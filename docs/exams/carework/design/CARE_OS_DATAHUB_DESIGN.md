@@ -5,7 +5,7 @@
 > **작성일**: 2026-11-04
 > **관련 SPEC ID**: CO-01, CO-02, CO-03, CO-04, CO-05, DA-13, DA-18, ROAD-P5
 > **전제**: [CareOS_경쟁전략.md](../business/CareOS_경쟁전략.md) (DOC-BIZ-06) §6 로드맵 단계 1~2 — 종사자 인터뷰(0단계, DOC-BIZ-07)와 병행 가능한 내부 리팩터링 범위
-> **상위 문서**: [CAREWORK_PRACTICE_TOOL_DESIGN.md](../../../dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md) (DOC-DSN-42) · [CAREWORK_FACILITY_WORKSPACE.md](../../../dev/design/CAREWORK_FACILITY_WORKSPACE.md) (DOC-DSN-43)
+> **상위 문서**: [CAREWORK_PRACTICE_TOOL_DESIGN.md](CAREWORK_PRACTICE_TOOL_DESIGN.md) (DOC-DSN-42) · [CAREWORK_FACILITY_WORKSPACE.md](CAREWORK_FACILITY_WORKSPACE.md) (DOC-DSN-43)
 
 ## 1. 목표·비목표
 

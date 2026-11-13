@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: e3c7db9285683ecb
-> 생성: 2026-11-12 · 원천: SPEC.md(706개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 52d8945d571fd44d
+> 생성: 2026-11-13 · 원천: SPEC.md(706개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -509,7 +509,7 @@
 | AD-07 | ✅ | 테스트 | DOC-DSN-30 | tools/check/dashboard_report.js | tests/unit/app/dashboard-report.test.js | — | — |
 | AD-08 | ✅ | 테스트 | DOC-DSN-30 | tools/check/user_report.js | tests/unit/app/user-report.test.js | — | — |
 | AD-09 | ✅ | 테스트 | DOC-DSN-30 | tools/check/pro_report.js | tests/unit/app/pro-report.test.js | — | — |
-| AD-10 | ✅ | 테스트 | DOC-DSN-30<br>DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-90<br>…외 2개 | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
+| AD-10 | ✅ | 테스트 | DOC-DSN-30<br>DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-49<br>…외 2개 | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
 | AD-11 | ✅ | 테스트 | DOC-DSN-30<br>DOC-DSN-36<br>DOC-DSN-37<br>DOC-RBK-17 | tools/deploy/register_admin_bot.js<br>tools/supabase/functions/admin-bot/index.ts | tests/unit/gates/admin-bot-contract.test.js | — | — |
 | AD-12 | ✅ | 테스트 | DOC-DSN-30<br>DOC-DSN-37 | tools/lib/discord.js | tests/unit/gates/discord-notify.test.js | — | — |
 | AD-13 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
@@ -542,8 +542,8 @@
 | AI-22 | ✅ | 테스트 | DOC-RBK-16 | src/content/data-loader.js<br>tools/ai/ai_cards.js | tests/unit/content/ai-tools.test.js | — | — |
 | AI-23 | ✅ | 테스트 | DOC-RBK-16 | tools/ai/ai_adoption.js | tests/unit/content/ai-tools.test.js | — | — |
 | AI-24 | ✅ | 테스트 | — | tools/ai/ai_textbook.js | tests/unit/content/ai-textbook.test.js | — | — |
-| AI-25 | ✅ | 테스트 | DOC-DSN-40<br>DOC-USR-18 | tools/supabase/functions/ai-proxy/index.ts | tests/unit/engine/ai-client.test.js | — | — |
-| AI-26 | ✅ | 테스트 | DOC-DSN-40<br>DOC-USR-18 | tools/supabase/functions/ai-proxy/index.ts | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
+| AI-25 | ✅ | 테스트 | DOC-DSN-40<br>DOC-USR-18 | tools/supabase/functions/ai-proxy/index.ts<br>tools/supabase/sync_ai_proxy_secrets.js | tests/unit/engine/ai-client.test.js | — | — |
+| AI-26 | ✅ | 테스트 | DOC-DSN-40<br>DOC-USR-18 | tools/supabase/functions/ai-proxy/index.ts<br>tools/supabase/sync_ai_proxy_secrets.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
 | AI-27 | ✅ | 테스트 | DOC-DSN-40<br>DOC-USR-18 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
 | AI-28 | ✅ | 테스트 | DOC-DSN-40<br>DOC-USR-18 | src/ai/ai-client.js<br>src/telemetry/usage-telemetry.js | tests/unit/engine/ai-client.test.js | — | — |
 | AI-29 | ✅ | 테스트 | DOC-DSN-40 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
@@ -635,7 +635,7 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | P-01 | ✅ | E2E 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 2개 | sw.js | tests/e2e/app.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
-| P-02 | ✅ | E2E 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-19<br>…외 3개 | src/config/cache.js<br>sw.js | tests/e2e/app.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
+| P-02 | ✅ | E2E 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 3개 | src/config/cache.js<br>sw.js | tests/e2e/app.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
 | P-03 | ✅ | 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 2개 | sw.js | tests/unit/app/pwa-sw.test.js | — | — |
 | P-04 | ✅ | 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 2개 | sw.js | tests/unit/app/pwa-sw.test.js | — | — |
 | P-04a | ✅ | 테스트 | DOC-RBK-01 | css/app-responsive.css | tests/unit/app/pwa-sw.test.js | — | — |
@@ -696,7 +696,7 @@
 | PF-15 | ✅ | 테스트 | — | ref-pipeline/convert.py | tests/unit/gates/perf-invariants.test.js | — | — |
 | PF-16 | ✅ | 테스트 | — | src/reader/mermaid-render.js | tests/unit/gates/perf-invariants.test.js | — | — |
 | PF-17 | ✅ | 테스트 | DOC-DSN-20 | — | tests/unit/gates/perf-invariants.test.js | — | — |
-| PF-18 | ✅ (목표 확정) | 문서 검토 | DOC-DSN-90 | — | — | — | — |
+| PF-18 | ✅ (목표 확정) | 문서 검토 | DOC-DSN-49 | — | — | — | — |
 | PF-19 | ✅ | 테스트 | — | — | tests/unit/tools/check-filenames.test.js | — | — |
 
 ## 4.5 접근성
@@ -826,7 +826,7 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | DA-01 | ✅ | 테스트 | DOC-RBK-03<br>DOC-RBK-08<br>DOC-REF-08 | tools/build/index.js<br>tools/build/manifest_loader.js | tests/unit/app/data-architecture.test.js | — | — |
-| DA-02 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-19<br>DOC-DSN-20<br>DOC-DSN-33<br>…외 2개 | src/content/data-loader.js<br>tools/build/index.js | tests/unit/app/data-architecture.test.js | — | — |
+| DA-02 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-20<br>DOC-DSN-33<br>DOC-DSN-48<br>…외 2개 | src/content/data-loader.js<br>tools/build/index.js | tests/unit/app/data-architecture.test.js | — | — |
 | DA-03 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | src/content/data-loader.js | tests/unit/app/data-loader.test.js | — | — |
 | DA-04 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | tools/build/build_study_md_bundle.js | tests/unit/app/data-architecture.test.js | — | — |
 | DA-05 | ✅ | 테스트 | DOC-DEV-09<br>DOC-DSN-18<br>DOC-RBK-03<br>DOC-REF-08 | src/core/state.js<br>src/core/storage.js | tests/unit/app/state.test.js | — | — |
@@ -887,7 +887,7 @@
 |----|------|-----------|------|------|--------|--------|------|
 | CS-01 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | ref-pipeline/batch_convert.py<br>ref-pipeline/md2doc.py<br>src/reader/textbook-core.js<br>tools/build/build_study_md_bundle.js<br>…외 3개 | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-02 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | tools/build/index.js<br>tools/build/plugins/exams.plugin.js<br>tools/sync/sync_textbook_files.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
-| CS-03 | ✅ | 테스트 | DOC-ADR-12<br>DOC-DSN-19<br>DOC-PPL-01<br>DOC-RBK-03<br>…외 4개 | ref-pipeline/check_laws.py<br>ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py<br>tools/check/check_ref_freshness.js<br>…외 2개 | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
+| CS-03 | ✅ | 테스트 | DOC-ADR-12<br>DOC-DSN-48<br>DOC-PPL-01<br>DOC-RBK-03<br>…외 4개 | ref-pipeline/check_laws.py<br>ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py<br>tools/check/check_ref_freshness.js<br>…외 2개 | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-04 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | tools/build/index.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-05 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | ref-pipeline/batch_convert.py<br>ref-pipeline/md2doc.py | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-06 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | tools/build/build_keyword_index.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
@@ -1051,7 +1051,6 @@
 | DOC-DSN-15 | docs/exams/cosmetic/design/PRACTICAL_TOOLS_DESIGN.md | FO-16, FO-18, FO-33, FO-34, FO-57, FO-58, FO-59, FO-60, FO-61, FO-62, FO-63 |
 | DOC-DSN-16 | docs/dev/design/STUDY_PLAN_PRO_DESIGN.md | D-17, SC-06, SC-07, SC-08 |
 | DOC-DSN-18 | docs/dev/design/SEMANTIC_EMBEDDING_DESIGN.md | AN-02, AN-07, AN-09, AN-10, DA-02, DA-05, DA-06, DA-08, DR-05, PF-02, SEM-05, TS-08, TS-09, TS-10, TS-11 |
-| DOC-DSN-19 | docs/dev/design/ASSET_STORAGE_REVIEW.md | CS-03, DA-02, P-02 |
 | DOC-DSN-20 | docs/dev/design/VENDOR_MANAGEMENT_DESIGN.md | BP-13, DA-02, PF-17 |
 | DOC-DSN-21 | docs/dev/design/LEARNING_UX_SIMPLIFICATION_DESIGN.md | AN-02, D-08, DR-01, DR-02, DR-04, DR-05, ROAD-L5, ROAD-P0, ROAD-P5, RV-01, RV-02, RV-03, RV-04, SC-08, SC-09, SC-10, SC-11, SC-12, SC-13, T-01, T-02, T-03, T-04, T-05, UX-GATE-01, UX-GATE-02, UX-GATE-03, UX-MET-01, UX-MET-02, UX-MET-03, UX-MET-04, UX-NAV-07, UX-NAV-08, UX-NAV-12, UX-NAV-13, UX-NAV-14 |
 | DOC-DSN-25 | docs/dev/design/UIUX_DESIGN_GUIDE.md | A-01, A-02, A-03, A-04, A-05, A-06, A-07, ES-02, R-01, R-02, R-03, R-04, R-05, R-06, R-07, R-08, TH-01, TH-02, TH-03, TH-04, TH-05, TH-06, UM-01, UM-02, UM-03, UM-04, UM-05, UX-FB-01, UX-FB-02, UX-FB-03, UX-FB-04, UX-FB-05, UX-FB-06, UX-FORM-01, UX-FORM-02, UX-NAV-01, UX-NAV-02, UX-NAV-03, UX-NAV-04, UX-NAV-05, UX-NAV-06, UX-NAV-07, UX-NAV-08, UX-NAV-09, UX-NAV-10, UX-NAV-11, UX-NAV-12, UX-NAV-13, UX-NAV-14, UX-PWA-01, UX-PWA-02, UX-PWA-03, UX-PWA-04, UX-PWA-05, UX-SCR-01, UX-SCR-02, UX-SET-01, UX-SET-02, UX-SET-03, UX-SET-04, UX-SET-05, UX-VFY-01, UX-VFY-02, UX-VFY-03, UX-VFY-04, UX-VFY-05, UX-VFY-06 |
@@ -1066,13 +1065,14 @@
 | DOC-DSN-39 | docs/dev/design/NATIVE_APP_STRATEGY.md | LP-01, LP-02, LP-03, LP-04, LP-05, LP-06, LP-07, LP-08, LP-09, LP-10, P-01, P-02, P-03, P-04, P-05, P-06, P-07 |
 | DOC-DSN-40 | docs/dev/design/AI_COACH_DESIGN.md | AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AU-08, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08 |
 | DOC-DSN-41 | docs/dev/design/PASSOK_시장분석.md | — |
-| DOC-DSN-42 | docs/dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md | CO-13, DA-13, DA-15, PAY-01, PAY-02, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, PAY-08, UM-01, UM-02, UM-03, UM-04 |
-| DOC-DSN-43 | docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md | — |
+| DOC-DSN-42 | docs/exams/carework/design/CAREWORK_PRACTICE_TOOL_DESIGN.md | CO-13, DA-13, DA-15, PAY-01, PAY-02, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, PAY-08, UM-01, UM-02, UM-03, UM-04 |
+| DOC-DSN-43 | docs/exams/carework/design/CAREWORK_FACILITY_WORKSPACE.md | — |
 | DOC-DSN-44 | docs/exams/carework/design/CARE_OS_DATAHUB_DESIGN.md | CO-01, CO-02, CO-03, CO-04, CO-05, DA-13, DA-18, ROAD-P5 |
 | DOC-DSN-45 | docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md | — |
 | DOC-DSN-46 | docs/dev/design/PASSOK_E2E_IMPLEMENTATION_DESIGN.md | — |
 | DOC-DSN-47 | docs/dev/design/CAPACITOR_PACKAGING_REVIEW.md | — |
-| DOC-DSN-90 | docs/dev/design/DEPLOY_PIPELINE_DESIGN.md | AD-10, PF-18 |
+| DOC-DSN-48 | docs/dev/design/ASSET_STORAGE_REVIEW.md | CS-03, DA-02, P-02 |
+| DOC-DSN-49 | docs/dev/design/DEPLOY_PIPELINE_DESIGN.md | AD-10, PF-18 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |
@@ -1148,8 +1148,8 @@
 ## 부록 C — 관련 SPEC ID 헤더 누락 문서
 
 - docs/assets/README.md
-- docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md
 - docs/dev/runbooks/CONTENT_PIPELINE_SPEC.md
 - docs/dev/runbooks/E2E_TEST_SUPABASE.md
 - docs/exams/carework/business/유튜브-숏츠-시리즈-제작의뢰서.md
+- docs/exams/carework/design/CAREWORK_FACILITY_WORKSPACE.md
 - docs/exams/cosmetic/business/유튜브-숏츠-시리즈-제작의뢰서.md

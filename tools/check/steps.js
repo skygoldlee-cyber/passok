@@ -54,6 +54,7 @@ const STEP_RLS = npmStep('rls', 'check:rls', '보안', 'RLS 익명 침투 검증
 const DOCS_STEPS = [
   nodeStep('docs:paths', 'tools/check/check_docs_paths.js', '문서', 'README·AGENTS·docs/*.md 경로 참조 존재 검증', { diffScoped: true }),
   nodeStep('docs:ids', 'tools/check/check_doc_ids.js', '문서', '문서 ID 누락·중복·범위·판본 헤더 검증'),
+  nodeStep('docs:registry', 'tools/check/check_doc_registry.js', '문서', '문서 ID 레지스트리·인덱스 카운트 ↔ 실물 양방향 정합'),
   nodeStep('docs:textbook', 'tools/check/check_textbook_docs.js', '문서', '교재 갱신 ↔ 판본:textbook 문서 신선도'),
   nodeStep('docs:inventory', 'tools/check/check_inventory.js', '문서', '디렉토리 구조 정합 (AGENTS·ARCHITECTURE 트리 ↔ 실물)'),
   nodeStep('docs:commands', 'tools/check/check_npm_commands.js', '문서', 'npm 명령 정합 (스크립트 ↔ 문서 인용 양방향)'),
@@ -218,6 +219,7 @@ const REMEDIES = {
   'content:textbookdocs': '교재 종속 문서(판본: textbook)를 최신 교재에 맞춰 갱신',
   'docs:textbook': '교재 종속 문서(판본: textbook)를 최신 교재에 맞춰 갱신',
   'docs:teststats': 'npm.cmd run stats:stamp — 테스트 수치 실측 스탬프 갱신',
+  'docs:registry': 'docs/README.md 레지스트리·문서 구조 트리 카운트를 실물에 맞게 갱신 (신규 문서는 레지스트리 행 추가)',
   'content:id-migration': 'npm.cmd run build:data — ID 이관 맵 미재생성',
   'content:refformat': 'node tools/sync/fix_refmd_glyphs.js (PUA·잔재 치환) · node tools/sync/reflow_flat_lines.js (평탄화 분할)',
   'refs:format': 'node tools/sync/fix_refmd_glyphs.js (PUA·잔재 치환) · node tools/sync/reflow_flat_lines.js (평탄화 분할)',

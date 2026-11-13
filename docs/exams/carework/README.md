@@ -11,15 +11,12 @@
 
 | 디렉터리 | 내용 | 판본 의존 |
 |------|------|------|
-| `business/` | 사업 기획·시장 조사 — `CareOS_경쟁전략.md`(경쟁사 분석·개선 로드맵)·`종사자_인터뷰_스크립트.md`(검증 인터뷰) | none |
-| `design/` | 시험 종속 설계 — `CARE_OS_DATAHUB_DESIGN.md`(clientId·360° 카드·다이제스트, CO-01~05) | none |
+| `business/` | 사업 기획·시장 조사·마케팅 — `CareOS_경쟁전략.md`(경쟁사 분석·개선 로드맵)·`종사자_인터뷰_스크립트.md`(검증 인터뷰)·`유튜브-숏츠-시리즈-제작의뢰서.md`(숏츠 외주 브리프) | none |
+| `design/` | 시험 종속 설계 — `CAREWORK_PRACTICE_TOOL_DESIGN.md`(현장도구·시험→실무 구독 전환, DSN-42)·`CAREWORK_FACILITY_WORKSPACE.md`(기관 워크스페이스·기록 서버, DSN-43)·`CARE_OS_DATAHUB_DESIGN.md`(clientId·360° 카드·다이제스트, CO-01~05) | none |
 
 ## 관련 플랫폼 문서 (docs/dev/)
 
-Care OS 실무도구의 설계 원전은 플랫폼 design 버킷에 있다:
-
-- `docs/dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md` — 현장도구 설계·시험→실무 구독 전환 (DOC-DSN-42)
-- `docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md` — 기관 워크스페이스·Supabase 기록 서버 설계 (DOC-DSN-43)
+- `docs/dev/design/SUBSCRIPTION_ROADMAP.md` — 월 구독 전환 로드맵 (구독 수익모델의 플랫폼 기준서)
 
 ## 신규 문서 추가 규칙
 

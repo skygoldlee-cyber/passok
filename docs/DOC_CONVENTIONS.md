@@ -70,6 +70,8 @@ docs/
 | `*_MAP.md` | 지도·매핑표 | reference/ |
 | `*_LOGIC.md` · `*_STRATEGY.md` | 로직 해설·전략 참조 | reference/ |
 | `*_GUIDE.md` · `*_RUNBOOK.md` | 절차·지침·안내서 | runbooks/ (수행 절차) · reference/ (독자 안내 — 예: CODE_READING_GUIDE) |
+| `*_REVIEW.md` | 시점성 검토·적합성 보고서 — 판단 근거가 현재에도 유효한 1회성 분석 | design/ (대체되면 report_archive/) |
+| `*_BACKLOG.md` | 측정 기반 분해·정리 백로그 | dev/ 수위 (생성물이면 재생성 명령 명기) |
 | `NNNN-slug.md` | ADR (4자리 연속 채번) | adr/ |
 | `README.md` | 디렉터리 인덱스 | 해당 디렉터리 루트 |
 

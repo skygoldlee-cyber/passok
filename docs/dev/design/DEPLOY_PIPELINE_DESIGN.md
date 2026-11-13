@@ -5,7 +5,7 @@
 > **관련 문서**: `tools/deploy/deploy.js` · `.githooks/pre-commit` · `.githooks/pre-push` · `tools/check/steps.js`
 > **관련 SPEC ID**: `PF-18` (측정 조건과 동일 철학 — 랩 측정 우선) · `AD-10` (배포 알림) · 해당 없음의 규약 게이트로 간주
 > **상태**: 설계 확정 — 일괄 적용 (2026-11-09)
-> **문서 ID**: DOC-DSN-90
+> **문서 ID**: DOC-DSN-49
 > **범위**: platform · 판본: none
 
 ---

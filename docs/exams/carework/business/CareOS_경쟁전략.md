@@ -6,7 +6,7 @@
 > **조사 기준**: 2026-11 · 국내 노인장기요양기관 업무관리·실버케어 솔루션 시장
 > **최종 업데이트**: 2026-11-04 (v6 — CO-08~10 lite 구현 반영, 구현 현황 갱신)
 > (이력) v5 — 리뷰 4차 반영: 소급 조치 결정 규칙·L0/L1 메모 명칭 구분·P2-10-lite 앞당김·보호자 개인정보 법무 범위 추가·§7-1↔§3-4 정합
-> **관련 문서**: [CAREWORK_PRACTICE_TOOL_DESIGN.md](../../../dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md) (DOC-DSN-42) · [CAREWORK_FACILITY_WORKSPACE.md](../../../dev/design/CAREWORK_FACILITY_WORKSPACE.md) (DOC-DSN-43) · [SUBSCRIPTION_ROADMAP.md](../../../dev/design/SUBSCRIPTION_ROADMAP.md) · [FORMULA_OS_경쟁전략.md](../../cosmetic/business/FORMULA_OS_경쟁전략.md) (DOC-BIZ-01 — 동일 프레임 선례)
+> **관련 문서**: [CAREWORK_PRACTICE_TOOL_DESIGN.md](../design/CAREWORK_PRACTICE_TOOL_DESIGN.md) (DOC-DSN-42) · [CAREWORK_FACILITY_WORKSPACE.md](../design/CAREWORK_FACILITY_WORKSPACE.md) (DOC-DSN-43) · [SUBSCRIPTION_ROADMAP.md](../../../dev/design/SUBSCRIPTION_ROADMAP.md) · [FORMULA_OS_경쟁전략.md](../../cosmetic/business/FORMULA_OS_경쟁전략.md) (DOC-BIZ-01 — 동일 프레임 선례)
 
 외부 초안 분석(케어포 중심 경쟁 검토)을 공식 출처로 교차 검증하고, 그 결과를 carework 실무도구(Care OS)의 설계·구현 개선 과제로 번역한 문서다. 수치·기능 주장은 1차 출처(공단 공시·각 사 공식 사이트)를 우선하며, 자사 마케팅 주장은 "미검증"으로 표기한다.
 

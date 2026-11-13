@@ -1,7 +1,7 @@
 # 📚 문서 인덱스 (Documentation Index)
 
 > **Cosmetic Pass Master / Passmula** — 맞춤형화장품 조제관리사 스마트 학습 + 실무(Formula OS) 플랫폼
-> 최종 갱신: 2026-10-13
+> 최종 갱신: 2026-11-13
 > **문서 ID**: DOC-IDX-01
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (문서 인덱스·ID 레지스트리)
@@ -93,19 +93,19 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (73개)
-│   ├── 수위 문서 (5개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·UIUX_외주전달_패키지
-│   ├── adr/                   ← 아키텍처 결정 기록 (19개 — README + ADR 18건)
-│   ├── runbooks/              ← 실행 절차·운영 런북 (18개)
-│   ├── design/                ← 설계·계획·평가 문서 (21개)
-│   ├── reference/             ← 명세·로직·참조 문서 (14개 + images/)
-│   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (3개 — §9 스냅샷 이력)
-├── user/                      ← 앱 공용 사용자 문서 (사용자 매뉴얼 + images/ — 런타임 fetch·배포 대상)
-└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (30개) · docs/exams/carework/ (2개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (99개)
+│   ├── 수위 문서 (6개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·COMPLEXITY_BACKLOG·UIUX_외주전달_패키지
+│   ├── adr/                   ← 아키텍처 결정 기록 (20개 — README + ADR 19건)
+│   ├── runbooks/              ← 실행 절차·운영 런북 (23개)
+│   ├── design/                ← 설계·계획·평가 문서 (29개)
+│   ├── reference/             ← 명세·로직·참조 문서 (17개 + images/)
+│   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (4개 — §9 스냅샷 이력)
+├── user/                      ← 앱 공용 사용자 문서 (2개 — 사용자 매뉴얼·개인정보처리방침 + images/ — 런타임 fetch·배포 대상)
+└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (7개)
     ├── README.md              ← 시험별 문서 인덱스
     ├── user/                  ← 학습자 문서 (5개)
-    ├── business/              ← 사업 기획·시장 조사·마케팅 문서 (5개)
-    ├── design/                ← 시험 종속 설계 문서 (5개 — Formula OS 계열)
+    ├── business/              ← 사업 기획·시장 조사·마케팅 문서 (cosmetic 6개 · carework 3개)
+    ├── design/                ← 시험 종속 설계 문서 (cosmetic 5개 — Formula OS 계열 · carework 3개)
     ├── reference/             ← 교재 종속 참조 문서 (2개 — 번호체계·참조매핑)
     ├── report_archive/        ← 시점 스냅샷 보고서 + 대체된 전략 원전 (11개)
     └── ingredients_audit_제2026-19호.md  ← 고시 대조 리포트 (판본: refmat)
@@ -128,6 +128,8 @@ docs/
 | [CODE_CONVENTIONS.md](CODE_CONVENTIONS.md) | 코드 규약 정본 — 파일 계층·명칭·금지 패턴·저장소/UI/추적성 규약 + 규약→게이트 매핑 (DOC-DEV-09) |
 | [SPEC.md](dev/SPEC.md) | 요구사양 명세서 — 구현된 기능을 역공학해 정리 (현행 기준서) |
 | [TRACE_MATRIX.md](dev/TRACE_MATRIX.md) | SPEC↔코드 추적 매트릭스 — 요구사항별 @spec 태그·테스트·문서 매핑 (자동 생성 — `npm run build:trace`) |
+| [COMPLEXITY_BACKLOG.md](dev/COMPLEXITY_BACKLOG.md) | 순환복잡도 상위 함수 분해 백로그 — 임계 초과 함수 목록·분해 순서 (⚙️ 생성물 — `node tools/check/check_complexity.js --report`) (DOC-DEV-14) |
+| [AI_COACH_DESIGN.md](dev/design/AI_COACH_DESIGN.md) | AI 코치 설계 — 서버측 Gemini 런타임 학습 기능·ai-proxy·ai_usage 계측 (DOC-DSN-40) |
 | [adr/](dev/adr/README.md) | 아키텍처 결정 기록 — 대안 검토·트레이드오프 등 결정의 "왜" 보존 (색인 README + ADR 18건) |
 | [MULTI_EXAM_DB_DESIGN.md](dev/design/MULTI_EXAM_DB_DESIGN.md) | 멀티시험 확장 설계 — 법령DB·지식DB의 시험 비종속 일반화 (Phase A~C 구현 완료) |
 | [LEARNING_ALGORITHM_DESIGN.md](dev/design/LEARNING_ALGORITHM_DESIGN.md) | 학습 알고리즘 통합본 — FSRS-4.5·FSRS-6 업그레이드·시험일 목표 R·due 클램프·지식 추적 (DOC-DSN-32, 구 DSN-17·26~29 통합) |
@@ -172,6 +174,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [TEXTBOOK_AUTHORING_GUIDE.md](dev/runbooks/TEXTBOOK_AUTHORING_GUIDE.md) | 교재 Markdown 작성 지침 — 카드/퀴즈 추출 규칙, manifest.json, 빌드 검증 |
 | [AI_AUTHORING_DESIGN.md](dev/design/AI_AUTHORING_DESIGN.md) | AI 제작 지원 설계 — LLM 문제·해설 초안 생성 도구, 근거 강제·기존 감사 게이트 연동 (DOC-DSN-33, 설계안) |
 | [STORY_PATCH_GUIDE.md](dev/runbooks/STORY_PATCH_GUIDE.md) | 이야기형 교재 서사 패치 작성 — 슬롯 마커·지시어 문법 (`*_이야기형.md`는 `build:story` 생성물, 직접 편집 금지) |
+| [STORY_TYPE_DESIGN_GUIDE.md](dev/runbooks/STORY_TYPE_DESIGN_GUIDE.md) | 이야기형 교재 서사 유형 설계 — 시험 유형별 서사 선정·캐릭터·구조 (DOC-RBK-22) |
+| [CONTENT_PIPELINE_SPEC.md](dev/runbooks/CONTENT_PIPELINE_SPEC.md) | 콘텐츠 파이프라인 규약 — 자료수집 → 참조자료 → 문제은행·교재 전체 경로·단계별 파일·선언·게이트 (DOC-RBK-19) |
 | [NUMBERING_SYSTEM.md](exams/cosmetic/reference/NUMBERING_SYSTEM.md) | 교재 챕터/섹션 십진 번호체계 |
 | [QUESTION_SCHEMA_DESIGN.md](dev/design/QUESTION_SCHEMA_DESIGN.md) | 문항 데이터 스키마 — 복수정답형의 "진술 단위 O/X → 조합 도출" 구조 |
 | [COMBO_GENERATION_GUIDE.md](dev/runbooks/COMBO_GENERATION_GUIDE.md) | 복수정답형 드릴 생성 도구 — `build_combo_drills.js` + `ref_statements.js` |
@@ -183,6 +187,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [evals/EVAL_BASELINE_2026-10-14.md](dev/evals/EVAL_BASELINE_2026-10-14.md) | 프로젝트 평가 기준선 스냅샷 — §9 첫 측정 아카이브 (DOC-DEV-10) |
 | [evals/EVAL_2026-10-16.md](dev/evals/EVAL_2026-10-16.md) | 프로젝트 평가 보고서 — 2026-10-16 재측정 (DOC-DEV-11) |
 | [evals/EVAL_2026-10-16_2.md](dev/evals/EVAL_2026-10-16_2.md) | 프로젝트 평가 보고서 — 2026-10-16 2차 재측정 (DOC-DEV-12) |
+| [evals/EVAL_2026-10-30.md](dev/evals/EVAL_2026-10-30.md) | 프로젝트 평가 보고서 — 2026-10-30 재측정 (DOC-DEV-13) |
 | [ingredients_audit_제2026-19호.md](exams/cosmetic/ingredients_audit_제2026-19호.md) | 원료 DB ↔ 고시 제2026-19호 별표1·별표2 전수 대조 리포트 — 오류 정정·누락 추가·반영 결과 (`ref-pipeline/compare_ingredients_official.py`) |
 
 ### Formula OS (실무)
@@ -203,6 +208,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [DOM_TEST_DESIGN.md](dev/design/DOM_TEST_DESIGN.md) | DOM 시나리오 테스트 설계 — jsdom 경계, 케이스 유형 매트릭스, Phase 1~6 로드맵 (E2E 포함) |
 | [TOOLS_MAP.md](dev/reference/TOOLS_MAP.md) | 도구 계층 지도 — tools/ 디렉터리별 역할·진입점 3종(스크립트·steps.js·문서 생명줄)·새 게이트 추가 절차·분기 감사 규약 (DOC-REF-17) |
 | [COMMANDS.md](dev/reference/COMMANDS.md) | 명령 카탈로그 — npm 스크립트·검증 단계 전체 표 (⚙️ 생성물: `npm run build:commands`, 정본 package.json·steps.js·도구 헤더) (DOC-REF-19) |
+| [PASSOK_E2E_AUTOMATION_GUIDE.md](dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md) | 사용자환경 E2E 자동화 구축 가이드 — Devin+agent-browser 외부 원안 (DOC-DSN-45, 참조용 원본) |
+| [PASSOK_E2E_IMPLEMENTATION_DESIGN.md](dev/design/PASSOK_E2E_IMPLEMENTATION_DESIGN.md) | E2E 자동화 구현 설계 — 기존 Playwright 체계 위에 가이드 절차 요소 이식 (DOC-DSN-46) |
 
 ### 운영·환경
 
@@ -219,6 +226,10 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [Supabase_Custom_SMTP_MagicLink_OTP_설정가이드.md](dev/runbooks/Supabase_Custom_SMTP_MagicLink_OTP_설정가이드.md) | Supabase 운영 런북 — Custom SMTP(Gmail 앱 비밀번호)·Magic Link/OTP 템플릿·체크리스트 |
 | [DISCORD_ADMIN.md](dev/runbooks/DISCORD_ADMIN.md) | Discord 운영 서버 셋업 — 알림 webhook(AD-10)·조회 명령 봇(AD-11) 최초 1회 절차 (DOC-RBK-17) |
 | [DISCORD_COMMUNITY_SETUP.md](dev/runbooks/DISCORD_COMMUNITY_SETUP.md) | Discord 커뮤니티 서버 개설 절차 — Community 활성화·역할 게이트·Onboarding·초대 링크→`discordInvite` 연결 (DOC-RBK-18) |
+| [GATE_TROUBLESHOOTING.md](dev/runbooks/GATE_TROUBLESHOOTING.md) | 게이트 실패 트러블슈팅 — 검증 실패별 원인·복구 절차 (DOC-RBK-20) |
+| [LFS_MIGRATION.md](dev/runbooks/LFS_MIGRATION.md) | Git LFS 마이그레이션 런북 — 이미지 자산 이력 이전 (DOC-RBK-21) |
+| [ASSET_STORAGE_REVIEW.md](dev/design/ASSET_STORAGE_REVIEW.md) | 대형 자산 저장 검토 — 바이너리 git 관리 판단·외부화 기각 근거·LFS 후보 기준 (DOC-DSN-48) |
+| [DEPLOY_PIPELINE_DESIGN.md](dev/design/DEPLOY_PIPELINE_DESIGN.md) | 배포 파이프라인 속도 개선 설계 — 게이트 실패 반복·CI 직렬 대기 해소 (DOC-DSN-49) |
 | [CHANGES.md](dev/CHANGES.md) | 코드 변경 이력 (Changelog) — 변경의 이유와 맥락 |
 
 ### 제품 전략·기획
@@ -233,8 +244,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [PROMOTION_DESIGN.md](dev/design/PROMOTION_DESIGN.md) | 홍보·유입 기능 보완 — 현황 인벤토리 + OG 태그·성과 공유 카드·다중 커뮤니티 링크·추천 코드·SEO·UTM 계측 백로그 (DOC-DSN-37, 설계안) |
 | [LANDING_PAGE_DESIGN.md](dev/design/LANDING_PAGE_DESIGN.md) | 서비스 소개 랜딩 페이지 — `/landing.html` 별도 정적 페이지, exams.json 구동 시험 카드·빌드 체인·SW/진입점 정책 (DOC-DSN-38, 설계안) |
 | [NATIVE_APP_STRATEGY.md](dev/design/NATIVE_APP_STRATEGY.md) | 네이티브 앱 전환 전략 검토 — TWA→Capacitor→Flutter 단계 권고·이주 대비 (DOC-DSN-39, 검토 메모) |
+| [CAPACITOR_PACKAGING_REVIEW.md](dev/design/CAPACITOR_PACKAGING_REVIEW.md) | Capacitor 네이티브 패키징 적합성 검토 — webDir 복사 모델 호환성·앱 크기·OAuth 딥링크 실측 (DOC-DSN-47) |
 | [PASSOK_시장분석.md](dev/design/PASSOK_시장분석.md) | 국가자격 시장분석 실측 갱신 — KOSIS 5개년 응시자 반영·우선순위 재조정 (DOC-DSN-41) |
-| [CAREWORK_PRACTICE_TOOL_DESIGN.md](dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md) | 요양보호사 현장도구 설계 — 시험→실무 구독 전환·careCalc/careCard/careLog 3단계 (DOC-DSN-42) |
 | [STUDY_PLAN_PRO_DESIGN.md](dev/design/STUDY_PLAN_PRO_DESIGN.md) | 스마트학습 과목별 가중 계획 — 출제 비중·약점 정답률 가중 주차별 배분표 (SC-08, 구현 완료) |
 | [STUDY_APP_DESIGN_GUIDE.md](dev/design/STUDY_APP_DESIGN_GUIDE.md) | 학습 앱 재사용 설계 가이드 — 다른 자격시험/교재 적용 템플릿 |
 
@@ -249,6 +260,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [판매업소_인터뷰_스크립트.md](exams/cosmetic/business/판매업소_인터뷰_스크립트.md) | Step 0 판매업소 인터뷰 질문·중단 기준·집계 시트 |
 | [맞춤형화장품판매업소_조사_2026-09.md](exams/cosmetic/business/맞춤형화장품판매업소_조사_2026-09.md) | 판매업소·솔루션 공급사·시장 수치·규제 동향 조사 |
 | [유튜브_홍보동영상_제작의뢰서.md](exams/cosmetic/business/유튜브_홍보동영상_제작의뢰서.md) | 홍보 영상 외주 제작 브리프 (콘티·사양·납품 기준) |
+| [유튜브-숏츠-시리즈-제작의뢰서.md](exams/cosmetic/business/유튜브-숏츠-시리즈-제작의뢰서.md) | 유튜브 숏츠 시리즈 외주 제작 브리프 (DOC-BIZ-09) |
 
 > `.html`은 `md2doc.py` 생성물 (gitignore 대상) — `.md`가 원본입니다.
 
@@ -258,11 +270,14 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 |------|------|
 | [CareOS_경쟁전략.md](exams/carework/business/CareOS_경쟁전략.md) | Care OS 경쟁 지도 — 장기요양 ERP 시장 검증 분석·보완층 전략·P0~P2 개선 로드맵 (DOC-BIZ-06, 2026-11 조사) |
 | [종사자_인터뷰_스크립트.md](exams/carework/business/종사자_인터뷰_스크립트.md) | Care OS §6-0 검증 인터뷰 — 시설·방문요양 종사자 표본 설계·중단 기준·집계 시트 (DOC-BIZ-07) |
+| [유튜브-숏츠-시리즈-제작의뢰서.md](exams/carework/business/유튜브-숏츠-시리즈-제작의뢰서.md) | carework 유튜브 숏츠 시리즈 외주 제작 브리프 (DOC-BIZ-08) |
 
 ## 🔧 설계 문서 (docs/exams/carework/design/)
 
 | 문서 | 설명 |
 |------|------|
+| [CAREWORK_PRACTICE_TOOL_DESIGN.md](exams/carework/design/CAREWORK_PRACTICE_TOOL_DESIGN.md) | 요양보호사 현장도구 설계 — 시험→실무 구독 전환·careCalc/careCard/careLog 3단계 (DOC-DSN-42) |
+| [CAREWORK_FACILITY_WORKSPACE.md](exams/carework/design/CAREWORK_FACILITY_WORKSPACE.md) | 기관 워크스페이스 설계 — PassOK가 기관 기록 서버가 되는 구독 확장 (DOC-DSN-43) |
 | [CARE_OS_DATAHUB_DESIGN.md](exams/carework/design/CARE_OS_DATAHUB_DESIGN.md) | Care OS 데이터 허브 — clientId 정규화·360° 카드·인수인계 로컬 다이제스트 (DOC-DSN-44, CO-01~05) |
 
 ---
@@ -272,6 +287,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | 문서 | 설명 | 접근 방법 |
 |------|------|-----------|
 | [user_manual.md](user/user_manual.md) | 사용자 매뉴얼 (앱 공용 — 모든 시험 공통) | 앱 내 "매뉴얼" 메뉴 (manual-viewer 렌더, 공용 문서) |
+| [PRIVACY_POLICY.md](user/PRIVACY_POLICY.md) | 개인정보처리방침 | 직접 열기·스토어 제출용 |
 | [formula_manual.md](../content/exams/cosmetic/docs/formula_manual.md) | Formula OS 실무 매뉴얼 | 앱 내 실무 매뉴얼 (doc: 링크 연동, 시험별 문서) |
 | [exam_strategy.md](exams/cosmetic/user/exam_strategy.md) | 시험 합격 공략법 — 4과목·100문항·과락 기준 전략 | 직접 열기 |
 | [subject1~4_numbers.md](exams/cosmetic/user/subject1_numbers.md) | 과목별 숫자 암기 요약정리 (4파일) | 직접 열기 |
@@ -359,6 +375,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DEV-10 | `docs/dev/evals/EVAL_BASELINE_2026-10-14.md` |
 | DOC-DEV-11 | `docs/dev/evals/EVAL_2026-10-16.md` |
 | DOC-DEV-12 | `docs/dev/evals/EVAL_2026-10-16_2.md` |
+| DOC-DEV-13 | `docs/dev/evals/EVAL_2026-10-30.md` |
+| DOC-DEV-14 | `docs/dev/COMPLEXITY_BACKLOG.md` (자동 생성 — `node tools/check/check_complexity.js --report`) |
 | DOC-DSN-01 | `docs/dev/design/DOM_TEST_DESIGN.md` |
 | DOC-DSN-02 | `docs/exams/cosmetic/design/FORMULA_OS_WORKFLOW_DESIGN.md` |
 | DOC-DSN-03 | — (통합 → `docs/dev/design/SUBSCRIPTION_ROADMAP.md` · DOC-DSN-07, 2026-10-17) |
@@ -398,10 +416,16 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-37 | `docs/dev/design/PROMOTION_DESIGN.md` |
 | DOC-DSN-38 | `docs/dev/design/LANDING_PAGE_DESIGN.md` |
 | DOC-DSN-39 | `docs/dev/design/NATIVE_APP_STRATEGY.md` |
+| DOC-DSN-40 | `docs/dev/design/AI_COACH_DESIGN.md` |
 | DOC-DSN-41 | `docs/dev/design/PASSOK_시장분석.md` |
-| DOC-DSN-42 | `docs/dev/design/CAREWORK_PRACTICE_TOOL_DESIGN.md` |
-| DOC-DSN-43 | `docs/dev/design/CAREWORK_FACILITY_WORKSPACE.md` |
+| DOC-DSN-42 | `docs/exams/carework/design/CAREWORK_PRACTICE_TOOL_DESIGN.md` |
+| DOC-DSN-43 | `docs/exams/carework/design/CAREWORK_FACILITY_WORKSPACE.md` |
 | DOC-DSN-44 | `docs/exams/carework/design/CARE_OS_DATAHUB_DESIGN.md` |
+| DOC-DSN-45 | `docs/dev/design/PASSOK_E2E_AUTOMATION_GUIDE.md` (외부 원안 — design 잔류: 실행 런북이 아닌 참조 문서) |
+| DOC-DSN-46 | `docs/dev/design/PASSOK_E2E_IMPLEMENTATION_DESIGN.md` |
+| DOC-DSN-47 | `docs/dev/design/CAPACITOR_PACKAGING_REVIEW.md` |
+| DOC-DSN-48 | `docs/dev/design/ASSET_STORAGE_REVIEW.md` (구 DOC-DSN-19에서 재채번 — DSN-19는 회수 유지) |
+| DOC-DSN-49 | `docs/dev/design/DEPLOY_PIPELINE_DESIGN.md` (구 DOC-DSN-90에서 재채번) |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |
@@ -439,7 +463,10 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-RBK-16 | `docs/dev/runbooks/PILOT_EXAM_PROMOTION.md` |
 | DOC-RBK-17 | `docs/dev/runbooks/DISCORD_ADMIN.md` |
 | DOC-RBK-18 | `docs/dev/runbooks/DISCORD_COMMUNITY_SETUP.md` |
+| DOC-RBK-19 | `docs/dev/runbooks/CONTENT_PIPELINE_SPEC.md` |
 | DOC-RBK-20 | `docs/dev/runbooks/GATE_TROUBLESHOOTING.md` |
+| DOC-RBK-21 | `docs/dev/runbooks/LFS_MIGRATION.md` |
+| DOC-RBK-22 | `docs/dev/runbooks/STORY_TYPE_DESIGN_GUIDE.md` |
 | DOC-RBK-23 | `docs/dev/runbooks/E2E_TEST_SUPABASE.md` |
 | DOC-ADR-00 | `docs/dev/adr/README.md` |
 | DOC-ADR-01 | `docs/dev/adr/0001-exam-data-boot-document-write.md` |
@@ -460,6 +487,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-ADR-16 | `docs/dev/adr/0016-multi-exam-registry-feature-flags.md` |
 | DOC-ADR-17 | `docs/dev/adr/0017-vendored-assets-hash-manifest.md` |
 | DOC-ADR-18 | `docs/dev/adr/0018-fsrs-over-sm2.md` |
+| DOC-ADR-19 | `docs/dev/adr/0019-telemetry-consent-first-party.md` |
 | DOC-USR-01 | `docs/exams/cosmetic/user/exam_strategy.md` |
 | DOC-USR-02 | `content/exams/cosmetic/docs/formula_manual.md` |
 | DOC-USR-03 | `docs/exams/cosmetic/user/subject1_numbers.md` |
@@ -473,6 +501,18 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-USR-11 | `content/exams/lossadj/docs/2028_개편_대비.md` |
 | DOC-USR-12 | `content/exams/insadj/docs/시험_구조_안내.md` |
 | DOC-USR-13 | `content/exams/insadj/docs/과목4_참고_문항.md` |
+| DOC-USR-14 | `content/exams/skincare/docs/학습안내서.md` |
+| DOC-USR-15 | `content/exams/skincare/docs/시험_구조_안내.md` |
+| DOC-USR-16 | `content/exams/hairdresser/docs/학습안내서.md` |
+| DOC-USR-17 | `content/exams/hairdresser/docs/시험_구조_안내.md` |
+| DOC-USR-18 | `docs/user/PRIVACY_POLICY.md` |
+| DOC-USR-19 | `content/exams/carework/docs/요양보호사_표준교재_목차_Passok_학습구조.md` |
+| DOC-USR-20 | `content/exams/carework/docs/실무매뉴얼.md` |
+| DOC-USR-22 | content/exams/carework/docs/적응형 학습 엔진 설계.md |
+| DOC-USR-23 | content/exams/carework/docs/인물 설정표.md |
+| DOC-USR-24 | content/exams/carework/docs/4단계 런타임 플로우 설계.md |
+| DOC-USR-25 | `content/exams/carework/docs/학습안내서.md` |
+| DOC-USR-26 | content/exams/carework/docs/웹툰 컷 가이드라인.md |
 | DOC-BIZ-01 | `docs/exams/cosmetic/business/FORMULA_OS_경쟁전략.md` |
 | DOC-BIZ-02 | `docs/exams/cosmetic/business/맞춤형화장품_조제관리사_자격증플랫폼_사업기획서.md` |
 | DOC-BIZ-03 | `docs/exams/cosmetic/business/맞춤형화장품판매업소_조사_2026-09.md` |
@@ -480,6 +520,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-BIZ-05 | `docs/exams/cosmetic/business/판매업소_인터뷰_스크립트.md` |
 | DOC-BIZ-06 | `docs/exams/carework/business/CareOS_경쟁전략.md` |
 | DOC-BIZ-07 | `docs/exams/carework/business/종사자_인터뷰_스크립트.md` |
+| DOC-BIZ-08 | `docs/exams/carework/business/유튜브-숏츠-시리즈-제작의뢰서.md` |
+| DOC-BIZ-09 | `docs/exams/cosmetic/business/유튜브-숏츠-시리즈-제작의뢰서.md` |
 | DOC-ARC-01 | docs/exams/cosmetic/report_archive/Cosmetic Master Business Plan.md |
 | DOC-ARC-02 | `docs/exams/cosmetic/report_archive/EXTERNAL_REVIEW_LEARNING_PRO.md` |
 | DOC-ARC-03 | `docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md` |
