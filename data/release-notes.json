@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261114-f189321",
+    "date": "2026-11-14",
+    "notes": [
+      "[기능·carework] 등록 서명 이미지 Word 출력 연결 — 런타임 {{img:}} 배선",
+      "[수정·carework] 인수인계서 서명란 '확인일' 슬롯 제거",
+      "[문서·carework] 서명 이미지 권장 크기 안내 문구 추가",
+      "[수정·carework] 홈 워터마크 체크박스 비가시 — 폼 입력 스타일 오염 리셋",
+      "[수정·content] docx 서명 이미지 수직 오프셋 확대 — -8→-16 (8pt 하강)",
+      "[수정·content] docx 서명 이미지 수직 오프셋 — 서명란 4pt 하강",
+      "[수정·content] docx 결재란 담당 서명 좌측 추가 보정 — 음수 들여쓰기",
+      "[수정·content] docx 서명 이미지 우측 탭 정지 정렬 + 결재란 담당 서명 좌측 정렬",
+      "[수정·content] docx 서명 이미지 추가 우측 보정 — 공백 4→5칸",
+      "[기능·content] docx 결재란 담당 서명을 images.approve 전용 키로 — (인) 제외·확대"
+    ]
+  },
+  {
     "version": "v20261114-e0c1352",
     "date": "2026-11-14",
     "notes": [
@@ -213,14 +229,6 @@
       "[기능·e2e] J-500 시험 팩 학습 적합성 스위트 — exams.json 매트릭스 동적 생성",
       "[수정·e2e] J-102 e2e-new 늦은 pullSync 경합 보강 — 카드 뷰 재진입 루프",
       "[문서·design] Capacitor 네이티브 패키징 적합성 검토 보고서 — DOC-DSN-47"
-    ]
-  },
-  {
-    "version": "v20261112-fb182cb",
-    "date": "2026-11-12",
-    "notes": [
-      "[수정·ux] carework 홈 글자 크게 버튼 무여백 밀착 수정 — gap-sec 리듬 적용",
-      "[정리·release] v20261112-faa4e3e 스탬프 확정 [no-docs]"
     ]
   }
 ]
