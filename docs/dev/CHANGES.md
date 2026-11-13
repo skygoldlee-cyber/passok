@@ -3,6 +3,7 @@
 ## 2026-11-13 docs(carework): 기관 사이트 라이선스 설계 문서 (DOC-DSN-51)
 
 - `CAREWORK_SITE_LICENSE_DESIGN.md` 신규 — 요양원 단위 월권·기간권 부여 설계. 옵션 3안 비교(채널 배치 코드 / facility_subscriptions 테이블 / 자동결제), 권장안: 멤버십 ∈ 유효 구독 기관이면 `effective_entitlement` RPC로 lazy 부여 — Phase 6a 멤버십·PAY 파이프라인 재사용으로 프론트 무변경. 운영 CLI `admin:facility-sub`, 미결정 쟁점 2개(부여 범위·시험 스코프) 정리
+- §6 기관 자체 서버DB 상황별 연동 추가 — T0 서버 없음(PassOK=기관 서버) / T1 자체서버+HTTP(record-webhook, CO-16 선구축) / T2 폐쇄형 ERP(묶음 수출) / T3 공단·양방향(비목표). 수출·수입 비대칭 분리, 연동 깊이를 티어 차별화 요소로 매핑
 
 
 ## 2026-11-13 fix(content): 실무매뉴얼 보호자 전달 문구 완충 — 정량 주장 → 절차 지시
