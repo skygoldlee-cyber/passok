@@ -462,6 +462,9 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         setLocalOrgName('행복요양원');
         careVisitPreview();
         expect(document.getElementById('vis-preview').textContent).toContain('행복요양원');
+        // 일별 제출 문서 — 항목별 행(kv 2열) 표 형식
+        expect(document.getElementById('vis-preview').querySelector('.doc-kv')).toBeTruthy();
+        expect(document.getElementById('vis-preview').textContent).toContain('방문일');
         setLocalOrgName('');
         expect(document.getElementById('vis-scheduled').textContent).toContain('등록된 방문예약이 없습니다');
         // 출력 CSV는 '상태' 열 없이 결과로 표현 — 완료는 요약, 취소는 결과 칸에 '취소' 표기

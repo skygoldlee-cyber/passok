@@ -1,6 +1,6 @@
 // src/exams/carework/views/care-visit.js — 면회·방문 기록 뷰
 // @spec UX-FORM-03,UX-FORM-05 — 시험 전용 실무 뷰 (DA-13)
-import { RELATIONS, VISIT_STATUS, relationLabel, buildVisitText, visitsToCsv } from '../care-visit.js';
+import { RELATIONS, VISIT_STATUS, relationLabel, buildVisitText, visitsToCsv, visitKvMd } from '../care-visit.js';
 import { markFunnel } from '../care-funnel.js';
 import { listVisits, saveVisit, updateVisit, removeVisit } from '../care-visit-store.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
@@ -9,7 +9,7 @@ import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisi
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast, showConfirm, flashSavedBadge, requireFields } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
-import { docMdHead, docMdSign, csvToMdTable, mdToHtml } from '../doc-md.js';
+import { docMdHead, docMdSign, mdToHtml } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 export { careShare } from '../care-share.js';
 export { careVisitVoiceToggle } from '../care-voice.js';
@@ -195,11 +195,13 @@ export function careVisitPrint() {
     window.print();
 }
 
-/** 방문 기록 MD 초안 — 저장 기록 전체를 표 구조로 (docx·xlsx 파생 원본) */
+/** 방문 기록 MD 초안 — 일별 제출 문서라 항목별 행(항목|내용 kv) 표 사용. 여러 건이면 번호 소제목으로 구분 (docx·인쇄 파생 원본) */
 export function careVisitDocMd() {
     const items = listVisits();
     if (!items.length) return '';
-    return docMdHead('면회·방문 기록') + '\n' + renderToolBody('careVisit', { 기록표: csvToMdTable(visitsToCsv(items)) }) + docMdSign([['작성자', 'author']]);
+    const body = items.length === 1 ? visitKvMd(items[0])
+        : items.map((v, i) => `### ${i + 1}. ${v.client || ''} — ${v.date || ''}\n\n${visitKvMd(v)}`).join('\n\n');
+    return docMdHead('면회·방문 기록') + '\n' + renderToolBody('careVisit', { 기록표: body }) + docMdSign([['작성자', 'author']]);
 }
 
 export function careVisitCsvExport() {
