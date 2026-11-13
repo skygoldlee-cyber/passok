@@ -164,7 +164,7 @@ export async function careHandoverExport(arg) {
 
 export function careHandoverPrint() {
     careHandoverGenerate();
-    if (!document.querySelector('#ho-preview pre')) { showToast('먼저 생성하세요.', 'error'); return; }
+    if (!document.querySelector('#ho-preview .doc-md')) { showToast('먼저 생성하세요.', 'error'); return; }
     const s = ensureSaved();
     if (s.error) { showToast(s.error, 'error'); proFeatureNotice('care_handover_save', '인수인계 저장'); return; }
     proFeatureNotice('care_handover_share', '인수인계 인쇄');

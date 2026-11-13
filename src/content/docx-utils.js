@@ -133,8 +133,10 @@ export function docxFile(text, filename, boldLines = 0) {
 
 // — MD 서브셋 → WordprocessingML (문서 표준 초안: 헤딩·표·목록·구분선·단락) —
 
-const _BORDERS = ['top', 'left', 'bottom', 'right', 'insideH', 'insideV']
-    .map(b => `<w:${b} w:val="single" w:sz="4" w:color="999999"/>`).join('');
+// 표 테두리 — 외곽선 1pt(sz=8)·내부선 0.5pt(sz=4). 격식 문서 관행(외곽 강조) +
+// 0.5pt는 화면 배율에서 서브픽셀로 사라지므로 PDF 변환 시 외곽선이 안 보이는 문제 방지
+const _BORDERS = ['top', 'left', 'bottom', 'right'].map(b => `<w:${b} w:val="single" w:sz="8" w:color="666666"/>`).join('')
+    + ['insideH', 'insideV'].map(b => `<w:${b} w:val="single" w:sz="4" w:color="999999"/>`).join('');
 // 표 레이아웃 — 본문 폭 고정 dxa (A4 11906 − 여백 1440×2 = 9026) + 균등 열 그리드 + 셀 내부 여백.
 // pct(상대폭)는 한글 등 일부 임포터가 미지원해 표가 본문 폭 밖으로 렌더될 수 있어 dxa 고정 사용.
 const _TEXT_W = 9026;

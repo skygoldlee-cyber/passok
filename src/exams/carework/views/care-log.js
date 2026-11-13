@@ -94,7 +94,7 @@ export function careLogSave() {
 
 export function careLogPrint() {
     careLogGenerate();
-    if (!document.querySelector('#log-preview pre')) { showToast('먼저 일지를 생성하세요.', 'error'); return; }
+    if (!document.querySelector('#log-preview .doc-md')) { showToast('먼저 일지를 생성하세요.', 'error'); return; }
     proFeatureNotice('care_log_export', '일지 인쇄·PDF');
     window.print();
 }

@@ -93,7 +93,7 @@ export function careIncidentSave() {
 
 export function careIncidentPrint() {
     careIncidentGenerate();
-    if (!document.querySelector('#inc-preview pre')) { showToast('먼저 보고서를 생성하세요.', 'error'); return; }
+    if (!document.querySelector('#inc-preview .doc-md')) { showToast('먼저 보고서를 생성하세요.', 'error'); return; }
     proFeatureNotice('care_incident_share', '보고서 인쇄·PDF');
     window.print();
 }
