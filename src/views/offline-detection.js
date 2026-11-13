@@ -5,6 +5,7 @@
 // 보고되는 사례가 있어(특히 iOS) 판정을 더 보수적으로 한다.
 
 import { TIMING } from '../config/timing.js';
+import { isStandalonePwa } from '../core/utils.js';
 
 /**
  * 오프라인 감지 초기화.
@@ -17,9 +18,7 @@ export function setupOfflineDetection(state, togglePomodoro) {
 
     // 설치형(standalone)에서는 온라인인데도 navigator.onLine이 false로
     // 보고되는 사례가 있어(특히 iOS) 판정을 더 보수적으로 한다.
-    const isStandalone =
-        window.matchMedia('(display-mode: standalone)').matches ||
-        window.navigator.standalone === true;
+    const isStandalone = isStandalonePwa();
 
     let probeInFlight = false;
     let failStreak = 0;

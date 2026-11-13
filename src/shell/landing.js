@@ -3,6 +3,7 @@
 // 체험 데모 위젯(미니 퀴즈·학습계획 미리보기), 설치 CTA, 버전 표기.
 // ES 모듈 — 순수 함수는 export해 단위 테스트에서 직접 검증한다.
 // DOM 진입은 #landing-main 존재 시에만 (테스트 임포트 안전).
+import { isStandalonePwa } from '../core/utils.js';
 
 const CIRCLED = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩'];
 const MS_PER_DAY = 86400000;
@@ -226,8 +227,7 @@ function renderPlan(host, examData) {
 function initInstallCta() {
     const btn = document.getElementById('landing-install-btn');
     if (!btn) return;
-    const standalone = window.matchMedia && window.matchMedia('(display-mode: standalone)').matches;
-    if (standalone || navigator.standalone === true) {
+    if (isStandalonePwa()) {
         // 이미 설치됨 — 설치 버튼을 앱 열기로 전환
         btn.replaceWith(appCta('앱 열기'));
         return;

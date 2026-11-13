@@ -1,6 +1,7 @@
 // src/pwa-install.js — PWA 설치 프롬프트 및 설치 안내 모달 로직 (app.js에서 추출)
 // @spec P-07,P-08,UX-PWA-04,P-09,UX-PWA-02,UX-PWA-04
 import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { isStandalonePwa } from '../core/utils.js';
 import { trapFocus } from '../ui-utils.js';
 
 /**
@@ -14,8 +15,7 @@ export function setupPWAInstall() {
     console.debug('[PWA] 조기 캡처된 deferredPrompt:', deferredPrompt ? '있음' : '없음');
 
     // 이미 설치된 경우 버튼 숨기기 (즉시 실행)
-    if (window.matchMedia('(display-mode: standalone)').matches ||
-        window.navigator.standalone === true) {
+    if (isStandalonePwa()) {
         console.debug('[PWA] 이미 설치된 상태입니다.');
         if (installBtn) {
             installBtn.classList.add('is-hidden');
@@ -89,7 +89,7 @@ export function setupPWAInstall() {
         if (diagEl && diagContent) {
             const lines = [];
             const secure = (typeof isSecureContext !== 'undefined') ? isSecureContext : (location.protocol === 'https:');
-            const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+            const isStandalone = isStandalonePwa();
             const hasPrompt = !!window.__deferredPrompt;
 
             // SW 상태(비동기) 수집

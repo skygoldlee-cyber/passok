@@ -7,6 +7,7 @@ import { safeGetItem, safeSetItem, safeRemoveItem } from '../core/state.js';
 import { hasProEntitlement } from '../pro/pro-upgrade.js';
 import { reportEvent } from '../telemetry/usage-telemetry.js';
 import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { isStandalonePwa } from '../core/utils.js';
 
 /** @param {string} id */
 const el = id => /** @type {HTMLInputElement|null} */ (document.getElementById(id));
@@ -34,12 +35,6 @@ export function canUnlink(user) {
 
 /** @param {string} provider */
 function _providerName(provider) { return PROVIDER_LABEL[provider] || provider; }
-
-/** 설치형 PWA 여부 — OAuth 리다이렉트 복귀 불가 환경 감지 (AU-09) */
-function _isStandalonePwa() {
-    return window.matchMedia?.('(display-mode: standalone)')?.matches === true
-        || window.navigator.standalone === true;
-}
 
 // Supabase 영문 오류 → 한글 안내
 /** @type {Array<[RegExp, string]>} */
@@ -102,7 +97,7 @@ export async function refreshAuthUI() {
     // AU-09 — 설치형 PWA는 소셜 로그인 버튼을 숨긴다: 외부 OAuth 리다이렉트 세션이
     // PWA 저장소로 돌아오지 못한다 (이메일 코드 경로가 대체 수단).
     const oauthArea = el('auth-oauth-area');
-    if (oauthArea) oauthArea.classList.toggle('is-hidden', _isStandalonePwa());
+    if (oauthArea) oauthArea.classList.toggle('is-hidden', isStandalonePwa());
     return user;
 }
 
@@ -115,7 +110,7 @@ function _renderIdentityArea(user) {
     if (!list || !actions || !area) return;
     const linked = linkedProviders(user);
     // 설치형 PWA는 OAuth 리다이렉트 복귀 불가(AU-09) — 연결 UI도 숨기고 이메일 경로를 안내
-    if (_isStandalonePwa()) { hide(area); return; }
+    if (isStandalonePwa()) { hide(area); return; }
     show(area);
     list.innerHTML = '';
     for (const id of (user.identities || [])) list.appendChild(_identityRow(user, id));

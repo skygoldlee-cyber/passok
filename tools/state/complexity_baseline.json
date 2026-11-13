@@ -303,8 +303,8 @@
     },
     "src/pwa/pwa-install.js": {
       "count": 3,
-      "max": 41,
-      "sum": 68
+      "max": 40,
+      "sum": 66
     },
     "src/pwa/pwa-manifest.js": {
       "count": 1,

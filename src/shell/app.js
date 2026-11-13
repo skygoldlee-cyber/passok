@@ -2,7 +2,7 @@
 // @spec S-02,S-03,S-08,UX-NAV-01,UX-PWA-01,UX-PWA-05,PF-10
 import { state, loadProgress } from '../core/state.js';
 import { esc } from '../core/sanitize.js';
-import { shuffle } from '../core/utils.js';
+import { shuffle, isStandalonePwa } from '../core/utils.js';
 import { clearScratchpad, toggleCalcScratchpad, toggleScratchpadEraser } from '../study/scratchpad.js';
 import { DataLoader } from '../content/data-loader.js';
 import { ExamViewer } from '../reader/exam-viewer.js';
@@ -286,9 +286,7 @@ function initApp() {
     // 앱 종료 버튼은 설치형 PWA(standalone)에서만 노출 — 브라우저 탭에서는 무의미
     step('setupAppQuit', () => {
         const quitBtn = document.getElementById('app-quit-btn');
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches
-            || window.navigator.standalone === true;
-        if (quitBtn && isStandalone) quitBtn.classList.remove('is-hidden');
+        if (quitBtn && isStandalonePwa()) quitBtn.classList.remove('is-hidden');
     });
     // 계정 세션 복원/구독 — 비동기, 내부에서 오류를 삼켜 앱 초기화를 막지 않음
     step('initAuthView', () => { initAuthView(); });

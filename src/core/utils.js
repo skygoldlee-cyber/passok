@@ -172,3 +172,14 @@ export function getChosung(str) {
 export function normalizeEntityName(name) {
     return typeof name === 'string' ? name.trim().toLowerCase().replace(/\s+/g, '') : '';
 }
+
+/**
+ * 설치형 PWA(standalone) 여부 — display-mode 미디어 쿼리 + iOS navigator.standalone 병용.
+ * OAuth 리다이렉트·설치 버튼 등 PWA 고유 분기의 판정을 단일 지점으로 모은다 (AU-09/P-07).
+ * 부트 전 동기 판정이 필요한 landing-redirect.js는 모듈 로드가 불가해 자체 판정을 유지한다.
+ * @returns {boolean}
+ */
+export function isStandalonePwa() {
+    return window.matchMedia?.('(display-mode: standalone)')?.matches === true
+        || window.navigator.standalone === true;
+}

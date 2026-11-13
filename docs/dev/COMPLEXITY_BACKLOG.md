@@ -19,7 +19,7 @@
 | 복잡도 | 함수 | 위치 |
 |---:|---|---|
 | 42 | `parseMarkdownContent` | src/reader/textbook-core.js:164 |
-| 41 | `openInstallModal` | src/pwa/pwa-install.js:76 |
+| 40 | `openInstallModal` | src/pwa/pwa-install.js:76 |
 | 39 | `openHtmlViewer` | src/reader/html-viewer.js:147 |
 | 37 | `(anonymous)#24` | src/pwa/pwa-manifest.js:11 |
 | 37 | `renderFlashcard` | src/views/flashcard.js:88 |
@@ -133,18 +133,18 @@
 | 17 | `computePassGap` | src/study/analysis-engine.js:366 |
 | 17 | `computeStudyPattern` | src/study/analysis-engine.js:585 |
 | 17 | `selectExamRiskSession` | src/study/study-tracker-alloc.js:92 |
-| 17 | `requestAiFeedback` | src/views/quiz/quiz.js:553 |
+| 17 | `requestAiFeedback` | src/views/quiz/quiz.js:554 |
 | 17 | `_subjectAllocHtml` | src/views/study-calendar.js:248 |
 | 17 | `weakRow` | src/views/trainer-drills.js:472 |
 | 17 | `checkShortAnswer` | src/views/trainer.js:33 |
 | 17 | `callProviderLLM` | src/written/written-grading.js:233 |
-| 16 | `refreshAuthUI` | src/auth-sync/auth-view.js:73 |
+| 16 | `refreshAuthUI` | src/auth-sync/auth-view.js:68 |
 | 16 | `pullSync` | src/auth-sync/sync.js:139 |
 | 16 | `batchToCsvRow` | src/exams/cosmetic/views/formula-batch.js:219 |
 | 16 | `updateFoldSummaries` | src/exams/cosmetic/views/formula-fields.js:268 |
 | 16 | `(anonymous)#18` | src/exams/cosmetic/views/formula-hub.js:38 |
 | 16 | `checkSummaryHtml` | src/exams/cosmetic/views/formula-list.js:18 |
-| 16 | `enter` | src/practice-registry.js:142 |
+| 16 | `enter` | src/practice-registry.js:222 |
 | 16 | `executePaletteResult` | src/shell/command-palette.js:376 |
 | 16 | `buildFeedbackPayload` | src/shell/feedback.js:112 |
 | 16 | `buildWeakMock` | src/study/personalization.js:68 |
@@ -192,7 +192,7 @@
 | 14 | `buildComboSubjectMd` | src/content/combo-doc.js:44 |
 | 14 | `resolveExamThemeTokens` | src/core/exam-context.js:182 |
 | 14 | `cleanOrphansForSubject` | src/core/state.js:314 |
-| 14 | `syncFacilityClients` | src/exams/carework/care-client-store.js:61 |
+| 14 | `syncFacilityClients` | src/exams/carework/care-client-store.js:54 |
 | 14 | `(anonymous)#4` | src/exams/carework/care-roster.js:55 |
 | 14 | `(anonymous)#6` | src/exams/carework/care-share.js:91 |
 | 14 | `(anonymous)#10` | src/exams/carework/doc-md.js:39 |
@@ -203,7 +203,6 @@
 | 14 | `parseExtractionResponse` | src/exams/cosmetic/product-vision.js:203 |
 | 14 | `renderStability` | src/exams/cosmetic/views/formula-calc.js:222 |
 | 14 | `writeCustomerForm` | src/exams/cosmetic/views/formula-customer.js:148 |
-| 14 | `setupPWAInstall` | src/pwa/pwa-install.js:9 |
 | 14 | `onLinkClick` | src/reader/manual-viewer.js:298 |
 | 14 | `_jwSep` | src/reader/markdown-parser.js:53 |
 | 14 | `tryList` | src/reader/markdown-parser.js:467 |
@@ -234,8 +233,9 @@
 | 13 | `(anonymous)#15` | src/exams/cosmetic/views/formula-batch.js:158 |
 | 13 | `(anonymous)#16` | src/exams/cosmetic/views/formula-calc.js:85 |
 | 13 | `_restoreCalcDraft` | src/exams/cosmetic/views/formula-calc.js:395 |
-| 13 | `getPracticeViewTitles` | src/practice-registry.js:838 |
+| 13 | `getPracticeViewTitles` | src/practice-registry.js:590 |
 | 13 | `showPlanCompare` | src/pro/pro-upgrade.js:237 |
+| 13 | `setupPWAInstall` | src/pwa/pwa-install.js:10 |
 | 13 | `detectPlatform` | src/pwa/pwa-install.js:61 |
 | 13 | `(anonymous)#25` | src/reader/exam-viewer.js:248 |
 | 13 | `(anonymous)#30` | src/reader/zoom-gestures.js:93 |
@@ -301,7 +301,7 @@
 | 11 | `extractFormPdf` | src/exams/carework/care-form-pdf.js:32 |
 | 11 | `(anonymous)#9` | src/exams/carework/care-visit.js:47 |
 | 11 | `_onTplFile` | src/exams/carework/form-template-editor.js:91 |
-| 11 | `(anonymous)#11` | src/exams/carework/form-template-store.js:65 |
+| 11 | `(anonymous)#11` | src/exams/carework/form-template-store.js:66 |
 | 11 | `parseLimitText` | src/exams/cosmetic/formula-check.js:35 |
 | 11 | `addCustomCandidate` | src/exams/cosmetic/formula-rules.js:129 |
 | 11 | `(anonymous)#17` | src/exams/cosmetic/views/formula-customer.js:66 |
@@ -334,7 +334,7 @@
 | 11 | `selectExamAction` | src/views/exam-select.js:240 |
 | 11 | `chapterForQuestion` | src/views/exam-sim/exam-sim-review.js:92 |
 | 11 | `bindQuizListeners` | src/views/listeners/listeners-quiz.js:9 |
-| 11 | `renderQuizResult` | src/views/quiz/quiz.js:462 |
+| 11 | `renderQuizResult` | src/views/quiz/quiz.js:463 |
 | 11 | `_toggleNoteEditor` | src/views/reader/reader-render.js:435 |
 | 11 | `(anonymous)#57` | src/views/reader/reader-toolbar.js:205 |
 | 11 | `saveGoalSettings` | src/views/study-calendar.js:457 |
