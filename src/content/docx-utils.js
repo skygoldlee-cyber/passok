@@ -354,7 +354,7 @@ const _sigRuns = (line, imgMap) => {
     const im = m ? imgMap[m[1] || ''] : undefined;
     if (m && im) {
         const label = line.replace(m[0], '').trim();
-        return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${esc(label + '　　　')}</w:t></w:r>${_imgRun(im)}`;
+        return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${esc(label + '　　　　')}</w:t></w:r>${_imgRun(im)}`;
     }
     const t = (m ? line.replace(m[0], '＿＿＿＿＿＿＿＿') : line).trim();
     return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(t + (/\(인\)\s*$/.test(t) ? '' : ' (인)'), _SIG_W - 300))}</w:r>`;
