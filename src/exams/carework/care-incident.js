@@ -1,4 +1,4 @@
-// src/exams/carework/care-incident.js — 사고·낙상 보고서 도메인 로직
+// src/exams/carework/care-incident.js — 사고 보고서 도메인 로직
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 // 발생경위·조치·가족 통지를 표준 사고보고 문서로 조립 — 기관 평가 증적 서식 기반
 import { toCsv } from '../../content/csv-utils.js';

@@ -1,4 +1,4 @@
-// src/exams/carework/views/care-incident.js — 사고·낙상 보고서 뷰
+// src/exams/carework/views/care-incident.js — 사고 보고서 뷰
 // @spec UX-FORM-03 — 시험 전용 실무 뷰 (DA-13)
 import { INCIDENT_TYPES, SEVERITIES, incidentTypeLabel, severityLabel, buildIncidentText, buildIncidentMd, incidentsToCsv } from '../care-incident.js';
 import { markFunnel } from '../care-funnel.js';
@@ -70,7 +70,7 @@ export function careIncidentGenerate() {
 export function careIncidentDocMd() {
     const f = readForm();
     const t = buildIncidentMd(f);
-    return t ? docMdHead('사고·낙상 보고서') + '\n' + renderToolBody('careIncident', {
+    return t ? docMdHead('사고 보고서') + '\n' + renderToolBody('careIncident', {
         보고내용: t, client: f.client,
         발생일시: `${f.date}${f.time ? ' ' + f.time : ''}`,
         발생장소: f.place, 사고유형: incidentTypeLabel(f.type),

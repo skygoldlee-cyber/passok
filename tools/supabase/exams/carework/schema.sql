@@ -189,7 +189,7 @@ drop policy if exists "visit member update" on public.family_visits;
 create policy "visit member update" on public.family_visits for update
   using (public.is_facility_member(facility_id, auth.uid()));
 
--- DSN-43 6d — 사고·낙상 보고서: incident_reports
+-- DSN-43 6d — 사고 보고서: incident_reports
 -- 기관 평가 증적 — 사고 기록은 법적 문서라 수정·삭제 정책 없음 (등록 후 정정은 신규 기록으로)
 
 create table if not exists public.incident_reports (

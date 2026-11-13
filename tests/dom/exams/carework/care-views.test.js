@@ -904,7 +904,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         await careFormSeedCopy('careIncident');
         const tpl = listFormTemplates().find(t => t.toolKey === 'careIncident');
         expect(tpl).toBeTruthy();
-        expect(tpl.title).toBe('사고·낙상 보고서');
+        expect(tpl.title).toBe('사고 보고서');
         expect(document.getElementById('cf-seed-list').innerHTML).toContain('사본 있음');
         await careFormTplDelete(tpl.id); // 사본 삭제 → 기본 양식이 '사본 만들기'로 복귀
         expect(document.getElementById('cf-seed-list').innerHTML).not.toContain('사본 있음');

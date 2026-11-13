@@ -282,7 +282,7 @@ export async function updateVisitResult(visitId, patch) {
     return { ok: true };
 }
 
-// — DSN-43 6d: 사고·낙상 보고서 —
+// — DSN-43 6d: 사고 보고서 —
 
 /** 사고 보고서 등록 — 기관 사고 대장에 증적 기록 @returns {Promise<{id:string}|{error:string}>} */
 /** @param {{facilityId:string, client:string, occurredAt:string, place:string, type:string, severity:string, description:string, action:string, familyNotified:boolean}} o */
