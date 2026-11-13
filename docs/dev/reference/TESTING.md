@@ -748,14 +748,40 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 
 - **실결함 회귀 가드**: 성분사전 '성분 추가' 버튼 nowrap 잘림과 자가 등록 모달
   등록 버튼 잘림이라는 두 실사례에서 비롯 — 수정을 되돌리는 변이로 실패 확인.
 
-**visual.spec.js — 스크린샷 시각 회귀 (로컬 + CI)**
+**scroll-occlusion.spec.js — 고정 크롬 오클루전 (UX-NAV-11, TR-23, 2026-11-13 추가)**
 
-- 대시보드 전체 화면 `toHaveScreenshot` — chromium·mobile·tablet × dark/light
-  6기준선으로 배경화(산수화)·테마 팔레트·반투명 카드 비침의 픽셀 변경 탐지.
-- 버전 토스트 등 동적 요소는 `mask`로 제외, `maxDiffPixelRatio` 1% 허용.
-- 픽셀 기준선은 linux(CI)만 관리 — 로컬 실행·win32 기준선 폐기. CI 시각 실패 시 visual-baseline.yml이 workflow_run으로 자동 재생성·커밋.
-  의도적 시각 변경 후 로컬은 `--update-snapshots`, CI용은
-  `visual-baseline.yml` 워크플로 수동 트리거 → 아티팩트 커밋으로 갱신.
+- **뷰 상단 가림 스윕**: cosmetic 12뷰 + carework 15뷰 해시 네비 순회 — 활성 뷰의
+  첫 가시 콘텐츠 상단이 `elementFromPoint` 기준 고정 크롬에 덮이지 않는지 실측.
+  상호작용 요소만 보던 기존 스윕과 달리 비상호작용 콘텐츠(헤딩·카드) 커버 —
+  헤더가 뷰 상단을 덮는 manual-07 류 회귀 대응.
+- **리더 TOC 점프 (TR-23)**: 본문 스크롤 끝 → 상위 섹션 점프의 착지 헤딩이
+  reader-chrome 아래로 가려지지 않음 — `scroll-margin-top` 계약 종단간 검증
+  (≤900px 드로어 대역 스킵 — 사이드바 레이아웃만).
+- **문서 오버레이 목차 점프**: 매뉴얼 오버레이 첫 헤딩·목차 점프 착지가
+  `.manual-ov-bar` 아래에서 시작하는지 폴링 검증.
+- **공용 계측 `tests/e2e/support/geometry.js`**: `waitForViewSettled`(활성 클래스
+  +scrollHeight 안정+폰트 정착 폴링 — 스윕의 고정 sleep 대체, CI 스윕 플레이크
+  근본 수정으로 mobile-overflow 격리 해제의 근거), `findOcclusion`·
+  `viewTopOcclusion`(`elementFromPoint` 실측).
+
+**perf.spec.js — 부트 성능 예산 (2026-11-13 추가)**
+
+- 콜드 DCL ≤15s · 웜(SW 제어 후) DCL ≤8s · LCP ≤10s — SW 캐시 미동작·번들
+  비대화 같은 재앙적 회귀 검출용 여유치 (미세 성능 추적은 프로파일링 대상).
+- chromium 프로젝트만 실행 — 네트워크·렌더 경로는 뷰포트와 무관하게 동일.
+
+**visual.spec.js — 스크린샷 시각 회귀 (CI 전용, 2026-11-13 표면 확장)**
+
+- 커버 표면: 대시보드(dark/light) + 퀴즈 진행·리더·설정 패널 오픈·carework
+  실무 홈(dark) — chromium·mobile·tablet × 표면. 배경화(산수화)·테마 팔레트·
+  반투명 카드 비침에 더해 주요 표면 레이아웃의 픽셀 변경을 탐지.
+- 퀴즈 문항은 `Math.random` 셔플이라 시드 고정(LCG 42)으로 결정성 확보,
+  날짜·버전·토스트 등 동적 요소는 `mask`로 제외, `maxDiffPixelRatio` 1% 허용.
+- CSS 배경화(webp)는 `Image.decode()` 완료까지 명시 대기 — networkidle이
+  background-image 요청을 보장하지 않아 생기던 잔상 레이스 수정.
+- 픽셀 기준선은 linux(CI)만 관리 — 로컬 실행·win32 기준선 폐기. 신규 표면의
+  기준선은 최초 CI 실패 후 visual-baseline.yml이 자동 재생성·커밋한다
+  (로컬 `--update-snapshots` 산출물은 커밋 금지).
 
 **a11y.spec.js — 접근성 자동 스캔·대비 전수 매트릭스 (A-01/03/04, UX-NAV-04, 2026-11-12 매트릭스 확장)**
 

@@ -1,5 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 test(e2e): 시각 회귀 표면 확장 + 오클루전 공용 검증 + 격리 스펙 근본 수정·해제
+
+- **visual.spec 표면 확장**: 대시보드 외 퀴즈 진행·리더·설정 패널 오픈·carework 실무 홈 기준선 추가 (다크 × 3프로젝트). 퀴즈 문항은 `Math.random` 셔플이라 LCG 시드 고정으로 결정성 확보, 날짜·버전 의존 요소는 마스크
+- **격리 근본 수정·해제 2건**: ① visual — CSS 배경화(webp) `Image.decode()` 완료 대기 추가 (networkidle이 background-image를 보장하지 않던 잔상 레이스) ② mobile-overflow — 뷰 스윕의 고정 sleep(700ms)을 정착 폴링으로 교체, CI 부하 시 비동기 렌더 미완료 계측 해소
+- **scroll-occlusion.spec 신규**: 공용 계측 `support/geometry.js`(`waitForViewSettled`·`findOcclusion`·`viewTopOcclusion` — elementFromPoint 실측). cosmetic 12뷰+carework 15뷰의 첫 콘텐츠가 크롬에 덮이지 않는지 스윕(비상호작용 콘텐츠 — manual-07 류), 리더 TOC 점프 헤딩의 scroll-margin-top 계약(TR-23), 문서 오버레이 목차 점프 검증
+- **perf.spec 신규**: 콜드 DCL ≤15s·웜 DCL ≤8s·LCP ≤10s — SW 캐시·번들 회귀 검출용 재앙 한계치, chromium만
+- **런북**: UIUX_VERIFY_RUNBOOK V6-c — PWA 설치·스탠드얼론 실기기 5점 체크 추가. TESTING.md 스펙 문서 갱신
+
+
 ## 2026-11-13 fix(ui): 라이선스 코드 입력 진입점 단일화 — 설정 패널만 유지
 
 - 플랜 안내(무료/유료 비교) 모달의 "라이선스 코드 입력" 링크 제거 — 입력은 ⚙️ 설정 패널 버튼 하나로 통일 (PAY-01 정본 경로). 구매 안내 문구의 경로 설명도 "설정 → 라이선스 코드 입력"으로 정정

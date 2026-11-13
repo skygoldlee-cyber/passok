@@ -7,8 +7,12 @@ import { defineConfig, devices } from '@playwright/test';
 // 편입 기준: CI 연속 실패 + 로컬 재현 불가. 편입일·근거를 주석에 기록하고
 // 근본 수정 후 즉시 해제하는 것이 원칙 — 영구 격리 금지.
 const CI_QUARANTINE = process.env.CI ? [
-    /mobile-overflow\.spec/,   // 2026-10-29 chromium+tablet 샤드 동시 실패(재시도 포함) — 로컬 전 프로젝트 통과 확인, 스윕 타이밍 플레이크
-    /visual\.spec/,            // 2026-10-29 CI 2회 연속 실패(재시도 포함) — 배경화 로드 레이스 의심, 로컬은 스킵 조건이라 재현 불가
+    // 격리 해제 이력:
+    //  mobile-overflow — 2026-11-13 해제: 스윕 대기를 고정 sleep(700ms)에서
+    //    정착 폴링(waitForViewSettled — 활성 클래스+scrollHeight 안정+폰트)으로 교체,
+    //    CI 부하 시 비동기 렌더 미완료 상태 계측이던 근본 원인 해소
+    //  visual — 2026-11-13 해제: CSS 배경화(webp) 디코드 완료를 명시 대기해
+    //    배경화 로드 레이스 해소 (networkidle은 CSS background 요청을 보장하지 않음)
 ] : [];
 
 export default defineConfig({
