@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 fix(carework): docx 페이지 방향 명시 + 인쇄 레이아웃 강제 + 서명란 가로줄 제거
+
+- `w:orient="portrait"` — pgSz에 방향을 명시. 속성 생략 시 가로로 해석하는 docx 임포터 대응 (A4 11906×16838 유지)
+- `word/settings.xml` 파트 추가 — `w:view w:val="print"` + `w:zoom 100%`. settings 부재 시 뷰어가 웹 레이아웃(전체폭·페이지 경계 없음)으로 여는 문제 해소. zip 파트 3→5개(+ document.xml.rels)
+- sectPr에 `w:cols`·`w:docGrid` 추가 — Word 정본과 동일한 섹션 구조 (일부 임포터가 본문 폭을 다르게 계산하는 것 방지)
+- 표 폭 pct→dxa 고정 — `tblW pct 5000`(상대폭)을 9026dxa(본문 폭)로 전환 + `tblGrid`·`tcW` 열 너비 명시. 상대폭 미지원 임포터에서 표가 본문 밖으로 밀리는 문제 방지
+- `docMdSign` `---` 제거 — docx에서 전폭 가로줄(`pBdr`)·미리보기에서 `<hr>`로 렌더돼 서명란 위에 뜬금없는 선이 생기던 것 제거 (전 문서 공통)
+
 ## 2026-11-13 feat(carework): 전 문서 격식표 출력 통일 — docx 전폭 표 + 미리보기·PDF 동일 렌더
 
 - 표 미지원 3곳 격식표화 — `buildIncidentMd`(사고보고서 2열 전항목) · `buildHandoverMd`(기본정보+인계내용 2표) · `careCalcDocMd` 신규(입력조건·공단 책정 기준·계산 결과 3표 + 선택 등급 ▶ 표시). 이제 내보내기 대상 8문서 전부 MD 표 경로 (일지·점검표·명부·면회·근무표는 기존 지원)

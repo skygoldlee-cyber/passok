@@ -19,12 +19,13 @@ export const mdTable = (headers, rows) =>
         ...rows.map((/** @type {*[]} */ r) => '| ' + r.map((/** @type {*} */ c) => String(c ?? '')).join(' | ') + ' |')].join('\n');
 
 /** 문서 서명란 — items: [[라벨, 'author'|'confirmer'|'receiver'|'']] — docSignHtml의 MD 대응.
- *  홈 설정 성명은 기입되고, 미설정·빈키(날짜) 슬롯은 수기 서명용 공란 유지 */
+ *  홈 설정 성명은 기입되고, 미설정·빈키(날짜) 슬롯은 수기 서명용 공란 유지.
+ *  구분선(---)은 넣지 않는다 — docx에서는 전폭 가로줄로 렌더돼 표 바로 아래 뜬금없는 선이 된다 */
 /** @param {Array<[string,string]>} items */
 export const docMdSign = items => {
     const s = getDocSign();
     const nm = (/** @type {string} */ k) => (k === 'author' ? s.author : k === 'confirmer' ? s.confirmer : k === 'receiver' ? s.receiver : '');
-    return '\n\n---\n\n' + items.map(([label, k]) => `${label}: ${nm(k) || '＿＿＿＿＿＿＿＿'}`).join('  ·  ');
+    return '\n\n' + items.map(([label, k]) => `${label}: ${nm(k) || '＿＿＿＿＿＿＿＿'}`).join('  ·  ');
 };
 
 /** 기존 CSV 직렬화 재사용 → MD 표 (BOM·인용 처리는 parseCsv 위임) */

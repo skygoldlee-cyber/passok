@@ -25,13 +25,18 @@ const unzip = async file => {
     return { entries, eocd };
 };
 
-test('파일명·타입 + 3필수 엔트리 + EOCD', async () => {
+test('파일명·타입 + 필수 엔트리 + EOCD', async () => {
     const f = docxFile('첫째\n둘째', '인수인계서_2026-11-05');
     assert.equal(f.name, '인수인계서_2026-11-05.docx');
     assert.ok(f.type.includes('wordprocessingml.document'));
     const { entries, eocd } = await unzip(f);
-    assert.deepEqual(Object.keys(entries), ['[Content_Types].xml', '_rels/.rels', 'word/document.xml']);
+    assert.deepEqual(Object.keys(entries), [
+        '[Content_Types].xml', '_rels/.rels', 'word/_rels/document.xml.rels', 'word/document.xml', 'word/settings.xml',
+    ]);
     assert.ok(eocd, 'EOCD 레코드 없음');
+    const settings = entries['word/settings.xml'];
+    assert.ok(settings.includes('<w:view w:val="print"/>'), '인쇄 레이아웃 보기 강제 누락 — 페이지 경계 미표시 위험');
+    assert.ok(settings.includes('<w:zoom w:percent="100"/>'), '확대율 100% 고정 누락');
 });
 
 test('단락 변환 — 줄 단위 w:p, 빈 줄은 빈 단락, 공백 보존', async () => {
@@ -66,7 +71,9 @@ test('docxFileMd — 헤딩·표·목록이 구조로 변환된다', async () =>
     assert.ok((doc.match(/<w:tr>/g) || []).length === 2, '표 행 수 불일치');
     assert.ok(doc.includes('• 항목'), '목록 불릿 누락');
     assert.ok(doc.includes('<w:pBdr>'), '구분선 누락');
-    assert.ok(doc.includes('w:type="pct"'), '표 전폭(pct) 레이아웃 누락 — A4 본문 폭 미사용');
+    assert.ok(doc.includes('w:type="dxa"'), '표 고정폭(dxa) 레이아웃 누락 — A4 본문 폭 미사용');
+    assert.ok(doc.includes('<w:tblGrid>') && doc.includes('<w:gridCol'), '열 그리드 누락');
     assert.ok(doc.includes('<w:shd'), '표머리 음영 누락');
     assert.ok(doc.includes('<w:tblCellMar>'), '셀 내부 여백 누락');
+    assert.ok(doc.includes('w:orient="portrait"'), 'A4 세로 방향 명시 누락');
 });
