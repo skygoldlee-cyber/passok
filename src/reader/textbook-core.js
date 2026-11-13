@@ -11,10 +11,10 @@ const cleanText = (/** @type {string} */ text) => {
     return text
         .replace(/<br\s*\/?>/gi, '\n')
         .replace(/&nbsp;/g, ' ')
-        .replace(/`\s*(?:🔖기출|📌중요|🎯\s*기출|🎯\s*중요|★\s*필수|기출|중요)\s*`/g, '')
-        .replace(/🔖기출/g, '')
+        .replace(/`\s*(?:🔖(?:기출|빈출)|📌중요|🎯\s*(?:기출|빈출)|🎯\s*중요|★\s*필수|기출|중요)\s*`/g, '')
+        .replace(/🔖(?:기출|빈출)/g, '')
         .replace(/📌중요/g, '')
-        .replace(/🎯\s*기출/g, '')
+        .replace(/🎯\s*(?:기출|빈출)/g, '')
         .replace(/🎯\s*중요/g, '')
         .replace(/★\s*필수/g, '')
         .replace(/`{2,}/g, '')
@@ -88,7 +88,7 @@ function scoreCard(term, definition, isKey, category, cardType) {
     else if (['requirement', 'procedure'].includes(cardType)) numericScore = 50;
 
     // 기출관련성 (0-100)
-    const examRel = isKey ? 100 : (category && /기출/.test(category) ? 30 : 0);
+    const examRel = isKey ? 100 : (category && /기출|빈출/.test(category) ? 30 : 0);
 
     // 카드적합성 (0-100)
     let cardFit = 70;
@@ -159,7 +159,7 @@ function basenameNoMd(filename) {
  * @param {string} filename - '1.cosmetic-overview.md' 형태 (카테고리·ID 네임스페이스)
  * @param {string} chapterKey
  * @returns {{cards:*[], quizzes:*[], warnings:Array<{line:number,text:string}>}}
- *   warnings = 🔖기출 마커가 있으나 퀴즈 미생성된 항목 (조용한 손실 감시)
+ *   warnings = 🔖(?:기출|빈출) 마커가 있으나 퀴즈 미생성된 항목 (조용한 손실 감시)
  */
 export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
     const lines = content.split(/\r?\n/);
@@ -228,7 +228,7 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
             // 범용 표현(예: "기능", "시험 기준", "보관 조건")은 키워드로 부적합
             if (isGenericTerm(cleanTerm)) return;
 
-            const has기출 = /🔖기출|🎯\s*기출/.test(rawTerm) || /🔖기출|🎯\s*기출/.test(rawDesc);
+            const has기출 = /🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)/.test(rawTerm) || /🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)/.test(rawDesc);
             const isKey = has기출 || /📌중요|🎯\s*중요/.test(rawTerm) || /📌중요|🎯\s*중요/.test(rawDesc) || /★\s*필수/.test(rawTerm) || /★\s*필수/.test(rawDesc);
             // definition에서도 (L숫자) 줄번호 참조 제거
             const cleanDesc = desc.replace(/\s*\(L\d+\)\s*/g, ' ').trim();
@@ -329,7 +329,7 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
                     }
                 }
 
-                // 🔖기출 표시가 있는데 이 행에서 퀴즈가 하나도 안 나오면 경고 수집
+                // 🔖(?:기출|빈출) 표시가 있는데 이 행에서 퀴즈가 하나도 안 나오면 경고 수집
                 if (has기출 && quizzesForRow === 0) {
                     warnings.push({ line: row.line || 0, text: cleanTerm || desc.substring(0, 40) });
                 }
@@ -388,16 +388,16 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
 
             // 헤더(###)·볼드 라벨·내용 없는 번호/불릿 항목은 퀴즈 생성 대상이 아니므로
             // 마커 경고에서 제외 (예: "### 1. 항목 🎯 기출", "> **참고 - X 🎯 기출**", "④ 항목명")
-            const markerStripped = line.replace(/🔖기출|🎯\s*기출|📌중요|🎯\s*중요|`/g, '').trim();
+            const markerStripped = line.replace(/🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)|📌중요|🎯\s*중요|`/g, '').trim();
             const isLabelLine = /^#{1,6}\s/.test(markerStripped)
                 || /^>?\s*\*\*[^*]+\*\*\s*[:：]?\s*$/.test(markerStripped)
                 || (/^>?\s*(?:[-*]\s+|[①-⑳]\s*)/.test(markerStripped) && !/[0-9:：,，•·*]/.test(markerStripped));
 
-            if (!isLabelLine && /🔖기출|📌중요|🎯\s*기출|🎯\s*중요/.test(line)) {
-                const has기출Line = /🔖기출|🎯\s*기출/.test(line);
+            if (!isLabelLine && /🔖(?:기출|빈출)|📌중요|🎯\s*(?:기출|빈출)|🎯\s*중요/.test(line)) {
+                const has기출Line = /🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)/.test(line);
                 let quizzesForLine = 0;
                 const cleanedLine = cleanText(line);
-                const listMatch = line.match(/^[-*]\s+\*\*([^*]+)\*\*(?:\s*(?:🔖기출|🎯\s*기출|📌중요|🎯\s*중요))?\s*[:：-]\s*(.+)$/);
+                const listMatch = line.match(/^[-*]\s+\*\*([^*]+)\*\*(?:\s*(?:🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)|📌중요|🎯\s*중요))?\s*[:：-]\s*(.+)$/);
                 if (listMatch) {
                     const term = cleanText(listMatch[1] || '').replace(/\s*\(L\d+\)\s*/g, '').replace(/\s*\(([^a-zA-Z()]*?)\)/g, '').trim();
                     if (term.length > 2 && term.length <= 50 && !isGenericTerm(term)) {
@@ -469,7 +469,7 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
                                 quizzes.push({
                                     id: makeQuizId(cleanedLine.substring(0, 15), ans),
                                     category: currentSection,
-                                    context: `[기출 지문 빈칸 채우기]`,
+                                    context: `[빈출 지문 빈칸 채우기]`,
                                     question: quizText,
                                     answer: ans,
                                     type: 'blank'
@@ -486,7 +486,7 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
                             quizzes.push({
                                 id: makeQuizId(cleanedLine.substring(0, 15), ans),
                                 category: currentSection,
-                                context: `[기출 지문 빈칸 채우기]`,
+                                context: `[빈출 지문 빈칸 채우기]`,
                                 question: quizText,
                                 answer: ans,
                                 type: 'blank'
@@ -496,7 +496,7 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
                     });
                 }
                 }
-                // 🔖기출 지문/리스트인데 퀴즈가 하나도 안 나오면 경고 수집 (조용한 손실 방지)
+                // 🔖(?:기출|빈출) 지문/리스트인데 퀴즈가 하나도 안 나오면 경고 수집 (조용한 손실 방지)
                 if (has기출Line && quizzesForLine === 0) {
                     warnings.push({ line: i + 1, text: cleanedLine.substring(0, 60) });
                 }

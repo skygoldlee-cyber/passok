@@ -6,10 +6,10 @@ import { escapeHTML as esc } from '../core/sanitize.js';  // escapeHTML을 esc�
 import { PATHS } from '../core/paths.js';
 import { buildSectionDisplayTitles } from '../reader/reader-toc.js';
 
-// --- ② 기출 핵심 요약 ---
+// --- ② 빈출 핵심 요약 ---
 
 /**
- * 챕터에서 기출/중요 마커가 붙은 핵심 라인을 추출합니다.
+ * 챕터에서 빈출/중요 마커가 붙은 핵심 라인을 추출합니다.
  * @param {object} chapter - { sections: [{ title, content }] }
  * @returns {{ sectionTitle: string, sectionIdx: number, items: string[] }[]}
  */
@@ -28,10 +28,10 @@ export function extractExamHighlights(chapter) {
             const trimmed = line.trim();
             if (!trimmed || trimmed.startsWith('|') || trimmed.startsWith('---')) return;
 
-            if (trimmed.includes('🔖기출') || trimmed.includes('📌중요') || /★\s*필수/.test(trimmed)) {
+            if (trimmed.includes('🔖기출') || trimmed.includes('🔖빈출') || trimmed.includes('📌중요') || /★\s*필수/.test(trimmed)) {
                 // 마커 제거하고 의미있는 텍스트만 추출
                 let clean = trimmed
-                    .replace(/🔖기출/g, '')
+                    .replace(/🔖(?:기출|빈출)/g, '')
                     .replace(/📌중요/g, '')
                     .replace(/★\s*필수/g, '')
                     .replace(/^\*\*([^*]+)\*\*/, '$1')
@@ -57,7 +57,7 @@ export function extractExamHighlights(chapter) {
 }
 
 /**
- * 기출 핵심 요약 카드 HTML을 생성합니다.
+ * 빈출 핵심 요약 카드 HTML을 생성합니다.
  */
 /** @param {*} chapter */
 function renderExamHighlightCard(chapter) {
@@ -73,7 +73,7 @@ function renderExamHighlightCard(chapter) {
         <div class="study-aid-card exam-highlight-card" id="exam-highlight-card">
             <div class="study-aid-header">
                 <i class="fa-solid fa-fire"></i>
-                <span>기출 핵심 — ${totalItems}개</span>
+                <span>빈출 핵심 — ${totalItems}개</span>
                 <button class="study-aid-toggle" id="exam-highlight-toggle" title="펼치기/접기">
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
@@ -164,7 +164,7 @@ async function renderNumberDrillCard(subjId) {
         <div class="study-aid-card number-drill-card" id="number-drill-card">
             <div class="study-aid-header">
                 <i class="fa-solid fa-hashtag"></i>
-                <span>중요 숫자 암기표 — ${totalEntries}개${keyCount > 0 ? ` (기출 ${keyCount}개 우선)` : ''}</span>
+                <span>중요 숫자 암기표 — ${totalEntries}개${keyCount > 0 ? ` (빈출 ${keyCount}개 우선)` : ''}</span>
                 <button class="study-aid-toggle" id="number-drill-toggle" title="펼치기/접기">
                     <i class="fa-solid fa-chevron-down"></i>
                 </button>
@@ -185,10 +185,10 @@ async function renderNumberDrillCard(subjId) {
         return h;
     };
 
-    // 1) 기출/중요 항목 — 카테고리별 분류, 항상 펼침
+    // 1) 빈출/중요 항목 — 카테고리별 분류, 항상 펼침
     if (keyEntries.length > 0) {
         html += `<div class="number-drill-section number-drill-key-section">`;
-        html += `<div class="number-drill-section-title">📌 기출·중요 숫자 (${keyCount}개)</div>`;
+        html += `<div class="number-drill-section-title">📌 빈출·중요 숫자 (${keyCount}개)</div>`;
 
         /** @type {Object.<string,*[]>} */
         const keyByCat = {};
@@ -281,7 +281,7 @@ export function detectProcedureFlow(chapter) {
             const numMatch = trimmed.match(/^(?:\d+[.)]|①|②|③|④|⑤|⑥|⑦|⑧|⑨|⑩)\s*(.+)/);
             if (numMatch) {
                 const label = (numMatch[1] || '')
-                    .replace(/🔖기출/g, '')
+                    .replace(/🔖(?:기출|빈출)/g, '')
                     .replace(/📌중요/g, '')
                     .replace(/\*\*/g, '')
                     .trim();
@@ -371,7 +371,7 @@ export function detectAdminPenalty(chapter) {
 export async function renderStudyAids(chapter, subjId) {
     let html = '';
 
-    // 기출 핵심 요약
+    // 빈출 핵심 요약
     const highlightCard = renderExamHighlightCard(chapter);
     if (highlightCard) html += highlightCard;
 

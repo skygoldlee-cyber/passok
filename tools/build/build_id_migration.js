@@ -37,8 +37,8 @@ const norm = s => String(s || '').replace(/\s+/g, ' ').trim();
 // 카드 term 매칭용 추가 정제 — cleanText가 잔류시키던 마커/백틱 잔재를 제거해
 // 정제 전후 term("헥세티딘 ``" → "헥세티딘")이 같은 키로 매칭되게 한다 (진도 이관)
 const cleanTermKey = s => norm(s)
-  .replace(/`\s*(?:🔖기출|📌중요|🎯\s*기출|🎯\s*중요|★\s*필수|기출|중요)\s*`/g, '')
-  .replace(/🔖기출|📌중요|🎯\s*기출|🎯\s*중요|★\s*필수|기출|중요/g, '')
+  .replace(/`\s*(?:🔖기출|🔖빈출|📌중요|🎯\s*기출|🎯\s*빈출|🎯\s*중요|★\s*필수|기출|빈출|중요)\s*`/g, '')
+  .replace(/🔖기출|🔖빈출|📌중요|🎯\s*기출|🎯\s*빈출|🎯\s*중요|★\s*필수|기출|빈출|중요/g, '')
   .replace(/`+/g, '')
   .replace(/\s+/g, ' ').trim();
 const CHECK_ONLY = process.argv.includes('--check');

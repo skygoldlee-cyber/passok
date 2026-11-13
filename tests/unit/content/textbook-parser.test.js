@@ -68,6 +68,15 @@ test('parseMarkdownFile: 🔖기출 마커 카드는 isKey=true', () => {
     assert.equal(card.isKey, true);
 });
 
+test('parseMarkdownFile: 🔖빈출 마커도 🔖기출과 동일하게 isKey·퀴즈 파생 (기출 비공개 시험 표기)', () => {
+    const md = '| 항목 | 설명 |\n| --- | --- |\n| 손발톱 관리 🔖빈출 | 손톱은 **둥글게** 자르기 |';
+    const { cards, quizzes } = parseMarkdownFile(md, 'caretheory', '1과목_요양보호론.md', 'ch1');
+    const card = cards.find(c => c.term === '손발톱 관리');
+    assert.equal(card.isKey, true);
+    assert.ok(quizzes.some(q => q.answer === '둥글게'), '빈칸 퀴즈 생성');
+    assert.ok(!card.term.includes('빈출'), 'term에 마커 잔재 금지');
+});
+
 test('parseMarkdownFile: 📌중요 마커 카드는 isKey=true', () => {
     const { cards } = parseMarkdownFile(SAMPLE_MD_TABLE, 'understanding', '1.cosmetic-overview.md', 'ch1');
     const card = cards.find(c => c.term === '관능평가법');

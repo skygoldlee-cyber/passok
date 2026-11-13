@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 fix+docs: DOC-BIZ-10 후속 3건 — 🔖빈출 정정·계정 연결 설계·exam-sim 오표시 검증
+
+- **① 🔖기출 → 🔖빈출 정정 (carework)**: carework는 기출 비공개 시험이므로 콘텐츠 표기 정정 — 교재 4파일·문제은행 1파일(63건). 마커는 파서가 소비하는 기능 토큰이므로 소비처가 **`🔖기출`·`🔖빈출` 둘 다 인식**하게 확장: `textbook-core.js`(isKey·빈칸 퀴즈·정리) · `study-aids.js`(추출·라벨 "빈출 핵심"/"빈출·중요 숫자") · `doc-overlay.js` · `check_manifest.js` MARKER_RE · `build_id_migration.js` · `report.js`. cosmetic 등 기존 `🔖기출`은 호환 유지. 학습안내서·적응형 엔진 설계 문서 표기도 정합. parser 테스트에 `🔖빈출` 동등성 케이스 추가(44/44 통과)·`build:data` 재생성 정합
+- **② 계정 연결 설계 (DOC-DSN-50)**: 로그인 수단(email OTP·kakao·google)마다 별도 `auth.users` → `profiles.plan` 권한 분리 문제. Supabase `linkIdentity` 경로 설계 — 설정 화면 "로그인 수단 관리" + 충돌(상대 수단이 다른 계정 귀속) 시 수동 복구 경로(이전 계정 로그인 유도·코드 재활성 정책·지원 채널), 자동 이메일 매칭 병합 금지 명시
+- **③ exam-sim `||120` 폴백 오표시 검증**: carework manifest `integratedExam`(35+45=80문항·90분·60%)이 카드(`app-dashboard`)·세션(`exam-sim-session`) 양쪽에 정확히 반영됨 — **오표시 없음**. 평가자가 본 100문/120분은 cosmetic 실제 설정. 잔여 정정은 `exam-sim-session.js`의 cosmetic 전용 수치가 "실제 시험"으로 범용 표기된 주석 2건 — manifest 참조로 정정
+
+
 ## 2026-11-13 docs: DOC-BIZ-10 이용자 관점 평가 등재 — 외부 유료 전환 평가 + 코드 대조 검증
 
 - **신규 문서**: `docs/exams/carework/business/이용자_관점_평가_2026-11-13.md` — 외부 평가 원문 보존 + §A 코드 대조 부록

@@ -142,7 +142,7 @@ export function buildTocHtml(article, { idPrefix, jumpAttr, tocClass }) {
     headings.forEach((h, idx) => {
         if (!h.id) h.id = idPrefix + idx;
         const depth = h.tagName === 'H3' ? 'depth-3' : 'depth-2';
-        const label = h.textContent.replace(/🔖기출|📌중요/g, '').trim();
+        const label = h.textContent.replace(/🔖(?:기출|빈출)|📌중요/g, '').trim();
         items += `<a href="#${h.id}" class="${depth}" data-${jumpAttr}="${h.id}">${escapeHTML(label)}</a>`;
     });
     return `<details class="${tocClass}"><summary><i class="fa-solid fa-list"></i> 목차</summary>${items}</details>`;

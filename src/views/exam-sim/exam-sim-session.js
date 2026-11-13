@@ -43,7 +43,7 @@ export function startSimSession(examData) {
     simState.currentIndex = 0;
     simState.userAnswers = {};
     simState.answerChanges = {}; // PS-08 — 세션 시작 시 변경 추적 리셋
-    // 문항당 1분 기산, 실전 형식(통합 모의고사)은 명시된 제한시간 우선 (실제 시험: 100문/120분)
+    // 문항당 1분 기산, 실전 형식(통합 모의고사)은 명시된 제한시간 우선 (실제 시험 시간은 manifest integratedExam.examTimeMin — 시험별 상이)
     simState.timeLeft = examData.timeLimitSec || examData.questions.length * TIMING.EXAM_TIME_PER_QUESTION_SEC;
     simState.wrongQuestions = [];
 
@@ -307,7 +307,7 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
             ? `1~${subjectCount}과목 통합 실전 모의고사 (${totalQuestions}제)`
             : `통합 실전 모의고사 (${totalQuestions}제)`,
         questions: combinedQuestions,
-        // 실제 시험 시간: manifest integratedExam.examTimeMin (100문/120분)
+        // 실제 시험 시간: manifest integratedExam.examTimeMin (시험별 상이 — cosmetic 120분·carework 90분)
         timeLimitSec
     };
 
