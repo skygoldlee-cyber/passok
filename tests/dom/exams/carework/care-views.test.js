@@ -464,6 +464,15 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.getElementById('vis-preview').textContent).toContain('행복요양원');
         setLocalOrgName('');
         expect(document.getElementById('vis-scheduled').textContent).toContain('등록된 방문예약이 없습니다');
+        // 출력 CSV는 '상태' 열 없이 결과로 표현 — 완료는 요약, 취소는 결과 칸에 '취소' 표기
+        const { visitsToCsv } = await import('../../../../src/exams/carework/care-visit.js');
+        const csv = visitsToCsv([
+            { date: '2026-11-05', client: '김○○', visitor: '홍○○', status: 'done', result: { summary: '면회 30분' } },
+            { date: '2026-11-06', client: '이○○', visitor: '박○○', status: 'canceled' },
+        ]);
+        expect(csv.split('\n')[0]).not.toContain('상태');
+        expect(csv).toContain('면회 30분');
+        expect(csv).toContain('취소'); // 상태 정보는 결과 칸으로 흡수
         careVisitDelete(document.querySelector('#vis-done [data-arg]')?.dataset.arg);
     });
 
