@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 fix(test): review-drills DOM 단언 갱신 — 빈출·중요 숫자 라벨 정합
+
+- 🔖기출→🔖빈출 라벨 정정에 누락된 DOM 테스트 1건(`review-drills-formula.dom.test.js`의 '기출·중요 숫자' 단언) — CI test 잡 failure 원인 수정
+
+
 ## 2026-11-13 feat(tools): DA-26 파이프라인 반영 — snap/shotPng 둘레 여백 자동화 + 전 삽화 재캡처
 
 - `capture_manual.js`에 `shotWithMargin` 헬퍼 추가 — 요소가 뷰포트에 온전히 들어오면 boundingBox ±8/6px 확장 클립, 더 크면 요소 스크린샷 폴백. `snap`·`shotPng`·탭바·more 합성 경로 일괄 적용

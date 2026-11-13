@@ -127,10 +127,10 @@ describe('ND-01: 숫자 암기 드릴 (number-drills JSON)', () => {
         expect(data).toEqual([]);
     });
 
-    it('renderStudyAids가 기출 우선 섹션 + 수치·단위·맥락을 렌더한다', async () => {
+    it('renderStudyAids가 빈출 우선 섹션 + 수치·단위·맥락을 렌더한다', async () => {
         const html = await renderStudyAids({ sections: [] }, 'subja');
         expect(html).toContain('number-drill-card');
-        expect(html).toContain('기출·중요 숫자');
+        expect(html).toContain('빈출·중요 숫자');
         expect(html).toContain('15');
         expect(html).toContain('일');
         expect(html).toContain('유해사례');

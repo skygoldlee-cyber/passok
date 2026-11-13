@@ -468,8 +468,8 @@ async function main() {
     let studyPage = null;
     for (const n of run) {
         try {
-            if (n === 'manual-01-sidebar') { // PC 전용 UI — 데스크탑 컨텍스트 (PC 병기)
-                const s = await browser.newContext({ viewport: { width: 1280, height: 1600 }, locale: 'ko-KR' });
+            if (n === 'manual-01-sidebar') { // PC 전용 UI — 데스크탑 컨텍스트 (PC 병기 · 메뉴 전체+푸터가 들어가는 최소 높이 1450 — 1600은 공백 과대·1300은 서식모음 잘림)
+                const s = await browser.newContext({ viewport: { width: 1280, height: 1450 }, locale: 'ko-KR' });
                 const sp = await s.newPage(); await seed(sp);
                 await sp.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
                 await sp.waitForSelector('nav, aside, .sidebar', { timeout: 15000 });
