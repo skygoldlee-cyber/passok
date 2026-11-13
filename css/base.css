@@ -620,7 +620,16 @@ body {
     height: 100vh;
     height: 100dvh; /* iOS Safari 주소창 변동 대응 */
     -webkit-font-smoothing: antialiased;
+    /* @spec UX-TXT-01 — 한국어 단어 단위 줄바꿈: 음절 중간 분절 금지.
+       깨지지 않는 긴 런은 아래 body * 의 overflow-wrap이 최후 수단으로 받는다 */
+    word-break: keep-all;
 }
+
+/* @spec UX-TXT-01 — 깨지지 않는 긴 런(URL·`-`/`·` 이음 나열·외래 장문)의 최후 수단:
+   단어가 컨테이너를 넘칠 때만 그 안에서 분절. keep-all만 단독이면 장문이
+   컨테이너를 넘쳐 수평 오버플로(UX-NAV-10 위반)가 된다. 개별 선언
+   (doc-md의 anywhere·source-link의 break-all 등)이 더 구체적이라 우선한다 */
+body * { overflow-wrap: break-word; }
 
 /* 배경화 — 정선「인왕제색도」(1751, 퍼블릭 도메인) 수묵 산수화 + 테마 딤.
    body는 overflow:hidden이라 스크롤하지 않으므로 fixed 없이도 화면 고정

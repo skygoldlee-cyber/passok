@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 spec+css: UX-TXT-01 신설 — 단어 단위 줄바꿈 전면 상속
+
+- **`body { word-break: keep-all }`**: 인시던트 지점에만 붙어 있던 keep-all(13곳)을 루트 상속으로 일반화 — 한국어 음절 중간 분절 전면 금지
+- **`body * { overflow-wrap: break-word }`**: 깨지지 않는 긴 런(URL·이음 나열·장문)의 최후 수단 — keep-all 단독 시 컨테이너 넘침(UX-NAV-10 위반) 방지, 넘칠 때만 발동이라 정상 단어 분절 없음
+- **SPEC §4.8.10 신설**: `UX-TXT-01` — 예외는 명시 선언 우선 (`.source-link` break-all=URL 의도, `.doc-md`·`.care-doc-sign` anywhere=이음 런 연속)
+- **검증**: `check:mobilesafe`·`check:types`·`lint` 통과
+
+
 ## 2026-11-13 ux: 컨트롤 간 여백 규약 정합 — 모바일 nowrap 액션 행 정리 (UX-CTL-03/05)
 
 - **nowrap 액션 행 flex-wrap 부여** (모바일 눌림·넘침 방지): `.result-actions`(퀴즈 완료) · `.reader-empty-actions` · `.subj-actions` · `.demo-actions` · `.calc-scratchpad-actions` · `.daily-choice-row` · `.daily-short-row` · `.quiz-input-group` · `.calc-input-row` · `.ing-input-row` · `.actual-form-row` · `.review-header` · `.sim-review-header`

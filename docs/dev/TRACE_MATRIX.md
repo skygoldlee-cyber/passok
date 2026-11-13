@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: d2705a8011bb2908
-> 생성: 2026-11-13 · 원천: SPEC.md(706개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: df71b1f32a575618
+> 생성: 2026-11-13 · 원천: SPEC.md(707개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 706개 — 문서 연결 469 · 소스 연결 623 · 테스트 연결 668 · 보고서 연결 109
+**커버리지 요약**: 요구사항 707개 — 문서 연결 469 · 소스 연결 624 · 테스트 연결 669 · 보고서 연결 109
 
 ---
 
@@ -812,6 +812,7 @@
 | UX-SET-04 | 사용자가 "몇 버전인지" 문의할 때 유일한 확인 경로. SW 등록 스크립트 URL에서 버전 자동 추출 | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-SET-05 | 일관된 드롭다운 UX | E2E 테스트 | DOC-DSN-25 | css/ui-overlay.css<br>src/views/listeners/listeners-app.js | tests/e2e/app-chrome.spec.js<br>tests/unit/app/ux-invariants.test.js | — | — |
 | UX-SET-06 | `.reader-chrome`이 헤더와 같은 z(100)라 DOM 후순으로 패널 상단이 불투명 카드 아래로 가려진 실사례(2026-10-24). `tests/e2e/settings-occlusion.spec.js`가 뷰별 `elementFromPoint` 실측으로 차단, `check:zlayer`가 CSS 대역 계약을 정적 검사 | E2E 테스트 | — | tools/check/check_zlayer.js | tests/e2e/settings-occlusion.spec.js | — | — |
+| UX-TXT-01 | keep-all 없이는 CJK 기본 규칙이 공백 무관 어디서든 끊어 단어 중간 분절이 발생한다 — keep-all은 인시던트 지점에만 붙어 있던 것(community-btn·exam 제목 등 13곳)을 루트 상속으로 일반화. keep-all 단독이면 깨지지 않는 영문 장문이 컨테이너를 넘치므로 `overflow-wrap` 병용이 세트 (UX-NAV-10 수평 오버플로 금지와 연동 — break-word는 넘침 시에만 발동해 정상 단어 분절은 일어나지 않음) | 테스트 | — | css/base.css | tests/unit/app/ux-invariants.test.js | — | — |
 | UX-VFY-01 | 요구사양 없는 UI 변경은 추적·리뷰 불가 — TR-21~23처럼 선 정의 후 구현하는 관행을 규약화 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
 | UX-VFY-02 | jsdom은 레이아웃을 계산하지 않으므로 DOM/단위 테스트로는 기하 요구사항을 검증할 수 없음 | E2E 테스트 | DOC-DSN-25<br>DOC-RBK-11 | — | tests/e2e/mobile-overflow.spec.js | — | — |
 | UX-VFY-03 | 신규 UI/UX 요구사항은 E2E와 함께 진입 — 기존 백로그(규약형 다수)는 기준선 승계 후 점진 축소 | 문서 검토 | DOC-DSN-25<br>DOC-RBK-11 | — | — | — | — |
