@@ -1,3 +1,9 @@
+## 2026-11-14 fix(carework): 홈 워터마크 체크박스 비가시 — 폼 입력 스타일 오염 리셋
+
+- 원인: `.care-calc-form input` 규칙이 `input[type=checkbox]`에도 min-height 44px·padding·border를 강제 → 체크박스가 빈 텍스트 필드처럼 렌더되어 사라져 보임 (label의 column flex로 체크 박스가 문구 아래 빈 박스로)
+- `.care-doc-wm-opt` 전용 규칙 추가 — label을 row flex로 되돌리고 checkbox는 필드 스타일 리셋(18px·accent-color)
+- 회귀 단언: ux-invariants UX-FORM-05 — 체크박스 필드 스타일 리셋 규칙 존재 검증
+
 ## 2026-11-14 feat(content): docx 서명 이미지 삽입 — `{{img:key}}` 토큰
 
 - `docxFileMd(md, name, wm, { images })` — images: `{key: {data:Uint8Array, w, h(px)}}`
