@@ -89,13 +89,18 @@ const SETTINGS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 const FOOTER = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">— </w:t></w:r><w:fldSimple w:instr=" PAGE "><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t>1</w:t></w:r></w:fldSimple><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve"> —</w:t></w:r></w:p></w:ftr>`;
 
-// 워터마크 — VML textpath 셰이프. 머리글 앵커는 본문 아래 레이어 고정이라 표 음영에 가려지므로
-// 첫 단락에 본문 앵커+양수 z-index로 삽입해 콘텐츠 앞에 표시 (1장 문서 중앙 1회 요구와 일치)
-// shapetype의 path·formulas·connectlocs는 Word 생성물에서 추출한 정본 — 이 값이 틀리면 textpath 경로가 깨져 글자가 렌더되지 않음
-const _VML_TYPE = '<v:shapetype id="_x0000_t136" coordsize="21600,21600" o:spt="136" adj="10800" path="m@7,l@8,m@5,21600l@6,21600e"><v:formulas><v:f eqn="sum #0 0 10800"/><v:f eqn="prod #0 2 1"/><v:f eqn="sum 21600 0 @1"/><v:f eqn="sum 21600 0 @3"/><v:f eqn="if @0 @3 0"/><v:f eqn="if @0 21600 @1"/><v:f eqn="if @0 0 @2"/><v:f eqn="if @0 @4 21600"/><v:f eqn="mid @5 @6"/><v:f eqn="mid @8 @5"/><v:f eqn="mid @7 @8"/><v:f eqn="mid @6 @7"/><v:f eqn="sum @6 0 @5"/></v:formulas><v:path textpathok="t" o:connecttype="custom" o:connectlocs="@9,0;@10,10800;@11,21600;@12,10800" o:connectangles="270,180,90,0"/><v:textpath on="t" fitshape="t"/><v:handles><v:h position="#0,bottomRight" xrange="6629,14971"/></v:handles><o:lock v:ext="edit" text="t" shapetype="t"/></v:shapetype>';
+// 워터마크 — 회전 텍스트 상자(t202). 머리글 앵커는 본문 아래 레이어 고정이라 표 음영에 가려지므로
+// 첫 단락에 본문 앵커+양수 z-index로 삽입해 콘텐츠 앞에 표시. textpath(t136)는 경로 기반 글리프라
+// 렌더러별 축소·방향 처리가 달라 깨지므로, 일반 단락 텍스트를 담은 상자 자체를 회전 (1장 문서 중앙 1회)
+/** 워터마크 폰트 크기 — 문구 길이로 명시 계산 (전각 1em·반각 .55em, 420pt 박스 폭) */
+/** @param {string} text @returns {number} pt */
+const _wmFont = text => {
+    const units = [...String(text)].reduce((a, c) => a + (/[\x20-\x7E]/.test(c) ? 0.55 : 1), 0);
+    return Math.min(48, Math.max(16, Math.floor(400 / Math.max(1, units))));
+};
 
-/** @param {string} text - 워터마크 문구 → 본문 선두 삽입용 단락 (margin 앵커 center/center·rotation 315·텍스트 앞·font-size:1pt+fitshape 자동 맞춤) */
-const _wmPara = text => `<w:p><w:pPr><w:spacing w:after="0" w:line="40" w:lineRule="exact"/></w:pPr><w:r><w:pict>${_VML_TYPE}<v:shape id="PowerPlusWaterMarkObject1" o:spid="_x0000_s2049" type="#_x0000_t136" style="position:absolute;margin-left:0;margin-top:0;width:468pt;height:117pt;rotation:315;z-index:251658240;mso-position-horizontal:center;mso-position-horizontal-relative:margin;mso-position-vertical:center;mso-position-vertical-relative:margin" o:allowincell="f" fillcolor="gray" stroked="f"><v:fill opacity=".4"/><v:textpath style="font-family:&quot;Malgun Gothic&quot;;font-size:1pt" string="${esc(text)}"/><w10:wrap type="none" anchorx="margin" anchory="margin"/></v:shape></w:pict></w:r></w:p>`;
+/** @param {string} text - 워터마크 문구 → 본문 선두 삽입용 단락 (margin 앵커 center/center·rotation -45·텍스트 앞) */
+const _wmPara = text => `<w:p><w:pPr><w:spacing w:after="0" w:line="40" w:lineRule="exact"/></w:pPr><w:r><w:pict><v:shape id="PowerPlusWaterMarkObject1" o:spid="_x0000_s2049" type="#_x0000_t202" style="position:absolute;margin-left:0;margin-top:0;width:420pt;height:60pt;rotation:-45;z-index:251658240;mso-position-horizontal:center;mso-position-horizontal-relative:margin;mso-position-vertical:center;mso-position-vertical-relative:margin" filled="f" stroked="f" o:allowincell="f"><v:textbox inset="0,0,0,0"><w:txbxContent><w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="BFBFBF"/><w:b/><w:sz w:val="${_wmFont(text) * 2}"/></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:p></w:txbxContent></v:textbox><w10:wrap type="none" anchorx="margin" anchory="margin"/></v:shape></w:pict></w:r></w:p>`;
 
 /**
  * @param {string} docXml - word/document.xml 내용

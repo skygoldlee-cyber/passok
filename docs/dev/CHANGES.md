@@ -14,6 +14,7 @@
 - 앱 PDF 워터마크를 DOM 렌더 의존에서 페이지 캔버스 fillText 직접 스탬프로 교체 (pdfFileFromEl wm 인자·_stampWatermark) — 클론 CSS 변환·overflow 잘림과 무관하게 확정 렌더, 클론의 .doc-wm은 제거해 중복 방지
 - 인쇄 워터마크는 cosmetic .fp-watermark 정본 방식(position:fixed — 페이지 박스 기준 매 장 중앙 반복) 채택
 - 참고: Word에서 머리글 앵커 오브젝트는 본문 아래 레이어 고정 — 표 음영(shd) 위에는 어떤 z-index로도 올라오지 않음 (정본 워터마크 동일 동작, 셀 음영 없는 영역에서만 보이는 것이 정상)
+- 최종: docx 워터마크는 첫 단락 본문 앵커 + 회전 텍스트 상자(t202+txbxContent) + 양수 z-index — 본문 앵커라 콘텐츠 전면 렌더(음영 포함 전 영역). textpath(t136)는 경로 기반 글리프라 정본 shapetype 적용 후에도 이 렌더러에서 글자 좌우 반전·폭주 재발해 폐기. font-size는 문구 길이 비례 계산(_wmFont), margin 앵커 center/center (Word COM PDF 출력으로 읽기 방향·위치 실측)
 
 ## 2026-11-14 fix(carework): 결재란·서명란 우측선 본문 표와 정합
 
