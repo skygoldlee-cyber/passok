@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: df71b1f32a575618
+> 입력 해시: 23edfa7f6120fbee
 > 생성: 2026-11-13 · 원천: SPEC.md(707개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -930,7 +930,7 @@
 | ROAD-P2 | 미구현 | 문서 검토 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 3개 | — | — | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-P3 | 미구현 | 문서 검토 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 3개 | — | — | DOC-ARC-01<br>DOC-ARC-02<br>DOC-ARC-03<br>DOC-ARC-06 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-P4 | ✅ 결정·게이트 구현 | 테스트 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 3개 | src/auth-sync/sync.js | tests/dom/common/common-sync.dom.test.js | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06<br>DOC-ARC-07 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
-| ROAD-P5 | ✅ | 테스트 | DOC-BIZ-06<br>DOC-BIZ-07<br>DOC-DSN-21<br>DOC-DSN-35<br>…외 1개 | — | tests/dom/pro/pro-notice.dom.test.js | — | — |
+| ROAD-P5 | ✅ | 테스트 | DOC-BIZ-06<br>DOC-BIZ-07<br>DOC-BIZ-10<br>DOC-DSN-21<br>…외 2개 | — | tests/dom/pro/pro-notice.dom.test.js | — | — |
 | ROAD-P6 | ✅ | 테스트 | DOC-DSN-35 | src/pro/pro-upgrade.js | tests/dom/pro/pro-notice.dom.test.js | — | — |
 
 ## 7.3 Learning Pro 잔여·차별화
@@ -1024,6 +1024,7 @@
 | DOC-BIZ-07 | docs/exams/carework/business/종사자_인터뷰_스크립트.md | DA-18, ROAD-P5 |
 | DOC-BIZ-08 | docs/exams/carework/business/유튜브-숏츠-시리즈-제작의뢰서.md | — |
 | DOC-BIZ-09 | docs/exams/cosmetic/business/유튜브-숏츠-시리즈-제작의뢰서.md | — |
+| DOC-BIZ-10 | docs/exams/carework/business/이용자_관점_평가_2026-11-13.md | ROAD-P5 |
 | DOC-DEV-01 | docs/dev/SPEC.md | — |
 | DOC-DEV-02 | docs/dev/ARCHITECTURE.md | — |
 | DOC-DEV-03 | docs/dev/CHANGES.md | — |
