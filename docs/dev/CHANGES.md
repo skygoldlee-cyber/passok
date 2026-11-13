@@ -17,6 +17,10 @@
 - 최종: docx 워터마크는 첫 단락 본문 앵커 DrawingML(wps) 텍스트 상자 + a:xfrm rot -45° + behindDoc=0 — 본문 앵커라 콘텐츠 전면 렌더(음영 포함 전 영역). textpath(t136)는 경로 기반 글리프라 글자 좌우 반전·폭주 재발(flip·v-text-reverse 무력), VML t202는 rotation이 txbx 콘텐츠에 적용 안 돼 수평 렌더 — 모두 폐기하고 최신 DrawingML로 확정. font-size는 문구 길이 비례 계산(_wmFont), margin 앵커 center/center (Word COM PDF 출력으로 각도·방향·위치 실측)
 - 전면(behindDoc=0) + w14:textFill alpha 40% 투명 텍스트 + 기울임 — 음영 포함 전 영역 표시되면서 본문 가독 유지. alpha 미지원 렌더러 대비 srgbClr 자체를 C0C0C0으로 (미지원 시 연회색·지원 시 더 은은). 글자 확대(박스 640pt·폰트 상한 64pt, 굵게+기울임 폭 보정 ×1.15) + horzOverflow=overflow — 문구 끝(날짜) 잘림 방지. PDF 캔버스 스탬프·미리보기도 italic·동일 배율 통일
 
+## 2026-11-14 feat(carework): 1쪽 보고서 쪽 번호 자동 생략
+
+- docx 바닥글을 IF NUMPAGES>1 조건부 필드로 교체 — 1쪽 문서는 — N — 표시 없음, 2쪽 이상만 자동 매김 (fldChar 중첩 필드, PAGE만 fldSimple→fldChar 전환)
+
 ## 2026-11-14 fix(carework): 결재란·서명란 우측선 본문 표와 정합
 
 - 부동 표 tblpX 보정 +140→+102tw — 이중 외곽선이 표폭 밖 ~38tw에 그려져 우측끝이 본문 표보다 1.9pt 바깥이던 것을 정렬 (PDF 실측 528.22→526.42pt vs 본문 526.30pt)

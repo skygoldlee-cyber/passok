@@ -39,7 +39,8 @@ test('파일명·타입 + 필수 엔트리 + EOCD', async () => {
     assert.ok(settings.includes('<w:zoom w:percent="100"/>'), '확대율 100% 고정 누락');
     // 바닥글 쪽 번호 — 공문서 격식 (PAGE 필드 자동 매김)
     const footer = entries['word/footer1.xml'];
-    assert.ok(footer.includes('fldSimple') && footer.includes('PAGE'), '쪽 번호 필드 누락');
+    assert.ok(footer.includes('PAGE') && footer.includes('NUMPAGES'), '쪽 번호 필드 누락');
+    assert.ok(footer.includes('&gt; 1'), '1쪽 문서 쪽 번호 생략 조건(IF NUMPAGES>1) 누락');
     assert.ok(entries['word/document.xml'].includes('w:footerReference'), '바닥글 참조 누락');
 });
 

@@ -85,9 +85,16 @@ const DOCRELS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 // 보기 설정 — 인쇄 레이아웃 + 100% 고정. 생략 시 뷰어가 웹 레이아웃(전체폭·페이지 경계 없음)으로 열 수 있다
 const SETTINGS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:view w:val="print"/><w:zoom w:percent="100"/><w:defaultTabStop w:val="708"/></w:settings>`;
-// 바닥글 — 공문서 쪽 번호(중앙·회색·소자). fldSimple PAGE 필드로 자동 매김
+// 바닥글 — 공문서 쪽 번호(중앙·회색·소자). 1쪽 문서는 번호 생략: { IF {NUMPAGES} > 1 … } 조건부 필드
+const _FRP = '<w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="595959"/><w:sz w:val="18"/></w:rPr>';
+const _fB = `<w:r>${_FRP}<w:fldChar w:fldCharType="begin"/></w:r>`;
+const _fE = `<w:r>${_FRP}<w:fldChar w:fldCharType="end"/></w:r>`;
+const _fI = (/** @type {string} */ t) => `<w:r>${_FRP}<w:instrText xml:space="preserve"> ${t} </w:instrText></w:r>`;
+const _fS = (/** @type {string} */ t) => `<w:r>${_FRP}<w:fldChar w:fldCharType="separate"/></w:r><w:r>${_FRP}<w:t xml:space="preserve">${t}</w:t></w:r>`;
+const _fF = (/** @type {string} */ instr, /** @type {string} */ dft) => _fB + _fI(instr) + _fS(dft) + _fE;
+const _ifLt = (/** @type {string} */ lit, /** @type {string} */ dft) => _fB + _fI('IF') + _fF('NUMPAGES', '1') + _fI(`&gt; 1 "${lit}"`) + _fS(dft) + _fE;
 const FOOTER = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">— </w:t></w:r><w:fldSimple w:instr=" PAGE "><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t>1</w:t></w:r></w:fldSimple><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve"> —</w:t></w:r></w:p></w:ftr>`;
+<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:p><w:pPr><w:jc w:val="center"/></w:pPr>${_ifLt('— ', '— ')}${_fB}${_fI('IF')}${_fF('NUMPAGES', '1')}${_fI('&gt; 1')}${_fF('PAGE', '1')}${_fE}${_ifLt(' —', ' —')}</w:p></w:ftr>`;
 
 // 워터마크 — 회전 텍스트 상자(t202). 머리글 앵커는 본문 아래 레이어 고정이라 표 음영에 가려지므로
 // 첫 단락에 본문 앵커+양수 z-index로 삽입해 콘텐츠 앞에 표시. textpath(t136)는 경로 기반 글리프라
