@@ -90,3 +90,26 @@ export const mdToHtml = md => {
     out.push('<p class="doc-end">끝.</p>'); // 공문서 종결 표기
     return `<div class="doc-md">${out.join('')}</div>`;
 };
+
+/**
+ * 서명란을 문서 하단 우측에 고정 — docx 출력의 부동 표(tblpPr, 페이지 하단 우측 앵커)와
+ * 같은 위치를 PDF 캡처용 DOM에서 재현한다. root는 position이 지정된 래퍼여야 한다
+ * (서명란 absolute의 containing block). root 높이를 한 페이지 분량으로 채워 서명란이
+ * 본문 직후가 아니라 페이지 하단에 오게 한다.
+ * @param {HTMLElement} root - positioned 래퍼 (.doc-md를 자신 또는 자손으로 포함)
+ * @param {{minHeight?: string, innerPad?: string, right?: string}} [o]
+ * @returns {boolean} 서명란을 찾아 고정했으면 true
+ */
+export const pinDocSignBottom = (root, { minHeight = '986px', innerPad = '64px', right = '88px' } = {}) => {
+    if (!(root instanceof HTMLElement)) return false;
+    const md = root.classList.contains('doc-md') ? root : root.querySelector('.doc-md');
+    const sign = /** @type {HTMLElement|null} */ (md && /** @type {HTMLElement} */ (md).querySelector('.doc-sign'));
+    if (!(md instanceof HTMLElement) || !sign) return false;
+    md.style.padding = `0 ${innerPad}`; // 본문 폭을 docx 좌우 25mm에 근사
+    sign.style.position = 'absolute';
+    sign.style.right = right; // 래퍼 여백(24px) + innerPad — 표 우측선과 정합
+    sign.style.bottom = '0';
+    root.style.boxSizing = 'border-box';
+    root.style.minHeight = minHeight;
+    return true;
+};

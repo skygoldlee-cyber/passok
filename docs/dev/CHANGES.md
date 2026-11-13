@@ -1,3 +1,8 @@
+## 2026-11-14 fix(carework): 인쇄·PDF를 docx 출력과 같은 격식으로 정렬
+
+- 인쇄(@media print): .doc-md에 상하 20mm·좌우 25mm 여백(페이지 패딩 보정) + 서명란을 flex 자동 마진·order로 문서 하단 우측 배치 — 절대 위치 금지 규약 준수
+- PDF(care-share→pdfFileFromEl 경로): pinDocSignBottom 헬퍼로 클론 래퍼를 한 페이지 분량(986px)으로 채우고 서명란을 하단 우측 절대 고정 — docx tblpPr 부동 표와 동일 위치
+
 ## 2026-11-14 fix(carework): 결재란 시설장 줄넘김 + 1페이지 수렴 압축
 
 - 결재란 열 폭 640→840tw — '시설장'(600tw)+셀 여백(200tw) 수용, 줄넘김 해소 (tblpX 6652→5852로 우측 정렬 유지)

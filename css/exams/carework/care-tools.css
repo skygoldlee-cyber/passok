@@ -307,6 +307,12 @@
     /* 문서형 표 스크롤 상자 해제 — 화면용 display:block+overflow-x:auto는 인쇄 시
        클립·분할되어 행이 잘리거나 내용이 유실된다 (행 절단 방지는 print.css 전역 규약) */
     .doc-md table { display: table !important; overflow: visible !important; }
+    /* Word 출력과 동일 격식 — 페이지 패딩(10mm/8mm)에 보정해 상하 20mm·좌우 25mm.
+       서명란은 docx 부동 표(tblpPr)처럼 하단 우측 — 절대 위치 금지 규약 대신
+       flex 자동 마진+order로 '끝.' 다음 문서 최하단에 배치 */
+    .doc-md { display: flex; flex-direction: column; box-sizing: border-box; padding: 10mm 17mm; min-height: 266mm; }
+    .doc-md .doc-end { order: 1; margin-top: auto; }
+    .doc-md .doc-sign { order: 2; }
 }
 
 .care-calc-rates { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: var(--space-1) 0 var(--gap-ctl); }

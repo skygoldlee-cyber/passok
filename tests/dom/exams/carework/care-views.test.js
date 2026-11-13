@@ -926,6 +926,19 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(html).toContain('<p>본문 단락</p>'); // 메타 다음 단락은 일반 단락
     });
 
+    it('pinDocSignBottom — 서명란을 래퍼 하단 우측에 절대 고정 (docx 부동 표와 동일 위치)', async () => {
+        const { mdToHtml, pinDocSignBottom } = await import('../../../../src/exams/carework/doc-md.js');
+        const wrap = document.createElement('div');
+        wrap.style.position = 'absolute';
+        wrap.innerHTML = mdToHtml('# 인수인계서\n\n:::sign\n인계자: 김 요양\n:::end');
+        expect(pinDocSignBottom(wrap)).toBe(true);
+        const sign = wrap.querySelector('.doc-sign');
+        expect(sign?.style.position).toBe('absolute');
+        expect(sign?.style.bottom).toBe('0px');
+        expect(wrap.style.minHeight).toBe('986px'); // 한 페이지 분량 — pdfFileFromEl 277mm 본문 환산
+        expect(pinDocSignBottom(document.createElement('div'))).toBe(false); // 서명란 없으면 미적용
+    });
+
     it('customForm — 블록 키 미리보기: 데이터 없으면 자동 칩, 실데이터는 표로 치환', async () => {
         const { fillTplEditor, setTplBlockState } = await import('../../../../src/exams/carework/form-template-editor.js');
         loadPartial('care-custom-form.html');

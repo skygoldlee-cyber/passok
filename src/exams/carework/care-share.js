@@ -6,6 +6,7 @@ import { pdfFileFromEl } from '../../content/pdf-utils.js';
 import { sheetFile } from '../../content/xlsx-utils.js';
 import { docxFile, docxFileMd } from '../../content/docx-utils.js';
 import { docHeadHtml, getOrgName } from './facility.js';
+import { pinDocSignBottom } from './doc-md.js';
 import { getJSON, setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { proFeatureNotice, refreshProBadges } from '../../pro/pro-upgrade.js';
@@ -155,6 +156,7 @@ const _pdfFile = async (/** @type {*} */ ctx) => {
         if (!el2.classList.contains('care-doc-head')) el2.style.background = 'transparent';
         el2.style.borderColor = '#000';
     });
+    pinDocSignBottom(wrap); // 서명란 페이지 하단 우측 고정 — docx 부동 표와 동일 위치
     document.body.appendChild(wrap);
     try { return await pdfFileFromEl(wrap, ctx.fname('pdf').replace(/\.pdf$/, '')); }
     finally { wrap.remove(); }
