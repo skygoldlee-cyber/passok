@@ -1,3 +1,12 @@
+## 2026-11-14 feat(carework): 기관명 대각선 워터마크 (인쇄·PDF·Word 공통)
+
+- 홈 → 출력물 서명에 '기관명 워터마크' 토글 — setDocSignWm, getDocSign().wm (CARE_DOC_SIGN에 wm 필드)
+- 문구: 기관명 · 출력일 — 대각선(-45°) 반복 타일, 옅은 회색
+- 미리보기: mdToHtml이 .doc-wm 타일 주입 (docWmHtml) — 인쇄는 print-color-adjust로 색 유지
+- PDF: pdfFileFromEl 클론에 포함 — 색상 강제 루프에서 .doc-wm 제외
+- Word: 헤더 파트(header1.xml)에 VML textpath 셰이프 4개 — Word 기본 워터마크와 동일 메커니즘, 전 페이지 자동 반복
+- docxFile/docxFileMd에 wm 선택 인자 — 미지정 시 헤더 파트 생략 (기존 출력 동일)
+
 ## 2026-11-14 fix(carework): 결재란·서명란 우측선 본문 표와 정합
 
 - 부동 표 tblpX 보정 +140→+102tw — 이중 외곽선이 표폭 밖 ~38tw에 그려져 우측끝이 본문 표보다 1.9pt 바깥이던 것을 정렬 (PDF 실측 528.22→526.42pt vs 본문 526.30pt)

@@ -5,7 +5,7 @@ import { esc } from '../../core/sanitize.js';
 import { pdfFileFromEl } from '../../content/pdf-utils.js';
 import { sheetFile } from '../../content/xlsx-utils.js';
 import { docxFile, docxFileMd } from '../../content/docx-utils.js';
-import { docHeadHtml, getOrgName } from './facility.js';
+import { docHeadHtml, getOrgName, getDocSign } from './facility.js';
 import { pinDocSignBottom } from './doc-md.js';
 import { getJSON, setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
@@ -152,6 +152,7 @@ const _pdfFile = async (/** @type {*} */ ctx) => {
     // 인쇄 가독성 — 테마 색상(회색 계열) 제거: 배경 흰색·텍스트 검정으로 강제
     wrap.querySelectorAll('*').forEach((/** @type {Element} */ e2) => {
         const el2 = /** @type {HTMLElement} */ (e2);
+        if (el2.closest('.doc-wm')) return; // 워터마크 옅은 회색 유지 — 검정 강제 제외
         el2.style.color = '#000';
         if (!el2.classList.contains('care-doc-head')) el2.style.background = 'transparent';
         el2.style.borderColor = '#000';
@@ -187,12 +188,18 @@ const _actPdf = async (/** @type {*} */ ctx) => {
     } catch { showToast('PDF 생성 실패 — 인쇄를 이용하세요.', 'error'); }
 };
 
+/** 워터마크 문구 — 설정 켜짐 + 기관명 있을 때만 (docx 헤더 VML과 미리보기 .doc-wm이 같은 문구) */
+const _wmText = () => {
+    const org = getOrgName();
+    return getDocSign().wm && org ? `${org} · ${todayKey()}` : '';
+};
+
 /** 공유 Word — MD 초안이 있으면 구조 보존 변환(표·헤딩), 없으면 헤더+본문 단락 폴백 */
 const _docxFile = (/** @type {*} */ ctx) => {
-    if (ctx.md) return docxFileMd(ctx.md, ctx.fname('docx').replace(/\.docx$/, ''));
+    if (ctx.md) return docxFileMd(ctx.md, ctx.fname('docx').replace(/\.docx$/, ''), _wmText());
     const org = getOrgName();
     const head = `${ctx.title}\n${org ? org + ' · ' : ''}${todayKey()} 출력`;
-    return docxFile(`${head}\n\n${ctx.text}`, ctx.fname('docx').replace(/\.docx$/, ''), 2);
+    return docxFile(`${head}\n\n${ctx.text}`, ctx.fname('docx').replace(/\.docx$/, ''), 2, _wmText());
 };
 
 const _actDocx = (/** @type {*} */ ctx) => {

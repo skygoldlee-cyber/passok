@@ -89,17 +89,27 @@ const SETTINGS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 const FOOTER = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:p><w:pPr><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">— </w:t></w:r><w:fldSimple w:instr=" PAGE "><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t>1</w:t></w:r></w:fldSimple><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve"> —</w:t></w:r></w:p></w:ftr>`;
 
+// 워터마크 — Word 기본 워터마크와 동일한 VML textpath 셰이프 (헤더라 전 페이지 자동 반복)
+const _VML_TYPE = '<v:shapetype id="_x0000_t136" coordsize="21600,21600" o:spt="136" adj="10800" path="m@7,0l@8,0m@5,21600l@6,21600e"><v:formulas><v:f eqn="sum #0 0 10800"/><v:f eqn="prod #0 2 1"/><v:f eqn="sum 21600 0 @1"/><v:f eqn="sum 0 0 @2"/><v:f eqn="sum 21600 0 @3"/><v:f eqn="if @0 @3 0"/><v:f eqn="if @0 21600 @1"/><v:f eqn="if @0 0 @2"/><v:f eqn="if @0 @4 21600"/><v:f eqn="mid @5 @6"/><v:f eqn="mid @8 @5"/><v:f eqn="mid @7 @8"/><v:f eqn="mid @6 @7"/><v:f eqn="sum @6 0 @5"/></v:formulas><v:path textpathok="t" o:connecttype="custom" o:connectlocs="@9,0;@10,10800" o:connectangles="270,90,90,270"/><v:textpath on="t" fitshape="t"/><v:handles><v:h position="#0,bottomRight" xrange="6629,14971"/></v:handles><o:lock v:ext="edit" text="t" shapetype="t"/></v:shapetype>';
+/** @param {number} id @param {number} top - 상단 위치(pt, margin 기준) @param {string} text */
+const _wmShape = (id, top, text) => `<v:shape id="wm${id}" type="#_x0000_t136" style="position:absolute;margin-left:70pt;margin-top:${top}pt;width:400pt;height:80pt;rotation:315;z-index:-251654144;mso-position-horizontal-relative:margin;mso-position-vertical-relative:margin" fillcolor="#d9d9d9" stroked="f" o:allowincell="f"><v:fill opacity=".5"/><v:textpath style="font-family:&quot;Malgun Gothic&quot;;font-size:1pt" string="${esc(text)}"/></v:shape>`;
+/** @param {string} text - 워터마크 문구 */
+const _header = text => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:hdr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office"><w:p><w:pPr><w:pStyle w:val="Header"/></w:pPr><w:r><w:pict>${_VML_TYPE}${[40, 240, 440, 640].map((t, i) => _wmShape(i, t, text)).join('')}</w:pict></w:r></w:p></w:hdr>`;
+
 /**
  * @param {string} docXml - word/document.xml 내용
+ * @param {string} [wm] - 워터마크 문구 (비우면 헤더 파트 생략)
  * @returns {Array.<[string, Uint8Array]>}
  */
-const _parts = docXml => [
-    ['[Content_Types].xml', _enc.encode(TYPES)],
+const _parts = (docXml, wm = '') => [
+    ['[Content_Types].xml', _enc.encode(wm ? TYPES.replace('</Types>', '<Override PartName="/word/header1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/></Types>') : TYPES)],
     ['_rels/.rels', _enc.encode(RELS)],
-    ['word/_rels/document.xml.rels', _enc.encode(DOCRELS)],
+    ['word/_rels/document.xml.rels', _enc.encode(wm ? DOCRELS.replace('</Relationships>', '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/></Relationships>') : DOCRELS)],
     ['word/document.xml', _enc.encode(docXml)],
     ['word/settings.xml', _enc.encode(SETTINGS)],
     ['word/footer1.xml', _enc.encode(FOOTER)],
+    ...(wm ? /** @type {Array.<[string, Uint8Array]>} */ ([['word/header1.xml', _enc.encode(_header(wm))]]) : []),
 ];
 
 // 서체 — 라틴·한글 모두 맑은 고딕으로 통일 (미지정 시 라틴은 Calibri로 바뀌어 두서 없음)
@@ -120,23 +130,26 @@ const _meta = t => `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:after="140"/>
 
 // 페이지 설정 — A4 세로(orient 명시 — 일부 임포터가 생략 시 가로로 해석) + 좌우 25mm 여백 + 1단·문서 그리드 (Word 정본과 동일한 sectPr 형태)
 const _SECT = '<w:sectPr><w:footerReference w:type="default" r:id="rId2"/><w:pgSz w:w="11906" w:h="16838" w:orient="portrait"/><w:pgMar w:top="1134" w:right="1417" w:bottom="1134" w:left="1417"/><w:cols w:space="708"/><w:docGrid w:linePitch="360"/></w:sectPr>';
+/** @param {string} wm - 워터마크 사용 시 헤더 참조 삽입 */
+const _sect = wm => wm ? _SECT.replace('<w:footerReference', '<w:headerReference w:type="default" r:id="rId3"/><w:footerReference') : _SECT;
 
 /**
  * @param {string[]} lines
  * @param {number} boldLines
  * @returns {string}
  */
-const _doc = (lines, boldLines) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><w:body>${lines.map((l, i) => _P(l, i, boldLines)).join('')}${_SECT}</w:body></w:document>`;
+const _doc = (lines, boldLines, wm = '') => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><w:body>${lines.map((l, i) => _P(l, i, boldLines)).join('')}${_sect(wm)}</w:body></w:document>`;
 
 /**
  * 텍스트 → .docx File (줄 단위 단락) — 공유·다운로드 공용, 지연 로드 불필요.
  * @param {string} text - 본문 (\n 단락 구분)
  * @param {string} filename - 확장자 제외 파일명
  * @param {number} [boldLines] - 선두 N줄을 굵게 (문서 헤더)
+ * @param {string} [wm] - 워터마크 문구 (헤더 VML — 전 페이지 반복)
  */
-export function docxFile(text, filename, boldLines = 0) {
-    const blob = _zipStore(_parts(_doc(String(text || '').split('\n'), boldLines)));
+export function docxFile(text, filename, boldLines = 0, wm = '') {
+    const blob = _zipStore(_parts(_doc(String(text || '').split('\n'), boldLines, wm), wm));
     return new File([blob], `${filename}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 }
 
@@ -331,9 +344,10 @@ const _mdBody = md => {
  * Markdown 초안 → .docx File — # 헤딩·|표|·- 목록·--- 구분선·단락을 구조 보존 변환.
  * @param {string} md - 문서 마크다운
  * @param {string} filename - 확장자 제외 파일명
+ * @param {string} [wm] - 워터마크 문구 (헤더 VML — 전 페이지 반복)
  */
-export function docxFileMd(md, filename) {
-    const body = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><w:body>${_mdBody(md)}${_SECT}</w:body></w:document>`;
-    const blob = _zipStore(_parts(body));
+export function docxFileMd(md, filename, wm = '') {
+    const body = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><w:body>${_mdBody(md)}${_sect(wm)}</w:body></w:document>`;
+    const blob = _zipStore(_parts(body, wm));
     return new File([blob], `${filename}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 }

@@ -88,7 +88,23 @@ export const mdToHtml = md => {
     }
     flush(false);
     out.push('<p class="doc-end">끝.</p>'); // 공문서 종결 표기
-    return `<div class="doc-md">${out.join('')}</div>`;
+    return `<div class="doc-md">${docWmHtml()}${out.join('')}</div>`;
+};
+
+/**
+ * 기관명 워터마크 타일 — 설정(홈 → 출력물 서명 → 기관명 워터마크) 켜짐 + 기관명 있을 때만.
+ * 대각선 반복 배치 — docx 헤더 VML 워터마크와 동일 문구(기관명 · 출력일)
+ * @returns {string} doc-wm 컨테이너 HTML 또는 빈 문자열
+ */
+export const docWmHtml = () => {
+    if (!getDocSign().wm) return '';
+    const org = getOrgName();
+    if (!org) return '';
+    const t = `${org} · ${todayKey()}`.replace(/[&<>"]/g, c => /** @type {Object.<string,string>} */ ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] || c);
+    let spans = '';
+    for (let r = 0; r < 7; r++) for (let c = 0; c < 2; c++)
+        spans += `<span style="top:${r * 15 + 2}%;${c ? 'right' : 'left'}:3%">${t}</span>`;
+    return `<div class="doc-wm" aria-hidden="true">${spans}</div>`;
 };
 
 /**

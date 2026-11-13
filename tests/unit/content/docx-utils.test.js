@@ -192,3 +192,14 @@ test('docxFileMd — 좁은 셀 긴 텍스트는 어절 경계 <w:br/> 사전 �
     assert.ok(doc.includes('기록내용'), '어절 중간 분리(기록내용)');
     assert.ok(doc.includes('서비스제공내역을'), '어절 중간 분리(서비스제공내역을)');
 });
+
+test('워터마크 — 문구 지정 시 헤더 VML 파트·참조 포함, 미지정 시 생략', async () => {
+    const { entries } = await unzip(docxFileMd('# t\n\n본문', 'doc', '테스트요양원 · 2026-11-14'));
+    assert.ok(entries['word/header1.xml'], '워터마크 헤더 파트 누락');
+    assert.ok(entries['word/header1.xml'].includes('테스트요양원'), '워터마크 문구 누락');
+    assert.ok(entries['word/header1.xml'].includes('rotation:315'), '대각선 회전 누락');
+    assert.ok(entries['word/document.xml'].includes('<w:headerReference'), 'sectPr 헤더 참조 누락');
+    const { entries: plain } = await unzip(docxFileMd('# t\n\n본문', 'doc'));
+    assert.ok(!plain['word/header1.xml'], '워터마크 미지정 시 헤더 파트는 생략되어야 함');
+    assert.ok(!plain['word/document.xml'].includes('<w:headerReference'), '미지정 시 헤더 참조 없어야 함');
+});

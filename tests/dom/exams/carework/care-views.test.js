@@ -939,6 +939,34 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(pinDocSignBottom(document.createElement('div'))).toBe(false); // 서명란 없으면 미적용
     });
 
+    it('docWmHtml — 설정 켜짐+기관명 있을 때 대각선 타일, mdToHtml 미리보기에 주입', async () => {
+        const { mdToHtml, docWmHtml } = await import('../../../../src/exams/carework/doc-md.js');
+        const { setDocSignWm, setLocalOrgName } = await import('../../../../src/exams/carework/facility.js');
+        setDocSignWm(false);
+        setLocalOrgName('테스트요양원');
+        expect(docWmHtml()).toBe(''); // 토글 꺼짐 → 미출력
+        setDocSignWm(true);
+        expect(docWmHtml()).toContain('doc-wm');
+        expect(docWmHtml()).toContain('테스트요양원'); // 기관명 · 출력일 문구
+        expect(mdToHtml('# 요양일지\n\n본문')).toContain('doc-wm'); // 미리보기·인쇄·PDF 경로 동일 주입
+        setDocSignWm(false);
+        setLocalOrgName('');
+        expect(docWmHtml()).toBe(''); // 기관명 없으면 토글 켜도 미출력
+    });
+
+    it('careHome — 기관명 워터마크 체크박스가 저장값과 동기화·변경 즉시 저장', async () => {
+        const { setDocSignWm, getDocSign } = await import('../../../../src/exams/carework/facility.js');
+        setDocSignWm(true);
+        loadPartial('care-home.html');
+        initCareHomeView();
+        const cb = /** @type {HTMLInputElement} */ (document.getElementById('home-doc-wm'));
+        expect(cb).toBeTruthy();
+        expect(cb.checked).toBe(true); // 저장값 복원
+        cb.checked = false;
+        cb.dispatchEvent(new Event('change'));
+        expect(getDocSign().wm).toBe(false); // 변경 즉시 저장
+    });
+
     it('customForm — 블록 키 미리보기: 데이터 없으면 자동 칩, 실데이터는 표로 치환', async () => {
         const { fillTplEditor, setTplBlockState } = await import('../../../../src/exams/carework/form-template-editor.js');
         loadPartial('care-custom-form.html');

@@ -116,19 +116,25 @@ export const fmtDocName = n => {
 /** 홈에서 설정한 서명자 — {author: 작성자(요양보호사), confirmer: 확인자(시설장·기관장), receiver: 인수자, signImage: 서명 이미지 data URI} */
 export function getDocSign() {
     const s = /** @type {any} */ (getJSON(STORAGE_KEYS.CARE_DOC_SIGN)) || {};
-    return { author: fmtDocName(s.author), confirmer: fmtDocName(s.confirmer), receiver: fmtDocName(s.receiver), signImage: String(s.signImage || '') };
+    return { author: fmtDocName(s.author), confirmer: fmtDocName(s.confirmer), receiver: fmtDocName(s.receiver), signImage: String(s.signImage || ''), wm: !!s.wm };
 }
 /** 서명자 저장 — 홈 설정 카드에서 호출 */
 /** @param {string} author @param {string} confirmer @param {string} [receiver] */
 export function setDocSign(author, confirmer, receiver = '') {
     const prev = getDocSign();
-    setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: String(author || '').trim(), confirmer: String(confirmer || '').trim(), receiver: String(receiver || '').trim(), signImage: prev.signImage });
+    setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: String(author || '').trim(), confirmer: String(confirmer || '').trim(), receiver: String(receiver || '').trim(), signImage: prev.signImage, wm: prev.wm });
+}
+/** 기관명 워터마크 표시 토글 — 홈 설정에서 호출 (인쇄·PDF·Word 출력물 공통) */
+/** @param {boolean} on */
+export function setDocSignWm(on) {
+    const s = getDocSign();
+    setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: s.author, confirmer: s.confirmer, receiver: s.receiver, signImage: s.signImage, wm: !!on });
 }
 /** 서명 이미지 저장/삭제 — 홈 업로드에서 호출 (기존 성명은 보존) */
 /** @param {string} dataUri */
 export function setDocSignImage(dataUri) {
     const s = getDocSign();
-    setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: s.author, confirmer: s.confirmer, receiver: s.receiver, signImage: String(dataUri || '') });
+    setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: s.author, confirmer: s.confirmer, receiver: s.receiver, signImage: String(dataUri || ''), wm: s.wm });
 }
 
 // — 서명 이미지 정규화 —
