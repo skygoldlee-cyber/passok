@@ -20,7 +20,7 @@ Supabase는 로그인 수단(email OTP·google·kakao)마다 별도 `auth.users`
 
 Supabase `auth.linkIdentity({provider})`로 현재 로그인 사용자에 OAuth 아이덴티티를 추가 — 연결된 아이덴티티는 같은 `auth.users`에 귀속돼 `profiles.plan`이 자동 공유된다 (스키마 추가 불필요).
 
-- **선행 조건 (Supabase 콘솔, 운영 작업)**: Auth 설정의 **Manual Linking 활성화** + google/kakao Redirect URL에 앱 도메인 등록. 미설정 시 `linkIdentity`는 오류 — UI는 실패 메시지를 친화적으로 표시해 무설정 상태에서도 안전하게 동작한다.
+- **선행 조건 (Supabase 콘솔, 운영 작업 — §7 접근 경로 참조)**: Auth 설정의 **Manual Linking 활성화** + Redirect URL에 앱 도메인 등록. 미설정 시 `linkIdentity`는 오류 — UI는 실패 메시지를 친화적으로 표시해 무설정 상태에서도 안전하게 동작한다.
 - **UI**: 계정 모달(`#auth-account-area`)에 "로그인 수단" 섹션 — `user.identities`로 연결된 수단 표시 + 미연결 수단(Google·카카오) 연결 버튼 + 해제 버튼.
 - **해제 가드**: `auth.unlinkIdentity(identity)`는 검증된 로그인 수단이 **2개 이상**일 때만 허용 — 마지막 수단 해제로 계정 접근 불가가 되는 것 차단.
 - **리다이렉트 왕복**: OAuth 링크는 페이지를 떠났다 돌아오므로 `PENDING_LINK_PROVIDER` 로컬 키로 대기 표시 → 복귀 후 `user.identities`에 수단이 들어왔으면 성공 토스트 + `account_link_success` 계측.
@@ -85,3 +85,39 @@ end if;
 - **이메일 불일치 동일인**: 카카오 이메일 ≠ 가입 이메일이면 ④ 미작동 — 지원 런북이 뒷받침
 - **unlink 후 OAuth 재로그인**: 해제한 수단으로 로그인하면 Supabase가 새 계정 생성 가능 — 해제 전 경고 문구 필수
 - **PWA OAuth 제한**: 설치형 PWA는 OAuth 리다이렉트 복귀 불가(AU-09) — 연결 버튼도 standalone에서는 숨김, 이메일 경로 안내
+
+## 7. 운영 적용 절차 (Supabase 콘솔 — 배포 시 수동 2건)
+
+코드만으로는 동작하지 않는다 — 프로덕션 프로젝트의 콘솔 설정·스키마 적용이 선행돼야 한다.
+
+### ① Manual Linking 활성화 + Redirect URL 등록
+
+```
+Supabase Dashboard (https://supabase.com/dashboard)
+→ 프로젝트 선택
+→ 좌측 메뉴 [Authentication]
+→ [Sign In / Providers] 탭
+→ 하단 "Manual Linking" — 토글 ON
+→ [URL Configuration] 탭
+→ "Redirect URLs"에 https://passok.vercel.app 등록 (개발 시 http://localhost:3000 도)
+```
+
+- 미설정 시 `linkIdentity` 호출이 오류를 반환 — 클라이언트는 "연결이 아직 활성화되지 않았습니다"로 표시
+
+### ② `redeem_code` 동일인 재활성 분기 적용
+
+```
+Supabase Dashboard
+→ [SQL Editor] → [New query]
+→ tools/supabase/schema.sql §3의 redeem_code 함수 블록 전체
+   (drop function if exists public.redeem_code(text); ~ grant execute … authenticated;)
+   붙여넣기 → [Run]
+→ 확인: select public.redeem_code('TEST', null) — 미인증이면 false
+```
+
+- 스키마는 자동 배포 경로가 없으므로 **수동 실행이 유일한 적용 수단**
+- 적용 전에는 동일인 재활성이 동작하지 않음 (코드 재입력은 기존처럼 false)
+
+### 배포 체크리스트 연계
+
+AU-10 코드가 포함된 배포 시 위 ①②를 `deploy` 후속으로 확인 — 충돌/실패 계측(`account_link_*`)이 수신되기 시작하면 실제 발생률로 2단계 서버 작업 우선순위를 판단한다.
