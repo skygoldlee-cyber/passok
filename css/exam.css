@@ -704,7 +704,8 @@
 .sim-review-header {
     display: flex;
     align-items: center;
-    gap: var(--space-5);
+    gap: var(--gap-ctl);
+    flex-wrap: wrap;
     border-bottom: 1px solid var(--border-color);
     padding-bottom: var(--space-4);
     margin-bottom: var(--space-5);

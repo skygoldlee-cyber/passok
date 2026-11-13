@@ -1,5 +1,14 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 ux: 컨트롤 간 여백 규약 정합 — 모바일 nowrap 액션 행 정리 (UX-CTL-03/05)
+
+- **nowrap 액션 행 flex-wrap 부여** (모바일 눌림·넘침 방지): `.result-actions`(퀴즈 완료) · `.reader-empty-actions` · `.subj-actions` · `.demo-actions` · `.calc-scratchpad-actions` · `.daily-choice-row` · `.daily-short-row` · `.quiz-input-group` · `.calc-input-row` · `.ing-input-row` · `.actual-form-row` · `.review-header` · `.sim-review-header`
+- **간격 토큰 정정**: 같은 행 컨트롤↔컨트롤에 섹션 티어 값(`--space-4`/`--gap-sec`)을 쓰던 행 → `--gap-ctl` — `.result-actions`·`.reader-empty-actions`·`.daily-choice-row`·`.daily-short-row`·`.quiz-input-group`·`.calc-input-row`·`.ing-input-row`·`.sim-review-header`·`.webtoon-nav`; 원시 토큰(`--space-2/3`) alias → `--gap-ctl` — `.header-actions`·`.clinic-actions`·`.subj-actions`·`.calc-scratchpad-actions`·`.actual-form-row`·`.review-header`
+- **`ui-utils.js`**: `.result-actions` 인라인 스타일 제거 — 클래스 단일 정본 (두 렌더 경로 간격 불일치 해소)
+- **check:mobilesafe ②b 신설**: `-actions` 명명의 flex 컨트롤 행에 `flex-wrap` 없으면 차단 — ②의 `flex-row|flex-center` 클래스 명명 스캔이 놓치던 CSS 측 공백 보완, 18행 검사·예외 4건(모바일 전용 규칙·단일 버튼 등) 사유 명시
+- **검증**: `check:mobilesafe` 통과 + 음성 테스트로 위반 검출 확인
+
+
 ## 2026-11-13 a11y·ux: 터치 타깃 축소 + 줌 패닝 대체 수단 (WCAG 2.5.7)
 
 - **exam-btn-sim**: `min-height: var(--control-h-md)`(44px, A-04/UX-CTL-02) — 모의고사 뷰 소형 타깃 5건 기준선 제거 (잔여 10건: 리더 툴바·캘린더·formula 등)

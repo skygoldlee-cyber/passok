@@ -251,7 +251,7 @@
 }
 .clinic-actions {
     display: flex;
-    gap: var(--space-2);
+    gap: var(--gap-ctl);
     flex-wrap: wrap;
 }
 
@@ -433,8 +433,9 @@
 
 .subj-actions {
     display: flex;
-    gap: var(--space-3);
+    gap: var(--gap-ctl);
     margin-top: auto;
+    flex-wrap: wrap;
 }
 
 .subj-actions button {
@@ -988,7 +989,7 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
 .actual-edit-btn { padding: 0.2rem 0.6rem; font-size: 0.75rem; }
 .actual-form { margin-top: var(--space-3); }
 .actual-form-title { font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: var(--space-2); }
-.actual-form-row { display: flex; gap: var(--space-2); align-items: center; }
+.actual-form-row { display: flex; gap: var(--gap-ctl); align-items: center; flex-wrap: wrap; }
 .actual-form-row .form-select { flex: 1; min-width: 0; }
 .actual-form-row input[type="number"] { max-width: 110px; }
 
@@ -1114,8 +1115,9 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
 }
 .daily-choice-row {
     display: flex;
-    gap: var(--gap-sec);
+    gap: var(--gap-ctl);
     width: 100%;
+    flex-wrap: wrap;
 }
 .daily-choice-row .btn {
     flex: 1;
@@ -1127,9 +1129,10 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
 }
 .daily-short-row {
     display: flex;
-    gap: var(--gap-sec);
+    gap: var(--gap-ctl);
     align-items: center;
     width: 100%;
+    flex-wrap: wrap;
 }
 .daily-short-row .form-input {
     flex: 1;

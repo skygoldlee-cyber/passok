@@ -223,7 +223,7 @@ export function trainerResultHtml({ headerTitle, badge, doneTitle, correct, tota
             <p class="result-score-summary">정답수: <strong>${correct}</strong> / ${total} (${rate}%)</p>
             ${statLine ? `<p style="color:var(--color-text-muted); font-size:0.85rem;">${statLine}</p>` : ''}
             <div style="text-align:left; margin:1.5rem 0; max-width:600px; margin-left:auto; margin-right:auto;">${reviewHTML}</div>
-            <div class="result-actions" style="display:flex; gap:1rem; justify-content:center; flex-wrap:wrap;">
+            <div class="result-actions">
                 <button class="btn btn-primary" data-click="${retryClick}"${retryArg ? ` data-arg="${retryArg}"` : ''}><i class="fa-solid fa-rotate-left"></i> ${retryLabel}</button>
                 ${extraActions}
                 <button class="btn btn-secondary" data-click="exitTrainerSubView"><i class="fa-solid fa-house"></i> 메뉴로</button>

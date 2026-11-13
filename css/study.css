@@ -368,7 +368,8 @@
 
 .quiz-input-group {
     display: flex;
-    gap: var(--space-4);
+    gap: var(--gap-ctl);
+    flex-wrap: wrap;
 }
 
 .form-input {
@@ -722,8 +723,9 @@
 
 .result-actions {
     display: flex;
-    gap: var(--space-4);
+    gap: var(--gap-ctl);
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 /* Empty State & General Screen States */
@@ -764,6 +766,8 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: var(--space-6);
+    flex-wrap: wrap;
+    gap: var(--gap-ctl);
 }
 
 .review-stats .badge {

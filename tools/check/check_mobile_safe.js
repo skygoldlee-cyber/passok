@@ -11,6 +11,8 @@
  *   ② 버튼 행 줄바꿈 — 컨테이너 div가 flex-row/flex-center로 버튼 2개 이상을
  *      나열하면서 flex-wrap/btn-row 계열이 없으면 위반. 의도된 nowrap은
  *      data-msafe-ok 속성으로 명시적 면제한다.
+ *   ②b 액션 행 CSS 래핑 — -actions로 끝나는 flex 컨트롤 행 셀렉터가
+ *      flex-wrap 없이 선언되면 위반 (마크업 클래스 명명과 무관하게 탐지).
  *   ③ 컨트롤 높이 — 인터랙티브 셀렉터의 height/min-height 44px 미만
  *      px 리터럴 탐지. --control-h-* 토큰 사용이 정답 (UX-CTL-01/06).
  *
@@ -132,6 +134,35 @@ for (const file of walk(path.join(ROOT, 'html'), ['.html'])) {
   }
 }
 
+/* ── ②b 액션 행 CSS 래핑 계약 — `*-actions` 명명의 컨트롤 행은 flex-wrap 필수 ──
+   ②는 마크업의 flex-row/flex-center 클래스만 스캔하므로, CSS에서 display:flex로
+   선언되는 -actions 명명 행(.result-actions 사례)은 탐지 밖이었다. 셀렉터가
+   -actions로 끝나는 행 컨테이너가 nowrap이면 모바일에서 버튼이 눌려 넘친다.
+   column 스택은 자동 통과. 의도된 nowrap은 예외 목록에 사유와 함께 선언한다. */
+const ACTION_ROW_EXEMPT = [
+  ['.header-actions', '헤더 우측 밀집 행 — 모바일 미디어쿼리에서 버튼 축소 보정 (app-responsive)'],
+  ['.app-confirm-actions', '모바일 세로 스택 미디어쿼리 보유 (.btn-row 동형 — app-responsive)'],
+  ['.flashcard-actions', '모바일 전용 규칙 — 평가 버튼 flex:1 등분 (study.css @media)'],
+  ['.textbook-card-actions', 'space-between 단일 토글 버튼 — 래핑 불필요'],
+];
+let actionRowScanned = 0;
+for (const file of walk(path.join(ROOT, 'css'), ['.css'])) {
+  const rel = path.relative(ROOT, file).replace(/\\/g, '/');
+  const src = fs.readFileSync(file, 'utf8');
+  for (const m of src.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const sel = m[1].trim(), body = m[2];
+    if (sel.startsWith('@')) continue;
+    const selBase = sel.replace(/::?[\w-]+(\([^)]*\))?$/, '').trim();
+    if (!/\.[\w-]*-actions$/.test(selBase)) continue;
+    if (!/display\s*:\s*flex/.test(body)) continue;
+    if (/flex-direction\s*:\s*column/.test(body)) continue;
+    actionRowScanned++;
+    if (/flex-wrap\s*:\s*wrap/.test(body)) continue;
+    if (ACTION_ROW_EXEMPT.some(([ex]) => selBase.includes(ex))) continue;
+    issues.push(`${rel} — ${sel.slice(0, 60)}: 컨트롤 액션 행에 flex-wrap 없음 — 모바일에서 버튼이 눌려 넘침. flex-wrap: wrap 추가 또는 ACTION_ROW_EXEMPT에 사유 선언`);
+  }
+}
+
 /* ── ③ 컨트롤 높이 규약 (UX-CTL-06) — 인터랙티브 셀렉터의 44px 미만 px 리터럴 ──
    CSS 규칙 블록을 스캔해 인터랙티브 패턴 셀렉터의 height/min-height가
    44px 미만 px 리터럴이면 위반. var(--control-h-*) 토큰 사용은 합격
@@ -204,4 +235,4 @@ if (issues.length) {
   for (const s of issues) console.error('  - ' + s);
   process.exit(1);
 }
-console.log(`✅ 모바일 안전 규약 통과 — 다이얼로그 ${dialogScanned}곳·버튼 행 ${rowScanned}곳·컨트롤 높이 ${ctlScanned}건·클릭 버튼 ${clickScanned}건 검사, 위반 0건`);
+console.log(`✅ 모바일 안전 규약 통과 — 다이얼로그 ${dialogScanned}곳·버튼 행 ${rowScanned}곳·액션 행 nowrap ${actionRowScanned}건·컨트롤 높이 ${ctlScanned}건·클릭 버튼 ${clickScanned}건 검사, 위반 0건`);

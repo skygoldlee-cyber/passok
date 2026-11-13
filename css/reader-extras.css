@@ -794,7 +794,8 @@ a.glossary-ref-link i {
 .reader-empty-actions {
     display: flex;
     justify-content: center;
-    gap: var(--space-4);
+    gap: var(--gap-ctl);
+    flex-wrap: wrap;
 }
 
 /* Reader Control Panel */
