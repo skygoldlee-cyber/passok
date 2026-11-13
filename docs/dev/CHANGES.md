@@ -1,5 +1,10 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 fix(capture): manual-07-roster 상단 잘림 — sticky 헤더 캡처 제외
+
+- `.app-header`(sticky top:0)가 뷰포트보다 큰 뷰 요소의 스크롤 캡처 시 타이틀 영역을 덮는 문제 — `dismissOverlays`에서 `mobile-tab-bar`와 동일하게 `display:none` 처리. `manual-07-roster` 재캡처, 나머지 전체-뷰 샷(g01·g02·g04·g05·manual-14)은 비침 없음 확인
+
+
 ## 2026-11-13 feat(auth): AU-10 로그인 수단 연결 구현 — linkIdentity·분리 방지·동일인 재활성
 
 - 계정 모달 "로그인 수단" 섹션: 연결된 identities 목록·해제 버튼(검증 수단 2개 이상 `canUnlink` 가드)·미연결 OAuth 수단 연결 버튼. `PENDING_LINK_PROVIDER`로 리다이렉트 복귀 성공/실패 판정

@@ -103,6 +103,7 @@ async function dismissOverlays(page) {
         document.querySelectorAll('.app-toast, .toast, .sw-toast, .consent-banner, .app-banner, [id*="toast"], [class*="toast"], [class*="banner"], [class*="update"], dialog[open]:not(#app-confirm-overlay), [class*="backdrop"], [class*="dim"]').forEach(e => e.remove());
         document.body.style.backgroundImage = 'none'; // 그라디언트만 제거 — 테마 배경색은 유지(다크 캡처 시 흰 배경 방지)
         document.getElementById('mobile-tab-bar')?.style.setProperty('display', 'none'); // 고정 탭 바가 요소 캡처에 겹치는 것 방지 (tabs 샷은 자체 복원)
+        document.querySelector('.app-header')?.style.setProperty('display', 'none'); // sticky 헤더가 스크롤된 뷰 상단을 덮는 것 방지 (manual-07 타이틀 잘림)
     });
     await page.waitForTimeout(250);
 }
