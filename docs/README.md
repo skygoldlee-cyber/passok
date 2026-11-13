@@ -101,11 +101,11 @@ docs/
 │   ├── reference/             ← 명세·로직·참조 문서 (17개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (4개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (2개 — 사용자 매뉴얼·개인정보처리방침 + images/ — 런타임 fetch·배포 대상)
-└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (8개)
+└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (9개)
     ├── README.md              ← 시험별 문서 인덱스
     ├── user/                  ← 학습자 문서 (5개)
     ├── business/              ← 사업 기획·시장 조사·마케팅 문서 (cosmetic 6개 · carework 4개)
-    ├── design/                ← 시험 종속 설계 문서 (cosmetic 5개 — Formula OS 계열 · carework 3개)
+    ├── design/                ← 시험 종속 설계 문서 (cosmetic 5개 — Formula OS 계열 · carework 4개)
     ├── reference/             ← 교재 종속 참조 문서 (2개 — 번호체계·참조매핑)
     ├── report_archive/        ← 시점 스냅샷 보고서 + 대체된 전략 원전 (11개)
     └── ingredients_audit_제2026-19호.md  ← 고시 대조 리포트 (판본: refmat)
@@ -281,6 +281,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [CAREWORK_PRACTICE_TOOL_DESIGN.md](exams/carework/design/CAREWORK_PRACTICE_TOOL_DESIGN.md) | 요양보호사 현장도구 설계 — 시험→실무 구독 전환·careCalc/careCard/careLog 3단계 (DOC-DSN-42) |
 | [CAREWORK_FACILITY_WORKSPACE.md](exams/carework/design/CAREWORK_FACILITY_WORKSPACE.md) | 기관 워크스페이스 설계 — PassOK가 기관 기록 서버가 되는 구독 확장 (DOC-DSN-43) |
 | [CARE_OS_DATAHUB_DESIGN.md](exams/carework/design/CARE_OS_DATAHUB_DESIGN.md) | Care OS 데이터 허브 — clientId 정규화·360° 카드·인수인계 로컬 다이제스트 (DOC-DSN-44, CO-01~05) |
+| [CAREWORK_SITE_LICENSE_DESIGN.md](exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md) | 기관 사이트 라이선스 — 요양원 단위 월권·기간권, facility_subscriptions + 멤버십 연동 entitlement (DOC-DSN-51) |
 
 ---
 
@@ -429,6 +430,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-48 | `docs/dev/design/ASSET_STORAGE_REVIEW.md` (구 DOC-DSN-19에서 재채번 — DSN-19는 회수 유지) |
 | DOC-DSN-49 | `docs/dev/design/DEPLOY_PIPELINE_DESIGN.md` (구 DOC-DSN-90에서 재채번) |
 | DOC-DSN-50 | `docs/dev/design/ACCOUNT_LINKING_DESIGN.md` |
+| DOC-DSN-51 | `docs/exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |

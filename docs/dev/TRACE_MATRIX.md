@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 0ae1a9c1891ba0a5
+> 입력 해시: 293473abc921f249
 > 생성: 2026-11-13 · 원천: SPEC.md(709개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -1078,6 +1078,7 @@
 | DOC-DSN-48 | docs/dev/design/ASSET_STORAGE_REVIEW.md | CS-03, DA-02, P-02 |
 | DOC-DSN-49 | docs/dev/design/DEPLOY_PIPELINE_DESIGN.md | AD-10, PF-18 |
 | DOC-DSN-50 | docs/dev/design/ACCOUNT_LINKING_DESIGN.md | AU-09, AU-10, PAY-01 |
+| DOC-DSN-51 | docs/exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md | — |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |
@@ -1159,4 +1160,5 @@
 - docs/dev/runbooks/E2E_TEST_SUPABASE.md
 - docs/exams/carework/business/유튜브-숏츠-시리즈-제작의뢰서.md
 - docs/exams/carework/design/CAREWORK_FACILITY_WORKSPACE.md
+- docs/exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md
 - docs/exams/cosmetic/business/유튜브-숏츠-시리즈-제작의뢰서.md
