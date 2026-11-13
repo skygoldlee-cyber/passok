@@ -1,5 +1,15 @@
 [
   {
+    "version": "v20261113-6d0053e",
+    "date": "2026-11-13",
+    "notes": [
+      "[수정·docs:registry] DA-15 — 시험 디렉터리 동적 수집으로 시험 ID 리터럴 제거",
+      "[tools·ai] 공급자별 모델 env + .env→ai-proxy secrets 동기화 도구",
+      "[문서] 문서 정합 정리 — 인덱스·레지스트리 동기화, carework design 격리, docs:registry 게이트",
+      "[정리·release] v20261113-03813b0 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261113-03813b0",
     "date": "2026-11-13",
     "notes": [
@@ -222,19 +232,6 @@
       "[tools·quality] 프로젝트 평가 개선안 5종 구현 — 용어 중앙화·캡처 검증·문서 감사·복구 통합",
       "[문서] 학습안내서·사용자매뉴얼 상황 중심 재편 + 스터디 삽화 4장",
       "[정리·release] v20261110-01bdcdd 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261110-a16ad56",
-    "date": "2026-11-10",
-    "notes": [
-      "[수정·test] J-101 스펙 안정화 — 퀴즈 인터랙션 대신 로컬 퍼스트 계약 검증",
-      "[기능·test] E2E 확장 기반 3종 적용 — 오버라이드·J-101·매뉴얼 drift 체크",
-      "[문서·user] 도움말 메뉴 표를 실제 구성과 정합",
-      "[정리·docs] E2E 가이드 경로 allowlist 갱신 — mock-exam/verify-mock 파일명 정합",
-      "[문서·dev] E2E 구현 설계 — 운영 Supabase 오염 리스크 명시 + 스펙 정합",
-      "[문서·dev] E2E 자동화 가이드를 실제 PASSOK 아키텍처로 정합",
-      "[정리·release] v20261110-f23cf2a 스탬프 확정 [no-docs]"
     ]
   }
 ]
