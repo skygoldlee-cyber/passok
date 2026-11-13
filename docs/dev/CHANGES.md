@@ -1,5 +1,11 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 fix(carework): 서명란 A4 하단 우측 앵커 + 셀 어절 단위 줄넘김
+
+- `docMdSign`이 `:::sign` 블록 마커 방출 — docx에서는 `tblpPr` 부동 표(vertAnchor=margin·tblpYSpec=bottom·tblpXSpec=right)로 페이지 하단 우측에 고정. 본문 표 바로 아래 붙던 서명 위치를 공문서 격식(하단 우측 서명란)으로 이동
+- 미리보기·PDF 경로는 `.doc-sign` 우측 정렬 박스로 렌더 (mdToHtml이 `:::sign` 블록 처리)
+- 셀 어절 단위 줄넘김 — docx 셀 단락에 `w:kinsoku` + `w:wordWrap w:val="off"`(단어 중간 분할 금지), 미리보기 td/th에 `word-break: keep-all` (브라우저는 CJK를 글자 단위로 끊으므로)
+
 ## 2026-11-13 fix(carework): 표 외곽선 굵게 + 미리보기 마크업 잔재 복구 (인쇄·AI초안·e2e)
 
 - docx 표 외곽선 sz=4→8(1pt)·색 666666 — 0.5pt는 화면 배율에서 서브픽셀로 사라져 PDF 변환 시 윗선이 안 보이던 문제 해소 (내부선은 0.5pt 유지, 외곽 강조 격식)

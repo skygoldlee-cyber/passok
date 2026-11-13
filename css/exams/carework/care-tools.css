@@ -142,8 +142,11 @@
 .doc-md h3, .doc-md h4, .doc-md h5 { margin: 8px 0 4px; }
 .doc-md p { margin: 2px 0; }
 .doc-md table { border-collapse: collapse; width: 100%; margin: 6px 0; font-size: .92em; display: block; overflow-x: auto; }
-.doc-md th, .doc-md td { border: 1px solid var(--border-strong, #9ca3af); padding: 4px 8px; text-align: left; }
+.doc-md th, .doc-md td { border: 1px solid var(--border-strong, #9ca3af); padding: 4px 8px; text-align: left; word-break: keep-all; }
 .doc-md th { background: var(--bg-muted, rgba(128,128,128,.12)); }
+/* 서명란 — :::sign 블록 → 본문 끝 우측 정렬 박스 (docx는 페이지 하단 우측 부동 표) */
+.doc-md .doc-sign { margin: 12px 0 0 auto; width: fit-content; min-width: 200px; padding: 8px 14px; border: 1px solid var(--border-strong, #9ca3af); font-size: .92em; }
+.doc-md .doc-sign div { margin: 2px 0; }
 .doc-md ul { margin: 4px 0 4px 20px; }
 .doc-md hr { border: 0; border-top: 1px solid var(--border-subtle, #d1d5db); margin: 8px 0; }
 .care-doc-signimg { height: 42px; max-width: 100%; object-fit: contain; vertical-align: middle; }

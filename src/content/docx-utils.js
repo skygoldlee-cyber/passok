@@ -141,13 +141,15 @@ const _BORDERS = ['top', 'left', 'bottom', 'right'].map(b => `<w:${b} w:val="sin
 // pct(상대폭)는 한글 등 일부 임포터가 미지원해 표가 본문 폭 밖으로 렌더될 수 있어 dxa 고정 사용.
 const _TEXT_W = 9026;
 const _CELL_MAR = '<w:tblCellMar><w:top w:w="60" w:type="dxa"/><w:left w:w="108" w:type="dxa"/><w:bottom w:w="60" w:type="dxa"/><w:right w:w="108" w:type="dxa"/></w:tblCellMar>';
+// 셀 단락 — kinsoku(동아시아 금칙 규칙) + wordWrap=off(단어 중간 분할 금지) → 어절 단위 줄넘김
+const _CELL_PPR = '<w:pPr><w:kinsoku/><w:wordWrap w:val="off"/></w:pPr>';
 /**
  * @param {string} c
  * @param {boolean} head
  * @param {number} [w] - 셀 너비 (dxa)
  * @returns {string}
  */
-const _cell = (c, head, w) => `<w:tc><w:tcPr>${w ? `<w:tcW w:w="${w}" w:type="dxa"/>` : ''}${head ? '<w:shd w:val="clear" w:color="auto" w:fill="E8E8E8"/>' : ''}</w:tcPr><w:p><w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/>${head ? '<w:b/>' : ''}</w:rPr><w:t xml:space="preserve">${esc(c.trim())}</w:t></w:r></w:p></w:tc>`;
+const _cell = (c, head, w) => `<w:tc><w:tcPr>${w ? `<w:tcW w:w="${w}" w:type="dxa"/>` : ''}${head ? '<w:shd w:val="clear" w:color="auto" w:fill="E8E8E8"/>' : ''}</w:tcPr><w:p>${_CELL_PPR}<w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/>${head ? '<w:b/>' : ''}</w:rPr><w:t xml:space="preserve">${esc(c.trim())}</w:t></w:r></w:p></w:tc>`;
 /**
  * @param {string[][]} rows
  * @returns {string}
@@ -168,6 +170,13 @@ const _tbl = rows => {
 const _h = (t, sz) => `<w:p><w:pPr><w:spacing w:before="200" w:after="100"/></w:pPr><w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/><w:b/><w:sz w:val="${sz}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 const _HR = '<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="999999"/></w:pBdr></w:pPr></w:p>';
 
+// 서명란 — 본문 여백 영역 하단 우측에 부동 표(tblpPr — Word 텍스트 상자와 동일한 앵커 방식).
+// 문서 끝에 배치하면 마지막 페이지 하단 오른쪽에 고정된다
+const _SIG_W = 4200;
+/** @param {string[]} lines */
+const _sigTbl = lines => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpXSpec="right" w:tblpYSpec="bottom" w:leftFromText="180" w:rightFromText="180" w:topFromText="180" w:bottomFromText="180"/><w:tblW w:w="${_SIG_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid><w:gridCol w:w="${_SIG_W}"/></w:tblGrid>`
+    + lines.map(l => `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/></w:tcPr><w:p>${_CELL_PPR}<w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/></w:rPr><w:t xml:space="preserve">${esc(l.trim())}</w:t></w:r></w:p></w:tc></w:tr>`).join('') + '</w:tbl>';
+
 /**
  * @param {string} md
  * @returns {string}
@@ -176,9 +185,14 @@ const _mdBody = md => {
     const out = [], lines = String(md || '').split('\n');
     /** @type {string[][] | null} */
     let tbl = null;
+    /** @type {string[] | null} */
+    let sign = null;
     const flush = () => { if (tbl) { out.push(_tbl(tbl)); tbl = null; } };
     for (const line of lines) {
         const t = line.trim();
+        if (t === ':::sign') { flush(); sign = []; continue; }
+        if (t === ':::end') { if (sign) { out.push(_sigTbl(sign)); sign = null; } continue; }
+        if (sign) { if (t) sign.push(t); continue; }
         if (/^\|[\s:|-]+\|$/.test(t)) continue; // 표 구분행
         if (t.startsWith('|') && t.endsWith('|')) { (tbl = tbl || []).push(t.slice(1, -1).split('|')); continue; }
         flush();

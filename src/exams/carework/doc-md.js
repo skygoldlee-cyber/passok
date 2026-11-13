@@ -20,12 +20,13 @@ export const mdTable = (headers, rows) =>
 
 /** 문서 서명란 — items: [[라벨, 'author'|'confirmer'|'receiver'|'']] — docSignHtml의 MD 대응.
  *  홈 설정 성명은 기입되고, 미설정·빈키(날짜) 슬롯은 수기 서명용 공란 유지.
- *  구분선(---)은 넣지 않는다 — docx에서는 전폭 가로줄로 렌더돼 표 바로 아래 뜬금없는 선이 된다 */
+ *  :::sign 블록 마커로 감싼다 — docx에서는 페이지 하단 우측 부동 표(tblpPr)로,
+ *  미리보기에서는 우측 정렬 서명 박스로 렌더된다 (본문 바로 아래가 아닌 문서 하단 배치) */
 /** @param {Array<[string,string]>} items */
 export const docMdSign = items => {
     const s = getDocSign();
     const nm = (/** @type {string} */ k) => (k === 'author' ? s.author : k === 'confirmer' ? s.confirmer : k === 'receiver' ? s.receiver : '');
-    return '\n\n' + items.map(([label, k]) => `${label}: ${nm(k) || '＿＿＿＿＿＿＿＿'}`).join('  ·  ');
+    return '\n\n:::sign\n' + items.map(([label, k]) => `${label}: ${nm(k) || '＿＿＿＿＿＿＿＿'}`).join('\n') + '\n:::end';
 };
 
 /** 기존 CSV 직렬화 재사용 → MD 표 (BOM·인용 처리는 parseCsv 위임) */
@@ -44,6 +45,8 @@ export const mdToHtml = md => {
     let tbl = null;
     /** @type {string[] | null} */
     let list = null;
+    /** @type {string[] | null} */
+    let sign = null;
     const flush = (/** @type {boolean} */ listOnly) => {
         if (tbl && !listOnly) {
             out.push(`<table><thead><tr>${(tbl[0] || []).map(c => `<th>${esc(c.trim())}</th>`).join('')}</tr></thead><tbody>` +
@@ -54,6 +57,12 @@ export const mdToHtml = md => {
     };
     for (const line of String(md || '').split('\n')) {
         const t = line.trim();
+        if (t === ':::sign') { flush(false); sign = []; continue; }
+        if (t === ':::end') {
+            if (sign) { out.push(`<div class="doc-sign">${sign.map(l => `<div>${esc(l)}</div>`).join('')}</div>`); sign = null; }
+            continue;
+        }
+        if (sign) { if (t) sign.push(t); continue; }
         if (/^\|[\s:|-]+\|$/.test(t)) continue;
         if (t.startsWith('|') && t.endsWith('|')) { flush(true); (tbl = tbl || []).push(t.slice(1, -1).split('|')); continue; }
         if (t.startsWith('- ')) { (list = list || []).push(t.slice(2)); continue; }

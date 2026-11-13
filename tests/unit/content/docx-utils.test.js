@@ -77,3 +77,16 @@ test('docxFileMd — 헤딩·표·목록이 구조로 변환된다', async () =>
     assert.ok(doc.includes('<w:tblCellMar>'), '셀 내부 여백 누락');
     assert.ok(doc.includes('w:orient="portrait"'), 'A4 세로 방향 명시 누락');
 });
+
+test('docxFileMd — :::sign 서명란은 하단 우측 부동 표, 셀 어절 줄바꿈', async () => {
+    const md = '# 제목\n\n| A | B |\n|---|---|\n| 1 | 2 |\n\n:::sign\n인계자(서명): 김요양\n인수자(서명): 박인수\n:::end';
+    const { entries } = await unzip(docxFileMd(md, 'doc'));
+    const doc = entries['word/document.xml'];
+    assert.ok(doc.includes('w:tblpPr'), '서명란 부동 표(tblpPr) 누락');
+    assert.ok(doc.includes('w:tblpYSpec="bottom"'), '서명란 하단 앵커 누락 — A4 하단 배치 아님');
+    assert.ok(doc.includes('w:tblpXSpec="right"'), '서명란 우측 앵커 누락');
+    assert.ok(doc.includes('인계자(서명): 김요양'), '서명 내용 누락');
+    assert.ok(!doc.includes(':::sign'), '마커가 본문에 노출됨');
+    assert.ok(doc.includes('<w:kinsoku/>'), '금칙 규칙(어절 줄바꿈) 누락');
+    assert.ok(doc.includes('<w:wordWrap w:val="off"/>'), '단어 중간 분할 금지 누락');
+});
