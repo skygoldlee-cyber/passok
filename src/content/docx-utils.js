@@ -119,17 +119,19 @@ export function docxFile(text, filename, boldLines = 0) {
 
 const _BORDERS = ['top', 'left', 'bottom', 'right', 'insideH', 'insideV']
     .map(b => `<w:${b} w:val="single" w:sz="4" w:color="999999"/>`).join('');
+// 표 레이아웃 — 본문 폭 100%(pct 5000) + 셀 내부 여백 (A4 세로 1인치 여백 안에서 가득 채움)
+const _CELL_MAR = '<w:tblCellMar><w:top w:w="60" w:type="dxa"/><w:left w:w="108" w:type="dxa"/><w:bottom w:w="60" w:type="dxa"/><w:right w:w="108" w:type="dxa"/></w:tblCellMar>';
 /**
  * @param {string} c
  * @param {boolean} head
  * @returns {string}
  */
-const _cell = (c, head) => `<w:tc><w:p><w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/>${head ? '<w:b/>' : ''}</w:rPr><w:t xml:space="preserve">${esc(c.trim())}</w:t></w:r></w:p></w:tc>`;
+const _cell = (c, head) => `<w:tc>${head ? '<w:tcPr><w:shd w:val="clear" w:color="auto" w:fill="E8E8E8"/></w:tcPr>' : ''}<w:p><w:r><w:rPr><w:rFonts w:eastAsia="Malgun Gothic"/>${head ? '<w:b/>' : ''}</w:rPr><w:t xml:space="preserve">${esc(c.trim())}</w:t></w:r></w:p></w:tc>`;
 /**
  * @param {string[][]} rows
  * @returns {string}
  */
-const _tbl = rows => `<w:tbl><w:tblPr><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblW w:w="0" w:type="auto"/></w:tblPr>${rows.map((r, i) => `<w:tr>${r.map(c => _cell(c, i === 0)).join('')}</w:tr>`).join('')}</w:tbl>`;
+const _tbl = rows => `<w:tbl><w:tblPr><w:tblW w:w="5000" w:type="pct"/><w:tblBorders>${_BORDERS}</w:tblBorders>${_CELL_MAR}</w:tblPr>${rows.map((r, i) => `<w:tr>${r.map(c => _cell(c, i === 0)).join('')}</w:tr>`).join('')}</w:tbl>`;
 /**
  * @param {string} t
  * @param {number} sz

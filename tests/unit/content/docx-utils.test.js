@@ -66,4 +66,7 @@ test('docxFileMd — 헤딩·표·목록이 구조로 변환된다', async () =>
     assert.ok((doc.match(/<w:tr>/g) || []).length === 2, '표 행 수 불일치');
     assert.ok(doc.includes('• 항목'), '목록 불릿 누락');
     assert.ok(doc.includes('<w:pBdr>'), '구분선 누락');
+    assert.ok(doc.includes('w:type="pct"'), '표 전폭(pct) 레이아웃 누락 — A4 본문 폭 미사용');
+    assert.ok(doc.includes('<w:shd'), '표머리 음영 누락');
+    assert.ok(doc.includes('<w:tblCellMar>'), '셀 내부 여백 누락');
 });

@@ -1,5 +1,13 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 feat(carework): 전 문서 격식표 출력 통일 — docx 전폭 표 + 미리보기·PDF 동일 렌더
+
+- 표 미지원 3곳 격식표화 — `buildIncidentMd`(사고보고서 2열 전항목) · `buildHandoverMd`(기본정보+인계내용 2표) · `careCalcDocMd` 신규(입력조건·공단 책정 기준·계산 결과 3표 + 선택 등급 ▶ 표시). 이제 내보내기 대상 8문서 전부 MD 표 경로 (일지·점검표·명부·면회·근무표는 기존 지원)
+- 미리보기 통일 — 일지·인수인계·사고보고서 미리보기가 `pre` 평문 → `mdToHtml(표준 초안)` 렌더로 전환. 화면·인쇄·PDF·docx·복사가 동일 MD 원본을 공유해 출력물 불일치 제거. 공유 셀렉터 `#*-preview pre` → `#*-preview` (3곳), careLogSave는 저장본을 `buildCareLog`로 직접 조립
+- docx 표 스타일 — `_tbl` 전폭 레이아웃(tblW pct 5000) + 셀 내부여백(tblCellMar) + 표머리 음영(w:shd E8E8E8) — A4 세로 1인치 여백 안에서 테두리 표가 본문 폭 가득 배치
+- 계산기 리팩터 — `_calcDocData`로 조건·기준·결과 행 데이터를 화면 HTML/내보내기 MD가 공유
+- 테스트 — care-incident 유닛 신설(5건) + handover·docx-utils 단언 확장 + DOM 3뷰 `pre`→`.doc-md` 셀렉터 갱신 + calc MD 표 단언
+
 ## 2026-11-13 fix(carework): 요양일지 docx 격식표 출력 + 관찰 칩 본문 반영
 
 - `buildCareLogMd` 신규 (care-log.js) — 기본정보(일시·대상자·급여 종류)·제공 서비스·특이사항을 MD 표로 구성. `careLogDocMd`의 `{{기록내용}}` 블록이 평문 생성문 → 표 MD로 교체돼 Word·한글 출력이 테두리 표로 렌더 (docxFileMd 경로 그대로, 기관 양식 사본에도 동일 블록 주입)

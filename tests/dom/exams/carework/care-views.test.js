@@ -42,7 +42,7 @@ vi.mock('../../../../src/exams/carework/facility.js', async (importOriginal) => 
     listIncidents: vi.fn(() => Promise.resolve([])),
 }));
 
-import { careCalcRun, careCalcReset, initCareCalcView } from '../../../../src/exams/carework/views/care-calc.js';
+import { careCalcRun, careCalcReset, careCalcDocMd, initCareCalcView } from '../../../../src/exams/carework/views/care-calc.js';
 import { careCardOpen, careCardClose, initCareCardView } from '../../../../src/exams/carework/views/care-card.js';
 import { careLogGenerate, careLogRecordCopy, initCareLogView } from '../../../../src/exams/carework/views/care-log.js';
 import { careFacilityHandoverSubmit, careHandoverAck } from '../../../../src/exams/carework/views/care-handover.js';
@@ -90,6 +90,10 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('care-use').value = '20';
         careCalcRun();
         expect(document.querySelector('#care-result')?.textContent).toMatch(/원/);
+        // 내보내기 MD 초안 — 조건·기준·결과가 표 구조 (docx 파생 원본)
+        const md = careCalcDocMd();
+        expect(md).toContain('| 급여 유형 |');
+        expect(md).toContain('| 실제 월 납부액 |');
         await careCalcReset(); // 초기화는 showConfirm(mock:true) 통과 후 실행
     });
 
@@ -188,14 +192,13 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('log-client').value = '김○○';
         document.getElementById('log-service').value = 'visit-care';
         careLogGenerate();
-        expect(document.querySelector('#log-preview pre')?.textContent).toMatch(/김○○/);
-        // 문서형 헤더 — 모든 결과물이 제목+출력일 템플릿 공유 (가독성 출력 회귀 방지)
-        expect(document.querySelector('#log-preview .care-doc-head strong')?.textContent).toBe('요양일지');
-        expect(document.querySelector('#log-preview .care-doc-head span')?.textContent).toContain('출력');
-        // esc() 래핑된 출력일이 이스케이프 없이 정상 렌더 (싱크 규약 적용 후에도 값 표시)
-        expect(document.querySelector('#log-preview .care-doc-head span')?.textContent).toMatch(/\d{4}-\d{2}-\d{2}/);
+        // 미리보기는 내보내기 표준 초안(MD)과 동일 렌더 — 표 구조 문서 (docx·PDF와 동일 원본)
+        expect(document.querySelector('#log-preview .doc-md')?.textContent).toMatch(/김○○/);
+        expect(document.querySelector('#log-preview .doc-md h3')?.textContent).toBe('요양일지');
+        expect(document.querySelector('#log-preview .doc-md')?.textContent).toMatch(/\d{4}-\d{2}-\d{2}/);
+        expect(document.querySelector('#log-preview .doc-md table')?.textContent).toContain('김○○');
         // 문서형 서명란 — cosmetic fp-sign-row 대응 (작성자·확인자)
-        expect(document.querySelector('#log-preview .care-doc-sign')?.textContent).toContain('작성자(요양보호사)');
+        expect(document.querySelector('#log-preview .doc-md')?.textContent).toContain('작성자(요양보호사)');
         careLogRecordCopy(); // 제공기록지 양식 복사 — 메뉴와 별개 문서라 별도 버튼 유지
     });
 
@@ -228,7 +231,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('log-date').value = '2026-11-01';
         document.getElementById('log-client').value = '김○○';
         careLogGenerate();
-        const sign = document.querySelector('#log-preview .care-doc-sign')?.textContent || '';
+        const sign = document.querySelector('#log-preview .doc-md')?.textContent || '';
         expect(sign).toContain('작성자(요양보호사): 김요양');
         expect(sign).toContain('확인자: 박시설');
         // 인수인계 — 인계자·인수자 기입, 확인일은 수기 공란 유지
@@ -237,10 +240,10 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         /** @type {HTMLInputElement} */ (document.getElementById('ho-from')).value = '김인계';
         /** @type {HTMLInputElement} */ (document.getElementById('ho-to')).value = '박인수';
         careHandoverGenerate();
-        const hoSign = document.querySelector('#ho-preview .care-doc-sign')?.textContent || '';
+        const hoSign = document.querySelector('#ho-preview .doc-md')?.textContent || '';
         expect(hoSign).toContain('인계자(서명): 김요양');
         expect(hoSign).toContain('인수자(서명): 이인수');
-        expect(hoSign).toContain('확인일: ______________');
+        expect(hoSign).toMatch(/확인일: ＿+/); // 미설정 슬롯은 수기 서명용 전각 공란
         setDocSign('', '', ''); // 정리 — 다른 테스트의 빈 서명란 검증에 영향 없도록
     });
 
@@ -400,7 +403,8 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('ho-from').value = '김○○';
         document.getElementById('ho-to').value = '박○○';
         careHandoverGenerate();
-        expect(document.querySelector('#ho-preview pre')?.textContent).toMatch(/인수인계서/);
+        expect(document.querySelector('#ho-preview .doc-md')?.textContent).toMatch(/인수인계서/);
+        expect(document.querySelector('#ho-preview .doc-md table')).toBeTruthy(); // 표 구조 문서
         const arg = /** @type {HTMLElement} */ (document.querySelector('[data-click="careHandoverExport"]')).dataset.arg;
         // 기록 우선 — 미저장 문서의 내보내기는 자동 저장 후 메뉴가 열린다
         await careHandoverExport(arg);
@@ -524,7 +528,8 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('inc-type').value = 'fall';
         document.getElementById('inc-desc').value = '화장실 앞 미끄러짐';
         careIncidentGenerate();
-        expect(document.querySelector('#inc-preview pre')?.textContent).toContain('낙상');
+        expect(document.querySelector('#inc-preview .doc-md')?.textContent).toContain('낙상');
+        expect(document.querySelector('#inc-preview .doc-md table')).toBeTruthy(); // 표 구조 문서
         careIncidentSave();
         expect(document.getElementById('inc-saved').textContent).toContain('김○○');
         careIncidentDelete(document.querySelector('#inc-saved [data-arg]')?.dataset.arg);

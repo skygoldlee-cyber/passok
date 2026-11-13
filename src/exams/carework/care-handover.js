@@ -32,3 +32,29 @@ export function buildHandover(in_) {
     lines.push('', `인계 확인: 인계자 ${in_.from || '____'} / 인수자 ${in_.to || '____'}`);
     return lines.join('\n');
 }
+
+/**
+ * 인수인계서 격식표 MD — 기본정보·인계 내용을 2열 표로 구성 (내보내기 표준 초안).
+ * buildHandover(평문)와 쌍 — docx·기관 양식 블록({{인계내용}})에 삽입된다.
+ * @param {*} in_
+ */
+export function buildHandoverMd(in_) {
+    if (!in_ || !in_.date || !in_.from || !in_.to) return null;
+    const shift = SHIFTS.find(s => s.key === in_.shift)?.label || in_.shift || '';
+    const tbl = (/** @type {string[]} */ head, /** @type {string[][]} */ rows) =>
+        ['| ' + head.join(' | ') + ' |', '|' + head.map(() => '---').join('|') + '|',
+            ...rows.map(r => `| ${r[0]} | ${r[1]} |`)].join('\n');
+    const info = /** @type {string[][]} */ ([
+        ['일시', `${in_.date}${shift ? ` (${shift} 근무조)` : ''}`],
+        ['인계자', in_.from],
+        ['인수자', in_.to],
+        ...(in_.clients ? [['대상자', in_.clients]] : []),
+    ]);
+    const body = /** @type {string[][]} */ ([
+        ['대상자 상태', (in_.status || '').trim() || '특이 변화 없음'],
+        ...(in_.logs && in_.logs.length ? [['당일 수행 서비스', in_.logs.join(' · ')]] : []),
+        ['미완료·인계 작업', (in_.tasks || '').trim() || '없음'],
+        ['특이 주의사항', (in_.caution || '').trim() || '없음'],
+    ]);
+    return `${tbl(['항목', '내용'], info)}\n\n${tbl(['구분', '인계 내용'], body)}`;
+}
