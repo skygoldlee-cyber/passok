@@ -1,5 +1,12 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 feat(tools): DA-26 파이프라인 반영 — snap/shotPng 둘레 여백 자동화 + 전 삽화 재캡처
+
+- `capture_manual.js`에 `shotWithMargin` 헬퍼 추가 — 요소가 뷰포트에 온전히 들어오면 boundingBox ±8/6px 확장 클립, 더 크면 요소 스크린샷 폴백. `snap`·`shotPng`·탭바·more 합성 경로 일괄 적용
+- 부팅 초기화가 care-incident 직접 진입을 care-home으로 되돌리는 레이스 발견 — `manual-01-share`를 시트 등장까지 재시도하는 루프 + `force` 클릭으로 견고화
+- 실무막뉴얼 23장 + 학습안내서 4장 전량 재캡처 (27장)
+
+
 ## 2026-11-13 docs: DA-26 신설 — 삽화 캡처 둘레 여백 규약 명문화
 
 - 기존 클립 관례(manual-08 ±8px·manual-10 ±24px·manual-15 ±4~6px)를 SPEC 요구사양으로 격상 — 타이트 클립의 그림자·테두리 잘림 방지 근거 명문화. `capture_manual.js` 헤더에 `@spec DA-25,DA-26` 부착

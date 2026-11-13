@@ -107,8 +107,26 @@ async function dismissOverlays(page) {
     await page.waitForTimeout(250);
 }
 
-/** 캡처 헬퍼 — locator 스크린샷 → images/<name>.webp */
-async function snap(page, name, locator, { quality = 0.82 } = {}) {
+// DA-26 — 캡처 둘레 여백 (타이트 클립의 그림자·테두리 잘림 방지)
+const MARGIN = { x: 8, y: 6 };
+
+/** 둘레 여백 포함 스크린샷 — 요소가 뷰포트에 온전히 들어오면 확장 클립, 더 크면 요소 스크린샷 폴백 */
+async function shotWithMargin(page, el, { x = MARGIN.x, y = MARGIN.y } = {}) {
+    const box = await el.boundingBox();
+    const vp = page.viewportSize();
+    if (!box || !vp) return el.screenshot();
+    // 뷰포트를 벗어나는 요소는 el.screenshot이 스크롤 스티칭으로 전체를 얻음 — 클립은 잘리므로 폴백
+    if (box.y < 0 || box.x < 0 || box.y + box.height > vp.height || box.x + box.width > vp.width) return el.screenshot();
+    const cx = Math.max(0, box.x - x), cy = Math.max(0, box.y - y);
+    return page.screenshot({ clip: {
+        x: cx, y: cy,
+        width: Math.min(vp.width - cx, box.width + x * 2),
+        height: Math.min(vp.height - cy, box.height + y * 2),
+    } });
+}
+
+/** 캡처 헬퍼 — locator 스크린샷 → images/<name>.webp (DA-26: 둘레 여백 포함) */
+async function snap(page, name, locator, { quality = 0.82, margin } = {}) {
     const el = typeof locator === 'string' ? page.locator(locator).first() : locator;
     await dismissOverlays(page);
     await el.scrollIntoViewIfNeeded();
@@ -118,7 +136,7 @@ async function snap(page, name, locator, { quality = 0.82 } = {}) {
         const txt = await el.innerText().catch(() => '');
         if (!txt.includes(expect)) throw new Error(`expect 실패 — '${expect}' 미포함 (실제: ${txt.slice(0, 60)}…)`);
     }
-    const png = await el.screenshot();
+    const png = await shotWithMargin(page, el, margin);
     writeFileSync(join(OUT_DIR, `${name}.webp`), await toWebp(page, png, quality));
     console.log(`✓ ${name}.webp`);
 }
@@ -168,13 +186,13 @@ async function snapRaw(page, name, locator) {
     console.log(`✓ ${name}.webp (원본 폭)`);
 }
 
-/** 요소 PNG 스크린샷 (합성 재료) */
+/** 요소 PNG 스크린샷 (합성 재료) — DA-26: 둘레 여백 포함 */
 async function shotPng(page, locator) {
     const el = typeof locator === 'string' ? page.locator(locator).first() : locator;
     await dismissOverlays(page);
     await el.scrollIntoViewIfNeeded();
     await page.waitForTimeout(300);
-    return el.screenshot();
+    return shotWithMargin(page, el);
 }
 
 // 학습안내서 삽화 — 학습 모드(study 시드) 전용, STUDY_SHOTS와 이름 쌍
@@ -229,7 +247,7 @@ const SHOTS = {
         // 실제 UI는 좌우 스와이프 탭 바 — 첫 화면 그대로 캡처 (dismissOverlays가 숨기므로 복원 후 직접 캡처)
         await dismissOverlays(page);
         await page.evaluate(() => { const b = document.getElementById('mobile-tab-bar'); if (b) b.style.display = ''; });
-        const png = await page.locator('#mobile-tab-bar').screenshot();
+        const png = await shotWithMargin(page, page.locator('#mobile-tab-bar'));
         writeFileSync(join(OUT_DIR, 'manual-01-tabs.webp'), await toWebp(page, png));
         console.log('✓ manual-01-tabs.webp');
     },
@@ -240,10 +258,10 @@ const SHOTS = {
         await page.goto(`${BASE}/#/care-log`, { waitUntil: 'networkidle' });
         const det = page.locator('details.care-more-actions').first();
         await dismissOverlays(page);
-        const before = await det.screenshot();
+        const before = await shotWithMargin(page, det);
         await page.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
         await page.waitForTimeout(300);
-        const after = await det.screenshot();
+        const after = await shotWithMargin(page, det);
         await snapComposite(page, 'manual-01-more', [before, after]);
     },
     // ① 저장 배지 — 저장 클릭 직후 표시
@@ -488,11 +506,15 @@ async function main() {
                 const mp = await m.newPage(); await seed(mp);
                 await mp.goto(`${BASE}/#/care-home`, { waitUntil: 'networkidle' });
                 await mp.waitForSelector('#care-home-view:not(.is-hidden)', { timeout: 30000 }).catch(() => {});
-                await mp.goto(`${BASE}/#/care-incident`, { waitUntil: 'networkidle' });
-                await mp.waitForSelector('#care-incident-view:not(.is-hidden)', { timeout: 20000 });
-                await mp.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
-                await mp.getByText('공유·내보내기').locator('visible=true').first().click();
-                await mp.waitForSelector('.care-export-sheet', { timeout: 8000 });
+                // 부팅 초기화가 직접 진입을 care-home으로 되돌리는 레이스 — 시트 등장까지 전체 시퀀스 재시도
+                for (let i = 0; i < 3; i++) {
+                    await mp.evaluate(() => { location.hash = '/care-incident'; });
+                    await mp.waitForSelector('#care-incident-view [data-click="careShare"]', { state: 'visible', timeout: 15000 }).catch(() => {});
+                    await mp.evaluate(() => document.querySelectorAll('details.care-more-actions').forEach(d => d.open = true));
+                    await mp.locator('#care-incident-view [data-click="careShare"]').click({ force: true, timeout: 10000 }).catch(() => {});
+                    const ok = await mp.waitForSelector('.care-export-sheet', { timeout: 6000 }).then(() => true).catch(() => false);
+                    if (ok) break;
+                }
                 // 시트 배경이 반투명 --bg-elevated라 뒤 페이지가 비침 — 캡처용 불투명 처리
                 await mp.evaluate(() => { const s = document.querySelector('.care-export-sheet'); if (s) s.style.background = '#1f2937'; });
                 await snap(mp, 'manual-01-share', '.care-export-sheet');
