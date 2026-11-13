@@ -3,7 +3,7 @@
 - `docxFileMd(md, name, wm, { images })` — images: `{key: {data:Uint8Array, w, h(px)}}`
 - 서명란(`:::sign`) 줄의 `{{img:key}}` 토큰 → `wp:inline` 드로잉으로 치환 (라벨 + 이미지)
 - (인) 표기는 이미지 생성 시 서명 위에 합성 — docx 부동 앵커 posOffset은 렌더러별 불안정
-- 라벨↔이미지 사이 전각 공백으로 서명 우측 보정 — 이미지 내 (인)이 다른 서명행의 (인) 열과 정렬 (5칸, 셀 폭 내 줄넘김 없는 상한)
+- 서명 이미지는 라벨 뒤 우측 탭 정지로 셀 우측 정렬 — 공백 누적은 셀 폭 초과 시 줄넘김(7칸 상한)이라 탭 방식 채택
 - 미지정 키는 `＿＿＿＿＿＿＿＿` 빈 자리로 치환 — 토큰 잔존 금지
 - 파트: `word/media/img_N.png` + document.xml.rels rId6~ + [Content_Types] png Default (이미지 지정 시만)
 - 결재란 담당 칸도 서명 표시 — `images.approve` 키(서명-only, (인) 미포함)를 별도 파트로 전달받아 중앙 인라인

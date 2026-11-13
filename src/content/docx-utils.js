@@ -326,7 +326,7 @@ const _APPR_X = _TEXT_W - _APPR_W + 102;
 const _cellPprC = _CELL_PPR.replace('</w:pPr>', '<w:jc w:val="center"/></w:pPr>');
 const _apprCell = (/** @type {string} */ t, /** @type {boolean} */ merge, /** @type {boolean} */ cont) => `<w:tc><w:tcPr><w:tcW w:w="${_AW}" w:type="dxa"/>${merge ? `<w:vMerge${cont ? '' : ' w:val="restart"'}/>` : ''}${t && !cont ? '<w:shd w:val="clear" w:color="auto" w:fill="DEEAF6"/>' : ''}<w:vAlign w:val="center"/></w:tcPr>${t ? `<w:p>${_cellPprC}<w:r><w:rPr>${_RF}<w:b/><w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${t}</w:t></w:r></w:p>` : '<w:p/>'}</w:tc>`;
 // 담당 칸 서명 — `images.approve`(서명-only)를 중앙 인라인. (인) 합성 서명과 달리 결재란은 서명만
-const _apprImgCell = (/** @type {{rid:string,cx:number,cy:number,id:number}} */ im) => `<w:tc><w:tcPr><w:tcW w:w="${_AW}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_cellPprC}${_imgRun(im)}</w:p></w:tc>`;
+const _apprImgCell = (/** @type {{rid:string,cx:number,cy:number,id:number}} */ im) => `<w:tc><w:tcPr><w:tcW w:w="${_AW}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_CELL_PPR}${_imgRun(im)}</w:p></w:tc>`;
 /** @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} [imgMap] */
 const _approve = (imgMap = {}) => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_APPR_X}" w:tblpYSpec="top" w:leftFromText="180" w:rightFromText="180" w:topFromText="60" w:bottomFromText="120"/><w:tblW w:w="${_APPR_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${`<w:gridCol w:w="${_AW}"/>`.repeat(4)}</w:tblGrid>`
     + `<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="400" w:hRule="atLeast"/></w:trPr>`
@@ -358,7 +358,7 @@ const _sigRuns = (line, imgMap) => {
     const im = m ? imgMap[m[1] || ''] : undefined;
     if (m && im) {
         const label = line.replace(m[0], '').trim();
-        return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${esc(label + '　　　　　')}</w:t></w:r>${_imgRun(im)}`;
+        return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${esc(label)}</w:t></w:r><w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:tab/></w:r>${_imgRun(im)}`;
     }
     const t = (m ? line.replace(m[0], '＿＿＿＿＿＿＿＿') : line).trim();
     return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(t + (/\(인\)\s*$/.test(t) ? '' : ' (인)'), _SIG_W - 300))}</w:r>`;
@@ -366,7 +366,12 @@ const _sigRuns = (line, imgMap) => {
 /** @param {string[]} lines @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} [imgMap] */
 const _sigTbl = (lines, imgMap = {}) => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_SIG_X}" w:tblpYSpec="bottom" w:leftFromText="180" w:rightFromText="180" w:topFromText="180" w:bottomFromText="180"/><w:tblW w:w="${_SIG_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid><w:gridCol w:w="${_SIG_W}"/></w:tblGrid>`
     + `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_cellPprC}<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${_docDate()}</w:t></w:r></w:p></w:tc></w:tr>`
-    + lines.map(l => `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_CELL_PPR}${_sigRuns(l, imgMap)}</w:p></w:tc></w:tr>`).join('') + '</w:tbl>';
+    + lines.map(l => {
+        // 이미지 서명행 — 우측 탭 정지로 서명을 셀 우측에 정렬 (공백 누적은 셀 폭 초과 시 줄넘김)
+        const imgM = l.match(/\{\{img:([\w-]+)\}\}/);
+        const ppr = imgM && imgMap[imgM[1] || ''] ? _CELL_PPR.replace('</w:pPr>', `<w:tabs><w:tab w:val="right" w:pos="${_SIG_W - 300}"/></w:tabs></w:pPr>`) : _CELL_PPR;
+        return `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${ppr}${_sigRuns(l, imgMap)}</w:p></w:tc></w:tr>`;
+    }).join('') + '</w:tbl>';
 
 /**
  * @param {string} md
