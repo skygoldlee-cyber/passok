@@ -15,6 +15,7 @@
 - 인쇄 워터마크는 cosmetic .fp-watermark 정본 방식(position:fixed — 페이지 박스 기준 매 장 중앙 반복) 채택
 - 참고: Word에서 머리글 앵커 오브젝트는 본문 아래 레이어 고정 — 표 음영(shd) 위에는 어떤 z-index로도 올라오지 않음 (정본 워터마크 동일 동작, 셀 음영 없는 영역에서만 보이는 것이 정상)
 - 최종: docx 워터마크는 첫 단락 본문 앵커 DrawingML(wps) 텍스트 상자 + a:xfrm rot -45° + behindDoc=0 — 본문 앵커라 콘텐츠 전면 렌더(음영 포함 전 영역). textpath(t136)는 경로 기반 글리프라 글자 좌우 반전·폭주 재발(flip·v-text-reverse 무력), VML t202는 rotation이 txbx 콘텐츠에 적용 안 돼 수평 렌더 — 모두 폐기하고 최신 DrawingML로 확정. font-size는 문구 길이 비례 계산(_wmFont), margin 앵커 center/center (Word COM PDF 출력으로 각도·방향·위치 실측)
+- 전면(behindDoc=0) + w14:textFill alpha 20% 투명 텍스트 + 기울임 — 음영 포함 전 영역 표시되면서 본문 가독 유지. 구버전 폴백은 w:color D9D9D9. PDF 캔버스 스탬프·미리보기도 italic 통일
 
 ## 2026-11-14 fix(carework): 결재란·서명란 우측선 본문 표와 정합
 

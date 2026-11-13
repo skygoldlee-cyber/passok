@@ -99,7 +99,7 @@ function _stampWatermark(canvas, text) {
     ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.rotate(-Math.PI / 4);
-    ctx.font = `700 ${Math.round(canvas.width / 12)}px 'Malgun Gothic','Apple SD Gothic Neo',sans-serif`;
+    ctx.font = `italic 700 ${Math.round(canvas.width / 12)}px 'Malgun Gothic','Apple SD Gothic Neo',sans-serif`;
     ctx.fillStyle = 'rgba(0,0,0,.16)';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';

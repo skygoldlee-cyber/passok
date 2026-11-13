@@ -203,7 +203,8 @@ test('워터마크 — 문구 지정 시 본문 선두 VML 셰이프 삽입, 미
     // 머리글 앵커는 본문 아래 레이어 고정이라 표 음영에 가려짐 — 본문 앵커+텍스트 앞 z-order 필수
     assert.ok(doc.includes('<wp:positionH relativeFrom="margin"><wp:align>center</wp:align>'), '수평 중앙 앵커 누락');
     assert.ok(doc.includes('<wp:positionV relativeFrom="margin"><wp:align>center</wp:align>'), '수직 중앙 앵커 누락');
-    assert.ok(doc.includes('behindDoc="0"'), '텍스트 앞 배치 누락 — behindDoc=1이면 음영 셀 배경에 가려짐');
+    assert.ok(doc.includes('behindDoc="0"'), '텍스트 앞 배치 누락 — 뒤쪽이면 음영 셀에 가려짐');
+    assert.ok(doc.includes('w14:alpha w14:val="20000"'), '투명 텍스트 누락 — w14:textFill alpha로 본문 가림 없이 전면 표시');
     const { entries: plain } = await unzip(docxFileMd('# t\n\n본문', 'doc'));
     assert.ok(!plain['word/document.xml'].includes('w:drawing'), '워터마크 미지정 시 드로잉 없어야 함');
 });
