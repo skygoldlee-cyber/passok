@@ -73,9 +73,20 @@ test('docxFileMd — 헤딩·표·목록이 구조로 변환된다', async () =>
     assert.ok(doc.includes('<w:pBdr>'), '구분선 누락');
     assert.ok(doc.includes('w:type="dxa"'), '표 고정폭(dxa) 레이아웃 누락 — A4 본문 폭 미사용');
     assert.ok(doc.includes('<w:tblGrid>') && doc.includes('<w:gridCol'), '열 그리드 누락');
+    assert.ok(doc.includes('<w:tblLayout w:type="fixed"/>'), '표 고정 레이아웃 누락 — gridCol 폭이 무시될 수 있음');
     assert.ok(doc.includes('<w:shd'), '표머리 음영 누락');
     assert.ok(doc.includes('<w:tblCellMar>'), '셀 내부 여백 누락');
     assert.ok(doc.includes('w:orient="portrait"'), 'A4 세로 방향 명시 누락');
+});
+
+test('docxFileMd — 열 너비 내용 기반 배분: 레이블 열이 내용 열보다 좁다', async () => {
+    const md = '| 항목 | 내용 |\n|---|---|\n| 성명 | 김요양 |\n| 기록 | 개별급여제공기록 작성지침에 따라 서비스제공내역을 상세하게 기재한다 |';
+    const { entries } = await unzip(docxFileMd(md, 'doc'));
+    const doc = entries['word/document.xml'];
+    const ws = [...doc.matchAll(/<w:gridCol w:w="(\d+)"/g)].map(m => +m[1]);
+    assert.strictEqual(ws.length, 2);
+    assert.ok(ws[0] < ws[1] * 0.5, `레이블 열(${ws[0]})이 내용 열(${ws[1]}) 대비 과도 — 균등 배분 잔재`);
+    assert.strictEqual(ws[0] + ws[1], 9026, '열 너비 합계가 본문 폭과 불일치');
 });
 
 test('docxFileMd — 공문서 격식: 제목 중앙·메타줄·표머리 연청·머리 반복', async () => {
@@ -112,14 +123,15 @@ test('docxFileMd — :::sign 서명란은 하단 우측 부동 표, 셀 어절 �
 });
 
 test('docxFileMd — 좁은 셀 긴 텍스트는 어절 경계 <w:br/> 사전 줄바꿈', async () => {
-    // 5열 표 → 셀 1805tw, usable ~1505tw → 한글 ~6자/줄. '요양일지 기록내용 확인'은
-    // '기록내용' 앞에서만 끊겨야 한다 (Word는 OOXML 어절 스위치가 없어 생성 측 사전 줄바꿈)
-    const md = '| 1 | 2 | 3 | 4 | 내용 |\n|---|---|---|---|---|\n| a | b | c | d | 요양일지 기록내용 확인 |';
+    // 5열 표 — 긴 내용 열도 60% 상한으로 셀 폭 한정 → 줄바꿈은 어절 경계에서만 발생해야 함
+    // (Word는 OOXML 어절 스위치가 없어 생성 측 사전 줄바꿈)
+    const md = '| 1 | 2 | 3 | 4 | 내용 |\n|---|---|---|---|---|\n| a | b | c | d | 요양일지 기록내용 확인 작성지침에 따라 서비스제공내역을 상세하게 기재한다 |';
     const { entries } = await unzip(docxFileMd(md, 'doc'));
     const doc = entries['word/document.xml'];
     assert.ok(doc.includes('<w:br/>'), '사전 줄바꿈 <w:br/> 누락');
     // 본문 폰트 10pt 명시 — 미명시면 뷰어 기본값에 따라 폭이 달라져 어절 사전 줄바꿈이 깨짐
     assert.ok(doc.includes('<w:sz w:val="20"/>'), '본문 폰트 크기 명시(10pt) 누락');
-    // 첫 줄은 '요양일지'로 끝나고 '기록내용'이 다음 줄 첫 토큰 — 음절 중간 분리 없음
-    assert.ok(doc.includes('>요양일지</w:t><w:br/><w:t xml:space="preserve">기록내용 확인</w:t>'), '어절 경계가 아닌 위치에서 분리됨');
+    // 어절이 쪼개지지 않음 — 줄바꿈된 조각들 사이에서도 각 어절은 통째로 존재
+    assert.ok(doc.includes('기록내용'), '어절 중간 분리(기록내용)');
+    assert.ok(doc.includes('서비스제공내역을'), '어절 중간 분리(서비스제공내역을)');
 });

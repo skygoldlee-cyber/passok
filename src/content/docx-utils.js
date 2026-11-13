@@ -176,6 +176,34 @@ const _wrap = (t, usable) => {
 /** 줄 배열 → 단일 런의 t/br 시퀀스 */
 /** @param {string[]} lines */
 const _runs = lines => lines.map(l => `<w:t xml:space="preserve">${esc(l)}</w:t>`).join('<w:br/>');
+const _estW = (/** @type {string} */ t) => [...String(t)].reduce((n, c) => n + _cw(c), 0);
+const _CPAD = 320; // 셀 좌우 여백+테두리 여유
+/**
+ * 열 너비 배분 — 내용 폭 추정 기반 (HTML auto-layout 유사). min=최장 어절 수용 폭, pref=한 줄 수용 폭.
+ * pref 합계가 본문 폭 이하면 잉여를 pref 비율로, 넘으면 min 확보 후 잉여를 (pref−min) 비율로 배분한다.
+ * @param {string[][]} rows @returns {number[]}
+ */
+const _colWs = rows => {
+    const n = Math.max(1, ...rows.map(r => r.length));
+    const min = Array(n).fill(900), pref = Array(n).fill(900);
+    for (const r of rows) r.forEach((c, i) => {
+        const t = String(c).trim();
+        pref[i] = Math.max(pref[i], _estW(t) + _CPAD);
+        min[i] = Math.max(min[i], Math.min(_estW(t.split(/ +/).sort((a, b) => _estW(b) - _estW(a))[0] || '') + _CPAD, pref[i]));
+    });
+    const cap = Math.floor(_TEXT_W * 0.6);
+    const pf = pref.map(p => Math.min(p, cap));
+    const sp = pf.reduce((a, b) => a + b, 0), sm = min.reduce((a, b) => a + b, 0);
+    let ws;
+    // 잉여 배분 가중 — 줄바꿈으로 늘어날 수 있는 열(pref>min)만 잉여를 받는다. 고정 폭 레이블 열은 제외
+    const grow = pf.map((p, i) => Math.max(0, p - min[i]));
+    const sg = grow.reduce((a, b) => a + b, 0);
+    if (sp <= _TEXT_W) ws = pf.map((p, i) => Math.floor(p + (_TEXT_W - sp) * (sg ? (grow[i] || 0) / sg : 1 / n)));
+    else if (sm < _TEXT_W) ws = pf.map((p, i) => Math.floor((min[i] || 0) + (_TEXT_W - sm) * (((p) - (min[i] || 0)) / Math.max(1, sp - sm))));
+    else { const b = Math.floor(_TEXT_W / n); ws = Array(n).fill(b); }
+    ws[n - 1] += _TEXT_W - ws.reduce((a, b) => a + b, 0); // 반올림 잔여는 마지막 열
+    return ws;
+};
 /**
  * @param {string} c
  * @param {boolean} head
@@ -188,12 +216,11 @@ const _cell = (c, head, w) => `<w:tc><w:tcPr>${w ? `<w:tcW w:w="${w}" w:type="dx
  * @returns {string}
  */
 const _tbl = rows => {
-    const n = Math.max(1, ...(rows.map(r => r.length)));
-    const base = Math.floor(_TEXT_W / n), last = _TEXT_W - base * (n - 1);
-    const grid = Array.from({ length: n }, (/** @type {*} */ _, i) => `<w:gridCol w:w="${i === n - 1 ? last : base}"/>`).join('');
-    const wAt = (/** @type {number} */ i) => i === n - 1 ? last : base;
+    const ws = _colWs(rows);
+    const grid = ws.map(w => `<w:gridCol w:w="${w}"/>`).join('');
+    const wAt = (/** @type {number} */ i) => ws[i];
     // 첫 행 tblHeader — 페이지 넘김 시 표머리 반복
-    return `<w:tbl><w:tblPr><w:tblW w:w="${_TEXT_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders>${_CELL_MAR}</w:tblPr><w:tblGrid>${grid}</w:tblGrid>`
+    return `<w:tbl><w:tblPr><w:tblW w:w="${_TEXT_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${grid}</w:tblGrid>`
         + rows.map((r, i) => `<w:tr>${i === 0 ? '<w:trPr><w:tblHeader/></w:trPr>' : ''}${r.map((c, ci) => _cell(c, i === 0, wAt(ci))).join('')}</w:tr>`).join('') + '</w:tbl>';
 };
 // 헤딩 — # 는 문서 제목(중앙·대자), ## 는 절 제목(하단 가는 선), ### 는 소제목
