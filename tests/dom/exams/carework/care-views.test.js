@@ -939,19 +939,21 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(pinDocSignBottom(document.createElement('div'))).toBe(false); // 서명란 없으면 미적용
     });
 
-    it('docWmHtml — 설정 켜짐+기관명 있을 때 대각선 타일, mdToHtml 미리보기에 주입', async () => {
-        const { mdToHtml, docWmHtml } = await import('../../../../src/exams/carework/doc-md.js');
+    it('docWmHtml — 설정 켜짐+기관명 있을 때 대각선 워터마크, mdToHtml 미리보기에 주입', async () => {
+        const { mdToHtml } = await import('../../../../src/exams/carework/doc-md.js');
+        const { docWmHtml } = await import('../../../../src/content/doc-wm.js'); // 공용 모듈 — 마크업 자체는 유닛 테스트
         const { setDocSignWm, setLocalOrgName } = await import('../../../../src/exams/carework/facility.js');
         setDocSignWm(false);
         setLocalOrgName('테스트요양원');
-        expect(docWmHtml()).toBe(''); // 토글 꺼짐 → 미출력
+        expect(mdToHtml('# 요양일지\n\n본문')).not.toContain('doc-wm'); // 토글 꺼짐 → 미출력
         setDocSignWm(true);
-        expect(docWmHtml()).toContain('doc-wm');
-        expect(docWmHtml()).toContain('테스트요양원'); // 기관명 · 출력일 문구
-        expect(mdToHtml('# 요양일지\n\n본문')).toContain('doc-wm'); // 미리보기·인쇄·PDF 경로 동일 주입
-        setDocSignWm(false);
+        const html = mdToHtml('# 요양일지\n\n본문');
+        expect(html).toContain('doc-wm'); // 미리보기·인쇄·PDF 경로 동일 주입
+        expect(html).toContain('테스트요양원'); // 기관명 · 출력일 문구
         setLocalOrgName('');
-        expect(docWmHtml()).toBe(''); // 기관명 없으면 토글 켜도 미출력
+        expect(mdToHtml('# 요양일지\n\n본문')).not.toContain('doc-wm'); // 기관명 없으면 토글 켜도 미출력
+        expect(docWmHtml('x')).toContain('doc-wm'); // 공용 API — 인자 문구 그대로 마크업
+        setDocSignWm(false);
     });
 
     it('careHome — 기관명 워터마크 체크박스가 저장값과 동기화·변경 즉시 저장', async () => {

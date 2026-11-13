@@ -17,6 +17,13 @@
 - 최종: docx 워터마크는 첫 단락 본문 앵커 DrawingML(wps) 텍스트 상자 + a:xfrm rot -45° + behindDoc=0 — 본문 앵커라 콘텐츠 전면 렌더(음영 포함 전 영역). textpath(t136)는 경로 기반 글리프라 글자 좌우 반전·폭주 재발(flip·v-text-reverse 무력), VML t202는 rotation이 txbx 콘텐츠에 적용 안 돼 수평 렌더 — 모두 폐기하고 최신 DrawingML로 확정. font-size는 문구 길이 비례 계산(_wmFont), margin 앵커 center/center (Word COM PDF 출력으로 각도·방향·위치 실측)
 - 전면(behindDoc=0) + w14:textFill alpha 40% 투명 텍스트 + 기울임 — 음영 포함 전 영역 표시되면서 본문 가독 유지. alpha 미지원 렌더러 대비 srgbClr 자체를 C0C0C0으로 (미지원 시 연회색·지원 시 더 은은). 글자 확대(박스 640pt·폰트 상한 64pt, 굵게+기울임 폭 보정 ×1.15) + horzOverflow=overflow — 문구 끝(날짜) 잘림 방지. PDF 캔버스 스탬프·미리보기도 italic·동일 배율 통일
 
+## 2026-11-14 refactor(content): 문서 워터마크 플랫폼 공용화 — 시험팩 재사용
+
+- src/content/doc-wm.js 신규 — docWmText(기관명 · 출력일 규약) + docWmHtml(.doc-wm 오버레이). docxFile/docxFileMd·pdfFileFromEl의 wm 인자와 세트로 4경로(docx 회전 상자·미리보기·인쇄·PDF 캔버스) 동일 문구 보장
+- css/doc-export.css 신규 — .doc-wm 규칙을 carework 전용 css에서 플랫폼 공유로 승격 (style.css @import + sw.js 프리캐시)
+- carework는 토글·기관명 같은 팩 고유 정보만 유지 (doc-md.js _wmText, care-share.js _wmText → 공용 호출)
+- 재사용 절차: wm=docWmText(기관명) → docxFileMd(md,name,wm)/pdfFileFromEl(el,name,wm) + 문서 루트(position:relative)에 docWmHtml(wm) 삽입
+
 ## 2026-11-14 feat(carework): 1쪽 보고서 쪽 번호 자동 생략
 
 - docx 바닥글을 IF NUMPAGES>1 조건부 필드로 교체 — 1쪽 문서는 — N — 표시 없음, 2쪽 이상만 자동 매김 (fldChar 중첩 필드, PAGE만 fldSimple→fldChar 전환)

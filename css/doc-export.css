@@ -1,0 +1,14 @@
+/* css/doc-export.css — 문서 내보내기 공용 스타일
+   @spec CO-13 — 문서 출력 공용 계층 (docx-utils·pdf-utils·doc-wm 세트)
+   워터마크 오버레이 .doc-wm — docWmHtml(src/content/doc-wm.js)이 생성.
+   사용 조건: 문서 루트 요소에 position:relative 지정 후 자식으로 삽입 */
+
+.doc-wm { position: absolute; inset: 0; overflow: hidden; pointer-events: none; display: flex; align-items: center; justify-content: center; }
+.doc-wm span { transform: rotate(-45deg); transform-origin: center; white-space: nowrap; font-weight: 700; font-style: italic; font-size: 1.3em; letter-spacing: .06em; color: rgba(0,0,0,.12); }
+
+@media print {
+    /* fixed는 인쇄 매체에서 페이지 박스 기준 매 장 반복 (cosmetic .fp-watermark 검증 방식).
+       옅은 회색이 인쇄에서 소실되지 않게 강제 */
+    .doc-wm { position: fixed; }
+    .doc-wm span { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}

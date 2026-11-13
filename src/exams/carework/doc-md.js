@@ -3,6 +3,7 @@
 import { getOrgName, getDocSign } from './facility.js';
 import { todayKey } from '../../core/utils.js';
 import { parseCsv } from '../../content/csv-utils.js';
+import { docWmText, docWmHtml } from '../../content/doc-wm.js';
 
 /** 문서 헤더 — # 제목 + 기관명·출력일 메타 (모든 내보내기 문서 공통 머리) */
 /** @param {string} title */
@@ -88,21 +89,12 @@ export const mdToHtml = md => {
     }
     flush(false);
     out.push('<p class="doc-end">끝.</p>'); // 공문서 종결 표기
-    return `<div class="doc-md">${docWmHtml()}${out.join('')}</div>`;
+    return `<div class="doc-md">${docWmHtml(_wmText())}${out.join('')}</div>`;
 };
 
-/**
- * 기관명 워터마크 타일 — 설정(홈 → 출력물 서명 → 기관명 워터마크) 켜짐 + 기관명 있을 때만.
- * 대각선 반복 배치 — docx 헤더 VML 워터마크와 동일 문구(기관명 · 출력일)
- * @returns {string} doc-wm 컨테이너 HTML 또는 빈 문자열
- */
-export const docWmHtml = () => {
-    if (!getDocSign().wm) return '';
-    const org = getOrgName();
-    if (!org) return '';
-    const t = `${org} · ${todayKey()}`.replace(/[&<>"]/g, c => /** @type {Object.<string,string>} */ ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] || c);
-    return `<div class="doc-wm" aria-hidden="true"><span style="font-size:2.6em">${t}</span></div>`;
-};
+/** 워터마크 문구 — 설정(홈 → 출력물 서명 → 기관명 워터마크) 켜짐 + 기관명 있을 때만.
+ *  문구 자체는 공용 docWmText — docx 회전 상자·PDF 캔버스 스탬프와 동일 */
+const _wmText = () => (getDocSign().wm ? docWmText(getOrgName()) : '');
 
 /**
  * 서명란을 문서 하단 우측에 고정 — docx 출력의 부동 표(tblpPr, 페이지 하단 우측 앵커)와

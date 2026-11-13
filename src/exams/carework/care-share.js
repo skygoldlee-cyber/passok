@@ -5,6 +5,7 @@ import { esc } from '../../core/sanitize.js';
 import { pdfFileFromEl } from '../../content/pdf-utils.js';
 import { sheetFile } from '../../content/xlsx-utils.js';
 import { docxFile, docxFileMd } from '../../content/docx-utils.js';
+import { docWmText } from '../../content/doc-wm.js';
 import { docHeadHtml, getOrgName, getDocSign } from './facility.js';
 import { pinDocSignBottom } from './doc-md.js';
 import { getJSON, setJSON } from '../../core/storage.js';
@@ -189,11 +190,8 @@ const _actPdf = async (/** @type {*} */ ctx) => {
     } catch { showToast('PDF 생성 실패 — 인쇄를 이용하세요.', 'error'); }
 };
 
-/** 워터마크 문구 — 설정 켜짐 + 기관명 있을 때만 (docx 헤더 VML과 미리보기 .doc-wm이 같은 문구) */
-const _wmText = () => {
-    const org = getOrgName();
-    return getDocSign().wm && org ? `${org} · ${todayKey()}` : '';
-};
+/** 워터마크 문구 — 설정 켜짐 + 기관명 있을 때만 (docx 회전 상자·미리보기 .doc-wm·PDF 스탬프 동일 문구) */
+const _wmText = () => (getDocSign().wm ? docWmText(getOrgName()) : '');
 
 /** 공유 Word — MD 초안이 있으면 구조 보존 변환(표·헤딩), 없으면 헤더+본문 단락 폴백 */
 const _docxFile = (/** @type {*} */ ctx) => {
