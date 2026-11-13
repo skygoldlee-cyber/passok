@@ -87,6 +87,13 @@ describe('플랜 안내 모달 (showPlanCompare)', () => {
         expect(btn.textContent).toContain('라이선스 코드');
     });
 
+    it('플랜 안내 모달은 정보 전용 — 코드 입력 링크 없음 (설정 패널 단일 진입)', async () => {
+        await stubPlan({});
+        await showPlanCompare();
+        expect(overlay().querySelector('[data-click="showRedeemCode"]')).toBeNull();
+        expect(overlay().textContent).not.toContain('라이선스 코드 입력');
+    });
+
     it('클라우드 동기화 행이 feature-plan.json의 cloud_sync 값을 반영한다', async () => {
         await stubPlan({ cloud_sync: 'pro' });
         await showPlanCompare();
