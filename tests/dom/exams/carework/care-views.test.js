@@ -266,6 +266,23 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         setDocSignImage(''); // 정리 — 이후 테스트에 영향 방지
     });
 
+    it('docMdSign — 등록 서명 이미지가 있으면 author 슬롯에 {{img:author}} 토큰, 미리보기는 img로 치환', async () => {
+        const { setDocSignImage } = await import('../../../../src/exams/carework/facility.js');
+        const { docMdSign, mdToHtml } = await import('../../../../src/exams/carework/doc-md.js');
+        setDocSignImage('data:image/png;base64,AAA');
+        try {
+            const md = docMdSign([['작성자', 'author'], ['확인자', 'confirmer']]);
+            expect(md).toContain('작성자: {{img:author}}'); // docx 이미지 치환 토큰
+            expect(md).not.toContain('확인자: {{img:author}}'); // author 슬롯만
+            const html = mdToHtml(':::sign\n작성자: {{img:author}}\n:::end');
+            expect(html).toContain('care-doc-signimg'); // 미리보기·PDF는 등록 이미지 렌더
+            expect(html).toContain('data:image/png;base64,AAA');
+            expect(html).not.toContain('{{img:'); // 토큰 잔존 금지
+        } finally { setDocSignImage(''); }
+        const md2 = docMdSign([['작성자', 'author']]);
+        expect(md2).not.toContain('{{img:'); // 이미지 없으면 기존 텍스트 서명란
+    });
+
     it('signFileToDataUri — 디코딩 불가 환경은 원본 data URI 폴백으로 등록 유지', async () => {
         const { signFileToDataUri } = await import('../../../../src/exams/carework/facility.js');
         // jsdom은 Image 로드 이벤트를 발생시키지 않아 디코딩이 무한 대기 — 디코딩 실패 강제로 폴백 계약 고정

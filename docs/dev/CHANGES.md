@@ -1,3 +1,11 @@
+## 2026-11-14 feat(carework): 등록 서명 이미지 Word 출력 연결 — 런타임 {{img:}} 배선
+
+- docMdSign이 author 슬롯에 `{{img:author}}` 토큰 방출 (signImage 등록 시) — docx는 이미지 삽입
+- mdToHtml은 토큰을 `<img class="care-doc-signimg">`로 치환 — 미리보기·인쇄·PDF도 동일 표시
+- facility.docSignImages() — 캔버스 합성: 서명란용 (인) 겹침 합성 + 결재란용 서명-only (2배 렌더)
+- care-share _docxFile이 images 맵 전달 (비동기 전환) — 클립보드·공유 텍스트는 토큰을 (서명)으로 치환
+- 이전에는 샘플 생성기에서만 images가 전달돼 앱 생성 Word에 서명 이미지 미삽입
+
 ## 2026-11-14 fix(carework): 인수인계서 서명란 '확인일' 슬롯 제거
 
 - 서명란이 인계자·인수자 2칸으로 간소화 — 확인일 수기 공란 불필요 (문서 헤더에 인수인계 일시 별도 표기)

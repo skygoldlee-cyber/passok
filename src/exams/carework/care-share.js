@@ -6,7 +6,7 @@ import { pdfFileFromEl } from '../../content/pdf-utils.js';
 import { sheetFile } from '../../content/xlsx-utils.js';
 import { docxFile, docxFileMd } from '../../content/docx-utils.js';
 import { docWmText } from '../../content/doc-wm.js';
-import { docHeadHtml, getOrgName, getDocSign } from './facility.js';
+import { docHeadHtml, getOrgName, getDocSign, docSignImages } from './facility.js';
 import { pinDocSignBottom } from './doc-md.js';
 import { getJSON, setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
@@ -167,7 +167,8 @@ const _pdfFile = async (/** @type {*} */ ctx) => {
 
 const _copyRaw = (/** @type {*} */ ctx) => {
     if (!navigator.clipboard?.writeText) { showToast('공유·복사를 지원하지 않는 환경입니다.', 'error'); return; }
-    navigator.clipboard.writeText(ctx.md || ctx.text).then( // MD 초안이 있으면 구조(표) 텍스트로 복사
+    const raw = (ctx.md || ctx.text).replace(/\{\{img:[\w-]+\}\}/g, '(서명)'); // 서명 이미지 토큰은 텍스트 표기로
+    navigator.clipboard.writeText(raw).then( // MD 초안이 있으면 구조(표) 텍스트로 복사
         () => showToast('클립보드에 복사했습니다 — 카톡 등에 붙여넣으세요.'),
         () => showToast('복사 실패 — 인쇄·PDF를 이용하세요.', 'error'));
 };
@@ -194,17 +195,20 @@ const _actPdf = async (/** @type {*} */ ctx) => {
 const _wmText = () => (getDocSign().wm ? docWmText(getOrgName()) : '');
 
 /** 공유 Word — MD 초안이 있으면 구조 보존 변환(표·헤딩), 없으면 헤더+본문 단락 폴백 */
-const _docxFile = (/** @type {*} */ ctx) => {
-    if (ctx.md) return docxFileMd(ctx.md, ctx.fname('docx').replace(/\.docx$/, ''), _wmText());
+const _docxFile = async (/** @type {*} */ ctx) => {
+    if (ctx.md) { // MD 초안 — {{img:}} 토큰은 등록 서명 이미지 PNG로 치환 (합성 실패 시 공란 폴백)
+        const images = await docSignImages();
+        return docxFileMd(ctx.md, ctx.fname('docx').replace(/\.docx$/, ''), _wmText(), images ? { images } : undefined);
+    }
     const org = getOrgName();
     const head = `${ctx.title}\n${org ? org + ' · ' : ''}${todayKey()} 출력`;
     return docxFile(`${head}\n\n${ctx.text}`, ctx.fname('docx').replace(/\.docx$/, ''), 2, _wmText());
 };
 
-const _actDocx = (/** @type {*} */ ctx) => {
+const _actDocx = async (/** @type {*} */ ctx) => {
     if (ctx.proKey) proFeatureNotice(ctx.proKey, `${ctx.title} Word 다운로드`);
     try {
-        const file = _docxFile(ctx);
+        const file = await _docxFile(ctx);
         _downloadAll([file]);
         _audit(ctx.title, ctx.flag, [file.name]);
     } catch { showToast('Word 파일 생성 실패 — 인쇄·PDF를 이용하세요.', 'error'); }
@@ -244,12 +248,12 @@ const _actShare = async (/** @type {*} */ ctx, /** @type {string} */ kind = 'all
         catch { showToast('PDF 생성 실패 — 텍스트만 공유됩니다.', 'error'); }
     })());
     if (kinds.includes('docx')) tasks.push((async () => { // Word — 편집용 .docx, 동기 생성이라 실패 여지 없음(방어적으로 분리)
-        try { files.push(_docxFile(ctx)); }
+        try { files.push(await _docxFile(ctx)); }
         catch { showToast('Word 생성 실패 — 나머지 파일은 정상 공유됩니다.', 'error'); }
     })());
     await Promise.allSettled(tasks); // 생성 완료 후 버튼 — 시트에 선택 파일 첨부
     _audit(ctx.title, ctx.flag, files.map((/** @type {File} */ f) => f.name));
-    const fs = files, { title } = ctx, text = ctx.md || ctx.text; // 텍스트 공유도 MD 초안 기본 (표 구조 보존)
+    const fs = files, { title } = ctx, text = (ctx.md || ctx.text).replace(/\{\{img:[\w-]+\}\}/g, '(서명)'); // 텍스트 공유도 MD 초안 기본 — 이미지 토큰은 (서명) 표기
     _shareBtn(`📤 ${title} 공유하기`, async () => {
         const ok = !_filesBlocked && fs.length && (typeof navigator.canShare !== 'function' || navigator.canShare({ files: fs }));
         try {

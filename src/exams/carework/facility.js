@@ -198,6 +198,54 @@ export async function signFileToDataUri(file) {
     return _fileDataUri(file);
 }
 /**
+ * 등록 서명 이미지 → docx `{{img:author}}`·결재란 삽입용 PNG 맵 — 없거나 합성 실패 시 null.
+ * author: 74×38 표시 (인) 우하단 + 서명 겹침 합성 (서명이 (인) 위를 덮는 실물 형태),
+ * approve: 결재란 담당 칸용 서명-only. 2배 렌더로 인쇄 선명도 확보, 표시 크기만 docx에 전달.
+ * @returns {Promise<{author: {data:Uint8Array,w:number,h:number}, approve: {data:Uint8Array,w:number,h:number}}|null>}
+ */
+export async function docSignImages() {
+    const uri = getDocSign().signImage;
+    if (!uri) return null;
+    try {
+        const img = await new Promise((res, rej) => {
+            const im = new Image();
+            im.onload = () => res(im);
+            im.onerror = () => rej(new Error('decode'));
+            im.src = uri;
+        });
+        const S = 2;
+        const toBytes = (/** @type {HTMLCanvasElement} */ el) => {
+            const b64 = el.toDataURL('image/png').split(',')[1] || '';
+            const bin = atob(b64); const u8 = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+            return u8;
+        };
+        const fit = (/** @type {number} */ maxW, /** @type {number} */ maxH) => {
+            const k = Math.min(maxW / img.naturalWidth, maxH / img.naturalHeight, 1);
+            return { w: Math.max(1, img.naturalWidth * k), h: Math.max(1, img.naturalHeight * k) };
+        };
+        const cv = document.createElement('canvas'); // 서명란 합성 — (인) 위에 서명 겹침
+        cv.width = 74 * S; cv.height = 38 * S;
+        const c = cv.getContext('2d');
+        if (!c) return null;
+        c.font = `${11.5 * S}px 'Malgun Gothic', sans-serif`; c.fillStyle = '#000';
+        c.fillText('(인)', cv.width - 5 * S - c.measureText('(인)').width, cv.height - 4 * S);
+        const iw = Math.min(56 * S, cv.width), ih = Math.min(cv.height, iw * img.naturalHeight / img.naturalWidth);
+        c.drawImage(img, cv.width - iw, cv.height - ih, iw, ih);
+        const av = document.createElement('canvas'); // 결재란 — 서명-only (비율 유지, 52×40 표시 상한)
+        const af = fit(52 * S, 40 * S);
+        av.width = Math.round(af.w); av.height = Math.round(af.h);
+        const ac = av.getContext('2d');
+        if (!ac) return null;
+        ac.drawImage(img, 0, 0, af.w, af.h);
+        return {
+            author: { data: toBytes(cv), w: 74, h: 38 },
+            approve: { data: toBytes(av), w: Math.round(af.w / S), h: Math.round(af.h / S) },
+        };
+    } catch { return null; }
+}
+
+/**
  * 문서 서명란 — items: [[라벨, 'author'|'confirmer'|'receiver'|'']].
  * 설정된 성명은 인쇄·공유 산출물에 그대로 기입되고, 미설정·빈키 슬롯(날짜)은 수기 서명용 공란 유지.
  */

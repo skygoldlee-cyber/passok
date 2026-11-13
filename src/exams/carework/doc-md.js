@@ -27,7 +27,8 @@ export const mdTable = (headers, rows) =>
 export const docMdSign = items => {
     const s = getDocSign();
     const nm = (/** @type {string} */ k) => (k === 'author' ? s.author : k === 'confirmer' ? s.confirmer : k === 'receiver' ? s.receiver : '');
-    return '\n\n:::sign\n' + items.map(([label, k]) => `${label}: ${nm(k) || '＿＿＿＿＿＿＿＿'}`).join('\n') + '\n:::end';
+    // author 슬롯에 등록 서명 이미지가 있으면 {{img:author}} 토큰 — docx는 이미지 삽입, 미리보기는 img 태그로 치환
+    return '\n\n:::sign\n' + items.map(([label, k]) => `${label}: ${k === 'author' && s.signImage ? '{{img:author}}' : (nm(k) || '＿＿＿＿＿＿＿＿')}`).join('\n') + '\n:::end';
 };
 
 /** 기존 CSV 직렬화 재사용 → MD 표 (BOM·인용 처리는 parseCsv 위임) */
@@ -69,7 +70,11 @@ export const mdToHtml = md => {
             if (sign) {
                 const d = new Date();
                 const date = `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
-                out.push(`<div class="doc-sign"><div class="doc-sign-date">${date}</div>${sign.map(l => `<div>${esc(l)}${/\(인\)\s*$/.test(l) ? '' : ' (인)'}</div>`).join('')}</div>`);
+                out.push(`<div class="doc-sign"><div class="doc-sign-date">${date}</div>${sign.map(l => {
+                    const m = l.match(/^(.*)\{\{img:author\}\}\s*$/);
+                    if (m) { const im = getDocSign().signImage; if (im) return `<div>${esc(m[1])}<img class="care-doc-signimg" alt="${esc(getDocSign().author || '서명')}" src="${im}"> (인)</div>`; }
+                    return `<div>${esc(l)}${/\(인\)\s*$/.test(l) ? '' : ' (인)'}</div>`;
+                }).join('')}</div>`);
                 sign = null;
             }
             continue;
