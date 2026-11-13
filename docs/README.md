@@ -93,10 +93,10 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (100개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (101개)
 │   ├── 수위 문서 (6개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·COMPLEXITY_BACKLOG·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (20개 — README + ADR 19건)
-│   ├── runbooks/              ← 실행 절차·운영 런북 (23개)
+│   ├── runbooks/              ← 실행 절차·운영 런북 (24개)
 │   ├── design/                ← 설계·계획·평가 문서 (30개)
 │   ├── reference/             ← 명세·로직·참조 문서 (17개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (4개 — §9 스냅샷 이력)
@@ -228,6 +228,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [DISCORD_COMMUNITY_SETUP.md](dev/runbooks/DISCORD_COMMUNITY_SETUP.md) | Discord 커뮤니티 서버 개설 절차 — Community 활성화·역할 게이트·Onboarding·초대 링크→`discordInvite` 연결 (DOC-RBK-18) |
 | [GATE_TROUBLESHOOTING.md](dev/runbooks/GATE_TROUBLESHOOTING.md) | 게이트 실패 트러블슈팅 — 검증 실패별 원인·복구 절차 (DOC-RBK-20) |
 | [LFS_MIGRATION.md](dev/runbooks/LFS_MIGRATION.md) | Git LFS 마이그레이션 런북 — 이미지 자산 이력 이전 (DOC-RBK-21) |
+| [FACILITY_DATA_OPS.md](dev/runbooks/FACILITY_DATA_OPS.md) | 기관 데이터 운영 절차 — 운영자 접근 통제·허용 목적·접근 기록 + Free 플랜 기준 백업(pg_dump)·시나리오별 복구·위탁 종료 반환/파기 (DOC-RBK-24, 위탁계약 별지 2 근거) |
 | [ASSET_STORAGE_REVIEW.md](dev/design/ASSET_STORAGE_REVIEW.md) | 대형 자산 저장 검토 — 바이너리 git 관리 판단·외부화 기각 근거·LFS 후보 기준 (DOC-DSN-48) |
 | [DEPLOY_PIPELINE_DESIGN.md](dev/design/DEPLOY_PIPELINE_DESIGN.md) | 배포 파이프라인 속도 개선 설계 — 게이트 실패 반복·CI 직렬 대기 해소 (DOC-DSN-49) |
 | [ACCOUNT_LINKING_DESIGN.md](dev/design/ACCOUNT_LINKING_DESIGN.md) | 계정 연결 설계 — 로그인 수단 간 유료 권한 통합 (linkIdentity·충돌 수동 복구 경로, DOC-DSN-50) |
@@ -474,6 +475,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-RBK-21 | `docs/dev/runbooks/LFS_MIGRATION.md` |
 | DOC-RBK-22 | `docs/dev/runbooks/STORY_TYPE_DESIGN_GUIDE.md` |
 | DOC-RBK-23 | `docs/dev/runbooks/E2E_TEST_SUPABASE.md` |
+| DOC-RBK-24 | `docs/dev/runbooks/FACILITY_DATA_OPS.md` |
 | DOC-ADR-00 | `docs/dev/adr/README.md` |
 | DOC-ADR-01 | `docs/dev/adr/0001-exam-data-boot-document-write.md` |
 | DOC-ADR-02 | `docs/dev/adr/0002-domain-asset-convention-paths.md` |

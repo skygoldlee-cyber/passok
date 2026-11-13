@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 8a37a7da5ca69175
+> 입력 해시: b4798f6f73c4219d
 > 생성: 2026-11-13 · 원천: SPEC.md(709개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 709개 — 문서 연결 470 · 소스 연결 627 · 테스트 연결 670 · 보고서 연결 109
+**커버리지 요약**: 요구사항 709개 — 문서 연결 471 · 소스 연결 627 · 테스트 연결 670 · 보고서 연결 109
 
 ---
 
@@ -506,7 +506,7 @@
 | AD-03 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
 | AD-04 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
 | AD-05 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
-| AD-06 | ✅ | 테스트 | DOC-DSN-30 | tools/check/feedback_report.js<br>tools/check/grant_pro.js<br>tools/check/user_report.js<br>tools/lib/supabase_ops.js | tests/unit/app/feedback-report.test.js<br>tests/unit/app/grant-pro.test.js<br>tests/unit/app/user-report.test.js | — | — |
+| AD-06 | ✅ | 테스트 | DOC-DSN-30<br>DOC-RBK-24 | tools/check/feedback_report.js<br>tools/check/grant_pro.js<br>tools/check/user_report.js<br>tools/lib/supabase_ops.js | tests/unit/app/feedback-report.test.js<br>tests/unit/app/grant-pro.test.js<br>tests/unit/app/user-report.test.js | — | — |
 | AD-07 | ✅ | 테스트 | DOC-DSN-30 | tools/check/dashboard_report.js | tests/unit/app/dashboard-report.test.js | — | — |
 | AD-08 | ✅ | 테스트 | DOC-DSN-30 | tools/check/user_report.js | tests/unit/app/user-report.test.js | — | — |
 | AD-09 | ✅ | 테스트 | DOC-DSN-30 | tools/check/pro_report.js | tests/unit/app/pro-report.test.js | — | — |
@@ -624,7 +624,7 @@
 | CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42 | src/content/docx-utils.js<br>src/content/pdf-utils.js<br>src/exams/carework/care-share.js<br>src/exams/carework/doc-md.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/docx-utils.test.js<br>…외 1개 | — | — |
 | CO-14 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
 | CO-15 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
-| CO-16 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | — | — | — | — | — | — |
+| CO-16 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 문서 검토 | DOC-RBK-24 | — | — | — | — |
 | CO-17 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | src/exams/carework/care-form-pdf.js<br>src/exams/carework/form-template-editor.js<br>src/exams/carework/form-template-store.js<br>src/exams/carework/views/care-custom-form.js | tests/dom/exams/carework/care-views.test.js | — | — |
 | CO-18 | 부분 구현 | 테스트 | — | src/exams/carework/form-seeds.js<br>src/exams/carework/views/care-custom-form.js | tests/dom/exams/carework/care-views.test.js | — | — |
 | CO-19 | 부분 구현 | 테스트 | — | src/exams/carework/audit-import.js<br>src/exams/carework/care-audit.js<br>src/exams/carework/views/care-audit.js | tests/dom/exams/carework/care-views.test.js<br>tests/unit/exams/carework/audit-import.test.js | — | — |
@@ -1110,6 +1110,7 @@
 | DOC-RBK-21 | docs/dev/runbooks/LFS_MIGRATION.md | — |
 | DOC-RBK-22 | docs/dev/runbooks/STORY_TYPE_DESIGN_GUIDE.md | BP-10, BP-11, BP-12, ST-01, ST-02, ST-03, ST-04, ST-05, ST-06, ST-07 |
 | DOC-RBK-23 | docs/dev/runbooks/E2E_TEST_SUPABASE.md | — |
+| DOC-RBK-24 | docs/dev/runbooks/FACILITY_DATA_OPS.md | AD-06, CO-16 |
 | DOC-REF-01 | docs/dev/reference/COMBO_STUDY_STRATEGY.md | DR-02, DR-03, DR-04, DR-05, DR-06, DR-07, Q-01, Q-02, Q-03, Q-04, Q-05, Q-06, Q-07, Q-08, Q-09, Q-10, Q-11, Q-12 |
 | DOC-REF-02 | docs/dev/reference/DEV_ENVIRONMENT.md | — |
 | DOC-REF-03 | docs/dev/reference/FLASHCARD_LOGIC.md | F-01, F-02, F-03, F-04, F-05, F-06, F-07, F-08, F-09, F-10, ID-01, ID-02, ID-03, ID-04, TR-01 |

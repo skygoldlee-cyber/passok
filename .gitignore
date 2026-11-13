@@ -158,6 +158,9 @@ data/exams/*/study_md/
 data/exams/*/subjects/
 data/exams/*/supplements/
 
+# 기관 데이터 덤프 — 개인정보 포함 가능, git 추적 금지 (DOC-RBK-24 §2.4)
+backup/
+
 # Windows 예약 디바이스명 — 리다이렉트 부산물 유입 차단
 nul
 content/exams/**/docs/*.pdf
