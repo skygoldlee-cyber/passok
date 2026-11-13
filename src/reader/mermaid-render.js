@@ -8,7 +8,7 @@
 import { detectMermaidType, getMermaidClassName, getMermaidInitOptions } from './mermaid-utils.js';
 import { PATHS } from '../core/paths.js';
 import { trapFocus } from '../ui-utils.js';
-import { bindZoomGestures } from './zoom-gestures.js';
+import { bindZoomGestures, bindZoomPanControls } from './zoom-gestures.js';
 
 /** @type {Promise<*>|null} */
 let _mermaidLoadPromise = null;
@@ -165,6 +165,12 @@ function _ensureZoomModal() {
                 <span id="mermaid-zoom-level" class="mermaid-zoom-level">100%</span>
                 <button type="button" id="mermaid-zoom-in" class="mermaid-zoom-btn" title="확대" aria-label="확대"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
                 <button type="button" id="mermaid-zoom-fit" class="mermaid-zoom-btn" title="화면에 맞추기"><i class="fa-solid fa-expand" aria-hidden="true"></i> 맞춤</button>
+                <span class="mermaid-zoom-pan" role="group" aria-label="확대 영역 이동">
+                    <button type="button" class="mermaid-zoom-btn" data-pan="up" aria-label="위로 이동"><i class="fa-solid fa-angle-up" aria-hidden="true"></i></button>
+                    <button type="button" class="mermaid-zoom-btn" data-pan="down" aria-label="아래로 이동"><i class="fa-solid fa-angle-down" aria-hidden="true"></i></button>
+                    <button type="button" class="mermaid-zoom-btn" data-pan="left" aria-label="왼쪽으로 이동"><i class="fa-solid fa-angle-left" aria-hidden="true"></i></button>
+                    <button type="button" class="mermaid-zoom-btn" data-pan="right" aria-label="오른쪽으로 이동"><i class="fa-solid fa-angle-right" aria-hidden="true"></i></button>
+                </span>
             </div>
             <button type="button" class="reader-table-modal-close" id="mermaid-zoom-close" aria-label="다이어그램 확대 닫기"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             <div id="mermaid-zoom-body" class="mermaid-zoom-body"></div>
@@ -185,6 +191,7 @@ function _ensureZoomModal() {
             setScale: _setZoom,
             getFitScale: _fitScale,
         });
+        bindZoomPanControls(body, modal.querySelector('.mermaid-zoom-toolbar'));
     }
     _zoomModal = modal;
     return modal;

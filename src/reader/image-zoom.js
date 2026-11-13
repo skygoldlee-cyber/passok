@@ -6,7 +6,7 @@
 // 로 확대한다 — 페이지 핀치줌은 레이아웃 통째 확대라 대체가 아니다 (TR-26).
 
 import { trapFocus } from '../ui-utils.js';
-import { bindZoomGestures } from './zoom-gestures.js';
+import { bindZoomGestures, bindZoomPanControls } from './zoom-gestures.js';
 
 const ZOOM_STEPS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2, 3, 4];
 const ZOOM_DRAG_THRESHOLD = 10; // px — 스크롤 드래그와 탭 구분
@@ -37,6 +37,12 @@ function _ensureImgZoomModal() {
                 <span id="img-zoom-level" class="mermaid-zoom-level">100%</span>
                 <button type="button" id="img-zoom-in" class="mermaid-zoom-btn" title="확대" aria-label="확대"><i class="fa-solid fa-magnifying-glass-plus" aria-hidden="true"></i></button>
                 <button type="button" id="img-zoom-fit" class="mermaid-zoom-btn" title="화면에 맞추기"><i class="fa-solid fa-expand" aria-hidden="true"></i> 맞춤</button>
+                <span class="mermaid-zoom-pan" role="group" aria-label="확대 영역 이동">
+                    <button type="button" class="mermaid-zoom-btn" data-pan="up" aria-label="위로 이동"><i class="fa-solid fa-angle-up" aria-hidden="true"></i></button>
+                    <button type="button" class="mermaid-zoom-btn" data-pan="down" aria-label="아래로 이동"><i class="fa-solid fa-angle-down" aria-hidden="true"></i></button>
+                    <button type="button" class="mermaid-zoom-btn" data-pan="left" aria-label="왼쪽으로 이동"><i class="fa-solid fa-angle-left" aria-hidden="true"></i></button>
+                    <button type="button" class="mermaid-zoom-btn" data-pan="right" aria-label="오른쪽으로 이동"><i class="fa-solid fa-angle-right" aria-hidden="true"></i></button>
+                </span>
             </div>
             <button type="button" class="reader-table-modal-close" id="img-zoom-close" aria-label="이미지 확대 닫기"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             <div id="img-zoom-body" class="mermaid-zoom-body img-zoom-body"></div>
@@ -57,6 +63,7 @@ function _ensureImgZoomModal() {
             setScale: _setImgZoom,
             getFitScale: _fitImgScale,
         });
+        bindZoomPanControls(body, modal.querySelector('.mermaid-zoom-toolbar'));
     }
     _imgZoomModal = modal;
     return modal;

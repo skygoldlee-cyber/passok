@@ -1,5 +1,21 @@
 # 코드 리뷰 수정 내역 (1~12 순차수정)
 
+## 2026-11-13 a11y·ux: 터치 타깃 축소 + 줌 패닝 대체 수단 (WCAG 2.5.7)
+
+- **exam-btn-sim**: `min-height: var(--control-h-md)`(44px, A-04/UX-CTL-02) — 모의고사 뷰 소형 타깃 5건 기준선 제거 (잔여 10건: 리더 툴바·캘린더·formula 등)
+- **줌 모달 패닝 대체**: `bindZoomPanControls` — 툴바 `data-pan` 방향 버튼(탭=뷰포트 45% 이동) + 줌 본문 `tabindex=0`으로 화살표 네이티브 스크롤 — mermaid·이미지 줌 두 모달 적용, A-12 Dragging Movements 부분→충족
+- **검증**: zoom-gestures DOM 테스트 10건 통과 (패닝 버튼·tabindex 케이스 추가)
+
+
+## 2026-11-13 telemetry: 퍼널 페이로드·판정 계측 정비 (EVAL_2026-10-30 권고 #2)
+
+- **quiz_complete 페이로드**: `duration_ms` 실측 소요 추가 — 세션 타임스탬프 차 폴백의 다중 런 부정확 해소 (`state.quiz.startedAt`)
+- **funnel_report**: 자동화 UA(Playwright·Headless 계열) 행 제외 — 과거 오염 행 정화 (신규는 isAutomatedRuntime이 발화 차단) + `duration_ms` 페이로드 우선 집계
+- **조사 결과**: quiz 퍼널 데이터 전량이 자동화 트래픽(10-30 폭주·correct 0·6s) — 실사용 기준선 부재 확인, 오류 캡처 경로는 세션 핑 도달로 개통 검증 (오류 0/206세션)
+- **aggregate_usage --snapshot**: usage_snapshot 서버 스냅샷에서 UX-GATE-01~03 판정 입력 산출 — 기기별 누적 카운터 차분, 창 개시 기록을 DOC-DSN-24 §5에 명기 (판정 가능 2026-12-11~)
+- **검증**: funnel-report 유닛 8건 통과 (duration_ms 우선 케이스 추가) · `error_report --days 7` 세션 206건 도달 확인 · `--snapshot --days 14` 실데이터 판정 입력 출력 확인
+
+
 ## 2026-11-13 tools(check): docs:registry DA-15 정합 — 시험 디렉터리 동적 수집
 
 - `check_doc_registry.js`: 트리 카운트 대조의 시험 버킷을 `exams/cosmetic`·`carework` 리터럴 → `docs/exams/*` readdir 동적 수집으로 교체 — 신규 시험 자동 지원 + DA-15 콘텐츠 독립성 스캔 통과
