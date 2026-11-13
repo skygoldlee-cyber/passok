@@ -35,6 +35,91 @@ const _domainImport = (rel) => Object.assign(
 const _domainMarkup = (/** @type {string} */ rel) => `./html/exams/${getActiveExamId()}/${rel}`;
 const _domainCss = (/** @type {string} */ rel) => `./css/exams/${getActiveExamId()}/${rel}`;
 
+/**
+ * 뷰 마크업 지연 주입 — 셸의 빈 스텁 <section>(data-lazy-view 보유)을
+ * 파셜 파일의 내용으로 통째 교체한다. 파셜 자체가 <section id>를 포함하므로
+ * 주입 후 스텁은 사라지고 data-lazy-view 부재가 "주입 완료" 표식이 된다.
+ * (DOM 테스트는 helpers가 동일 파셜을 미리 주입하므로 이 경로는
+ *  실제 런타임 최초 진입에서만 실행된다)
+ */
+/**
+ * 도메인 스타일 지연 주입 — feat.styles를 활성 시험 css/exams/<id>/ 규약으로
+ * 해석해 <link>를 1회 삽입한다. style.css의 정적 @import는 모든 시험에
+ * 로드되므로 도메인 CSS는 이 경로만 거친다.
+ */
+/** @param {*} feat */
+function ensureDomainStyles(feat) {
+    if (!feat.styles || typeof document === 'undefined') return;
+    const href = _domainCss(feat.styles);
+    if (document.querySelector(`link[href="${href}"]`)) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = href;
+    document.head.appendChild(link);
+}
+
+/** @param {*} feat */
+async function ensureViewMarkup(feat) {
+    ensureDomainStyles(feat);
+    if (!feat.markup) return;
+    const el = document.getElementById(feat.viewId);
+    if (!el || !el.hasAttribute('data-lazy-view')) return;
+    const url = _domainMarkup(feat.markup);
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`view markup ${res.status}: ${url}`);
+    // 스텁의 런타임 상태 보존 — 딥링크로 navigateToView가 먼저 'active'를
+    // 부여한 뒤 enter()의 본 주입이 스텁을 통째 교체하면 클래스가 소실돼
+    // 뷰가 숨는다 (부팅 딥링크 → 지연 뷰 경로의 실결함).
+    const wasActive = el.classList.contains('active');
+    el.outerHTML = await res.text();
+    if (wasActive) {
+        const injected = document.getElementById(feat.viewId);
+        if (injected) injected.classList.add('active');
+    }
+}
+
+/**
+ * 표준 피처 뷰 진입 — 로딩 표시 → 마크업 주입 → main 모듈 로드 → cfg.init 호출.
+ * renderFn은 비동기 — navigateToView가 반환값을 기다리지 않으므로
+ * 내부에서 모든 실패를 삼켜야 한다 (토스트로 보고).
+ * ROAD-Q3 — gen은 라우터가 부여한 렌더 세대. await 재개 지점마다
+ * isStaleViewGen으로 판정해 다른 뷰로 전환된 뒤의 늦은 DOM·로딩·토스트
+ * 쓰기를 차단한다. 스테일이면 로딩 해제도 건너뛴다 — navigateToView가
+ * 전환 시점에 전역 로딩을 이미 내렸고 새 뷰의 스피너를 지우면 안 된다.
+ * enter()가 피처별로 다른 점은 init 함수명뿐 — 나머지는 전부 이 팩토리가 소유한다.
+ */
+/** @param {*} feat */
+function _makeEnter(feat) {
+    return async function enter(/** @type {*} */ gen) {
+        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
+            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
+        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
+        if (stale()) return;
+        showGlobalLoading(feat.loadingText);
+        try {
+            await ensureViewMarkup(feat);
+            if (stale()) return;
+            const m = await feat.loaders.main();
+            if (stale()) return;
+            await m[feat.init]();
+        } catch (e) {
+            if (!stale()) showToast(feat.loadErrorText, 'error');
+        } finally {
+            if (!stale()) hideGlobalLoading();
+        }
+    };
+}
+
+/**
+ * 표준 실무 피처 정의 — cfg.init은 로드된 main 모듈의 초기화 함수명.
+ * 커스텀 진입 절차(데이터 선로딩·uiText 오버라이드·추가 훅)가 필요한
+ * 피처만 enter()를 직접 정의한다 (formula 참조).
+ */
+/** @param {*} cfg */
+function _defineFeature(cfg) {
+    return { ...cfg, enter: _makeEnter(cfg) };
+}
+
 const formula = {
     viewId: 'formula-view',
     slug: 'formula',
@@ -132,13 +217,8 @@ const formula = {
             'checkMfdsNoticeNow', 'dismissMfdsNotice', 'viewMfdsNoticeStatus', 'dismissRefRevision',
         ]],
     ],
-    // 뷰 진입 — 피처가 자체 로딩·데이터 선행·초기화·도메인 훅을 소유한다.
-    // renderFn은 비동기 — navigateToView가 반환값을 기다리지 않으므로
-    // 내부에서 모든 실패를 삼켜야 한다 (토스트로 보고).
-    // ROAD-Q3 — gen은 라우터가 부여한 렌더 세대. await 재개 지점마다
-    // isStaleViewGen으로 판정해 다른 뷰로 전환된 뒤의 늦은 DOM·로딩·토스트
-    // 쓰기를 차단한다. 스테일이면 로딩 해제도 건너뛴다 — navigateToView가
-    // 전환 시점에 전역 로딩을 이미 내렸고 새 뷰의 스피너를 지우면 안 된다.
+    // 뷰 진입 — 데이터 선로딩·uiText 카피 오버라이드가 필요한 커스텀 enter.
+    // 공통 stale·로딩 규약은 _makeEnter 주석 참조.
     async enter(/** @type {*} */ gen) {
         const [{ DataLoader }, { showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
             await Promise.all([
@@ -175,49 +255,6 @@ const formula = {
 };
 
 /**
- * 뷰 마크업 지연 주입 — 셸의 빈 스텁 <section>(data-lazy-view 보유)을
- * 파셜 파일의 내용으로 통째 교체한다. 파셜 자체가 <section id>를 포함하므로
- * 주입 후 스텁은 사라지고 data-lazy-view 부재가 "주입 완료" 표식이 된다.
- * (DOM 테스트는 helpers가 동일 파셜을 미리 주입하므로 이 경로는
- *  실제 런타임 최초 진입에서만 실행된다)
- */
-/**
- * 도메인 스타일 지연 주입 — feat.styles를 활성 시험 css/exams/<id>/ 규약으로
- * 해석해 <link>를 1회 삽입한다. style.css의 정적 @import는 모든 시험에
- * 로드되므로 도메인 CSS는 이 경로만 거친다.
- */
-/** @param {*} feat */
-function ensureDomainStyles(feat) {
-    if (!feat.styles || typeof document === 'undefined') return;
-    const href = _domainCss(feat.styles);
-    if (document.querySelector(`link[href="${href}"]`)) return;
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = href;
-    document.head.appendChild(link);
-}
-
-/** @param {*} feat */
-async function ensureViewMarkup(feat) {
-    ensureDomainStyles(feat);
-    if (!feat.markup) return;
-    const el = document.getElementById(feat.viewId);
-    if (!el || !el.hasAttribute('data-lazy-view')) return;
-    const url = _domainMarkup(feat.markup);
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`view markup ${res.status}: ${url}`);
-    // 스텁의 런타임 상태 보존 — 딥링크로 navigateToView가 먼저 'active'를
-    // 부여한 뒤 enter()의 본 주입이 스텁을 통째 교체하면 클래스가 소실돼
-    // 뷰가 숨는다 (부팅 딥링크 → 지연 뷰 경로의 실결함).
-    const wasActive = el.classList.contains('active');
-    el.outerHTML = await res.text();
-    if (wasActive) {
-        const injected = document.getElementById(feat.viewId);
-        if (injected) injected.classList.add('active');
-    }
-}
-
-/**
  * 유휴 시점 예열 — 유효 실무 피처의 뷰 모듈·마크업을 미리 요청한다.
  * 요청은 SW cacheFirst/SWR을 경유해 캐시에 적재되므로, 활성 시험의 실무
  * 피처만 프리캐시 없이도 오프라인 진입·첫 진입 즉시성을 확보한다.
@@ -230,8 +267,12 @@ export function warmPracticeFeatures() {
     }
 }
 
-/** 실무 피처 정의 — 키는 exams.json의 features 키와 1:1 대응한다 */
-const careHome = {
+/* ================================================================
+ * 표준 실무 피처 정의 — 키는 exams.json의 features 키와 1:1 대응한다.
+ * cfg.init은 main 로더 모듈의 초기화 함수명. 카피·파셜·스타일·핸들러는
+ * 전부 선언 데이터 — 진입 절차는 _defineFeature가 _makeEnter로 유도한다.
+ * ================================================================ */
+const careHome = _defineFeature({
     viewId: 'care-home-view',
     slug: 'care-home',
     priority: -1,
@@ -243,29 +284,12 @@ const careHome = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-home.html',
     styles: 'care-tools.css',
+    init: 'initCareHomeView',
     loaders: { main: _domainImport('views/care-home.js'), ai: _domainImport('care-ai.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careDocSignSave', 'careSignImagePick', 'careHomeGuideDismiss']], ['ai', ['careAiDraft']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careHome.loadingText);
-        try {
-            await ensureViewMarkup(careHome);
-            if (stale()) return;
-            const m = await careHome.loaders.main();
-            if (stale()) return;
-            m.initCareHomeView();
-        } catch (e) {
-            if (!stale()) showToast(careHome.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careCalc = {
+});
+const careCalc = _defineFeature({
     viewId: 'care-calc-view',
     slug: 'care-calc',
     priority: 0,
@@ -277,29 +301,12 @@ const careCalc = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-calc.html',
     styles: 'care-tools.css',
+    init: 'initCareCalcView',
     loaders: { main: _domainImport('views/care-calc.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careCalcRun', 'careCalcReset', 'careCalcPrint']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careCalc.loadingText);
-        try {
-            await ensureViewMarkup(careCalc);
-            if (stale()) return;
-            const m = await careCalc.loaders.main();
-            if (stale()) return;
-            m.initCareCalcView();
-        } catch (e) {
-            if (!stale()) showToast(careCalc.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careCard = {
+});
+const careCard = _defineFeature({
     viewId: 'care-card-view',
     slug: 'care-card',
     priority: 2,
@@ -311,29 +318,12 @@ const careCard = {
     dataErrorText: '카드 데이터를 불러오지 못했습니다.',
     markup: 'care-card.html',
     styles: 'care-tools.css',
+    init: 'initCareCardView',
     loaders: { main: _domainImport('views/care-card.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careCardOpen', 'careCardClose', 'careCardToIncident']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careCard.loadingText);
-        try {
-            await ensureViewMarkup(careCard);
-            if (stale()) return;
-            const m = await careCard.loaders.main();
-            if (stale()) return;
-            await m.initCareCardView();
-        } catch (e) {
-            if (!stale()) showToast(careCard.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careLog = {
+});
+const careLog = _defineFeature({
     viewId: 'care-log-view',
     slug: 'care-log',
     priority: 1,
@@ -345,29 +335,12 @@ const careLog = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-log.html',
     styles: 'care-tools.css',
+    init: 'initCareLogView',
     loaders: { main: _domainImport('views/care-log.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careLogGenerate', 'careLogSave', 'careLogDelete', 'careLogPrint', 'careLogCsvExport', 'careLogRecordCopy', 'careShare', 'careLogDocMd']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careLog.loadingText);
-        try {
-            await ensureViewMarkup(careLog);
-            if (stale()) return;
-            const m = await careLog.loaders.main();
-            if (stale()) return;
-            m.initCareLogView();
-        } catch (e) {
-            if (!stale()) showToast(careLog.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careWebtoon = {
+});
+const careWebtoon = _defineFeature({
     viewId: 'care-webtoon-view',
     slug: 'care-webtoon',
     priority: 1,
@@ -379,29 +352,12 @@ const careWebtoon = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-webtoon.html',
     styles: 'care-tools.css',
+    init: 'initCareWebtoonView',
     loaders: { main: _domainImport('views/care-webtoon.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['webtoonPrev', 'webtoonNext']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careWebtoon.loadingText);
-        try {
-            await ensureViewMarkup(careWebtoon);
-            if (stale()) return;
-            const m = await careWebtoon.loaders.main();
-            if (stale()) return;
-            m.initCareWebtoonView();
-        } catch (e) {
-            if (!stale()) showToast(careWebtoon.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careFlow = {
+});
+const careFlow = _defineFeature({
     viewId: 'care-flow-view',
     slug: 'care-flow',
     priority: 1,
@@ -413,29 +369,12 @@ const careFlow = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-flow.html',
     styles: 'care-tools.css',
+    init: 'initCareFlowView',
     loaders: { main: _domainImport('views/care-flow.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['flowBack', 'flowNext', 'flowOpt', 'flowDontKnow', 'flowNextConcept', 'startConceptFlow', 'flowRec', 'flowLgToggle']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careFlow.loadingText);
-        try {
-            await ensureViewMarkup(careFlow);
-            if (stale()) return;
-            const m = await careFlow.loaders.main();
-            if (stale()) return;
-            m.initCareFlowView();
-        } catch (e) {
-            if (!stale()) showToast(careFlow.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careAudit = {
+});
+const careAudit = _defineFeature({
     viewId: 'care-audit-view',
     slug: 'care-audit',
     priority: 3,
@@ -447,29 +386,12 @@ const careAudit = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-audit.html',
     styles: 'care-tools.css',
+    init: 'initCareAuditView',
     loaders: { main: _domainImport('views/care-audit.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careAuditReset', 'careAuditPrint', 'careAuditDocMd', 'careAuditFilePick', 'careAuditFileLoad', 'careAuditFileReset']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careAudit.loadingText);
-        try {
-            await ensureViewMarkup(careAudit);
-            if (stale()) return;
-            const m = await careAudit.loaders.main();
-            if (stale()) return;
-            await m.initCareAuditView();
-        } catch (e) {
-            if (!stale()) showToast(careAudit.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careHandover = {
+});
+const careHandover = _defineFeature({
     viewId: 'care-handover-view',
     slug: 'care-handover',
     priority: 4,
@@ -481,29 +403,12 @@ const careHandover = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-handover.html',
     styles: 'care-tools.css',
+    init: 'initCareHandoverView',
     loaders: { main: _domainImport('views/care-handover.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careHandoverGenerate', 'careHandoverSave', 'careHandoverDelete', 'careHandoverExport', 'careHandoverPrint', 'careHandoverCsvExport', 'careFacilityHandoverSubmit', 'careHandoverAck', 'careHandoverDigest', 'careHandoverDocMd']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careHandover.loadingText);
-        try {
-            await ensureViewMarkup(careHandover);
-            if (stale()) return;
-            const m = await careHandover.loaders.main();
-            if (stale()) return;
-            m.initCareHandoverView();
-        } catch (e) {
-            if (!stale()) showToast(careHandover.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careVisit = {
+});
+const careVisit = _defineFeature({
     viewId: 'care-visit-view',
     slug: 'care-visit',
     uiTextKey: 'careVisit',
@@ -514,29 +419,12 @@ const careVisit = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-visit.html',
     styles: 'care-tools.css',
+    init: 'initCareVisitView',
     loaders: { main: _domainImport('views/care-visit.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careVisitAdd', 'careVisitResultOpen', 'careVisitResultSave', 'careVisitResultClose', 'careVisitCancel', 'careVisitDelete', 'careVisitPreview', 'careVisitPrint', 'careVisitCsvExport', 'careVisitFacilitySubmit', 'careVisitDocMd', 'careVisitPhotoPick', 'careVisitPhotoRemove', 'careVisitVoiceToggle']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careVisit.loadingText);
-        try {
-            await ensureViewMarkup(careVisit);
-            if (stale()) return;
-            const m = await careVisit.loaders.main();
-            if (stale()) return;
-            m.initCareVisitView();
-        } catch (e) {
-            if (!stale()) showToast(careVisit.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careClients = {
+});
+const careClients = _defineFeature({
     viewId: 'care-client-view',
     slug: 'care-client',
     uiTextKey: 'careClients',
@@ -547,29 +435,12 @@ const careClients = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-client.html',
     styles: 'care-tools.css',
+    init: 'initCareClientView',
     loaders: { main: _domainImport('views/care-client.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careClientSave', 'careClientNew', 'careClientLoad', 'careClientReport', 'careClientDelete', 'careClientPreview', 'careClientPrint', 'careClientCsvExport', 'careClientCsvImport', 'careClientDocMd']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careClients.loadingText);
-        try {
-            await ensureViewMarkup(careClients);
-            if (stale()) return;
-            const m = await careClients.loaders.main();
-            if (stale()) return;
-            m.initCareClientView();
-        } catch (e) {
-            if (!stale()) showToast(careClients.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careIncident = {
+});
+const careIncident = _defineFeature({
     viewId: 'care-incident-view',
     slug: 'care-incident',
     uiTextKey: 'careIncident',
@@ -580,29 +451,12 @@ const careIncident = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-incident.html',
     styles: 'care-tools.css',
+    init: 'initCareIncidentView',
     loaders: { main: _domainImport('views/care-incident.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careIncidentGenerate', 'careIncidentSave', 'careIncidentPrint', 'careIncidentCsvExport', 'careIncidentDelete', 'careIncidentFacilitySubmit', 'careIncidentDocMd', 'careIncidentPhotoPick', 'careIncidentPhotoRemove', 'careIncidentVoiceToggle']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careIncident.loadingText);
-        try {
-            await ensureViewMarkup(careIncident);
-            if (stale()) return;
-            const m = await careIncident.loaders.main();
-            if (stale()) return;
-            m.initCareIncidentView();
-        } catch (e) {
-            if (!stale()) showToast(careIncident.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careRoster = {
+});
+const careRoster = _defineFeature({
     viewId: 'care-roster-view',
     slug: 'care-roster',
     uiTextKey: 'careRoster',
@@ -613,29 +467,12 @@ const careRoster = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-roster.html',
     styles: 'care-tools.css',
+    init: 'initCareRosterView',
     loaders: { main: _domainImport('views/care-roster.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careRosterAdd', 'careRosterDelete', 'careRosterPreview', 'careRosterPrint', 'careRosterCsvExport', 'careRosterCsvImport', 'careRosterDocMd']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careRoster.loadingText);
-        try {
-            await ensureViewMarkup(careRoster);
-            if (stale()) return;
-            const m = await careRoster.loaders.main();
-            if (stale()) return;
-            m.initCareRosterView();
-        } catch (e) {
-            if (!stale()) showToast(careRoster.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careFinder = {
+});
+const careFinder = _defineFeature({
     viewId: 'care-finder-view',
     slug: 'care-finder',
     uiTextKey: 'careFinder',
@@ -646,29 +483,12 @@ const careFinder = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-finder.html',
     styles: 'care-tools.css',
+    init: 'initCareFinderView',
     loaders: { main: _domainImport('views/care-finder.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careFinderSearch', 'careFinderUseOrg']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careFinder.loadingText);
-        try {
-            await ensureViewMarkup(careFinder);
-            if (stale()) return;
-            const m = await careFinder.loaders.main();
-            if (stale()) return;
-            m.initCareFinderView();
-        } catch (e) {
-            if (!stale()) showToast(careFinder.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careForms = {
+});
+const careForms = _defineFeature({
     viewId: 'care-forms-view',
     slug: 'care-forms',
     uiTextKey: 'careForms',
@@ -679,29 +499,12 @@ const careForms = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-forms.html',
     styles: 'care-tools.css',
+    init: 'initCareFormsView',
     loaders: { main: _domainImport('views/care-forms.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', []]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careForms.loadingText);
-        try {
-            await ensureViewMarkup(careForms);
-            if (stale()) return;
-            const m = await careForms.loaders.main();
-            if (stale()) return;
-            m.initCareFormsView();
-        } catch (e) {
-            if (!stale()) showToast(careForms.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careCustomForm = {
+});
+const careCustomForm = _defineFeature({
     viewId: 'care-custom-form-view',
     slug: 'care-custom-form',
     priority: 7,
@@ -713,29 +516,12 @@ const careCustomForm = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'care-custom-form.html',
     styles: 'care-tools.css',
+    init: 'initCareCustomFormView',
     loaders: { main: _domainImport('views/care-custom-form.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['careFormTplUse', 'careFormTplNew', 'careFormTplEdit', 'careFormTplDelete', 'careFormSeedCopy', 'careFormSeedFile', 'careFormTplSave', 'careFormTplFacSave', 'careFormTplEditClose', 'careFormTplPdfPick', 'careFormDocGenerate', 'careFormDocSave', 'careFormDocDelete', 'careFormDocMd', 'careFormDocPrint']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careCustomForm.loadingText);
-        try {
-            await ensureViewMarkup(careCustomForm);
-            if (stale()) return;
-            const m = await careCustomForm.loaders.main();
-            if (stale()) return;
-            m.initCareCustomFormView();
-        } catch (e) {
-            if (!stale()) showToast(careCustomForm.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careFacilityJoin = {
+});
+const careFacilityJoin = _defineFeature({
     viewId: 'facility-join-view',
     slug: 'facility-join',
     priority: 5,
@@ -747,29 +533,12 @@ const careFacilityJoin = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'facility-join.html',
     styles: 'care-tools.css',
+    init: 'initFacilityJoinView',
     loaders: { main: _domainImport('views/facility-join.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['facilityJoin', 'facilityOrgNameSave']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careFacilityJoin.loadingText);
-        try {
-            await ensureViewMarkup(careFacilityJoin);
-            if (stale()) return;
-            const m = await careFacilityJoin.loaders.main();
-            if (stale()) return;
-            m.initFacilityJoinView();
-        } catch (e) {
-            if (!stale()) showToast(careFacilityJoin.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
-const careFacilityAdmin = {
+});
+const careFacilityAdmin = _defineFeature({
     viewId: 'facility-admin-view',
     slug: 'facility-admin',
     priority: 6,
@@ -781,28 +550,11 @@ const careFacilityAdmin = {
     dataErrorText: '데이터를 불러오지 못했습니다.',
     markup: 'facility-admin.html',
     styles: 'care-tools.css',
+    init: 'initFacilityAdminView',
     loaders: { main: _domainImport('views/facility-admin.js') },
     /** @type {Array<[string, string[]]>} */
     handlers: [['main', ['facilityAdminCreate', 'facilityAdminWebhook']]],
-    async enter(/** @type {*} */ gen) {
-        const [{ showGlobalLoading, hideGlobalLoading, showToast }, { isStaleViewGen }] =
-            await Promise.all([import('./ui-utils.js'), import('./views/navigation.js')]);
-        const stale = () => typeof gen === 'number' && isStaleViewGen(gen);
-        if (stale()) return;
-        showGlobalLoading(careFacilityAdmin.loadingText);
-        try {
-            await ensureViewMarkup(careFacilityAdmin);
-            if (stale()) return;
-            const m = await careFacilityAdmin.loaders.main();
-            if (stale()) return;
-            m.initFacilityAdminView();
-        } catch (e) {
-            if (!stale()) showToast(careFacilityAdmin.loadErrorText, 'error');
-        } finally {
-            if (!stale()) hideGlobalLoading();
-        }
-    },
-};
+});
 const PRACTICE_FEATURES = { formula, careHome, careCalc, careCard, careLog, careWebtoon, careFlow, careAudit, careHandover, careVisit, careClients, careIncident, careRoster, careFinder, careForms, careCustomForm, careFacilityJoin, careFacilityAdmin };
 
 /** 활성 시험이 실무 피처를 1개 이상 보유하는가 — 실무 모드 진입 가능 조건 */
