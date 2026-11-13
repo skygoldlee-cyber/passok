@@ -117,6 +117,8 @@ test('docxFileMd — 좁은 셀 긴 텍스트는 어절 경계 <w:br/> 사전 �
     const { entries } = await unzip(docxFileMd(md, 'doc'));
     const doc = entries['word/document.xml'];
     assert.ok(doc.includes('<w:br/>'), '사전 줄바꿈 <w:br/> 누락');
-    // 첫 줄은 '요양일지 '로 끝나고 '기록내용'이 다음 줄 첫 토큰 — 음절 중간 분리 없음
+    // 본문 폰트 10pt 명시 — 미명시면 뷰어 기본값에 따라 폭이 달라져 어절 사전 줄바꿈이 깨짐
+    assert.ok(doc.includes('<w:sz w:val="20"/>'), '본문 폰트 크기 명시(10pt) 누락');
+    // 첫 줄은 '요양일지'로 끝나고 '기록내용'이 다음 줄 첫 토큰 — 음절 중간 분리 없음
     assert.ok(doc.includes('>요양일지</w:t><w:br/><w:t xml:space="preserve">기록내용 확인</w:t>'), '어절 경계가 아닌 위치에서 분리됨');
 });

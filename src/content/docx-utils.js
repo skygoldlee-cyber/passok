@@ -108,7 +108,7 @@ const _RF = '<w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsi
  * @returns {string}
  */
 const _P = (line, i, boldLines) => line
-    ? `<w:p><w:pPr><w:spacing w:after="60"/></w:pPr><w:r><w:rPr>${_RF}${i < boldLines ? '<w:b/>' : ''}</w:rPr>${_runs(_wrap(line, _TEXT_W - 300))}</w:r></w:p>`
+    ? `<w:p><w:pPr><w:spacing w:after="60"/></w:pPr><w:r><w:rPr>${_RF}${i < boldLines ? '<w:b/>' : ''}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(line, _TEXT_W - 300))}</w:r></w:p>`
     : '<w:p/>';
 // 메타줄 — 제목 바로 아래 기관명·출력일. 중앙·회색·소자로 공문서 머리 격식
 /** @param {string} t */
@@ -151,9 +151,9 @@ const _CELL_MAR = '<w:tblCellMar><w:top w:w="90" w:type="dxa"/><w:left w:w="130"
 // kinsoku·wordWrap·lang=ko-KR·noLineBreaksAfter·useFELayout 모두 중간 분리 유지).
 // 그래서 어절 줄넘김은 생성 측에서 폭 추정 후 <w:br/>를 직접 삽입해 구현한다.
 const _CELL_PPR = '<w:pPr><w:kinsoku/><w:wordWrap w:val="off"/></w:pPr>';
-// 글자 폭 추정 — 맑은고딕 11pt: 한글·전각 220tw, ASCII·반각 120tw.
-// 실제보다 좁게 잡아(보수 추정) Word 자체 줄바꿈이 개입해 어절을 가르지 않게 한다.
-const _cw = (/** @type {string} */ c) => ((c.codePointAt(0) || 0) < 128 ? 120 : 220);
+// 글자 폭 — 맑은고딕 10pt(w:sz 20 명시): 한글·전각 200tw(1em 정확), ASCII·반각 110tw(보수 추정).
+// 폰트 크기를 명시하지 않으면 뷰어 기본값에 따라 달라져 어절 분리가 깨지므로 sz를 고정한다.
+const _cw = (/** @type {string} */ c) => ((c.codePointAt(0) || 0) < 128 ? 110 : 200);
 /**
  * 어절 단위 사전 줄바꿈 — usable(dxa) 폭에 맞게 공백 경계에서만 분리.
  * 어절 하나가 폭을 넘으면 그대로 둔다 (그 경우 Word의 음절 분리가 불가피 — 중간 강제 분할보다 자연스러움).
@@ -182,7 +182,7 @@ const _runs = lines => lines.map(l => `<w:t xml:space="preserve">${esc(l)}</w:t>
  * @param {number} [w] - 셀 너비 (dxa)
  * @returns {string}
  */
-const _cell = (c, head, w) => `<w:tc><w:tcPr>${w ? `<w:tcW w:w="${w}" w:type="dxa"/>` : ''}<w:vAlign w:val="center"/>${head ? '<w:shd w:val="clear" w:color="auto" w:fill="DEEAF6"/>' : ''}</w:tcPr><w:p>${head ? _CELL_PPR.replace('</w:pPr>', '<w:jc w:val="center"/></w:pPr>') : _CELL_PPR}<w:r><w:rPr>${_RF}${head ? '<w:b/>' : ''}</w:rPr>${_runs(_wrap(c.trim(), Math.max(400, (w || _TEXT_W) - 300)))}</w:r></w:p></w:tc>`;
+const _cell = (c, head, w) => `<w:tc><w:tcPr>${w ? `<w:tcW w:w="${w}" w:type="dxa"/>` : ''}<w:vAlign w:val="center"/>${head ? '<w:shd w:val="clear" w:color="auto" w:fill="DEEAF6"/>' : ''}</w:tcPr><w:p>${head ? _CELL_PPR.replace('</w:pPr>', '<w:jc w:val="center"/></w:pPr>') : _CELL_PPR}<w:r><w:rPr>${_RF}${head ? '<w:b/>' : ''}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(c.trim(), Math.max(400, (w || _TEXT_W) - 300)))}</w:r></w:p></w:tc>`;
 /**
  * @param {string[][]} rows
  * @returns {string}
@@ -212,7 +212,7 @@ const _HR = '<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="9999
 const _SIG_W = 4200;
 /** @param {string[]} lines */
 const _sigTbl = lines => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpXSpec="right" w:tblpYSpec="bottom" w:leftFromText="180" w:rightFromText="180" w:topFromText="180" w:bottomFromText="180"/><w:tblW w:w="${_SIG_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid><w:gridCol w:w="${_SIG_W}"/></w:tblGrid>`
-    + lines.map(l => `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_CELL_PPR}<w:r><w:rPr>${_RF}</w:rPr>${_runs(_wrap(l.trim(), _SIG_W - 300))}</w:r></w:p></w:tc></w:tr>`).join('') + '</w:tbl>';
+    + lines.map(l => `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_CELL_PPR}<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(l.trim(), _SIG_W - 300))}</w:r></w:p></w:tc></w:tr>`).join('') + '</w:tbl>';
 
 /**
  * @param {string} md
