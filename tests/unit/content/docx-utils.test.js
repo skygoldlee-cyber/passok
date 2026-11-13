@@ -109,3 +109,14 @@ test('docxFileMd — :::sign 서명란은 하단 우측 부동 표, 셀 어절 �
     assert.ok(doc.includes('<w:kinsoku/>'), '금칙 규칙(어절 줄바꿈) 누락');
     assert.ok(doc.includes('<w:wordWrap w:val="off"/>'), '단어 중간 분할 금지 누락');
 });
+
+test('docxFileMd — 좁은 셀 긴 텍스트는 어절 경계 <w:br/> 사전 줄바꿈', async () => {
+    // 5열 표 → 셀 1805tw, usable ~1505tw → 한글 ~6자/줄. '요양일지 기록내용 확인'은
+    // '기록내용' 앞에서만 끊겨야 한다 (Word는 OOXML 어절 스위치가 없어 생성 측 사전 줄바꿈)
+    const md = '| 1 | 2 | 3 | 4 | 내용 |\n|---|---|---|---|---|\n| a | b | c | d | 요양일지 기록내용 확인 |';
+    const { entries } = await unzip(docxFileMd(md, 'doc'));
+    const doc = entries['word/document.xml'];
+    assert.ok(doc.includes('<w:br/>'), '사전 줄바꿈 <w:br/> 누락');
+    // 첫 줄은 '요양일지 '로 끝나고 '기록내용'이 다음 줄 첫 토큰 — 음절 중간 분리 없음
+    assert.ok(doc.includes('>요양일지</w:t><w:br/><w:t xml:space="preserve">기록내용 확인</w:t>'), '어절 경계가 아닌 위치에서 분리됨');
+});

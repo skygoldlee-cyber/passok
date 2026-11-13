@@ -223,17 +223,17 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         careDocSignSave();
         // 홈 재진입 시 저장값이 폼에 채워짐
         initCareHomeView();
-        expect(/** @type {HTMLInputElement} */ (document.getElementById('home-sign-author')).value).toBe('김요양');
-        expect(/** @type {HTMLInputElement} */ (document.getElementById('home-sign-receiver')).value).toBe('이인수');
-        // 일지 — 작성자·확인자 모두 기입
+        expect(/** @type {HTMLInputElement} */ (document.getElementById('home-sign-author')).value).toBe('김 요양'); // 성·이름 사이 한 칸 표기
+        expect(/** @type {HTMLInputElement} */ (document.getElementById('home-sign-receiver')).value).toBe('이 인수');
+        // 일지 — 작성자·확인자 모두 기입 (성 뒤 공백 표기)
         loadPartial('care-log.html');
         initCareLogView();
         document.getElementById('log-date').value = '2026-11-01';
         document.getElementById('log-client').value = '김○○';
         careLogGenerate();
         const sign = document.querySelector('#log-preview .doc-md')?.textContent || '';
-        expect(sign).toContain('작성자(요양보호사): 김요양');
-        expect(sign).toContain('확인자: 박시설');
+        expect(sign).toContain('작성자(요양보호사): 김 요양');
+        expect(sign).toContain('확인자: 박 시설');
         // 인수인계 — 인계자·인수자 기입, 확인일은 수기 공란 유지
         loadPartial('care-handover.html');
         /** @type {HTMLInputElement} */ (document.getElementById('ho-date')).value = '2026-11-05';
@@ -241,8 +241,8 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         /** @type {HTMLInputElement} */ (document.getElementById('ho-to')).value = '박인수';
         careHandoverGenerate();
         const hoSign = document.querySelector('#ho-preview .doc-md')?.textContent || '';
-        expect(hoSign).toContain('인계자(서명): 김요양');
-        expect(hoSign).toContain('인수자(서명): 이인수');
+        expect(hoSign).toContain('인계자(서명): 김 요양');
+        expect(hoSign).toContain('인수자(서명): 이 인수');
         expect(hoSign).toMatch(/확인일: ＿+/); // 미설정 슬롯은 수기 서명용 전각 공란
         setDocSign('', '', ''); // 정리 — 다른 테스트의 빈 서명란 검증에 영향 없도록
     });
@@ -252,8 +252,8 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         const { docMdSign } = await import('../../../../src/exams/carework/doc-md.js');
         setDocSign('김보호', '박기관');
         const md = docMdSign([['점검자', 'author'], ['기관장(확인)', 'confirmer'], ['점검일', '']]);
-        expect(md).toContain('점검자: 김보호'); // 서명란이 MD 초안에 포함 — 미리보기·docx·복사 공통
-        expect(md).toContain('기관장(확인): 박기관');
+        expect(md).toContain('점검자: 김 보호'); // 서명란이 MD 초안에 포함 — 성 뒤 한 칸 표기
+        expect(md).toContain('기관장(확인): 박 기관');
         expect(md).toMatch(/점검일: ＿+/); // 미설정 슬롯은 수기 서명용 공란
     });
 
@@ -692,7 +692,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         const { setDocSign } = await import('../../../../src/exams/carework/facility.js');
         setDocSign('김요양', '박시설');
         const md = fillTemplate('작성자: {{author}} 수급자: {{client}} 비고: {{비고}}', { client: '이대상', 비고: '특이없음' });
-        expect(md).toContain('작성자: 김요양');
+        expect(md).toContain('작성자: 김 요양'); // 서명자 성명 — 성 뒤 한 칸 표기
         expect(md).toContain('수급자: 이대상');
         expect(md).toContain('비고: 특이없음');
         expect(fillTemplate('미기입: {{메모}}', {})).toMatch(/미기입: ＿+/); // 미기입 필드는 공란 유지

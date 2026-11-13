@@ -104,10 +104,19 @@ export function docHeadHtml(title) {
 
 // — 출력물 서명란 기입 (홈 설정 — 전 문서 공통) —
 
+/** 성명 표기 — 성·이름 사이 한 칸 (2글자 김 수 / 3글자 김 철수 / 4글자 남궁 민수). 한글 성명만 변환, 외국어·기타는 원형 */
+/** @param {string} n */
+export const fmtDocName = n => {
+    const s = String(n || '').trim();
+    if (/^[가-힣]{2,3}$/.test(s)) return `${s[0]} ${s.slice(1)}`;
+    if (/^[가-힣]{4}$/.test(s)) return `${s.slice(0, 2)} ${s.slice(2)}`;
+    return s;
+};
+
 /** 홈에서 설정한 서명자 — {author: 작성자(요양보호사), confirmer: 확인자(시설장·기관장), receiver: 인수자, signImage: 서명 이미지 data URI} */
 export function getDocSign() {
     const s = /** @type {any} */ (getJSON(STORAGE_KEYS.CARE_DOC_SIGN)) || {};
-    return { author: String(s.author || ''), confirmer: String(s.confirmer || ''), receiver: String(s.receiver || ''), signImage: String(s.signImage || '') };
+    return { author: fmtDocName(s.author), confirmer: fmtDocName(s.confirmer), receiver: fmtDocName(s.receiver), signImage: String(s.signImage || '') };
 }
 /** 서명자 저장 — 홈 설정 카드에서 호출 */
 /** @param {string} author @param {string} confirmer @param {string} [receiver] */
