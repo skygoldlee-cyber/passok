@@ -235,7 +235,7 @@ test('서명 이미지 — 서명란 {{img:key}} 토큰을 인라인 이미지�
     assert.ok(doc.includes('r:embed="rId6"'), '서명란 이미지 관계 참조 누락 — 본문 이미지는 rId6~ 연번');
     assert.ok(doc.includes('r:embed="rId7"'), '결재란 담당 칸 서명(approve 키) 참조 누락');
     assert.ok(doc.includes('<w:tab w:val="right"'), '우측 탭 정지 누락 — 서명을 셀 우측에 정렬');
-    assert.ok(doc.includes('<w:position w:val="-8"/>'), '서명 이미지 수직 오프셋 누락 — 셀 내 약간 아래');
+    assert.ok(doc.includes('<w:position w:val="-16"/>'), '서명 이미지 수직 오프셋 누락 — 셀 내 아래');
     assert.ok(doc.includes('descr="서명"'), '대체 텍스트 누락');
     assert.ok(!doc.includes('{{img'), '토큰 잔존 — 치환 실패');
     assert.ok(entries['word/media/img_0.png'], '미디어 파트 누락');
