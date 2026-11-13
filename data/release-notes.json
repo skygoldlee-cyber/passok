@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261113-b582e0c",
+    "date": "2026-11-13",
+    "notes": [
+      "[수정·capture] manual-07-roster 상단 잘림 — sticky 헤더 캡처 제외",
+      "[정리·release] v20261113-44da6c1 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261113-44da6c1",
     "date": "2026-11-13",
     "notes": [
@@ -217,14 +225,6 @@
       "[문서·carework] 유튜브 숏츠 시리즈 제작 의뢰서+콘티 신설 (DOC-BIZ-08)",
       "[문서·user] 학습흐름 삽화 PRO 배지 → 유료 통일",
       "[수정·cosmetic] 사용자 표시 PRO 잔재 → 유료 통일"
-    ]
-  },
-  {
-    "version": "v20261110-01bdcdd",
-    "date": "2026-11-10",
-    "notes": [
-      "[문서·carework] 실무매뉴얼 보완 — 체크리스트 전 상황 통일·신규 상황 2건·삽화 정합",
-      "[정리·release] v20261110-82f1dee 스탬프 확정 [no-docs]"
     ]
   }
 ]
