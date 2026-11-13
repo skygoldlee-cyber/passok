@@ -17,6 +17,12 @@
 - 최종: docx 워터마크는 첫 단락 본문 앵커 DrawingML(wps) 텍스트 상자 + a:xfrm rot -45° + behindDoc=0 — 본문 앵커라 콘텐츠 전면 렌더(음영 포함 전 영역). textpath(t136)는 경로 기반 글리프라 글자 좌우 반전·폭주 재발(flip·v-text-reverse 무력), VML t202는 rotation이 txbx 콘텐츠에 적용 안 돼 수평 렌더 — 모두 폐기하고 최신 DrawingML로 확정. font-size는 문구 길이 비례 계산(_wmFont), margin 앵커 center/center (Word COM PDF 출력으로 각도·방향·위치 실측)
 - 전면(behindDoc=0) + w14:textFill alpha 40% 투명 텍스트 + 기울임 — 음영 포함 전 영역 표시되면서 본문 가독 유지. alpha 미지원 렌더러 대비 srgbClr 자체를 C0C0C0으로 (미지원 시 연회색·지원 시 더 은은). 글자 확대(박스 640pt·폰트 상한 64pt, 굵게+기울임 폭 보정 ×1.15) + horzOverflow=overflow — 문구 끝(날짜) 잘림 방지. PDF 캔버스 스탬프·미리보기도 italic·동일 배율 통일
 
+## 2026-11-14 fix(carework): docx 워터마크 끝쪽 전면 앵커 추가 — 2쪽+ 가시성 확보
+
+- 헤더 워터마크는 본문 뒤 레이어라 표 음영·본문 아래로 가려져 편집 화면에서 사실상 미표시 → 콘텐츠가 1쪽 추정(단락×14pt+행×22pt>640pt)을 넘으면 문서 끝에도 본문 앵커 전면 워터마크 추가 (첫쪽+끝쪽 전면, 중간쪽은 헤더 반복)
+- wp:docPr id 중복이 Word 손상 거부의 원인 — 앵커별 유일 id(100/101/200) 부여
+- Word 편집 화면 실측: 1쪽 전면 워터마크 표시 확인, 2쪽도 동일 구조로 렌더
+
 ## 2026-11-14 fix(carework): docx 워터마크 2쪽 이상 미표시 수정 — 헤더 반복
 
 - 본문 앵커는 앵커 단락이 있는 1쪽에만 렌더 — 2쪽 이상은 기본 헤더에 동일 DrawingML 상자(behindDoc=1, 네이티브 워터마크 레이어)를 두어 매 장 반복

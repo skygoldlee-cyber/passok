@@ -108,8 +108,8 @@ const _wmFont = text => {
     return Math.min(64, Math.max(24, Math.floor(550 / Math.max(1, units * 1.15))));
 };
 
-/** @param {string} text - 워터마크 문구 @param {boolean} [behind] - 헤더용이면 true(텍스트 뒤=네이티브 워터마크 레이어), 본문 앵커용이면 false(텍스트 앞) */
-const _wmPara = (text, behind = false) => `<w:p><w:pPr><w:spacing w:after="0" w:line="40" w:lineRule="exact"/></w:pPr><w:r><w:drawing><wp:anchor xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" distT="0" distB="0" distL="0" distR="0" simplePos="0" relativeHeight="251658240" behindDoc="${behind ? 1 : 0}" locked="0" layoutInCell="1" allowOverlap="1"><wp:simplePos x="0" y="0"/><wp:positionH relativeFrom="margin"><wp:align>center</wp:align></wp:positionH><wp:positionV relativeFrom="margin"><wp:align>center</wp:align></wp:positionV><wp:extent cx="8128000" cy="1143000"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:wrapNone/><wp:docPr id="${behind ? 200 : 100}" name="워터마크"/><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"><wps:wsp xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"><wps:cNvSpPr txBox="1"/><wps:spPr><a:xfrm rot="-2700000"><a:off x="0" y="0"/><a:ext cx="8128000" cy="1143000"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></wps:spPr><wps:txbx><w:txbxContent><w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="C0C0C0"/><w:b/><w:i/><w:sz w:val="${_wmFont(text) * 2}"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:srgbClr w14:val="C0C0C0"><w14:alpha w14:val="40000"/></w14:srgbClr></w14:solidFill></w14:textFill></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:p></w:txbxContent></wps:txbx><wps:bodyPr wrap="none" lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr" horzOverflow="overflow" vertOverflow="overflow"/></wps:wsp></a:graphicData></a:graphic></wp:anchor></w:drawing></w:r></w:p>`;
+/** @param {string} text - 워터마크 문구 @param {boolean} [behind] - 헤더용이면 true(텍스트 뒤=네이티브 워터마크 레이어), 본문 앵커용이면 false(텍스트 앞) @param {number} [id] - wp:docPr id (문서 내 유일해야 함 — 중복 시 Word가 파일 손상으로 거부) */
+const _wmPara = (text, behind = false, id = 0) => `<w:p><w:pPr><w:spacing w:after="0" w:line="40" w:lineRule="exact"/></w:pPr><w:r><w:drawing><wp:anchor xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" distT="0" distB="0" distL="0" distR="0" simplePos="0" relativeHeight="251658240" behindDoc="${behind ? 1 : 0}" locked="0" layoutInCell="1" allowOverlap="1"><wp:simplePos x="0" y="0"/><wp:positionH relativeFrom="margin"><wp:align>center</wp:align></wp:positionH><wp:positionV relativeFrom="margin"><wp:align>center</wp:align></wp:positionV><wp:extent cx="8128000" cy="1143000"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:wrapNone/><wp:docPr id="${id || (behind ? 200 : 100)}" name="워터마크"/><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"><wps:wsp xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"><wps:cNvSpPr txBox="1"/><wps:spPr><a:xfrm rot="-2700000"><a:off x="0" y="0"/><a:ext cx="8128000" cy="1143000"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></wps:spPr><wps:txbx><w:txbxContent><w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="C0C0C0"/><w:b/><w:i/><w:sz w:val="${_wmFont(text) * 2}"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:srgbClr w14:val="C0C0C0"><w14:alpha w14:val="40000"/></w14:srgbClr></w14:solidFill></w14:textFill></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:p></w:txbxContent></wps:txbx><wps:bodyPr wrap="none" lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr" horzOverflow="overflow" vertOverflow="overflow"/></wps:wsp></a:graphicData></a:graphic></wp:anchor></w:drawing></w:r></w:p>`;
 
 // 헤더 — 기본 헤더(2쪽 이상 매 장 반복)에 워터마크: 헤더 앵커는 본문 아래 레이어라 네이티브 워터마크와 동일.
 // 1쪽은 첫 단락 본문 앵커가 담당하므로 첫 페이지 헤더(header2)는 비움 — titlePg와 세트
@@ -161,20 +161,31 @@ const _sect = wm => wm
     ? `<w:sectPr><w:headerReference w:type="default" r:id="rId3"/><w:footerReference w:type="default" r:id="rId2"/><w:headerReference w:type="first" r:id="rId4"/><w:footerReference w:type="first" r:id="rId5"/><w:titlePg/><w:pgSz w:w="11906" w:h="16838" w:orient="portrait"/><w:pgMar w:top="1134" w:right="1417" w:bottom="1134" w:left="1417"/><w:cols w:space="708"/><w:docGrid w:linePitch="360"/></w:sectPr>`
     : _SECT;
 
+// 다중 페이지 추정 — 본문 XML의 단락·표 행 수로 콘텐츠 높이 근사 (단락≈14pt·행≈22pt, 한 장 본문≈640pt)
+// 길다고 판단되면 문서 끝에도 전면 워터마크 앵커를 둬 마지막 쪽도 1쪽과 동일 농도로 표시.
+// 헤더 워터마크는 본문 뒤 레이어라 표 음영에 가려 옅어지므로, 전면 앵커가 실질 표시를 담당한다
+/** @param {string} bodyXml */
+const _isLong = bodyXml =>
+    ((bodyXml.match(/<w:p[ >]/g) || []).length * 14 + (bodyXml.match(/<w:tr[ >]/g) || []).length * 22) > 640;
+
 /**
  * @param {string[]} lines
  * @param {number} boldLines
  * @returns {string}
  */
-const _doc = (lines, boldLines, wm = '') => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w10="urn:schemas-microsoft-com:office:word"><w:body>${wm ? _wmPara(wm) : ''}${lines.map((l, i) => _P(l, i, boldLines)).join('')}${_sect(wm)}</w:body></w:document>`;
+const _doc = (lines, boldLines, wm = '') => {
+    const body = lines.map((l, i) => _P(l, i, boldLines)).join('');
+    const tail = wm && _isLong(body) ? _wmPara(wm, false, 101) : '';
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w10="urn:schemas-microsoft-com:office:word"><w:body>${wm ? _wmPara(wm) : ''}${body}${tail}${_sect(wm)}</w:body></w:document>`;
+};
 
 /**
  * 텍스트 → .docx File (줄 단위 단락) — 공유·다운로드 공용, 지연 로드 불필요.
  * @param {string} text - 본문 (\n 단락 구분)
  * @param {string} filename - 확장자 제외 파일명
  * @param {number} [boldLines] - 선두 N줄을 굵게 (문서 헤더)
- * @param {string} [wm] - 워터마크 문구 (1쪽 본문 앵커 + 2쪽~ 기본 헤더 반복)
+ * @param {string} [wm] - 워터마크 문구 (첫·끝쪽 본문 앵커 전면 + 2쪽~ 기본 헤더 반복)
  */
 export function docxFile(text, filename, boldLines = 0, wm = '') {
     const blob = _zipStore(_parts(_doc(String(text || '').split('\n'), boldLines, wm), wm));
@@ -372,10 +383,12 @@ const _mdBody = md => {
  * Markdown 초안 → .docx File — # 헤딩·|표|·- 목록·--- 구분선·단락을 구조 보존 변환.
  * @param {string} md - 문서 마크다운
  * @param {string} filename - 확장자 제외 파일명
- * @param {string} [wm] - 워터마크 문구 (1쪽 본문 앵커 + 2쪽~ 기본 헤더 반복)
+ * @param {string} [wm] - 워터마크 문구 (첫·끝쪽 본문 앵커 전면 + 2쪽~ 기본 헤더 반복)
  */
 export function docxFileMd(md, filename, wm = '') {
-    const body = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w10="urn:schemas-microsoft-com:office:word"><w:body>${wm ? _wmPara(wm) : ''}${_mdBody(md)}${_sect(wm)}</w:body></w:document>`;
+    const mdBody = _mdBody(md);
+    const tail = wm && _isLong(mdBody) ? _wmPara(wm, false, 101) : '';
+    const body = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w10="urn:schemas-microsoft-com:office:word"><w:body>${wm ? _wmPara(wm) : ''}${mdBody}${tail}${_sect(wm)}</w:body></w:document>`;
     const blob = _zipStore(_parts(body, wm));
     return new File([blob], `${filename}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 }

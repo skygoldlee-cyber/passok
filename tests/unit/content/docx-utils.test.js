@@ -219,4 +219,9 @@ test('워터마크 — 문구 지정 시 본문 선두 VML 셰이프 삽입, 미
     assert.ok(!plain['word/document.xml'].includes('w:drawing'), '워터마크 미지정 시 드로잉 없어야 함');
     assert.ok(!plain['word/document.xml'].includes('<w:titlePg/>'), '워터마크 없으면 titlePg 불필요');
     assert.ok(!('word/header1.xml' in plain), '워터마크 미지정 시 헤더 파트 없어야 함');
+    // 다중 페이지 — 콘텐츠가 1쪽 추정(640pt)을 넘으면 끝쪽에도 전면 앵커 추가 (헤더는 음영에 가려 옅음)
+    const longMd = '# t\n\n' + Array.from({ length: 50 }, (_, i) => '단락 ' + i).join('\n\n');
+    const { entries: long } = await unzip(docxFileMd(longMd, 'doc', '테스트요양원'));
+    const front = (long['word/document.xml'].match(/behindDoc="0"/g) || []).length;
+    assert.equal(front, 2, '긴 문서는 첫쪽+끝쪽 2개의 전면 워터마크 앵커여야 함');
 });
