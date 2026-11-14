@@ -197,8 +197,9 @@ async function _onSeedFile(input) {
                 .filter(r => r.some(c => String(c || '').trim()))
                 .map(r => '| ' + r.map(c => String(c || '').trim()).join(' | ') + ' |').join('\n');
         } else {
-            const { extractFormDocx, extractFormPdf } = await import('../care-form-pdf.js');
-            body = (await (n.endsWith('.docx') ? extractFormDocx(f) : extractFormPdf(f))).text;
+            if (n.endsWith('.hwp') && !n.endsWith('.hwpx')) throw new Error('구형 .hwp는 지원하지 않습니다 — 한글에서 Word(docx)로 저장해 올려주세요.');
+            const { extractFormDocx, extractFormPdf, extractFormHwpx } = await import('../care-form-pdf.js');
+            body = (await (n.endsWith('.docx') ? extractFormDocx(f) : n.endsWith('.hwpx') ? extractFormHwpx(f) : extractFormPdf(f))).text;
         }
     } catch (e) {
         showToast(e instanceof Error && e.message ? e.message : '파일을 읽지 못했습니다 — 텍스트 기반 파일인지 확인하세요.', 'error');

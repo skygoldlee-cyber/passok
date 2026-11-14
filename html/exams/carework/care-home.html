@@ -33,13 +33,15 @@
             <label>서명 이미지 (선택) <input id="home-sign-image" type="file" accept="image/*" class="is-hidden"></label>
             <button type="button" class="btn btn-secondary" data-click="careSignImagePick">이미지 파일 선택</button>
             <div id="home-sign-image-preview"></div>
+            <p class="care-log-hint">권장: 가로로 긴 서명 이미지 (가로 480px 내외 · 투명 배경 PNG) — 큰 이미지는 자동 축소됩니다.</p>
+            <label class="care-doc-wm-opt"><input id="home-doc-wm" type="checkbox"> 기관명 워터마크 표시 (인쇄·PDF·Word)</label>
             <div class="care-calc-actions"><button data-click="careDocSignSave" class="btn btn-secondary">서명 저장</button></div>
             <p class="care-log-hint">일지·인수인계서·보고서 등 모든 출력물 서명란에 자동 기입됩니다.</p>
         </div>
     </div>
     <div class="care-home-card">
         <h3 class="care-home-sign-title">우리 기관 서식</h3>
-        <p class="care-log-hint">기관 자체 서식의 등록·기입·출력은 「우리 기관 서식」 뷰에서 관리합니다 — 양식 파일(PDF·DOCX·Excel) AI 추출도 그곳에서 가능합니다.</p>
+        <p class="care-log-hint">기관 자체 서식의 등록·기입·출력은 「우리 기관 서식」 뷰에서 관리합니다 — 양식 파일(PDF·DOCX·HWPX·Excel) AI 추출도 그곳에서 가능합니다.</p>
         <a href="#/care-custom-form" class="btn btn-secondary">우리 기관 서식 열기</a>
     </div>
     <nav class="care-home-nav" aria-label="빠른 기록">

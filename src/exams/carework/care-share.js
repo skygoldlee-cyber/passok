@@ -5,7 +5,9 @@ import { esc } from '../../core/sanitize.js';
 import { pdfFileFromEl } from '../../content/pdf-utils.js';
 import { sheetFile } from '../../content/xlsx-utils.js';
 import { docxFile, docxFileMd } from '../../content/docx-utils.js';
-import { docHeadHtml, getOrgName } from './facility.js';
+import { docWmText } from '../../content/doc-wm.js';
+import { docHeadHtml, getOrgName, getDocSign, docSignImages } from './facility.js';
+import { pinDocSignBottom } from './doc-md.js';
 import { getJSON, setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { proFeatureNotice, refreshProBadges } from '../../pro/pro-upgrade.js';
@@ -135,6 +137,7 @@ const _pdfFile = async (/** @type {*} */ ctx) => {
     const outEl = ctx.sel.trim() && document.querySelector(ctx.sel.trim());
     if (outEl && outEl.textContent?.trim()) {
         const clone = /** @type {HTMLElement} */ (outEl.cloneNode(true));
+        clone.querySelector('.doc-wm')?.remove(); // DOM 워터마크는 제거 — 캔버스 스탬프와 중복 방지
         if (ctx.flag === 'mask') { // 텍스트 노드만 가림 — 표 구조는 유지
             const walker = document.createTreeWalker(clone, NodeFilter.SHOW_TEXT);
             for (let n = walker.nextNode(); n; n = walker.nextNode()) n.nodeValue = _mask(n.nodeValue || '');
@@ -151,18 +154,21 @@ const _pdfFile = async (/** @type {*} */ ctx) => {
     // 인쇄 가독성 — 테마 색상(회색 계열) 제거: 배경 흰색·텍스트 검정으로 강제
     wrap.querySelectorAll('*').forEach((/** @type {Element} */ e2) => {
         const el2 = /** @type {HTMLElement} */ (e2);
+        if (el2.closest('.doc-wm')) return; // 워터마크 옅은 회색 유지 — 검정 강제 제외
         el2.style.color = '#000';
         if (!el2.classList.contains('care-doc-head')) el2.style.background = 'transparent';
         el2.style.borderColor = '#000';
     });
+    pinDocSignBottom(wrap); // 서명란 페이지 하단 우측 고정 — docx 부동 표와 동일 위치
     document.body.appendChild(wrap);
-    try { return await pdfFileFromEl(wrap, ctx.fname('pdf').replace(/\.pdf$/, '')); }
+    try { return await pdfFileFromEl(wrap, ctx.fname('pdf').replace(/\.pdf$/, ''), _wmText()); }
     finally { wrap.remove(); }
 };
 
 const _copyRaw = (/** @type {*} */ ctx) => {
     if (!navigator.clipboard?.writeText) { showToast('공유·복사를 지원하지 않는 환경입니다.', 'error'); return; }
-    navigator.clipboard.writeText(ctx.md || ctx.text).then( // MD 초안이 있으면 구조(표) 텍스트로 복사
+    const raw = (ctx.md || ctx.text).replace(/\{\{img:[\w-]+\}\}/g, '(서명)'); // 서명 이미지 토큰은 텍스트 표기로
+    navigator.clipboard.writeText(raw).then( // MD 초안이 있으면 구조(표) 텍스트로 복사
         () => showToast('클립보드에 복사했습니다 — 카톡 등에 붙여넣으세요.'),
         () => showToast('복사 실패 — 인쇄·PDF를 이용하세요.', 'error'));
 };
@@ -185,18 +191,24 @@ const _actPdf = async (/** @type {*} */ ctx) => {
     } catch { showToast('PDF 생성 실패 — 인쇄를 이용하세요.', 'error'); }
 };
 
+/** 워터마크 문구 — 설정 켜짐 + 기관명 있을 때만 (docx 회전 상자·미리보기 .doc-wm·PDF 스탬프 동일 문구) */
+const _wmText = () => (getDocSign().wm ? docWmText(getOrgName()) : '');
+
 /** 공유 Word — MD 초안이 있으면 구조 보존 변환(표·헤딩), 없으면 헤더+본문 단락 폴백 */
-const _docxFile = (/** @type {*} */ ctx) => {
-    if (ctx.md) return docxFileMd(ctx.md, ctx.fname('docx').replace(/\.docx$/, ''));
+const _docxFile = async (/** @type {*} */ ctx) => {
+    if (ctx.md) { // MD 초안 — {{img:}} 토큰은 등록 서명 이미지 PNG로 치환 (합성 실패 시 공란 폴백)
+        const images = await docSignImages();
+        return docxFileMd(ctx.md, ctx.fname('docx').replace(/\.docx$/, ''), _wmText(), images ? { images } : undefined);
+    }
     const org = getOrgName();
     const head = `${ctx.title}\n${org ? org + ' · ' : ''}${todayKey()} 출력`;
-    return docxFile(`${head}\n\n${ctx.text}`, ctx.fname('docx').replace(/\.docx$/, ''), 2);
+    return docxFile(`${head}\n\n${ctx.text}`, ctx.fname('docx').replace(/\.docx$/, ''), 2, _wmText());
 };
 
-const _actDocx = (/** @type {*} */ ctx) => {
+const _actDocx = async (/** @type {*} */ ctx) => {
     if (ctx.proKey) proFeatureNotice(ctx.proKey, `${ctx.title} Word 다운로드`);
     try {
-        const file = _docxFile(ctx);
+        const file = await _docxFile(ctx);
         _downloadAll([file]);
         _audit(ctx.title, ctx.flag, [file.name]);
     } catch { showToast('Word 파일 생성 실패 — 인쇄·PDF를 이용하세요.', 'error'); }
@@ -236,12 +248,12 @@ const _actShare = async (/** @type {*} */ ctx, /** @type {string} */ kind = 'all
         catch { showToast('PDF 생성 실패 — 텍스트만 공유됩니다.', 'error'); }
     })());
     if (kinds.includes('docx')) tasks.push((async () => { // Word — 편집용 .docx, 동기 생성이라 실패 여지 없음(방어적으로 분리)
-        try { files.push(_docxFile(ctx)); }
+        try { files.push(await _docxFile(ctx)); }
         catch { showToast('Word 생성 실패 — 나머지 파일은 정상 공유됩니다.', 'error'); }
     })());
     await Promise.allSettled(tasks); // 생성 완료 후 버튼 — 시트에 선택 파일 첨부
     _audit(ctx.title, ctx.flag, files.map((/** @type {File} */ f) => f.name));
-    const fs = files, { title } = ctx, text = ctx.md || ctx.text; // 텍스트 공유도 MD 초안 기본 (표 구조 보존)
+    const fs = files, { title } = ctx, text = (ctx.md || ctx.text).replace(/\{\{img:[\w-]+\}\}/g, '(서명)'); // 텍스트 공유도 MD 초안 기본 — 이미지 토큰은 (서명) 표기
     _shareBtn(`📤 ${title} 공유하기`, async () => {
         const ok = !_filesBlocked && fs.length && (typeof navigator.canShare !== 'function' || navigator.canShare({ files: fs }));
         try {
@@ -296,7 +308,7 @@ const _sheet = (/** @type {*} */ ctx, /** @type {string} */ headText, /** @type 
 const _pickShareKind = (/** @type {*} */ ctx) => {
     const items = [
         { label: '📄 PDF로 보내기', pro: ctx.proKey, run: () => _actShare(ctx, 'pdf') },
-        { label: '📝 Word로 보내기', pro: ctx.proKey, run: () => _actShare(ctx, 'docx') },
+        { label: '📝 Word·한글로 보내기', pro: ctx.proKey, run: () => _actShare(ctx, 'docx') },
     ];
     if (ctx.csvGen) items.push({ label: '📊 Excel로 보내기', pro: ctx.proKey, run: () => _actShare(ctx, 'xlsx') });
     items.push({ label: '📎 전체 파일로 보내기', pro: ctx.proKey, run: () => _actShare(ctx, 'all') });
@@ -313,7 +325,7 @@ const _openMenu = (/** @type {*} */ ctx) => {
     items.push({ label: '🖨️ 인쇄·PDF 저장', pro: ctx.proKey, run: () => _actPrint(ctx) });
     items.push({ label: `📋 본문 복사${masked}`, pro: ctx.proKey, disabled: !ctx.text, run: () => { if (ctx.proKey) proFeatureNotice(ctx.proKey, `${ctx.title} 복사`); _copyRaw(ctx); _audit(ctx.title, ctx.flag, ['clipboard']); } });
     items.push({ label: `📄 PDF 파일 다운로드${masked}`, pro: ctx.proKey, disabled: !ctx.text, run: () => _actPdf(ctx) });
-    items.push({ label: `📝 Word 파일 다운로드${masked}`, pro: ctx.proKey, disabled: !ctx.text, run: () => _actDocx(ctx) });
+    items.push({ label: `📝 Word·한글 파일 다운로드${masked}`, pro: ctx.proKey, disabled: !ctx.text, run: () => _actDocx(ctx) });
     if (ctx.csvGen) items.push({ label: '📊 Excel 내보내기', pro: ctx.proKey, run: () => _actXlsx(ctx) });
     _sheet(ctx, `${ctx.title} — 내보낼 방식을 선택하세요`, items);
 };

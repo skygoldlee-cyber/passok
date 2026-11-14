@@ -175,9 +175,9 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
         await tapMenu('카카오톡');
-        for (const label of ['PDF로 보내기', 'Word로 보내기', '전체 파일로 보내기']) // 형식 선택 시트 항목
+        for (const label of ['PDF로 보내기', 'Word·한글로 보내기', '전체 파일로 보내기']) // 형식 선택 시트 항목
             expect(menuItem(label), `선택 항목 없음: ${label}`).toBeTruthy();
-        await tapMenu('Word로 보내기');
+        await tapMenu('Word·한글로 보내기');
         await tapShareBtn();
         await vi.waitFor(() => expect(globalThis.navigator.share).toHaveBeenCalled());
         const payload = globalThis.navigator.share.mock.calls[0][0];
@@ -223,7 +223,7 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
             <button id="share" data-arg="#out|문서">공유</button></section>`);
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
-        await tapMenu('Word 파일 다운로드');
+        await tapMenu('Word·한글 파일 다운로드');
         await vi.waitFor(() => expect(globalThis.URL.createObjectURL).toHaveBeenCalled());
         const file = globalThis.URL.createObjectURL.mock.calls[0][0];
         expect(file.name).toMatch(/문서_\d{4}-\d{2}-\d{2}\.docx$/);

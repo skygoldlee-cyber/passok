@@ -3,7 +3,7 @@
 // 기관 양식 뷰(cf-tpl 접두사)의 인라인 편집기 — 파일 추출 파이프라인·본문 미리보기 단일화.
 import { parseFields, SYSTEM_KEYS, FIELD_RE } from './form-template-store.js';
 import { mdToHtml } from './doc-md.js';
-import { extractFormPdf, extractFormDocx, extractFormXlsx, textToTemplate, fieldsToTemplate } from './care-form-pdf.js';
+import { extractFormPdf, extractFormDocx, extractFormXlsx, extractFormHwpx, textToTemplate, fieldsToTemplate } from './care-form-pdf.js';
 import { requestFormExtract } from '../../ai/ai-client.js';
 import { escapeHTML as esc } from '../../core/sanitize.js';
 import { showToast } from '../../ui-utils.js';
@@ -82,6 +82,8 @@ export function renderTplPreview(prefix) {
 const _extract = (/** @type {*} */ f) => {
     const n = (f.name || '').toLowerCase();
     if (n.endsWith('.docx')) return extractFormDocx(f);
+    if (n.endsWith('.hwpx')) return extractFormHwpx(f);
+    if (n.endsWith('.hwp')) return Promise.reject(new Error('구형 .hwp는 지원하지 않습니다 — 한글에서 Word(docx)로 저장해 올려주세요.'));
     if (/\.(xlsx|xls|csv)$/.test(n)) return extractFormXlsx(f);
     return extractFormPdf(f);
 };

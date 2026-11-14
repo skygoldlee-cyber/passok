@@ -1,13 +1,13 @@
-// src/exams/carework/views/care-incident.js — 사고·낙상 보고서 뷰
+// src/exams/carework/views/care-incident.js — 사고 보고서 뷰
 // @spec UX-FORM-03 — 시험 전용 실무 뷰 (DA-13)
-import { INCIDENT_TYPES, SEVERITIES, incidentTypeLabel, severityLabel, buildIncidentText, incidentsToCsv } from '../care-incident.js';
+import { INCIDENT_TYPES, SEVERITIES, incidentTypeLabel, severityLabel, buildIncidentText, buildIncidentMd, incidentsToCsv } from '../care-incident.js';
 import { markFunnel } from '../care-funnel.js';
 import { listIncidents, saveIncident, removeIncident } from '../incident-store.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
-import { myMembership, submitIncident, listIncidents as listFacilityIncidents, docHeadHtml, docSignHtml, refreshOrgName, signFileToDataUri } from '../facility.js';
+import { myMembership, submitIncident, listIncidents as listFacilityIncidents, refreshOrgName, signFileToDataUri } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { docMdHead, docMdSign } from '../doc-md.js';
+import { docMdHead, docMdSign, mdToHtml } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 import { getJSON, setJSON, removeItem } from '../../../core/storage.js';
 import { STORAGE_KEYS } from '../../../core/storage-keys.js';
@@ -62,15 +62,15 @@ export function careIncidentGenerate() {
         return;
     }
     _lastText = t;
-    out.innerHTML = docHeadHtml('사고·낙상 보고서') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['보고자', 'author'], ['확인(시설장)', 'confirmer']])
+    out.innerHTML = mdToHtml(careIncidentDocMd())
         + (_photos.length ? `<div class="care-photo-grid">${_photos.map(p => `<img src="${p}" alt="첨부 사진">`).join('')}</div>` : '');
 }
 
-/** 보고서 MD 초안 — 헤더 + 폼 생성문 (docx 파생 원본) */
+/** 보고서 MD 초안 — 헤더 + 격식표 생성문 (docx 파생 원본 — 평문이 아닌 표로 출력) */
 export function careIncidentDocMd() {
     const f = readForm();
-    const t = buildIncidentText(f);
-    return t ? docMdHead('사고·낙상 보고서') + '\n' + renderToolBody('careIncident', {
+    const t = buildIncidentMd(f);
+    return t ? docMdHead('사고 보고서') + '\n' + renderToolBody('careIncident', {
         보고내용: t, client: f.client,
         발생일시: `${f.date}${f.time ? ' ' + f.time : ''}`,
         발생장소: f.place, 사고유형: incidentTypeLabel(f.type),
@@ -93,7 +93,7 @@ export function careIncidentSave() {
 
 export function careIncidentPrint() {
     careIncidentGenerate();
-    if (!document.querySelector('#inc-preview pre')) { showToast('먼저 보고서를 생성하세요.', 'error'); return; }
+    if (!document.querySelector('#inc-preview .doc-md')) { showToast('먼저 보고서를 생성하세요.', 'error'); return; }
     proFeatureNotice('care_incident_share', '보고서 인쇄·PDF');
     window.print();
 }

@@ -1,4 +1,236 @@
+## 2026-11-14 fix(carework): 면회 기록 '방문 일시' 중복 행 제거
+
+- 완료 건은 실제 방문 일시를 방문일·시간 행에 직접 표기 — 별도 '방문 일시' 행은 중복이라 제거
+
+## 2026-11-14 fix(carework): 면회·방문 기록 문서를 항목별 행(kv) 표로 전환
+
+- 일별 제출 문서 특성상 다열 목록표 대신 항목|내용 2열 kv 표 — careVisitDocMd가 visitKvMd로 생성
+- 여러 건 저장 시 건별 '### N. 대상자 — 방문일' 소제목으로 구분, Excel(visitsToCsv)은 다열 표 유지
+- 방문객 열은 관계를 괄호 병기 (김민수 (아들)), 완료 건은 방문 일시·결과·특이사항 행 추가, 취소는 결과 '취소'
+
+## 2026-11-14 fix(carework): 면회·방문 기록 '상태' 열 제거 — 결과로 표현 통합
+
+- CSV·문서 표에서 '상태' 열 삭제 — 완료는 결과 칸 요약으로 표현, 취소는 결과 칸에 '취소' 표기
+- buildVisitText의 `상태:` 줄도 완료·예정은 제거 — 취소만 유지 (결과로 표현 불가한 경우만)
+
+## 2026-11-14 feat(carework): 등록 서명 이미지 Word 출력 연결 — 런타임 {{img:}} 배선
+
+- docMdSign이 author 슬롯에 `{{img:author}}` 토큰 방출 (signImage 등록 시) — docx는 이미지 삽입
+- mdToHtml은 토큰을 `<img class="care-doc-signimg">`로 치환 — 미리보기·인쇄·PDF도 동일 표시
+- facility.docSignImages() — 캔버스 합성: 서명란용 (인) 겹침 합성 + 결재란용 서명-only (2배 렌더)
+- care-share _docxFile이 images 맵 전달 (비동기 전환) — 클립보드·공유 텍스트는 토큰을 (서명)으로 치환
+- 이전에는 샘플 생성기에서만 images가 전달돼 앱 생성 Word에 서명 이미지 미삽입
+
+## 2026-11-14 fix(carework): 인수인계서 서명란 '확인일' 슬롯 제거
+
+- 서명란이 인계자·인수자 2칸으로 간소화 — 확인일 수기 공란 불필요 (문서 헤더에 인수인계 일시 별도 표기)
+- 실무매뉴얼 날짜 슬롯 설명도 점검일만 남김 (평가 체크리스트 점검일 슬롯은 유지)
+
+## 2026-11-14 fix(carework): 홈 워터마크 체크박스 비가시 — 폼 입력 스타일 오염 리셋 + 서명 권장 크기 안내
+
+- 서명 이미지 선택 아래 권장 규격 안내 추가 — 가로형·가로 480px 내외·투명 배경 PNG (자동 축소 안내 포함)
+
+- 원인: `.care-calc-form input` 규칙이 `input[type=checkbox]`에도 min-height 44px·padding·border를 강제 → 체크박스가 빈 텍스트 필드처럼 렌더되어 사라져 보임 (label의 column flex로 체크 박스가 문구 아래 빈 박스로)
+- `.care-doc-wm-opt` 전용 규칙 추가 — label을 row flex로 되돌리고 checkbox는 필드 스타일 리셋(18px·accent-color)
+- 회귀 단언: ux-invariants UX-FORM-05 — 체크박스 필드 스타일 리셋 규칙 존재 검증
+
+## 2026-11-14 feat(content): docx 서명 이미지 삽입 — `{{img:key}}` 토큰
+
+- `docxFileMd(md, name, wm, { images })` — images: `{key: {data:Uint8Array, w, h(px)}}`
+- 서명란(`:::sign`) 줄의 `{{img:key}}` 토큰 → `wp:inline` 드로잉으로 치환 (라벨 + 이미지)
+- (인) 표기는 이미지 생성 시 서명 위에 합성 — docx 부동 앵커 posOffset은 렌더러별 불안정
+- 서명 이미지는 라벨 뒤 우측 탭 정지로 셀 우측 정렬 — 공백 누적은 셀 폭 초과 시 줄넘김(7칸 상한)이라 탭 방식 채택
+- 서명란 이미지에 `w:position=-16`(8pt 하강) — 셀 내 수직 위치 미세 보정, 결재란은 기본 위치 유지
+- 미지정 키는 `＿＿＿＿＿＿＿＿` 빈 자리로 치환 — 토큰 잔존 금지
+- 파트: `word/media/img_N.png` + document.xml.rels rId6~ + [Content_Types] png Default (이미지 지정 시만)
+- 결재란 담당 칸도 서명 표시 — `images.approve` 키(서명-only, (인) 미포함)를 별도 파트로 전달받아 인라인 (좌측+음수 들여쓰기)
+- docPr id 300~ 대역 사용 — 워터마크(100/101/200)와 충돌 없음
+
+## 2026-11-14 feat(carework): 기관명 대각선 워터마크 (인쇄·PDF·Word 공통)
+
+- 홈 → 출력물 서명에 '기관명 워터마크' 토글 — setDocSignWm, getDocSign().wm (CARE_DOC_SIGN에 wm 필드)
+- 문구: 기관명 · 출력일 — 대각선(-45°) 반복 타일, 옅은 회색
+- 미리보기: mdToHtml이 .doc-wm 타일 주입 (docWmHtml) — 인쇄는 print-color-adjust로 색 유지
+- PDF: pdfFileFromEl 클론에 포함 — 색상 강제 루프에서 .doc-wm 제외
+- Word: 헤더 파트(header1.xml)에 VML textpath 셰이프 4개 — Word 기본 워터마크와 동일 메커니즘, 전 페이지 자동 반복
+- docxFile/docxFileMd에 wm 선택 인자 — 미지정 시 헤더 파트 생략 (기존 출력 동일)
+- 농도 수정: 초기 #d9d9d9·opacity .5는 사실상 무색(93% 흰색) — gray·opacity .5(#BFBFBF, 25% 회색)로 진하게 (PDF 글리프 커브 렌더 확인)
+- 단일 중앙 배치로 변경: 타일 반복은 1장 문서에서 가장자리 잘림 — 미리보기도 translate(-50%,-50%) 단일 중앙으로 통일
+- docx 헤더 셰이프를 Word AddTextEffect 생성물과 동일 구조로 재작성 (page 앵커·margin-left/top 명시·양수 z-index 텍스트 앞·w10:wrap·xmlns:w10) — margin 앵커+음수 z-index 조합은 일부 환경에서 편집 화면에 렌더되지 않음
+- docx 워터마크를 Word 갤러리 워터마크 canonical 구조로 교체 — 기존 shapetype의 path·formulas(`sum 0 0 @3`→`sum 21600 0 @3`)·connectlocs(2개→4개)가 Word 정본과 달라 textpath 경로가 깨져 편집 화면 미렌더·글리프 폭주 발생. 정본 추출값 적용 + margin 앵커 center/center·rotation 315·음수 z-index·font-size:1pt+fitshape 자동 맞춤 (Word COM PDF 출력으로 실측 확인)
+- 미리보기 .doc-wm 중앙 정렬을 translate(-50%,-50%)에서 flex(align/justify center)로 교체 — html2canvas가 퍼센트 변환을 오계산해 앱 PDF에서 간헐 잘림 발생하던 것 해소
+- 앱 PDF 워터마크를 DOM 렌더 의존에서 페이지 캔버스 fillText 직접 스탬프로 교체 (pdfFileFromEl wm 인자·_stampWatermark) — 클론 CSS 변환·overflow 잘림과 무관하게 확정 렌더, 클론의 .doc-wm은 제거해 중복 방지
+- 인쇄 워터마크는 cosmetic .fp-watermark 정본 방식(position:fixed — 페이지 박스 기준 매 장 중앙 반복) 채택
+- 참고: Word에서 머리글 앵커 오브젝트는 본문 아래 레이어 고정 — 표 음영(shd) 위에는 어떤 z-index로도 올라오지 않음 (정본 워터마크 동일 동작, 셀 음영 없는 영역에서만 보이는 것이 정상)
+- 최종: docx 워터마크는 첫 단락 본문 앵커 DrawingML(wps) 텍스트 상자 + a:xfrm rot -45° + behindDoc=0 — 본문 앵커라 콘텐츠 전면 렌더(음영 포함 전 영역). textpath(t136)는 경로 기반 글리프라 글자 좌우 반전·폭주 재발(flip·v-text-reverse 무력), VML t202는 rotation이 txbx 콘텐츠에 적용 안 돼 수평 렌더 — 모두 폐기하고 최신 DrawingML로 확정. font-size는 문구 길이 비례 계산(_wmFont), margin 앵커 center/center (Word COM PDF 출력으로 각도·방향·위치 실측)
+- 전면(behindDoc=0) + w14:textFill alpha 40% 투명 텍스트 + 기울임 — 음영 포함 전 영역 표시되면서 본문 가독 유지. alpha 미지원 렌더러 대비 srgbClr 자체를 C0C0C0으로 (미지원 시 연회색·지원 시 더 은은). 글자 확대(박스 640pt·폰트 상한 64pt, 굵게+기울임 폭 보정 ×1.15) + horzOverflow=overflow — 문구 끝(날짜) 잘림 방지. PDF 캔버스 스탬프·미리보기도 italic·동일 배율 통일
+
+## 2026-11-14 fix(carework): docx 워터마크 끝쪽 전면 앵커 추가 — 2쪽+ 가시성 확보
+
+- 헤더 워터마크는 본문 뒤 레이어라 표 음영·본문 아래로 가려져 편집 화면에서 사실상 미표시 → 콘텐츠가 1쪽 추정(단락×14pt+행×22pt>640pt)을 넘으면 문서 끝에도 본문 앵커 전면 워터마크 추가 (첫쪽+끝쪽 전면, 중간쪽은 헤더 반복)
+- wp:docPr id 중복이 Word 손상 거부의 원인 — 앵커별 유일 id(100/101/200) 부여
+- Word 편집 화면 실측: 1쪽 전면 워터마크 표시 확인, 2쪽도 동일 구조로 렌더
+
+## 2026-11-14 fix(carework): docx 워터마크 2쪽 이상 미표시 수정 — 헤더 반복
+
+- 본문 앵커는 앵커 단락이 있는 1쪽에만 렌더 — 2쪽 이상은 기본 헤더에 동일 DrawingML 상자(behindDoc=1, 네이티브 워터마크 레이어)를 두어 매 장 반복
+- titlePg 도입 — 1쪽은 빈 첫 헤더(본문 앵커 전면 유지, 중복 방지) + 첫 페이지 바닥글 footer2.xml로 쪽 번호 유지
+- Word COM PDF 실측: 2쪽 문서 양쪽 페이지 모두 대각선 워터마크 + — N — 번호 확인
+
+## 2026-11-14 refactor(content): 문서 워터마크 플랫폼 공용화 — 시험팩 재사용
+
+- src/content/doc-wm.js 신규 — docWmText(기관명 · 출력일 규약) + docWmHtml(.doc-wm 오버레이). docxFile/docxFileMd·pdfFileFromEl의 wm 인자와 세트로 4경로(docx 회전 상자·미리보기·인쇄·PDF 캔버스) 동일 문구 보장
+- css/doc-export.css 신규 — .doc-wm 규칙을 carework 전용 css에서 플랫폼 공유로 승격 (style.css @import + sw.js 프리캐시)
+- carework는 토글·기관명 같은 팩 고유 정보만 유지 (doc-md.js _wmText, care-share.js _wmText → 공용 호출)
+- 재사용 절차: wm=docWmText(기관명) → docxFileMd(md,name,wm)/pdfFileFromEl(el,name,wm) + 문서 루트(position:relative)에 docWmHtml(wm) 삽입
+
+## 2026-11-14 feat(carework): 1쪽 보고서 쪽 번호 자동 생략
+
+- docx 바닥글을 IF NUMPAGES>1 조건부 필드로 교체 — 1쪽 문서는 — N — 표시 없음, 2쪽 이상만 자동 매김 (fldChar 중첩 필드, PAGE만 fldSimple→fldChar 전환)
+
+## 2026-11-14 fix(carework): 결재란·서명란 우측선 본문 표와 정합
+
+- 부동 표 tblpX 보정 +140→+102tw — 이중 외곽선이 표폭 밖 ~38tw에 그려져 우측끝이 본문 표보다 1.9pt 바깥이던 것을 정렬 (PDF 실측 528.22→526.42pt vs 본문 526.30pt)
+
+## 2026-11-14 fix(carework): 인쇄·PDF를 docx 출력과 같은 격식으로 정렬
+
+- 인쇄(@media print): .doc-md에 상하 20mm·좌우 25mm 여백(페이지 패딩 보정) + 서명란을 flex 자동 마진·order로 문서 하단 우측 배치 — 절대 위치 금지 규약 준수
+- PDF(care-share→pdfFileFromEl 경로): pinDocSignBottom 헬퍼로 클론 래퍼를 한 페이지 분량(986px)으로 채우고 서명란을 하단 우측 절대 고정 — docx tblpPr 부동 표와 동일 위치
+
+## 2026-11-14 fix(carework): 결재란 시설장 줄넘김 + 1페이지 수렴 압축
+
+- 결재란 열 폭 640→840tw — '시설장'(600tw)+셀 여백(200tw) 수용, 줄넘김 해소 (tblpX 6652→5852로 우측 정렬 유지)
+- 상하 여백 1440→1134tw(20mm)·본문 after 60→40·메타 240→140·절제목 before 240→160·행 최소 440→400tw·빈 단락 7pt 고정·'끝.' 전 200→80 — 8종 샘플 중 7종 1페이지 수렴 (본인부담금계산은 내용 초과분 2p 유지)
+
+## 2026-11-14 feat(carework): 내보내기 문서 공문서 격식 강화 — 결재란·쪽 번호·이중 외곽선
+
+- A 격식: 서명 문서 상단 우측 결재란(부동 표·세로병합 담당/팀장/시설장) + 바닥글 쪽 번호(PAGE 필드) + 서명란 발신일·(인) 표기 + '끝.' 종결 표기
+- B 표: 외곽 이중선(thinThickSmallGap)·2열 표 레이블 열 음영·행 분할 방지(cantSplit)·최소 행 높이 24pt·짝수 행 줄무늬
+- C 타이포: 제목 명조계(바탕)·본문 1.15배 줄간격·좌우 여백 25mm (본문 폭 9072tw)
+- 결재란은 인라인 jc=right가 여백을 넘어가 부동 표 tblpX 보정으로 전환 — 서명란과 동일 우측 경계 정합
+- 미리보기·PDF는 doc-approve/doc-kv/doc-end·(인)·명조 제목·이중 테두리로 동일 격식
+
+## 2026-11-14 fix(carework): 사고·낙상 보고서 → 사고 보고서 명칭 정리
+
+- 낙상은 사고의 한 종류 — 뷰 제목·내보내기 문서 제목·사이드바 라벨·양식 시드·매뉴얼·설계 문서의 명칭을 '사고 보고서'로 통일 (ID·스토리지 키·테이블명은 유지)
+
 # 코드 리뷰 수정 내역 (1~12 순차수정)
+
+## 2026-11-13 fix(carework): 표 헤더 항목명 줄넘김 금지 + 셀 여백 축소
+
+- 헤더 어절 폭을 열 너비 하한으로 강제 — 배분 후 초과분은 하한 위 여유 열에서 비례 회수
+- 셀 좌우 여백 130→100tw — 다열 표에서 헤더·긴 토큰 수용 폭 확보 (9열 면회·방문 기록이 축소 경로에서 해제)
+
+## 2026-11-13 fix(carework): 다열 표 열 너비 — min 합계 초과 시 비율 축소 배분
+
+- 9열 면회·방문 기록처럼 최소폭 합계가 본문 폭을 넘으면 균등 fallback돼 어느 열도 어절을 못 담던 문제 → min 비율 축소 배분으로 변경, 잔여는 최대 열에 보정. 연락처 열 1002→1624tw
+
+## 2026-11-13 fix(carework): 표 열 너비 내용 기반 배분 — 레이블 열 과폭 해소
+
+- 균등 배분을 HTML auto-layout 유사 방식으로 교체 — 열별 min(최장 어절+여백)·pref(한 줄 수용 폭) 추정, 잉여는 줄바꿈 가능 열에만 배분, 단일 열 60% 상한
+- `tblLayout fixed` 명시로 gridCol 폭이 Word에서 강제되도록 보강
+- 결과: 인수인계서 레이블 열 4513→920tw, 내용 열 확장 — 줄바꿈 줄어 문서 전체가 타이트해짐
+
+## 2026-11-13 fix(carework): 서명 박스 우측 여백 초과 — tblpX 명시 좌표로 교체
+
+- `tblpXSpec="right"`는 부동 표 우측 끝이 셀 여백만큼(≈128tw) 우측 가이드선을 넘어감을 PDF 벡터 실측으로 확인 — `tblpX=4966`(본문폭 9026−서명폭 4200+140 보정) 명시 좌표로 교체, 우측 끝 본문 표 우측선(523pt)과 정합
+
+## 2026-11-13 fix(carework): 어절 줄넘김 패킹 수정 — 폰트 10pt 명시 + 정확한 글자 폭
+
+- COM 실측으로 본문 폰트가 10pt임을 확인 — `w:sz=20`을 모든 본문 런에 명시해 레이아웃 결정화
+- 글자 폭 추정 수정: 한글 220→200tw(1em 정확)·ASCII 120→110tw — 이전 추정 과대로 어절이 한 줄에 하나씩만 들어가 빈 공간이 컸던 문제 해소
+
+## 2026-11-13 feat(carework): 성명 성·이름 공백 표기 + docx 어절 단위 사전 줄바꿈
+
+- `fmtDocName` — getDocSign 반환 시 한글 성명을 '김 철수'(2~3글자)·'남궁 민수'(4글자) 형식으로 포맷. 서명란·`{{author}}` 시스템 키·인수인계 기본값·주간리포트 등 모든 표시 경로 일괄 적용
+- docx 어절 줄넘김 — COM 실측으로 Word가 한글을 음절 단위로만 끊음을 확인(kinsoku·wordWrap·ko-KR·noLineBreaksAfter·useFELayout·WORD JOINER 전부 무효). 생성 측에서 셀 폭·글자 폭(한글 전각 220tw·ASCII 120tw) 추정 후 어절 경계에 `<w:br/>` 직접 삽입. 단일 어절이 셀 폭을 넘는 경우만 Word의 음절 분리에 위임
+
+## 2026-11-13 style(carework): 내보내기 문서 공문서 격식 — 제목 중앙·메타줄·표머리 연청
+
+- docx — `#` 제목 중앙·대자(18pt), 제목 직후 단락을 메타줄(중앙·회색·소자)로 인식. 표머리 연청(DEEAF6)·중앙 정렬·수직 가운데 + `tblHeader`로 페이지 넘김 시 머리 반복. 외곽선 404040·내부선 BFBFBF로 톤 정리, 셀 여백 확대, 라틴·숫자도 맑은 고딕 통일(w:ascii/hAnsi)
+- 미리보기 — h3 중앙 제목·`.doc-meta` 메타줄·h4 가는 밑줄·표머리 연청+중앙·짝수 행 미묘한 줄무늬 — docx와 같은 톤
+
+## 2026-11-13 fix(carework): 서명란 A4 하단 우측 앵커 + 셀 어절 단위 줄넘김
+
+- `docMdSign`이 `:::sign` 블록 마커 방출 — docx에서는 `tblpPr` 부동 표(vertAnchor=margin·tblpYSpec=bottom·tblpXSpec=right)로 페이지 하단 우측에 고정. 본문 표 바로 아래 붙던 서명 위치를 공문서 격식(하단 우측 서명란)으로 이동
+- 미리보기·PDF 경로는 `.doc-sign` 우측 정렬 박스로 렌더 (mdToHtml이 `:::sign` 블록 처리)
+- 셀 어절 단위 줄넘김 — docx 셀 단락에 `w:kinsoku` + `w:wordWrap w:val="off"`(단어 중간 분할 금지), 미리보기 td/th에 `word-break: keep-all` (브라우저는 CJK를 글자 단위로 끊으므로)
+
+## 2026-11-13 fix(carework): 표 외곽선 굵게 + 미리보기 마크업 잔재 복구 (인쇄·AI초안·e2e)
+
+- docx 표 외곽선 sz=4→8(1pt)·색 666666 — 0.5pt는 화면 배율에서 서브픽셀로 사라져 PDF 변환 시 윗선이 안 보이던 문제 해소 (내부선은 0.5pt 유지, 외곽 강조 격식)
+- 미리보기 `pre`→`.doc-md` 전환(8d53f61b) 시 누락된 잔재 4곳 복구 — 요양일지·사고보고서·인수인계서 인쇄 가드 + AI 초안 미리보기 주입이 생성물을 못 찾아 동작 불가였음
+- e2e 셀렉터 동기화 — ux-forms·j-510의 `#*-preview pre` 단언을 `.doc-md`로 (CI 실패 원인)
+
+## 2026-11-13 fix(carework): docx 페이지 방향 명시 + 인쇄 레이아웃 강제 + 서명란 가로줄 제거
+
+- `w:orient="portrait"` — pgSz에 방향을 명시. 속성 생략 시 가로로 해석하는 docx 임포터 대응 (A4 11906×16838 유지)
+- `word/settings.xml` 파트 추가 — `w:view w:val="print"` + `w:zoom 100%`. settings 부재 시 뷰어가 웹 레이아웃(전체폭·페이지 경계 없음)으로 여는 문제 해소. zip 파트 3→5개(+ document.xml.rels)
+- sectPr에 `w:cols`·`w:docGrid` 추가 — Word 정본과 동일한 섹션 구조 (일부 임포터가 본문 폭을 다르게 계산하는 것 방지)
+- 표 폭 pct→dxa 고정 — `tblW pct 5000`(상대폭)을 9026dxa(본문 폭)로 전환 + `tblGrid`·`tcW` 열 너비 명시. 상대폭 미지원 임포터에서 표가 본문 밖으로 밀리는 문제 방지
+- `docMdSign` `---` 제거 — docx에서 전폭 가로줄(`pBdr`)·미리보기에서 `<hr>`로 렌더돼 서명란 위에 뜬금없는 선이 생기던 것 제거 (전 문서 공통)
+
+## 2026-11-13 feat(carework): 전 문서 격식표 출력 통일 — docx 전폭 표 + 미리보기·PDF 동일 렌더
+
+- 표 미지원 3곳 격식표화 — `buildIncidentMd`(사고보고서 2열 전항목) · `buildHandoverMd`(기본정보+인계내용 2표) · `careCalcDocMd` 신규(입력조건·공단 책정 기준·계산 결과 3표 + 선택 등급 ▶ 표시). 이제 내보내기 대상 8문서 전부 MD 표 경로 (일지·점검표·명부·면회·근무표는 기존 지원)
+- 미리보기 통일 — 일지·인수인계·사고보고서 미리보기가 `pre` 평문 → `mdToHtml(표준 초안)` 렌더로 전환. 화면·인쇄·PDF·docx·복사가 동일 MD 원본을 공유해 출력물 불일치 제거. 공유 셀렉터 `#*-preview pre` → `#*-preview` (3곳), careLogSave는 저장본을 `buildCareLog`로 직접 조립
+- docx 표 스타일 — `_tbl` 전폭 레이아웃(tblW pct 5000) + 셀 내부여백(tblCellMar) + 표머리 음영(w:shd E8E8E8) — A4 세로 1인치 여백 안에서 테두리 표가 본문 폭 가득 배치
+- 계산기 리팩터 — `_calcDocData`로 조건·기준·결과 행 데이터를 화면 HTML/내보내기 MD가 공유
+- 테스트 — care-incident 유닛 신설(5건) + handover·docx-utils 단언 확장 + DOM 3뷰 `pre`→`.doc-md` 셀렉터 갱신 + calc MD 표 단언
+
+## 2026-11-13 fix(carework): 요양일지 docx 격식표 출력 + 관찰 칩 본문 반영
+
+- `buildCareLogMd` 신규 (care-log.js) — 기본정보(일시·대상자·급여 종류)·제공 서비스·특이사항을 MD 표로 구성. `careLogDocMd`의 `{{기록내용}}` 블록이 평문 생성문 → 표 MD로 교체돼 Word·한글 출력이 테두리 표로 렌더 (docxFileMd 경로 그대로, 기관 양식 사본에도 동일 블록 주입)
+- `obsText` — 식사량·수면·배변 관찰 칩이 평문·표 양쪽 본문에 반영 (입력은 수집되나 출력에 누락되던 항목 복구, 미선택 시 행 생략)
+- 기관 사본 호환 — seed의 `{{비고}}` 키에도 note 값 주입 (특이사항만 넘기던 누락 보완)
+- `form-seeds.js` — 중복 `if (!def)` 5줄 제거
+- 유닛 테스트 — 표 구조·관찰 행·미선택 생략 검증 (node --test 7건)
+
+## 2026-11-13 feat(carework): HWPX(아래한글) 양식 추출 + 출력 라벨 한글 호환 표기
+
+- `extractFormHwpx` 신규 (care-form-pdf.js) — KS X 6101 ZIP+OWPML: `_zipDir` 리팩터(중앙 디렉터리 나열 공용화)로 Contents/sectionN.xml 전수 순회, hp:p 단락·hp:tbl 표를 텍스트·MD 행 복원. 표 내부 hp:t는 본문 중복 방지 분리. deflate는 기존 DecompressionStream 경로 재사용 — 의존성 추가 없음. 구형 .hwp(OLE/CFB)는 3개 진입점 모두 "docx로 저장" 명시 안내로 거부
+- 입력 연결 3곳 — `form-template-editor._extract`·`care-custom-form._onSeedFile`·`careAuditFileLoad`에 .hwpx 분기 + accept 속성·힌트 갱신 (기관 서식·관공서 양식이 hwp로 배포되는 실제 경로 커버)
+- 출력 라벨 — "Word로 보내기"·"Word 파일 다운로드" → "Word·한글" 표기 (생성 docx가 아래한글에서 그대로 열리는 사실을 사용자가 인지하도록)
+- DOM 테스트 — extractFormHwpx: stored zip section XML의 단락·표 복원 + OLE 매직 바이트 거부 검증
+- 테스트 라벨 동기 — care-share DOM·E2E 스펙의 시트 항목 단언을 "Word·한글" 표기로 갱신
+
+## 2026-11-13 docs(carework): 전문가 검토 의뢰서 (DOC-BIZ-12) — 법무 0b 검토 패키지
+
+- `전문가검토_의뢰서.md` 신규 — 전문가 전달 패키지. §2 서비스·사실관계 브리프(데이터 흐름·L0/L1 저장 범위·안전조치 현황·운영 규모) + §3 첨부 문서 목록(계약서·방침·런북·스키마·재수탁자 DPA) + §4 검토 질문 8건(전자동의 성립·손배 캡 유효성·보증 조항·재수탁 동의·접속기록 충족·문서 형태·보호자 필드·수탁자 자격) + §5 확정 결정 표. 회신 반영 → 기능 플래그 재개통이 0b 완료 조건
+
+## 2026-11-13 docs(carework): 위탁계약서 결정 확정 — 리전 실측 확인 + 5개 쟁점 결정
+
+- Supabase 리전 실측 확인 — Management API(`api.supabase.com/v1/projects`) 조회로 프로젝트 리전 `ap-northeast-2`(서울) 확정. §13 국외이전 조항을 국내 보관 원칙으로 확정, 별지 3 확인 완료 표기
+- 결정 5건 반영 — ①계약 형태: 전자 동의 갈음(서면 요구 기관만 예외) ②접속기록: 인증 로그로 최소 충족(기록별 감사는 기관 요구 시) ③민감 필드 암호화: 인프라 at-rest로 충족 ④손해배상: 직전 12개월 지급액 상한 캡(§11) ⑤보호자 정보: `family_visits` 연락처 유지 + §9(3) 보증 조항. 미해결 목록 → 결정 이력으로 전환
+- `FACILITY_DATA_OPS.md` 신규 (DOC-RBK-24) — 별지 2의 잔여 문서화 2건 해소. §1 운영자 접근 절차: 관리자 자격 전수 목록(.env·GitHub Secrets·Edge Function env·대시보드·PAT) + 접근 원칙(목적 제한·메타 우선·비열람 기본값 — ADMIN_DESIGN §6.2의 기관 데이터 확장) + 허용 목적 표 + 접근 기록 표. §2~3 백업·복구: Free 플랜 자동백업 미제공 실측 기준 → 기관 테이블 덤프(주 1회)가 실질 백업 경로, 시나리오별 복원(정지 Resume / 테이블 복원 / 전면 복원) + 위탁 종료 반환·파기 절차. 별지 2 ⚠️ 2건 전부 ✅ 전환
+- `tools/supabase/dump_facility.js` 신규 + `admin:facility-backup` 스크립트 — 기관 8개 테이블 PostgREST JSON 덤프 + `--restore`(dry-run/`--apply` upsert, FK 부모 우선 순서). **2026-11-13 프로덕션 실습 완료**: 마커 행 삽입→덤프→삭제→복원→삭제 전 주기 통과, §1.5 접근 기록에 실적 남김. 실습 발견: pg_dump·psql 미설치(도구 경로가 정본), TEST_SUPABASE service key 무효(다른 조직 — 대시보드 수동 갱신 필요). `backup/` gitignore 등록
+
+## 2026-11-13 docs(carework): 개인정보처리 위탁계약서 초안 + 처리방침 수탁 조항 (법무 0b A1·A2)
+
+- `개인정보처리_위탁계약서_초안.md` 신규 — 표준양식 구조 기반, 15개 조항 + 별지 3종(처리항목 명세·안전조치 현황·재수탁자/국외이전). L0/L1 계층 경계·민감정보 보증·보호자 제3자 정보·전자 동의 성립 조항 반영. 전문가 검토 전 사용 금지 명시 + 미해결 결정 6건 목록화
+- `PRIVACY_POLICY.md` 개정 — §1.2에 기관 워크스페이스 수집 항목 추가, §5-1 수탁 처리 절 신설(위탁자=기관·수탁자=운영자·보관·반환파기), Supabase 행을 서울 리전 기술로 정정. docs_md 번들 재생성
+- 계약서 §13·별지3 — SUPABASE_DESIGN 문서 기준 서울 리전(ap-northeast-2) 반영, 대시보드 최종 확인 항목으로 남김
+
+
+## 2026-11-13 docs(carework): 기관 사이트 라이선스 설계 문서 (DOC-DSN-51)
+
+- `CAREWORK_SITE_LICENSE_DESIGN.md` 신규 — 요양원 단위 월권·기간권 부여 설계. 옵션 3안 비교(채널 배치 코드 / facility_subscriptions 테이블 / 자동결제), 권장안: 멤버십 ∈ 유효 구독 기관이면 `effective_entitlement` RPC로 lazy 부여 — Phase 6a 멤버십·PAY 파이프라인 재사용으로 프론트 무변경. 운영 CLI `admin:facility-sub`, 미결정 쟁점 2개(부여 범위·시험 스코프) 정리
+- §6 기관 자체 서버DB 상황별 연동 추가 — T0 서버 없음(PassOK=기관 서버) / T1 자체서버+HTTP(record-webhook, CO-16 선구축) / T2 폐쇄형 ERP(묶음 수출) / T3 공단·양방향(비목표). 수출·수입 비대칭 분리, 연동 깊이를 티어 차별화 요소로 매핑
+
+
+## 2026-11-13 fix(content): 실무매뉴얼 보호자 전달 문구 완충 — 정량 주장 → 절차 지시
+
+- "시설장 확인 후 보내는 곳이 많습니다" → "시설장 확인이 필요한지도 함께 확인하세요". 정량 주장(많습니다)의 직접 근거가 없어 기관 방침 확인 지시로 전환 — 기관 승인 경유가 법적 기본 구조(개인정보처리자=기관, 취급자는 지휘·감독 하에 처리)라는 조사 결과와 일치
+
+
+## 2026-11-13 test(e2e): 시각 회귀 표면 확장 + 오클루전 공용 검증 + 격리 스펙 근본 수정·해제
+
+- **visual.spec 표면 확장**: 대시보드 외 퀴즈 진행·리더·설정 패널 오픈·carework 실무 홈 기준선 추가 (다크 × 3프로젝트). 퀴즈 문항은 `Math.random` 셔플이라 LCG 시드 고정으로 결정성 확보, 날짜·버전 의존 요소는 마스크
+- **격리 근본 수정·해제 2건**: ① visual — CSS 배경화(webp) `Image.decode()` 완료 대기 추가 (networkidle이 background-image를 보장하지 않던 잔상 레이스) ② mobile-overflow — 뷰 스윕의 고정 sleep(700ms)을 정착 폴링으로 교체, CI 부하 시 비동기 렌더 미완료 계측 해소
+- **scroll-occlusion.spec 신규**: 공용 계측 `support/geometry.js`(`waitForViewSettled`·`findOcclusion`·`viewTopOcclusion` — elementFromPoint 실측). cosmetic 12뷰+carework 15뷰의 첫 콘텐츠가 크롬에 덮이지 않는지 스윕(비상호작용 콘텐츠 — manual-07 류), 리더 TOC 점프 헤딩의 scroll-margin-top 계약(TR-23), 문서 오버레이 목차 점프 검증
+- **perf.spec 신규**: 콜드 DCL ≤15s·웜 DCL ≤8s·LCP ≤10s — SW 캐시·번들 회귀 검출용 재앙 한계치, chromium만
+- **런북**: UIUX_VERIFY_RUNBOOK V6-c — PWA 설치·스탠드얼론 실기기 5점 체크 추가. TESTING.md 스펙 문서 갱신
+
 
 ## 2026-11-13 fix(ui): 라이선스 코드 입력 진입점 단일화 — 설정 패널만 유지
 

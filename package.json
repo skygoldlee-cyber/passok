@@ -1,6 +1,6 @@
 {
   "name": "passok",
-  "version": "2026.11.13",
+  "version": "2026.11.14",
   "description": "PassOK — 멀티시험 자격시험 스마트 학습 플랫폼",
   "engines": {
     "node": ">=24"
@@ -150,6 +150,7 @@
     "admin:grant-pro": "node tools/check/grant_pro.js",
     "admin:issue-code": "node tools/check/issue_pro_code.js",
     "admin:discord": "node tools/deploy/register_admin_bot.js",
+    "admin:facility-backup": "node tools/supabase/dump_facility.js",
     "ai:explain": "node tools/ai/ai_explain.js",
     "ai:draft": "node tools/ai/ai_draft_questions.js",
     "ai:distractors": "node tools/ai/ai_distractors.js",

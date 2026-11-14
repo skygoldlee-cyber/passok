@@ -8,6 +8,7 @@
 
 import { test, expect } from '@playwright/test';
 import { readFileSync } from 'node:fs';
+import { waitForViewSettled } from './support/geometry.js';
 
 test.beforeEach(({ page }) => {
     page.addInitScript(() => {
@@ -94,8 +95,9 @@ test.describe('모바일 오버플로 스윕', () => {
                 const nav = await import('./src/views/navigation.js');
                 nav.switchView(id, { scrollTop: true });
             }, v);
-            // 비동기 렌더(사전·분석 등 DataLoader 경유) 안정화 대기
-            await page.waitForTimeout(700);
+            // 비동기 렌더(사전·분석 등 DataLoader 경유) 정착 대기 —
+            // 활성화 불가 뷰(기능 게이트)는 건너뛰고, 정착 폴링으로 스윕 플레이크 방지
+            if (!(await waitForViewSettled(page, v))) continue;
             const r = await collectOverflow(page);
             if (r.docOver > 1 || r.clipped.length) {
                 failures.push(`${v}: docOver=${r.docOver} 범인=[${r.pageOffenders.join(' | ')}] 클립=[${r.clipped.join(' | ')}]`);
@@ -183,7 +185,7 @@ test.describe('모바일 오버플로 스윕', () => {
                 const nav = await import('./src/views/navigation.js');
                 nav.switchView(id, { scrollTop: true });
             }, v);
-            await page.waitForTimeout(700);
+            if (!(await waitForViewSettled(page, v))) continue;
             await dismissOverlays(page);
             const r = await page.evaluate(() => {
                 const tab = document.getElementById('mobile-tab-bar');
@@ -226,7 +228,7 @@ test.describe('모바일 오버플로 스윕', () => {
                 const nav = await import('./src/views/navigation.js');
                 nav.switchView(id, { scrollTop: true });
             }, v);
-            await page.waitForTimeout(700);
+            if (!(await waitForViewSettled(page, v))) continue;
             await dismissOverlays(page);
             const r = await page.evaluate(() => {
                 // 소멸성 오버레이는 타이밍상 일시 가림이라 대상 제외
@@ -316,7 +318,7 @@ test.describe('모바일 오버플로 스윕', () => {
                 const nav = await import('./src/views/navigation.js');
                 nav.switchView(id, { scrollTop: true });
             }, v);
-            await page.waitForTimeout(700);
+            if (!(await waitForViewSettled(page, v))) continue;
             await dismissOverlays(page);
             const offenders = await page.evaluate((viewId) => {
                 const view = document.getElementById(viewId);

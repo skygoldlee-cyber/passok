@@ -144,6 +144,7 @@ src/                    # ES Modules
   content/unpack.js             # pk1 번들 디코더 (DA-16 — 콘텐츠 비평문화)
   content/pdf-utils.js         # PDF 생성 지연 로더 — jsPDF+html2canvas 벤더, 미리보기 렌더→PDF File (CO-13)
   content/docx-utils.js        # Word(.docx) 생성 — 미니멀 OOXML 직접 작성 (zip stored 엔트리, 의존성 없음, CO-13)
+  content/doc-wm.js            # 문서 워터마크 공용 — "기관명 · 출력일" 문구 규약(docWmText) + DOM 오버레이(docWmHtml). docx/pdfFileFromEl의 wm 인자 + css/doc-export.css와 세트 (CO-13)
   study/scratchpad.js          # 스크래치패드 캔버스 (계산 연습용)
   study/trainer-calc.js       # 계산 트레이너 문제 생성기 (순수 로직, 전역 스코프 실행)
   study/fsrs.js               # FSRS-6 기억 모델 순수 함수 (DSR 상태 전이·간격 산출·SM-2 지연 변환)
@@ -380,7 +381,7 @@ src/                    # ES Modules
     event-listeners.js  # 이벤트 리스너 진입점 — 도메인 바인딩 합성 (listeners-*.js)
     backup.js           # 백업/복원
     offline-detection.js # 오프라인 감지 (app.js에서 분리)
-css/                    # 스타일시트 모듈 (base.css, reader.css, app-responsive.css, reader-extras.css, reader-mermaid.css, trainer.css, exam.css, dashboard.css, study.css, study-calendar.css, print.css, ui-overlay.css, html-viewer.css, landing.css — @import 순서가 캐스케이드, style.css 참조. landing.css만 랜딩 전용 별도 링크로 @import 예외)
+css/                    # 스타일시트 모듈 (base.css, reader.css, app-responsive.css, reader-extras.css, reader-mermaid.css, trainer.css, exam.css, dashboard.css, study.css, study-calendar.css, doc-export.css, print.css, ui-overlay.css, html-viewer.css, landing.css — @import 순서가 캐스케이드, style.css 참조. landing.css만 랜딩 전용 별도 링크로 @import 예외)
   exams/<id>/           # 시험 도메인 스타일 (cosmetic/formula.css 등) — 피처 진입 시 practice-registry가 <link> 지연 주입 (style.css @import 아님 — 비활성 시험 미로드)
     carework/care-tools.css # carework 실무도구 공용 스타일 — 4피처 카드·폼·진행률·인쇄 격리 (DOC-DSN-42)
 content/                # 시험 콘텐츠 컨테이너

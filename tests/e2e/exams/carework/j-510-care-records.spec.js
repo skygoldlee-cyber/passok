@@ -34,7 +34,7 @@ test.describe('J-510 carework 실무 기록 CRUD', () => {
         await page.locator('label.obs-chip:has(input[name="obs-sleep"][value="양호"])').click();
 
         await page.locator('[data-click="careLogGenerate"]').click();
-        await expect(page.locator('#log-preview pre')).toContainText('김일지');
+        await expect(page.locator('#log-preview .doc-md')).toContainText('김일지');
 
         await openMoreActions(page, 'care-log-view');
         await page.locator('#care-log-view [data-click="careLogSave"]').click();
@@ -89,7 +89,7 @@ test.describe('J-510 carework 실무 기록 CRUD', () => {
         await page.locator('#inc-family').check();
 
         await page.locator('[data-click="careIncidentGenerate"]').click();
-        await expect(page.locator('#inc-preview pre')).toContainText('이낙상');
+        await expect(page.locator('#inc-preview .doc-md')).toContainText('이낙상');
 
         await openMoreActions(page, 'care-incident-view');
         await page.locator('#care-incident-view [data-click="careIncidentSave"]').click();

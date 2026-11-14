@@ -444,7 +444,7 @@ const careIncident = _defineFeature({
     viewId: 'care-incident-view',
     slug: 'care-incident',
     uiTextKey: 'careIncident',
-    title: '사고·낙상 보고서',
+    title: '사고 보고서',
     subtitle: '사고 기록·증적 서식',
     loadingText: '사고 보고서를 불러오는 중입니다...',
     loadErrorText: '사고 보고서를 불러오지 못했습니다.',

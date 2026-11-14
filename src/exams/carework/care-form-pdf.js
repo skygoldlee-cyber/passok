@@ -95,12 +95,12 @@ export function fieldsToTemplate(fields, title = '') {
 // — DOCX·Excel 양식 추출 (CO-17) —
 
 /**
- * zip 엔트리 읽기 — EOCD→중앙 디렉터리에서 name 탐색, deflate는 네이티브 DecompressionStream.
- * docx·xlsx는 zip+OOXML이라 별도 라이브러리 없이 해제 가능 (iOS 15.x 등 미지원 시 no-inflate 오류).
- * @param {ArrayBuffer} buf @param {string} name
- * @returns {Promise<Uint8Array|null>}
+ * zip 중앙 디렉터리 나열 — EOCD 탐색 후 엔트리 {name, method, csize, lho} 배열 반환.
+ * docx·xlsx·hwpx는 zip 컨테이너라 별도 라이브러리 없이 해제 가능.
+ * @param {ArrayBuffer} buf
+ * @returns {{u8:Uint8Array<ArrayBuffer>, dv:DataView, entries:Array<{name:string, method:number, csize:number, lho:number}>}}
  */
-async function _zipEntry(buf, name) {
+function _zipDir(buf) {
     const u8 = new Uint8Array(buf);
     const dv = new DataView(u8.buffer, u8.byteOffset, u8.byteLength);
     let eocd = -1;
@@ -111,6 +111,7 @@ async function _zipEntry(buf, name) {
     const count = dv.getUint16(eocd + 10, true);
     let off = dv.getUint32(eocd + 16, true);
     const td = new TextDecoder();
+    const entries = [];
     for (let i = 0; i < count; i++) {
         if (dv.getUint32(off, true) !== 0x02014b50) break;
         const method = dv.getUint16(off + 10, true);
@@ -119,21 +120,33 @@ async function _zipEntry(buf, name) {
         const elen = dv.getUint16(off + 30, true);
         const clen = dv.getUint16(off + 32, true);
         const lho = dv.getUint32(off + 42, true);
-        const fname = td.decode(u8.subarray(off + 46, off + 46 + nlen));
+        const name = td.decode(u8.subarray(off + 46, off + 46 + nlen));
+        entries.push({ name, method, csize, lho });
         off += 46 + nlen + elen + clen;
-        if (fname !== name) continue;
-        const lnlen = dv.getUint16(lho + 26, true);
-        const lelen = dv.getUint16(lho + 28, true);
-        const data = u8.subarray(lho + 30 + lnlen + lelen, lho + 30 + lnlen + lelen + csize);
-        if (method === 0) return data;
-        if (method === 8) {
-            if (typeof DecompressionStream !== 'function') throw new Error('no-inflate');
-            const stream = new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
-            return new Uint8Array(await new Response(stream).arrayBuffer());
-        }
-        throw new Error('지원하지 않는 압축 방식');
     }
-    return null;
+    return { u8, dv, entries };
+}
+
+/**
+ * zip 엔트리 읽기 — name으로 디렉터리 탐색, deflate는 네이티브 DecompressionStream.
+ * (iOS 15.x 등 미지원 시 no-inflate 오류)
+ * @param {ArrayBuffer} buf @param {string} name
+ * @returns {Promise<Uint8Array|null>}
+ */
+async function _zipEntry(buf, name) {
+    const { u8, dv, entries } = _zipDir(buf);
+    const e = entries.find(x => x.name === name);
+    if (!e) return null;
+    const lnlen = dv.getUint16(e.lho + 26, true);
+    const lelen = dv.getUint16(e.lho + 28, true);
+    const data = u8.subarray(e.lho + 30 + lnlen + lelen, e.lho + 30 + lnlen + lelen + e.csize);
+    if (e.method === 0) return data;
+    if (e.method === 8) {
+        if (typeof DecompressionStream !== 'function') throw new Error('no-inflate');
+        const stream = new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+        return new Uint8Array(await new Response(stream).arrayBuffer());
+    }
+    throw new Error('지원하지 않는 압축 방식');
 }
 
 const _W_NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
@@ -184,4 +197,72 @@ export async function extractFormXlsx(file) {
     const { readTableFile } = await import('../../content/xlsx-utils.js');
     const csv = await readTableFile(file);
     return { text: String(csv || ''), fields: [], pages: 1 };
+}
+
+// — HWPX(아래한글) 양식 추출 (CO-17) — KS X 6101: ZIP + OWPML —
+
+const _HP_NS = 'http://www.hancom.co.kr/hwpml/2011/paragraph';
+const _HS_NS = 'http://www.hancom.co.kr/hwpml/2011/section';
+
+/** hp:p 직접 텍스트 — 표(hp:tbl) 내부의 hp:t는 제외 (표는 별도 MD 행으로 복원) */
+/** @param {Element} p */
+function _hpPText(p) {
+    const parts = [];
+    for (const t of p.getElementsByTagNameNS(_HP_NS, 't')) {
+        let inTbl = false;
+        for (let a = t.parentElement; a && a !== p; a = a.parentElement) {
+            if (a.namespaceURI === _HP_NS && a.localName === 'tbl') { inTbl = true; break; }
+        }
+        if (!inTbl) parts.push(t.textContent);
+    }
+    return parts.join('').trim();
+}
+
+/** section XML → 텍스트 — 단락은 개행, 표(hp:tbl 안 hp:tr/hp:tc)는 MD 표 행으로 복원 */
+/** @param {string} xml */
+function _hwpxXmlToText(xml) {
+    const doc = new DOMParser().parseFromString(xml, 'application/xml');
+    const sec = doc.getElementsByTagNameNS(_HS_NS, 'sec')[0];
+    if (!sec) return '';
+    const out = [];
+    for (const p of sec.getElementsByTagNameNS(_HP_NS, 'p')) {
+        // 표: 문단(run) 내부 객체로 존재 — tr/tc를 MD 행으로
+        for (const tbl of p.getElementsByTagNameNS(_HP_NS, 'tbl')) {
+            for (const tr of tbl.getElementsByTagNameNS(_HP_NS, 'tr')) {
+                const cells = [...tr.getElementsByTagNameNS(_HP_NS, 'tc')]
+                    .map(tc => [...tc.getElementsByTagNameNS(_HP_NS, 'p')]
+                        .map(q => _hpPText(q)).filter(Boolean).join(' '));
+                if (cells.some(Boolean)) out.push('| ' + cells.join(' | ') + ' |');
+            }
+        }
+        const t = _hpPText(p);
+        if (t) out.push(t);
+    }
+    return out.join('\n');
+}
+
+/**
+ * HWPX(아래한글) 양식 → {text, fields:[], pages:N} — Contents/sectionN.xml 전부 순회.
+ * 구형 바이너리 .hwp(OLE/CFB)는 zip이 아니라 여기서 거부 — docx로 저장해 올리도록 안내.
+ * @param {File|Blob} file
+ */
+export async function extractFormHwpx(file) {
+    const buf = await file.arrayBuffer();
+    let dir;
+    try { dir = _zipDir(buf); }
+    catch { throw new Error('HWPX 파일이 아닙니다 — 구형 .hwp는 한글에서 Word(docx)로 저장해 올려주세요.'); }
+    const names = dir.entries.map(e => e.name)
+        .filter(n => /^Contents\/section\d+\.xml$/i.test(n))
+        .sort((a, b) => (+/** @type {*} */ (a.match(/\d+/))[0]) - (+/** @type {*} */ (b.match(/\d+/))[0]));
+    if (!names.length) throw new Error('HWPX 본문(section XML)을 찾지 못했습니다 — 구형 .hwp는 Word(docx)로 저장해 올려주세요.');
+    const td = new TextDecoder('utf-8');
+    const texts = [];
+    for (const name of names) {
+        const bytes = await _zipEntry(buf, name).catch(e => {
+            if (e.message === 'no-inflate') throw new Error('이 브라우저는 HWPX 압축 해제를 지원하지 않습니다 — PDF로 저장해 올려주세요.');
+            throw e;
+        });
+        if (bytes) texts.push(_hwpxXmlToText(td.decode(bytes)));
+    }
+    return { text: texts.filter(Boolean).join('\n\n---\n\n'), fields: [], pages: names.length };
 }

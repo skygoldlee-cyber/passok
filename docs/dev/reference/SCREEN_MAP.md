@@ -25,7 +25,7 @@
 | Formula OS | `formula-view` | formula.html | `#/formula` | 사이드바 / 탭바 (실무 랜딩) | §3.18 | 실무 (학습 모드에서도 노출) |
 | 면회·방문 기록 (Care OS) | `care-visit-view` | exams/carework/care-visit.html (지연 주입) | `#/care-visit` | 사이드바 / 탭바 (`data-feature="careVisit"`) | — | 실무 |
 | 대상자 명부 (Care OS) | `care-client-view` | exams/carework/care-client.html (지연 주입) | `#/care-client` | 사이드바 / 탭바 (`data-feature="careClients"`) | — | 실무 |
-| 사고·낙상 보고서 (Care OS) | `care-incident-view` | exams/carework/care-incident.html (지연 주입) | `#/care-incident` | 사이드바 / 탭바 (`data-feature="careIncident"`) | — | 실무 |
+| 사고 보고서 (Care OS) | `care-incident-view` | exams/carework/care-incident.html (지연 주입) | `#/care-incident` | 사이드바 / 탭바 (`data-feature="careIncident"`) | — | 실무 |
 | 교대 근무표 (Care OS) | `care-roster-view` | exams/carework/care-roster.html (지연 주입) | `#/care-roster` | 사이드바 / 탭바 (`data-feature="careRoster"`) | — | 실무 |
 | 입소 서류 체크리스트 (Care OS) | `care-admit-view` | exams/carework/care-admit.html (지연 주입) | `#/care-admit` | 사이드바 / 탭바 (`data-feature="careAdmit"`) | — | 실무 |
 | 요양기관 찾기 (Care OS) | `care-finder-view` | exams/carework/care-finder.html (지연 주입) | `#/care-finder` | 사이드바 / 탭바 (`data-feature="careFinder"`) | — | 실무 |

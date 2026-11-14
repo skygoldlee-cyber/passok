@@ -407,3 +407,14 @@ test('UX-TXT-01: word-break: break-all은 monospace·URL 등 의도적 케이스
       `${sel.slice(0, 60)} — break-all은 monospace/URL 표기 의도 케이스만 허용`);
   }
 });
+
+test('UX-FORM-05: 폼 내 체크박스는 입력 필드 스타일이 아닌 체크박스로 렌더된다', () => {
+  // 재발 방지 — .care-calc-form input 규칙이 체크박스에 min-height/padding/border를 강제해
+  // 텍스트 필드처럼 변형(체크박스 "안 보임" 신고). 전용 리셋 규칙 존재를 단언.
+  const careCss = read('css/exams/carework/care-tools.css');
+  assert.ok(/\.care-doc-wm-opt\b/.test(careCss), '워터마크 옵션 label 행 배치 규칙');
+  assert.ok(/\.care-doc-wm-opt\s+input\[type="checkbox"\][^{]*\{[^}]*min-height:\s*0/.test(careCss),
+    '체크박스 필드 스타일 리셋 (min-height 해제)');
+  const html = read('html/exams/carework/care-home.html');
+  assert.ok(html.includes('id="home-doc-wm"'), '체크박스 마크업 존재');
+});

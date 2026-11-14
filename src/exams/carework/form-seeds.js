@@ -27,7 +27,7 @@ export const TOOL_FORM_SEEDS = {
         seed: '일시: {{일시}}\n인계자: {{인계자}}\n인수자: {{인수자}}\n대상자: {{대상자}}\n\n{{인계내용}}\n\n비고: {{비고}}',
     },
     careIncident: {
-        title: '사고·낙상 보고서', block: '보고내용',
+        title: '사고 보고서', block: '보고내용',
         // 사고보고서는 전 항목 스칼라 — 필드 전부 세분화 노출
         seed: '발생 일시: {{발생일시}}\n대상자: {{client}}\n발생 장소: {{발생장소}}\n사고 유형: {{사고유형}}\n중증도: {{중증도}}\n발생 경위: {{발생경위}}\n조치 내용: {{조치내용}}\n목격자: {{목격자}}\n가족 통지: {{가족통지}}\n\n비고: {{비고}}',
     },
@@ -56,11 +56,6 @@ export function toolOverride(toolKey) {
 /** @param {string} toolKey @param {Object.<string,*>} [values] */
 export function renderToolBody(toolKey, values = {}) {
     const def = (/** @type {Object.<string,{title:string,block:string,seed:string}>} */ (TOOL_FORM_SEEDS))[toolKey];
-    if (!def) return '';
-    if (!def) return '';
-    if (!def) return '';
-    if (!def) return '';
-    if (!def) return '';
     if (!def) return '';
     const body = toolOverride(toolKey) ?? `{{${def.block}}}`;
     return fillTemplate(body, values, 'md', new Set([def.block]));

@@ -4,6 +4,7 @@ import { computeCareCost, formatWon } from '../care-calc.js';
 import { markFunnel } from '../care-funnel.js';
 import { GRADE_LIMITS, REDUCTIONS, EFFECTIVE_YEAR, FACILITY_TYPES } from '../care-calc-data.js';
 import { docHeadHtml, refreshOrgName } from '../facility.js';
+import { docMdHead, mdTable } from '../doc-md.js';
 import { showConfirm } from '../../../ui-utils.js';
 export { careShare } from '../care-share.js';
 
@@ -60,15 +61,14 @@ function readForm() {
     };
 }
 
-export function careCalcRun() {
+/** 계산 문서 데이터 — 화면 HTML과 내보내기 MD가 같은 표 내용을 공유 (CO-13 표준 초안) */
+function _calcDocData() {
     const in_ = readForm();
     const r = computeCareCost(in_);
-    const out = $('care-result');
-    if (!out) return;
-    if (!r) { out.innerHTML = '<p class="care-calc-err">입력을 확인하세요.</p>'; return; }
+    if (!r) return null;
     // 입력 조건 — 인쇄·PDF 출력물이 결과만 보이지 않도록 조건을 결과물 상단에 병기
     const ncKeys = in_.type === 'facility' ? Object.keys(NC_FIELDS) : NC_HOME_KEYS;
-    const cond = [
+    const cond = /** @type {string[][]} */ ([
         ['급여 유형', in_.type === 'facility' ? '시설급여' : '재가급여'],
         ['장기요양등급', _selLabel('care-grade')],
         ...(in_.type === 'facility'
@@ -79,22 +79,14 @@ export function careCalcRun() {
             .map(([k, v]) => [`비급여·${(/** @type {Object.<string,string>} */ (NC_LABELS))[k] || k}`, formatWon(v)]),
         ['본인부담 감경', _selLabel('care-reduction')],
         ['적용 기준', `${EFFECTIVE_YEAR}년 고시`],
-    ];
-    // 공단 책정 기준표 — 선택 급여유형의 등급별 고시 금액 (재가=월 한도액, 시설=1일 수가), 선택 등급 강조
-    const sel = (/** @type {string} */ k) => k === in_.grade ? ' class="care-doc-sel"' : '';
-    let basisHtml;
-    if (in_.type === 'facility') {
-        const f = FACILITY_TYPES.find((/** @type {*} */ x) => x.key === _val('care-fac-type', '')) || FACILITY_TYPES[0];
-        basisHtml = `<div class="care-doc-sec">공단 책정 기준 — ${esc(f.label)} 1일 수가 (${EFFECTIVE_YEAR}년)</div>`
-            + `<table class="care-doc"><tbody>${GRADE_LIMITS.filter((/** @type {*} */ g) => f.rates[g.key])
-                .map((/** @type {*} */ g) => `<tr${sel(g.key)}><td>${g.label}</td><td class="care-doc-num">${formatWon(f.rates[g.key])}/일</td></tr>`).join('')}</tbody></table>`;
-    } else {
-        basisHtml = `<div class="care-doc-sec">공단 책정 기준 — 재가 등급별 월 한도액 (${EFFECTIVE_YEAR}년)</div>`
-            + `<table class="care-doc"><tbody>${GRADE_LIMITS
-                .map((/** @type {*} */ g) => `<tr${sel(g.key)}><td>${g.label}</td><td class="care-doc-num">${formatWon(g.home)}</td></tr>`).join('')}</tbody></table>`;
-    }
-    const docRow = (/** @type {string[]} */ t) => `<tr${t[2] ? ` class="${t[2]}"` : ''}><td>${t[0]}</td><td class="care-doc-num">${t[1]}</td></tr>`;
-    const rows = [
+    ]);
+    // 공단 책정 기준표 — 선택 급여유형의 등급별 고시 금액 (재가=월 한도액, 시설=1일 수가)
+    const f = in_.type === 'facility' ? (FACILITY_TYPES.find((/** @type {*} */ x) => x.key === _val('care-fac-type', '')) || FACILITY_TYPES[0]) : null;
+    const basisTitle = f ? `공단 책정 기준 — ${f.label} 1일 수가 (${EFFECTIVE_YEAR}년)` : `공단 책정 기준 — 재가 등급별 월 한도액 (${EFFECTIVE_YEAR}년)`;
+    const basisRows = (f ? GRADE_LIMITS.filter((/** @type {*} */ g) => f.rates[g.key]).map((/** @type {*} */ g) => [g.label, `${formatWon(f.rates[g.key])}/일`])
+        : GRADE_LIMITS.map((/** @type {*} */ g) => [g.label, formatWon(g.home)]))
+        .map((/** @type {string[]} */ row) => ({ row, sel: row[0] === _selLabel('care-grade') }));
+    const rows = /** @type {string[][]} */ ([
         ['총 이용액', formatWon(r.covered + r.overLimit)],
         ['공단 부담', formatWon(r.publicPay)],
         ['급여 본인부담금', formatWon(r.selfCovered)],
@@ -103,15 +95,40 @@ export function careCalcRun() {
         ...(r.limit ? [['등급 월 한도', formatWon(/** @type {number} */ (r.limit))]] : []),
         ['실제 월 납부액', formatWon(r.selfPay), 'care-calc-total'],
         ...(in_._basis ? [[`급여비용 산정 — ${formatWon(in_._basis.rate)}/일 × ${in_._basis.days}일`, '']] : []),
-    ];
+    ]);
+    return { in_, cond, basisTitle, basisRows, rows };
+}
+
+export function careCalcRun() {
+    const d = _calcDocData();
+    const out = $('care-result');
+    if (!out) return;
+    if (!d) { out.innerHTML = '<p class="care-calc-err">입력을 확인하세요.</p>'; return; }
+    const sel = (/** @type {boolean} */ b) => b ? ' class="care-doc-sel"' : '';
+    const basisHtml = `<div class="care-doc-sec">${esc(d.basisTitle)}</div>`
+        + `<table class="care-doc"><tbody>${d.basisRows
+            .map((/** @type {*} */ b) => `<tr${sel(b.sel)}><td>${b.row[0]}</td><td class="care-doc-num">${b.row[1]}</td></tr>`).join('')}</tbody></table>`;
+    const docRow = (/** @type {string[]} */ t) => `<tr${t[2] ? ` class="${t[2]}"` : ''}><td>${t[0]}</td><td class="care-doc-num">${t[1]}</td></tr>`;
     out.innerHTML =
         docHeadHtml('장기요양 비용 계산 결과')
-        + `<div class="care-doc-sec">입력 조건</div><table class="care-doc"><tbody>${cond.map(docRow).join('')}</tbody></table>`
+        + `<div class="care-doc-sec">입력 조건</div><table class="care-doc"><tbody>${d.cond.map(docRow).join('')}</tbody></table>`
         + basisHtml
-        + `<div class="care-doc-sec">계산 결과</div><table class="care-doc"><tbody>${rows.map(docRow).join('')}</tbody></table>`
+        + `<div class="care-doc-sec">계산 결과</div><table class="care-doc"><tbody>${d.rows.map(docRow).join('')}</tbody></table>`
         + `<p class="care-calc-src">근거(${EFFECTIVE_YEAR}년 기준): 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시</p>`
         + (rateYearStale() ? `<p class="care-calc-err">⚠ ${EFFECTIVE_YEAR}년 고시 기준 — 현재 연도 고시가 아직 반영되지 않았으므로 결과는 참고용입니다.</p>` : '')
         + `<p class="care-doc-disclaimer">※ 계산 결과는 참고용 예상액입니다 — 실제 청구액은 공단 심사·기관 계약에 따라 달라질 수 있습니다.</p>`;
+}
+
+/** 계산 결과 MD 초안 — 조건·책정 기준·결과를 표로 (docx 파생 원본) */
+export function careCalcDocMd() {
+    const d = _calcDocData();
+    if (!d) return '';
+    return docMdHead('장기요양 비용 계산 결과')
+        + '\n### 입력 조건\n\n' + mdTable(['항목', '내용'], d.cond)
+        + `\n\n### ${d.basisTitle}\n\n` + mdTable(['등급', '금액'], d.basisRows.map((/** @type {*} */ b) => b.sel ? [`▶ ${b.row[0]}`, b.row[1]] : b.row))
+        + '\n\n### 계산 결과\n\n' + mdTable(['항목', '금액'], d.rows.map((/** @type {string[]} */ r) => [r[0] || '', r[1] || '']))
+        + `\n\n근거(${EFFECTIVE_YEAR}년 기준): 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시`
+        + '\n\n※ 계산 결과는 참고용 예상액입니다 — 실제 청구액은 공단 심사·기관 계약에 따라 달라질 수 있습니다.';
 }
 
 export async function careCalcReset() {

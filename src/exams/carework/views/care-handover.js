@@ -1,6 +1,6 @@
 // src/exams/carework/views/care-handover.js — 인수인계서 뷰
 // @spec UX-FORM-03 — 시험 전용 실무 뷰 (DA-13)
-import { buildHandover, SHIFTS } from '../care-handover.js';
+import { buildHandover, buildHandoverMd, SHIFTS } from '../care-handover.js';
 import { markFunnel } from '../care-funnel.js';
 import { listCareLogs, FREE_LIMIT } from '../care-log-store.js';
 import { saveHandover, listHandovers, deleteHandover, handoversToCsv } from '../handover-store.js';
@@ -9,13 +9,13 @@ import { attachClientPicker, clientField } from '../care-client-field.js';
 import { buildDigest } from '../handover-digest.js';
 import { listVisits } from '../care-visit-store.js';
 import { listIncidents } from '../incident-store.js';
-import { myMembership, submitHandover, listHandovers as listFacilityHandovers, ackHandover, docHeadHtml, docSignHtml, getDocSign, refreshOrgName } from '../facility.js';
+import { myMembership, submitHandover, listHandovers as listFacilityHandovers, ackHandover, getDocSign, refreshOrgName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { getJSON, setJSON } from '../../../core/storage.js';
 import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { showToast, showConfirm, flashSavedBadge, requireFields } from '../../../ui-utils.js';
 import { careShare } from '../care-share.js';
-import { docMdHead, docMdSign } from '../doc-md.js';
+import { docMdHead, docMdSign, mdToHtml } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare };
@@ -82,7 +82,7 @@ export function careHandoverGenerate() {
         return;
     }
     _lastText = t;
-    out.innerHTML = docHeadHtml('인수인계서') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver'], ['확인일', '']]);
+    out.innerHTML = mdToHtml(careHandoverDocMd());
     renderSaved();
 }
 
@@ -141,13 +141,14 @@ export function careHandoverCsvExport() {
     return csv;
 }
 
-/** 인수인계서 MD 초안 — 헤더 + 생성문 (docx 파생 원본) */
+/** 인수인계서 MD 초안 — 헤더 + 격식표 생성문 (docx 파생 원본 — 평문이 아닌 표로 출력) */
 export function careHandoverDocMd() {
-    return _lastText ? docMdHead('인수인계서') + '\n' + renderToolBody('careHandover', {
-        인계내용: _lastText,
+    const t = _lastIn ? buildHandoverMd(_lastIn) : null;
+    return t ? docMdHead('인수인계서') + '\n' + renderToolBody('careHandover', {
+        인계내용: t,
         일시: `${_lastIn?.date || ''}${_lastIn?.shift ? ` (${_lastIn.shift} 근무조)` : ''}`,
         인계자: _lastIn?.from, 인수자: _lastIn?.to, 대상자: _lastIn?.clients,
-    }) + docMdSign([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver'], ['확인일', '']]) : '';
+    }) + docMdSign([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver']]) : '';
 }
 
 /** 📤 공유·내보내기 게이트 — 기록 우선: 미저장 생성문은 자동 저장 후 careShare 위임 (저장 실패 시에만 차단) */
@@ -163,7 +164,7 @@ export async function careHandoverExport(arg) {
 
 export function careHandoverPrint() {
     careHandoverGenerate();
-    if (!document.querySelector('#ho-preview pre')) { showToast('먼저 생성하세요.', 'error'); return; }
+    if (!document.querySelector('#ho-preview .doc-md')) { showToast('먼저 생성하세요.', 'error'); return; }
     const s = ensureSaved();
     if (s.error) { showToast(s.error, 'error'); proFeatureNotice('care_handover_save', '인수인계 저장'); return; }
     proFeatureNotice('care_handover_share', '인수인계 인쇄');

@@ -104,22 +104,37 @@ export function docHeadHtml(title) {
 
 // — 출력물 서명란 기입 (홈 설정 — 전 문서 공통) —
 
+/** 성명 표기 — 성·이름 사이 한 칸 (2글자 김 수 / 3글자 김 철수 / 4글자 남궁 민수). 한글 성명만 변환, 외국어·기타는 원형 */
+/** @param {string} n */
+export const fmtDocName = n => {
+    const s = String(n || '').trim();
+    if (/^[가-힣]{2,3}$/.test(s)) return `${s[0]} ${s.slice(1)}`;
+    if (/^[가-힣]{4}$/.test(s)) return `${s.slice(0, 2)} ${s.slice(2)}`;
+    return s;
+};
+
 /** 홈에서 설정한 서명자 — {author: 작성자(요양보호사), confirmer: 확인자(시설장·기관장), receiver: 인수자, signImage: 서명 이미지 data URI} */
 export function getDocSign() {
     const s = /** @type {any} */ (getJSON(STORAGE_KEYS.CARE_DOC_SIGN)) || {};
-    return { author: String(s.author || ''), confirmer: String(s.confirmer || ''), receiver: String(s.receiver || ''), signImage: String(s.signImage || '') };
+    return { author: fmtDocName(s.author), confirmer: fmtDocName(s.confirmer), receiver: fmtDocName(s.receiver), signImage: String(s.signImage || ''), wm: !!s.wm };
 }
 /** 서명자 저장 — 홈 설정 카드에서 호출 */
 /** @param {string} author @param {string} confirmer @param {string} [receiver] */
 export function setDocSign(author, confirmer, receiver = '') {
     const prev = getDocSign();
-    setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: String(author || '').trim(), confirmer: String(confirmer || '').trim(), receiver: String(receiver || '').trim(), signImage: prev.signImage });
+    setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: String(author || '').trim(), confirmer: String(confirmer || '').trim(), receiver: String(receiver || '').trim(), signImage: prev.signImage, wm: prev.wm });
+}
+/** 기관명 워터마크 표시 토글 — 홈 설정에서 호출 (인쇄·PDF·Word 출력물 공통) */
+/** @param {boolean} on */
+export function setDocSignWm(on) {
+    const s = getDocSign();
+    setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: s.author, confirmer: s.confirmer, receiver: s.receiver, signImage: s.signImage, wm: !!on });
 }
 /** 서명 이미지 저장/삭제 — 홈 업로드에서 호출 (기존 성명은 보존) */
 /** @param {string} dataUri */
 export function setDocSignImage(dataUri) {
     const s = getDocSign();
-    setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: s.author, confirmer: s.confirmer, receiver: s.receiver, signImage: String(dataUri || '') });
+    setJSON(STORAGE_KEYS.CARE_DOC_SIGN, { author: s.author, confirmer: s.confirmer, receiver: s.receiver, signImage: String(dataUri || ''), wm: s.wm });
 }
 
 // — 서명 이미지 정규화 —
@@ -182,6 +197,54 @@ export async function signFileToDataUri(file) {
     } catch { /* 디코딩·캔버스 불가 → 원본 폴백 */ }
     return _fileDataUri(file);
 }
+/**
+ * 등록 서명 이미지 → docx `{{img:author}}`·결재란 삽입용 PNG 맵 — 없거나 합성 실패 시 null.
+ * author: 74×38 표시 (인) 우하단 + 서명 겹침 합성 (서명이 (인) 위를 덮는 실물 형태),
+ * approve: 결재란 담당 칸용 서명-only. 2배 렌더로 인쇄 선명도 확보, 표시 크기만 docx에 전달.
+ * @returns {Promise<{author: {data:Uint8Array,w:number,h:number}, approve: {data:Uint8Array,w:number,h:number}}|null>}
+ */
+export async function docSignImages() {
+    const uri = getDocSign().signImage;
+    if (!uri) return null;
+    try {
+        const img = await new Promise((res, rej) => {
+            const im = new Image();
+            im.onload = () => res(im);
+            im.onerror = () => rej(new Error('decode'));
+            im.src = uri;
+        });
+        const S = 2;
+        const toBytes = (/** @type {HTMLCanvasElement} */ el) => {
+            const b64 = el.toDataURL('image/png').split(',')[1] || '';
+            const bin = atob(b64); const u8 = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+            return u8;
+        };
+        const fit = (/** @type {number} */ maxW, /** @type {number} */ maxH) => {
+            const k = Math.min(maxW / img.naturalWidth, maxH / img.naturalHeight, 1);
+            return { w: Math.max(1, img.naturalWidth * k), h: Math.max(1, img.naturalHeight * k) };
+        };
+        const cv = document.createElement('canvas'); // 서명란 합성 — (인) 위에 서명 겹침
+        cv.width = 74 * S; cv.height = 38 * S;
+        const c = cv.getContext('2d');
+        if (!c) return null;
+        c.font = `${11.5 * S}px 'Malgun Gothic', sans-serif`; c.fillStyle = '#000';
+        c.fillText('(인)', cv.width - 5 * S - c.measureText('(인)').width, cv.height - 4 * S);
+        const iw = Math.min(56 * S, cv.width), ih = Math.min(cv.height, iw * img.naturalHeight / img.naturalWidth);
+        c.drawImage(img, cv.width - iw, cv.height - ih, iw, ih);
+        const av = document.createElement('canvas'); // 결재란 — 서명-only (비율 유지, 52×40 표시 상한)
+        const af = fit(52 * S, 40 * S);
+        av.width = Math.round(af.w); av.height = Math.round(af.h);
+        const ac = av.getContext('2d');
+        if (!ac) return null;
+        ac.drawImage(img, 0, 0, af.w, af.h);
+        return {
+            author: { data: toBytes(cv), w: 74, h: 38 },
+            approve: { data: toBytes(av), w: Math.round(af.w / S), h: Math.round(af.h / S) },
+        };
+    } catch { return null; }
+}
+
 /**
  * 문서 서명란 — items: [[라벨, 'author'|'confirmer'|'receiver'|'']].
  * 설정된 성명은 인쇄·공유 산출물에 그대로 기입되고, 미설정·빈키 슬롯(날짜)은 수기 서명용 공란 유지.
@@ -273,7 +336,7 @@ export async function updateVisitResult(visitId, patch) {
     return { ok: true };
 }
 
-// — DSN-43 6d: 사고·낙상 보고서 —
+// — DSN-43 6d: 사고 보고서 —
 
 /** 사고 보고서 등록 — 기관 사고 대장에 증적 기록 @returns {Promise<{id:string}|{error:string}>} */
 /** @param {{facilityId:string, client:string, occurredAt:string, place:string, type:string, severity:string, description:string, action:string, familyNotified:boolean}} o */

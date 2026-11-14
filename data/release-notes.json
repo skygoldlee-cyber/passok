@@ -1,8 +1,75 @@
 [
   {
-    "version": "v20261113-52523f5",
+    "version": "v20261114-cfd1956",
+    "date": "2026-11-14",
+    "notes": [
+      "[수정·carework] 면회 기록 방문 일시를 방문일 행에 병기",
+      "[수정·carework] 면회·방문 기록 문서를 항목별 행(kv) 표로 전환",
+      "[정리·release] v20261114-385a9ad 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261114-385a9ad",
+    "date": "2026-11-14",
+    "notes": [
+      "[수정·carework] 면회·방문 기록 '상태' 열 제거 — 결과로 표현 통합",
+      "[정리·release] v20261114-f189321 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261114-f189321",
+    "date": "2026-11-14",
+    "notes": [
+      "[기능·carework] 등록 서명 이미지 Word 출력 연결 — 런타임 {{img:}} 배선",
+      "[수정·carework] 인수인계서 서명란 '확인일' 슬롯 제거",
+      "[문서·carework] 서명 이미지 권장 크기 안내 문구 추가",
+      "[수정·carework] 홈 워터마크 체크박스 비가시 — 폼 입력 스타일 오염 리셋",
+      "[수정·content] docx 서명 이미지 수직 오프셋 확대 — -8→-16 (8pt 하강)",
+      "[수정·content] docx 서명 이미지 수직 오프셋 — 서명란 4pt 하강",
+      "[수정·content] docx 결재란 담당 서명 좌측 추가 보정 — 음수 들여쓰기",
+      "[수정·content] docx 서명 이미지 우측 탭 정지 정렬 + 결재란 담당 서명 좌측 정렬",
+      "[수정·content] docx 서명 이미지 추가 우측 보정 — 공백 4→5칸",
+      "[기능·content] docx 결재란 담당 서명을 images.approve 전용 키로 — (인) 제외·확대"
+    ]
+  },
+  {
+    "version": "v20261114-e0c1352",
+    "date": "2026-11-14",
+    "notes": [
+      "[수정·carework] docx 워터마크 2쪽 이상 미표시 — 헤더 반복 추가",
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[리팩터링·content] 문서 워터마크 플랫폼 공용화 — 시험팩 재사용",
+      "[기능·carework] 1쪽 보고서 쪽 번호 자동 생략",
+      "[수정·carework] 워터마크 확대·잘림·농도 최종 조정",
+      "[수정·carework] docx 워터마크 투명·기울임 — w14:textFill alpha + italic",
+      "[수정·carework] docx 워터마크 DrawingML 텍스트 상자로 대각선 렌더 확정",
+      "[수정·carework] docx 워터마크 본문 앵커 회전 텍스트 상자로 확정",
+      "[수정·carework] 워터마크 렌더 확정 — 본문 앵커 전면 VML + 캔버스 스탬프",
+      "[수정·carework] 워터마크 셰이프를 Word 네이티브 구조로 재작성"
+    ]
+  },
+  {
+    "version": "v20261113-a1dfc7f",
     "date": "2026-11-13",
     "notes": [
+      "[기능·carework] HWPX(아래한글) 양식 추출 + 출력 라벨 한글 호환 표기",
+      "[문서·carework] 전문가 검토 의뢰서 (DOC-BIZ-12) — 법무 0b 검토 패키지",
+      "[기능·ops] 기관 데이터 백업·복원 도구 + 운영 절차 런북 (법무 0b 별지2 잔여 해소)",
+      "[문서·carework] 처리방침 수탁 조항 + 계약서 리전 정정 — 법무 0b A2",
+      "[문서·carework] 개인정보처리 위탁계약서 초안 — DOC-BIZ-11, 법무 0b 산출물",
+      "[문서·carework] 기관 자체 서버DB 상황별 연동 — DSN-51 §6 추가",
+      "[문서·carework] 기관 사이트 라이선스 설계 — DOC-DSN-51",
+      "[정리·release] v20261113-be6ce0d 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-be6ce0d",
+    "date": "2026-11-13",
+    "notes": [
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[수정·content] 실무매뉴얼 보호자 전달 문구 완충 — 정량 주장 → 절차 지시",
+      "[테스트·e2e] 시각 기준선 자동 재생성 — CI 실패 감지 후 복구 (linux) [skip ci]",
+      "[테스트·e2e] 시각 회귀 표면 확장 + 오클루전 공용 검증 + 격리 스펙 근본 수정·해제",
       "[수정·ui] 라이선스 코드 입력 진입점 단일화 — 설정 패널만 유지",
       "[정리·release] v20261113-b582e0c 스탬프 확정 [no-docs]"
     ]
@@ -93,6 +160,14 @@
       "[리팩터링·complexity] 2라운드 — _requestAi·evaluateStability 분해 (336→334)",
       "[리팩터링·complexity] 상위 복잡도 3함수 분해 — markStoryNarrative·populateExamCards·care-flow _render (340→336)",
       "[정리·release] v20261112-f735eae 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-52523f5",
+    "date": "2026-11-13",
+    "notes": [
+      "[수정·ui] 라이선스 코드 입력 진입점 단일화 — 설정 패널만 유지",
+      "[정리·release] v20261113-b582e0c 스탬프 확정 [no-docs]"
     ]
   },
   {

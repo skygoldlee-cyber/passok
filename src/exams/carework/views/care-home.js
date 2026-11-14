@@ -7,7 +7,7 @@ import { listClients } from '../care-client-store.js';
 import { clientTrends } from '../care-trend.js';
 import { markFunnel, funnelStats } from '../care-funnel.js';
 import { escapeHTML as esc } from '../../../core/sanitize.js';
-import { refreshOrgName, getDocSign, setDocSign, setDocSignImage, signFileToDataUri } from '../facility.js';
+import { refreshOrgName, getDocSign, setDocSign, setDocSignImage, setDocSignWm, signFileToDataUri } from '../facility.js';
 import { getItem, setItem } from '../../../core/storage.js';
 import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { showToast } from '../../../ui-utils.js';
@@ -61,6 +61,18 @@ export function initCareHomeView() {
     if (aEl) aEl.value = sign.author;
     if (cEl) cEl.value = sign.confirmer;
     if (rEl) rEl.value = sign.receiver;
+    // 기관명 워터마크 — 체크 즉시 저장 (인쇄·PDF·Word 출력물 공통)
+    const wmEl = /** @type {HTMLInputElement|null} */ ($('home-doc-wm'));
+    if (wmEl) {
+        wmEl.checked = sign.wm;
+        if (!wmEl.dataset.bound) {
+            wmEl.dataset.bound = '1';
+            wmEl.addEventListener('change', () => {
+                setDocSignWm(wmEl.checked);
+                showToast(wmEl.checked ? '워터마크를 켰습니다 — 출력물에 기관명이 대각선으로 표시됩니다.' : '워터마크를 껐습니다.');
+            });
+        }
+    }
     // 서명 이미지 — 선택 즉시 data URI로 저장, 미리보기·삭제 버튼 갱신
     const imgEl = /** @type {HTMLInputElement|null} */ ($('home-sign-image'));
     const pvEl = $('home-sign-image-preview');

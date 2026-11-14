@@ -1,15 +1,15 @@
 // src/exams/carework/views/care-log.js — 요양일지 생성기 뷰
 // @spec UX-FORM-03 — 시험 전용 실무 뷰 (DA-13)
-import { buildCareLog, buildRecordText, SERVICE_TYPES, ACTIVITY_GROUPS, careLogsToCsv } from '../care-log.js';
+import { buildCareLog, buildCareLogMd, buildRecordText, SERVICE_TYPES, ACTIVITY_GROUPS, careLogsToCsv } from '../care-log.js';
 import { markFunnel } from '../care-funnel.js';
 import { saveCareLog, listCareLogs, removeCareLog, syncPendingCareLogs } from '../care-log-store.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { docHeadHtml, docSignHtml, refreshOrgName } from '../facility.js';
+import { refreshOrgName } from '../facility.js';
 import { showToast, showConfirm, flashSavedBadge, requireFields } from '../../../ui-utils.js';
 import { shareAudit } from '../care-share.js';
-import { docMdHead, docMdSign } from '../doc-md.js';
+import { docMdHead, docMdSign, mdToHtml } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 import { todayKey } from '../../../core/utils.js';
 
@@ -58,18 +58,18 @@ export function careLogGenerate() {
         out.innerHTML = '<p class="care-calc-err">일시·대상자·급여 종류를 입력하세요.</p>';
         return;
     }
-    out.innerHTML = docHeadHtml('요양일지') + `<pre class="care-log-text">${esc(t)}</pre>` + docSignHtml([['작성자(요양보호사)', 'author'], ['확인자', 'confirmer']]);
+    out.innerHTML = mdToHtml(careLogDocMd());
 }
 
-/** 일지 MD 초안 — 헤더 + 폼 생성문 (docx 파생 원본) */
+/** 일지 MD 초안 — 헤더 + 격식표 생성문 (docx 파생 원본 — 평문이 아닌 표로 출력) */
 export function careLogDocMd() {
     const f = readForm();
-    const t = buildCareLog(f);
+    const t = buildCareLogMd(f);
     return t ? docMdHead('요양일지') + '\n' + renderToolBody('careLog', {
         기록내용: t, client: f.client,
         일시: `${f.date}${f.start ? ` ${f.start}~${f.end || ''}` : ''}`,
         급여종류: SERVICE_TYPES.find(s => s.key === f.service)?.label || f.service,
-        특이사항: f.note,
+        특이사항: f.note, 비고: f.note,
     }) + docMdSign([['작성자(요양보호사)', 'author'], ['확인자', 'confirmer']]) : '';
 }
 
@@ -86,7 +86,7 @@ export function careLogRecordCopy() {
 export function careLogSave() {
     careLogGenerate();
     const f = readForm();
-    const text = document.querySelector('#log-preview pre')?.textContent || '';
+    const text = buildCareLog(f) || '';
     if (!text) { showToast('먼저 일지를 생성하세요.', 'error'); return; }
     const r = saveCareLog({ ...f, text });
     if (r.ok) { showToast('일지를 저장했습니다.'); renderSaved(); flashSavedBadge($('log-saved')); }
@@ -94,7 +94,7 @@ export function careLogSave() {
 
 export function careLogPrint() {
     careLogGenerate();
-    if (!document.querySelector('#log-preview pre')) { showToast('먼저 일지를 생성하세요.', 'error'); return; }
+    if (!document.querySelector('#log-preview .doc-md')) { showToast('먼저 일지를 생성하세요.', 'error'); return; }
     proFeatureNotice('care_log_export', '일지 인쇄·PDF');
     window.print();
 }

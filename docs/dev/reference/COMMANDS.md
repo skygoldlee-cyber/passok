@@ -387,13 +387,14 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run report:glossary` | `node tools/build/extract_glossary_candidates.js` | 따옴표 정의 + 항목 기호 정의 + 교재 헤딩 정의 |
 | `npm run report:pro` | `node tools/check/pro_report.js` | Pro 현황 리포트 (AD-09) |
 
-### `admin:*` — 3개
+### `admin:*` — 4개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
 | `npm run admin:grant-pro` | `node tools/check/grant_pro.js` | Pro 플랜 부여·회수 (ADMIN_DESIGN.md §5 Phase 1) |
 | `npm run admin:issue-code` | `node tools/check/issue_pro_code.js` | 라이선스 코드 발급 CLI (PAYMENT_PILOT_DESIGN §3, P-OPS-1) |
 | `npm run admin:discord` | `node tools/deploy/register_admin_bot.js` | Discord 슬래시 명령 일괄 등록 (AD-11) |
+| `npm run admin:facility-backup` | `node tools/supabase/dump_facility.js` | 기관(facility) 테이블 백업·복원 (DOC-RBK-24 §2~§3 절차 도구) |
 
 ### `ai:*` — 19개
 

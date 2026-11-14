@@ -88,8 +88,10 @@ export async function careAuditFileLoad() {
             const { parseCsv } = await import('../../../content/csv-utils.js');
             rows.push(...parseCsv((await extractFormXlsx(f)).text));
         } else {
-            const { extractFormDocx } = await import('../care-form-pdf.js');
-            const { text } = await extractFormDocx(f);
+            const name = (f.name || '').toLowerCase();
+            if (name.endsWith('.hwp') && !name.endsWith('.hwpx')) throw new Error('구형 .hwp는 지원하지 않습니다 — 한글에서 Word(docx)로 저장해 올려주세요.');
+            const { extractFormDocx, extractFormHwpx } = await import('../care-form-pdf.js');
+            const { text } = await (name.endsWith('.hwpx') ? extractFormHwpx(f) : extractFormDocx(f));
             for (const l of String(text).split('\n')) {
                 const t = l.trim();
                 if (/^\|.*\|$/.test(t)) rows.push(t.slice(1, -1).split('|').map(c => c.trim()));

@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: acb577e3b2ecccd0
+> 입력 해시: 11e4388cb3305b90
 > 생성: 2026-11-13 · 원천: SPEC.md(709개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 709개 — 문서 연결 470 · 소스 연결 627 · 테스트 연결 670 · 보고서 연결 109
+**커버리지 요약**: 요구사항 709개 — 문서 연결 471 · 소스 연결 627 · 테스트 연결 670 · 보고서 연결 109
 
 ---
 
@@ -143,7 +143,7 @@
 | TR-20 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/reader/image-zoom.js<br>src/views/reader/reader-render.js | tests/dom/shell/onboarding-zoom.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
 | TR-21 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader.css<br>html/views/textbook-reader.html<br>index.html<br>src/views/reader/reader-toolbar.js | tests/e2e/toc-sidebar.spec.js | — | — |
 | TR-22 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader.css<br>html/views/textbook-reader.html<br>index.html<br>src/views/reader/reader-toolbar.js | tests/e2e/toc-sidebar.spec.js | — | — |
-| TR-23 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader.css<br>html/views/textbook-reader.html<br>index.html<br>src/views/reader/reader-toolbar.js | tests/e2e/toc-sidebar.spec.js | — | — |
+| TR-23 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader.css<br>html/views/textbook-reader.html<br>index.html<br>src/views/reader/reader-toolbar.js | tests/e2e/scroll-occlusion.spec.js<br>tests/e2e/toc-sidebar.spec.js | — | — |
 | TR-24 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-05 | — | tests/dom/reader/reader-keyboard.dom.test.js | — | — |
 | TR-25 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-05 | — | tests/dom/reader/reader-keyboard.dom.test.js | — | — |
 | TR-26 | ✅ | E2E 테스트 | DOC-RBK-07<br>DOC-REF-05 | src/reader/zoom-gestures.js | tests/dom/reader/zoom-gestures.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
@@ -506,7 +506,7 @@
 | AD-03 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
 | AD-04 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
 | AD-05 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-30 | — | — | — | — |
-| AD-06 | ✅ | 테스트 | DOC-DSN-30 | tools/check/feedback_report.js<br>tools/check/grant_pro.js<br>tools/check/user_report.js<br>tools/lib/supabase_ops.js | tests/unit/app/feedback-report.test.js<br>tests/unit/app/grant-pro.test.js<br>tests/unit/app/user-report.test.js | — | — |
+| AD-06 | ✅ | 테스트 | DOC-DSN-30<br>DOC-RBK-24 | tools/check/feedback_report.js<br>tools/check/grant_pro.js<br>tools/check/user_report.js<br>tools/lib/supabase_ops.js | tests/unit/app/feedback-report.test.js<br>tests/unit/app/grant-pro.test.js<br>tests/unit/app/user-report.test.js | — | — |
 | AD-07 | ✅ | 테스트 | DOC-DSN-30 | tools/check/dashboard_report.js | tests/unit/app/dashboard-report.test.js | — | — |
 | AD-08 | ✅ | 테스트 | DOC-DSN-30 | tools/check/user_report.js | tests/unit/app/user-report.test.js | — | — |
 | AD-09 | ✅ | 테스트 | DOC-DSN-30 | tools/check/pro_report.js | tests/unit/app/pro-report.test.js | — | — |
@@ -621,10 +621,10 @@
 | CO-10 | ✅ lite (기록 유무 커버리지) | 테스트 | — | src/exams/carework/care-coverage.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
 | CO-11 | 미구현 — 조건부(법무 0b + facility 재개통) | — | — | — | — | — | — |
 | CO-12 | ✅ lite (배너·계측) | 테스트 | — | src/exams/carework/care-funnel.js<br>src/exams/carework/views/care-home.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
-| CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42 | src/content/docx-utils.js<br>src/content/pdf-utils.js<br>src/exams/carework/care-share.js<br>src/exams/carework/doc-md.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/docx-utils.test.js<br>…외 1개 | — | — |
+| CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42 | css/doc-export.css<br>src/content/doc-wm.js<br>src/content/docx-utils.js<br>src/content/pdf-utils.js<br>…외 2개 | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/doc-wm.test.js<br>…외 2개 | — | — |
 | CO-14 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
 | CO-15 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
-| CO-16 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | — | — | — | — | — | — |
+| CO-16 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 문서 검토 | DOC-RBK-24 | — | — | — | — |
 | CO-17 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | src/exams/carework/care-form-pdf.js<br>src/exams/carework/form-template-editor.js<br>src/exams/carework/form-template-store.js<br>src/exams/carework/views/care-custom-form.js | tests/dom/exams/carework/care-views.test.js | — | — |
 | CO-18 | 부분 구현 | 테스트 | — | src/exams/carework/form-seeds.js<br>src/exams/carework/views/care-custom-form.js | tests/dom/exams/carework/care-views.test.js | — | — |
 | CO-19 | 부분 구현 | 테스트 | — | src/exams/carework/audit-import.js<br>src/exams/carework/care-audit.js<br>src/exams/carework/views/care-audit.js | tests/dom/exams/carework/care-views.test.js<br>tests/unit/exams/carework/audit-import.test.js | — | — |
@@ -789,7 +789,7 @@
 | UX-NAV-08 | SPA에서 뒤로가기가 없으면 Android/PWA 뒤로가기 시 앱이 종료됨. 해시는 공유 가능한 딥링크도 제공. `navigateToView` 재진입은 `_hashNavigating` 플래그로 pushState를 생략해 무한 루프 방지. nav-item 없는 뷰(exam-select)는 `registerViewNavigator`로 등록된 라우터 경로가 `switchView` 폴백을 대신해 제목·해시·렌더를 동일하게 동기화 | E2E 테스트 | DOC-DSN-11<br>DOC-DSN-21<br>DOC-DSN-25<br>DOC-REF-09 | src/shell/modal-back.js<br>src/shell/router.js | tests/dom/shell/router.dom.test.js<br>tests/dom/shell/ui-structure.dom.test.js<br>tests/e2e/app.spec.js<br>tests/e2e/more-sheet.spec.js | — | — |
 | UX-NAV-09 | 인플로우 크롬은 본문 높이를 영구 잠식하고, transform만 적용한 숨김은 공간을 회수하지 못함(실측: 본문 63%→89% vh). 오버레이 시 콘텐츠 스크롤 컨테이너에 `padding-top`=크롬 높이를 줘 첫 화면이 크롬 아래 묻히지 않게 함 — 패딩은 스크롤과 함께 밀려나므로 읽는 중 잠식 0. 크롬 아래를 지나는 다른 오버레이(섹션 표시줄 등)는 `~` 시빌링 셀렉터로 숨김 상태와 위치를 연동할 것 | E2E 테스트 | DOC-DSN-25 | css/reader.css | tests/e2e/toc-sidebar.spec.js | — | — |
 | UX-NAV-10 | 성분사전 검색 행이 버튼 4개(초기화·CSV·전체 CSV·성분 추가)를 nowrap으로 나열해 모바일에서 '성분 추가'가 잘린 실사례. `text-overflow:ellipsis` 말줄임과 가로 스크롤 컨테이너(표 wrapper 등)는 의도된 클립이라 예외. E2E 스윕(`mobile-overflow.spec.js`)이 전 뷰를 프로젝트 뷰포트별로 실측 | E2E 테스트 | DOC-DSN-25 | — | tests/e2e/mobile-overflow.spec.js | — | — |
-| UX-NAV-11 | UX-NAV-05의 실측 확장 — 탭 바 위치 계약을 요소 단위로 검증. 스크롤 컨테이너 가장자리 클립은 스크롤로 도달 가능하므로 예외, 일시 오버레이(토스트·오프라인 배너)는 소멸성이라 예외. E2E(`mobile-overflow.spec.js`)가 전 뷰의 상호작용 요소를 `scrollIntoView`+히트 테스트로 순회 | E2E 테스트 | DOC-DSN-25 | — | tests/e2e/mobile-overflow.spec.js | — | — |
+| UX-NAV-11 | UX-NAV-05의 실측 확장 — 탭 바 위치 계약을 요소 단위로 검증. 스크롤 컨테이너 가장자리 클립은 스크롤로 도달 가능하므로 예외, 일시 오버레이(토스트·오프라인 배너)는 소멸성이라 예외. E2E(`mobile-overflow.spec.js`)가 전 뷰의 상호작용 요소를 `scrollIntoView`+히트 테스트로 순회 | E2E 테스트 | DOC-DSN-25 | — | tests/e2e/mobile-overflow.spec.js<br>tests/e2e/scroll-occlusion.spec.js | — | — |
 | UX-NAV-12 | 그룹 라벨은 `index.template.html`의 `.nav-group-label` 정적 마크업 — 모바일 시트는 멤버가 있는 그룹만 표기하고 라벨·상대 순서는 사이드바를 따른다. 표시명만 바뀌고 `data-target`·라우트 ID는 불변 | 테스트 | DOC-DSN-21<br>DOC-DSN-25 | — | tests/dom/common/common-navigation.dom.test.js | — | — |
 | UX-NAV-13 | `html/views/{quiz,exam,trainer,review}.html` 정적 문구 — manifest `uiText` subtitle과 별도 본문 표기라 `check:uitext` 비대상 | 테스트 | DOC-DSN-21<br>DOC-DSN-25 | — | tests/dom/study/study-review.dom.test.js | — | — |
 | UX-NAV-14 | `html/views/trainer.html` 정적 구조 — 카드 DOM·`data-click`·`data-feature`·배지 id 불변, 그룹 이동만. 라벨은 본문 텍스트라 `check:uitext` 비대상 | E2E 테스트 | DOC-DSN-21<br>DOC-DSN-25 | css/trainer.css<br>html/views/trainer.html<br>index.html | tests/dom/study/study-trainer.dom.test.js<br>tests/e2e/app.spec.js | — | — |
@@ -850,7 +850,7 @@
 | DA-21 | ✅ | 테스트 | — | css/dashboard.css<br>css/exams/carework/care-tools.css | tests/dom/exams/carework/care-views.test.js | — | — |
 | DA-22 | ✅ | 테스트 | — | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | — | — |
 | DA-23 | ✅ | 테스트 | — | src/core/utils.js | tests/unit/app/utils.test.js | — | — |
-| DA-24 | ✅ | 테스트 | — | src/content/docx-utils.js<br>src/exams/carework/doc-md.js | tests/unit/content/docx-utils.test.js | — | — |
+| DA-24 | ✅ | 테스트 | — | src/content/doc-wm.js<br>src/content/docx-utils.js<br>src/exams/carework/doc-md.js | tests/unit/content/doc-wm.test.js<br>tests/unit/content/docx-utils.test.js | — | — |
 | DA-25 | ✅ | 도구 검증 | — | tools/illustrate/capture_manual.js | — | — | — |
 | DA-26 | ✅ | 도구 검증 | — | tools/illustrate/capture_manual.js | — | — | — |
 
@@ -1027,6 +1027,8 @@
 | DOC-BIZ-08 | docs/exams/carework/business/유튜브-숏츠-시리즈-제작의뢰서.md | — |
 | DOC-BIZ-09 | docs/exams/cosmetic/business/유튜브-숏츠-시리즈-제작의뢰서.md | — |
 | DOC-BIZ-10 | docs/exams/carework/business/이용자_관점_평가_2026-11-13.md | ROAD-P5 |
+| DOC-BIZ-11 | docs/exams/carework/business/개인정보처리_위탁계약서_초안.md | — |
+| DOC-BIZ-12 | docs/exams/carework/business/전문가검토_의뢰서.md | — |
 | DOC-DEV-01 | docs/dev/SPEC.md | — |
 | DOC-DEV-02 | docs/dev/ARCHITECTURE.md | — |
 | DOC-DEV-03 | docs/dev/CHANGES.md | — |
@@ -1078,6 +1080,7 @@
 | DOC-DSN-48 | docs/dev/design/ASSET_STORAGE_REVIEW.md | CS-03, DA-02, P-02 |
 | DOC-DSN-49 | docs/dev/design/DEPLOY_PIPELINE_DESIGN.md | AD-10, PF-18 |
 | DOC-DSN-50 | docs/dev/design/ACCOUNT_LINKING_DESIGN.md | AU-09, AU-10, PAY-01 |
+| DOC-DSN-51 | docs/exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md | — |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |
@@ -1108,6 +1111,7 @@
 | DOC-RBK-21 | docs/dev/runbooks/LFS_MIGRATION.md | — |
 | DOC-RBK-22 | docs/dev/runbooks/STORY_TYPE_DESIGN_GUIDE.md | BP-10, BP-11, BP-12, ST-01, ST-02, ST-03, ST-04, ST-05, ST-06, ST-07 |
 | DOC-RBK-23 | docs/dev/runbooks/E2E_TEST_SUPABASE.md | — |
+| DOC-RBK-24 | docs/dev/runbooks/FACILITY_DATA_OPS.md | AD-06, CO-16 |
 | DOC-REF-01 | docs/dev/reference/COMBO_STUDY_STRATEGY.md | DR-02, DR-03, DR-04, DR-05, DR-06, DR-07, Q-01, Q-02, Q-03, Q-04, Q-05, Q-06, Q-07, Q-08, Q-09, Q-10, Q-11, Q-12 |
 | DOC-REF-02 | docs/dev/reference/DEV_ENVIRONMENT.md | — |
 | DOC-REF-03 | docs/dev/reference/FLASHCARD_LOGIC.md | F-01, F-02, F-03, F-04, F-05, F-06, F-07, F-08, F-09, F-10, ID-01, ID-02, ID-03, ID-04, TR-01 |
@@ -1157,6 +1161,9 @@
 - docs/assets/README.md
 - docs/dev/runbooks/CONTENT_PIPELINE_SPEC.md
 - docs/dev/runbooks/E2E_TEST_SUPABASE.md
+- docs/exams/carework/business/개인정보처리_위탁계약서_초안.md
 - docs/exams/carework/business/유튜브-숏츠-시리즈-제작의뢰서.md
+- docs/exams/carework/business/전문가검토_의뢰서.md
 - docs/exams/carework/design/CAREWORK_FACILITY_WORKSPACE.md
+- docs/exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md
 - docs/exams/cosmetic/business/유튜브-숏츠-시리즈-제작의뢰서.md

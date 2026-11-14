@@ -66,8 +66,12 @@ export async function careAiDraft(btn) {
         );
         const text = res?.text || '';
         if (!text) { showToast(res?.error || '응답이 없습니다.', 'error'); return; }
-        const pre = document.querySelector(kind === 'ho' ? '#ho-preview pre' : '#log-preview pre');
-        if (pre) pre.textContent = `[AI 초안 — 검토 후 사용]\n\n${text}`;
+        const box = document.querySelector(kind === 'ho' ? '#ho-preview' : '#log-preview');
+        if (box) {
+            const pre = document.createElement('pre');
+            pre.textContent = `[AI 초안 — 검토 후 사용]\n\n${text}`;
+            box.replaceChildren(pre);
+        }
         showToast('초안 생성 — 검토 후 사용하세요.');
     } catch (e) {
         if (e instanceof Error && e.name === 'AbortError') showToast('AI 초안 생성이 취소되었습니다.', 'warning');
