@@ -264,10 +264,13 @@ const _topEls = xml => {
     }
     return out;
 };
-// 앵커 삽입 간격 — 추정 쪽 경계(_PAGE_PT)마다 1개씩. 쪽 중앙 앵커는 같은 쪽에 놓이면
-// 반투명 PNG가 겹쳐 농도가 배가되므로(쪽마다 농도 불일치) 쪽당 1개 원칙 — 추정이 실제보다
-// 낮으면 일부 쪽 누락 가능성이 있지만 추정 상수는 실측 교정됨 (구 360pt는 쪽당 ~2개 중첩 보장)
-const _WM_PT = _PAGE_PT;
+// 앵커 삽입 간격 — 추정 쪽 경계마다 1개씩. 실측 본문 용량(≈728.6pt)보다 크게 둔다:
+// 추정이 정확·낙관적(현 지배 편향 ~1.3x)이면 경계 착지점이 반드시 실측 쪽 용량을 넘어
+// 다음 쪽에 착지 → 같은 쪽 중첩(알파 배가) 불가. _PAGE_PT(700) 그대로면 정확한 추정에서
+// est-700 지점이 실측 1쪽 안쪽(700<728.6)에 놓여 선두 앵커와 중첩될 수 있던 잔여 리스크 제거.
+// 대가 — 추정이 극단적으로 낙관적이면(real≫est) 중간 쪽이 건너뛰어질 수 있으나,
+// 끝쪽 앵커가 마지막 쪽을 보장하고 중첩보다 누락을 택하는 쪽이 농도 불일치 재발보다 안전
+const _WM_PT = 750;
 /**
  * 추정 경계 간격(_WM_PT)마다 본문 워터마크 앵커 삽입 — 헤더 앵커는 렌더러가 무조건 본문
  * 아래층에 그려서(behindDoc 무시) "본문 위 덮기"가 불가하므로 본문 경로만 지원한다.
@@ -351,6 +354,8 @@ const _sprayWm = (bodyXml, mkPara, d = _DENS.normal) => {
  */
 const _doc = (lines, boldLines, wm = '', wmImg = null) => {
     const body = lines.map((l, i) => _P(l, i, boldLines)).join('');
+    // 텍스트 상자 폴백은 Word 내보내기에서 소실될 수 있음(실측) — 캔버스 가능하면 wmImg(docWmPng) 권장
+    if (wm && !wmImg && typeof console !== 'undefined') console.warn('[docx] 워터마크 텍스트 상자 폴백 사용 — wmImg PNG 경로 권장');
     const mk = wmImg ? (/** @param {number} id */ (id) => _wmPicPara('rId6', id)) : wm ? (/** @param {number} id */ (id) => _wmPara(wm, id)) : null;
     return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w10="urn:schemas-microsoft-com:office:word"><w:body>${mk ? mk(0) + _sprayWm(body, mk) : body}${_SECT}</w:body></w:document>`;
@@ -713,6 +718,8 @@ export function docxFileMd(md, filename, wm = '', opts = {}) {
             }
         }
     }
+    // 텍스트 상자 폴백은 Word 내보내기에서 소실될 수 있음(실측) — 캔버스 가능하면 wmImg(docWmPng) 권장
+    if (wm && !opts.wmImg && typeof console !== 'undefined') console.warn('[docx] 워터마크 텍스트 상자 폴백 사용 — wmImg PNG 경로 권장');
     const mk = opts.wmImg ? (/** @param {number} id */ (id) => _wmPicPara(wmRid, id)) : wm ? (/** @param {number} id */ (id) => _wmPara(wm, id)) : null;
     const body = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w10="urn:schemas-microsoft-com:office:word"><w:body>${mk ? mk(0) + _sprayWm(mdBody, mk, dens) : mdBody}${_SECT}</w:body></w:document>`;
     const blob = _zipStore(_parts(body, imgs, doc));
