@@ -182,6 +182,12 @@ const _P = (line, i, boldLines) => line
 // 메타줄(기관명·출력일) — 중앙 소자 + 하단 가는선 (공문서 제목-본문 분리 관행)
 const _meta = t => `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="4" w:space="10" w:color="BFBFBF"/></w:pBdr>${_NOSPACE}<w:spacing w:after="140"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 
+// 각주성 줄 — '※'/'근거'로 시작하는 법적 근거·주의 문구. 소자 회색으로 본문과 격을 낮춘다
+// (9pt라 한 줄 수용량이 넓어 근거 열거가 본문폭을 넘어 2줄로 깨지는 것도 막는다)
+const _NOTE_RE = /^(※|근거)/;
+/** @param {string} t */
+const _note = t => `<w:p><w:pPr>${_NOSPACE}<w:snapToGrid w:val="0"/><w:spacing w:after="40" w:line="260" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr>${_runs(_wrap(t, Math.round((_TEXT_W - 300) * 22 / 18)))}</w:r></w:p>`; // _cw는 11pt 기준 — 9pt 본문폭은 ×22/18
+
 // 페이지 설정 — A4 세로(orient 명시 — 일부 임포터가 생략 시 가로로 해석) + 좌우 25mm 여백 + 1단.
 // docGrid는 제거 — 글자 격자로 오해석해 어절·자간을 늘리는 임포터가 있음 (비용 계산서 어절 간격 신고)
 const _SECT = '<w:sectPr><w:footerReference w:type="default" r:id="rId2"/><w:pgSz w:w="11906" w:h="16838" w:orient="portrait"/><w:pgMar w:top="1134" w:right="1417" w:bottom="1134" w:left="1417"/><w:cols w:space="708"/></w:sectPr>';
@@ -685,6 +691,7 @@ const _mdBody = (md, imgMap = {}, qr = null, doc = null) => {
         if (t === ':::page') { out.push(_PAGEBREAK); continue; } // 페이지 나눔 마커 — 1건 1쪽 문서
         if (t.startsWith(':::closing')) { out.push(_closeP(t.slice(10).trim())); continue; } // 종결 문구 마커 — 서명란 위 중앙 표기
         if (t === '---') { out.push(_HR); continue; }
+        if (_NOTE_RE.test(t)) { out.push(_note(t)); continue; } // 각주성 소자 회색 줄
         if (t.startsWith('- ')) { out.push(_P('• ' + t.slice(2), 99, 0)); continue; }
         out.push(_P(t, 99, 0));
     }

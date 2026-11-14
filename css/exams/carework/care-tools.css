@@ -152,6 +152,7 @@
 .doc-md h3 { margin: 4px 0 2px; text-align: center; font-size: 1.5em; font-family: Batang, '바탕', 'NanumMyeongjo', serif; font-weight: 700; text-decoration-line: underline; text-decoration-style: double; }
 .doc-md .doc-meta { text-align: center; color: var(--color-text-dim, #666); font-size: .82em; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border-subtle, #d1d5db); } /* 제목-본문 구분선 — docx 메타 하단선과 정합 */
 .doc-md .doc-closing { text-align: center; margin: 16px 0 6px; } /* :::closing 종결 문구 — 서명란 위 중앙 표기 */
+.doc-md .doc-note { color: var(--color-text-dim, #666); font-size: .82em; margin: 4px 0; } /* ※/근거 각주성 소자 회색 — docx _note와 정합 */
 .doc-md h4 { margin: 14px 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--border-subtle, #d1d5db); font-size: 1.08em; }
 .doc-md h5 { margin: 10px 0 4px; font-size: 1em; }
 .doc-md p { margin: 3px 0; }

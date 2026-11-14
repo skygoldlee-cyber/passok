@@ -95,6 +95,7 @@ export const mdToHtml = md => {
         if (t === ':::page') { out.push('<div class="doc-pagebreak"></div>'); continue; } // 인쇄 시 쪽 나눔 — docx의 :::page와 동일 마커
         if (t.startsWith(':::closing')) { out.push(`<p class="doc-closing">${esc(t.slice(10).trim())}</p>`); continue; } // 종결 문구 — docx :::closing과 동일
         if (t === '---') { out.push('<hr>'); continue; }
+        if (/^(※|근거)/.test(t)) { out.push(`<p class="doc-note">${esc(t)}</p>`); continue; } // 각주성 소자 회색 — docx _note와 동일 규칙
         if (t) out.push(`<p>${esc(t)}</p>`);
     }
     flush(false);
