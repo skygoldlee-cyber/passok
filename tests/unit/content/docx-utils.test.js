@@ -174,9 +174,10 @@ test('docxFileMd — :::sign 서명란은 하단 우측 부동 표, 셀 어절 �
     const doc = entries['word/document.xml'];
     assert.ok(doc.includes('w:tblpPr'), '서명란 부동 표(tblpPr) 누락');
     assert.ok(doc.includes('w:tblpYSpec="bottom"'), '서명란 하단 앵커 누락 — A4 하단 배치 아님');
-    // 명시적 tblpX — XSpec="right"는 우측 초과, 이중 외곽선 포함 우측끝을 본문 표와 정합(−40 보정)
+    // 명시적 tblpX — XSpec="right"는 우측 초과, 이중 외곽선 포함 우측끝을 본문 표와 정합(+88 보정 —
+    // 중첩 표는 tblpX 산술보다 ~65tw 좌측에 착지 + 본문 표 외곽선 ~24tw 우측 돌출, PDF 실측)
     // 내부 표 들여쓰기(_SIG_IND=60)만큼 좌측으로 — 시각적 우측선은 본문 표 외곽선과 일치
-    assert.ok(doc.includes('w:tblpX="4772"'), '서명란 우측 앵커(본문폭−서명폭−들여쓰기−40 보정) 누락');
+    assert.ok(doc.includes('w:tblpX="4900"'), '서명란 우측 앵커(본문폭−서명폭−들여쓰기+88 보정) 누락');
     assert.ok(doc.includes('인계자(서명): 김요양'), '서명 내용 누락');
     assert.ok(!doc.includes(':::sign'), '마커가 본문에 노출됨');
     assert.ok(doc.includes('<w:kinsoku/>'), '금칙 규칙(어절 줄바꿈) 누락');

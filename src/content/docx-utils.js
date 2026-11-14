@@ -617,10 +617,11 @@ const _closeTbl = (sigLines, imgMap, qr) => {
     if (sigLines) cells.push({ w: _SIG_W + _SIG_SLK, mar: _TCMAR0, v: 'top', xml: _sigInner(sigLines, imgMap) + _MIN_P });
     const w = cells.reduce((s, c) => s + c.w, 0);
     // tblpX는 그리드 총폭이 아니라 내용 우측 끝(들여쓰기+내부 표 폭) 기준 — 서명 박스 우측선이 본문 표와 정렬.
-    // -40 보정: 외곽 부동 표의 셀 여백+중첩 표 기준점이 tblpX를 ~142tw 우측으로 밀어 서명란 우측선이
-    // 본문 표 외곽선(+~38tw)보다 튀어나감 (PDF 실측 — 결재란 +102와 다른 중첩 구조)
+    // +88 보정: 중첩 표 구조에서 실 렌더 위치가 tblpX 산술보다 ~65tw 좌측에 착지하고 본문 표 외곽선은
+    // 텍스트 경계보다 ~24tw 우측에 그려져, 보정 없으면 서명란 우측선이 본문 표보다 ~128tw 안쪽에 뜬다
+    // (인수인계서 PDF 실측 519.2pt vs 본문 표 525.6pt — 결재란 +102와 다른 중첩 구조)
     const vis = (qr && qr.img ? _QR_TW : 0) + (sigLines ? _SIG_IND + _SIG_W : 0);
-    return `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_TEXT_W - vis - 40}" w:tblpYSpec="bottom" w:leftFromText="180" w:rightFromText="180" w:topFromText="180" w:bottomFromText="180"/><w:tblW w:w="${w}" w:type="dxa"/><w:tblBorders>${_QR_NIL_B}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${cells.map(c => `<w:gridCol w:w="${c.w}"/>`).join('')}</w:tblGrid>`
+    return `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_TEXT_W - vis + 88}" w:tblpYSpec="bottom" w:leftFromText="180" w:rightFromText="180" w:topFromText="180" w:bottomFromText="180"/><w:tblW w:w="${w}" w:type="dxa"/><w:tblBorders>${_QR_NIL_B}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${cells.map(c => `<w:gridCol w:w="${c.w}"/>`).join('')}</w:tblGrid>`
         + `<w:tr><w:trPr><w:cantSplit/></w:trPr>` + cells.map(c => `<w:tc><w:tcPr><w:tcW w:w="${c.w}" w:type="dxa"/>${c.mar}<w:vAlign w:val="${c.v}"/></w:tcPr>${c.xml}</w:tc>`).join('') + '</w:tr></w:tbl>';
 };
 
