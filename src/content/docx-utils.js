@@ -179,7 +179,8 @@ const _P = (line, i, boldLines) => line
     : `<w:p><w:pPr>${_NOSPACE}<w:spacing w:line="150" w:lineRule="exact"/></w:pPr></w:p>`;
 // 메타줄 — 제목 바로 아래 기관명·출력일. 중앙·회색·소자로 공문서 머리 격식
 /** @param {string} t */
-const _meta = t => `<w:p><w:pPr>${_NOSPACE}<w:spacing w:after="140"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
+// 메타줄(기관명·출력일) — 중앙 소자 + 하단 가는선 (공문서 제목-본문 분리 관행)
+const _meta = t => `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="4" w:space="10" w:color="BFBFBF"/></w:pBdr>${_NOSPACE}<w:spacing w:after="140"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 
 // 페이지 설정 — A4 세로(orient 명시 — 일부 임포터가 생략 시 가로로 해석) + 좌우 25mm 여백 + 1단.
 // docGrid는 제거 — 글자 격자로 오해석해 어절·자간을 늘리는 임포터가 있음 (비용 계산서 어절 간격 신고)
@@ -512,7 +513,7 @@ const _RF_T = '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:e
  * @returns {string}
  */
 const _h = (t, lv) => lv === 1
-    ? `<w:p><w:pPr>${_NOSPACE}<w:spacing w:before="80" w:after="80"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF_T}<w:b/><w:sz w:val="36"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`
+    ? `<w:p><w:pPr>${_NOSPACE}<w:spacing w:before="80" w:after="80"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF_T}<w:b/><w:u w:val="double"/><w:sz w:val="40"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`
     : `<w:p><w:pPr>${lv === 2 ? '<w:pBdr><w:bottom w:val="single" w:sz="4" w:color="BFBFBF"/></w:pBdr>' : ''}${_NOSPACE}<w:spacing w:before="160" w:after="80"/></w:pPr><w:r><w:rPr>${_RF}<w:b/><w:sz w:val="${lv === 2 ? 28 : 24}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 const _HR = `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="999999"/></w:pBdr>${_NOSPACE}</w:pPr></w:p>`;
 const _PAGEBREAK = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
@@ -538,6 +539,18 @@ const _approve = (imgMap = {}) => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margi
     + _apprSignCell(imgMap.approve, 500)
     + _apprSignCell() + _apprSignCell()
     + '</w:tr></w:tbl>';
+// 상단 서식란 — 공문서 표준 상단 표기(문서번호·시행일자·수신·참조). 라벨 1200tw 탭 정지로 값 정렬.
+// opts.doc가 있을 때만 부여 — 미리보기/PDF는 발행 전 초안이라 doc 번호 미부여 (푸터·QR과 동일 비대칭)
+const _formP = (/** @type {string} */ k, /** @type {string} */ v) => `<w:p><w:pPr>${_NOSPACE}<w:spacing w:after="20"/><w:tabs><w:tab w:val="left" w:pos="1200"/></w:tabs></w:pPr><w:r><w:rPr>${_RF}<w:b/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${k}</w:t></w:r><w:r><w:rPr>${_RF}<w:sz w:val="18"/></w:rPr><w:tab/><w:t xml:space="preserve">${esc(v)}</w:t></w:r></w:p>`;
+/** @param {{no?:string, recipient?:string, cc?:string}} doc @returns {string} */
+const _formBlk = doc => [
+    doc.no ? _formP('문서번호', doc.no) : '',
+    _formP('시행일자', _docDate()),
+    doc.recipient ? _formP('수신', doc.recipient) : '',
+    doc.cc ? _formP('참조', doc.cc) : '',
+].join('');
+// 종결 문구 — :::closing 마커. 서명란 위 "상기와 같이 …합니다."류 마무리 문구를 중앙 표기
+const _closeP = (/** @type {string} */ t) => `<w:p><w:pPr>${_NOSPACE}<w:spacing w:before="120" w:after="40"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:sz w:val="22"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 // 문서 종결 — 공문서 관행의 '끝.' 표기 (중앙)
 const _END = `<w:p><w:pPr>${_NOSPACE}<w:spacing w:before="80"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:sz w:val="22"/></w:rPr><w:t>끝.</w:t></w:r></w:p>`;
 
@@ -640,10 +653,12 @@ const _sigInner = (lines, imgMap = {}) => `<w:tbl><w:tblPr><w:tblW w:w="${_SIG_W
  * @param {string} md
  * @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} [imgMap]
  * @param {?{img:{rid:string,id:number}, no:string}} [qr] - 문서번호 QR — 서명란과 같은 종결 부동 표에 삽입
+ * @param {?{no?:string, recipient?:string, cc?:string}} [doc] - 지정 시 제목 위에 공문서 상단 서식란(문서번호·시행일자·수신·참조) 부여
  * @returns {string}
  */
-const _mdBody = (md, imgMap = {}, qr = null) => {
+const _mdBody = (md, imgMap = {}, qr = null, doc = null) => {
     const out = [], lines = String(md || '').split('\n');
+    if (doc && (doc.no || doc.recipient || doc.cc)) out.push(_formBlk(doc)); // 상단 서식란 — 제목 위 좌측 (결재란은 부동 표라 우측 정합 유지)
     if (/^:::sign\s*$/m.test(md)) out.push(_approve(imgMap)); // 서명 문서는 결재란 선두 부여 (images.approve 있으면 담당 칸 (인) 위 서명 오버레이)
     /** @type {string[][] | null} */
     let tbl = null;
@@ -667,6 +682,7 @@ const _mdBody = (md, imgMap = {}, qr = null) => {
         if (!t) { out.push(_P('', 99, 0)); continue; } // 빈 줄 — meta 플래그 유지
         meta = false;
         if (t === ':::page') { out.push(_PAGEBREAK); continue; } // 페이지 나눔 마커 — 1건 1쪽 문서
+        if (t.startsWith(':::closing')) { out.push(_closeP(t.slice(10).trim())); continue; } // 종결 문구 마커 — 서명란 위 중앙 표기
         if (t === '---') { out.push(_HR); continue; }
         if (t.startsWith('- ')) { out.push(_P('• ' + t.slice(2), 99, 0)); continue; }
         out.push(_P(t, 99, 0));
@@ -683,7 +699,7 @@ const _mdBody = (md, imgMap = {}, qr = null) => {
  * @param {string} md - 문서 마크다운
  * @param {string} filename - 확장자 제외 파일명
  * @param {string} [wm] - 워터마크 문구 (텍스트 상자 폴백 — 추정 페이지 간격으로 균등 배치)
- * @param {{images?: Object<string,{data:Uint8Array,w:number,h:number}>, wmImg?: {data:Uint8Array}, doc?: {no?:string, org?:string, title?:string, rev?:number, qr?:{data:Uint8Array}}}} [opts] - images: `{{img:key}}` 토큰(서명란)·`approve`(결재란 담당 칸)용 서명-only PNG 바이트 + 표시 크기(px) — (인)은 문서 텍스트로 렌더되고 이미지는 그 위 앵커 오버레이, wmImg: 알파 구운 워터마크 PNG (지정 시 텍스트 대신 사용), doc: 문서 추적 메타 (core.xml·푸터 번호, qr 지정 시 서명란 좌측 QR 부동 표)
+ * @param {{images?: Object<string,{data:Uint8Array,w:number,h:number}>, wmImg?: {data:Uint8Array}, doc?: {no?:string, org?:string, title?:string, rev?:number, qr?:{data:Uint8Array}, recipient?:string, cc?:string}}} [opts] - images: `{{img:key}}` 토큰(서명란)·`approve`(결재란 담당 칸)용 서명-only PNG 바이트 + 표시 크기(px) — (인)은 문서 텍스트로 렌더되고 이미지는 그 위 앵커 오버레이, wmImg: 알파 구운 워터마크 PNG (지정 시 텍스트 대신 사용), doc: 문서 추적 메타 (core.xml·푸터 번호, qr 지정 시 서명란 좌측 QR 부동 표, no/recipient/cc 지정 시 상단 서식란 부여)
  */
 export function docxFileMd(md, filename, wm = '', opts = {}) {
     const imgs = Object.entries(opts.images || {}).map(([key, im], i) => ({ key, data: im.data, cx: (im.w || 90) * 9525, cy: (im.h || 60) * 9525, rid: `rId${6 + i}`, id: 300 + i }));
@@ -694,7 +710,7 @@ export function docxFileMd(md, filename, wm = '', opts = {}) {
     if (qrIm) imgs.push({ key: '__qr', data: qrIm.data, cx: 0, cy: 0, rid: qrIm.rid, id: qrIm.id });
     const wmRid = opts.wmImg ? `rId${6 + imgs.length}` : ''; // 워터마크 PNG는 imgs 마지막 — 본문 rels rId6~ 연번
     if (opts.wmImg) imgs.push({ key: '__wm', data: opts.wmImg.data, cx: 0, cy: 0, rid: wmRid, id: 0 });
-    let mdBody = _mdBody(md, imgMap, qrIm ? { img: qrIm, no: (doc ? doc.no : '') || '' } : null);
+    let mdBody = _mdBody(md, imgMap, qrIm ? { img: qrIm, no: (doc ? doc.no : '') || '' } : null, doc);
     let dens = _DENS.normal;
     // 1장 원칙 — 표준 밀도 추정(부동 표 점유 예약 _FLT_PT 포함)이 한 장을 넘기면 콤팩트→타이트
     // 순으로 재시도해 한 장 수용. 그래도 넘치면 표준 유지(어차피 2장이면 가독성 우선).

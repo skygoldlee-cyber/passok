@@ -119,7 +119,8 @@ test('docxFileMd — 공문서 격식: 제목 중앙·메타줄·표머리 연�
     // 제목(#) — 중앙 정렬·대자, 제목 직후 단락은 메타줄(중앙·회색·소자)
     const titleIdx = doc.indexOf('인수인계서');
     assert.ok(doc.slice(0, titleIdx).includes('jc w:val="center"'), '제목 중앙 정렬 누락');
-    assert.ok(doc.includes('<w:sz w:val="36"/>'), '제목 대자(18pt) 누락');
+    assert.ok(doc.includes('<w:sz w:val="40"/>'), '제목 대자(20pt) 누락');
+    assert.ok(doc.includes('<w:u w:val="double"/>'), '제목 이중 밑줄 누락');
     const metaIdx = doc.indexOf('○○요양원 · 2026-11-13 출력');
     assert.ok(metaIdx > titleIdx && doc.slice(titleIdx, metaIdx).includes('w:color w:val="595959"'), '메타줄 회색 소자 처리 누락');
     // 표 — 머리 연청 음영·중앙 정렬·수직 가운데·페이지 넘김 시 머리 반복·내부선 연회색
@@ -362,7 +363,8 @@ test('docxFileMd — docProps/core.xml: 번호·기관·제목·판본 + 패키�
     assert.ok(footer.includes('문서번호 LOG-20261114-a3f2c1'), '푸터 문서번호 누락 — 모든 쪽 표기 기대');
     const docXml = entries['word/document.xml'];
     assert.ok(docXml.includes('테스트요양원 · 2026-11-14 출력'), '메타줄 누락');
-    assert.ok(!docXml.includes('문서번호'), '메타줄·본문에 문서번호 미병기 — 번호는 푸터·QR에만 표기');
+    assert.ok(docXml.includes('문서번호') && docXml.includes('LOG-20261114-a3f2c1'), '상단 서식란 문서번호 미부여 — 공문서 표준 서식');
+    assert.ok(docXml.includes('시행일자'), '상단 서식란 시행일자 미부여');
 });
 
 test('docxFileMd — doc.qr: 서명란 좌측 QR 부동 표 + media 파트 + 관계', async () => {

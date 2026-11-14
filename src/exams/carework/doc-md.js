@@ -93,6 +93,7 @@ export const mdToHtml = md => {
         if (!t) continue; // 빈 줄 — meta 플래그 유지
         meta = false;
         if (t === ':::page') { out.push('<div class="doc-pagebreak"></div>'); continue; } // 인쇄 시 쪽 나눔 — docx의 :::page와 동일 마커
+        if (t.startsWith(':::closing')) { out.push(`<p class="doc-closing">${esc(t.slice(10).trim())}</p>`); continue; } // 종결 문구 — docx :::closing과 동일
         if (t === '---') { out.push('<hr>'); continue; }
         if (t) out.push(`<p>${esc(t)}</p>`);
     }
