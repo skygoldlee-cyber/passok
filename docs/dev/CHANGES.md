@@ -4,7 +4,7 @@
 ## 2026-11-15 test(e2e): carework 스펙을 성명 한 칸·문서번호 파일명 계약으로 갱신
 
 - `d5ea3cd85`의 `fmtDocName`(성·이름 한 칸)·`제목_문서번호` 파일명 도입 당시 e2e가 changes 게이트로 스킵되어 단언 미갱신이 잔존 — 실제 e2e 실행 시 드러난 누적 불일치 해소 (코드 회귀 아님)
-- j-510/511/522: 대상자·면회·근무 표기 기대값을 `김 일지`·`김 면회`·`홍 가족` 등 fmtDocName 출력으로 갱신 — `vis-result-for`·Supabase 행(toBe)은 원시값 유지
+- j-510/511/522·ux-forms: 대상자·면회·근무 표기 기대값을 `김 일지`·`김 면회`·`홍 가족` 등 fmtDocName 출력으로 갱신 — `vis-result-for`·Supabase 행(toBe)은 원시값 유지
 - care-share: 다운로드 파일명 패턴 → `제목_PREFIX-YYYYMMDD-HASH6.docx`
 
 ## 2026-11-15 fix(docx): ※/근거 각주성 줄 소자 회색 처리 — 근거 열거 한 줄 표기
