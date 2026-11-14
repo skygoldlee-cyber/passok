@@ -59,7 +59,7 @@ import { qrPng, qrDataUrl, qrMatrix } from '../content/qr.js';
 | `docxFileMd` | `(md, filename, wm = '', opts = {})` | **주 경로** — MD 초안 → 공문서형 docx (제목·표·서명란·결재란·"끝." 종결) |
 | `docWmText` | `(org) => string` | 워터마크 문구 규약 — `"기관명 · YYYY-MM-DD"`, 기관명 없으면 `''`(미출력) |
 | `docWmPng` | `(text) => {data:Uint8Array,w,h} \| null` | 캔버스에 `rgba(0,0,0,.22)`로 구운 알파 PNG(1920×200, 2배 해상도) — **docx·미리보기·PDF와 동일 농도 보장의 유일 수단**. 문구가 `W×0.77`(회전 수평 투영 ≈ 페이지 폭 595pt)을 넘으면 폰트 자동 축소. 비브라우저면 `null` |
-| `docWmHtml` | `(text) => string` | 미리보기·인쇄용 DOM 오버레이 — 문서 루트(`position:relative`)에 삽입, `css/doc-export.css` 필요. 문구 추정 폭(`_wmEm`)으로 `font-size`를 인라인 산출 — 장문 기관명도 페이지 폭 내 수렴 |
+| `docWmHtml` | `(text) => string` | 미리보기·인쇄용 DOM 오버레이 — 문서 루트(`position:relative`)에 삽입, `css/doc-export.css` 필요. 문구 추정 폭(`_wmEm`)으로 `font-size`를 인라인 산출 — 장문 기관명도 페이지 폭 내 수렴. **쪽 단위 스탬프**: 986px(1쪽) 간격으로 최대 12개 중첩 생성해 다면 문서 각 쪽 중앙에 배치 — 인쇄는 `fixed` 자동 반복이라 첫 스탬프만 표시 |
 
 `docxFileMd`의 `opts`:
 
@@ -69,7 +69,7 @@ import { qrPng, qrDataUrl, qrMatrix } from '../content/qr.js';
   images: { key: { data: Uint8Array, w: 90, h: 60 } },  // {{img:key}} 토큰 치환용 PNG + 표시 px
   // 예약 키: images.author → :::sign 내 {{img:author}} 치환(서명란 (인) 위 오버레이)
   //          images.approve → 결재란 '담당' 칸 (인) 위 오버레이 — 둘 다 서명-only 투명 PNG 권장
-  doc: { no, org, title, rev, qr: { data } } // 문서 추적 메타 — §7. docProps/core.xml + 푸터 번호 + 서명란 좌측 QR 부동 표
+  doc: { no, org, title, rev, qr: { data }, recipient, cc } // 문서 추적 메타 — §7. 상단 서식란 + core.xml + 푸터 번호 + 서명란 좌측 QR 부동 표 (recipient→수신·cc→참조 선택)
 }
 ```
 
@@ -87,7 +87,7 @@ import { qrPng, qrDataUrl, qrMatrix } from '../content/qr.js';
 | `:::page` | 강제 페이지 나눔 — **1장 원칙 압축 대상에서 제외됨**(의도된 다면 구성) |
 | `:::closing <문구>` | 종결 문구 — 서명란 위 "상기와 같이 …합니다."류 마무리 문구를 중앙 표기 (미리보기 `.doc-closing`과 정합) |
 | `※`·`근거` 시작 줄 | 각주성 소자 회색 단락(9pt, `595959`) — 법적 근거·주의 문구. 본문폭 한계로 11pt면 2줄로 깨지는 근거 열거도 9pt 한 줄 수용 (미리보기 `.doc-note`와 정합) |
-| `:::sign` … `:::end` | 서명 문서 — **선두에 결재란(결재/담당/팀장/시설장) 부동 표 자동 선 부여 — 서명 자리는 `(인)` 중앙정렬 표기**(`images.approve` 지정 시 담당 칸 (인) 위에 서명 앵커 오버레이) + `:::sign`~`:::end` 사이 줄들을 하단 우측 서명란으로 출력 (QR 있으면 종결 부동 표 `_closeTbl`의 우측 셀로 중첩 — §7.2). 줄 내 `{{img:key}}`는 (인) 위 오버레이 서명으로 치환 — **(인)은 문서 텍스트로 유지되고 이미지가 `wp:anchor`로 그 위에 겹침** (날인 형태 — §10 함정 참조) |
+| `:::sign` … `:::end` | 서명 문서 — **선두에 결재란(결재/담당/팀장/시설장) 부동 표 자동 선 부여 — 서명 자리는 `(인)` 중앙정렬 표기**(`images.approve` 지정 시 담당 칸 (인) 위에 서명 앵커 오버레이) + `:::sign`~`:::end` 사이 줄들을 하단 우측 서명란으로 출력 (QR 있으면 종결 부동 표 `_closeTbl`의 우측 셀로 중첩 — §7.2). 줄은 `라벨: 성명 {{img:key}}` 병기가 계약(토큰은 (인) 날인 표식, 성명 대체 금지) — `{{img:key}}`는 (인) 위 오버레이 서명으로 치환되며 **(인)과 성명 모두 문서 텍스트로 유지되고 이미지가 `wp:anchor`로 그 위에 겹침** (날인 형태 — §10 함정 참조) |
 | 일반 단락 | 본문 단락 (맑은고딕 11pt·행간 336) |
 
 자동 부가: 서명 문서의 결재란, 문서 말미의 `끝.` 종결 표기, 바닥글 쪽 번호(`{IF NUMPAGES>1}` 조건부 — 1쪽 문서는 번호 생략).
@@ -104,7 +104,8 @@ import { qrPng, qrDataUrl, qrMatrix } from '../content/qr.js';
 | 설정 | `w:view=print`·`zoom=100` — 생략 시 뷰어가 웹 레이아웃으로 열 수 있어 필수 |
 | 표 음영 팔레트 | 헤더 `B8D2F0`(진한 파랑) · 교번 파랑 `D5E4F6` · 교번 회색 `D0D0D0` — **3단계 명도 위계**(헤더>회색>파랑 밴드)가 육안 구분 가능한 최종 확정치. 2열 KV 표는 레이블 열 회색이나 **교번 채우기가 레이블 회색보다 우선**(밴드는 항상 전폭) — 표 유형별 띠 모양 통일. 결재란 서명(인) 칸도 `D0D0D0` — 헤더 행만 파랑. `care-tools.css` 미리보기는 `tr:nth-child(odd/even)` 규칙으로 동일 패턴 유지 |
 | 서명 오버레이 | (인)은 문서 텍스트, 서명 PNG는 **서명-only 투명 이미지**를 그 위에 앵커 오버레이 — 서명란은 `charC` 방식으로 (인) **중심**에 정렬(`posOffset=-69850-cx/2` EMU — 앵커점이 (인) 중심보다 ~5.5pt 우측), 결재란은 `column`+`center`. 우측끝 정렬(`charR`)은 서명 폭이 (인)보다 넓어 잉크 덩어리가 좌측으로 밀려 보이는 실측 결함으로 폐기 |
-| 종결 표 우측 정합 | `_closeTbl`의 `tblpX` 보정은 **-40** — 결재란(+102)과 다른 이유는 중첩 표 구조(외곽 셀 여백+`_SIG_IND`)로 기준점이 다르기 때문. 보정 후 우측 가장자리가 본문 표 외곽선(≈526.3pt)과 정확히 일치 |
+| 종결 표 우측 정합 | `_closeTbl`의 `tblpX` 보정은 **+88** — 중첩 부동 표는 tblpX 산술보다 ~65tw 좌측에 착지하고 본문 표 이중 외곽선은 텍스트 경계보다 ~24tw 우측에 그려지므로, 보정 없으면 서명란 우측선이 ~128tw 안쪽에 뜬다 (PDF 실측 519.2→524.9pt vs 본문 525.6pt 정합). 결재란(+102)과 다른 이유는 중첩 표 구조(외곽 셀 여백+`_SIG_IND`)로 기준점이 다르기 때문 |
+| 서명 표시 상한 | `DOCX_SIGN_MAX`(export) — author **74×38**·approve **52×40**pt. `facility.js docSignImages`·샘플 생성기·호출자가 같은 상한을 공유 (렌더 PNG는 2x로 인쇄 선명도 확보, 표시 pt만 전달) |
 
 ## 5. 워터마크 메커니즘 — 설계 제약과 실현
 
@@ -253,7 +254,8 @@ const file = docxFileMd(md, '재고현황_2026-11-14', wm, {
 - [ ] 서명·결재가 필요한 문서만 `:::sign` 사용 — 선두 결재란이 자동 부여됨
 - [ ] 워터마크 문구는 `docWmText(기관명)` — 경로별 임의 문구 금지
 - [ ] 워터마크는 `wmImg`(PNG) 우선 전달, `wm` 텍스트는 폴백으로 병행 전달
-- [ ] 서명 이미지는 `opts.images`로 — `images.author`는 서명란 `{{img:author}}` 토큰에, `images.approve`는 결재란 담당 칸에 적용. 둘 다 **서명-only 투명 PNG**여야 함 — (인)은 문서가 텍스트로 그리고 이미지는 그 위 오버레이라, (인)이 구워진 이미지를 넣으면 이중 표기됨
+- [ ] 서명 이미지는 `opts.images`로 — `images.author`는 서명란 `{{img:author}}` 토큰에, `images.approve`는 결재란 담당 칸에 적용. 둘 다 **서명-only 투명 PNG**여야 함 — (인)은 문서가 텍스트로 그리고 이미지는 그 위 오버레이라, (인)이 구워진 이미지를 넣으면 이중 표기됨. 표시 상한은 `DOCX_SIGN_MAX`(author 74×38/approve 52×40pt) 공유
+- [ ] 서명란 줄은 `라벨: 성명 {{img:key}}` 병기 — `{{img:key}}` 단독이면 성명이 누락됨 (토큰은 (인) 날인 표식일 뿐 성명을 대체하지 않음)
 - [ ] `:::page`는 의도된 다면 구성에만 — 쓰면 밀도 압축이 비활성화됨
 
 ## 9. 검증 절차 — Word COM·PDF 스트림·유닛
@@ -281,16 +283,18 @@ for s in re.findall(rb'stream\r?\n(.*?)endstream', data, re.S):
 
 ```python
 # PyMuPDF — 쪽별 워터마크 이미지 개수 = 정확히 1이어야 함 (2↑이면 농도 배가)
+# + wm bbox가 본문 영역(여백 안쪽)을 4방향으로 넘는지 — 페이지 중심 대각선 배치의 기하 증거
+# (잉크 픽셀 샘플은 기관명이 짧으면 여백 미도달·음영 칸이 <250으로 오염되어 부정확)
 import pymupdf
 for i, p in enumerate(pymupdf.open(f)):
-    n = len([im for im in p.get_image_info() if im['width'] == 1920])  # wmPNG 폭
-    assert n == 1, f'p{i+1}: wm {n}개'
-# 흰 여백 위 잉크 픽셀 ≈255×(1-α)=199 — 농도 실측
+    wms = [im for im in p.get_image_info() if im['width'] == 1920]  # wmPNG 폭
+    assert len(wms) == 1, f'p{i+1}: wm {len(wms)}개'
+    bb = wms[0]['bbox']  # x0<좌여백·y0<상여백·x1>우본문끝·y1>하본문끝 확인
 ```
 
 - 유닛 회귀: `node --test tests/unit/content/docx-utils.test.js tests/unit/content/doc-wm.test.js` → `npm.cmd test`
 - 샘플 재생성: `node tmp/gen_sample_docs.js --wm` → `tmp/sample-docs/` 8종 (carework 참조. `WM_ORG=기관명`으로 문구 지정)
-- **시각 회귀 게이트**: `powershell -File tools/check/check_docx_render.ps1` — Word COM 전수 내보내기 + PyMuPDF 계약 검증(쪽당 wm 1개·bbox 동일·꼬리 빈 쪽 없음·여백 잉크)을 한 명령으로 수행 (Word COM 의존 — 로컬 게이트)
+- **시각 회귀 게이트**: `powershell -File tools/check/check_docx_render.ps1` — Word COM 전수 내보내기 + PyMuPDF 계약 검증(쪽당 wm 1개·bbox 전 쪽 동일·bbox 본문 4방향 초과·꼬리 빈 쪽 없음)을 한 명령으로 수행 (Word COM 의존 — 로컬 게이트)
 - **다면 문서는 각 쪽 워터마크 확인** — 위 PyMuPDF 카운트로 쪽당 정확히 1개인지 대조
 
 ## 10. 함정·주의사항 (과거 결함 사례)
@@ -313,6 +317,9 @@ for i, p in enumerate(pymupdf.open(f)):
 | 워터마크 농도 `.12` | 순백지 위 88% 흰색이라 실사용자에게 **사실상 비가시** — 표 음영 위에서만 구분되어 "테이블 내에서만 표시"로 보고됨. 경로 통일 농도는 `.22` |
 | 부동 표 분할 | `tblpYSpec=bottom` 부동 표가 앵커 아래 남은 공간보다 크면 **행 단위로 쪼개져** 다음 쪽 상단에 잔여 행이 렌더됨 (서명란 날짜 행만 앞쪽·서명 행이 뒤쪽 사례) — 종결 블록은 반드시 **단일 행 `cantSplit` 한 표**로 묶고 앵커를 본문 말미(`끝.` 뒤)에 둘 것 |
 | 중첩 표 셀 경계 | 셀 폭과 같은 내부 표는 이중 외곽선(~38tw)이 셀 경계를 넘어 그려지고, 경계에서 자르는 렌더러에서 **서명란 우측선이 깎여 보임** → 서명 셀은 내부 표보다 `_SIG_SLK`(300) 넓게 + 내부 표 `tblInd`(60)로 양쪽 외곽선을 셀 안에 수용 |
-| 셀 안 서명 앵커 | (인) 위 서명 오버레이는 `wp:anchor`+`layoutInCell="1"` 필수 — 셀 밖 기준으로 잡히면 서명이 셀 밖으로 이탈. 서명란은 `relativeFrom="character"`+`posOffset=_OVR_RPAD-폭`으로 우측 끝 정합((인) 잉크가 탭 정지 위치보다 ~3.5pt 우측에 넘침 — 보정 없으면 `)`가 삐져나옴), 결재란은 `column`+`center`. 세로는 `line`+`center` — (인)이 있는 줄 중앙 |
+| 셀 안 서명 앵커 | (인) 위 서명 오버레이는 `wp:anchor`+`layoutInCell="1"` 필수 — 셀 밖 기준으로 잡히면 서명이 셀 밖으로 이탈. 서명란은 `relativeFrom="character"`+`posOffset=_OVR_CTR−cx/2`(≈-5.5pt−폭/2)로 **(인) 중심** 정합 — 앵커 문자(탭 정지점)가 (인) 중심보다 ~5.5pt 우측이라 좌측 편차 보정. 결재란은 `column`+`center`. 세로는 `line`+`center` — (인)이 있는 줄 중앙 |
+| `{{img:key}}` 성명 유지 | 서명란 줄은 **`성명 {{img:key}}` 병기**가 계약 — 토큰은 "(인) 위 날인 표식"일 뿐 성명 자리를 대체하면 성명이 누락된다(`인계자(서명): (인)` 결함 사례). `docMdSign`·생성기 `sign()` 모두 `라벨: 성명 {{img:author}}` 형태로 방출 |
+| 소자 `_wrap` 스케일 | `_cw` 글자폭은 **11pt 기준 dxa** — 9pt 소자(`_note`·메타) 등 다른 크기 단락은 `_wrap` 가용폭을 ×22/18로 스케일해야 함. 보정 없으면 9pt로 한 줄 들어가는 텍스트를 11pt 폭으로 판정해 불필요한 `<w:br/>` 사전 줄바꿈이 들어간다 (근거 열거 2줄 결함 사례) |
+| 미리보기 다면 스탬프 | `docWmHtml`은 986px(1쪽 관례, `pinDocSignBottom`과 동일) 간격으로 최대 12개 스탬프를 중첩 생성 — `inset:0` 단일 절대배치는 문서 전체 높이 중앙에 1번만 그려져 2쪽+ 문서의 쪽 중앙에 없음. 인쇄는 `position:fixed`가 장마다 자동 반복하므로 `@media print`에서 **첫 스탬프만 표시**해 중첩 방지 |
 
 **관련 이력**: 상세한 시행착오 경위는 `docs/dev/CHANGES.md` 2026-11-14 묶음(워터마크 헤더→본문 복원, OOXML 결함 2종, 1장 원칙, 표 분할 폐기 등) 참조.
