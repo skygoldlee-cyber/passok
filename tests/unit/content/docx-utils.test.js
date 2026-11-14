@@ -123,7 +123,7 @@ test('docxFileMd — 공문서 격식: 제목 중앙·메타줄·표머리 연�
     const metaIdx = doc.indexOf('○○요양원 · 2026-11-13 출력');
     assert.ok(metaIdx > titleIdx && doc.slice(titleIdx, metaIdx).includes('w:color w:val="595959"'), '메타줄 회색 소자 처리 누락');
     // 표 — 머리 연청 음영·중앙 정렬·수직 가운데·페이지 넘김 시 머리 반복·내부선 연회색
-    assert.ok(doc.includes('w:fill="DEEAF6"'), '표머리 연청 음영 누락');
+    assert.ok(doc.includes('w:fill="B8D2F0"'), '표머리 연청 음영 누락');
     assert.ok(doc.includes('<w:tblHeader/>'), '표머리 반복(tblHeader) 누락');
     assert.ok(doc.includes('<w:vAlign w:val="center"/>'), '셀 수직 가운데 누락');
     assert.ok(doc.includes('w:color="BFBFBF"'), '내부선 연회색 누락');
@@ -134,8 +134,8 @@ test('docxFileMd — 공문서 격식: 제목 중앙·메타줄·표머리 연�
     assert.ok(doc.includes('<w:cantSplit/>'), '행 분할 방지 누락');
     assert.ok(doc.includes('<w:trHeight'), '최소 행 높이 누락');
     // 2열 표 레이블 열 음영 + 짝수 행 줄무늬
-    assert.ok(doc.includes('w:fill="F2F2F2"'), '레이블 열 음영 누락');
-    assert.ok(doc.includes('w:fill="F7F9FC"'), '짝수 행 줄무늬 음영 누락');
+    assert.ok(doc.includes('w:fill="D0D0D0"'), '레이블 열 음영 누락');
+    assert.ok(doc.includes('w:fill="D5E4F6"'), '짝수 행 줄무늬 음영 누락');
     // 타이포 — 제목 명조계·본문 1.15배 줄간격·'끝.' 종결 표기
     assert.ok(doc.includes('w:eastAsia="바탕"'), '제목 명조 서체 누락');
     assert.ok(doc.includes('w:line="336"'), '줄간격 1.4배 누락');
@@ -173,9 +173,9 @@ test('docxFileMd — :::sign 서명란은 하단 우측 부동 표, 셀 어절 �
     const doc = entries['word/document.xml'];
     assert.ok(doc.includes('w:tblpPr'), '서명란 부동 표(tblpPr) 누락');
     assert.ok(doc.includes('w:tblpYSpec="bottom"'), '서명란 하단 앵커 누락 — A4 하단 배치 아님');
-    // 명시적 tblpX — XSpec="right"는 우측 초과, 이중 외곽선 포함 우측끝을 본문 표와 정합(+102 보정)
-    // 내부 표 들여쓰기(_SIG_IND=60)만큼 좌측으로 — 시각적 우측선 위치는 4974 시절과 동일
-    assert.ok(doc.includes('w:tblpX="4914"'), '서명란 우측 앵커(본문폭−서명폭−들여쓰기+102 보정) 누락');
+    // 명시적 tblpX — XSpec="right"는 우측 초과, 이중 외곽선 포함 우측끝을 본문 표와 정합(−40 보정)
+    // 내부 표 들여쓰기(_SIG_IND=60)만큼 좌측으로 — 시각적 우측선은 본문 표 외곽선과 일치
+    assert.ok(doc.includes('w:tblpX="4772"'), '서명란 우측 앵커(본문폭−서명폭−들여쓰기−40 보정) 누락');
     assert.ok(doc.includes('인계자(서명): 김요양'), '서명 내용 누락');
     assert.ok(!doc.includes(':::sign'), '마커가 본문에 노출됨');
     assert.ok(doc.includes('<w:kinsoku/>'), '금칙 규칙(어절 줄바꿈) 누락');
@@ -215,12 +215,13 @@ test('워터마크 — 문구 지정 시 본문 앵커 삽입, 미지정 시 생
     const { entries: plain } = await unzip(docxFileMd('# t\n\n본문', 'doc'));
     assert.ok(!plain['word/document.xml'].includes('w:drawing'), '워터마크 미지정 시 드로잉 없어야 함');
     assert.ok(!('word/header1.xml' in plain), '헤더 파트 없어야 함');
-    // 다중 페이지 — 추정 경계(360pt)마다 앵커 + 문서 끝 앵커로 마지막 쪽 보장
+    // 다중 페이지 — 추정 쪽 경계(_PAGE_PT)마다 앵커 1개 + 문서 끝 앵커로 마지막 쪽 보장.
+    // 쪽당 1개 원칙 — 같은 쪽에 중첩되면 알파가 배가되어 쪽별 농도가 달라짐
     const longMd = '# t\n\n' + Array.from({ length: 50 }, (_, i) => '단락 ' + i).join('\n\n');
     const { entries: long } = await unzip(docxFileMd(longMd, 'doc', '테스트요양원'));
     const longDoc = long['word/document.xml'];
     const anchors = (longDoc.match(/<wp:anchor/g) || []).length;
-    assert.ok(anchors >= 4, `긴 문서 앵커 부족 (${anchors}) — 경계 간격 + 끝쪽 앵커 필요`);
+    assert.ok(anchors >= 3, `긴 문서 앵커 부족 (${anchors}) — 선두 + 경계 간격 + 끝쪽 앵커 필요`);
     for (const id of ['id="100"', 'id="101"', 'id="102"']) assert.ok(longDoc.includes(id), `docPr ${id} 누락 — 앵커 id는 유일해야 함`);
     // 모든 앵커는 용지 중앙 — relativeFrom="page" + align=center라 세로·가로 자동 인지
     const posV = longDoc.match(/<wp:positionV relativeFrom="page"><wp:align>center<\/wp:align>/g) || [];
@@ -392,7 +393,7 @@ test('docxFile — doc 미지정 시 기존 6엔트리 유지 (회귀)', async (
 
 test('docxFile — opts.doc: 평문 경로도 core.xml + 푸터 번호 부여', async () => {
     const doc = { no: 'INC-20261113-b7e4d2', org: '테스트요양원', rev: 1 };
-    const { entries } = await unzip(docxFile('제목\n기관 · 2026-11-13 출력 · 문서번호 INC-20261113-b7e4d2\n\n본문', 'doc', 2, '', null, { doc }));
+    const { entries } = await unzip(docxFile('제목\n기관 · 2026-11-13 출력 · 문서번호 INC-20261113-b7e4d2\n\n본문', 'doc', 2, '', { doc }));
     assert.ok(entries['docProps/core.xml'].includes('<dc:identifier>INC-20261113-b7e4d2</dc:identifier>'));
     assert.ok(entries['word/footer1.xml'].includes('문서번호 INC-20261113-b7e4d2'));
 });

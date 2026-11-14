@@ -272,7 +272,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         setDocSignImage('data:image/png;base64,AAA');
         try {
             const md = docMdSign([['작성자', 'author'], ['확인자', 'confirmer']]);
-            expect(md).toContain('작성자: {{img:author}}'); // docx 이미지 치환 토큰
+            expect(md).toMatch(/작성자: [^\n]*\{\{img:author\}\}/); // 성명 유지 + docx 이미지 치환 토큰 (토큰이 성명 자리를 대체하면 서명란에 성명 누락)
             expect(md).not.toContain('확인자: {{img:author}}'); // author 슬롯만
             const html = mdToHtml(':::sign\n작성자: {{img:author}}\n:::end');
             expect(html).toContain('care-doc-signimg'); // 미리보기·PDF는 등록 이미지 렌더

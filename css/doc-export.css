@@ -3,12 +3,15 @@
    워터마크 오버레이 .doc-wm — docWmHtml(src/content/doc-wm.js)이 생성.
    사용 조건: 문서 루트 요소에 position:relative 지정 후 자식으로 삽입 */
 
-.doc-wm { position: absolute; inset: 0; overflow: hidden; pointer-events: none; display: flex; align-items: center; justify-content: center; }
-.doc-wm span { transform: rotate(-45deg); transform-origin: center; white-space: nowrap; font-weight: 700; font-style: italic; font-size: 2.6em; letter-spacing: .06em; color: rgba(0,0,0,.12); }
+.doc-wm { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+/* 화면: 쪽(986px) 간격 반복 스탬프 — 각 span이 top 오프셋으로 배정됨 (doc-wm.js) */
+.doc-wm span { position: absolute; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); transform-origin: center; white-space: nowrap; font-weight: 700; font-style: italic; font-size: 2.6em; letter-spacing: .06em; color: rgba(0,0,0,.22); }
 
 @media print {
     /* fixed는 인쇄 매체에서 페이지 박스 기준 매 장 반복 (cosmetic .fp-watermark 검증 방식).
+       인쇄에서는 반복 스탬프 중 첫 번째만 페이지 중앙에 표시 (나머지 숨김 — 중복 방지).
        옅은 회색이 인쇄에서 소실되지 않게 강제 */
-    .doc-wm { position: fixed; }
-    .doc-wm span { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .doc-wm { position: fixed; display: flex; align-items: center; justify-content: center; }
+    .doc-wm span { position: static; transform: rotate(-45deg); print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    .doc-wm span + span { display: none; }
 }

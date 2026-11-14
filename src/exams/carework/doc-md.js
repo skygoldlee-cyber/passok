@@ -27,8 +27,9 @@ export const mdTable = (headers, rows) =>
 export const docMdSign = items => {
     const s = getDocSign();
     const nm = (/** @type {string} */ k) => (k === 'author' ? s.author : k === 'confirmer' ? s.confirmer : k === 'receiver' ? s.receiver : '');
-    // author 슬롯에 등록 서명 이미지가 있으면 {{img:author}} 토큰 — docx는 이미지 삽입, 미리보기는 img 태그로 치환
-    return '\n\n:::sign\n' + items.map(([label, k]) => `${label}: ${k === 'author' && s.signImage ? '{{img:author}}' : (nm(k) || '＿＿＿＿＿＿＿＿')}`).join('\n') + '\n:::end';
+    // author 슬롯에 등록 서명 이미지가 있으면 이름 뒤에 {{img:author}} 토큰 병기 — (인) 위 날인 표식이며
+    // 성명 텍스트는 그대로 유지 (토큰이 이름 자리를 대체하면 서명란에 성명이 누락됨)
+    return '\n\n:::sign\n' + items.map(([label, k]) => `${label}: ${nm(k) || '＿＿＿＿＿＿＿＿'}${k === 'author' && s.signImage ? ' {{img:author}}' : ''}`).join('\n') + '\n:::end';
 };
 
 /** 기존 CSV 직렬화 재사용 → MD 표 (BOM·인용 처리는 parseCsv 위임) */

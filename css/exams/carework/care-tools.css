@@ -157,20 +157,22 @@
 .doc-md .doc-approve-wrap { text-align: right; margin-bottom: 14px; } /* 결재란↔본문 간격 — docx bottomFromText 300tw와 동일 체감 */
 .doc-md .doc-approve { display: inline-table; border-collapse: collapse; font-size: .85em; }
 .doc-md .doc-approve td { border: 1px solid var(--border-strong, #9ca3af); padding: 3px 12px; text-align: center; min-width: 48px; vertical-align: middle; }
-.doc-md .doc-approve tr:first-child td { background: #deeaf6; font-weight: 700; }
-.doc-md .doc-approve tr:last-child td { height: 26px; }
+.doc-md .doc-approve tr:first-child td { background: #b8d2f0; font-weight: 700; }
+.doc-md .doc-approve tr:last-child td { height: 26px; background: #d0d0d0; } /* (인) 서명칸 — 본문 회줄과 동일 회색 */
 .doc-md table { border-collapse: collapse; width: 100%; margin: 8px 0; font-size: .92em; display: block; overflow-x: auto; border: 2.5px double #444; }
 .doc-md th, .doc-md td { border: 1px solid var(--border-strong, #9ca3af); padding: 6px 10px; text-align: left; word-break: keep-all; vertical-align: middle; }
-.doc-md th { background: #deeaf6; color: #1f2937; text-align: center; font-weight: 700; }
-.doc-md tbody tr:nth-child(even) td { background: rgba(128,128,128,.05); }
-.doc-md table.doc-kv tbody td:first-child { background: #f2f2f2; text-align: center; }
+.doc-md th { background: #b8d2f0; color: #1f2937; text-align: center; font-weight: 700; }
+.doc-md tbody tr:nth-child(even) td { background: #d5e4f6; }
+.doc-md tbody tr:nth-child(odd) td { background: #d0d0d0; }
+.doc-md table.doc-kv tbody td:first-child { text-align: center; } /* 홀수 행 회색은 tbody odd 규칙이 담당 — even 행은 레이블 열까지 전폭 청음영 (docx와 동일 패턴) */
 .doc-md .doc-end { text-align: center; margin: 14px 0 0; }
 .doc-md .doc-pagebreak { break-before: page; page-break-before: always; } /* :::page — 인쇄·PDF 시 새 쪽 */
 .doc-md .doc-sign-date { text-align: center; color: var(--color-text-dim, #555); margin-bottom: 6px; }
 /* 서명란 — :::sign 블록 → 본문 끝 우측 정렬 박스 (docx는 페이지 하단 우측 부동 표) */
 .doc-md .doc-sign { margin: 12px 0 0 auto; width: fit-content; min-width: 200px; padding: 10px 16px; border: 1px solid var(--border-strong, #9ca3af); font-size: .92em; }
 .doc-md .doc-sign div { margin: 4px 0; }
-.doc-md .doc-sign > div:nth-child(odd) { background: #f7f9fc; margin: 4px -16px; padding: 0 16px; } /* 서명란 줄무늬 — docx 행 음영과 동일 리듬 */
+.doc-md .doc-sign > div:nth-child(odd) { background: #d5e4f6; margin: 4px -16px; padding: 0 16px; } /* 서명란 줄무늬 — docx 행 음영과 동일 리듬 */
+.doc-md .doc-sign > div:nth-child(even) { background: #d0d0d0; margin: 4px -16px; padding: 0 16px; }
 .doc-md ul { margin: 4px 0 4px 20px; }
 .doc-md hr { border: 0; border-top: 1px solid var(--border-subtle, #d1d5db); margin: 8px 0; }
 .care-doc-signimg { height: 42px; max-width: 100%; object-fit: contain; vertical-align: middle; }

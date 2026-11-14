@@ -240,7 +240,7 @@ const _docxFile = async (/** @type {*} */ ctx) => {
     }
     const org = getOrgName();
     const head = `${ctx.title}\n${org ? org + ' · ' : ''}${todayKey()} 출력`;
-    return docxFile(`${head}\n\n${ctx.text}`, ctx.fname('docx').replace(/\.docx$/, ''), 2, wm, wmImg, { doc });
+    return docxFile(`${head}\n\n${ctx.text}`, ctx.fname('docx').replace(/\.docx$/, ''), 2, wm, { ...(wmImg ? { wmImg } : {}), doc });
 };
 
 const _actDocx = async (/** @type {*} */ ctx) => {

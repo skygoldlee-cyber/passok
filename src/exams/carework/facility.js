@@ -5,6 +5,7 @@ import { getSupabase, getAuthSession } from '../../auth-sync/supabase-client.js'
 import { getJSON, setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { todayKey } from '../../core/utils.js';
+import { DOCX_SIGN_MAX } from '../../content/docx-utils.js';
 import { fmtDocName } from './name-fmt.js';
 
 export const ROLES = { worker: '요양보호사', manager: '관리책임자' };
@@ -195,7 +196,7 @@ export async function signFileToDataUri(file) {
  * 등록 서명 이미지 → docx `{{img:author}}`·결재란 삽입용 PNG 맵 — 없거나 합성 실패 시 null.
  * 두 키 모두 서명-only (투명 배경 유지) — (인)은 문서가 텍스트로 그리고 서명은 그 위에
  * 겹치는 오버레이로 배치된다 (docx wp:anchor · 미리보기 CSS absolute).
- * author: 서명란 (인)용 표시 상한 74×38, approve: 결재란 담당 칸 (인)용 52×40.
+ * author/approve 표시 상한은 DOCX_SIGN_MAX(74×38 / 52×40) 단일 정본 — 샘플 생성기도 공유.
  * 2배 렌더로 인쇄 선명도 확보, 표시 크기만 docx에 전달.
  * @returns {Promise<{author: {data:Uint8Array,w:number,h:number}, approve: {data:Uint8Array,w:number,h:number}}|null>}
  */
@@ -226,7 +227,7 @@ export async function docSignImages() {
             c.drawImage(img, 0, 0, w, h);
             return { data: toBytes(cv), w: Math.round(w / S), h: Math.round(h / S) };
         };
-        const author = mk(74, 38), approve = mk(52, 40);
+        const author = mk(DOCX_SIGN_MAX.author.w, DOCX_SIGN_MAX.author.h), approve = mk(DOCX_SIGN_MAX.approve.w, DOCX_SIGN_MAX.approve.h);
         return author && approve ? { author, approve } : null;
     } catch { return null; }
 }

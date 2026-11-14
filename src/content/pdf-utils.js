@@ -99,8 +99,14 @@ function _stampWatermark(canvas, text) {
     ctx.save();
     ctx.translate(canvas.width / 2, canvas.height / 2);
     ctx.rotate(-Math.PI / 4);
-    ctx.font = `italic 700 ${Math.round(canvas.width / 9)}px 'Malgun Gothic','Apple SD Gothic Neo',sans-serif`;
-    ctx.fillStyle = 'rgba(0,0,0,.12)';
+    // 문구 길이 무관하게 페이지 폭 안에 수렴 — 회전 투영 (문구폭+높이)/√2 ≤ 캔버스 폭
+    // → 문구폭 상한 ≈ √2·w − px ≈ 보수 상수 1.35·w
+    const maxW = canvas.width * 1.35;
+    let px = Math.round(canvas.width / 9);
+    const font = () => { ctx.font = `italic 700 ${px}px 'Malgun Gothic','Apple SD Gothic Neo',sans-serif`; };
+    font();
+    while (px > 12 && ctx.measureText(text).width > maxW) { px -= 4; font(); }
+    ctx.fillStyle = 'rgba(0,0,0,.22)';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText(text, 0, 0);
