@@ -33,7 +33,7 @@ test.describe('Care OS — 공유·내보내기 (CO-13)', () => {
             page.waitForEvent('download'),
             sheet.locator('button', { hasText: 'Word·한글 파일 다운로드' }).click(),
         ]);
-        expect(download.suggestedFilename()).toMatch(/평가 체크리스트_\d{4}-\d{2}-\d{2}\.docx$/);
+        expect(download.suggestedFilename()).toMatch(/평가 체크리스트_CHK-\d{8}-[0-9a-f]{6}\.docx$/); // 파일명=제목_문서번호(PREFIX-YYYYMMDD-HASH6) — 문서 추적 계약
         expect(page._errors).toEqual([]);
     });
 

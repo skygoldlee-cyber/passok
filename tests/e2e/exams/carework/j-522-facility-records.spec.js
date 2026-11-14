@@ -38,8 +38,8 @@ test.describe('J-522 기관 기록 대장 연동 (Supabase)', () => {
             '면회 공유 토스트 없음').toBeVisible({ timeout: 15_000 });
         // 기관 면회 대장 섹션에 예약 행 반영
         await expect(page.locator('#vis-facility .care-audit-sec'),
-            '기관 면회 대장 미렌더').toContainText('김면회', { timeout: 20_000 });
-        await expect(page.locator('#vis-facility')).toContainText('홍가족');
+            '기관 면회 대장 미렌더').toContainText('김 면회', { timeout: 20_000 });
+        await expect(page.locator('#vis-facility')).toContainText('홍 가족');
 
         // DB측 단언 — family_visits (예약 상태 scheduled)
         const visits = await restSelect(
@@ -73,7 +73,7 @@ test.describe('J-522 기관 기록 대장 연동 (Supabase)', () => {
             '사고 공유 토스트 없음').toBeVisible({ timeout: 15_000 });
         // 기관 사고 대장 섹션에 행 반영 — 가족통지 표기 포함
         await expect(page.locator('#inc-facility .care-audit-sec'),
-            '기관 사고 대장 미렌더').toContainText('이낙상', { timeout: 20_000 });
+            '기관 사고 대장 미렌더').toContainText('이 낙상', { timeout: 20_000 });
         await expect(page.locator('#inc-facility')).toContainText('가족통지');
 
         // DB측 단언 — incident_reports (append-only)

@@ -34,15 +34,15 @@ test.describe('J-510 carework 실무 기록 CRUD', () => {
         await page.locator('label.obs-chip:has(input[name="obs-sleep"][value="양호"])').click();
 
         await page.locator('[data-click="careLogGenerate"]').click();
-        await expect(page.locator('#log-preview .doc-md')).toContainText('김일지');
+        await expect(page.locator('#log-preview .doc-md')).toContainText('김 일지');
 
         await openMoreActions(page, 'care-log-view');
         await page.locator('#care-log-view [data-click="careLogSave"]').click();
-        await expect(page.locator('#log-saved .care-log-saved-item')).toContainText('김일지');
+        await expect(page.locator('#log-saved .care-log-saved-item')).toContainText('김 일지');
 
         // 재진입 지속성 — 라우팅 재방문
         await page.goto('/index.html#/care-log');
-        await expect(page.locator('#log-saved .care-log-saved-item')).toContainText('김일지');
+        await expect(page.locator('#log-saved .care-log-saved-item')).toContainText('김 일지');
 
         // 삭제 — 확인 모달 승인
         await page.locator('#log-saved [data-click="careLogDelete"]').click();
@@ -60,7 +60,7 @@ test.describe('J-510 carework 실무 기록 CRUD', () => {
         await page.locator('#vis-relation').selectOption({ index: 0 });
         await page.locator('#vis-purpose').fill('면회·물품 전달');
         await page.locator('[data-click="careVisitAdd"]').click();
-        await expect(page.locator('#vis-scheduled .care-log-saved-item')).toContainText('김면회');
+        await expect(page.locator('#vis-scheduled .care-log-saved-item')).toContainText('김 면회');
 
         // 예약 → 결과 기록 패널
         await page.locator('#vis-scheduled [data-click="careVisitResultOpen"]').click();
@@ -72,7 +72,7 @@ test.describe('J-510 carework 실무 기록 CRUD', () => {
 
         // 완료 목록으로 이동
         await expect(page.locator('#vis-result-panel')).toBeHidden();
-        await expect(page.locator('#vis-done .care-log-saved-item')).toContainText('김면회');
+        await expect(page.locator('#vis-done .care-log-saved-item')).toContainText('김 면회');
         await expect(page.locator('#vis-done .care-log-saved-item')).toContainText('면회 완료');
     });
 
@@ -89,14 +89,14 @@ test.describe('J-510 carework 실무 기록 CRUD', () => {
         await page.locator('#inc-family').check();
 
         await page.locator('[data-click="careIncidentGenerate"]').click();
-        await expect(page.locator('#inc-preview .doc-md')).toContainText('이낙상');
+        await expect(page.locator('#inc-preview .doc-md')).toContainText('이 낙상');
 
         await openMoreActions(page, 'care-incident-view');
         await page.locator('#care-incident-view [data-click="careIncidentSave"]').click();
-        await expect(page.locator('#inc-saved .care-log-saved-item')).toContainText('이낙상');
+        await expect(page.locator('#inc-saved .care-log-saved-item')).toContainText('이 낙상');
 
         // 재진입 지속성
         await page.goto('/index.html#/care-incident');
-        await expect(page.locator('#inc-saved .care-log-saved-item')).toContainText('이낙상');
+        await expect(page.locator('#inc-saved .care-log-saved-item')).toContainText('이 낙상');
     });
 });

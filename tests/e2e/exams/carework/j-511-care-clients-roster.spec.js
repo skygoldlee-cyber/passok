@@ -24,7 +24,7 @@ test.describe('J-511 carework 수급자 명부·근무표', () => {
         await page.locator('#cli-room').fill('302호');
         await page.locator('#cli-caution').fill('낙상 위험');
         await page.locator('[data-click="careClientSave"]').click();
-        await expect(page.locator('#cli-list .care-log-saved-item')).toContainText('김연동');
+        await expect(page.locator('#cli-list .care-log-saved-item')).toContainText('김 연동');
         await expect(page.locator('#cli-list .care-log-saved-item')).toContainText('입소중');
 
         // 2) 일지 작성 — 대상자 입력 시 명부 datalist가 등록 이름을 제안
@@ -36,7 +36,7 @@ test.describe('J-511 carework 수급자 명부·근무표', () => {
         await page.locator('[data-click="careLogGenerate"]').click();
         await page.locator('#care-log-view details.care-more-actions > summary').click();
         await page.locator('#care-log-view [data-click="careLogSave"]').click();
-        await expect(page.locator('#log-saved .care-log-saved-item')).toContainText('김연동');
+        await expect(page.locator('#log-saved .care-log-saved-item')).toContainText('김 연동');
 
         // 3) 명부 재방문 — 저장된 일지가 수급자 통합 이력으로 연동
         await page.goto('/index.html#/care-client');
@@ -63,7 +63,7 @@ test.describe('J-511 carework 수급자 명부·근무표', () => {
         await page.locator('#ros-worker').fill('박요양');
         await page.locator('#ros-note').fill('야간 전담');
         await page.locator('[data-click="careRosterAdd"]').click();
-        await expect(page.locator('#ros-list .care-log-saved-item')).toContainText('박요양');
+        await expect(page.locator('#ros-list .care-log-saved-item')).toContainText('박 요양');
         await expect(page.locator('#ros-list .care-log-saved-item')).toContainText('야간 전담');
 
         await page.locator('#ros-list [data-click="careRosterDelete"]').click();
