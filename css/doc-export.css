@@ -4,7 +4,7 @@
    사용 조건: 문서 루트 요소에 position:relative 지정 후 자식으로 삽입 */
 
 .doc-wm { position: absolute; inset: 0; overflow: hidden; pointer-events: none; display: flex; align-items: center; justify-content: center; }
-.doc-wm span { transform: rotate(-45deg); transform-origin: center; white-space: nowrap; font-weight: 700; font-style: italic; font-size: 1.3em; letter-spacing: .06em; color: rgba(0,0,0,.12); }
+.doc-wm span { transform: rotate(-45deg); transform-origin: center; white-space: nowrap; font-weight: 700; font-style: italic; font-size: 2.6em; letter-spacing: .06em; color: rgba(0,0,0,.12); }
 
 @media print {
     /* fixed는 인쇄 매체에서 페이지 박스 기준 매 장 반복 (cosmetic .fp-watermark 검증 방식).

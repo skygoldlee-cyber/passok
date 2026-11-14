@@ -1,4 +1,6 @@
 {
   "_comment": "미참조 자산 예외 승계 명단 — 여기 없는 고아 자산은 check:orphans 실패. 값은 보존 사유.",
-  "content/exams/carework/assets/characters/han-jeongsu.svg": "웹툰 인물 설정표(DOC-USR-23) 후보 캐릭터 — 향후 서사 등장 예정 보존"
+  "content/exams/carework/assets/characters/han-jeongsu.svg": "웹툰 인물 설정표(DOC-USR-23) 후보 캐릭터 — 향후 서사 등장 예정 보존",
+  "icons/passok-icon-1024.png": "PWA 아이콘 원본 마스터 — 192/512/180/maskable 파생 크기 생성용 소스 (앱 미참조 정상)",
+  "icons/passok-icon-master.png": "PWA 아이콘 원본 마스터 — 192/512/180/maskable 파생 크기 생성용 소스 (앱 미참조 정상)"
 }

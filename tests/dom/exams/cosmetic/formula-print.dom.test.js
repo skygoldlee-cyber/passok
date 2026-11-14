@@ -1,5 +1,5 @@
 // tests/dom/formula-print.dom.test.js — Formula OS 인쇄 산출물 시나리오
-// @spec FO-21,FO-29
+// @spec FO-21,FO-29,CO-22
 // 설계: docs/dev/design/DOM_TEST_DESIGN.md §5.1 (Phase 2c)
 // 검증: formulaPrint 빈 드래프트 거부·기록지 렌더, 배치 기록지 QC·위생·스냅샷,
 //       라벨 전성분·폴백, 안내문 제형 템플릿·원료 주의, afterprint 정리,
@@ -18,6 +18,8 @@ import { formulaNew, formulaOpen, formulaPrint, formulaPrintWorkOrder } from '..
 import {
     batchPrintRecord, batchPrintLabel, batchPrintGuide,
 } from '../../../../src/exams/cosmetic/views/formula-batch.js';
+import { buildSalesRecordHtml, printHtml } from '../../../../src/exams/cosmetic/views/formula-print.js';
+import { listDocIssues } from '../../../../src/exams/cosmetic/doc-issue-store.js';
 import { createFormula } from '../../../../src/exams/cosmetic/formula-store.js';
 import { createBatch } from '../../../../src/exams/cosmetic/batch-store.js';
 
@@ -191,5 +193,23 @@ describe('인쇄 산출물 — 기록지·라벨·안내문', () => {
         expect(lastToast()[1]).toBe('info');
         expect(printArea().innerHTML).toBe('');
         expect(window.print).not.toHaveBeenCalled();
+    });
+
+    it('증적 문서 — 문서번호 data 속성·QR·인쇄 시 발행 대장 기록 (CO-22)', () => {
+        const html = buildSalesRecordHtml([
+            { batchNo: 'B-001', deliveredAt: '2026-11-10', formulaName: '세럼', customerName: '김수', targetVolume: 30, unit: 'g', disposition: '' },
+        ]);
+        expect(html).toContain('data-doc-no="SALES-');
+        expect(html).toContain('data-doc-tool="판매내역서"');
+        expect(html).toContain('fp-doc-qr');
+        printHtml(html);
+        const issues = listDocIssues();
+        expect(issues).toHaveLength(1);
+        expect(issues[0].docNo).toMatch(/^SALES-\d{8}-[0-9a-f]{6}$/);
+        expect(issues[0].tool).toBe('판매내역서');
+        expect(issues[0].kinds).toContain('print');
+        // 비증적 산출물은 data-doc-no가 없어 대장 미기록
+        printHtml('<div class="fp-doc"><h1>라벨</h1></div>');
+        expect(listDocIssues()).toHaveLength(1);
     });
 });

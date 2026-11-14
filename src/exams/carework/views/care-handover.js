@@ -9,7 +9,7 @@ import { attachClientPicker, clientField } from '../care-client-field.js';
 import { buildDigest } from '../handover-digest.js';
 import { listVisits } from '../care-visit-store.js';
 import { listIncidents } from '../incident-store.js';
-import { myMembership, submitHandover, listHandovers as listFacilityHandovers, ackHandover, getDocSign, refreshOrgName } from '../facility.js';
+import { myMembership, submitHandover, listHandovers as listFacilityHandovers, ackHandover, getDocSign, refreshOrgName, fmtDocName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { getJSON, setJSON } from '../../../core/storage.js';
 import { STORAGE_KEYS } from '../../../core/storage-keys.js';
@@ -91,7 +91,7 @@ function renderSaved() {
     if (!host) return;
     const items = listHandovers();
     host.innerHTML = items.length
-        ? items.map((/** @type {*} */ x) => `<div class="care-log-saved-item"><span>${esc(x.savedAt)} · ${esc(x.from || '')} → ${esc(x.to || '')}</span><button data-click="careHandoverDelete" data-arg="${esc(x.id)}" class="btn btn-secondary">삭제</button></div>`).join('')
+        ? items.map((/** @type {*} */ x) => `<div class="care-log-saved-item"><span>${esc(x.savedAt)} · ${esc(fmtDocName(x.from))} → ${esc(fmtDocName(x.to))}</span><button data-click="careHandoverDelete" data-arg="${esc(x.id)}" class="btn btn-secondary">삭제</button></div>`).join('')
         : '<p class="care-log-empty">저장된 인수인계 없음 — 공유·내보내기 시 자동 저장됩니다.</p>';
 }
 
@@ -186,7 +186,7 @@ async function renderFacility() {
             <button class="btn" data-click="careFacilityHandoverSubmit">🏥 기관에 공유</button>
             ${_fhList.map((/** @type {*} */ h) => `
                 <div class="care-log-saved-item">
-                    <span>${esc(h.shift_date)} · ${esc(h.client)} — ${esc(h.memo || '')}</span>
+                    <span>${esc(h.shift_date)} · ${esc(fmtDocName(h.client))} — ${esc(h.memo || '')}</span>
                     <em>${esc(h.handover_acks?.length || 0)}명 인수</em>
                     <button data-click="careHandoverAck" data-arg="${esc(h.id)}" class="btn btn-secondary">인수 확인</button>
                 </div>`).join('')}

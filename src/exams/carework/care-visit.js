@@ -3,6 +3,7 @@
 // 방문예약(scheduled) → 방문결과(done)/취소(canceled) 상태 전이와 면회 기록 문서 생성
 import { toCsv } from '../../content/csv-utils.js';
 import { mdTable } from './doc-md.js';
+import { fmtDocName } from './name-fmt.js';
 
 export const RELATIONS = [
     { key: 'spouse', label: '배우자' },
@@ -28,8 +29,8 @@ export function buildVisitText(v) {
     if (!v || !v.client || !v.visitor || !v.date) return '';
     const rel = relationLabel(v.relation);
     const lines = [
-        `대상자: ${v.client}`,
-        `방문객: ${v.visitor}${rel ? ` (${rel})` : ''}`,
+        `대상자: ${fmtDocName(v.client)}`,
+        `방문객: ${fmtDocName(v.visitor)}${rel ? ` (${rel})` : ''}`,
         v.phone ? `연락처: ${v.phone}` : '',
         `방문 예정: ${v.date}${v.time ? ' ' + v.time : ''}`,
         v.purpose ? `목적·요청사항: ${v.purpose}` : '',
@@ -48,8 +49,8 @@ export const visitKvMd = (v) => {
     const rel = relationLabel(v.relation);
     const r = v.status === 'done' ? v.result : null; // 완료 시 실제 방문 일시·결과 사용
     const rows = [
-        ['방문일', `${r?.date || v.date || ''}${(r?.time || v.time) ? ' ' + (r?.time || v.time) : ''}`], ['대상자', v.client || ''],
-        ['방문객', `${v.visitor || ''}${rel ? ` (${rel})` : ''}`], ['연락처', v.phone || ''],
+        ['방문일', `${r?.date || v.date || ''}${(r?.time || v.time) ? ' ' + (r?.time || v.time) : ''}`], ['대상자', fmtDocName(v.client)],
+        ['방문객', `${fmtDocName(v.visitor)}${rel ? ` (${rel})` : ''}`], ['연락처', v.phone || ''],
         ['목적', v.purpose || ''],
     ];
     if (r?.summary) rows.push(['결과·특이사항', r.summary]);

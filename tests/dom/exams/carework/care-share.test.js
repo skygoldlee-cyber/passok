@@ -202,8 +202,9 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
         await careShare(document.getElementById('share').dataset.arg);
         await tapMenu('카카오톡');
         await tapMenu('Excel로 보내기'); // 형식 선택 — xlsx만 생성
-        const localToday = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
-        await vi.waitFor(() => expect(sheetSpy).toHaveBeenCalledWith(csv, `방문 기록_${localToday}.xlsx`)); // 실제 xlsx 생성 확인
+        await vi.waitFor(() => expect(sheetSpy).toHaveBeenCalled()); // 실제 xlsx 생성 확인
+        expect(sheetSpy.mock.calls[0][0]).toBe(csv);
+        expect(sheetSpy.mock.calls[0][1]).toMatch(/^방문 기록_[A-Z]+-\d{8}-[0-9a-f]{6}\.xlsx$/); // 추적 문서번호 접미사
         expect(pdfSpy).not.toHaveBeenCalled(); // 미선택 형식은 생성하지 않는다
     });
 
@@ -226,7 +227,7 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
         await tapMenu('Word·한글 파일 다운로드');
         await vi.waitFor(() => expect(globalThis.URL.createObjectURL).toHaveBeenCalled());
         const file = globalThis.URL.createObjectURL.mock.calls[0][0];
-        expect(file.name).toMatch(/문서_\d{4}-\d{2}-\d{2}\.docx$/);
+        expect(file.name).toMatch(/문서_[A-Z]+-\d{8}-[0-9a-f]{6}\.docx$/);
         expect(file.type).toContain('wordprocessingml.document');
     });
 

@@ -1,12 +1,15 @@
 // src/exams/cosmetic/views/formula-print.js — Formula OS 인쇄 산출물 빌더 (Phase A)
-// @spec FO-14,FO-21,FO-29,FO-56,FO-57,FO-58,FO-60,FO-69,FO-70
+// @spec CO-22,FO-14,FO-21,FO-29,FO-56,FO-57,FO-58,FO-60,FO-69,FO-70
 //
 // 조제 기록지(배치)·제품 라벨·사용 안내문·작업지시서 HTML 생성 + 공용 인쇄 트리거.
 // 기존 formula.js의 조제 기록지와 같은 #formula-print-area + body.formula-printing
 // 메커니즘을 재사용한다 (print.css의 fp-* 규칙 + fp-label 신설).
 
 import { esc } from '../../../core/sanitize.js';
-import { todayKey, fnv1aHex } from '../../../core/utils.js';
+import { todayKey } from '../../../core/utils.js';
+import { docStamp } from '../../../content/doc-stamp.js';
+import { qrDataUrl } from '../../../content/qr.js';
+import { recordDocIssue } from '../doc-issue-store.js';
 import { QC_FIELDS, HYGIENE_FIELDS } from '../batch-store.js';
 import { PHASE_OPTIONS } from '../formula-store.js';
 import { buildUsageGuideFromBatch } from '../usage-guide.js';
@@ -30,10 +33,16 @@ function fpWatermark(text) {
   return text ? `<div class="fp-watermark" aria-hidden="true">${esc(text)}</div>` : '';
 }
 
-/** 증적 문서 번호 — FO-66 RPT 형식을 따라 유형 접두어 + 발행일 + 내용 해시6 (동일 내용 → 동일 번호) */
+/** 증적 문서 번호 — FO-66 RPT 형식을 따라 유형 접두어 + 발행일 + 내용 해시6 (동일 내용 → 동일 번호).
+    CO-22 — 공용 docStamp로 위임 (플랫폼 전 시험 팩 동일 체계) */
 /** @param {string} prefix @param {*} seed */
-function fpDocStamp(prefix, seed) {
-  return `${prefix}-${todayKey().replace(/-/g, '')}-${fnv1aHex(JSON.stringify(seed)).slice(0, 6)}`;
+const fpDocStamp = docStamp;
+
+/** 문서번호 QR — 인쇄물 우측 소형 이미지 (CO-22). 스캔 시 번호 평문 — 오프라인 검색 대응 */
+/** @param {string} no */
+function fpDocQr(no) {
+  const src = no ? qrDataUrl(no, 120) : null;
+  return src ? `<img class="fp-doc-qr" src="${src}" alt="문서번호 QR — ${esc(no)}">` : '';
 }
 
 /** 배치 QC·위생 요약 텍스트 — 카드·인쇄 공용 */
@@ -330,7 +339,7 @@ export function buildAuditReportHtml(d) {
   // FO-66 — 출력물↔이력 대조·변조 감지용 식별자/해시. FO-67 — 출력 기록(기기 흔적).
   const idLine = `문서 번호: ${esc(d.id || '—')} · 내용 해시: ${esc(d.hash || '—')}`
     + `${d.printedBy ? ` · 출력 환경: ${esc(d.printedBy)}` : ''}`;
-  return `<div class="fp-doc">
+  return `<div class="fp-doc" data-doc-no="${esc(d.id || '')}" data-doc-tool="종합 점검 보고서">
     ${fpWatermark(d.id)}
     <h1>종합 점검 보고서</h1>
     <p class="fp-meta-line">사업 유형: ${esc(d.biz.label)} — ${esc(d.biz.desc)}</p>
@@ -346,6 +355,7 @@ export function buildAuditReportHtml(d) {
       <span class="fp-sign">확인일: ________</span>
     </div>
     <p class="fp-meta-line fp-sign-record">서명 기록 — 출력일시 ${esc(auditFmtDateTime(d.generatedAt))} · 출력 환경 ${esc(d.printedBy || '—')} · 문서 ${esc(d.id || '—')}</p>
+    ${fpDocQr(d.id)}
     <p class="fp-disclaimer">본 보고서는 자가점검용 참고 자료이며 법률 자문이 아닙니다. 실제 의무·기준의 판단은 법령 원문과 관할 지방식약청 안내를 따르세요.</p>
     <p class="fp-disclaimer">본 문서에는 고객 개인정보(이름·피부 정보·상담 내용)가 포함될 수 있습니다 — 출력물의 보관·폐기에 주의하세요.</p>
   </div>`;
@@ -369,10 +379,11 @@ export function buildRecallListHtml(q) {
     <td>${esc(b.deliveredAt || '미인도')}</td>
   </tr>`).join('');
   const stamp = fpDocStamp('LOT', [m.name, m.lot, batches.map((/** @type {*} */ b) => b.batchNo)]);
-  return `<div class="fp-doc">
+  return `<div class="fp-doc" data-doc-no="${stamp}" data-doc-tool="원료 LOT 사용 추적">
     ${fpWatermark(stamp)}
     <h1>원료 LOT 사용 추적</h1>
     <p class="fp-meta-line">원료: ${esc(m.name || '—')}${m.lot ? ` · LOT ${esc(m.lot)}` : ''} · 조회일: ${esc(todayKey())} · 대상 배치 ${batches.length}건 · 문서 ${esc(stamp)}</p>
+    ${fpDocQr(stamp)}
     ${batches.length ? `<table class="fp-table">
       <thead><tr><th>배치번호</th><th>처방·제품</th><th>인도 고객</th><th>조제 일시</th><th>인도일</th></tr></thead>
       <tbody>${rows}</tbody></table>
@@ -398,10 +409,11 @@ export function buildSalesRecordHtml(batches) {
   const period = list.length
     ? `${list[list.length - 1].deliveredAt} ~ ${list[0].deliveredAt}` : '—';
   const stamp = fpDocStamp('SALES', list.map((/** @type {*} */ b) => [b.batchNo, b.deliveredAt, b.customerName]));
-  return `<div class="fp-doc">
+  return `<div class="fp-doc" data-doc-no="${stamp}" data-doc-tool="판매내역서">
     ${fpWatermark(stamp)}
     <h1>판매내역서</h1>
     <p class="fp-meta-line">기간: ${esc(period)} · 발행일: ${esc(todayKey())} · 인도 완료 ${list.length}건 · 문서 ${esc(stamp)}</p>
+    ${fpDocQr(stamp)}
     ${list.length ? `<table class="fp-table">
       <thead><tr><th>인도일</th><th>배치번호</th><th>제품·처방</th><th>고객</th><th class="fp-num">내용량</th><th>비고</th></tr></thead>
       <tbody>${rows}</tbody></table>`
@@ -425,10 +437,11 @@ export function buildConsentHtml(d) {
   const allergyLine = c.allergies && c.allergies.length
     ? esc(c.allergies.join(', ')) : '보고된 알레르기 없음';
   const stamp = fpDocStamp('CONSENT', [c.name, c.skinType, p.formulaName, p.batchNo]);
-  return `<div class="fp-doc">
+  return `<div class="fp-doc" data-doc-no="${stamp}" data-doc-tool="맞춤형화장품 사용 안내·동의서">
     ${fpWatermark(stamp)}
     <h1>맞춤형화장품 사용 안내·동의서</h1>
     <p class="fp-meta-line">고객: ${esc(c.name || '—')}${c.skinType ? ` · 피부타입 ${esc(c.skinType)}` : ''} · 발행일: ${esc(todayKey())} · 문서 ${esc(stamp)}</p>
+    ${fpDocQr(stamp)}
     ${p.formulaName || p.batchNo ? `<p class="fp-meta-line">대상 제품: ${esc(p.formulaName || '—')}${p.batchNo ? ` (배치 ${esc(p.batchNo)})` : ''}</p>` : ''}
     <h3>고객 알레르기 이력</h3>
     <p class="fp-notes">${allergyLine}</p>
@@ -449,11 +462,17 @@ export function buildConsentHtml(d) {
   </div>`;
 }
 
-/** 공용 인쇄 트리거 — 전용 영역에 렌더 후 window.print() */
+/** 공용 인쇄 트리거 — 전용 영역에 렌더 후 window.print().
+    CO-22 — fp-doc 루트의 data-doc-no가 있으면 증적 문서로 보고 발행 대장에 기록 (비증적 산출물은 속성 없음 → 미기록) */
 /** @param {string} html */
 export function printHtml(html) {
   const area = document.getElementById('formula-print-area');
   if (!area) return;
+  try {
+    const no = (String(html).match(/data-doc-no="([^"]+)"/) || [])[1] || '';
+    const tool = (String(html).match(/data-doc-tool="([^"]+)"/) || [])[1] || '';
+    if (no) recordDocIssue({ docNo: no, tool, kind: 'print' });
+  } catch { /* 대장 기록 실패는 출력을 막지 않는다 */ }
   area.innerHTML = html;
   document.body.classList.add('formula-printing');
   const cleanup = () => {

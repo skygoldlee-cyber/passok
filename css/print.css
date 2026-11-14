@@ -308,6 +308,15 @@
         margin: 2pt 0;
     }
 
+    /* CO-22 — 문서번호 QR (증적 문서 우측 소형, 인쇄 대비 흑백 고대비) */
+    #formula-print-area .fp-doc-qr {
+        width: 18mm;
+        height: 18mm;
+        float: right;
+        margin: 0 0 2pt 6pt;
+        image-rendering: pixelated;
+    }
+
     #formula-print-area .fp-doc h3 {
         font-size: 11pt;
         margin: 12pt 0 4pt;

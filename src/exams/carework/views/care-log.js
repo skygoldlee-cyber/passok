@@ -6,7 +6,7 @@ import { saveCareLog, listCareLogs, removeCareLog, syncPendingCareLogs } from '.
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { refreshOrgName } from '../facility.js';
+import { refreshOrgName, fmtDocName } from '../facility.js';
 import { showToast, showConfirm, flashSavedBadge, requireFields } from '../../../ui-utils.js';
 import { shareAudit } from '../care-share.js';
 import { docMdHead, docMdSign, mdToHtml } from '../doc-md.js';
@@ -121,7 +121,7 @@ function renderSaved() {
     const items = listCareLogs();
     host.innerHTML = items.length
         ? items.map(x => `<div class="care-log-saved-item">
-            <span>${esc(x.date)} · ${esc(x.client)} · ${esc(x.service)}</span>
+            <span>${esc(x.date)} · ${esc(fmtDocName(x.client))} · ${esc(x.service)}</span>
             ${x._sync === 'done' ? '<em>☁ 기관</em>' : ''}
             <button data-click="careLogDelete" data-arg="${esc(x.id)}" class="btn btn-secondary">삭제</button>
           </div>`).join('')

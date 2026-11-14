@@ -25,7 +25,7 @@ test('정식 헤더는 기존 파서 그대로 통과', () => {
 test('buildRecordText — 공단 제공기록지 양식', () => {
     const t = buildRecordText({ date: '2026-11-04', client: '김영희', service: 'visit-care', start: '09:00', end: '12:00', activities: { physical: ['식사 보조'] }, note: '혈압 확인' });
     assert.match(t, /급여제공기록지/);
-    assert.match(t, /김영희/);
+    assert.match(t, /김 영희/);
     assert.match(t, /방문요양/);
     assert.match(t, /식사 보조/);
     assert.equal(buildRecordText({ client: 'x' }), null);

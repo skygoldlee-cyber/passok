@@ -17,7 +17,7 @@ test('격식표 MD — 전 항목이 2열 표로 구성', () => {
     const md = buildIncidentMd(base);
     assert.match(md, /\| 항목 \| 내용 \|/);
     assert.match(md, /\| 발생 일시 \| 2026-11-01 14:30 \|/);
-    assert.match(md, /\| 대상자 \| 김○○ \|/);
+    assert.match(md, /\| 대상자 \| 김 ○○ \|/);
     assert.match(md, /\| 사고 유형 \| 낙상 \|/);
     assert.match(md, /\| 중증도 \| 경미 \(관찰 필요\) \|/);
     assert.match(md, /\| 가족 통지 \| 완료 \|/);

@@ -193,10 +193,10 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('log-service').value = 'visit-care';
         careLogGenerate();
         // 미리보기는 내보내기 표준 초안(MD)과 동일 렌더 — 표 구조 문서 (docx·PDF와 동일 원본)
-        expect(document.querySelector('#log-preview .doc-md')?.textContent).toMatch(/김○○/);
+        expect(document.querySelector('#log-preview .doc-md')?.textContent).toMatch(/김 ○○/);
         expect(document.querySelector('#log-preview .doc-md h3')?.textContent).toBe('요양일지');
         expect(document.querySelector('#log-preview .doc-md')?.textContent).toMatch(/\d{4}-\d{2}-\d{2}/);
-        expect(document.querySelector('#log-preview .doc-md table:not(.doc-approve)')?.textContent).toContain('김○○');
+        expect(document.querySelector('#log-preview .doc-md table:not(.doc-approve)')?.textContent).toContain('김 ○○');
         // 문서형 서명란 — cosmetic fp-sign-row 대응 (작성자·확인자)
         expect(document.querySelector('#log-preview .doc-md')?.textContent).toContain('작성자(요양보호사)');
         careLogRecordCopy(); // 제공기록지 양식 복사 — 메뉴와 별개 문서라 별도 버튼 유지
@@ -425,7 +425,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         const arg = /** @type {HTMLElement} */ (document.querySelector('[data-click="careHandoverExport"]')).dataset.arg;
         // 기록 우선 — 미저장 문서의 내보내기는 자동 저장 후 메뉴가 열린다
         await careHandoverExport(arg);
-        expect(document.getElementById('ho-saved')?.textContent).toMatch(/김○○/);
+        expect(document.getElementById('ho-saved')?.textContent).toMatch(/김 ○○/);
         expect(document.querySelector('.care-export-sheet')).toBeTruthy();
         const saved = document.querySelectorAll('#ho-saved .care-log-saved-item').length;
         // 동일 문서 재내보내기·명시 저장 — 중복 기록 없음 (텍스트 동일성 기준)
@@ -444,8 +444,8 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('vis-phone').value = '010-1234-5678';
         careVisitAdd();
         const sched = document.getElementById('vis-scheduled');
-        expect(sched.textContent).toContain('김○○');
-        expect(sched.textContent).toContain('홍○○');
+        expect(sched.textContent).toContain('김 ○○');
+        expect(sched.textContent).toContain('홍 ○○');
         expect(sched.textContent).toContain('010-1234-5678');
         // 결과 기록 패널 — loc: 접두 data-arg로 대상 지정 후 저장
         const arg = sched.querySelector('[data-arg^="loc:"]')?.dataset.arg;
@@ -493,7 +493,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         await new Promise(r => setTimeout(r, 0));
         const host = document.getElementById('vis-facility');
         expect(host.textContent).toContain('행복요양원');
-        expect(host.textContent).toContain('홍○○');
+        expect(host.textContent).toContain('홍 ○○');
         expect(host.textContent).toContain('010-1111-2222');
         expect(host.innerHTML).toContain('fac:v1');
         expect(host.innerHTML).not.toContain('fac:v2'); // 완료 건은 결과 기록 버튼 없음
@@ -528,7 +528,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('cli-caution').value = '낙상 위험';
         careClientSave();
         const list = document.getElementById('cli-list');
-        expect(list.textContent).toContain('김○○');
+        expect(list.textContent).toContain('김 ○○');
         expect(list.textContent).toContain('낙상 위험');
         const id = list.querySelector('[data-arg]')?.dataset.arg;
         await careClientLoad(id);
@@ -563,7 +563,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         expect(document.querySelector('#inc-preview .doc-md')?.textContent).toContain('낙상');
         expect(document.querySelector('#inc-preview .doc-md table')).toBeTruthy(); // 표 구조 문서
         careIncidentSave();
-        expect(document.getElementById('inc-saved').textContent).toContain('김○○');
+        expect(document.getElementById('inc-saved').textContent).toContain('김 ○○');
         careIncidentDelete(document.querySelector('#inc-saved [data-arg]')?.dataset.arg);
     });
 
@@ -575,7 +575,7 @@ describe('carework 실무 뷰 — 마크업↔핸들러 계약', () => {
         document.getElementById('ros-worker').value = '김○○';
         careRosterAdd();
         const list = document.getElementById('ros-list');
-        expect(list.textContent).toContain('김○○');
+        expect(list.textContent).toContain('김 ○○');
         expect(list.textContent).toContain('야간');
         careRosterDelete(list.querySelector('[data-arg]')?.dataset.arg);
     });

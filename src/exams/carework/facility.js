@@ -5,6 +5,7 @@ import { getSupabase, getAuthSession } from '../../auth-sync/supabase-client.js'
 import { getJSON, setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { todayKey } from '../../core/utils.js';
+import { fmtDocName } from './name-fmt.js';
 
 export const ROLES = { worker: '요양보호사', manager: '관리책임자' };
 
@@ -104,14 +105,7 @@ export function docHeadHtml(title) {
 
 // — 출력물 서명란 기입 (홈 설정 — 전 문서 공통) —
 
-/** 성명 표기 — 성·이름 사이 한 칸 (2글자 김 수 / 3글자 김 철수 / 4글자 남궁 민수). 한글 성명만 변환, 외국어·기타는 원형 */
-/** @param {string} n */
-export const fmtDocName = n => {
-    const s = String(n || '').trim();
-    if (/^[가-힣]{2,3}$/.test(s)) return `${s[0]} ${s.slice(1)}`;
-    if (/^[가-힣]{4}$/.test(s)) return `${s.slice(0, 2)} ${s.slice(2)}`;
-    return s;
-};
+export { fmtDocName, fmtDocNames } from './name-fmt.js';
 
 /** 홈에서 설정한 서명자 — {author: 작성자(요양보호사), confirmer: 확인자(시설장·기관장), receiver: 인수자, signImage: 서명 이미지 data URI} */
 export function getDocSign() {
@@ -199,8 +193,10 @@ export async function signFileToDataUri(file) {
 }
 /**
  * 등록 서명 이미지 → docx `{{img:author}}`·결재란 삽입용 PNG 맵 — 없거나 합성 실패 시 null.
- * author: 74×38 표시 (인) 우하단 + 서명 겹침 합성 (서명이 (인) 위를 덮는 실물 형태),
- * approve: 결재란 담당 칸용 서명-only. 2배 렌더로 인쇄 선명도 확보, 표시 크기만 docx에 전달.
+ * 두 키 모두 서명-only (투명 배경 유지) — (인)은 문서가 텍스트로 그리고 서명은 그 위에
+ * 겹치는 오버레이로 배치된다 (docx wp:anchor · 미리보기 CSS absolute).
+ * author: 서명란 (인)용 표시 상한 74×38, approve: 결재란 담당 칸 (인)용 52×40.
+ * 2배 렌더로 인쇄 선명도 확보, 표시 크기만 docx에 전달.
  * @returns {Promise<{author: {data:Uint8Array,w:number,h:number}, approve: {data:Uint8Array,w:number,h:number}}|null>}
  */
 export async function docSignImages() {
@@ -220,28 +216,18 @@ export async function docSignImages() {
             for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
             return u8;
         };
-        const fit = (/** @type {number} */ maxW, /** @type {number} */ maxH) => {
-            const k = Math.min(maxW / img.naturalWidth, maxH / img.naturalHeight, 1);
-            return { w: Math.max(1, img.naturalWidth * k), h: Math.max(1, img.naturalHeight * k) };
+        const mk = (/** @type {number} */ maxW, /** @type {number} */ maxH) => {
+            const k = Math.min(maxW * S / img.naturalWidth, maxH * S / img.naturalHeight, 1);
+            const w = Math.max(1, img.naturalWidth * k), h = Math.max(1, img.naturalHeight * k);
+            const cv = document.createElement('canvas');
+            cv.width = Math.round(w); cv.height = Math.round(h);
+            const c = cv.getContext('2d');
+            if (!c) return null;
+            c.drawImage(img, 0, 0, w, h);
+            return { data: toBytes(cv), w: Math.round(w / S), h: Math.round(h / S) };
         };
-        const cv = document.createElement('canvas'); // 서명란 합성 — (인) 위에 서명 겹침
-        cv.width = 74 * S; cv.height = 38 * S;
-        const c = cv.getContext('2d');
-        if (!c) return null;
-        c.font = `${11.5 * S}px 'Malgun Gothic', sans-serif`; c.fillStyle = '#000';
-        c.fillText('(인)', cv.width - 5 * S - c.measureText('(인)').width, cv.height - 4 * S);
-        const iw = Math.min(56 * S, cv.width), ih = Math.min(cv.height, iw * img.naturalHeight / img.naturalWidth);
-        c.drawImage(img, cv.width - iw, cv.height - ih, iw, ih);
-        const av = document.createElement('canvas'); // 결재란 — 서명-only (비율 유지, 52×40 표시 상한)
-        const af = fit(52 * S, 40 * S);
-        av.width = Math.round(af.w); av.height = Math.round(af.h);
-        const ac = av.getContext('2d');
-        if (!ac) return null;
-        ac.drawImage(img, 0, 0, af.w, af.h);
-        return {
-            author: { data: toBytes(cv), w: 74, h: 38 },
-            approve: { data: toBytes(av), w: Math.round(af.w / S), h: Math.round(af.h / S) },
-        };
+        const author = mk(74, 38), approve = mk(52, 40);
+        return author && approve ? { author, approve } : null;
     } catch { return null; }
 }
 

@@ -45,7 +45,9 @@ export const mdToHtml = md => {
     const out = [];
     // 서명 문서는 공문서 결재란 선두 부여 (docx _APPROVE와 동일 구조)
     if (/^:::sign\s*$/m.test(md)) {
-        out.push('<div class="doc-approve-wrap"><table class="doc-approve"><tr><td rowspan="2">결 재</td><td>담당</td><td>팀장</td><td>시설장</td></tr><tr><td></td><td></td><td></td></tr></table></div>');
+        const si = getDocSign().signImage; // 담당 칸 — 등록 서명이 (인) 위에 겹침 (docx 앵커 오버레이와 동일 형태)
+        const spot = `<span class="doc-sign-spot">(인)${si ? `<img class="care-doc-signimg" alt="서명" src="${si}">` : ''}</span>`;
+        out.push(`<div class="doc-approve-wrap"><table class="doc-approve"><tr><td rowspan="2">결 재</td><td>담당</td><td>팀장</td><td>시설장</td></tr><tr><td>${spot}</td><td>(인)</td><td>(인)</td></tr></table></div>`);
     }
     /** @type {string[][] | null} */
     let tbl = null;
@@ -72,7 +74,7 @@ export const mdToHtml = md => {
                 const date = `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`;
                 out.push(`<div class="doc-sign"><div class="doc-sign-date">${date}</div>${sign.map(l => {
                     const m = l.match(/^(.*)\{\{img:author\}\}\s*$/);
-                    if (m) { const im = getDocSign().signImage; if (im) return `<div>${esc(m[1])}<img class="care-doc-signimg" alt="${esc(getDocSign().author || '서명')}" src="${im}"> (인)</div>`; }
+                    if (m) { const im = getDocSign().signImage; if (im) return `<div>${esc(m[1])} <span class="doc-sign-spot">(인)<img class="care-doc-signimg" alt="${esc(getDocSign().author || '서명')}" src="${im}"></span></div>`; }
                     return `<div>${esc(l)}${/\(인\)\s*$/.test(l) ? '' : ' (인)'}</div>`;
                 }).join('')}</div>`);
                 sign = null;
@@ -89,6 +91,7 @@ export const mdToHtml = md => {
         if (meta && t) { meta = false; out.push(`<p class="doc-meta">${esc(t)}</p>`); continue; }
         if (!t) continue; // 빈 줄 — meta 플래그 유지
         meta = false;
+        if (t === ':::page') { out.push('<div class="doc-pagebreak"></div>'); continue; } // 인쇄 시 쪽 나눔 — docx의 :::page와 동일 마커
         if (t === '---') { out.push('<hr>'); continue; }
         if (t) out.push(`<p>${esc(t)}</p>`);
     }

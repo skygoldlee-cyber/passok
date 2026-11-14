@@ -2,6 +2,7 @@
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 // 발생경위·조치·가족 통지를 표준 사고보고 문서로 조립 — 기관 평가 증적 서식 기반
 import { toCsv } from '../../content/csv-utils.js';
+import { fmtDocName, fmtDocNames } from './name-fmt.js';
 
 export const INCIDENT_TYPES = [
     { key: 'fall', label: '낙상' },
@@ -37,13 +38,13 @@ export function buildIncidentText(v) {
     if (!v || !v.client || !v.date || !v.type) return '';
     const lines = [
         `발생 일시: ${v.date}${v.time ? ' ' + v.time : ''}`,
-        `대상자: ${v.client}`,
+        `대상자: ${fmtDocName(v.client)}`,
         v.place ? `발생 장소: ${v.place}` : '',
         `사고 유형: ${incidentTypeLabel(v.type)}`,
         v.severity ? `중증도: ${severityLabel(v.severity)}` : '',
         v.desc ? `발생 경위: ${v.desc}` : '',
         v.action ? `조치 내용: ${v.action}` : '',
-        v.witness ? `목격자: ${v.witness}` : '',
+        v.witness ? `목격자: ${fmtDocNames(v.witness, true)}` : '',
         `가족 통지: ${v.familyNotified ? '완료' : '미완료'}`,
     ];
     return lines.filter(Boolean).join('\n');
@@ -58,13 +59,13 @@ export function buildIncidentMd(v) {
     if (!v || !v.client || !v.date || !v.type) return '';
     const rows = /** @type {string[][]} */ ([
         ['발생 일시', `${v.date}${v.time ? ' ' + v.time : ''}`],
-        ['대상자', v.client],
+        ['대상자', fmtDocName(v.client)],
         ...(v.place ? [['발생 장소', v.place]] : []),
         ['사고 유형', incidentTypeLabel(v.type)],
         ...(v.severity ? [['중증도', severityLabel(v.severity)]] : []),
         ...(v.desc ? [['발생 경위', v.desc]] : []),
         ...(v.action ? [['조치 내용', v.action]] : []),
-        ...(v.witness ? [['목격자', v.witness]] : []),
+        ...(v.witness ? [['목격자', fmtDocNames(v.witness, true)]] : []),
         ['가족 통지', v.familyNotified ? '완료' : '미완료'],
     ]);
     return ['| 항목 | 내용 |', '|---|---|', ...rows.map(r => `| ${r[0]} | ${r[1]} |`)].join('\n');

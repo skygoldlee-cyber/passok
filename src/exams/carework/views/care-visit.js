@@ -5,13 +5,14 @@ import { markFunnel } from '../care-funnel.js';
 import { listVisits, saveVisit, updateVisit, removeVisit } from '../care-visit-store.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
-import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisitResult, refreshOrgName, signFileToDataUri } from '../facility.js';
+import { myMembership, submitVisit, listVisits as listFacilityVisits, updateVisitResult, refreshOrgName, signFileToDataUri, fmtDocName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast, showConfirm, flashSavedBadge, requireFields } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 import { docMdHead, docMdSign, mdToHtml } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
-export { careShare } from '../care-share.js';
+import { careShare } from '../care-share.js';
+export { careShare };
 export { careVisitVoiceToggle } from '../care-voice.js';
 import { voiceButtonsInit } from '../care-voice.js';
 
@@ -30,6 +31,8 @@ let _facility = null;
 let _fvList = [];
 /** @type {{scope:string, id:string}|null} */
 let _resultTarget = null; // {scope:'local'|'facility', id}
+/** @type {string|null} */
+let _docId = null; // 출력 대상 기록 — 기록별 개별 출력 (null = 최신 건)
 const PHOTO_MAX = 3; // 첨부 사진 한도 — localStorage 쿼터 보호
 /** @type {string[]} */ const _vPhotos = [];
 
@@ -177,10 +180,10 @@ function renderPreview() {
     // 첨부 사진 섹션 — 표 구조 문서라 레코드별 그리드를 문서 말미에 병기
     const withPhotos = listVisits().filter((/** @type {*} */ v) => v.result?.photos?.length);
     if (withPhotos.length) out.innerHTML += '<h3>📷 첨부 사진</h3>' + withPhotos.map((/** @type {*} */ v) =>
-        `<div class="care-photo-sub">${esc(v.client)} · ${esc(v.date)}</div><div class="care-photo-grid">${v.result.photos.map((/** @type {string} */ p) => `<img src="${p}" alt="첨부 사진">`).join('')}</div>`).join('');
+        `<div class="care-photo-sub">${esc(fmtDocName(v.client))} · ${esc(v.date)}</div><div class="care-photo-grid">${v.result.photos.map((/** @type {string} */ p) => `<img src="${p}" alt="첨부 사진">`).join('')}</div>`).join('');
 }
 
-/** 방문 기록 문서 미리보기 — 저장 기록 전체를 문서로 렌더 (내보내기 메뉴 자동 생성기, 복사·인쇄·PDF 공통 원본) */
+/** 방문 기록 문서 미리보기 — 출력 대상 건(_docId, 없으면 최신) 1건만 문서로 렌더 (내보내기 메뉴 자동 생성기, 복사·인쇄·PDF 공통 원본) */
 export function careVisitPreview() {
     const t = buildAllText();
     if (!t) { showToast('내보낼 방문 기록이 없습니다.', 'error'); return; }
@@ -195,13 +198,22 @@ export function careVisitPrint() {
     window.print();
 }
 
-/** 방문 기록 MD 초안 — 일별 제출 문서라 항목별 행(항목|내용 kv) 표 사용. 여러 건이면 번호 소제목으로 구분 (docx·인쇄 파생 원본) */
+/** 방문 기록 MD 초안 — 일별 제출 문서라 1건 1문서, 항목별 행(항목|내용 kv) 표 사용 (docx·인쇄 파생 원본). 대상은 _docId 선택 건, 없으면 최신 건 */
 export function careVisitDocMd() {
     const items = listVisits();
     if (!items.length) return '';
-    const body = items.length === 1 ? visitKvMd(items[0])
-        : items.map((v, i) => `### ${i + 1}. ${v.client || ''} — ${v.date || ''}\n\n${visitKvMd(v)}`).join('\n\n');
-    return docMdHead('면회·방문 기록') + '\n' + renderToolBody('careVisit', { 기록표: body }) + docMdSign([['작성자', 'author']]);
+    const v = items.find(x => x.id === _docId) || items[0];
+    return docMdHead('면회·방문 기록') + '\n' + renderToolBody('careVisit', { 기록표: visitKvMd(v) }) + docMdSign([['작성자', 'author']]);
+}
+
+/** 기록별 개별 출력 — 해당 건을 문서 대상으로 지정 후 내보내기 메뉴를 연다 */
+/** @param {string} id */
+export async function careVisitDoc(id) {
+    if (!listVisits().some(x => x.id === id)) return;
+    _docId = id;
+    renderPreview();
+    const arg = /** @type {HTMLElement|null} */ (document.querySelector('[data-click="careShare"][data-arg*="vis-preview"]'))?.dataset.arg;
+    if (arg) await careShare(arg);
 }
 
 export function careVisitCsvExport() {
@@ -215,15 +227,17 @@ export function careVisitCsvExport() {
 }
 
 function renderLists() {
+    _docId = null; // 기록 변동 시 출력 대상은 최신 건으로 복귀
     const items = listVisits();
     const sched = $('vis-scheduled');
     if (sched) {
         const rows = items.filter(v => v.status === 'scheduled');
         sched.innerHTML = rows.length
             ? rows.map((/** @type {*} */ v) => `<div class="care-log-saved-item">
-                <span>${esc(v.date)}${v.time ? ' ' + esc(v.time) : ''} · ${esc(v.client)} ← ${esc(v.visitor)}(${esc(relationLabel(v.relation))})${v.phone ? esc(' ' + v.phone) : ''}${v.purpose ? ' — ' + esc(v.purpose) : ''}</span>
+                <span>${esc(v.date)}${v.time ? ' ' + esc(v.time) : ''} · ${esc(fmtDocName(v.client))} ← ${esc(fmtDocName(v.visitor))}(${esc(relationLabel(v.relation))})${v.phone ? esc(' ' + v.phone) : ''}${v.purpose ? ' — ' + esc(v.purpose) : ''}</span>
                 <button data-click="careVisitResultOpen" data-arg="loc:${esc(v.id)}" class="btn btn-secondary">결과 기록</button>
                 <button data-click="careVisitCancel" data-arg="loc:${esc(v.id)}" class="btn btn-secondary">취소</button>
+                <button data-click="careVisitDoc" data-arg="${esc(v.id)}" class="btn btn-secondary">출력</button>
                 <button data-click="careVisitDelete" data-arg="${esc(v.id)}" class="btn btn-secondary">삭제</button>
               </div>`).join('')
             : '<p class="care-log-empty">등록된 방문예약이 없습니다.</p>';
@@ -233,7 +247,8 @@ function renderLists() {
         const rows = items.filter((/** @type {*} */ v) => v.status !== 'scheduled');
         done.innerHTML = rows.length
             ? rows.map(v => `<div class="care-log-saved-item">
-                <span>${esc(v.date)} · ${esc(v.client)} ← ${esc(v.visitor)} — ${esc((/** @type {Object.<string,string>} */ (VISIT_STATUS))[v.status] || '')}${v.result && v.result.summary ? esc(' · ' + v.result.summary) : ''}</span>
+                <span>${esc(v.date)} · ${esc(fmtDocName(v.client))} ← ${esc(fmtDocName(v.visitor))} — ${esc((/** @type {Object.<string,string>} */ (VISIT_STATUS))[v.status] || '')}${v.result && v.result.summary ? esc(' · ' + v.result.summary) : ''}</span>
+                <button data-click="careVisitDoc" data-arg="${esc(v.id)}" class="btn btn-secondary">출력</button>
                 <button data-click="careVisitDelete" data-arg="${esc(v.id)}" class="btn btn-secondary">삭제</button>
               </div>`).join('')
             : '<p class="care-log-empty">완료·취소된 방문이 없습니다.</p>';
@@ -253,7 +268,7 @@ async function renderFacility() {
             <h3>기관 면회 대장 — ${esc(_facility.name)}</h3>
             ${_fvList.map((/** @type {*} */ v) => `
                 <div class="care-log-saved-item">
-                    <span>${esc(v.visit_date)}${v.visit_time ? ' ' + esc(v.visit_time) : ''} · ${esc(v.client)} ← ${esc(v.visitor_name)}${v.visitor_phone ? esc(' ' + v.visitor_phone) : ''} — ${esc((/** @type {Object.<string,string>} */ (VISIT_STATUS))[v.status] || v.status)}${v.result && v.result.summary ? esc(' · ' + v.result.summary) : ''}</span>
+                    <span>${esc(v.visit_date)}${v.visit_time ? ' ' + esc(v.visit_time) : ''} · ${esc(fmtDocName(v.client))} ← ${esc(fmtDocName(v.visitor_name))}${v.visitor_phone ? esc(' ' + v.visitor_phone) : ''} — ${esc((/** @type {Object.<string,string>} */ (VISIT_STATUS))[v.status] || v.status)}${v.result && v.result.summary ? esc(' · ' + v.result.summary) : ''}</span>
                     ${v.status === 'scheduled' ? `<button data-click="careVisitResultOpen" data-arg="fac:${esc(v.id)}" class="btn btn-secondary">결과 기록</button>
                     <button data-click="careVisitCancel" data-arg="fac:${esc(v.id)}" class="btn btn-secondary">취소</button>` : ''}
                 </div>`).join('')}

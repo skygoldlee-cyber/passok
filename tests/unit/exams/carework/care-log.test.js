@@ -39,7 +39,7 @@ test('관찰 칩 입력은 본문에 반영 — 미선택 시 생략', () => {
 test('격식표 MD — 기본정보·서비스·특이사항이 표로 구성', () => {
     const md = buildCareLogMd({ ...base, obs: { meal: '전' } });
     assert.match(md, /\| 일시 \| 2026-11-01 09:00~12:00 \|/);
-    assert.match(md, /\| 대상자 \| 김○○ 님 \|/);
+    assert.match(md, /\| 대상자 \| 김 ○○ 님 \|/);
     assert.match(md, /\| 급여 종류 \| 방문요양 \|/);
     assert.match(md, /\| 신체활동 지원 \| 식사 보조 \|/); // 선택 그룹만 행
     assert.match(md, /\| 상태 관찰 \| 식사량: 전 \|/);

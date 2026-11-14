@@ -137,6 +137,8 @@ export const STORAGE_KEYS = {
   INCIDENT_ITEMS: 'carework_incidents',
   ROSTER_ITEMS: 'carework_roster',
   CARE_SHARE_AUDIT: 'carework_share_audit',
+  // 문서 발행 대장 — 문서번호별 발행 이력 [{id,docNo,tool,org,rev,issuedAt,files,kinds,hash}] (문서 추적성)
+  CARE_DOC_ISSUES: 'carework_doc_issues',
   CARE_ORG_NAME: 'carework_org_name',
   // 출력물 서명란 기입 — 홈 설정의 작성자·확인자 성명 {author, confirmer}
   CARE_DOC_SIGN: 'carework_doc_sign',
@@ -157,6 +159,9 @@ export const STORAGE_KEYS = {
   // Formula OS — 종합 보고서 출력 이력 (FO-63) — 최근 20건
   // [{at, bizId, bizLabel, setLabel, done, total, sections, id, hash, fresh}]
   FORMULA_AUDIT_LOG: 'formula_audit_log',
+
+  // Formula OS — 문서 발행 대장 (CO-22) — 증적 문서(docNo)별 발행 이력·판본 누적
+  FORMULA_DOC_ISSUES: 'formula_doc_issues',
 
   // Formula OS — 종합 보고서 점검자 성명 (FO-69) — 평문 문자열, 서명란 기입용
   FORMULA_INSPECTOR_NAME: 'formula_inspector_name',
@@ -267,6 +272,7 @@ export const BACKUP_KEYS = [
   STORAGE_KEYS.ROSTER_ITEMS,      // 교대 근무표 — 백업·동기화 대상
   STORAGE_KEYS.CARE_ORG_NAME,     // 출력물 기관명 (미가입 시 수동 설정) — 환경설정
   STORAGE_KEYS.CARE_DOC_SIGN,     // 출력물 서명란 작성자·확인자 성명 — 환경설정
+  STORAGE_KEYS.CARE_DOC_ISSUES,   // 문서 발행 대장 — 기관 감사 증적 (문서 추적성)
   STORAGE_KEYS.ADMIT_CHECKS,      // 입소 서류 체크리스트 수납 상태 — 환경설정
   STORAGE_KEYS.CARE_AUDIT_CUSTOM, // 기관 업로드 평가 점검표 — 백업·동기화 대상
   STORAGE_KEYS.CARE_FORM_TEMPLATES, // 기관 자체 양식 템플릿 — 백업·동기화 대상 (CO-17)
@@ -277,6 +283,7 @@ export const BACKUP_KEYS = [
   STORAGE_KEYS.FORMULA_ADLINT_STATE, // 광고 점검 최근 결과 — 종합 보고서 작업 데이터 (FO-56)
   STORAGE_KEYS.ADVERSE_ITEMS,      // 소비자 이상사례 기록 — 법적 증적 (FO-59)
   STORAGE_KEYS.FORMULA_AUDIT_LOG,  // 보고서 출력 이력 — 점검 진척 근거 (FO-63)
+  STORAGE_KEYS.FORMULA_DOC_ISSUES, // 문서 발행 대장 — 증적 문서 발행 이력 (CO-22)
   STORAGE_KEYS.FORMULA_INSPECTOR_NAME, // 보고서 점검자 성명 — 서명란 기입 설정 (FO-69)
 ];
 

@@ -2,12 +2,12 @@
 // @spec UX-FORM-03,UX-FORM-05 — 시험 전용 실무 뷰 (DA-13)
 import { listClients, addClient, removeClient, upsertClients, syncFacilityClients } from '../care-client-store.js';
 import { markFunnel } from '../care-funnel.js';
-import { clientsToCsv, ADMIT_ITEMS } from '../care-client-csv.js';
+import { clientsToCsv, clientKvMd, ADMIT_ITEMS } from '../care-client-csv.js';
 import { csvToClientsAny } from '../care-csv-presets.js';
 import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { docMdHead, csvToMdTable, mdToHtml, docMdSign } from '../doc-md.js';
-import { docHeadHtml, getDocSign, refreshOrgName } from '../facility.js';
+import { docMdHead, mdToHtml, docMdSign } from '../doc-md.js';
+import { docHeadHtml, getDocSign, refreshOrgName, fmtDocName } from '../facility.js';
 import { showToast, showConfirm, flashSavedBadge, requireFields } from '../../../ui-utils.js';
 import { clientTimeline, timelineSummary } from '../care-timeline.js';
 import { clientTrends } from '../care-trend.js';
@@ -119,11 +119,13 @@ function renderPreview() {
     if (out) out.innerHTML = mdToHtml(careClientDocMd());
 }
 
-/** 명부 MD 초안 — 대상자 표 구조 (docx·xlsx 파생 원본) */
+/** 명부 MD 초안 — 수급자별 항목 행(kv) 표 (docx·인쇄 파생 원본 — 다열 표는 Excel 내보내기에 한정) */
 export function careClientDocMd() {
     const items = listClients();
     if (!items.length) return '';
-    return docMdHead('수급자 명부') + '\n' + csvToMdTable(clientsToCsv(items)) + docMdSign([['작성자', 'author']]);
+    const body = items.length === 1 ? clientKvMd(items[0])
+        : items.map((c, i) => `### ${i + 1}. ${fmtDocName(c.name)}${c.status ? ` — ${c.status}` : ''}\n\n${clientKvMd(c)}`).join('\n\n');
+    return docMdHead('수급자 명부') + '\n' + body + docMdSign([['작성자', 'author']]);
 }
 
 /** 명부 문서 미리보기 — 저장 명부 전체를 문서로 렌더 (내보내기 메뉴 자동 생성기, 복사·인쇄·PDF 공통 원본) */
@@ -148,7 +150,7 @@ function renderList() {
     const stores = { logs: listCareLogs(), visits: listVisits(), handovers: listHandovers(), incidents: listIncidents() };
     host.innerHTML = items.length
         ? items.map(c => `<div class="care-log-saved-item">
-            <span><strong>${esc(c.name)}</strong>${c.status ? esc(' [' + c.status + ']') : ''}${c.room ? esc(' · ' + c.room) : ''}${_docSummary(c)}${c.caution ? esc(' · ⚠ ' + c.caution) : ''}${c.allergy ? esc(' · 알레르기 ' + c.allergy) : ''}${_timelineHtml(c, stores)}</span>
+            <span><strong>${esc(fmtDocName(c.name))}</strong>${c.status ? esc(' [' + c.status + ']') : ''}${c.room ? esc(' · ' + c.room) : ''}${_docSummary(c)}${c.caution ? esc(' · ⚠ ' + c.caution) : ''}${c.allergy ? esc(' · 알레르기 ' + c.allergy) : ''}${_timelineHtml(c, stores)}</span>
             <button data-click="careClientReport" data-arg="${esc(c.id)}" class="btn btn-secondary">주간리포트</button>
             <button data-click="careClientLoad" data-arg="${esc(c.id)}" class="btn btn-secondary">수정</button>
             <button data-click="careClientDelete" data-arg="${esc(c.id)}" class="btn btn-secondary">삭제</button>

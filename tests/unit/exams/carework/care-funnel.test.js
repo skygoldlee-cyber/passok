@@ -86,7 +86,7 @@ test('CO-09 주간 리포트 — 최근 7일 대상자 기록 요약', async () 
     const today = new Date().toISOString().slice(0, 10);
     const r = weeklyReport('김철수', { logs: [{ client: '김철수', date: today, note: '산책', obs: { meal: '반' } }], visits: [], incidents: [] });
     assert.equal(r.count, 1);
-    assert.match(r.text, /김철수|일지 1건/);
+    assert.match(r.text, /김 철수|일지 1건/);
 });
 test('CO-10 증적 커버리지 — 기록 유무 매칭·부족 항목 열거', async () => {
     const { auditCoverage } = await import('../../../../src/exams/carework/care-coverage.js');

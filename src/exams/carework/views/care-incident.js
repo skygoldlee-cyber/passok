@@ -5,7 +5,7 @@ import { markFunnel } from '../care-funnel.js';
 import { listIncidents, saveIncident, removeIncident } from '../incident-store.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
 import { downloadSheet } from '../../../content/xlsx-utils.js';
-import { myMembership, submitIncident, listIncidents as listFacilityIncidents, refreshOrgName, signFileToDataUri } from '../facility.js';
+import { myMembership, submitIncident, listIncidents as listFacilityIncidents, refreshOrgName, signFileToDataUri, fmtDocName } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docMdHead, docMdSign, mdToHtml } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
@@ -120,7 +120,7 @@ function renderSaved() {
     const items = listIncidents();
     host.innerHTML = items.length
         ? items.map((/** @type {*} */ x) => `<div class="care-log-saved-item">
-            <span>${esc(x.date)} · ${esc(x.client)} — ${esc(incidentTypeLabel(x.type))}${x.photos?.length ? ` 📷${x.photos.length}` : ''}</span>
+            <span>${esc(x.date)} · ${esc(fmtDocName(x.client))} — ${esc(incidentTypeLabel(x.type))}${x.photos?.length ? ` 📷${x.photos.length}` : ''}</span>
             <button data-click="careIncidentDelete" data-arg="${esc(x.id)}" class="btn btn-secondary">삭제</button>
           </div>`).join('')
         : '<p class="care-log-empty">저장된 보고서가 없습니다.</p>';
@@ -139,7 +139,7 @@ async function renderFacility() {
             <h3>기관 사고 대장 — ${esc(_facility.name)}</h3>
             ${_fiList.map((/** @type {*} */ v) => `
                 <div class="care-log-saved-item">
-                    <span>${esc(v.occurred_at)} · ${esc(v.client)} — ${esc(v.type)}${v.severity ? esc(' · ' + v.severity) : ''}${v.family_notified ? ' · 가족통지' : ''}</span>
+                    <span>${esc(v.occurred_at)} · ${esc(fmtDocName(v.client))} — ${esc(v.type)}${v.severity ? esc(' · ' + v.severity) : ''}${v.family_notified ? ' · 가족통지' : ''}</span>
                 </div>`).join('')}
         </div>`;
 }

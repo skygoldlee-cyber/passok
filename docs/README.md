@@ -93,12 +93,12 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (101개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (102개)
 │   ├── 수위 문서 (6개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·COMPLEXITY_BACKLOG·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (20개 — README + ADR 19건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (24개)
 │   ├── design/                ← 설계·계획·평가 문서 (30개)
-│   ├── reference/             ← 명세·로직·참조 문서 (17개 + images/)
+│   ├── reference/             ← 명세·로직·참조 문서 (18개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (4개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (2개 — 사용자 매뉴얼·개인정보처리방침 + images/ — 런타임 fetch·배포 대상)
 └── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (11개)
@@ -161,6 +161,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [SUPABASE_DESIGN.md](dev/design/SUPABASE_DESIGN.md) | Supabase 계정·클라우드 동기화·Pro 권한 설계 — Phase 1~2 구현 완료, URL/PWA 동일 로그인 UX + Firebase 이관 대안 설계 (구 DSN-31 통합) |
 | [FLASHCARD_LOGIC.md](dev/reference/FLASHCARD_LOGIC.md) | 플래시카드 생성·난이도·필터·SM-2 간격 반복 로직 |
 | [MD_TO_HTML_LOGIC.md](dev/reference/MD_TO_HTML_LOGIC.md) | MD→HTML 변환 로직 — 런타임 파서(manual-viewer)와 빌드 파이프라인 |
+| [DOCX_GENERATION.md](dev/reference/DOCX_GENERATION.md) | Word(.docx) 생성 + 워터마크 파이프라인 — 무의존 OOXML·MD 서브셋·워터마크 앵커 설계·1장 원칙·시험 팩 적용 레시피·검증 절차 (DOC-REF-20) |
 
 ### 콘텐츠 파이프라인
 
@@ -453,6 +454,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-REF-17 | `docs/dev/reference/TOOLS_MAP.md` |
 | DOC-REF-18 | `docs/dev/reference/CONVENTIONS_CHEATSHEET.md` |
 | DOC-REF-19 | `docs/dev/reference/COMMANDS.md` |
+| DOC-REF-20 | `docs/dev/reference/DOCX_GENERATION.md` |
 | DOC-RBK-01 | `docs/dev/runbooks/AUDIO_HOSTING_GUIDE.md` |
 | DOC-RBK-02 | `docs/dev/runbooks/COMBO_GENERATION_GUIDE.md` |
 | DOC-RBK-03 | `docs/dev/runbooks/CONTENT_WORKFLOW.md` |

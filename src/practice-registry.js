@@ -422,7 +422,7 @@ const careVisit = _defineFeature({
     init: 'initCareVisitView',
     loaders: { main: _domainImport('views/care-visit.js') },
     /** @type {Array<[string, string[]]>} */
-    handlers: [['main', ['careVisitAdd', 'careVisitResultOpen', 'careVisitResultSave', 'careVisitResultClose', 'careVisitCancel', 'careVisitDelete', 'careVisitPreview', 'careVisitPrint', 'careVisitCsvExport', 'careVisitFacilitySubmit', 'careVisitDocMd', 'careVisitPhotoPick', 'careVisitPhotoRemove', 'careVisitVoiceToggle']]],
+    handlers: [['main', ['careVisitAdd', 'careVisitResultOpen', 'careVisitResultSave', 'careVisitResultClose', 'careVisitCancel', 'careVisitDelete', 'careVisitPreview', 'careVisitPrint', 'careVisitCsvExport', 'careVisitFacilitySubmit', 'careVisitDocMd', 'careVisitDoc', 'careVisitPhotoPick', 'careVisitPhotoRemove', 'careVisitVoiceToggle']]],
 });
 const careClients = _defineFeature({
     viewId: 'care-client-view',

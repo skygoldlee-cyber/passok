@@ -1,17 +1,20 @@
 // src/exams/carework/care-share.js
-// @spec CO-13 — 생성 문서 내보내기 메뉴 (공유·인쇄·복사·다운로드 통합 진입)
+// @spec CO-13,CO-22 — 생성 문서 내보내기 메뉴 (공유·인쇄·복사·다운로드 통합 진입) + 발행 대장·문서번호 부여
 import { showToast } from '../../ui-utils.js';
 import { esc } from '../../core/sanitize.js';
 import { pdfFileFromEl } from '../../content/pdf-utils.js';
 import { sheetFile } from '../../content/xlsx-utils.js';
 import { docxFile, docxFileMd } from '../../content/docx-utils.js';
-import { docWmText } from '../../content/doc-wm.js';
+import { docWmText, docWmPng } from '../../content/doc-wm.js';
+import { docStamp } from '../../content/doc-stamp.js';
+import { qrPng, qrDataUrl } from '../../content/qr.js';
 import { docHeadHtml, getOrgName, getDocSign, docSignImages } from './facility.js';
 import { pinDocSignBottom } from './doc-md.js';
+import { docPrefix, recordDocIssue, nextDocRev } from './doc-issue-store.js';
 import { getJSON, setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { proFeatureNotice, refreshProBadges } from '../../pro/pro-upgrade.js';
-import { todayKey } from '../../core/utils.js';
+import { todayKey, fnv1aHex } from '../../core/utils.js';
 
 const _NAME_RE = /(김|이|박|최|정|강|조|윤|장|임|한|오|서|신|권|황|안|송|전|홍|고|문|양|손|배|백|허|유|남|심|노|하|곽|성|차|주|우|구|민|류|나|진|엄|채|원|천|방|공|현|함|변|염|추|도|소|석|선|설|마|길|연|위|표|명|기|반|왕|금|옥|육|인|맹|제|모|탁|어|은|편|남궁|독고|제갈|황보|선우)[가-힣]{1,2}(?!\s*(식사|산책|요양|보호|관리|확인|기록|완료|시작|교대))/g;
 const _PHONE_RE = /0\d{1,2}[-\s]?\d{3,4}[-\s]?\d{4}/g;
@@ -96,11 +99,15 @@ const _arg = (/** @type {string} */ arg) => {
     const flag = f3 === 'mask' ? 'mask' : '';
     const [gen = '', alt = '', print = '', proKey = '', mdgen = ''] = flag ? f.slice(3) : f.slice(2);
     const stamp = todayKey();
-    return {
-        sel: f[0] || '', title: f[1] || '문서', flag, gen, print, proKey, mdgen, text: '', md: '',
+    /** @type {*} */
+    const ctx = {
+        sel: f[0] || '', title: f[1] || '문서', flag, gen, print, proKey, mdgen, text: '', md: '', docNo: '',
         csvGen: gen.endsWith('CsvExport') ? gen : (alt.endsWith('CsvExport') ? alt : ''),
-        fname: (/** @type {string} */ ext) => `${f[1] || '문서'}_${stamp}.${ext}`,
+        fname: /** @type {null|function(string):string} */ (null),
     };
+    // 파일명 — 문서번호 발급 후엔 `제목_유형-날짜-해시` (번호 미발급 폴백: `제목_날짜`)
+    ctx.fname = (/** @type {string} */ ext) => `${ctx.title}_${ctx.docNo || stamp}.${ext}`;
+    return ctx;
 };
 
 /** 본문 확보 — 출력 요소 → 미생성 시 생성 핸들러 실행 → 오류 마커·실패 시 폼 양식 폴백 → mask 가림 */
@@ -126,6 +133,8 @@ const _prepare = async (/** @type {*} */ ctx) => {
             ctx.md = md ? (ctx.flag === 'mask' ? _mask(md) : md) : '';
         } catch { ctx.md = ''; }
     }
+    // 문서번호 — MD 초안(없으면 평문)을 시드로 유형-날짜-해시 부여. 동일 내용 재출력은 동일 번호
+    ctx.docNo = docStamp(docPrefix(ctx.title), ctx.md || ctx.text);
 };
 
 /** 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강
@@ -159,8 +168,17 @@ const _pdfFile = async (/** @type {*} */ ctx) => {
         if (!el2.classList.contains('care-doc-head')) el2.style.background = 'transparent';
         el2.style.borderColor = '#000';
     });
+    document.body.appendChild(wrap); // 레이아웃 확정 후 서명란 폭 측정 — detached 상태에선 offsetWidth=0
     pinDocSignBottom(wrap); // 서명란 페이지 하단 우측 고정 — docx 부동 표와 동일 위치
-    document.body.appendChild(wrap);
+    if (ctx.docNo) { // 문서번호 + QR — 서명란 좌측(docx _qrTbl과 동일 배치), 서명 없으면 하단 좌측
+        const qr = qrDataUrl(ctx.docNo);
+        const sign = /** @type {HTMLElement|null} */ (wrap.querySelector('.doc-sign'));
+        const d = document.createElement('div');
+        d.className = 'doc-qr-spot';
+        if (sign) d.style.right = `${88 + sign.offsetWidth + 24}px`; else d.style.left = '88px';
+        d.innerHTML = `<div class="doc-qr-cap">문서번호 ${esc(ctx.docNo)}</div>${qr ? `<img class="doc-qr-img" src="${esc(qr)}" alt="문서번호 QR">` : ''}`;
+        wrap.appendChild(d);
+    }
     try { return await pdfFileFromEl(wrap, ctx.fname('pdf').replace(/\.pdf$/, ''), _wmText()); }
     finally { wrap.remove(); }
 };
@@ -176,9 +194,10 @@ const _copyRaw = (/** @type {*} */ ctx) => {
 const _actPrint = (/** @type {*} */ ctx) => {
     if (ctx.proKey) proFeatureNotice(ctx.proKey, `${ctx.title} 인쇄·PDF`);
     const fn = ctx.print && (/** @type {any} */ (window))[ctx.print];
-    if (typeof fn === 'function') { fn(); return; } // 전용 인쇄 핸들러 — 자체 생성·검증·notice 포함
+    if (typeof fn === 'function') { fn(); _issue(ctx, 'print'); return; } // 전용 인쇄 핸들러 — 자체 생성·검증·notice 포함
     const g = ctx.gen && !ctx.gen.endsWith('CsvExport') && (/** @type {any} */ (window))[ctx.gen];
     if (typeof g === 'function') g();
+    _issue(ctx, 'print'); // 생성 후·인쇄 대화상자 전 — 인쇄물도 발행물
     window.print();
 };
 
@@ -187,6 +206,7 @@ const _actPdf = async (/** @type {*} */ ctx) => {
     try {
         const file = await _pdfFile(ctx);
         _downloadAll([file]);
+        _issue(ctx, 'pdf', [file.name]);
         _audit(ctx.title, ctx.flag, [file.name]);
     } catch { showToast('PDF 생성 실패 — 인쇄를 이용하세요.', 'error'); }
 };
@@ -194,15 +214,33 @@ const _actPdf = async (/** @type {*} */ ctx) => {
 /** 워터마크 문구 — 설정 켜짐 + 기관명 있을 때만 (docx 회전 상자·미리보기 .doc-wm·PDF 스탬프 동일 문구) */
 const _wmText = () => (getDocSign().wm ? docWmText(getOrgName()) : '');
 
+/** 발행 대장 기록 — 파일 생성·다운로드 성공 후 호출 (실패 경로는 기록하지 않음) */
+const _issue = (/** @type {*} */ ctx, /** @type {string} */ kind, /** @type {string[]} */ filenames = []) => {
+    try {
+        recordDocIssue({ docNo: ctx.docNo, tool: ctx.title, kind, filenames, hash: fnv1aHex(JSON.stringify(ctx.md || ctx.text)) });
+    } catch { /* 대장 기록 실패는 출력을 막지 않는다 */ }
+};
+
+/** 문서 추적 메타 — docx core.xml·푸터·QR 부동 표용. QR는 문서번호 평문(오프라인 검색 대응), 캔버스 불가 시 생략 */
+const _docMeta = (/** @type {*} */ ctx) => {
+    const qr = ctx.docNo ? qrPng(ctx.docNo) : null;
+    return { no: ctx.docNo, org: getOrgName(), title: ctx.title, rev: nextDocRev(ctx.docNo), ...(qr ? { qr } : {}) };
+};
+
 /** 공유 Word — MD 초안이 있으면 구조 보존 변환(표·헤딩), 없으면 헤더+본문 단락 폴백 */
 const _docxFile = async (/** @type {*} */ ctx) => {
+    const wm = _wmText();
+    // 알파 구운 PNG 우선 — w14:alpha·behindDoc 무시 뷰어에서도 이미지 알파라 동일 농도 (캔버스 불가 시 텍스트 상자 폴백)
+    const wmImg = wm ? docWmPng(wm) : null;
+    const doc = _docMeta(ctx);
     if (ctx.md) { // MD 초안 — {{img:}} 토큰은 등록 서명 이미지 PNG로 치환 (합성 실패 시 공란 폴백)
         const images = await docSignImages();
-        return docxFileMd(ctx.md, ctx.fname('docx').replace(/\.docx$/, ''), _wmText(), images ? { images } : undefined);
+        const opts = { ...(images ? { images } : {}), ...(wmImg ? { wmImg } : {}), doc };
+        return docxFileMd(ctx.md, ctx.fname('docx').replace(/\.docx$/, ''), wm, opts);
     }
     const org = getOrgName();
     const head = `${ctx.title}\n${org ? org + ' · ' : ''}${todayKey()} 출력`;
-    return docxFile(`${head}\n\n${ctx.text}`, ctx.fname('docx').replace(/\.docx$/, ''), 2, _wmText());
+    return docxFile(`${head}\n\n${ctx.text}`, ctx.fname('docx').replace(/\.docx$/, ''), 2, wm, wmImg, { doc });
 };
 
 const _actDocx = async (/** @type {*} */ ctx) => {
@@ -210,6 +248,7 @@ const _actDocx = async (/** @type {*} */ ctx) => {
     try {
         const file = await _docxFile(ctx);
         _downloadAll([file]);
+        _issue(ctx, 'docx', [file.name]);
         _audit(ctx.title, ctx.flag, [file.name]);
     } catch { showToast('Word 파일 생성 실패 — 인쇄·PDF를 이용하세요.', 'error'); }
 };
@@ -218,7 +257,7 @@ const _actXlsx = async (/** @type {*} */ ctx) => {
     const fn = (/** @type {any} */ (window))[ctx.csvGen];
     if (typeof fn !== 'function') { showToast('Excel 내보내기를 지원하지 않습니다.', 'error'); return; }
     if (ctx.proKey) proFeatureNotice(ctx.proKey, `${ctx.title} Excel 내보내기`);
-    try { await fn(); _audit(ctx.title, ctx.flag, [ctx.fname('xlsx')]); }
+    try { await fn(); _issue(ctx, 'xlsx', [ctx.fname('xlsx')]); _audit(ctx.title, ctx.flag, [ctx.fname('xlsx')]); }
     catch { showToast('Excel 내보내기에 실패했습니다.', 'error'); }
 };
 
@@ -252,6 +291,7 @@ const _actShare = async (/** @type {*} */ ctx, /** @type {string} */ kind = 'all
         catch { showToast('Word 생성 실패 — 나머지 파일은 정상 공유됩니다.', 'error'); }
     })());
     await Promise.allSettled(tasks); // 생성 완료 후 버튼 — 시트에 선택 파일 첨부
+    _issue(ctx, 'share', files.map((/** @type {File} */ f) => f.name));
     _audit(ctx.title, ctx.flag, files.map((/** @type {File} */ f) => f.name));
     const fs = files, { title } = ctx, text = (ctx.md || ctx.text).replace(/\{\{img:[\w-]+\}\}/g, '(서명)'); // 텍스트 공유도 MD 초안 기본 — 이미지 토큰은 (서명) 표기
     _shareBtn(`📤 ${title} 공유하기`, async () => {
@@ -294,7 +334,7 @@ const _sheet = (/** @type {*} */ ctx, /** @type {string} */ headText, /** @type 
         b.disabled = !!it.disabled;
         b.style.cssText = 'display:flex;align-items:center;gap:8px;width:100%;margin-top:6px;padding:12px;border:0;border-radius:10px;background:var(--bg-muted,rgba(255,255,255,.04));color:inherit;font:600 14px sans-serif;text-align:left;cursor:pointer';
         if (it.disabled) b.style.cssText += ';opacity:.45;cursor:default';
-        b.innerHTML = `${esc(it.label)}${it.pro ? ` <span class="pro-badge" data-pro-feature="${esc(it.pro)}" style="margin-left:auto">유료</span>` : ''}`;
+        b.innerHTML = `${esc(it.label)}${it.pro ? ` <span class="pro-badge" data-pro-feature="${esc(it.pro)}">유료</span>` : ''}`;
         b.addEventListener('click', async () => { close(); try { await /** @type {*} */ (it).run(); } catch { /* 폴백은 호출층이 처리 */ } });
         sheet.appendChild(b);
     }

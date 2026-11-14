@@ -1,6 +1,7 @@
 // src/exams/carework/care-roster.js — 교대 근무표 도메인 로직
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 import { parseCsv, toCsv } from '../../content/csv-utils.js';
+import { fmtDocNames } from './name-fmt.js';
 
 export const ROSTER_SHIFTS = [
     { key: 'day', label: '주간(데이)' },
@@ -24,7 +25,7 @@ export function buildRosterText(items) {
     let cur = '';
     for (const r of sorted) {
         if (r.date !== cur) { cur = r.date; lines.push(`■ ${cur}`); }
-        lines.push(`  ${shiftLabel(r.shift)} — ${r.worker}${r.note ? ' · ' + r.note : ''}`);
+        lines.push(`  ${shiftLabel(r.shift)} — ${fmtDocNames(r.worker)}${r.note ? ' · ' + r.note : ''}`);
     }
     return lines.join('\n');
 }

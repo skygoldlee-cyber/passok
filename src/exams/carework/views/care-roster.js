@@ -7,7 +7,7 @@ import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { docMdHead, csvToMdTable, mdToHtml, docMdSign } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
-import { refreshOrgName } from '../facility.js';
+import { refreshOrgName, fmtDocNames } from '../facility.js';
 import { showToast, showConfirm, requireFields } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
@@ -53,7 +53,7 @@ function renderPreview() {
 export function careRosterDocMd() {
     const items = listRoster();
     if (!items.length) return '';
-    return docMdHead('교대 근무표') + '\n' + renderToolBody('careRoster', { 근무표: csvToMdTable(rosterToCsv(items)) }) + docMdSign([['작성자', 'author']]);
+    return docMdHead('교대 근무표') + '\n' + renderToolBody('careRoster', { 근무표: csvToMdTable(rosterToCsv(items.map(r => ({ ...r, worker: fmtDocNames(r.worker) })))) }) + docMdSign([['작성자', 'author']]);
 }
 
 /** 근무표 문서 미리보기 — 배정 목록을 문서로 렌더 (내보내기 메뉴 자동 생성기, 복사·인쇄·PDF 공통 원본) */
@@ -107,7 +107,7 @@ function renderList() {
     const items = [...listRoster()].sort((a, b) => (a.date + a.shift).localeCompare(b.date + b.shift));
     host.innerHTML = items.length
         ? items.map(x => `<div class="care-log-saved-item">
-            <span>${esc(x.date)} · ${esc(shiftLabel(x.shift))} — ${esc(x.worker)}${x.note ? esc(' · ' + x.note) : ''}</span>
+            <span>${esc(x.date)} · ${esc(shiftLabel(x.shift))} — ${esc(fmtDocNames(x.worker))}${x.note ? esc(' · ' + x.note) : ''}</span>
             <button data-click="careRosterDelete" data-arg="${esc(x.id)}" class="btn btn-secondary">삭제</button>
           </div>`).join('')
         : '<p class="care-log-empty">등록된 근무 배정이 없습니다.</p>';

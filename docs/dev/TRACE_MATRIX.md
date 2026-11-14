@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 11e4388cb3305b90
-> 생성: 2026-11-13 · 원천: SPEC.md(709개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: a6dd1cc79e541554
+> 생성: 2026-11-14 · 원천: SPEC.md(710개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 709개 — 문서 연결 471 · 소스 연결 627 · 테스트 연결 670 · 보고서 연결 109
+**커버리지 요약**: 요구사항 710개 — 문서 연결 473 · 소스 연결 629 · 테스트 연결 670 · 보고서 연결 109
 
 ---
 
@@ -114,7 +114,7 @@
 | E-06 | ✅ | 테스트 | — | src/views/exam-sim/exam-sim-arena.js<br>src/views/exam-sim/exam-sim-review.js<br>src/views/exam-sim/exam-simulator.js | tests/dom/exam/exam-sim-review.dom.test.js<br>tests/dom/study/study-simulator.dom.test.js<br>tests/unit/engine/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | — |
 | E-07 | ✅ | 테스트 | — | css/exam.css<br>src/views/exam-sim/exam-sim-review.js<br>src/views/exam-sim/exam-sim-session.js<br>src/views/exam-sim/exam-simulator.js | tests/dom/exam/exam-sim-review.dom.test.js<br>tests/dom/study/study-simulator.dom.test.js<br>tests/unit/engine/exam-simulator-facade.test.js | DOC-ARC-05<br>DOC-ARC-10<br>DOC-ARC-11 | 시험 합격 기준 — 과목별 40점 미만 과락·전 과목 평균 60점 이상 |
 | E-08 | ✅ | 테스트 | — | src/views/exam-sim/exam-sim-arena.js | tests/dom/study/study-simulator.dom.test.js | — | — |
-| E-09 | ✅ — `#sim-timer-live` sr-only 리전 + `_warnedMarks`로 10분·1분 1회씩 보고 · 만료 자동제출(기존) · `registerViewLeaveGuard`로 뷰 이탈 가드 + `exitSimArena` 확인 모달(응답 수 표기) — submit/exit 시 가드 해제 | — | — | — | — | — | — |
+| E-09 | ✅ — `#sim-timer-live` sr-only 리전 + `_warnedMarks`로 10분·1분 1회씩 보고 · 만료 자동제출(기존) · `registerViewLeaveGuard`로 뷰 이탈 가드 + `exitSimArena` 확인 모달(응답 수 표기) — submit/exit 시 가드 해제 | 테스트 | — | src/views/exam-sim/exam-sim-arena.js | tests/dom/study/study-simulator.dom.test.js | — | — |
 
 ## 3.5 교재 리더
 
@@ -155,7 +155,7 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| SA-01 | 폐기 | E2E 테스트 | — | — | tests/e2e/reader-flow.spec.js | — | — |
+| SA-01 | 폐기 | — | — | — | — | — | — |
 | SA-02 | ✅ | 테스트 | — | src/study/study-aids.js<br>src/views/reader/reader-render.js<br>src/views/textbook-reader.js | tests/unit/engine/study-aids.test.js | — | — |
 | SA-03 | ✅ | 테스트 | — | src/study/study-aids.js<br>src/views/reader/reader-render.js<br>src/views/textbook-reader.js | tests/unit/engine/study-aids.test.js | — | — |
 | SA-04 | ✅ | 테스트 | — | src/study/study-aids.js<br>src/views/textbook-reader.js | tests/unit/engine/study-aids.test.js | — | — |
@@ -185,7 +185,7 @@
 | RR-04 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/keyword-index.js<br>src/views/reader/reader-ref-links.js<br>tools/build/build_keyword_index.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
 | RR-05 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js<br>src/views/reader/reader-ref-links.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
 | RR-06 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js<br>src/views/reader/reader-ref-links.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
-| RR-07 | 폐기 | E2E 테스트 | DOC-REF-04<br>DOC-REF-07 | — | tests/e2e/reader-flow.spec.js | — | — |
+| RR-07 | 폐기 | 문서 검토 | DOC-REF-04<br>DOC-REF-07 | — | — | — | — |
 | RR-08 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
 | RR-09 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
 | RR-10 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
@@ -621,7 +621,7 @@
 | CO-10 | ✅ lite (기록 유무 커버리지) | 테스트 | — | src/exams/carework/care-coverage.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
 | CO-11 | 미구현 — 조건부(법무 0b + facility 재개통) | — | — | — | — | — | — |
 | CO-12 | ✅ lite (배너·계측) | 테스트 | — | src/exams/carework/care-funnel.js<br>src/exams/carework/views/care-home.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
-| CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42 | css/doc-export.css<br>src/content/doc-wm.js<br>src/content/docx-utils.js<br>src/content/pdf-utils.js<br>…외 2개 | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/doc-wm.test.js<br>…외 2개 | — | — |
+| CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42<br>DOC-REF-20 | css/doc-export.css<br>src/content/doc-wm.js<br>src/content/docx-utils.js<br>src/content/pdf-utils.js<br>…외 2개 | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/doc-stamp.test.js<br>…외 3개 | — | — |
 | CO-14 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
 | CO-15 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
 | CO-16 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 문서 검토 | DOC-RBK-24 | — | — | — | — |
@@ -630,6 +630,7 @@
 | CO-19 | 부분 구현 | 테스트 | — | src/exams/carework/audit-import.js<br>src/exams/carework/care-audit.js<br>src/exams/carework/views/care-audit.js | tests/dom/exams/carework/care-views.test.js<br>tests/unit/exams/carework/audit-import.test.js | — | — |
 | CO-20 | ✅ | E2E 테스트 | — | src/content/pdf-utils.js<br>src/exams/carework/care-share.js<br>src/reader/exam-viewer.js<br>src/reader/html-viewer.js<br>…외 1개 | tests/dom/reader/print-pdf.test.js<br>tests/e2e/journeys/j-302-docs-print.spec.js<br>tests/unit/content/pdf-utils.test.js | — | — |
 | CO-21 | ✅ | E2E 테스트 | — | src/content/pdf-utils.js<br>src/reader/exam-viewer.js<br>src/reader/manual-viewer.js | tests/dom/reader/print-pdf.test.js<br>tests/dom/reader/print-prep.test.js<br>tests/e2e/pdf-pagination.spec.js<br>tests/unit/content/pdf-utils.test.js | — | — |
+| CO-22 | ✅ | 테스트 | DOC-REF-20 | src/content/doc-issues.js<br>src/content/doc-stamp.js<br>src/content/docx-utils.js<br>src/content/qr.js<br>…외 4개 | tests/dom/exams/cosmetic/formula-print.dom.test.js<br>tests/unit/content/doc-issues.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 
@@ -850,7 +851,7 @@
 | DA-21 | ✅ | 테스트 | — | css/dashboard.css<br>css/exams/carework/care-tools.css | tests/dom/exams/carework/care-views.test.js | — | — |
 | DA-22 | ✅ | 테스트 | — | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | — | — |
 | DA-23 | ✅ | 테스트 | — | src/core/utils.js | tests/unit/app/utils.test.js | — | — |
-| DA-24 | ✅ | 테스트 | — | src/content/doc-wm.js<br>src/content/docx-utils.js<br>src/exams/carework/doc-md.js | tests/unit/content/doc-wm.test.js<br>tests/unit/content/docx-utils.test.js | — | — |
+| DA-24 | ✅ | 테스트 | DOC-REF-20 | src/content/doc-wm.js<br>src/content/docx-utils.js<br>src/exams/carework/doc-md.js | tests/unit/content/doc-wm.test.js<br>tests/unit/content/docx-utils.test.js | — | — |
 | DA-25 | ✅ | 도구 검증 | — | tools/illustrate/capture_manual.js | — | — | — |
 | DA-26 | ✅ | 도구 검증 | — | tools/illustrate/capture_manual.js | — | — | — |
 
@@ -1131,6 +1132,7 @@
 | DOC-REF-17 | docs/dev/reference/TOOLS_MAP.md | — |
 | DOC-REF-18 | docs/dev/reference/CONVENTIONS_CHEATSHEET.md | DA-15, ID-05 |
 | DOC-REF-19 | docs/dev/reference/COMMANDS.md | — |
+| DOC-REF-20 | docs/dev/reference/DOCX_GENERATION.md | CO-13, CO-22, DA-24 |
 | DOC-ROOT-01 | README.md | — |
 | DOC-ROOT-02 | AGENTS.md | — |
 | DOC-USR-01 | docs/exams/cosmetic/user/exam_strategy.md | — |

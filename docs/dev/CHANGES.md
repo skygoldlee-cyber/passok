@@ -1,3 +1,49 @@
+> **문서 ID**: DOC-DEV-03
+> **범위**: platform · 판본: none
+
+## 2026-11-14 fix(docx): 서명 이미지 `(인)` 위 앵커 오버레이 — 날인 형태
+
+- `(인)`은 문서 텍스트로 항상 렌더하고, 사용자 서명 이미지는 `wp:anchor` 오버레이로 그 위에 겹침 — 실물 도장 날인 형태. 기존 방식(캔버스에서 (인)+서명 미리 합성 → 인라인 이미지·결재란은 서명-only 인라인)은 (인) 위치 정합이 안 맞고 결재란은 (인) 자체가 없던 문제 해소
+- `_ovrImgRun` 신설 — 서명란은 `relativeFrom="character"`+`posOffset=_OVR_RPAD(50800)−폭`으로 이미지 우측 끝을 (인) 우측 끝에 정합((인) 잉크가 탭 정지 위치보다 ~3.5pt 우측으로 넘쳐 `)`가 삐져나오던 것 보정), 결재란은 `column`+`center`((인) 중앙과 일치). 세로는 공통 `line`+`center` — (인)이 있는 줄 중앙. `layoutInCell="1"` 필수(셀 안 앵커)
+- `facility.js docSignImages` — (인) 미리 합성 폐기, `author`·`approve` 모두 서명-only 투명 PNG로 통일 (문서가 (인)을 그리므로 이중 표기 방지)
+- 미리보기 `doc-md.js` — 결재란 서명 자리 `(인)` 표기 + 담당 칸 서명 오버레이(`.doc-sign-spot`), 서명란도 `(인)`+img 겹침. `care-tools.css`에 절대배치 스타일 추가
+- `_imgPic` 공용 분리 — 인라인(QR)·앵커(서명) 런이 `<a:graphic>` 본체 공유. docPr id: 결재란 500·서명란 600+행번 (고유성)
+- 유닛 26·전체 1,949·DOM 1,067 통과, 샘플 8종 재생성·Word 개방 검증, DOCX_GENERATION.md §3·§8·§10 반영
+
+## 2026-11-14 fix(docx): 결재란 서명 자리 `(인)` 중앙정렬 표기
+
+- `_approve` 2행 서명 칸(담당·팀장·시설장)에 `(인)` 중앙정렬 표기 — 공문서 날인 위치 표시 관행. 기존 빈 셀 + 서명 이미지 칸의 `ind -120` 좌측 보정도 `jc=center` 중앙 인라인으로 교체
+- `_apprSignCell` 헬퍼 추가, DOCX_GENERATION.md §4 표 반영
+
+## 2026-11-14 fix(docx): 종결 표 내부 서명 표 셀 경계 여유 — 우측선 잘림 대응
+
+- `_closeTbl` 서명 셀 폭을 내부 표보다 `_SIG_SLK`(300tw) 넓게 + 내부 표에 `tblInd`(60tw) — 내부 표 폭=셀 폭이면 이중 외곽선(~38tw)이 셀 경계를 넘어 그려져, 중첩 표를 셀 경계에서 잘라내는 렌더러에서 서명란 우측선이 깎여 보이는 사례 대응
+- `tblpX`는 그리드 총폭이 아니라 내용 우측 끝(들여쓰기+내부 표 폭) 기준으로 재산출 — 서명 박스 우측선의 시각적 위치는 변경 전과 동일(본문 표 우측선 정합 유지)
+- DOCX_GENERATION.md §4 부동 표 표·§10 함정(중첩 표 셀 경계) 반영, 샘플 8종 재생성·Word 개방 검증 완료
+
+## 2026-11-14 feat(doc): 문서 추적성 — 문서번호·발행 대장·메타데이터·QR 전 단계 구현
+
+- **① 문서번호** `src/content/doc-stamp.js` — `docStamp(prefix, seed)` → `PREFIX-YYYYMMDD-HASH6` (fnv1a 내용 해시, cosmetic FO-70 철학). 동일 내용=동일 번호(중복 발행 탐지)·내용 변경=번호 변경(변조 대조). care-share가 docx·xlsx·PDF·클립보드·공유 전 경로의 파일명을 `제목_DOCNO.ext`로 통일
+- **② 발행 대장** `src/exams/carework/doc-issue-store.js` + `STORAGE_KEYS.CARE_DOC_ISSUES` — docNo별 발행 이력 기록, 재발행 시 rev+1·파일명/출력형식 병합·해시 보존. care-forms 뷰에 발행 이력·문서번호 검증 UI 추가 (localStorage 로컬 퍼스트)
+- **③ 파일 내장 메타** `docx-utils.js`의 `opts.doc={no,org,title,rev,qr}` — docProps/core.xml(dc:title·dc:identifier·dc:creator·cp:revision·dcterms:created), 푸터 문서번호 행, `#` 메타줄 번호 자동 주입(렌더 시점이라 해시 비오염). doc 미지정 시 기존과 완전 동일
+- **④ QR** `src/content/qr.js` — 의존성 0 QR 인코더(V1–V7·EC-M·바이트 모드·포맷/버전 정보·마스크), 순수 JS 1비트 PNG 인코딩으로 Node·jsdom·브라우저 동일 바이트. docx 말미 QR 블록 + PDF·HTML 미리보기에도 QR 표기
+- DOCX_GENERATION.md §7에 추적성 계약 문서화 — opts.doc 필드·자동 부여 산출 표·발급 순서 주의(시드→docStamp→qrPng→docxFileMd, 순환 방지)
+- **SPEC CO-22 신설** (생성 문서 추적성) — 전 시험 공용 요구사항으로 승격, 관련 @spec 태그 정합
+- **공용 팩토리화** `src/content/doc-issues.js` — createDocIssueStore(key)로 시험별 대장 인스턴스 생성. carework·cosmetic 대장이 같은 구현 공유, 스토리지 키만 분리 (시험 격리 유지)
+- **cosmetic 확장** `src/exams/cosmetic/doc-issue-store.js` + `FORMULA_DOC_ISSUES` 키 — fpDocStamp가 docStamp 위임으로 통합, 증적 문서 4종(종합보고서·LOT·판매내역서·동의서)에 data-doc-no/data-doc-tool 속성·QR 삽입, printHtml이 인쇄 성공 시 대장 기록 (비증적 산출물은 속성 없어 미기록)
+- specrefs 정리 — reader-flow.spec의 폐기 ID 참조(SA-01·RR-07) 제거, E-09 테스트 태그 연결
+- QR 배치 — docx 말미 중앙 블록 → **서명란 좌측 무테두리 부동 표**(`_qrTbl`, tblpYSpec=bottom·tblpX=_SIG_X−2600−160, 서명 없으면 하단 좌측). PDF 미리보기도 서명란 좌측 absolute 배치로 정합 (wrap을 DOM 부착 후 서명 폭 측정 — detached는 offsetWidth=0 주의)
+- 메타줄 번호 제거 — 상단 메타줄의 `· 문서번호` 자동 병기 폐기(위아래 중복 표기 정리). 번호는 푸터(전 쪽)·QR 캡션(서명란 좌측)·core.xml에만 유지. 평문 docxFile 경로의 head 메타줄에서도 제거
+- 종결 부동 표 분할 결함 수정 — 서명란·QR을 별개 부동 표로 `:::end` 지점에 두면 앵커 아래 공간 부족 시 서명 표가 행 단위로 쪼개지고(평가체크리스트: 날짜 행만 3쪽·서명 행 4쪽) QR이 다른 쪽으로 이탈. **서명란+QR을 `_closeTbl` 단일 행 cantSplit 부동 표로 통합**(QR 좌측 셀 + 서명 내부 표 중첩 우측 셀)하고 `끝.` 뒤로 이동 — 쪽 경계에서 통째로 넘어가며 항상 나란히 배치. 서명만 있으면 1셀 종결 표, QR만 있으면 `_qrTbl` 하단 좌측 유지
+- 유닛: doc-stamp·qr(독립 디코더 라운드트립 + PNG zlib 검증)·doc-issue-store·docx-utils(메타/푸터/QR) 추가. DOM: 파일명 단언을 문서번호 접미사 규약으로 갱신
+- 샘플 8종 재생성 — 파일명·푸터·메타줄·core.xml에 문서번호, 말미 QR, 발행 대장 기록. Word COM 전수 개방·쪽 수 확인
+
+## 2026-11-14 docs(docx): 워터마크 Word 생성 파이프라인 참조 문서화 (DOC-REF-20)
+
+- docs/dev/reference/DOCX_GENERATION.md 신설 — 다른 시험 팩이 워터마크·서명·결재란을 갖는 공문서 docx를 만들 때 필요한 전부를 정리: 공개 API(docxFile/docxFileMd/docWm*), MD 서브셋 문법, 레이아웃 상수, 워터마크 설계 제약(본문 앵커만 앞면 가능·page 중앙·PNG 알파·쪽당 앵커≥1), _sprayWm 3중 장치, 1장 원칙 3티어, 적용 레시피·체크리스트, Word COM/PDF 스트림 검증 절차, 함정 11종(과거 결함 사례)
+- docs/README.md 문서 표+DOC-REF 등록부, TRACE_MATRIX.md에 DOC-REF-20 등록
+- docx-utils.js 선두 주석 정정 — 헤더 워터마크 방식 설명이 폐기된 구버전이었음 → 본문 앵커 방식·behindDoc 계약으로 갱신
+
 ## 2026-11-14 fix(carework): 면회 기록 '방문 일시' 중복 행 제거
 
 - 완료 건은 실제 방문 일시를 방문일·시간 행에 직접 표기 — 별도 '방문 일시' 행은 중복이라 제거
@@ -4155,8 +4201,6 @@
 > 대상: passok (구 passory / Personalized_Skincare / Cosmetic Pass Master) 배포판
 > 작업일: 2026-08-23
 > 검증: 모든 `src/*.js` `node --check` 통과 · `node tools/build/index.js` 재빌드 성공 ·
-> **문서 ID**: DOC-DEV-03
-> **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
 ## 2026-10-23 테스트 임시 디렉터리 누수 차단 — mkdtemp 픽스처 after 정리 훅

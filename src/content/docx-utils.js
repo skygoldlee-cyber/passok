@@ -1,10 +1,16 @@
 // src/content/docx-utils.js — Word(.docx) 생성 — 미니멀 OOXML, 의존성 없음
-// @spec CO-13,DA-24 — 출력 문서 Word 파일 공유/다운로드 (MD 초안 → docx 파생)
-// [Content_Types]·_rels·document·document.rels·settings 5엔트리면 Word·HWP·Google Docs
+// @spec CO-13,CO-22,DA-24 — 출력 문서 Word 파일 공유/다운로드 (MD 초안 → docx 파생) + 문서 추적 메타(opts.doc)
+// [Content_Types]·_rels·document·document.rels·settings·footer 6엔트리면 Word·HWP·Google Docs
 // 정상 개방 — settings.xml로 인쇄 레이아웃(A4 페이지 경계 표시)을 강제한다.
+// opts.doc(문서 추적 메타 {no,org,title,rev,qr}) 지정 시 docProps/core.xml·푸터 문서번호·
+// 서명란 좌측 QR 부동 표를 추가한다 — docProps 파트는 OOXML 표준이라 모든 뷰어가 무시하거나 읽는다.
 import { esc } from '../core/sanitize.js';
 
 const _enc = new TextEncoder();
+
+// 단락 공통 — 한글↔라틴(autoSpaceDE)·한글↔숫자(autoSpaceDN) 자동 간격 끄기. 미명시 시 뷰어 기본값 ON이라
+// 숫자·라틴 밀집 본문(비용 계산서 등)의 어절 간격이 벌어져 보인다 — pPr 시퀀스상 spacing·jc 앞에 위치
+const _NOSPACE = '<w:autoSpaceDE w:val="0"/><w:autoSpaceDN w:val="0"/>';
 
 // CRC-32 (IEEE) — ZIP 로컬 헤더·중앙 디렉터리의 무결성 필드
 const _CRC = (() => {
@@ -76,14 +82,15 @@ const _zipStore = files => {
     return new Blob(/** @type {BlobPart[]} */ ([...chunks, ...central, new Uint8Array(e.buffer)]));
 };
 
-/** @param {string} wm - 워터마크 문구 (있으면 헤더 파트 추가) @param {boolean} [hasImg] - 미디어 파트 포함 여부 */
-const _types = (wm, hasImg) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>${hasImg ? '<Default Extension="png" ContentType="image/png"/>' : ''}<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/><Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>${wm ? '<Override PartName="/word/footer2.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/><Override PartName="/word/header1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/><Override PartName="/word/header2.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.header+xml"/>' : ''}</Types>`;
-const RELS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/></Relationships>`;
-/** @param {string} wm - 워터마크 문구 @param {number} [nImg] - 본문 이미지 수 (rId6~ 연번) */
-const _docrels = (wm, nImg = 0) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>${wm ? '<Relationship Id="rId3" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header1.xml"/><Relationship Id="rId4" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/header" Target="header2.xml"/><Relationship Id="rId5" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer2.xml"/>' : ''}${[...Array(nImg)].map((_, i) => `<Relationship Id="rId${6 + i}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/img_${i}.png"/>`).join('')}</Relationships>`;
+/** @param {boolean} [hasImg] - 미디어 파트 포함 여부 @param {boolean} [hasCore] - docProps/core.xml 포함 여부 */
+const _types = (hasImg, hasCore) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/>${hasImg ? '<Default Extension="png" ContentType="image/png"/>' : ''}<Override PartName="/word/document.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml"/><Override PartName="/word/settings.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml"/><Override PartName="/word/footer1.xml" ContentType="application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml"/>${hasCore ? '<Override PartName="/docProps/core.xml" ContentType="application/vnd.openxmlformats-package.core-properties+xml"/>' : ''}</Types>`;
+/** @param {boolean} [hasCore] - docProps/core.xml 패키지 관계 포함 여부 */
+const _rels = hasCore => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="word/document.xml"/>${hasCore ? '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/package/2006/relationships/metadata/core-properties" Target="docProps/core.xml"/>' : ''}</Relationships>`;
+/** @param {number} [nImg] - 본문 이미지 수 (rId6~ 연번) */
+const _docrels = (nImg = 0) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/settings" Target="settings.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer" Target="footer1.xml"/>${[...Array(nImg)].map((_, i) => `<Relationship Id="rId${6 + i}" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/img_${i}.png"/>`).join('')}</Relationships>`;
 // 보기 설정 — 인쇄 레이아웃 + 100% 고정. 생략 시 뷰어가 웹 레이아웃(전체폭·페이지 경계 없음)으로 열 수 있다
 const SETTINGS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <w:settings xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:view w:val="print"/><w:zoom w:percent="100"/><w:defaultTabStop w:val="708"/></w:settings>`;
@@ -95,12 +102,32 @@ const _fI = (/** @type {string} */ t) => `<w:r>${_FRP}<w:instrText xml:space="pr
 const _fS = (/** @type {string} */ t) => `<w:r>${_FRP}<w:fldChar w:fldCharType="separate"/></w:r><w:r>${_FRP}<w:t xml:space="preserve">${t}</w:t></w:r>`;
 const _fF = (/** @type {string} */ instr, /** @type {string} */ dft) => _fB + _fI(instr) + _fS(dft) + _fE;
 const _ifLt = (/** @type {string} */ lit, /** @type {string} */ dft) => _fB + _fI('IF') + _fF('NUMPAGES', '1') + _fI(`&gt; 1 "${lit}"`) + _fS(dft) + _fE;
-const FOOTER = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:p><w:pPr><w:jc w:val="center"/></w:pPr>${_ifLt('— ', '— ')}${_fB}${_fI('IF')}${_fF('NUMPAGES', '1')}${_fI('&gt; 1')}${_fF('PAGE', '1')}${_fE}${_ifLt(' —', ' —')}</w:p></w:ftr>`;
+const _FRP_NO = _FRP.replace('<w:sz w:val="18"/>', '<w:sz w:val="14"/>'); // 문서번호행 — 쪽 번호보다 한 단계 소자
+/** @param {string} [docNo] - 문서 추적 번호 — 지정 시 쪽 번호 아래 소자로 모든 쪽에 표기 */
+const _footer = docNo => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:p><w:pPr>${_NOSPACE}<w:jc w:val="center"/></w:pPr>${_ifLt('— ', '— ')}${_fB}${_fI('IF')}${_fF('NUMPAGES', '1')}${_fI('&gt; 1')}${_fF('PAGE', '1')}${_fE}${_ifLt(' —', ' —')}</w:p>${docNo ? `<w:p><w:pPr>${_NOSPACE}<w:spacing w:before="20"/><w:jc w:val="center"/></w:pPr><w:r>${_FRP_NO}<w:t xml:space="preserve">문서번호 ${esc(docNo)}</w:t></w:r></w:p>` : ''}</w:ftr>`;
 
-// 워터마크 — 회전 텍스트 상자(wps/DrawingML). 1쪽: 첫 단락 본문 앵커+텍스트 앞(표 음영 위로 보임)·
-// 2쪽 이상: 기본 헤더 앵커(본문 뒤, 매 장 반복 — titlePg로 1쪽 제외). textpath(t136)는 경로 기반
-// 글리프라 렌더러별 축소·방향 처리가 달라 깨지므로, 일반 단락 텍스트를 담은 상자 자체를 회전
+// 코어 속성 — docProps/core.xml. 파일이 복사·이름변경돼도 문서번호·기관·판본이 파일 안에 남는다
+// (파일명만 바꾸면 추적 불가 — 추적성의 파일 내장 층). revision은 발행 차수(재발행 시 증가)
+/** @param {{no?:string, org?:string, title?:string, rev?:number}} [doc] @param {string} [titleFallback] */
+const _coreXml = (doc = {}, titleFallback = '') => {
+    const now = new Date().toISOString();
+    return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><dc:title>${esc(doc.title || titleFallback)}</dc:title>${doc.no ? `<dc:identifier>${esc(doc.no)}</dc:identifier>` : ''}${doc.org ? `<dc:creator>${esc(doc.org)}</dc:creator><cp:lastModifiedBy>${esc(doc.org)}</cp:lastModifiedBy>` : ''}<cp:revision>${Math.max(1, doc.rev || 0)}</cp:revision><dcterms:created xsi:type="dcterms:W3CDTF">${now}</dcterms:created><dcterms:modified xsi:type="dcterms:W3CDTF">${now}</dcterms:modified></cp:coreProperties>`;
+};
+
+// 워터마크 — 회전 상자 앵커를 본문 단락(및 거대 표의 경계 행 셀 단락)에 분산 배치한다.
+// 헤더 도형 경로는 렌더러가 behindDoc와 무관하게 항상 본문 아래층에 그리므로
+// "본문 위 덮기" 요구사항에 쓸 수 없다 — 본문 앵커만 앞면 렌더가 가능하다.
+// 전 쪽 커버리지는 _sprayWm의 3중 장치(360pt 경계 앵커·거대 표 셀 내부 런·끝쪽 앵커)로 보장.
+// 표현은 2경로:
+//   ① wmImg(알파 구운 PNG, 앞면 pic 앵커 behindDoc=0) — 일부 뷰어가 w14:alpha·behindDoc를
+//      무시해 텍스트 경로는 진하면 가림·연하면 미표시로 양립 불가. PNG 알파는 렌더러 무관
+//      적용돼 미리보기·PDF의 rgba(0,0,0,.12)와 동일 결과 — 브라우저 경로는 항상 이쪽.
+//   ② wm 텍스트(wps 상자, 뒤 behindDoc=1) — PNG 생성 불가 환경 폴백. 뒤라서 글자를 가리지
+//      않되 behindDoc 무시 뷰어·음영 셀 아래는 미표시.
+// textpath(t136)는 경로 기반 글리프라 렌더러별 축소·방향 처리가 달라 깨지므로,
+// 일반 단락 텍스트를 담은 상자 자체를 회전
 /** 워터마크 폰트 크기 — 문구 길이로 명시 계산 (전각 1em·반각 .55em, 굵게+기울임 보정 ×1.15, 640pt 박스 폭) */
 /** @param {string} text @returns {number} pt */
 const _wmFont = text => {
@@ -108,34 +135,33 @@ const _wmFont = text => {
     return Math.min(64, Math.max(24, Math.floor(550 / Math.max(1, units * 1.15))));
 };
 
-/** @param {string} text - 워터마크 문구 @param {boolean} [behind] - 헤더용이면 true(텍스트 뒤=네이티브 워터마크 레이어), 본문 앵커용이면 false(텍스트 앞) @param {number} [id] - wp:docPr id (문서 내 유일해야 함 — 중복 시 Word가 파일 손상으로 거부) */
-const _wmPara = (text, behind = false, id = 0) => `<w:p><w:pPr><w:spacing w:after="0" w:line="40" w:lineRule="exact"/></w:pPr><w:r><w:drawing><wp:anchor xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" distT="0" distB="0" distL="0" distR="0" simplePos="0" relativeHeight="251658240" behindDoc="${behind ? 1 : 0}" locked="0" layoutInCell="1" allowOverlap="1"><wp:simplePos x="0" y="0"/><wp:positionH relativeFrom="margin"><wp:align>center</wp:align></wp:positionH><wp:positionV relativeFrom="margin"><wp:align>center</wp:align></wp:positionV><wp:extent cx="8128000" cy="1143000"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:wrapNone/><wp:docPr id="${id || (behind ? 200 : 100)}" name="워터마크"/><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"><wps:wsp xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"><wps:cNvSpPr txBox="1"/><wps:spPr><a:xfrm rot="-2700000"><a:off x="0" y="0"/><a:ext cx="8128000" cy="1143000"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></wps:spPr><wps:txbx><w:txbxContent><w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="C0C0C0"/><w:b/><w:i/><w:sz w:val="${_wmFont(text) * 2}"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:srgbClr w14:val="C0C0C0"><w14:alpha w14:val="40000"/></w14:srgbClr></w14:solidFill></w14:textFill></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:p></w:txbxContent></wps:txbx><wps:bodyPr wrap="none" lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr" horzOverflow="overflow" vertOverflow="overflow"/></wps:wsp></a:graphicData></a:graphic></wp:anchor></w:drawing></w:r></w:p>`;
+// 앵커 래퍼 — 용지 중앙 정렬 640×90pt 상자, id는 문서 내 유일 (중복 시 Word가 파일 손상으로 거부).
+// relativeFrom="page" + align=center — Word가 실제 용지 크기 기준으로 중앙을 계산하므로
+// 세로·가로 방향을 자동 인지한다 (고정 posOffset은 방향별 재계산이 필요해 사용하지 않음).
+// layoutInCell="0" — 표 안/표 사이 단락의 앵커가 셀 기준으로 해석되는 것을 차단.
+const _wmOpen = (/** @type {number} */ id, /** @type {number} */ behind) => `<w:p><w:pPr><w:spacing w:after="0" w:line="40" w:lineRule="exact"/></w:pPr><w:r><w:drawing><wp:anchor xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" distT="0" distB="0" distL="0" distR="0" simplePos="0" relativeHeight="251658240" behindDoc="${behind}" locked="0" layoutInCell="0" allowOverlap="1"><wp:simplePos x="0" y="0"/><wp:positionH relativeFrom="page"><wp:align>center</wp:align></wp:positionH><wp:positionV relativeFrom="page"><wp:align>center</wp:align></wp:positionV><wp:extent cx="8128000" cy="1143000"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:wrapNone/><wp:docPr id="${id || 100}" name="워터마크"/><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="`;
+const _wmClose = `</a:graphicData></a:graphic></wp:anchor></w:drawing></w:r></w:p>`;
 
-// 헤더 — 기본 헤더(2쪽 이상 매 장 반복)에 워터마크: 헤더 앵커는 본문 아래 레이어라 네이티브 워터마크와 동일.
-// 1쪽은 첫 단락 본문 앵커가 담당하므로 첫 페이지 헤더(header2)는 비움 — titlePg와 세트
-/** @param {string} wm - 워터마크 문구 */
-const _headerWm = wm => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:hdr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">${_wmPara(wm, true)}</w:hdr>`;
-const HEADER_EMPTY = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:hdr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:p><w:pPr><w:spacing w:after="0" w:line="40" w:lineRule="exact"/></w:pPr></w:p></w:hdr>`;
+/** @param {string} rid - 이미지 관계 id (rIdN) @param {number} [id] - wp:docPr id */
+const _wmPicPara = (rid, id = 0) => `${_wmOpen(id, 0)}http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="0" name="wm.png" descr="워터마크"/><pic:cNvPicPr><a:picLocks noChangeAspect="1"/></pic:cNvPicPr></pic:nvPicPr><pic:blipFill><a:blip r:embed="${rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm rot="-2700000"><a:off x="0" y="0"/><a:ext cx="8128000" cy="1143000"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic>${_wmClose}`;
+
+/** @param {string} text - 워터마크 문구 @param {number} [id] - wp:docPr id */
+const _wmPara = (text, id = 0) => `${_wmOpen(id, 1)}http://schemas.microsoft.com/office/word/2010/wordprocessingShape"><wps:wsp xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"><wps:cNvSpPr txBox="1"/><wps:spPr><a:xfrm rot="-2700000"><a:off x="0" y="0"/><a:ext cx="8128000" cy="1143000"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></wps:spPr><wps:txbx><w:txbxContent><w:p><w:pPr>${_NOSPACE}<w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="C0C0C0"/><w:b/><w:i/><w:sz w:val="${_wmFont(text) * 2}"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:srgbClr w14:val="C0C0C0"><w14:alpha w14:val="100000"/></w14:srgbClr></w14:solidFill></w14:textFill></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:p></w:txbxContent></wps:txbx><wps:bodyPr wrap="none" lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr" horzOverflow="overflow" vertOverflow="overflow"/></wps:wsp>${_wmClose}`;
 
 /**
- * @param {string} docXml - word/document.xml 내용 @param {string} wm - 워터마크 문구
+ * @param {string} docXml - word/document.xml 내용
  * @param {Array.<{data: Uint8Array}>} [imgs] - 본문 이미지 (word/media/img_N.png 순번)
+ * @param {?{no?:string, org?:string, title?:string, rev?:number}} [doc] - 문서 추적 메타 — 지정 시 docProps/core.xml·푸터 문서번호 추가
  * @returns {Array.<[string, Uint8Array]>}
  */
-const _parts = (docXml, wm, imgs = []) => [
-    ['[Content_Types].xml', _enc.encode(_types(wm, imgs.length > 0))],
-    ['_rels/.rels', _enc.encode(RELS)],
-    ['word/_rels/document.xml.rels', _enc.encode(_docrels(wm, imgs.length))],
+const _parts = (docXml, imgs = [], doc = null) => [
+    ['[Content_Types].xml', _enc.encode(_types(imgs.length > 0, !!doc))],
+    ['_rels/.rels', _enc.encode(_rels(!!doc))],
+    ['word/_rels/document.xml.rels', _enc.encode(_docrels(imgs.length))],
     ['word/document.xml', _enc.encode(docXml)],
     ['word/settings.xml', _enc.encode(SETTINGS)],
-    ['word/footer1.xml', _enc.encode(FOOTER)],
-    ...(wm ? /** @type {Array.<[string, Uint8Array]>} */([
-        ['word/footer2.xml', _enc.encode(FOOTER)], // 첫 페이지 바닥글 — titlePg 대응 (기본과 동일 내용)
-        ['word/header1.xml', _enc.encode(_headerWm(wm))],
-        ['word/header2.xml', _enc.encode(HEADER_EMPTY)],
-    ]) : []),
+    ['word/footer1.xml', _enc.encode(_footer(doc ? doc.no : undefined))],
+    ...(doc ? [/** @type {[string, Uint8Array]} */(['docProps/core.xml', _enc.encode(_coreXml(doc))])] : []),
     ...imgs.map((img, i) => /** @type {[string, Uint8Array]} */([`word/media/img_${i}.png`, img.data])),
 ];
 
@@ -149,37 +175,183 @@ const _RF = '<w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsi
  * @returns {string}
  */
 const _P = (line, i, boldLines) => line
-    ? `<w:p><w:pPr><w:spacing w:after="40" w:line="276" w:lineRule="auto"/></w:pPr><w:r><w:rPr>${_RF}${i < boldLines ? '<w:b/>' : ''}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(line, _TEXT_W - 300))}</w:r></w:p>`
-    : '<w:p><w:pPr><w:spacing w:line="140" w:lineRule="exact"/></w:pPr></w:p>';
+    ? `<w:p><w:pPr>${_NOSPACE}<w:snapToGrid w:val="0"/><w:spacing w:after="40" w:line="336" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr><w:r><w:rPr>${_RF}${i < boldLines ? '<w:b/>' : ''}<w:sz w:val="22"/></w:rPr>${_runs(_wrap(line, _TEXT_W - 300))}</w:r></w:p>`
+    : `<w:p><w:pPr>${_NOSPACE}<w:spacing w:line="150" w:lineRule="exact"/></w:pPr></w:p>`;
 // 메타줄 — 제목 바로 아래 기관명·출력일. 중앙·회색·소자로 공문서 머리 격식
 /** @param {string} t */
-const _meta = t => `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:after="140"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
+const _meta = t => `<w:p><w:pPr>${_NOSPACE}<w:spacing w:after="140"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 
-// 페이지 설정 — A4 세로(orient 명시 — 일부 임포터가 생략 시 가로로 해석) + 좌우 25mm 여백 + 1단·문서 그리드 (Word 정본과 동일한 sectPr 형태)
-const _SECT = '<w:sectPr><w:footerReference w:type="default" r:id="rId2"/><w:pgSz w:w="11906" w:h="16838" w:orient="portrait"/><w:pgMar w:top="1134" w:right="1417" w:bottom="1134" w:left="1417"/><w:cols w:space="708"/><w:docGrid w:linePitch="360"/></w:sectPr>';
-// 워터마크 있으면 titlePg — 1쪽: 빈 첫 헤더+본문 앵커(전면) / 2쪽 이상: 기본 헤더 앵커(본문 뒤, 매 장 반복)
-/** @param {string} wm - 워터마크 문구 */
-const _sect = wm => wm
-    ? `<w:sectPr><w:headerReference w:type="default" r:id="rId3"/><w:footerReference w:type="default" r:id="rId2"/><w:headerReference w:type="first" r:id="rId4"/><w:footerReference w:type="first" r:id="rId5"/><w:titlePg/><w:pgSz w:w="11906" w:h="16838" w:orient="portrait"/><w:pgMar w:top="1134" w:right="1417" w:bottom="1134" w:left="1417"/><w:cols w:space="708"/><w:docGrid w:linePitch="360"/></w:sectPr>`
-    : _SECT;
+// 페이지 설정 — A4 세로(orient 명시 — 일부 임포터가 생략 시 가로로 해석) + 좌우 25mm 여백 + 1단.
+// docGrid는 제거 — 글자 격자로 오해석해 어절·자간을 늘리는 임포터가 있음 (비용 계산서 어절 간격 신고)
+const _SECT = '<w:sectPr><w:footerReference w:type="default" r:id="rId2"/><w:pgSz w:w="11906" w:h="16838" w:orient="portrait"/><w:pgMar w:top="1134" w:right="1417" w:bottom="1134" w:left="1417"/><w:cols w:space="708"/></w:sectPr>';
 
-// 다중 페이지 추정 — 본문 XML의 단락·표 행 수로 콘텐츠 높이 근사 (단락≈14pt·행≈22pt, 한 장 본문≈640pt)
-// 길다고 판단되면 문서 끝에도 전면 워터마크 앵커를 둬 마지막 쪽도 1쪽과 동일 농도로 표시.
-// 헤더 워터마크는 본문 뒤 레이어라 표 음영에 가려 옅어지므로, 전면 앵커가 실질 표시를 담당한다
-/** @param {string} bodyXml */
-const _isLong = bodyXml =>
-    ((bodyXml.match(/<w:p[ >]/g) || []).length * 14 + (bodyXml.match(/<w:tr[ >]/g) || []).length * 22) > 640;
+// 워터마크 균등 분포 — 추정 페이지 높이(단락≈14pt·행≈22pt, 한 장 본문≈640pt)마다 뒤쪽 앵커를 삽입.
+// 첫·끝 고정 앵커는 같은 쪽에 중첩돼 문서마다 농도가 달라지므로, 페이지 경계 추정 위치마다
+// 1개씩 배치해 쪽당 동일 농도를 노린다
+const _PAGE_PT = 700; // 실측 본문 용량 ≈728pt — 추정 오차 안전 마진 28pt
+// 부동 표(결재란 top·서명란 bottom)가 본문 흐름에서 점유하는 시각적 높이 예약치 —
+// tblpPr 표는 흐름 높이를 안 쓰지만 텍스트가 감겨 그 영역만큼 가용 쪽이 줄어든다 (결재≈55 + 서명≈150)
+const _FLT_PT = 200;
+// 밀도 티어별 추정 상수 — l:줄높이(pt), a:단락 후간격, rMin/rPad:행 최소·셀 여백(pt).
+// 추정은 줄 수(<w:p>·<w:br/>) 기반 — 상수는 Word 실측 렌더 높이로 교정 (맑은고딕 11pt 행간336
+// 실측 줄 ≈25pt·표 행 ≈47pt = 셀 여백12+줄35 — 평면 상수는 실제의 ~0.55배라 1장 판정·워터마크 경계가 어긋남)
+/** @typedef {{l:number,a:number,rMin:number,rPad:number,rl:number}} DocxDens - 밀도 티어 추정 상수 (pt) */
+const _DENS = {
+    normal:  { l: 25, a: 0, rMin: 47, rPad: 12, rl: 35 }, // 행간336 → 단락 ≈25pt·행 ≈47pt
+    compact: { l: 23, a: 0, rMin: 43, rPad: 11, rl: 31 }, // 행간300 → 단락 ≈23pt·행 ≈43pt
+    tight:   { l: 19, a: 0, rMin: 31, rPad: 6,  rl: 25 }, // 행간240·셀여백 축소 → 단락 ≈19pt·행 ≈31pt
+};
+/** @param {string} el - 최상위 본문 요소 XML @param {DocxDens} [d] - 밀도 티어 @returns 추정 높이(pt) */
+const _estEl = (el, d = _DENS.normal) => el.includes('w:lineRule="exact"')
+    ? 8 // 스페이서 단락 — lineRule=exact라 글자 크기 무관 고정 높이 (150/120/100tw ≈ 5~8pt)
+    : (((el.match(/<w:p[ >]/g) || []).length + (el.match(/<w:br\/>/g) || []).length) * d.l + d.a);
+/** 표 행 추정 — 행 높이는 최장 셀의 줄 수에 의함 (셀별 <w:br/> 수의 최대 + 셀 상하 여백, 최소 행높이 하한) */
+const _estRow = (/** @type {string} */ tr, /** @type {DocxDens} */ d) => {
+    const cells = tr.split(/(?=<w:tc[ >])/).filter(s => s.startsWith('<w:tc'));
+    const L = Math.max(1, ...cells.map(c => 1 + (c.match(/<w:br\/>/g) || []).length));
+    return Math.max(d.rMin, d.rPad + L * (d.rl || d.l));
+};
+/** 본문 요소 → 흐름 부품 배열 — 본문 표는 행 단위로 분해 (표 내부 페이지 경계 추적용) */
+const _flowParts = (/** @type {string} */ el) => (el.startsWith('<w:tbl>') && !el.includes('<w:tblpPr'))
+    ? el.split(/(?=<w:tr[ >])/) : [el];
+/** 부품 높이 추정 — 표 행은 최장 셀 줄 수 기반(셀 단락 합산 금지: 행 높이는 최장 셀 높이라 평행 합산은 과대), 그 외는 요소 추정 */
+const _estPart = (/** @type {string} */ el, /** @type {DocxDens} */ d) => el.startsWith('<w:tr') ? _estRow(el, d) : (el.startsWith('<w:tbl') ? 0 : _estEl(el, d));
+/** 본문 흐름 높이 추정 — 부동 표(결재·서명, tblpPr)는 여백 앵커라 본문 높이를 소비하지 않아 제외 */
+const _estFlow = (/** @type {string} */ body, /** @type {DocxDens} */ d) => _topEls(body)
+    .flatMap(_flowParts)
+    .filter(el => !(el.startsWith('<w:tbl') && el.includes('<w:tblpPr')))
+    .reduce((n, el) => n + _estPart(el, d), 0);
+// 콤팩트 티어 셀 여백 (표준 120/140 → 90/120)
+const _CELL_MAR_C = '<w:tblCellMar><w:top w:w="90" w:type="dxa"/><w:left w:w="120" w:type="dxa"/><w:bottom w:w="90" w:type="dxa"/><w:right w:w="120" w:type="dxa"/></w:tblCellMar>';
+// 리터럴 문자열 전량 치환 — lib가 ES2020이라 replaceAll 대신 split/join (정규식 이스케이프 불필요)
+const _repAll = (/** @type {string} */ s, /** @type {string} */ a, /** @type {string} */ b) => s.split(a).join(b);
+/**
+ * 콤팩트 밀도 변환 — 1장 원칙: 표준 밀도가 한 장을 넘기면 행간·단락 간격·행높이·셀 여백을
+ * 축소해 한 장 수용을 재시도한다 (글자 크기는 유지 — 가독성 본질은 건드리지 않음).
+ * @param {string} body @returns {string}
+ */
+const _compact = body => [
+    ['<w:spacing w:after="40" w:line="336" w:lineRule="auto"/>', '<w:spacing w:after="20" w:line="300" w:lineRule="auto"/>'],
+    ['<w:spacing w:line="336" w:lineRule="auto"/>', '<w:spacing w:line="300" w:lineRule="auto"/>'],
+    ['<w:trHeight w:val="440" w:hRule="atLeast"/>', '<w:trHeight w:val="420" w:hRule="atLeast"/>'],
+    [_CELL_MAR, _CELL_MAR_C],
+    ['<w:spacing w:line="150" w:lineRule="exact"/>', '<w:spacing w:line="120" w:lineRule="exact"/>'],
+    ['<w:spacing w:before="160" w:after="80"/>', '<w:spacing w:before="120" w:after="60"/>'],
+].reduce((s, [a, b]) => _repAll(s, a || '', b || ''), body);
+// 타이트 티어 셀 여백 (콤팩트 90/120 → 60/90) — 콤팩트로도 한 장을 넘는 문서용 최종 압축
+const _CELL_MAR_T = '<w:tblCellMar><w:top w:w="60" w:type="dxa"/><w:left w:w="90" w:type="dxa"/><w:bottom w:w="60" w:type="dxa"/><w:right w:w="90" w:type="dxa"/></w:tblCellMar>';
+/** 타이트 밀도 변환 — 콤팩트 결과를 한 단계 더 압축 (행간 240·행높이 360·셀 여백·스페이서 축소) */
+const _tight = (/** @type {string} */ body) => [
+    ['w:line="300" w:lineRule="auto"', 'w:line="240" w:lineRule="auto"'],
+    ['<w:trHeight w:val="420" w:hRule="atLeast"/>', '<w:trHeight w:val="360" w:hRule="atLeast"/>'],
+    [_CELL_MAR_C, _CELL_MAR_T],
+    ['<w:spacing w:line="120" w:lineRule="exact"/>', '<w:spacing w:line="100" w:lineRule="exact"/>'],
+    ['<w:spacing w:before="120" w:after="60"/>', '<w:spacing w:before="80" w:after="40"/>'],
+].reduce((s, [a, b]) => _repAll(s, a || '', b || ''), _compact(body));
+/** 본문 XML → 최상위 요소 배열 (w:p·w:tbl — 표 내부 단락은 표 단위로 묶음) */
+/** @param {string} xml */
+const _topEls = xml => {
+    const out = [];
+    let i = 0;
+    while (i < xml.length) {
+        const end = xml.startsWith('<w:tbl>', i)
+            ? xml.indexOf('</w:tbl>', i) + 8
+            : xml.indexOf('</w:p>', i) + 6; // w:p·기타 요소 — </w:p> 없으면 -1+6=5 < i라 루프 종료
+        if (end <= i) { out.push(xml.slice(i)); break; }
+        out.push(xml.slice(i, end));
+        i = end;
+    }
+    return out;
+};
+// 앵커 삽입 간격 — 실제 쪽 높이(~728pt)보다 충분히 촘촘하게(360pt) 둬서, 추정이 실제보다
+// 최대 ~2배 낮게 잡혀도(뷰어가 예상보다 크게 렌더) 실제 쪽 간 앵커 간격이 720pt를 넘지 않는다.
+const _WM_PT = 360;
+/**
+ * 추정 경계 간격(_WM_PT)마다 본문 워터마크 앵커 삽입 — 헤더 앵커는 렌더러가 무조건 본문
+ * 아래층에 그려서(behindDoc 무시) "본문 위 덮기"가 불가하므로 본문 경로만 지원한다.
+ * 페이지 누락 방지 3중 장치:
+ *   ① 소형 표는 통째 누적 + 표 뒤 앵커, 거대 표는 경계 행 첫 셀 단락 안에 앵커 런 삽입
+ *      (표 분할은 이중 테두리+틈이 보여 폐기 — 런 앵커는 부동이라 표가 하나로 유지됨)
+ *   ② 경계를 넘는 장문 단락은 <w:br/> 위치에서 분할해 사이에 앵커 삽입 — 요소 내부가
+ *      쪽 경계를 삼키는 것을 차단 (표만 분할하던 구버전은 장문 단락이 쪽을 넘으면 빈 쪽 발생)
+ *   ③ 문서 끝 앵커 — 마지막 앵커 뒤의 남은 콘텐츠가 실제 렌더에서 새 쪽으로 넘어가도
+ *      끝쪽이 빠지지 않는다 (추정 오차로 앵커가 앞쪽에 몰려도 마지막 쪽 보장)
+ * @param {string} bodyXml @param {?((id:number)=>string)} mkPara - 워터마크 단락 생성기 (null이면 무변경) @param {DocxDens} [d] - 본문 밀도 티어 (콤팩트는 경계 추정도 동일 티어로)
+ */
+const _sprayWm = (bodyXml, mkPara, d = _DENS.normal) => {
+    if (!mkPara) return bodyXml;
+    const out = [];
+    let acc = 0, next = _WM_PT, id = 101, lastAnchorAcc = 0;
+    const mk = () => { lastAnchorAcc = acc; return mkPara(id++); };
+    // 셀 내부 삽입용 런 앵커 — 단락 껍질(<w:p><w:pPr>…</w:pPr>·</w:p>)을 벗긴 그림 런.
+    // wp:anchor는 인라인 공간을 차지하지 않아 셀 레이아웃에 영향 없고, 표 분할(이중 테두리+틈)도 불필요
+    const mkCell = () => { lastAnchorAcc = acc; return mkPara(id++).replace(/^<w:p><w:pPr>[^]*?<\/w:pPr>/, '').replace(/<\/w:p>$/, ''); };
+    const crossed = () => { if (acc < next) return false; next = Math.floor(acc / _WM_PT) * _WM_PT + _WM_PT; return true; };
+    for (const el of _topEls(bodyXml)) {
+        if (el.includes('w:type="page"')) { // 강제 페이지 나눔 — 실제 새 쪽이므로 추정 누적 리셋 + 새 쪽 선두 앵커
+            out.push(el, mk()); acc = 0; next = _WM_PT; lastAnchorAcc = 0; continue;
+        }
+        if (el.startsWith('<w:tbl') && el.includes('<w:tblpPr')) { out.push(el); continue; } // 부동 표 — 여백 앵커라 높이 미소비
+        if (el.startsWith('<w:tbl>')) { // 본문 표 — 소형은 통째 누적 + 표 뒤 앵커, 거대는 경계 행의 셀 안에 앵커 런 삽입
+            const parts = _flowParts(el);
+            const tblH = parts.reduce((/** @type {number} */ n, /** @type {string} */ p) => n + _estPart(p, d), 0);
+            if (tblH < _PAGE_PT * 0.75) { out.push(el); acc += tblH; if (crossed()) out.push(mk()); continue; }
+            for (const part of parts) {
+                if (!part.startsWith('<w:tr')) { out.push(part); continue; }
+                acc += _estPart(part, d);
+                if (crossed()) {
+                    const ci = part.indexOf('</w:p>'); // 경계 행 첫 셀 단락 끝에 런 삽입 — 표는 그대로 하나
+                    out.push(ci < 0 ? part : part.slice(0, ci) + mkCell() + part.slice(ci));
+                } else out.push(part);
+            }
+            continue;
+        }
+        // 장문 단락 — 추정 높이가 경계를 넘고 <w:br/>가 있으면 경계에 맞춰 분할
+        const segs = el.includes('<w:br/>') ? el.split('<w:br/>') : null;
+        if (segs && segs.length > 1 && acc + _estEl(el, d) >= next) {
+            const pPr = (el.match(/<w:pPr>.*?<\/w:pPr>/) || [''])[0];
+            const rPr = (el.match(/<w:rPr>.*?<\/w:rPr>/) || [''])[0];
+            const head = '<w:p>' + pPr + '<w:r>' + rPr;
+            let buf = segs[0] || '';
+            acc += d.l; // seg0 = 첫 줄
+            for (let i = 1; i < segs.length; i++) {
+                if (acc + d.l >= next) { // 다음 줄이 경계를 넘음 — 여기서 단락을 끊고 앵커
+                    out.push(buf + '</w:r></w:p>', mk());
+                    buf = head;
+                    next = Math.floor(acc / _WM_PT) * _WM_PT + _WM_PT;
+                } else buf += '<w:br/>';
+                buf += segs[i];
+                acc += d.l;
+            }
+            acc += d.a; // 단락 후간격
+            out.push(buf);
+            if (crossed()) out.push(mk());
+            continue;
+        }
+        out.push(el);
+        acc += _estEl(el, d);
+        if (crossed()) out.push(mk());
+    }
+    // 끝쪽 앵커 — 마지막 앵커 뒤 콘텐츠가 남아 있으면 문서 말단에 앵커를 추가해 마지막 쪽을
+    // 보장한다. 꼬리가 작아도(수십 pt) 실제 렌더에서 새 쪽으로 넘어갈 수 있으므로 하한은 10pt.
+    // 문서 추정 하한은 _PAGE_PT가 아니라 _WM_PT — 추정이 과소평가된 문서(추정<640이어도 실제
+    // 2쪽)는 바로 여기서 누락되므로 낮은 하한이 필요. 1장 추정 문서(<_WM_PT)는 같은 쪽 중복이라 생략.
+    if (acc >= _WM_PT && acc - lastAnchorAcc >= 10) out.push(mk());
+    return out.join('');
+};
 
 /**
  * @param {string[]} lines
  * @param {number} boldLines
+ * @param {string} [wm] - 워터마크 문구 (텍스트 상자 폴백)
+ * @param {?{data:Uint8Array}} [wmImg] - 워터마크 PNG (알파 구운 이미지)
  * @returns {string}
  */
-const _doc = (lines, boldLines, wm = '') => {
+const _doc = (lines, boldLines, wm = '', wmImg = null) => {
     const body = lines.map((l, i) => _P(l, i, boldLines)).join('');
-    const tail = wm && _isLong(body) ? _wmPara(wm, false, 101) : '';
+    const mk = wmImg ? (/** @param {number} id */ (id) => _wmPicPara('rId6', id)) : wm ? (/** @param {number} id */ (id) => _wmPara(wm, id)) : null;
     return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w10="urn:schemas-microsoft-com:office:word"><w:body>${wm ? _wmPara(wm) : ''}${body}${tail}${_sect(wm)}</w:body></w:document>`;
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w10="urn:schemas-microsoft-com:office:word"><w:body>${mk ? mk(0) + _sprayWm(body, mk) : body}${_SECT}</w:body></w:document>`;
 };
 
 /**
@@ -187,10 +359,12 @@ const _doc = (lines, boldLines, wm = '') => {
  * @param {string} text - 본문 (\n 단락 구분)
  * @param {string} filename - 확장자 제외 파일명
  * @param {number} [boldLines] - 선두 N줄을 굵게 (문서 헤더)
- * @param {string} [wm] - 워터마크 문구 (첫·끝쪽 본문 앵커 전면 + 2쪽~ 기본 헤더 반복)
+ * @param {string} [wm] - 워터마크 문구 (텍스트 상자 폴백 — 추정 페이지 간격으로 균등 배치)
+ * @param {?{data:Uint8Array}} [wmImg] - 워터마크 PNG (알파 구운 이미지 — 지정 시 텍스트 대신 사용)
+ * @param {{doc?: {no?:string, org?:string, title?:string, rev?:number}}} [opts] - doc: 문서 추적 메타 (core.xml·푸터 문서번호)
  */
-export function docxFile(text, filename, boldLines = 0, wm = '') {
-    const blob = _zipStore(_parts(_doc(String(text || '').split('\n'), boldLines, wm), wm));
+export function docxFile(text, filename, boldLines = 0, wm = '', wmImg = null, opts = {}) {
+    const blob = _zipStore(_parts(_doc(String(text || '').split('\n'), boldLines, wm, wmImg), wmImg ? [{ data: wmImg.data }] : [], opts.doc || null));
     return new File([blob], `${filename}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 }
 
@@ -203,15 +377,16 @@ const _BORDERS = ['top', 'left', 'bottom', 'right'].map(b => `<w:${b} w:val="thi
 // 표 레이아웃 — 본문 폭 고정 dxa (A4 11906 − 좌우 여백 1417×2 = 9072) + 균등 열 그리드 + 셀 내부 여백.
 // pct(상대폭)는 한글 등 일부 임포터가 미지원해 표가 본문 폭 밖으로 렌더될 수 있어 dxa 고정 사용.
 const _TEXT_W = 9072;
-const _CELL_MAR = '<w:tblCellMar><w:top w:w="90" w:type="dxa"/><w:left w:w="100" w:type="dxa"/><w:bottom w:w="90" w:type="dxa"/><w:right w:w="100" w:type="dxa"/></w:tblCellMar>';
+const _CELL_MAR = '<w:tblCellMar><w:top w:w="120" w:type="dxa"/><w:left w:w="140" w:type="dxa"/><w:bottom w:w="120" w:type="dxa"/><w:right w:w="140" w:type="dxa"/></w:tblCellMar>';
 // 셀 단락 — kinsoku(동아시아 금칙 규칙) + wordWrap=off(라틴 단어 중간 분할 금지).
 // 주의: Word는 한글을 음절 단위로 끊으며 어절 단위 강제 OOXML 스위치가 없다(COM 실측 —
 // kinsoku·wordWrap·lang=ko-KR·noLineBreaksAfter·useFELayout 모두 중간 분리 유지).
 // 그래서 어절 줄넘김은 생성 측에서 폭 추정 후 <w:br/>를 직접 삽입해 구현한다.
-const _CELL_PPR = '<w:pPr><w:kinsoku/><w:wordWrap w:val="off"/><w:spacing w:line="276" w:lineRule="auto"/></w:pPr>';
-// 글자 폭 — 맑은고딕 10pt(w:sz 20 명시): 한글·전각 200tw(1em 정확), ASCII·반각 110tw(보수 추정).
+const _CELL_PPR = `<w:pPr><w:kinsoku/><w:wordWrap w:val="off"/>${_NOSPACE}<w:snapToGrid w:val="0"/><w:spacing w:line="336" w:lineRule="auto"/></w:pPr>`;
+// 글자 폭 — 맑은고딕 11pt(w:sz 22 명시): 한글·전각 220tw(1em 정확), ASCII·반각 120tw(보수 추정),
+// 공백은 80tw(실측 ≈62+여유 — 과대 추정은 공백 많은 줄이 수백 tw 일찍 끊겨 어절 고아 유발).
 // 폰트 크기를 명시하지 않으면 뷰어 기본값에 따라 달라져 어절 분리가 깨지므로 sz를 고정한다.
-const _cw = (/** @type {string} */ c) => ((c.codePointAt(0) || 0) < 128 ? 110 : 200);
+const _cw = (/** @type {string} */ c) => (c === ' ' ? 80 : (c.codePointAt(0) || 0) < 128 ? 120 : 220);
 /**
  * 어절 단위 사전 줄바꿈 — usable(dxa) 폭에 맞게 공백 경계에서만 분리.
  * 어절 하나가 폭을 넘으면 그대로 둔다 (그 경우 Word의 음절 분리가 불가피 — 중간 강제 분할보다 자연스러움).
@@ -219,7 +394,7 @@ const _cw = (/** @type {string} */ c) => ((c.codePointAt(0) || 0) < 128 ? 110 : 
  * @returns {string[]}
  */
 const _wrap = (t, usable) => {
-    const lines = []; let line = '', lw = 0;
+    /** @type {string[]} */ const lines = []; let line = '', lw = 0;
     for (const tok of String(t).split(/( +)/)) {
         const tw = [...tok].reduce((n, c) => n + _cw(c), 0);
         if (line && lw + tw > usable) {
@@ -229,13 +404,20 @@ const _wrap = (t, usable) => {
         } else { line += tok; lw += tw; }
     }
     if (line || !lines.length) lines.push(line.trimEnd());
+    // 마지막 줄 어절 고아 방지 — 1어절뿐이면 앞 줄 끝 어절을 내려 2어절 이상으로 (있습니다. 단독행 신고)
+    while (lines.length > 1 && !/ /.test(lines[lines.length - 1] || '')) {
+        const m = (lines[lines.length - 2] || '').match(/^(.*\S)\s+(\S+)$/);
+        if (!m) break;
+        lines[lines.length - 2] = m[1] || '';
+        lines[lines.length - 1] = `${m[2] || ''} ${lines[lines.length - 1] || ''}`;
+    }
     return lines;
 };
 /** 줄 배열 → 단일 런의 t/br 시퀀스 */
 /** @param {string[]} lines */
 const _runs = lines => lines.map(l => `<w:t xml:space="preserve">${esc(l)}</w:t>`).join('<w:br/>');
 const _estW = (/** @type {string} */ t) => [...String(t)].reduce((n, c) => n + _cw(c), 0);
-const _CPAD = 280; // 셀 좌우 여백(100×2)+테두리 여유
+const _CPAD = 320; // 셀 좌우 여백(100×2)+테두리 여유
 /**
  * 열 너비 배분 — 내용 폭 추정 기반 (HTML auto-layout 유사). min=최장 어절 수용 폭, pref=한 줄 수용 폭.
  * pref 합계가 본문 폭 이하면 잉여를 pref 비율로, 넘으면 min 확보 후 잉여를 (pref−min) 비율로 배분한다.
@@ -286,7 +468,7 @@ const _colWs = rows => {
  */
 const _cell = (c, head, w, shd, center) => {
     const ppr = _CELL_PPR.replace('</w:pPr>', `${head || center ? '<w:jc w:val="center"/>' : ''}</w:pPr>`);
-    return `<w:tc><w:tcPr>${w ? `<w:tcW w:w="${w}" w:type="dxa"/>` : ''}${shd ? `<w:shd w:val="clear" w:color="auto" w:fill="${shd}"/>` : ''}<w:vAlign w:val="center"/></w:tcPr><w:p>${ppr}<w:r><w:rPr>${_RF}${head ? '<w:b/>' : ''}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(c.trim(), Math.max(400, (w || _TEXT_W) - _CPAD)))}</w:r></w:p></w:tc>`;
+    return `<w:tc><w:tcPr>${w ? `<w:tcW w:w="${w}" w:type="dxa"/>` : ''}${shd ? `<w:shd w:val="clear" w:color="auto" w:fill="${shd}"/>` : ''}<w:vAlign w:val="center"/></w:tcPr><w:p>${ppr}<w:r><w:rPr>${_RF}${head ? '<w:b/>' : ''}<w:sz w:val="22"/></w:rPr>${_runs(_wrap(c.trim(), Math.max(440, (w || _TEXT_W) - _CPAD)))}</w:r></w:p></w:tc>`;
 };
 /**
  * @param {string[][]} rows
@@ -299,7 +481,7 @@ const _tbl = rows => {
     const wAt = (/** @type {number} */ i) => ws[i];
     // 첫 행 tblHeader(페이지 넘김 시 표머리 반복) + cantSplit(행이 페이지 경계에서 쪼개지지 않음) + 최소 행 높이 24pt
     return `<w:tbl><w:tblPr><w:tblW w:w="${_TEXT_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${grid}</w:tblGrid>`
-        + rows.map((r, i) => `<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="400" w:hRule="atLeast"/>${i === 0 ? '<w:tblHeader/>' : ''}</w:trPr>${r.map((c, ci) => {
+        + rows.map((r, i) => `<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="440" w:hRule="atLeast"/>${i === 0 ? '<w:tblHeader/>' : ''}</w:trPr>${r.map((c, ci) => {
             const shd = i === 0 ? 'DEEAF6' : (n === 2 && ci === 0 ? 'F2F2F2' : (i % 2 === 0 ? 'F7F9FC' : ''));
             return _cell(c, i === 0, wAt(ci), shd, n === 2 && ci === 0);
         }).join('')}</w:tr>`).join('') + '</w:tbl>';
@@ -313,32 +495,34 @@ const _RF_T = '<w:rFonts w:ascii="Times New Roman" w:hAnsi="Times New Roman" w:e
  * @returns {string}
  */
 const _h = (t, lv) => lv === 1
-    ? `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="80" w:after="80"/></w:pPr><w:r><w:rPr>${_RF_T}<w:b/><w:sz w:val="36"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`
-    : `<w:p><w:pPr><w:spacing w:before="160" w:after="80"/>${lv === 2 ? '<w:pBdr><w:bottom w:val="single" w:sz="4" w:color="BFBFBF"/></w:pBdr>' : ''}</w:pPr><w:r><w:rPr>${_RF}<w:b/><w:sz w:val="${lv === 2 ? 28 : 24}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
-const _HR = '<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="999999"/></w:pBdr></w:pPr></w:p>';
+    ? `<w:p><w:pPr>${_NOSPACE}<w:spacing w:before="80" w:after="80"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF_T}<w:b/><w:sz w:val="36"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`
+    : `<w:p><w:pPr>${lv === 2 ? '<w:pBdr><w:bottom w:val="single" w:sz="4" w:color="BFBFBF"/></w:pBdr>' : ''}${_NOSPACE}<w:spacing w:before="160" w:after="80"/></w:pPr><w:r><w:rPr>${_RF}<w:b/><w:sz w:val="${lv === 2 ? 28 : 24}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
+const _HR = `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="999999"/></w:pBdr>${_NOSPACE}</w:pPr></w:p>`;
+const _PAGEBREAK = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
 
-// 결재란 — 공문서 상단 우측 승인 표 ('결 재' 세로병합 + 담당·팀장·시설장 빈 서명칸).
+// 결재란 — 공문서 상단 우측 승인 표 ('결 재' 세로병합 + 담당·팀장·시설장 '(인)' 중앙 서명칸).
 // 서명 문서(:::sign 포함)에만 부여
-const _AW = 840; // 결재란 열 폭 — '시설장'(600tw)+셀 여백(200tw) 수용 하한
+const _AW = 960; // 결재란 열 폭 — 11pt '시설장'(660tw)+셀 여백(280tw) 한 줄 수용 하한 940+여유
 const _APPR_W = _AW * 4;
 // 인라인 jc=right도 셀 여백+테두리만큼 우측 가이드선을 넘어감(PDF 실측) — 부동 표+tblpX 보정은 서명란과 동일
 const _APPR_X = _TEXT_W - _APPR_W + 102;
 const _cellPprC = _CELL_PPR.replace('</w:pPr>', '<w:jc w:val="center"/></w:pPr>');
-const _apprCell = (/** @type {string} */ t, /** @type {boolean} */ merge, /** @type {boolean} */ cont) => `<w:tc><w:tcPr><w:tcW w:w="${_AW}" w:type="dxa"/>${merge ? `<w:vMerge${cont ? '' : ' w:val="restart"'}/>` : ''}${t && !cont ? '<w:shd w:val="clear" w:color="auto" w:fill="DEEAF6"/>' : ''}<w:vAlign w:val="center"/></w:tcPr>${t ? `<w:p>${_cellPprC}<w:r><w:rPr>${_RF}<w:b/><w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${t}</w:t></w:r></w:p>` : '<w:p/>'}</w:tc>`;
-// 담당 칸 서명 — `images.approve`(서명-only)를 중앙 인라인. (인) 합성 서명과 달리 결재란은 서명만
-const _apprImgCell = (/** @type {{rid:string,cx:number,cy:number,id:number}} */ im) => `<w:tc><w:tcPr><w:tcW w:w="${_AW}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_CELL_PPR.replace('</w:pPr>', '<w:ind w:left="-120"/></w:pPr>')}${_imgRun(im)}</w:p></w:tc>`;
+const _apprCell = (/** @type {string} */ t, /** @type {boolean} */ merge, /** @type {boolean} */ cont) => `<w:tc><w:tcPr><w:tcW w:w="${_AW}" w:type="dxa"/>${merge ? `<w:vMerge${cont ? '' : ' w:val="restart"'}/>` : ''}${t && !cont ? '<w:shd w:val="clear" w:color="auto" w:fill="DEEAF6"/>' : ''}<w:vAlign w:val="center"/></w:tcPr>${t ? `<w:p>${_cellPprC}<w:r><w:rPr>${_RF}<w:b/><w:sz w:val="22"/></w:rPr><w:t xml:space="preserve">${t}</w:t></w:r></w:p>` : '<w:p/>'}</w:tc>`;
+// 서명 자리 — 담당·팀장·시설장 각 칸에 '(인)'을 중앙 정렬로 표기 (공문서 날인 위치 표시 관행).
+// 서명 이미지가 있으면 (인) 위에 겹치는 앵커 오버레이로 삽입 — 날인 도장 형태
+const _apprSignCell = (/** @type {{rid:string,cx:number,cy:number}|undefined} */ im = undefined, /** @type {number} */ id = 0) => `<w:tc><w:tcPr><w:tcW w:w="${_AW}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_cellPprC}<w:r><w:rPr>${_RF}<w:sz w:val="22"/></w:rPr><w:t>(인)</w:t></w:r>${im ? _ovrImgRun(im, 'center', id) : ''}</w:p></w:tc>`;
 /** @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} [imgMap] */
-const _approve = (imgMap = {}) => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_APPR_X}" w:tblpYSpec="top" w:leftFromText="180" w:rightFromText="180" w:topFromText="60" w:bottomFromText="120"/><w:tblW w:w="${_APPR_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${`<w:gridCol w:w="${_AW}"/>`.repeat(4)}</w:tblGrid>`
-    + `<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="400" w:hRule="atLeast"/></w:trPr>`
+const _approve = (imgMap = {}) => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_APPR_X}" w:tblpYSpec="top" w:leftFromText="180" w:rightFromText="180" w:topFromText="60" w:bottomFromText="300"/><w:tblW w:w="${_APPR_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${`<w:gridCol w:w="${_AW}"/>`.repeat(4)}</w:tblGrid>`
+    + `<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="440" w:hRule="atLeast"/></w:trPr>`
     + _apprCell('결 재', true, false)
     + ['담당', '팀장', '시설장'].map(t => _apprCell(t, false, false)).join('')
     + `</w:tr><w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="640" w:hRule="atLeast"/></w:trPr>`
     + _apprCell('', true, true)
-    + (imgMap.approve ? _apprImgCell(imgMap.approve) : _apprCell('', false, false))
-    + _apprCell('', false, false) + _apprCell('', false, false)
+    + _apprSignCell(imgMap.approve, 500)
+    + _apprSignCell() + _apprSignCell()
     + '</w:tr></w:tbl>';
 // 문서 종결 — 공문서 관행의 '끝.' 표기 (중앙)
-const _END = `<w:p><w:pPr><w:jc w:val="center"/><w:spacing w:before="80"/></w:pPr><w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t>끝.</w:t></w:r></w:p>`;
+const _END = `<w:p><w:pPr>${_NOSPACE}<w:spacing w:before="80"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:sz w:val="22"/></w:rPr><w:t>끝.</w:t></w:r></w:p>`;
 
 // 서명란 — 본문 여백 영역 하단 우측에 부동 표(tblpPr — Word 텍스트 상자와 동일한 앵커 방식).
 // 문서 끝에 배치하면 마지막 페이지 하단 오른쪽에 고정된다. 첫 행은 발신일(중앙), 서명행은 (인) 표기
@@ -347,50 +531,108 @@ const _SIG_W = 4200;
 const _SIG_X = _TEXT_W - _SIG_W + 102;
 const _docDate = () => { const d = new Date(); return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`; };
 
-// 인라인 이미지 런 — 서명란 `{{img:key}}` 토큰 치환용. rIdN 관계의 word/media/img_N.png 참조
-/** @param {{rid:string, cx:number, cy:number, id:number}} img @param {number} [posY] - 수직 오프셋 (half-points, 음수=아래) */
-const _imgRun = (img, posY = 0) => `<w:r>${posY ? `<w:rPr><w:position w:val="${posY}"/></w:rPr>` : ''}<w:drawing><wp:inline xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${img.cx}" cy="${img.cy}"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:docPr id="${img.id}" name="서명"/><a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="0" name="sign.png" descr="서명"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="${img.rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${img.cx}" cy="${img.cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic></wp:inline></w:drawing></w:r>`;
+// 이미지 <a:graphic> 본체 — 인라인·앵커 런 공용
+/** @param {{rid:string, cx:number, cy:number, file?:string, desc?:string}} img */
+const _imgPic = img => `<a:graphic xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main"><a:graphicData uri="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:pic xmlns:pic="http://schemas.openxmlformats.org/drawingml/2006/picture"><pic:nvPicPr><pic:cNvPr id="0" name="${img.file || 'sign.png'}" descr="${img.desc || '서명'}"/><pic:cNvPicPr/></pic:nvPicPr><pic:blipFill><a:blip r:embed="${img.rid}"/><a:stretch><a:fillRect/></a:stretch></pic:blipFill><pic:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="${img.cx}" cy="${img.cy}"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom></pic:spPr></pic:pic></a:graphicData></a:graphic>`;
+// 인라인 이미지 런 — 문서번호 QR 삽입용. rIdN 관계의 word/media/img_N.png 참조
+/** @param {{rid:string, cx:number, cy:number, id:number, name?:string, file?:string, desc?:string}} img */
+const _imgRun = img => `<w:r><w:drawing><wp:inline xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" distT="0" distB="0" distL="0" distR="0"><wp:extent cx="${img.cx}" cy="${img.cy}"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:docPr id="${img.id}" name="${img.name || '서명'}"/>${_imgPic(img)}</wp:inline></w:drawing></w:r>`;
+// (인) 위 서명 오버레이 — wp:anchor는 흐름 공간을 차지하지 않아 (인)가 문서 텍스트로 그대로
+// 남고 서명 이미지가 그 위에 겹쳐 놓인다 (실물 도장 날인 형태).
+//   hMode 'center': 셀 수평 중앙 — 결재란 (중앙정렬 (인)과 중심 일치)
+//   hMode 'charR' : 앵커 문자((인) 직후)에 우측 끝 정합 — 서명란 ((인) 우측 끝과 이미지 우측 끝 일치).
+//     _OVR_RPAD만큼 더 우측으로 — (인) 잉크가 탭 정지 기준 문자 위치보다 ~3.5pt 우측으로 넘쳐 그려져
+//     보정 없으면 ')' 오른편이 이미지 밖으로 삐져나옴 (PDF 실측)
+//   세로는 (인)이 있는 줄(line) 중앙. layoutInCell=1 — 표 셀 안 앵커 필수.
+//   docPr id는 그리기 인스턴스별 고유해야 함 — 500=결재란, 600+행번=서명란.
+const _OVR_RPAD = 50800; // ≈4pt — (인) 우측 잉크 오버행 보정
+/** @param {{rid:string, cx:number, cy:number, name?:string, file?:string, desc?:string}} img @param {string} hMode @param {number} id */
+const _ovrImgRun = (img, hMode, id) => `<w:r><w:drawing><wp:anchor xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" distT="0" distB="0" distL="0" distR="0" simplePos="0" relativeHeight="251659264" behindDoc="0" locked="0" layoutInCell="1" allowOverlap="1"><wp:simplePos x="0" y="0"/>${hMode === 'center' ? '<wp:positionH relativeFrom="column"><wp:align>center</wp:align></wp:positionH>' : `<wp:positionH relativeFrom="character"><wp:posOffset>${_OVR_RPAD - img.cx}</wp:posOffset></wp:positionH>`}<wp:positionV relativeFrom="line"><wp:align>center</wp:align></wp:positionV><wp:extent cx="${img.cx}" cy="${img.cy}"/><wp:effectExtent l="0" t="0" r="0" b="0"/><wp:wrapNone/><wp:docPr id="${id}" name="${img.name || '서명'}"/>${_imgPic(img)}</wp:anchor></w:drawing></w:r>`;
 
-// 서명 셀 내용 — `{{img:key}}` 토큰이 있고 이미지가 지정되면 라벨+서명 이미지((인)은 이미지에 합성), 아니면 텍스트+(인)
-/** @param {string} line @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} imgMap */
-const _sigRuns = (line, imgMap) => {
+// 문서번호 QR — 서명란 좌측 부동 표(테두리 없음). 서명 표와 동일하게 본문 여백 하단
+// (tblpYSpec=bottom) 기준이라 마지막 쪽 하단에서 서명란 바로 왼쪽에 놓인다.
+// 서명 없는 문서는 하단 좌측(tblpX=0)에 배치. 캡션 소자 + 약 2cm QR.
+// 스캔하면 문서번호 평문 — 발행 이력 뷰·수기 검색으로 발행 기록 대조 (온라인 URL은 로컬 퍼스트라 미사용)
+const _QR_TW = 2600; // 캡션 '문서번호 PREFIX-YYYYMMDD-HASH6' 한 줄 수용 폭
+const _QR_EMU = 720000;
+const _QR_NIL_B = ['top', 'left', 'bottom', 'right', 'insideH', 'insideV'].map(b => `<w:${b} w:val="nil"/>`).join('');
+/** @param {{rid:string, id:number}} img @param {string} no */
+const _qrParas = (img, no) => (no ? `<w:p><w:pPr>${_NOSPACE}<w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="14"/></w:rPr><w:t xml:space="preserve">문서번호 ${esc(no)}</w:t></w:r></w:p>` : '')
+    + `<w:p><w:pPr>${_NOSPACE}<w:spacing w:before="40"/><w:jc w:val="center"/></w:pPr>${_imgRun({ ...img, cx: _QR_EMU, cy: _QR_EMU, name: '문서번호 QR', file: 'docno.png', desc: `문서번호 ${no || ''}` })}</w:p>`;
+// QR 단독 — 서명 없는 문서는 하단 좌측 부동 표
+/** @param {{rid:string, id:number}} img @param {string} no */
+const _qrTbl = (img, no) => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="0" w:tblpYSpec="bottom" w:leftFromText="60" w:rightFromText="60" w:topFromText="60" w:bottomFromText="60"/><w:tblW w:w="${_QR_TW}" w:type="dxa"/><w:tblBorders>${_QR_NIL_B}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid><w:gridCol w:w="${_QR_TW}"/></w:tblGrid>`
+    + `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_QR_TW}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr>${_qrParas(img, no)}</w:tc></w:tr></w:tbl>`;
+
+// 종결 부동 표 — 서명란(+문서번호 QR)을 한 행에 묶어 마지막 쪽 하단에 통째로 배치.
+// cantSplit 단일 행이라 쪽 경계에서 행이 쪼개지지 않는다 — 별개 부동 표 2개를 :::end 지점에
+// 두면 앵커 아래 공간보다 크거나 서로 다른 쪽에 앵커될 때 표가 분할·이탈됐다 (평가체크리스트 4쪽 사례).
+const _TCMAR0 = '<w:tcMar><w:top w:w="0" w:type="dxa"/><w:left w:w="0" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="0" w:type="dxa"/></w:tcMar>'; // 서명 셀 — 내부 표가 테두리·여백을 갖고 있어 셀 여백 0
+const _MIN_P = '<w:p><w:pPr><w:spacing w:before="0" w:after="0" w:line="20" w:lineRule="exact"/></w:pPr></w:p>'; // 셀 내 중첩 표 뒤 필수 단락 — 최소 높이
+/** @param {string[]} sigLines @param {Object} imgMap @param {?{img:{rid:string,id:number}, no:string}} qr */
+// 서명 셀 여유폭 — 내부 표는 셀보다 _SIG_SLK 좁게 둔다. 내부 표 폭=셀 폭이면 이중 외곽선의
+// 바깥 선분(~38tw)이 셀 경계를 넘어가고, 중첩 표를 셀 경계에서 잘라내는 렌더러에서 서명란
+// 우측선이 깎여 보인다. 여유폭이 외곽선 여유분+렌더러별 셀 여백 차이를 흡수한다.
+const _SIG_SLK = 300;
+const _SIG_IND = 60; // 내부 표 좌측 들여쓰기 — 좌측 외곽선(~38tw)도 셀 경계 안에 그려지도록
+/** @param {?string[]} sigLines @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} imgMap @param {?{img:{rid:string,id:number}, no:string}} qr */
+const _closeTbl = (sigLines, imgMap, qr) => {
+    const cells = [];
+    if (qr && qr.img) cells.push({ w: _QR_TW, mar: '', v: 'bottom', xml: _qrParas(qr.img, qr.no) });
+    if (sigLines) cells.push({ w: _SIG_W + _SIG_SLK, mar: _TCMAR0, v: 'top', xml: _sigInner(sigLines, imgMap) + _MIN_P });
+    const w = cells.reduce((s, c) => s + c.w, 0);
+    // tblpX는 그리드 총폭이 아니라 내용 우측 끝(들여쓰기+내부 표 폭) 기준 — 서명 박스 우측선이 본문 표와 정렬
+    const vis = (qr && qr.img ? _QR_TW : 0) + (sigLines ? _SIG_IND + _SIG_W : 0);
+    return `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_TEXT_W - vis + 102}" w:tblpYSpec="bottom" w:leftFromText="180" w:rightFromText="180" w:topFromText="180" w:bottomFromText="180"/><w:tblW w:w="${w}" w:type="dxa"/><w:tblBorders>${_QR_NIL_B}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${cells.map(c => `<w:gridCol w:w="${c.w}"/>`).join('')}</w:tblGrid>`
+        + `<w:tr><w:trPr><w:cantSplit/></w:trPr>` + cells.map(c => `<w:tc><w:tcPr><w:tcW w:w="${c.w}" w:type="dxa"/>${c.mar}<w:vAlign w:val="${c.v}"/></w:tcPr>${c.xml}</w:tc>`).join('') + '</w:tr></w:tbl>';
+};
+
+// 서명 셀 내용 — 라벨 + 우측 탭 정지 (인). `{{img:key}}` 토큰에 이미지가 지정되면
+// (인) 위에 겹치는 앵커 오버레이로 서명 삽입 (실물 날인 형태 — (인)은 문서 텍스트로 유지)
+/** @param {string} line @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} imgMap @param {number} [i] - 행 번호 (오버레이 docPr id 고유화) */
+const _sigRuns = (line, imgMap, i = 0) => {
     const m = line.match(/\{\{img:([\w-]+)\}\}/);
     const im = m ? imgMap[m[1] || ''] : undefined;
-    if (m && im) {
-        const label = line.replace(m[0], '').trim();
-        return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${esc(label)}</w:t></w:r><w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:tab/></w:r>${_imgRun(im, -16)}`;
-    }
-    const t = (m ? line.replace(m[0], '＿＿＿＿＿＿＿＿') : line).trim();
-    return `<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr>${_runs(_wrap(t + (/\(인\)\s*$/.test(t) ? '' : ' (인)'), _SIG_W - 300))}</w:r>`;
+    const t = (m ? line.replace(m[0], im ? '' : '＿＿＿＿＿＿＿＿') : line).trim();
+    // (인)은 우측 탭 정지로 셀 우측 끝에 배치 — 이름 뒤 공백 누적은 줄넘김·위치 불안정이라 탭 사용
+    const label = t.replace(/\s*\(인\)\s*$/, '').trimEnd();
+    const txt = `<w:r><w:rPr>${_RF}<w:sz w:val="22"/></w:rPr>${_runs(_wrap(label, _SIG_W - 300))}</w:r><w:r><w:rPr>${_RF}<w:sz w:val="22"/></w:rPr><w:tab/></w:r><w:r><w:rPr>${_RF}<w:sz w:val="22"/></w:rPr><w:t>(인)</w:t></w:r>`;
+    // 오버레이는 (인) 런 직후에 앵커 — relativeFrom="character" + posOffset=-폭으로 이미지 우측 끝을 (인) 우측 끝에 정합
+    return im ? txt + _ovrImgRun(im, 'charR', 600 + i) : txt;
 };
 /** @param {string[]} lines @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} [imgMap] */
-const _sigTbl = (lines, imgMap = {}) => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_SIG_X}" w:tblpYSpec="bottom" w:leftFromText="180" w:rightFromText="180" w:topFromText="180" w:bottomFromText="180"/><w:tblW w:w="${_SIG_W}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid><w:gridCol w:w="${_SIG_W}"/></w:tblGrid>`
-    + `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_cellPprC}<w:r><w:rPr>${_RF}<w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${_docDate()}</w:t></w:r></w:p></w:tc></w:tr>`
-    + lines.map(l => {
-        // 이미지 서명행 — 우측 탭 정지로 서명을 셀 우측에 정렬 (공백 누적은 셀 폭 초과 시 줄넘김)
-        const imgM = l.match(/\{\{img:([\w-]+)\}\}/);
-        const ppr = imgM && imgMap[imgM[1] || ''] ? _CELL_PPR.replace('</w:pPr>', `<w:tabs><w:tab w:val="right" w:pos="${_SIG_W - 300}"/></w:tabs></w:pPr>`) : _CELL_PPR;
-        return `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr><w:p>${ppr}${_sigRuns(l, imgMap)}</w:p></w:tc></w:tr>`;
-    }).join('') + '</w:tbl>';
+const _sigRows = (lines, imgMap = {}) => `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/><w:shd w:val="clear" w:color="auto" w:fill="F7F9FC"/><w:vAlign w:val="center"/></w:tcPr><w:p>${_cellPprC}<w:r><w:rPr>${_RF}<w:sz w:val="22"/></w:rPr><w:t xml:space="preserve">${_docDate()}</w:t></w:r></w:p></w:tc></w:tr>`
+    + lines.map((l, i) => {
+        // 서명·(인) 우측 정렬용 탭 정지 — 모든 서명행 부여 (공백 누적은 셀 폭 초과 시 줄넘김)
+        const ppr = _CELL_PPR.replace('</w:pPr>', `<w:tabs><w:tab w:val="right" w:pos="${_SIG_W - 300}"/></w:tabs></w:pPr>`);
+        const shd = i % 2 ? '<w:shd w:val="clear" w:color="auto" w:fill="F7F9FC"/>' : ''; // 날짜행 포함 짝수 행 줄무늬 — 본문 표와 동일 리듬
+        return `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_SIG_W}" w:type="dxa"/>${shd}<w:vAlign w:val="center"/></w:tcPr><w:p>${ppr}${_sigRuns(l, imgMap, i)}</w:p></w:tc></w:tr>`;
+    }).join('');
+// 서명란 내부 표(비부동) — 종결 부동 표의 셀에 중첩
+/** @param {string[]} lines @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} [imgMap] */
+const _sigInner = (lines, imgMap = {}) => `<w:tbl><w:tblPr><w:tblW w:w="${_SIG_W}" w:type="dxa"/><w:tblInd w:w="${_SIG_IND}" w:type="dxa"/><w:tblBorders>${_BORDERS}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid><w:gridCol w:w="${_SIG_W}"/></w:tblGrid>${_sigRows(lines, imgMap)}</w:tbl>`;
 
 /**
  * @param {string} md
  * @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} [imgMap]
+ * @param {?{img:{rid:string,id:number}, no:string}} [qr] - 문서번호 QR — 서명란과 같은 종결 부동 표에 삽입
  * @returns {string}
  */
-const _mdBody = (md, imgMap = {}) => {
+const _mdBody = (md, imgMap = {}, qr = null) => {
     const out = [], lines = String(md || '').split('\n');
-    if (/^:::sign\s*$/m.test(md)) out.push(_approve(imgMap)); // 서명 문서는 결재란 선두 부여 (images.author 있으면 담당 칸 서명)
+    if (/^:::sign\s*$/m.test(md)) out.push(_approve(imgMap)); // 서명 문서는 결재란 선두 부여 (images.approve 있으면 담당 칸 (인) 위 서명 오버레이)
     /** @type {string[][] | null} */
     let tbl = null;
     /** @type {string[] | null} */
     let sign = null;
+    /** @type {string[] | null} */
+    let sigLines = null; // 서명란 행 — 끝. 뒤 종결 부동 표로 모아 QR과 한 표에 묶는다
     let meta = false; // # 제목 직후 첫 단락 → 기관명·출력일 메타줄
     const flush = () => { if (tbl) { out.push(_tbl(tbl)); tbl = null; } };
     for (const line of lines) {
         const t = line.trim();
         if (t === ':::sign') { flush(); sign = []; meta = false; continue; }
-        if (t === ':::end') { if (sign) { out.push(_sigTbl(sign, imgMap)); sign = null; } continue; }
+        if (t === ':::end') { if (sign) { sigLines = sign; sign = null; } continue; }
         if (sign) { if (t) sign.push(t); continue; }
         if (/^\|[\s:|-]+\|$/.test(t)) continue; // 표 구분행
         if (t.startsWith('|') && t.endsWith('|')) { meta = false; (tbl = tbl || []).push(t.slice(1, -1).split('|')); continue; }
@@ -400,27 +642,46 @@ const _mdBody = (md, imgMap = {}) => {
         if (meta && t) { meta = false; out.push(_meta(t)); continue; }
         if (!t) { out.push(_P('', 99, 0)); continue; } // 빈 줄 — meta 플래그 유지
         meta = false;
+        if (t === ':::page') { out.push(_PAGEBREAK); continue; } // 페이지 나눔 마커 — 1건 1쪽 문서
         if (t === '---') { out.push(_HR); continue; }
         if (t.startsWith('- ')) { out.push(_P('• ' + t.slice(2), 99, 0)); continue; }
         out.push(_P(t, 99, 0));
     }
     flush();
-    return out.join('') + _END; // 공문서 종결 표기
+    // 종결 부동 표는 끝. 뒤에 둔다 — 앵커가 본문 흐름 말미라 항상 마지막 쪽 하단에 통째로 놓인다.
+    // 서명+QR은 _closeTbl 한 표(서명 없으면 QR만 _qrTbl 하단 좌측)
+    const close = sigLines ? _closeTbl(sigLines, imgMap, qr) : (qr && qr.img ? _qrTbl(qr.img, qr.no) : '');
+    return out.join('') + _END + close;
 };
 
 /**
  * Markdown 초안 → .docx File — # 헤딩·|표|·- 목록·--- 구분선·단락을 구조 보존 변환.
  * @param {string} md - 문서 마크다운
  * @param {string} filename - 확장자 제외 파일명
- * @param {string} [wm] - 워터마크 문구 (첫·끝쪽 본문 앵커 전면 + 2쪽~ 기본 헤더 반복)
- * @param {{images?: Object<string,{data:Uint8Array,w:number,h:number}>}} [opts] - images: `{{img:key}}` 토큰(서명란) 치환용 PNG 바이트 + 표시 크기(px)
+ * @param {string} [wm] - 워터마크 문구 (텍스트 상자 폴백 — 추정 페이지 간격으로 균등 배치)
+ * @param {{images?: Object<string,{data:Uint8Array,w:number,h:number}>, wmImg?: {data:Uint8Array}, doc?: {no?:string, org?:string, title?:string, rev?:number, qr?:{data:Uint8Array}}}} [opts] - images: `{{img:key}}` 토큰(서명란)·`approve`(결재란 담당 칸)용 서명-only PNG 바이트 + 표시 크기(px) — (인)은 문서 텍스트로 렌더되고 이미지는 그 위 앵커 오버레이, wmImg: 알파 구운 워터마크 PNG (지정 시 텍스트 대신 사용), doc: 문서 추적 메타 (core.xml·푸터 번호, qr 지정 시 서명란 좌측 QR 부동 표)
  */
 export function docxFileMd(md, filename, wm = '', opts = {}) {
     const imgs = Object.entries(opts.images || {}).map(([key, im], i) => ({ key, data: im.data, cx: (im.w || 90) * 9525, cy: (im.h || 60) * 9525, rid: `rId${6 + i}`, id: 300 + i }));
     const imgMap = Object.fromEntries(imgs.map(x => [x.key, x]));
-    const mdBody = _mdBody(md, imgMap);
-    const tail = wm && _isLong(mdBody) ? _wmPara(wm, false, 101) : '';
-    const body = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w10="urn:schemas-microsoft-com:office:word"><w:body>${wm ? _wmPara(wm) : ''}${mdBody}${tail}${_sect(wm)}</w:body></w:document>`;
-    const blob = _zipStore(_parts(body, wm, imgs));
+    const doc = opts.doc || null;
+    // 문서번호 QR — 서명 이미지 뒤·워터마크 앞의 rId (본문 rels rId6~ 연번 유지)
+    const qrIm = doc && doc.qr && doc.qr.data ? { data: doc.qr.data, rid: `rId${6 + imgs.length}`, id: 400 } : null;
+    if (qrIm) imgs.push({ key: '__qr', data: qrIm.data, cx: 0, cy: 0, rid: qrIm.rid, id: qrIm.id });
+    const wmRid = opts.wmImg ? `rId${6 + imgs.length}` : ''; // 워터마크 PNG는 imgs 마지막 — 본문 rels rId6~ 연번
+    if (opts.wmImg) imgs.push({ key: '__wm', data: opts.wmImg.data, cx: 0, cy: 0, rid: wmRid, id: 0 });
+    let mdBody = _mdBody(md, imgMap, qrIm ? { img: qrIm, no: (doc ? doc.no : '') || '' } : null);
+    let dens = _DENS.normal;
+    // 1장 원칙 — 표준 밀도 추정(부동 표 점유 예약 _FLT_PT 포함)이 한 장을 넘기면 콤팩트→타이트
+    // 순으로 재시도해 한 장 수용. 그래도 넘치면 표준 유지(어차피 2장이면 가독성 우선).
+    // :::page 명시 쪽 나눔 문서는 의도된 다면 구성이라 압축하지 않음
+    const _flt = mdBody.includes('<w:tblpPr') ? _FLT_PT : 0;
+    if (!mdBody.includes('<w:br w:type="page"/>') && _estFlow(mdBody, _DENS.normal) + _flt > _PAGE_PT) {
+        if (_estFlow(mdBody, _DENS.compact) + _flt <= _PAGE_PT) { mdBody = _compact(mdBody); dens = _DENS.compact; }
+        else if (_estFlow(mdBody, _DENS.tight) + _flt <= _PAGE_PT) { mdBody = _tight(mdBody); dens = _DENS.tight; }
+    }
+    const mk = opts.wmImg ? (/** @param {number} id */ (id) => _wmPicPara(wmRid, id)) : wm ? (/** @param {number} id */ (id) => _wmPara(wm, id)) : null;
+    const body = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w10="urn:schemas-microsoft-com:office:word"><w:body>${mk ? mk(0) + _sprayWm(mdBody, mk, dens) : mdBody}${_SECT}</w:body></w:document>`;
+    const blob = _zipStore(_parts(body, imgs, doc));
     return new File([blob], `${filename}.docx`, { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
 }

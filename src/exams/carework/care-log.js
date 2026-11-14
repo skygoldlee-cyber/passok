@@ -2,6 +2,7 @@
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 // 제공기준 고시 기록 항목 기반 표준 일지 텍스트 자동 조립 (DOC-DSN-42 Phase 3)
 import { toCsv } from '../../content/csv-utils.js';
+import { fmtDocName } from './name-fmt.js';
 
 export const SERVICE_TYPES = [
     { key: 'visit-care', label: '방문요양' },
@@ -24,7 +25,7 @@ export function buildCareLog(in_) {
     const svc = SERVICE_TYPES.find(s => s.key === in_.service)?.label || in_.service;
     const lines = ['■ 요양일지'];
     lines.push(`일시: ${in_.date}${in_.start ? ` ${in_.start}~${in_.end || ''}` : ''}`);
-    lines.push(`대상자: ${in_.client} 님`);
+    lines.push(`대상자: ${fmtDocName(in_.client)} 님`);
     lines.push(`급여 종류: ${svc}`);
     lines.push('', '■ 제공 서비스 내용');
     const acts = in_.activities || {};
@@ -60,7 +61,7 @@ export function buildCareLogMd(in_) {
             ...rows.map(r => '| ' + r.join(' | ') + ' |')].join('\n');
     const out = [tbl(['항목', '내용'], [
         ['일시', `${in_.date}${in_.start ? ` ${in_.start}~${in_.end || ''}` : ''}`],
-        ['대상자', `${in_.client} 님`],
+        ['대상자', `${fmtDocName(in_.client)} 님`],
         ['급여 종류', svc],
     ])];
     const rows = [];
@@ -84,7 +85,7 @@ export function buildRecordText(in_) {
     const acts = Object.values(in_.activities || {}).flat().filter(Boolean);
     return [
         '급여제공기록지',
-        `대상자: ${in_.client}`,
+        `대상자: ${fmtDocName(in_.client)}`,
         `일시: ${in_.date} ${in_.start || ''}~${in_.end || ''}`,
         `급여종류: ${svc}`,
         `서비스 내용: ${acts.length ? acts.join(', ') : '(내용 기록)'}`,
