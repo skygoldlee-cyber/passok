@@ -405,3 +405,65 @@ test('docxFile — opts.doc: 평문 경로도 core.xml + 푸터 번호 부여', 
     assert.ok(entries['docProps/core.xml'].includes('<dc:identifier>INC-20261113-b7e4d2</dc:identifier>'));
     assert.ok(entries['word/footer1.xml'].includes('문서번호 INC-20261113-b7e4d2'));
 });
+
+test('docxFileMd — 본문 {{img:key}} 단독 줄은 중앙 인라인 이미지 단락 (토큰 누수 금지)', async () => {
+    const png = new Uint8Array([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A]);
+    const md = '# t\n\n본문\n\n{{img:chart}}\n\n뒤 줄';
+    const { entries } = await unzip(docxFileMd(md, 'doc', '', { images: { chart: { data: png, w: 400, h: 200 } } }));
+    const doc = entries['word/document.xml'];
+    assert.ok(doc.includes('wp:inline'), '본문 이미지 인라인 삽입 누락');
+    assert.ok(doc.includes('r:embed="rId6"'), '본문 이미지 관계 참조 누락');
+    assert.ok(doc.includes('descr="chart"'), '이미지 키 대체 텍스트 누락');
+    assert.ok(!doc.includes('{{img'), '토큰 리터럴 누수');
+    assert.ok(entries['word/media/img_0.png'], '미디어 파트 누락');
+});
+
+test('docxFileMd — 미등록 {{img:key}}·행 중간 토큰은 (이미지) 텍스트 표기', async () => {
+    const { entries } = await unzip(docxFileMd('# t\n\n{{img:none}}\n\n참고 {{img:x}} 그림', 'doc'));
+    const doc = entries['word/document.xml'];
+    assert.ok(!doc.includes('{{img'), '토큰 리터럴 누수');
+    assert.ok((doc.match(/\(이미지\)/g) || []).length >= 2, '플레이스홀더 표기 누락');
+    assert.ok(doc.includes('참고 (이미지) 그림'), '행 중간 토큰 치환 누락');
+});
+
+test('docxFileMd — 코드 펜스는 등폭 단락으로 원문 보존, 펜스 내 마커 미해석', async () => {
+    const md = '# t\n\n```\n| a | b |\n:::sign\n```\n\n본문';
+    const { entries } = await unzip(docxFileMd(md, 'doc'));
+    const doc = entries['word/document.xml'];
+    assert.ok(doc.includes('Courier New'), '등폭 폰트 누락');
+    assert.ok(doc.includes('| a | b |'), '펜스 내 표 행은 원문 유지');
+    assert.ok(!doc.includes('<w:tbl>'), '펜스 내 표 행이 표로 렌더됨');
+    assert.ok(!doc.includes('결 재'), '펜스 내 :::sign이 결재란으로 해석됨');
+    assert.ok(!doc.includes('```'), '펜스 마커 누수');
+    const un = await unzip(docxFileMd('# t\n\n```\ncode line', 'doc'));
+    assert.ok(un.entries['word/document.xml'].includes('code line'), '미닫힘 펜스 내용 유실');
+});
+
+test('docxFileMd — 인라인 **굵게**·`코드`가 런 서식으로 (본문·표 셀 공통)', async () => {
+    const md = '# t\n\n메타\n\n**중요** 사항과 `값`\n\n| 항목 | 내용 |\n|---|---|\n| a | **필수** |';
+    const { entries } = await unzip(docxFileMd(md, 'doc'));
+    const doc = entries['word/document.xml'];
+    assert.ok(/<w:b\/><w:sz w:val="22"\/><\/w:rPr><w:t[^>]*>중요<\/w:t>/.test(doc), '굵게 런 누락');
+    assert.ok(doc.includes('Courier New'), '코드 등폭 폰트 누락');
+    assert.ok((doc.match(/<w:t[^>]*>필수<\/w:t>/) || []).length >= 1, '표 셀 굵게 누락');
+    assert.ok(!doc.includes('**중요**'), '마커 리터럴 누수');
+});
+
+test('docxFileMd — 인라인 *기울임*·~~취소~~·[링크]가 런 서식으로', async () => {
+    const { entries } = await unzip(docxFileMd('# t\n\n메타\n\n*강조* 와 ~~삭제~~ 그리고 [참고](https://x.kr)', 'doc'));
+    const doc = entries['word/document.xml'];
+    assert.ok(/<w:i\/><w:sz w:val="22"\/><\/w:rPr><w:t[^>]*>강조<\/w:t>/.test(doc), '기울임 런 누락');
+    assert.ok(doc.includes('<w:strike/>'), '취소선 누락');
+    assert.ok(/<w:u w:val="single"\/>/.test(doc) && doc.includes('0B5FFF'), '링크 스타일 누락');
+    assert.ok(doc.includes('>참고<'), '링크 텍스트 누락');
+    assert.ok(!doc.includes('~~삭제~~') && !doc.includes('[참고]'), '마커 리터럴 누수');
+});
+
+test('docxFileMd — ![alt](key) 단독 줄은 인라인 이미지, 행 중간은 (이미지) 표기', async () => {
+    const png = { data: new Uint8Array([137, 80, 78, 71]), w: 10, h: 10 };
+    const { entries } = await unzip(docxFileMd('# t\n\n메타\n\n![도식](fig1)\n\n참고 ![x](fig1) 끝', 'doc', null, { images: { fig1: png } }));
+    const doc = entries['word/document.xml'];
+    assert.ok(doc.includes('wp:inline'), '단독 줄 이미지 삽입 누락');
+    assert.ok(!doc.includes('![x](') && (doc.match(/\(이미지\)/g) || []).length >= 1, '행 중간 이미지 표기 누락');
+    assert.ok(entries['word/media/img_0.png'], '미디어 파트 누락');
+});

@@ -233,9 +233,10 @@ function _cutsWithTableSplit(root, availPx) {
  * @param {HTMLElement} el
  * @param {string} title - 확장자 제외 파일명
  * @param {string} [wm] - 워터마크 문구 (비우면 미스탬프)
+ * @param {{landscape?: boolean}} [opts] - landscape: A4 가로 페이지 (MD :::landscape 문서와 정합 — 호출층이 el 폭도 가로 비율로 지정)
  * @returns {Promise<File>}
  */
-export async function pdfFileFromEl(el, title, wm = '') {
+export async function pdfFileFromEl(el, title, wm = '', { landscape = false } = {}) {
     await ensurePdf();
     // 접힌 details 내용도 출력물에 포함 — 렌더 동안만 펼치고 완료 후 복원
     const closedDetails = [...el.querySelectorAll('details:not([open])')];
@@ -245,7 +246,7 @@ export async function pdfFileFromEl(el, title, wm = '') {
         await _settleImages(el); // lazy 이미지 로드·레이아웃 확정 — 절단 위치 어긋남 방지 (@spec CO-21)
         _expandScrollClips(el); // 세로 스크롤 클립 해제 — 잘린 행 누락·경계 오인 방지 (@spec CO-21)
         undoMermaid = [...fixPrintLines(el), ...fixMermaidPrintContrast(el)]; // 인쇄 선·다이어그램 보정 — 렌더 후 복원 (@spec CO-20)
-        const W = 210, H = 297;
+        const W = landscape ? 297 : 210, H = landscape ? 210 : 297;
         // 페이지 여백 — 통짜 이미지를 전면 출력하면 상하 여백 없이 글자가 잘리므로 페이지별 캔버스에 여백을 입혀 조각냄 (@spec CO-20)
         const MX = 8, MY = 10;
         // 한 페이지 본문 css px — 캔버스 배율과 무관(pxPerMm/scale 상쇄). 렌더 전 계산해야
@@ -256,7 +257,7 @@ export async function pdfFileFromEl(el, title, wm = '') {
         const scale = _fitCanvasScale(el.offsetHeight); // 캔버스 높이 상한 대응 — 초장문서는 배율 하향
         const canvas = await (/** @type {any} */ (window)).html2canvas(el, { scale, logging: false });
         const { jsPDF } = (/** @type {any} */ (window)).jspdf;
-        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdf = new jsPDF(landscape ? 'l' : 'p', 'mm', 'a4');
         const pxPerMm = canvas.width / W;
         const pagePx = Math.round(H * pxPerMm);
         const innerPx = Math.round((W - 2 * MX) * pxPerMm);

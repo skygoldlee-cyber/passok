@@ -31,6 +31,8 @@ const _CRC = (() => {
     }
     return t;
 })();
+import { apprRoles as _apprRoles, stripCodeFences, imgLineKey, RE_NOTE, RE_INL_ALL, RE_IMG_TOK } from './md-tokens.js';
+
 /** @param {Uint8Array} buf */
 const _crc32 = buf => {
     let c = 0xFFFFFFFF;
@@ -227,7 +229,7 @@ const _RF = '<w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsi
  * @returns {string}
  */
 const _P = (line, i, boldLines) => line
-    ? `<w:p><w:pPr>${_NOSPACE}<w:snapToGrid w:val="0"/><w:spacing w:after="40" w:line="336" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr><w:r><w:rPr>${_RF}${i < boldLines ? '<w:b/>' : ''}<w:sz w:val="22"/></w:rPr>${_runs(_wrap(line, _TW - 300))}</w:r></w:p>`
+    ? `<w:p><w:pPr>${_NOSPACE}<w:snapToGrid w:val="0"/><w:spacing w:after="40" w:line="336" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr>${_runsInl(_wrap(line, _TW - 300), _RF + (i < boldLines ? '<w:b/>' : '') + '<w:sz w:val="22"/>')}</w:p>`
     : `<w:p><w:pPr>${_NOSPACE}<w:spacing w:line="150" w:lineRule="exact"/></w:pPr></w:p>`;
 // 메타줄 — 제목 바로 아래 기관명·출력일. 중앙·회색·소자로 공문서 머리 격식
 // 단락 테두리(pBdr) 가로선 — Word는 텍스트 영역보다 양끝 ~1.5pt 넓게 그려 표 외곽선과 어긋남.
@@ -235,13 +237,13 @@ const _P = (line, i, boldLines) => line
 const _PBDR_IND = '<w:ind w:left="20" w:right="20"/>';
 // 메타줄(기관명·출력일) — 중앙 소자 + 하단 가는선 (공문서 제목-본문 분리 관행)
 /** @param {string} t */
-const _meta = t => `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="4" w:space="10" w:color="999999"/></w:pBdr>${_NOSPACE}<w:spacing w:after="140"/>${_PBDR_IND}<w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
+const _meta = t => `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="4" w:space="10" w:color="999999"/></w:pBdr>${_NOSPACE}<w:spacing w:after="140"/>${_PBDR_IND}<w:jc w:val="center"/></w:pPr>${_runsInl(_wrap(t.replace(RE_IMG_TOK, '(이미지)'), _TW - 300), _RF + '<w:color w:val="595959"/><w:sz w:val="18"/>')}</w:p>`; // 제목 직후 첫 줄 — 인라인·토큰도 본문과 동일 처리 (누수 방지)
 
 // 각주성 줄 — '※'/'근거'로 시작하는 법적 근거·주의 문구. 소자 회색으로 본문과 격을 낮춘다
 // (9pt라 한 줄 수용량이 넓어 근거 열거가 본문폭을 넘어 2줄로 깨지는 것도 막는다)
-const _NOTE_RE = /^(※|근거)/;
+const _NOTE_RE = RE_NOTE;
 /** @param {string} t */
-const _note = t => `<w:p><w:pPr>${_NOSPACE}<w:snapToGrid w:val="0"/><w:spacing w:after="40" w:line="260" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr>${_runs(_wrap(t, Math.round((_TW - 300) * 22 / 18)))}</w:r></w:p>`; // _cw는 11pt 기준 — 9pt 본문폭은 ×22/18
+const _note = t => `<w:p><w:pPr>${_NOSPACE}<w:snapToGrid w:val="0"/><w:spacing w:after="40" w:line="260" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr>${_runsInl(_wrap(t, Math.round((_TW - 300) * 22 / 18)), _RF + '<w:color w:val="595959"/><w:sz w:val="18"/>')}</w:p>`; // _cw는 11pt 기준 — 9pt 본문폭은 ×22/18
 
 // 페이지 설정 — A4(orient 명시 — 일부 임포터가 생략 시 가로로 해석) + 좌우 25mm 여백 + 1단.
 // 워터마크는 header1.xml(rId4) 참조 — 모든 쪽에 반복되는 표준 경로.
@@ -434,7 +436,36 @@ const _wrap = (t, usable) => {
 };
 /** 줄 배열 → 단일 런의 t/br 시퀀스 */
 /** @param {string[]} lines */
-const _runs = lines => lines.map(l => `<w:t xml:space="preserve">${esc(l)}</w:t>`).join('<w:br/>');
+// 인라인 서식 — **굵게**·`코드` 세그먼트 (미닫힘 마커는 리터럴 출력). 줄바꿈 추정 폭에는 마커가 포함되나 편차 미미
+const _INL_RE = RE_INL_ALL; // 인식 집합 정본은 md-tokens.js — doc-md._inl과 동일 규약
+/** 세그먼트 rPr — 굵은체는 rFonts 직후(rPr 시퀀스 순서), 코드는 등폭 폰트로 교체 */
+/** @param {string} rpr @param {{b?:number,i?:number,s?:number,mono?:number,link?:number}} f */
+const _segRpr = (rpr, f) => {
+    let r = rpr;
+    if (f.mono) r = r.replace(/<w:rFonts[^/]*\/>/, '<w:rFonts w:ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="Courier New"/>');
+    r = r.replace(/(<w:rFonts[^/]*\/>)/, `$1${f.b ? '<w:b/>' : ''}${f.i ? '<w:i/>' : ''}${f.s ? '<w:strike/>' : ''}${f.link ? '<w:u w:val="single"/>' : ''}`);
+    if (f.link) r = /<w:color/.test(r) ? r.replace(/<w:color[^/]*\/>/, '<w:color w:val="0B5FFF"/>') : r.replace(/(<w:sz)/, '<w:color w:val="0B5FFF"/>$1'); // 링크 색 — 기존 color는 교체, 없으면 sz 앞 삽입
+    return r;
+};
+/** 인라인 서식 포함 줄 배열 → 런 시퀀스 — 줄 경계는 별도 런의 <w:br/> (w:br은 런 자식이라 런 사이에 못 둠) */
+/** @param {string[]} lines @param {string} rpr - 세그먼트 기본 rPr 내부 XML (rFonts·color·sz 포함) */
+const _runsInl = (lines, rpr) => lines.map(l => {
+    let out = '', pos = 0;
+    const put = (/** @type {string} */ txt, /** @type {Object} */ f = {}) =>
+        `<w:r><w:rPr>${_segRpr(rpr, f)}</w:rPr><w:t xml:space="preserve">${esc(txt)}</w:t></w:r>`;
+    for (const m of l.matchAll(_INL_RE)) {
+        if (m.index > pos) out += put(l.slice(pos, m.index));
+        const g = m[0] || '';
+        if (g.startsWith('![')) out += put('(이미지)'); // ![alt](src) 행 중간 — 인라인 그림은 단독 줄 전용, 표기로 폴백
+        else if (g.startsWith('**')) out += put(m[3] ?? '', { b: 1 }); // RE_INL_ALL 그룹: 1=alt 2=src 3=bold 4=code 5=em 6=del 7=link
+        else if (g.startsWith('`')) out += put(m[4] ?? '', { mono: 1 });
+        else if (g.startsWith('~~')) out += put(m[6] ?? '', { s: 1 });
+        else if (g.startsWith('[')) out += put(m[7] ?? '', { link: 1 }); // [text](url) — 밑줄+링크색 텍스트 (실 하이퍼링크 rId 배선은 미지원)
+        else out += put(m[5] ?? '', { i: 1 }); // *기울임*
+        pos = m.index + m[0].length;
+    }
+    return out + put(l.slice(pos));
+}).join('<w:r><w:br/></w:r>');
 const _estW = (/** @type {string} */ t) => [...String(t)].reduce((n, c) => n + _cw(c), 0);
 const _CPAD = 320; // 셀 좌우 여백(100×2)+테두리 여유
 /**
@@ -502,7 +533,7 @@ const _cell = (c, head, w, shd, center, keep, merge) => {
     const t = c.trim();
     const ppr = _CELL_PPR.replace('</w:pPr>', `${keep ? '<w:keepNext/>' : ''}${head || center ? '<w:jc w:val="center"/>' : ''}</w:pPr>`);
     const tcPr = `<w:tcPr>${_tcW(w)}${_tcMerge(merge)}${_tcNoWrap(t, w)}${_tcShd(shd)}<w:vAlign w:val="center"/></w:tcPr>`;
-    return `<w:tc>${tcPr}<w:p>${ppr}<w:r><w:rPr>${_RF}${head ? '<w:b/>' : ''}<w:sz w:val="22"/></w:rPr>${merge === 'cont' ? '' : _runs(_wrap(t, Math.max(440, (w || _TW) - _CPAD)))}</w:r></w:p></w:tc>`;
+    return `<w:tc>${tcPr}<w:p>${ppr}${merge === 'cont' ? '' : _runsInl(_wrap(t, Math.max(440, (w || _TW) - _CPAD)), _RF + (head ? '<w:b/>' : '') + '<w:sz w:val="22"/>')}</w:p></w:tc>`;
 };
 // 표 음영 — 흑백 인쇄 가독성: 머리행만 연청색, 데이터행은 짝수만 아주 옅은 줄무늬, 레이블 열은 연회색
 const _SHD_HEAD = 'D9E6F7', _SHD_ZEBRA = 'F2F6FB', _SHD_LABEL = 'EFEFEF';
@@ -517,8 +548,8 @@ const _kvRowsW = (rows, w0) => {
  *  (공문 서식의 라벨 열은 문서 전체 단일 폭). _colWs의 잉여 배분폭이 아닌 내용 적합 폭 기준.
  * @param {string} md @returns {number} */
 const _kvLabelW = md => {
-    // :::sign 블록 제거 — 서명란 줄은 |…| 표 행이 아니지만 방어적으로 제외
-    const txt = String(md || '').replace(/:::sign[\s\S]*?:::end/g, '');
+    // :::sign 블록·코드 펜스 제거 — 서명란 줄·펜스 내 |…| 행은 표 행이 아니므로 방어적으로 제외
+    const txt = stripCodeFences(String(md || '').replace(/:::sign[\s\S]*?:::end/g, ''));
     let w0 = 0;
     /** @type {string[][] | null} */ let rows = null;
     const done = () => { w0 = _kvRowsW(rows, w0); rows = null; };
@@ -680,7 +711,7 @@ const _sigRuns = (line, imgMap) => {
     const t = (m ? line.replace(m[0], im ? '' : '＿＿＿＿＿＿＿＿') : line).trim();
     // (인)·서명은 우측 탭 정지로 셀 우측 끝에 배치 — 이름 뒤 공백 누적은 줄넘김·위치 불안정이라 탭 사용
     const label = t.replace(/\s*\(인\)\s*$/, '').trimEnd();
-    return `<w:r><w:rPr>${_RF}<w:sz w:val="22"/></w:rPr>${_runs(_wrap(label, _SIG_W - 300))}</w:r><w:r><w:rPr>${_RF}<w:sz w:val="22"/></w:rPr><w:tab/></w:r>` +
+    return `${_runsInl(_wrap(label, _SIG_W - 300), _RF + '<w:sz w:val="22"/>')}<w:r><w:rPr>${_RF}<w:sz w:val="22"/></w:rPr><w:tab/></w:r>` +
         (im ? _imgRun({ ...im, id: _dpNext(), name: '서명', desc: '서명' })
             : `<w:r><w:rPr>${_RF}<w:sz w:val="22"/></w:rPr><w:t>(인)</w:t></w:r>`);
 };
@@ -702,23 +733,36 @@ const _sigInner = (lines, imgMap = {}, date = '') => `<w:tbl><w:tblPr><w:tblW w:
  * @param {?{no?:string, recipient?:string, cc?:string, date?:string}} [doc] - 지정 시 제목 위에 공문서 상단 서식란(문서번호·시행일자·수신·참조) 부여
  * @returns {string}
  */
-/** 결재란 역할 해석 — :::sign 있고 :::approve none 아니면 역할 배열 (기본 담당·팀장·시설장) */
-/** @param {string} md */
-const _apprRoles = md => {
-    const am = String(md).match(/^:::approve\s*(.*)$/m);
-    if (!/^:::sign\s*$/m.test(md) || (am && (am[1] || '').trim() === 'none')) return null;
-    const roles = am ? (am[1] || '').split('|').map(s => s.trim()).filter(Boolean) : ['담당', '팀장', '시설장'];
-    return roles.length ? roles : null;
-};
+// _apprRoles는 md-tokens.js 공용 정본 import — 미리보기·docx가 같은 결재란 규약 공유
 
-/** 본문 단락 계열 — :::page 쪽 나눔·:::closing 종결 문구·--- 구분선·각주·불릿·일반 단락 */
-/** @param {string} t */
-const _blockXml = t => {
+/** 본문 이미지 단락 — {{img:key}} 단독 줄. 중앙 정렬 인라인 삽입 (서명란과 동일 wp:inline 기구) */
+/** @param {{rid:string,cx:number,cy:number,id:number}} im @param {string} key */
+const _imgP = (im, key) => `<w:p><w:pPr>${_NOSPACE}<w:snapToGrid w:val="0"/><w:spacing w:after="40" w:line="336" w:lineRule="auto"/><w:jc w:val="center"/></w:pPr>${_imgRun({ ...im, id: _dpNext(), name: '이미지', desc: key })}</w:p>`;
+
+/** 코드 펜스 블록 — ```로 감싼 소스·다이어그램 원문. 등폭 폰트 단락으로 줄바꿈 보존 (Mermaid 등 다이어그램 렌더는 앱 경로 미지원 — 원문 표기) */
+/** @param {string[]} lines */
+const _codeP = lines => `<w:p><w:pPr>${_NOSPACE}<w:snapToGrid w:val="0"/><w:spacing w:after="40" w:line="280" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr>`
+    + lines.map(l => `<w:r><w:rPr><w:rFonts w:ascii="Courier New" w:hAnsi="Courier New" w:eastAsia="Courier New"/><w:sz w:val="20"/></w:rPr><w:t xml:space="preserve">${esc(l || ' ')}</w:t></w:r>`).join('<w:r><w:br/></w:r>') + '</w:p>';
+
+/** 본문 단락 계열 — :::page 쪽 나눔·:::closing 종결 문구·--- 구분선·각주·본문 이미지·불릿·일반 단락 */
+/** @param {string} t @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} [imgMap] */
+const _blockXml = (t, imgMap) => {
     if (t === ':::page') return _PAGEBREAK; // 페이지 나눔 마커 — 1건 1쪽 문서
     if (t.startsWith(':::closing')) return _closeP(t.slice(10).trim()); // 종결 문구 마커 — 서명란 위 중앙 표기
     if (t === '---') return _HR;
     if (_NOTE_RE.test(t)) return _note(t); // 각주성 소자 회색 줄
-    return _P(t.startsWith('- ') ? '• ' + t.slice(2) : t, 99, 0);
+    const imL = imgLineKey(t); // {{img:key}}·![설명](key) 단독 줄 — 동일 인라인 이미지 단락
+    if (imL) { const im = imgMap && imgMap[imL.key]; return im ? _imgP(im, imL.key) : _P('(이미지)', 99, 0); } // 미등록 이미지 키 — 토큰 누수 대신 표기
+    const txt = t.replace(RE_IMG_TOK, '(이미지)'); // 행 중간 토큰 — 인라인 이미지 미지원, 텍스트 표기
+    return _P(txt.startsWith('- ') ? '• ' + txt.slice(2) : txt, 99, 0);
+};
+
+/** 코드 펜스 상태 — ```열림/닫힘 토글, 내부 줄은 원문 보존(trim 안 함 — 들여쓰기가 코드 내용). 처리했으면 true */
+/** @param {string} line @param {string} t @param {*} st @param {*} cx */
+const _mdCodeSt = (line, t, st, cx) => {
+    if (st.code) { if (t.startsWith('```')) { cx.flush(); cx.out.push(_codeP(st.code)); st.code = null; } else st.code.push(line); return true; }
+    if (t.startsWith('```')) { cx.flush(); st.code = []; st.meta = false; return true; }
+    return false;
 };
 
 /** 서명란 수집 상태 — :::sign~:::end 구간. 처리했으면 true */
@@ -753,14 +797,14 @@ const _mdHead = (t, st, cx) => {
 /** @param {string} line @param {*} st @param {*} cx */
 const _mdLine = (line, st, cx) => {
     const t = line.trim();
-    if (_mdSignSt(t, st, cx) || _mdStruct(t, st, cx)) return;
+    if (_mdCodeSt(line, t, st, cx) || _mdSignSt(t, st, cx) || _mdStruct(t, st, cx)) return;
     cx.flush();
     if (_mdHead(t, st, cx)) return;
     if (!t) { cx.out.push(_P('', 99, 0)); return; } // 빈 줄 — meta 플래그 유지
     const firstMeta = st.meta; st.meta = false;
     if (firstMeta) cx.out.push(_meta(t));
     cx.emitAppr(); // 제목·메타 이후 첫 본문 요소 직전 — 결재란이 제목 줄을 감싸지 않게
-    if (!firstMeta) cx.out.push(_blockXml(t));
+    if (!firstMeta) cx.out.push(_blockXml(t, cx.imgMap));
 };
 
 /** @param {string} md @param {Object<string,{data:Uint8Array,rid:string,cx:number,cy:number,id:number}>} [imgMap]
@@ -772,13 +816,14 @@ const _mdBody = (md, imgMap = {}, doc = null) => {
     // 부동 표는 앵커 지점 뒤 단락만 감싸므로 제목·메타 줄 출력 뒤에 삽입한다 —
     // 문서 선두 삽입은 제목이 결재란 좌측으로 치우쳐 중앙이 깨졌다 (렌더 리뷰).
     const roles = _apprRoles(md);
-    const st = { tbl: /** @type {string[][] | null} */ (null), sign: /** @type {string[] | null} */ (null), sigLines: /** @type {string[] | null} */ (null), meta: false, apprXml: roles ? _approve(roles) : null };
+    const st = { tbl: /** @type {string[][] | null} */ (null), sign: /** @type {string[] | null} */ (null), sigLines: /** @type {string[] | null} */ (null), code: /** @type {string[] | null} */ (null), meta: false, apprXml: roles ? _approve(roles) : null };
     const w0 = _kvLabelW(md);
-    const cx = { out,
+    const cx = { out, imgMap,
         flush: () => { if (st.tbl) { out.push(_tbl(st.tbl, w0)); st.tbl = null; } },
         emitAppr: () => { if (st.apprXml) { out.push(st.apprXml); st.apprXml = null; } } };
     for (const line of String(md || '').split('\n')) _mdLine(line, st, cx);
     cx.flush();
+    if (st.code) out.push(_codeP(st.code)); // 미닫힘 펜스 — 수집분 그대로 출력
     cx.emitAppr(); // 메타 없는 문서 폴백 — 본문 끝 앵커라도 부동 표는 상단 여백에 렌더
     // 종결 부동 표는 끝. 뒤에 둔다 — 앵커가 본문 흐름 말미라 항상 마지막 쪽 하단에 통째로 놓인다.
     // 서명란은 _closeTbl 부동 표로 마지막 쪽 하단 배치 (문서번호 QR은 푸터 — 부동 표 안 이미지는 인쇄 경로 탈락)
@@ -801,8 +846,9 @@ const _imgPool = (mdS, images) => {
     };
     /** @type {Object<string,{data:Uint8Array,rid:string,cx:number,cy:number,id:number}>} */
     const imgMap = {};
+    const mdRef = stripCodeFences(mdS); // 펜스 내 토큰은 원문 출력 내용 — 참조 아님
     for (const [key, im] of Object.entries(images || {})) {
-        if (!mdS.includes(`{{img:${key}}}`)) continue; // 본문 미참조 이미지는 임베드 생략
+        if (!mdRef.includes(`{{img:${key}}}`) && !mdRef.includes(`](${key})`)) continue; // 본문 미참조 이미지는 임베드 생략 ({{img:key}}·![..](key) 두 표기 모두 참조로 간주)
         imgMap[key] = { data: im.data, cx: (im.w || 90) * 9525, cy: (im.h || 60) * 9525, rid: add(im.data), id: _dpNext() };
     }
     return { media, imgMap, add };

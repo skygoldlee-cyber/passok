@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 9d6bdd32f40d5f67
+> 입력 해시: 4ce48857ddf79781
 > 생성: 2026-11-15 · 원천: SPEC.md(710개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -621,7 +621,7 @@
 | CO-10 | ✅ lite (기록 유무 커버리지) | 테스트 | — | src/exams/carework/care-coverage.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
 | CO-11 | 미구현 — 조건부(법무 0b + facility 재개통) | — | — | — | — | — | — |
 | CO-12 | ✅ lite (배너·계측) | 테스트 | — | src/exams/carework/care-funnel.js<br>src/exams/carework/views/care-home.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
-| CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42<br>DOC-REF-20 | css/doc-export.css<br>src/content/doc-wm.js<br>src/content/docx-utils.js<br>src/content/pdf-utils.js<br>…외 2개 | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/doc-stamp.test.js<br>…외 3개 | — | — |
+| CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42<br>DOC-REF-20 | css/doc-export.css<br>src/content/doc-md.js<br>src/content/doc-wm.js<br>src/content/docx-utils.js<br>…외 4개 | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/doc-md.test.js<br>…외 4개 | — | — |
 | CO-14 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
 | CO-15 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
 | CO-16 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 문서 검토 | DOC-RBK-24 | — | — | — | — |
@@ -851,7 +851,7 @@
 | DA-21 | ✅ | 테스트 | — | css/dashboard.css<br>css/exams/carework/care-tools.css | tests/dom/exams/carework/care-views.test.js | — | — |
 | DA-22 | ✅ | 테스트 | — | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | — | — |
 | DA-23 | ✅ | 테스트 | — | src/core/utils.js | tests/unit/app/utils.test.js | — | — |
-| DA-24 | ✅ | 테스트 | DOC-REF-20 | src/content/doc-wm.js<br>src/content/docx-utils.js<br>src/exams/carework/doc-md.js | tests/unit/content/doc-wm.test.js<br>tests/unit/content/docx-utils.test.js | — | — |
+| DA-24 | ✅ | 테스트 | DOC-REF-20 | src/content/doc-md.js<br>src/content/doc-wm.js<br>src/content/docx-utils.js<br>src/content/md-tokens.js<br>…외 1개 | tests/unit/content/doc-md.test.js<br>tests/unit/content/doc-wm.test.js<br>tests/unit/content/docx-utils.test.js | — | — |
 | DA-25 | ✅ | 도구 검증 | — | tools/illustrate/capture_manual.js | — | — | — |
 | DA-26 | ✅ | 도구 검증 | — | tools/illustrate/capture_manual.js | — | — | — |
 
@@ -1142,6 +1142,7 @@
 | DOC-USR-06 | docs/exams/cosmetic/user/subject4_numbers.md | ND-01 |
 | DOC-USR-07 | docs/user/user_manual.md | MV-01, MV-02, MV-03, MV-04 |
 | DOC-USR-18 | docs/user/PRIVACY_POLICY.md | AI-25, AI-26, AI-27, AI-28, AU-08, AU-09, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08 |
+| ref-pipeline/tests/fixtures/probe.md | ref-pipeline/tests/fixtures/probe.md | — |
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
@@ -1169,3 +1170,4 @@
 - docs/exams/carework/design/CAREWORK_FACILITY_WORKSPACE.md
 - docs/exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md
 - docs/exams/cosmetic/business/유튜브-숏츠-시리즈-제작의뢰서.md
+- ref-pipeline/tests/fixtures/probe.md

@@ -597,6 +597,9 @@ class TestOfflinePrerender:
     )
 
     def test_offline_no_network_and_div_kept(self, _cache_tmp, monkeypatch):
+        # 로컬 렌더도 불가한 환경(vendor·Chrome 부재)이면 div가 그대로 유지된다
+        monkeypatch.setattr(md2doc, "_render_mermaid_locally", lambda src: None)
+
         def _boom(*a, **k):
             raise AssertionError("network must not be used")
 
@@ -604,6 +607,23 @@ class TestOfflinePrerender:
         out = md2doc._prerender_mermaid_to_svg(self._DIVS, allow_network=False)
         assert out.count('<div class="mermaid">') == 2
         assert "mermaid-img" not in out
+
+    def test_offline_uses_local_render(self, _cache_tmp, monkeypatch):
+        # 오프라인 + 로컬 렌더 가능 — vendor+Chrome 경로로 div→SVG 치환
+        monkeypatch.setattr(
+            md2doc, "_render_mermaid_locally",
+            lambda src: '<svg xmlns="http://www.w3.org/2000/svg"></svg>',
+        )
+
+        def _boom(*a, **k):
+            raise AssertionError("network must not be used")
+
+        monkeypatch.setattr(md2doc.urllib.request, "urlopen", _boom)
+        out = md2doc._prerender_mermaid_to_svg(
+            '<div class="mermaid">flowchart LR\nuniq-E--&gt;F</div>',
+            allow_network=False,
+        )
+        assert "mermaid-img" in out
 
     def test_offline_uses_cache(self, _cache_tmp):
         md2doc._mermaid_cache_write(
@@ -803,6 +823,13 @@ class TestDocxOutput:
         texts = [p.text for p in d.paragraphs]
         assert "1. 첫" in texts and "2. 둘" in texts
 
+    def test_ol_after_ul_stays_ordered(self, tmp_path):
+        # ul 뒤 빈 줄로 이어지는 1. 항목이 같은 <ul>로 병합되는
+        # Python-Markdown 결함 — sane_lists로 별도 <ol> 유지
+        d = self._doc("- 가\n- 나\n\n1. 첫\n2. 둘\n", tmp_path)
+        texts = [p.text for p in d.paragraphs]
+        assert "• 가" in texts and "1. 첫" in texts and "2. 둘" in texts
+
     def test_blockquote_is_table(self, tmp_path):
         d = self._doc("> 인용문\n", tmp_path)
         assert len(d.tables) == 1
@@ -841,10 +868,23 @@ class TestDocxOutput:
         assert "p" in tags[tags.index("tbl"):]
 
     def test_fence_marker_paragraphs_skipped(self, tmp_path):
+        # :::sign…:::end는 서명란 표로 의미 렌더 — 마커 미노출·줄은 (인) 행이 됨
         d = self._doc("본문\n\n:::sign\n서명란\n:::end\n", tmp_path)
         texts = [p.text for p in d.paragraphs]
         assert not any(t.startswith(":::") for t in texts)
-        assert "서명란" in texts
+        cells = [c.text for t in d.tables for r in t.rows for c in r.cells]
+        assert any("서명란 (인)" in c for c in cells), f"서명란 표 누락: {cells}"
+
+    def test_approve_marker_renders_table(self, tmp_path):
+        d = self._doc("본문\n\n:::approve 담당|팀장\n", tmp_path)
+        cells = [c.text for t in d.tables for r in t.rows for c in r.cells]
+        assert "결 재" in cells and "담당" in cells and "팀장" in cells
+        assert not any(":::" in p.text for p in d.paragraphs)
+
+    def test_approve_none_emits_nothing(self, tmp_path):
+        d = self._doc("본문\n\n:::approve none\n", tmp_path)
+        assert not d.tables
+        assert not any(":::" in p.text for p in d.paragraphs)
 
     def test_table_columns_fit_content(self, tmp_path):
         # 라벨 열이 내용보다 과도하게 넓지 않아야 한다
@@ -905,6 +945,19 @@ class TestDocxOutput:
         )
         assert ":::" not in body and "서명란" in body
 
+    def test_tailwind_html_strips_markers(self):
+        # 독립 HTML(뷰어) 경로도 동일 규약 — 마커·토큰 누수 금지
+        out = md2doc.markdown_to_tailwind_html(
+            "본문\n\n:::sign\n서명: 홍길동 {{img:author}}\n:::end\n\n"
+            ":::approve 부장|차장\n\n:::closing 끝.\n",
+            "t",
+            md2doc.RenderConfig(allow_network=False, embed_mermaid=False),
+        )
+        assert ":::" not in out and "{{img" not in out
+        # :::sign/:::approve는 서명란·결재란 표로 의미 렌더 — 역할·이름 보존, 토큰만 (이미지)
+        assert "부장" in out and "(이미지)" in out
+        assert "서명: 홍길동" in out and "끝." in out
+
     def test_kv_class_on_two_col_table(self, tmp_path):
         # 2열 표는 kv 클래스 — CSS가 라벨 열 가운데 정렬 (DOCX 규약과 동일)
         import md2doc
@@ -915,3 +968,166 @@ class TestDocxOutput:
         )
         assert 'table class="kv"' in body
         assert body.count("<table") == 2  # 3열 표는 kv 아님
+
+    def test_arg_markers_stripped_in_body(self):
+        # 인자 있는 마커도 누수 금지 — :::approve 역할|역할·:::approve none
+        body = md2doc.md_to_html_body(
+            "본문\n\n:::approve none\n\n다음\n\n:::approve 부장|차장|과장\n\n끝\n",
+            render_mermaid=False,
+        )
+        assert ":::" not in body
+        # :::approve none은 억제, 역자 인자는 결재란 표로 의미 렌더
+        assert "none" not in body.replace("본문", "")
+        assert "부장" in body and "차장" in body
+        assert "본문" in body and "다음" in body
+
+    def test_arg_markers_skipped_in_docx(self, tmp_path):
+        d = self._doc(
+            "본문\n\n:::approve none\n\n다음\n\n:::approve 부장|차장\n\n끝\n",
+            tmp_path,
+        )
+        texts = [p.text for p in d.paragraphs]
+        assert not any(t.startswith(":::") for t in texts)
+        assert "다음" in texts and "끝" in texts
+
+    def test_closing_marker_keeps_phrase(self, tmp_path):
+        # :::closing <문구>는 내용 문구 — 접두만 제거하고 문구를 남긴다
+        body = md2doc.md_to_html_body(
+            "본문\n\n:::closing 끝. 이상입니다.\n", render_mermaid=False
+        )
+        assert ":::" not in body and "끝. 이상입니다." in body
+        d = self._doc("본문\n\n:::closing 끝. 이상입니다.\n", tmp_path)
+        texts = [p.text for p in d.paragraphs]
+        assert "끝. 이상입니다." in texts
+        assert not any(t.startswith(":::") for t in texts)
+
+    def test_img_token_replaced_not_leaked(self, tmp_path):
+        # {{img:key}}는 앱 내부 토큰 — (이미지) 표기로 치환, 리터럴 누수 금지
+        body = md2doc.md_to_html_body(
+            "서명: {{img:author}}\n", render_mermaid=False
+        )
+        assert "{{img:" not in body and "(이미지)" in body
+        d = self._doc("서명: {{img:author}}\n", tmp_path)
+        texts = [p.text for p in d.paragraphs]
+        assert not any("{{img:" in t for t in texts)
+        assert any("(이미지)" in t for t in texts)
+
+    def test_page_marker_becomes_break(self, tmp_path):
+        # :::page는 쪽 나눔 의미 — PDF는 .new-page div, DOCX는 페이지 브레이크
+        body = md2doc.md_to_html_body(
+            "앞쪽\n\n:::page\n\n뒤쪽\n", render_mermaid=False
+        )
+        assert ":::" not in body and '<div class="new-page"></div>' in body
+        d = self._doc("앞쪽\n\n:::page\n\n뒤쪽\n", tmp_path)
+        from docx.oxml.ns import qn
+        brs = [
+            r for p in d.paragraphs for r in p.runs
+            if r._r.findall(qn("w:br"))
+            and any(b.get(qn("w:type")) == "page" for b in r._r.findall(qn("w:br")))
+        ]
+        assert brs, ":::page가 페이지 브레이크로 변환되어야 한다"
+        texts = [p.text for p in d.paragraphs]
+        assert "앞쪽" in texts and "뒤쪽" in texts
+
+    def test_landscape_marker_sets_section(self, tmp_path):
+        in_path = tmp_path / "land.md"
+        in_path.write_text(":::landscape\n\n본문\n", encoding="utf-8")
+        out = md2doc.convert_markdown_to_docx(
+            in_path, render_mermaid=False, allow_network=False
+        )
+        from docx import Document
+        from docx.enum.section import WD_ORIENT
+        d = Document(str(out))
+        sec = d.sections[0]
+        assert sec.orientation == WD_ORIENT.LANDSCAPE
+        assert sec.page_width > sec.page_height
+
+    def test_table_rowspan_merges_cells(self, tmp_path):
+        # HTML rowspan은 세로 병합 — 후속 행 셀이 차지 열을 건너뛰어 정렬 유지
+        in_path = tmp_path / "sp.md"
+        in_path.write_text(
+            '<table><tr><td rowspan="2">세로</td><td>a</td></tr>'
+            "<tr><td>b</td></tr></table>\n",
+            encoding="utf-8",
+        )
+        out = md2doc.convert_markdown_to_docx(
+            in_path, render_mermaid=False, allow_network=False
+        )
+        from docx import Document
+        d = Document(str(out))
+        t = d.tables[0]
+        # rowspan 병합: 두 행의 첫 셀이 같은 병합 셀("세로")
+        assert t.cell(0, 0).text == "세로"
+        assert t.cell(1, 0).text == "세로"
+        assert t.cell(0, 1).text == "a" and t.cell(1, 1).text == "b"
+
+    def test_table_header_repeats_and_rows_unsplit(self, tmp_path):
+        # 헤더 행은 쪽 넘김 시 반복(tblHeader), 행 분할 금지(cantSplit)
+        d = self._doc(
+            "| A | B |\n|---|---|\n| 1 | x |\n", tmp_path
+        )
+        t = d.tables[0]
+        from docx.oxml.ns import qn
+        pr0 = t.rows[0]._tr.find(qn("w:trPr"))
+        assert pr0 is not None
+        assert pr0.find(qn("w:tblHeader")) is not None
+        for row in t.rows:
+            pr = row._tr.find(qn("w:trPr"))
+            assert pr is not None and pr.find(qn("w:cantSplit")) is not None
+
+    def test_e2e_fixture_probe(self, tmp_path):
+        # fixtures/probe.md — 표·mermaid·이미지·마커 전종 커버리지 E2E 회귀.
+        # 오프라인 변환으로 결정론 보장 — mermaid는 소스→코드블록 폴백.
+        import zipfile
+        src = Path(__file__).parent / "fixtures" / "probe.md"
+        out = tmp_path / "probe.docx"
+        md2doc.convert_markdown_to_docx(
+            src, out_path=out, render_mermaid=True, allow_network=False
+        )
+        z = zipfile.ZipFile(str(out))
+        media = [n for n in z.namelist() if n.startswith("word/media/")]
+        assert len(media) >= 2  # 로컬 PNG + data URI PNG
+        from docx import Document
+        d = Document(str(out))
+        # 표 3종 + 콜아웃 인용(1×1 표) + :::sign 서명란 표 + :::approve 결재란 표
+        assert len(d.tables) == 6
+        # rowspan/colspan 병합 표 — 세로·가로 병합 모두 유지
+        t = d.tables[2]
+        assert t.cell(1, 0).text == t.cell(2, 0).text  # rowspan '공통' vMerge
+        assert t.cell(3, 0).text == t.cell(3, 1).text  # colspan '가로병합'
+        texts = [p.text for p in d.paragraphs]
+        cells = [c.text for tb in d.tables for r in tb.rows for c in r.cells]
+        assert not any(t.startswith(":::") for t in texts)
+        assert not any("{{img" in t for t in texts + cells)
+        assert any("(이미지)" in c for c in cells)  # 서명란 토큰 → (이미지) 표기
+        assert "끝. 이상입니다." in texts  # :::closing 문구 보존
+        assert "1. 순서 첫째" in texts  # ol이 ul로 병합되지 않음(sane_lists)
+        # mermaid — 캐시 히트 시 이미지 임베드, 미스 시 소스→코드블록 폴백
+        # (두 경로 모두 계약 — 어느 쪽이든 다이어그램 정보는 보존되어야 함)
+        assert len(media) >= 3 or any("flowchart" in t for t in texts)
+
+
+class TestDocxPageFooter:
+    def test_page_number_field_in_footer(self, tmp_path):
+        src = tmp_path / "p.md"
+        src.write_text("본문\n", encoding="utf-8")
+        out = tmp_path / "p.docx"
+        md2doc.convert_markdown_to_docx(src, out_path=out, render_mermaid=False)
+        import zipfile
+        z = zipfile.ZipFile(str(out))
+        ftr = [n for n in z.namelist() if "footer" in n and n.endswith(".xml")]
+        assert ftr, "푸터 파트 누락"
+        xml = z.read(ftr[0]).decode("utf-8")
+        assert 'w:instr=" PAGE "' in xml and 'w:instr=" NUMPAGES "' in xml
+
+
+class TestDocxBookmarks:
+    def test_heading_bookmark_and_anchor_link(self, tmp_path):
+        src = tmp_path / "b.md"
+        src.write_text("# 제목\n\n## 절\n\n[이동](#_2)\n", encoding="utf-8")
+        out = tmp_path / "b.docx"
+        md2doc.convert_markdown_to_docx(src, out_path=out, render_mermaid=False)
+        import zipfile
+        xml = zipfile.ZipFile(str(out)).read("word/document.xml").decode("utf-8")
+        assert "w:bookmarkStart" in xml and 'w:name="_2"' in xml
+        assert 'w:anchor="_2"' in xml  # 내부 링크 → 북마크 이동

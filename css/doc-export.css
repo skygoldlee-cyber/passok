@@ -7,6 +7,16 @@
 /* 화면: 쪽(986px) 간격 반복 스탬프 — 각 span이 top 오프셋으로 배정됨 (doc-wm.js) */
 .doc-wm span { position: absolute; left: 50%; transform: translate(-50%, -50%) rotate(-45deg); transform-origin: center; white-space: nowrap; font-weight: 700; font-style: italic; font-size: 2.6em; letter-spacing: .06em; color: rgba(0,0,0,.22); }
 
+/* 본문 이미지 — {{img:key}} 단독 줄 (src/content/doc-md.js·docx-utils.js 공통 마커) */
+.doc-md .doc-img-wrap { text-align: center; margin: 8px 0; }
+.doc-md .doc-img { max-width: 100%; }
+.doc-md .doc-img-inline { max-height: 2.6em; vertical-align: middle; }
+/* 코드 펜스 블록 — ``` 원문 보존 (Mermaid 등 다이어그램은 앱 경로 미지원 — 소스 표기) */
+.doc-md .doc-code { font-family: 'Courier New', monospace; font-size: .88em; background: #f6f6f6; border: 1px solid #e0e0e0; padding: 8px 10px; margin: 6px 0; white-space: pre-wrap; word-break: break-all; }
+.doc-md code { font-family: 'Courier New', monospace; font-size: .92em; background: #f0f0f0; padding: 0 3px; }
+/* :::landscape — 미리보기 가로 폭 (docx 가로 용지·PDF 가로 페이지와 정합, pdfFileFromEl landscape와 세트) */
+.doc-md.doc-landscape { width: 990px; }
+
 @media print {
     /* fixed는 인쇄 매체에서 페이지 박스 기준 매 장 반복 (cosmetic .fp-watermark 검증 방식).
        인쇄에서는 반복 스탬프 중 첫 번째만 페이지 중앙에 표시 (나머지 숨김 — 중복 방지).
@@ -14,4 +24,7 @@
     .doc-wm { position: fixed; display: flex; align-items: center; justify-content: center; }
     .doc-wm span { position: static; transform: rotate(-45deg); print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     .doc-wm span + span { display: none; }
+    /* 가로 문서 인쇄 — @page size는 브라우저 인쇄 대화상자 설정이 우선이라 폭·높이만 가로 규격으로 재정의
+       (시험 팩 CSS의 세로 min-height가 가로 페이지를 넘지 않게) */
+    .doc-md.doc-landscape { width: 261mm; max-width: none; min-height: 0; }
 }

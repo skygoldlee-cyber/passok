@@ -206,20 +206,22 @@ const _pdfInk = wrap => wrap.querySelectorAll('*').forEach((/** @type {Element} 
  *  @spec CO-20 — 인쇄 가독성 규칙(흰 배경·여백·검정 강제) 인라인 구현 — pdfFileFromElStyled와 동일 규약 */
 const _pdfFile = async (/** @type {*} */ ctx) => {
     const wrap = document.createElement('div');
+    // :::landscape 문서 — docx 가로 용지와 정합 맞춰 가로 페이지로 출력 (폭 비례 확장 — 세로 700px↔210mm)
+    const land = /^:::landscape\s*$/m.test(_md(ctx));
     // html2canvas는 문서 좌표로 렌더 — fixed는 뷰포트에 노출(흰 플래시)되므로 문서 하단 absolute로 배치
-    wrap.style.cssText = 'position:absolute;left:0;top:100vh;width:700px;padding:24px;background:#fff;color:#000';
+    wrap.style.cssText = `position:absolute;left:0;top:100vh;width:${land ? 990 : 700}px;padding:24px;background:#fff;color:#000`;
     _pdfBody(wrap, ctx);
     _pdfInk(wrap);
     document.body.appendChild(wrap); // 레이아웃 확정 후 서명란 폭 측정 — detached 상태에선 offsetWidth=0
-    pinDocSignBottom(wrap); // 서명란 페이지 하단 우측 고정 — docx 부동 표와 동일 위치
+    pinDocSignBottom(wrap, land ? { minHeight: '700px' } : undefined); // 서명란 페이지 하단 우측 고정 — docx 부동 표와 동일 위치
     if (ctx.docNo) _pdfQr(wrap, ctx);
-    try { return await pdfFileFromEl(wrap, ctx.fname('pdf').replace(/\.pdf$/, ''), _wmText(ctx)); }
+    try { return await pdfFileFromEl(wrap, ctx.fname('pdf').replace(/\.pdf$/, ''), _wmText(ctx), { landscape: land }); }
     finally { wrap.remove(); }
 };
 
 const _copyRaw = (/** @type {*} */ ctx) => {
     if (!navigator.clipboard?.writeText) { showToast('공유·복사를 지원하지 않는 환경입니다.', 'error'); return; }
-    const raw = (_md(ctx) || _txt(ctx)).replace(/\{\{img:[\w-]+\}\}/g, '(서명)'); // 서명 이미지 토큰은 텍스트 표기로
+    const raw = (_md(ctx) || _txt(ctx)).replace(/\{\{img:[\w-]+\}\}/g, '(이미지)'); // 이미지 토큰은 텍스트 표기로
     navigator.clipboard.writeText(raw).then( // MD 초안이 있으면 구조(표) 텍스트로 복사
         () => showToast('클립보드에 복사했습니다 — 카톡 등에 붙여넣으세요.'),
         () => showToast('복사 실패 — 인쇄·PDF를 이용하세요.', 'error'));
@@ -330,7 +332,7 @@ const _actShare = async (/** @type {*} */ ctx, /** @type {string} */ kind = 'all
     await Promise.allSettled(tasks); // 생성 완료 후 버튼 — 시트에 선택 파일 첨부
     _issue(ctx, 'share', files.map((/** @type {File} */ f) => f.name));
     _audit(ctx.title, ctx.flag, files.map((/** @type {File} */ f) => f.name));
-    const fs = files, { title } = ctx, text = (_md(ctx) || _txt(ctx)).replace(/\{\{img:[\w-]+\}\}/g, '(서명)'); // 텍스트 공유도 MD 초안 기본 — 이미지 토큰은 (서명) 표기
+    const fs = files, { title } = ctx, text = (_md(ctx) || _txt(ctx)).replace(/\{\{img:[\w-]+\}\}/g, '(이미지)'); // 텍스트 공유도 MD 초안 기본 — 이미지 토큰은 (이미지) 표기
     _shareBtn(`📤 ${title} 공유하기`, () => _doShare(fs, title, text));
 };
 

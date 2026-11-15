@@ -1,6 +1,6 @@
 # 📄 Word(.docx) 생성 + 워터마크 파이프라인 — 시험 팩 적용 가이드
 
-> **작성일**: 2026-11-14 · **갱신**: 2026-11-15 (워터마크 header1.xml 전환·푸터 QR·`:::approve`/`:::landscape`·서명 인라인화·표 정합 일괄 교정·ref-pipeline md2doc DOCX 경로 추가)
+> **작성일**: 2026-11-14 · **갱신**: 2026-11-15 (워터마크 header1.xml 전환·푸터 QR·`:::approve`/`:::landscape`·서명 인라인화·표 정합 일괄 교정·ref-pipeline md2doc DOCX 경로 추가 · 본문 `{{img:key}}`·코드 펜스·인라인 `**`/`` ` `` 지원·doc-md 공용 팩토리화·PDF 가로 페이지 정합 · md2doc 인자 마커/`{{img:}}` 누수 차단·rowspan·tblHeader/cantSplit·`:::page`/`:::landscape` 의미 보존 · 인라인 확장(`*·~~·[]()·![]()`)·md-tokens 공용 분류 모듈·ref `:::sign`/`:::approve` 표 렌더·ref 페이지 번호 필드·`#anchor`→북마크·오프라인 mermaid(vendor+Chrome))
 > **대상**: `docxFile`·`docxFileMd`(`src/content/docx-utils.js`)와 `docWm*`(`src/content/doc-wm.js`)으로 워터마크·서명·결재란을 갖는 공문서형 Word 문서를 만드는 파이프라인 + 문서 추적성(`doc-stamp`·`qr`·`doc-issues`·`opts.doc` — 문서번호·메타데이터·QR·발행 대장) — 다른 시험 팩에서 출력 문서를 만들 때의 적용 절차·계약·함정을 정리
 > **관련 SPEC ID**: `CO-13`(생성 문서 공유) · `CO-22`(문서 추적성) · `DA-24`(문서 생성은 MD 초안에서 시작)
 > **문서 ID**: DOC-REF-20
@@ -36,7 +36,8 @@
 | `src/content/doc-issues.js` | 발행 대장 **공용 팩토리** `createDocIssueStore({key, org})` — 시험 팩은 저장 키·기관명 공급자만 주입 (DA-13 격리는 키 선택으로 유지) |
 | `src/exams/carework/doc-issue-store.js` | carework 결합 — 팩토리 + 문서 유형 접두어 맵(`docPrefix`) |
 | `src/exams/carework/care-share.js` | carework 적용 실례 — `_docxFile`이 md 초안 + 워터마크 + 서명 이미지 + `doc` 메타를 묶어 `docxFileMd` 호출 |
-| `src/exams/carework/doc-md.js` | MD 초안 빌더(`docMdHead`·`docMdSign`·`mdTable`)·미리보기(`mdToHtml` + `docWmHtml`)·`pinDocSignBottom` 실례 |
+| `src/content/doc-md.js` | MD 초안 빌더·미리보기 **공용 팩토리** `createDocMd({org, sign})` — `docMdHead`·`docMdSign`·`mdTable`·`csvToMdTable`·`mdToHtml`·`pinDocSignBottom`. 시험 팩은 기관명·서명 설정 공급자만 주입 |
+| `src/exams/carework/doc-md.js` | carework 결합 — 팩토리 + `facility.js` 공급자 (`getOrgName`/`getDocSign`). 기존 호출 계약 유지 |
 | `tests/unit/content/docx-utils.test.js` | 계약 테스트 29건 — 워터마크 헤더·1장 원칙·서명/결재·표 구조·열 폭 |
 | `tmp/gen_sample_docs.js` | 샘플 재생성 스크립트 — `tmp/sample-docs/`에 산출 (검증용). `--wm`=워터마크 PNG 포함, `WM_ORG` 환경변수로 기관명 지정 |
 | `tools/check/check_docx_render.ps1` + `docx_render_assert.py` | 시각 회귀 게이트 — Word COM 전수 PDF 내보내기 + PyMuPDF 렌더 계약 검증 (로컬 전용) |
@@ -94,11 +95,15 @@ import { createDocIssueStore } from '../content/doc-issues.js';
 | `- 항목` | `• 항목` 불릿 단락 |
 | `---` | 하단선 단락(구분선) — pBdr, `_PBDR_IND`로 표 외곽선과 수평 정합 |
 | `:::page` | 강제 페이지 나눔 — **1장 원칙 압축 대상에서 제외됨**(의도된 다면 구성) |
-| `:::landscape` | 가로 방향 설정 마커(본문 출력 없음) — A4 가로, 본문폭 `_TW` 9072→14004 전환. 넓은 다열 표(명부 등)용 |
+| `:::landscape` | 가로 방향 설정 마커(본문 출력 없음) — docx는 A4 가로+본문폭 `_TW` 9072→14004 전환, 미리보기는 `.doc-landscape` 클래스(가로 폭), PDF는 `pdfFileFromEl` `{landscape}` 옵션으로 A4 가로 페이지 — 세 경로 정합. 넓은 다열 표(명부 등)용 |
 | `:::approve 역할\|역할` | 결재란 역할 지정 — 기본 `담당·팀장·시설장`, `:::approve none`이면 결재란 억제. **`:::sign` 있는 문서에서만 효력** (설정 마커 — 본문 출력 없음). 재가기관은 `사회복지사\|센터장` 등 기관 결재선 반영 |
 | `:::closing <문구>` | 종결 문구 — 서명란 위 "상기와 같이 …합니다."류 마무리 문구를 중앙 표기 (미리보기 `.doc-closing`과 정합) |
 | `※`·`근거` 시작 줄 | 각주성 소자 회색 단락(9pt, `595959`) — 법적 근거·주의 문구. 본문폭 한계로 11pt면 2줄로 깨지는 근거 열거도 9pt 한 줄 수용 (미리보기 `.doc-note`와 정합) |
 | `:::sign` … `:::end` | 서명 문서 — **선두에 결재란 부동 표 자동 선 부여**(결 재 세로병합 + 역할별 `(인)` 중앙 칸 — 미결재 문서에 서명을 미리 넣지 않는 빈칸 원칙) + `:::sign`~`:::end` 사이 줄들을 하단 우측 서명란 부동 표로 출력 (`끝.` 뒤 `_closeTbl` 단일 행 `cantSplit` 앵커 — §7.2). 줄은 `라벨: 성명 {{img:key}}` 병기가 계약 — `{{img:key}}`는 우측 탭 뒤 **인라인 이미지**로 치환(성명·라벨은 문서 텍스트로 유지). 이미지 미지정 시 토큰은 `＿＿＿＿＿＿＿＿`(수기 서명 공란)으로 치환되고 끝에 `(인)` 표기 |
+| `{{img:key}}` (본문 단독 줄) | 중앙 정렬 **인라인 이미지 단락** (`_imgP` — 서명란과 동일 `wp:inline` 기구). `opts.images`에 키가 없으면 `(이미지)` 텍스트 표기 — 토큰은 절대 리터럴 출력 안 됨. **행 중간 토큰**은 인라인 이미지 미지원 — `(이미지)` 텍스트로 치환 (미리보기는 `<img class="doc-img">`, 복사·텍스트 공유도 `(이미지)`) |
+| ` ``` ` … ` ``` ` (코드 펜스) | 등폭 폰트(Courier New 10pt) 단락으로 **원문 줄바꿈·들여쓰기 보존** — 펜스 내 `:::sign`·`\|…\|`·`**` 등 마커는 미해석 (미리보기는 `<pre class="doc-code">`). **Mermaid 등 다이어그램은 소스 텍스트 표기** — 앱 경로는 다이어그램 렌더 미지원, 렌더가 필요하면 ref-pipeline `md2doc.py`(§11) 사용. 미닫힘 펜스는 수집분까지 출력 |
+| `**굵게**`·`` `코드` ``·`*기울임*`·`~~취소~~`·`[텍스트](url)` (인라인) | 런 단위 서식 — b/i/strike 런·Courier New·링크는 밑줄+링크색 텍스트 (실 하이퍼링크 rId는 미지원 — 문서 인쇄용). 미리보기는 strong/code/em/del/a — 인식 집합 정본 `src/content/md-tokens.js` (`RE_INL_*` — 두 이미터 공유). 미닫힘 마커·위험 URL(`javascript:`)은 리터럴 유지 |
+| `![alt](key)` · `![alt](url)` | 단독 줄 — `{{img:key}}`와 동일 인라인 이미지 단락/`<img>` 블록 (images 맵 키 또는 data:/http(s): URL). 행 중간은 `(이미지)` 표기 |
 | 일반 단락 | 본문 단락 (맑은고딕 11pt·행간 336) |
 
 자동 부가: 서명 문서의 결재란, 문서 말미의 `끝.` 종결 표기, 바닥글 `— 쪽 / 전체 —` 중앙 쪽 번호(`PAGE`/`NUMPAGES` 단순 필드 — 조건부 `IF` 중첩은 LibreOffice·한컴·모바일 미리보기가 계산하지 못해 폐기).
@@ -107,7 +112,7 @@ import { createDocIssueStore } from '../content/doc-issues.js';
 
 | 항목 | 값 |
 |------|-----|
-| 용지 | A4 세로 `w:pgSz 11906×16838` / `:::landscape` 시 가로 `16838×11906` (`orient` 명시 — 생략 시 가로로 해석하는 임포터 있음). 본문폭 `_TW` = 9072(세로)·14004(가로) — 표 폭·열 배분·부동 표 위치가 전부 `_TW` 기준이라 가로 전환은 `_sect` 플래그만으로 성립 |
+| 용지 | A4 세로 `w:pgSz 11906×16838` / `:::landscape` 시 가로 `16838×11906` (`orient` 명시 — 생략 시 가로로 해석하는 임포터 있음). 본문폭 `_TW` = 9072(세로)·14004(가로) — 표 폭·열 배분·부동 표 위치가 전부 `_TW` 기준이라 가로 전환은 `_sect` 플래그만으로 성립. 앱 PDF도 `pdfFileFromEl`의 `{landscape:true}`로 A4 가로 지원 — 호출층(care-share `_pdfFile`)이 `:::landscape` 감지해 래퍼 폭 700→990px 확장과 함께 전달 |
 | 여백 | 상하 1134tw(≈20mm)·좌우 1417tw(≈25mm) |
 | 서체 | Malgun Gothic 11pt (`w:sz=22`)·행간 `w:line=336`(1.4배)·단락 후간격 40tw·`autoSpaceDE/DN=0`(한글↔라틴·숫자 자동 간격 끔 — 숫자 밀집 본문 어절 벌어짐 방지). `styles.xml`에 docDefaults + `w:lang eastAsia="ko-KR"` + Heading1~3 스타일(outlineLvl — 탐색창·PDF 북마크용) |
 | 표 | 행 최소 440tw·셀 여백 상하 120/좌우 140tw·단선 테두리 외곽 sz8(1pt) `595959`·내부 sz4(0.5pt) `999999` — 이중선·진한 외곽은 흑백 인쇄 시 탁하고 토너 낭비. 내부선은 `D9D9D9`까지 연하면 인쇄·PDF 래스터에서 소멸 |
@@ -369,7 +374,7 @@ for i, p in enumerate(pymupdf.open(f)):
 | 본문 분산 워터마크 (폐기) | 구버전 `_sprayWm`은 추정 쪽 경계마다 본문 앵커를 삽입 — 같은 쪽 중복 착지 시 알파 배가·경계 누락 시 스탬프 없는 쪽 발생 + 거대 표를 쪼개야 했다. 헤더 스탬프로 전환해 기계 자체를 폐기 (§5.3) |
 || 인접 `<w:tbl>` 병합 | OOXML에서 단락 없이 연속한 두 표는 Word가 **한 표로 병합** — MD에서 빈 줄로 구분된 별도 표도 붙어 보임. md2doc `_add_table`이 직전 내용 요소가 표면 빈 단락 삽입 (말미 `sectPr` 건너뜀 — 있으면 마지막 내용 요소 판정이 항상 실패) |
 || 셀 단락 스타일 상속 → vAlign 치우침 | Normal의 `line`/후행 간격이 표 셀 단락까지 상속되면 행이 부풀고, `vAlign=center`가 **여백 포함 블록**을 중앙화해 텍스트가 위로 치우침 (Word→PDF 실측 8pt 편향). md2doc `_compact_cell`이 셀 단락을 space 0/0·line 1.0으로 — vAlign은 텍스트 자체 중앙화용, 셀 여백은 `tblCellMar`로 부여 |
-|| `:::` 마커 출력 노출 | `:::sign`/`:::end` 등 doc-md 펜스 마커는 앱 `_mdBody`가 구조 처리하지만, 범용 MD 파이프라인(md2doc)에서는 텍스트로 새어나옴 — `_strip_fence_markers`(본문 `<p>` 라인) + `_emit_block`(단락) 이중 제거. pre·코드 펜스 안은 출력 내용이라 보존 |
+|| `:::` 마커 출력 노출 | `:::sign`/`:::end` 등 doc-md 펜스 마커는 앱 `_mdBody`가 구조 처리하지만, 범용 MD 파이프라인(md2doc)에서는 텍스트로 새어나옴 — `_sanitize_marker_lines` 공용 정화 + `_strip_fence_markers`(본문 `<p>` 라인) + `_emit_block`(단락) 이중 제거. **인자 있는 마커(`:::approve 역할`·`:::closing 문구`)도 정규식이 `[ \t]*:::[\w-]+[ \t]*` fullmatch라 인자 붙으면 빗나가던 이력** — 인자 유무 무관하게 처리. `{{img:key}}` 토큰도 `(이미지)` 치환으로 누수 차단. pre·코드 펜스 안은 출력 내용이라 보존 |
 
 **관련 이력**: 상세한 시행착오 경위는 `docs/dev/CHANGES.md` 2026-11-14 묶음(워터마크 헤더→본문 복원, OOXML 결함 2종, 1장 원칙, 표 분할 폐기 등) + 2026-11-15 묶음(헤더 워터마크 재전환·푸터 QR·`:::approve`/`:::landscape`·날짜 단일 소스·표 정합 교정·md2doc DOCX 경로) 참조.
 
@@ -381,12 +386,13 @@ for i, p in enumerate(pymupdf.open(f)):
 
 | 항목 | 규약 |
 |------|------|
-| 블록 매핑 | h1-6(크기 계열 + h1 3px·h2 1.5px 밑줄)·p(strong/em/code/a/sub/sup/del/mark/br)·ul/ol(중첩 들여쓰기·`start`)·blockquote/콜아웃(1×1 음영 표+좌측 바)·표(헤더 음영·colspan)·pre(음영+테두리·Consolas 8.5)·hr·img(상대경로/data URI/원격)·svg(PyMuPDF→PNG)·외부 링크는 실 하이퍼링크·`#앵커`는 텍스트 폴백 |
+| 블록 매핑 | h1-6(크기 계열 + h1 3px·h2 1.5px 밑줄)·p(strong/em/code/a/sub/sup/del/mark/br)·ul/ol(중첩 들여쓰기·`start`)·blockquote/콜아웃(1×1 음영 표+좌측 바)·표(헤더 음영·colspan/**rowspan** 점유 맵+vMerge)·pre(음영+테두리·Consolas 8.5)·hr·img(상대경로/data URI/원격)·svg(headless Chrome 스크린샷→PNG — mermaid SVG의 `<text>`·외부 폰트를 PyMuPDF가 검은 박스로 깨뜨려 브라우저 우선, PyMuPDF 폴백)·외부 링크는 실 하이퍼링크·`#앵커`는 텍스트 폴백 |
 | 표 열 폭 | `_col_widths_emu` — 열별 최장 셀 추정 폭(전각 2·그 외 1, 앱 `_estW` 동일) 비례 + 고정 레이아웃(gridCol·tcW 동기). 2열 표는 `_kv_label_emu`가 문서 전체 라벨 폭 공유(최장 라벨 기준, 하한 25mm·상한 본문폭 40%) — 앱 `_kvLabelW`와 같은 규약 |
 | 표 셀 정렬 | vAlign center 전 셀 + 헤더·2열 라벨 열 jc=center — 앱 `_cell` 규약. `_compact_cell`이 셀 단락을 space 0/0·line 1.0으로(§10 함정 참조) + `_tbl_cell_mar` 상하 75dxa(print.html padding 해당) |
+| 표 행 속성 | 헤더 행 `tblHeader`(쪽 넘김 시 반복 — print.html `thead{display:table-header-group}`과 동일 의미) + 전 행 `cantSplit`(쪽 경계 분할 금지) |
 | 인접 표 | `<w:tbl>` 연속 시 빈 단락 삽입 — Word 병합 방지 |
-| `:::` 마커 | `_strip_fence_markers`(HTML 본문 `<p>` 라인) + `_emit_block`(DOCX 단락) 이중 — HTML·PDF·DOCX 전 경로에서 제거 |
+| `:::` 마커 | `_sanitize_marker_lines`(공용) + `_strip_fence_markers`(HTML `<p>` 라인) + `_emit_block`(DOCX 단락) — **인자 있는 마커(`:::approve 역할`·`:::approve none`)도 누수 금지**. `:::closing <문구>`는 접두만 제거해 문구 보존. `:::page`는 `<div class="new-page">`로 치환해 PDF(`.new-page` CSS)·DOCX(페이지 브레이크) 양쪽에서 쪽 나눔 보존. `:::landscape`는 DOCX 섹션 A4 가로(`WD_ORIENT.LANDSCAPE`, 본문폭 267mm)·PDF `@page size: A4 landscape`로 방향 보존 — 앱 §3과 동일 의미. `{{img:key}}`는 `(이미지)` 텍스트 치환(앱 토큰 — 이 경로는 해석 불가) |
 | kv 클래스 | `_mark_kv_tables`가 2열 표에 `class="kv"` 부여 — `print.html`/`doc.html`의 CSS가 라벨 열 가운데 정렬해 DOCX 규약을 다른 경로에 재현 |
-| mermaid | 사전렌더 SVG → PyMuPDF PNG 래스터 임베드. 오프라인 폴백(`div.mermaid` 잔존)이면 소스를 코드 블록으로 출력 |
+| mermaid | 사전렌더 `<img src="data:image/svg+xml">` → `_parse_body`가 placeholder로 추출 → Chrome 스크린샷 PNG 임베드(미설치·실패 시 PyMuPDF 폴백). 오프라인·미렌더(`div.mermaid` 잔존 — **정확한 클래스 매치**, `mermaid-img`와 구분)면 소스를 코드 블록으로 출력 |
 | 인터페이스 | CLI `--docx`(`--pdf`와 병기 가능, `--out` 확장자 자동 조정)·GUI `DOCX 생성` 체크박스+결과 열+설정 저장·`requirements.txt`에 `python-docx>=1.1.0` |
 | 검증 | `python -m pytest ref-pipeline/tests/test_md2doc.py` (repo 루트 기준 — basetemp 경로 주의)·실물 md → Word COM PDF 내보내기로 렌더·벡터 실측 |
