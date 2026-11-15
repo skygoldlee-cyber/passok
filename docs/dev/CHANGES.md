@@ -1,6 +1,17 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-15 feat(ref-pipeline): md2doc DOCX 출력 — PDF와 내용 정합 경로
+
+`ref-pipeline/md2doc.py`에 `--docx` 출력 추가. PDF와 동일한 `md_to_html_body` 산출 본문을 파싱해 python-docx로 걷는다 — 표·콜아웃·이미지·mermaid(SVG→PNG 래스터)의 내용 정합이 원천 보장.
+
+- **`_html_body_to_docx`** — 본문 HTML → 경량 `_HNode` 트리(`_BodyTree`, stdlib HTMLParser) → 블록 워커. h1-6(크기·h1/h2 밑줄)·p·ul/ol(단계 들여쓰기·불릿/번호)·blockquote/콜아웃(1×1 음영 표+좌측 바)·표(헤더 음영·colspan 병합)·pre(음영+테두리·Consolas)·hr·img(상대경로/data URI/원격)·svg(PyMuPDF→PNG)·a(외부 하이퍼링크·내부 앵커는 텍스트). 맑은 고딕 eastAsia·A4 18/15mm 여백
+- **깨진 `.keep` 구조 내성** — `_apply_smart_pagination`이 헤딩+`<ul>`(내부 `<p>` 포함)을 붙일 때 임의 닫는 태그 첫 등장에서 끊기던 기존 결함을 `</\2>` 역참조로 수정(PDF 경로도 동일하게 개선) + 목록 밖 `li`는 불릿 폴백으로 내용 보존
+- **CLI** — `--docx` 플래그, `--pdf`와 동시 지정 가능 (단일 입력 `--out`은 확장자를 형식별로 조정)
+- **GUI** — `DOCX 생성` 체크박스·결과 열·`opt_docx` 설정 저장
+- **requirements.txt** — `python-docx>=1.1.0` 추가 (미설치 환경은 친절 오류로 안내, 기존 HTML/PDF 경로 무영향)
+- 검증 — pytest 88(신규 8) · 실물 ref_md 변환 → Word 내보내기로 렌더 확인
+
 ## 2026-11-15 fix(carework): DOCX 서명란 우측선 여백 침범 해소 — 본문 표 우측선과 정합
 
 종결 부동 표의 `tblpX` 보정(+88)이 과도해 서명 박스 우측선이 529.9pt에 착지, 본문 표 우측선(524.98)과 우측 여백 안내선(524.45)을 ~4.5pt 침범하던 문제.

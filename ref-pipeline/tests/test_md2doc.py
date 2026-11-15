@@ -751,3 +751,79 @@ class TestBuildMarkdown:
         assert "<table>" in out
         out = md.convert("```python\nx = 1\n```")
         assert "codehilite" in out or "highlight" in out
+
+
+# ---------------------------------------------------------------------------
+# DOCX 출력 — _html_body_to_docx / convert_markdown_to_docx
+# ---------------------------------------------------------------------------
+
+class TestDocxOutput:
+    """python-docx 필요 — 미설치 시 skip."""
+
+    @pytest.fixture(autouse=True)
+    def _need_docx(self):
+        pytest.importorskip("docx")
+
+    def _doc(self, md: str, tmp_path: Path):
+        in_path = tmp_path / "in.md"
+        in_path.write_text(md, encoding="utf-8")
+        body = md2doc.md_to_html_body(
+            md, render_mermaid=False, allow_network=False
+        )
+        return md2doc._html_body_to_docx(
+            body, in_path.parent, "t", new_page_h2=False,
+            allow_network=False,
+        )
+
+    def test_headings_paragraphs_runs(self, tmp_path):
+        d = self._doc("# 제목\n\n본문 **굵게** 그리고 `코드`.\n", tmp_path)
+        texts = [p.text for p in d.paragraphs]
+        assert "제목" in texts
+        para = next(p for p in d.paragraphs if "본문" in p.text)
+        assert any(r.font.bold for r in para.runs if r.text == "굵게")
+        assert any(r.font.name == "Consolas" for r in para.runs if "코드" in r.text)
+
+    def test_table_structure(self, tmp_path):
+        d = self._doc(
+            "| A | B |\n|---|---|\n| 1 | x |\n| 2 | y |\n", tmp_path
+        )
+        assert len(d.tables) == 1
+        t = d.tables[0]
+        assert len(t.rows) == 3 and len(t.columns) == 2
+        assert t.cell(0, 0).text == "A"
+        assert t.cell(2, 1).text == "y"
+
+    def test_list_markers(self, tmp_path):
+        d = self._doc("- 가\n- 나\n", tmp_path)
+        marks = [p.text for p in d.paragraphs if p.text.startswith("• ")]
+        assert marks == ["• 가", "• 나"]
+
+    def test_ordered_list_numbers(self, tmp_path):
+        d = self._doc("1. 첫\n2. 둘\n", tmp_path)
+        texts = [p.text for p in d.paragraphs]
+        assert "1. 첫" in texts and "2. 둘" in texts
+
+    def test_blockquote_is_table(self, tmp_path):
+        d = self._doc("> 인용문\n", tmp_path)
+        assert len(d.tables) == 1
+        assert "인용문" in d.tables[0].cell(0, 0).text
+
+    def test_keep_wrapper_blocks_stay_separate(self, tmp_path):
+        # 스마트 페이지네이션의 .keep div 안 헤딩+목록이 한 단락으로 합쳐지면 안 됨
+        d = self._doc("## 절\n\n- 항목 하나\n- 항목 둘\n", tmp_path)
+        texts = [p.text for p in d.paragraphs]
+        assert "절" in texts
+        assert "• 항목 하나" in texts and "• 항목 둘" in texts
+
+    def test_convert_file_writes_docx(self, tmp_path):
+        in_path = tmp_path / "doc.md"
+        in_path.write_text("# 제목\n\n본문\n", encoding="utf-8")
+        out = md2doc.convert_markdown_to_docx(in_path, allow_network=False)
+        assert out.suffix == ".docx" and out.exists()
+
+    def test_missing_python_docx_errors(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(md2doc, "_docx", None)
+        in_path = tmp_path / "doc.md"
+        in_path.write_text("# t\n", encoding="utf-8")
+        with pytest.raises(RuntimeError, match="python-docx"):
+            md2doc.convert_markdown_to_docx(in_path, allow_network=False)
