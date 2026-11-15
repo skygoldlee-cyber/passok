@@ -2281,6 +2281,7 @@ class _DocxCtx:
     new_page_h2: bool = False
     allow_network: bool = True
     content_emu: int = 0               # 본문 최대 폭 (EMU)
+    kv_label_emu: int = 0              # 2열 표 공유 라벨 폭 (0=미사용)
 
 
 def _ea_font(holder, name: str = _DOCX_BODY_FONT) -> None:
@@ -2630,6 +2631,77 @@ def _emit_callout(container, node: _HNode, ctx: _DocxCtx) -> None:
     _drop_empty_first(cell)
 
 
+def _est_cell_w(node: _HNode) -> int:
+    """셀 내용 추정 폭 — 전각(W/F)은 2, 그 외 1 (docx-utils.js _estW와 동일 규칙)."""
+    w = 0
+    for ch in _flatten_text(node):
+        w += 2 if unicodedata.east_asian_width(ch) in ("W", "F") else 1
+    return w
+
+
+def _col_widths_emu(grid: list[list[_HNode]], ncols: int, ctx: _DocxCtx) -> list[int]:
+    """열 폭 배분 — 열별 최장 셀 추정 폭에 비례, 합계는 본문폭."""
+    est = [0] * ncols
+    for row in grid:
+        ci = 0
+        for c in row:
+            try:
+                span = max(1, int(c.attr("colspan") or "1"))
+            except ValueError:
+                span = 1
+            if ci < ncols:
+                est[ci] = max(est[ci], _est_cell_w(c) // span)
+            ci += span
+    est = [max(e + 10, 12) for e in est]  # 셀 여백 추정 + 최소 폭
+    total = sum(est)
+    widths = [int(ctx.content_emu * e / total) for e in est]
+    widths[-1] += ctx.content_emu - sum(widths)  # 반올림 잔차를 마지막 열로
+    return widths
+
+
+# 추정 폭 단위 → EMU — 1단위 ≈ 10.5pt 본문의 절반 전각 폭
+_DOCX_EST_EMU = 66675
+
+
+def _kv_label_emu(root: _HNode, content_emu: int) -> int:
+    """문서 내 2열 표의 라벨 열을 하나의 폭으로 — 최장 라벨 기준.
+
+    인접 2열 표가 각자 폭을 가지면 라벨 경계가 계단처럼 어긋난다 (앱
+    docx-utils의 _kvLabelW와 같은 규약 — 공문 서식의 라벨 열은 단일 폭).
+    표 안의 표는 대상에서 제외한다.
+    """
+    best = 0
+    stack = [root]
+    while stack:
+        n = stack.pop()
+        if n.tag == "table":
+            rows = [
+                wrap for tr in n.kids
+                for wrap in ([tr] if tr.tag == "tr" else tr.kids)
+                if wrap.tag == "tr"
+            ]
+            if rows and len([k for k in rows[0].kids if k.tag in ("th", "td")]) == 2:
+                for tr in rows:
+                    cells = [k for k in tr.kids if k.tag in ("th", "td")]
+                    if cells:
+                        best = max(best, _est_cell_w(cells[0]))
+            continue  # 표 안의 표는 대상 아님
+        stack.extend(n.kids)
+    if not best:
+        return 0
+    emu = (best + 10) * _DOCX_EST_EMU  # +10: 셀 좌우 여백 추정
+    return int(min(max(emu, Mm(25)), content_emu * 0.4))
+
+
+def _apply_col_widths(tbl, widths_emu: list[int]) -> None:
+    """고정 레이아웃 + gridCol·tcW 동기 — 내용 비례 열 폭."""
+    tbl.autofit = False
+    grid_el = tbl._tbl.find(qn("w:tblGrid"))
+    if grid_el is not None:
+        for gc, w in zip(grid_el, widths_emu):
+            gc.set(qn("w:w"), str(int(w / 635)))  # EMU→dxa
+
+
 def _emit_table(container, node: _HNode, ctx: _DocxCtx) -> None:
     head_trs: list[_HNode] = []
     trs: list[_HNode] = []
@@ -2656,6 +2728,11 @@ def _emit_table(container, node: _HNode, ctx: _DocxCtx) -> None:
         return
     tbl = _add_table(container, len(grid), ncols)
     _tbl_borders(tbl)
+    if ncols == 2 and ctx.kv_label_emu:
+        widths = [ctx.kv_label_emu, ctx.content_emu - ctx.kv_label_emu]
+    else:
+        widths = _col_widths_emu(grid, ncols, ctx)
+    _apply_col_widths(tbl, widths)
     head_n = len(head_trs)
     for ri, cells in enumerate(grid):
         ci = 0
@@ -2669,6 +2746,7 @@ def _emit_table(container, node: _HNode, ctx: _DocxCtx) -> None:
             tcell = tbl.cell(ri, ci)
             if span > 1 and ci + span <= ncols:
                 tcell = tcell.merge(tbl.cell(ri, ci + span - 1))
+            tcell.width = Emu(int(sum(widths[ci:ci + span])))  # tcW — 병합 셀은 합산 폭
             if cnode.tag == "th" or ri < head_n:
                 _tc_shd(tcell, _DOCX_HEAD_FILL)
             _emit_blocks_cell(tcell, cnode, ctx, head=cnode.tag == "th" or ri < head_n)
@@ -2876,6 +2954,7 @@ def _html_body_to_docx(body: str, base_dir: Path, title: str,
         doc=doc, base_dir=base_dir, svgs=svgs,
         new_page_h2=new_page_h2, allow_network=allow_network,
         content_emu=Mm(_DOCX_CONTENT_MM),
+        kv_label_emu=_kv_label_emu(root, Mm(_DOCX_CONTENT_MM)),
     )
     _emit_blocks(doc, root, ctx)
     return doc

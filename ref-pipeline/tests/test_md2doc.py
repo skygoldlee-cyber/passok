@@ -842,3 +842,26 @@ class TestDocxOutput:
         texts = [p.text for p in d.paragraphs]
         assert not any(t.startswith(":::") for t in texts)
         assert "서명란" in texts
+
+    def test_table_columns_fit_content(self, tmp_path):
+        # 라벨 열이 내용보다 과도하게 넓지 않아야 한다
+        d = self._doc(
+            "| A | 내용열이 아주 깁니다 여기에 긴 내용을 넣어요 계속 |\n"
+            "|---|---|\n| 1 | x |\n",
+            tmp_path,
+        )
+        t = d.tables[0]
+        w0, w1 = t.columns[0].width, t.columns[1].width
+        assert w0 and w1 and w0 < w1  # 짧은 라벨 열이 내용열보다 좁다
+
+    def test_two_col_tables_share_label_width(self, tmp_path):
+        # 인접 2열 표는 라벨 열 폭을 공유 — 경계가 계단처럼 어긋나지 않는다
+        d = self._doc(
+            "| A | x |\n|---|---|\n| 1 | y |\n\n"
+            "| 훨씬긴라벨열 | x |\n|---|---|\n| 2 | y |\n",
+            tmp_path,
+        )
+        assert len(d.tables) == 2
+        w0 = d.tables[0].columns[0].width
+        w1 = d.tables[1].columns[0].width
+        assert w0 == w1
