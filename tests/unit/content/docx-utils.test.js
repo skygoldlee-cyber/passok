@@ -133,7 +133,7 @@ test('docxFileMd — 공문서 격식: 제목 중앙·메타줄·표머리 연�
     assert.ok(doc.includes('w:fill="D9E6F7"'), '표머리 연청 음영 누락');
     assert.ok(doc.includes('<w:tblHeader/>'), '표머리 반복(tblHeader) 누락');
     assert.ok(doc.includes('<w:vAlign w:val="center"/>'), '셀 수직 가운데 누락');
-    assert.ok(doc.includes('w:color="BFBFBF"'), '내부선 연회색 누락');
+    assert.ok(doc.includes('w:color="999999"'), '내부선 회색 누락 — D9D9D9급 연색은 인쇄·PDF에서 소멸');
     // 외곽선 — 얇은 단선(흑백 인쇄 가독성·토너 절감). 이중선·진회색은 렌더 리뷰에서 탁하다고 지적됨
     assert.ok(doc.includes('w:val="single"'), '외곽 단선 누락');
     assert.ok(doc.includes('w:color="595959"'), '외곽선 색 누락');

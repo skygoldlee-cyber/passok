@@ -232,7 +232,7 @@ const _P = (line, i, boldLines) => line
 // 메타줄 — 제목 바로 아래 기관명·출력일. 중앙·회색·소자로 공문서 머리 격식
 /** @param {string} t */
 // 메타줄(기관명·출력일) — 중앙 소자 + 하단 가는선 (공문서 제목-본문 분리 관행)
-const _meta = t => `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="4" w:space="10" w:color="BFBFBF"/></w:pBdr>${_NOSPACE}<w:spacing w:after="140"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
+const _meta = t => `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="4" w:space="10" w:color="999999"/></w:pBdr>${_NOSPACE}<w:spacing w:after="140"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 
 // 각주성 줄 — '※'/'근거'로 시작하는 법적 근거·주의 문구. 소자 회색으로 본문과 격을 낮춘다
 // (9pt라 한 줄 수용량이 넓어 근거 열거가 본문폭을 넘어 2줄로 깨지는 것도 막는다)
@@ -362,9 +362,10 @@ export function docxFile(text, filename, boldLines = 0, wm = '', opts = {}) {
 // — MD 서브셋 → WordprocessingML (문서 표준 초안: 헤딩·표·목록·구분선·단락) —
 
 // 표 테두리 — 얇은 단선 통일. 이중선·진한 외곽선은 흑백 인쇄 시 탁하고 토너를 많이 쓴다
-// (사용자 렌더 리뷰 — 얇은 단선 + 연한 줄무늬 권고). 외곽 0.5pt·내부 0.25pt 회색.
+// (사용자 렌더 리뷰 — 얇은 단선 + 연한 줄무늬 권고). 외곽 1pt·내부 0.5pt 회색.
+// 내부선은 D9D9D9(85%)까지 연하면 인쇄·PDF 래스터에서 소멸하므로 999999(60%) — 인쇄에서도 격자 인식 가능.
 const _BORDERS = ['top', 'left', 'bottom', 'right'].map(b => `<w:${b} w:val="single" w:sz="8" w:color="595959"/>`).join('')
-    + ['insideH', 'insideV'].map(b => `<w:${b} w:val="single" w:sz="4" w:color="D9D9D9"/>`).join('');
+    + ['insideH', 'insideV'].map(b => `<w:${b} w:val="single" w:sz="4" w:color="999999"/>`).join('');
 // 표 레이아웃 — 본문 폭 고정 dxa (A4 11906 − 좌우 여백 1417×2 = 9072) + 균등 열 그리드 + 셀 내부 여백.
 // pct(상대폭)는 한글 등 일부 임포터가 미지원해 표가 본문 폭 밖으로 렌더될 수 있어 dxa 고정 사용.
 
@@ -550,8 +551,8 @@ const _tblRow = (r, i, cx) => `<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="44
  */
 const _h = (t, lv) => lv === 1
     ? `<w:p><w:pPr><w:pStyle w:val="Heading1"/>${_NOSPACE}<w:spacing w:before="80" w:after="80"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:b/><w:u w:val="double"/><w:sz w:val="40"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`
-    : `<w:p><w:pPr><w:pStyle w:val="Heading${lv}"/><w:keepNext/>${lv === 2 ? '<w:pBdr><w:bottom w:val="single" w:sz="4" w:color="BFBFBF"/></w:pBdr>' : ''}${_NOSPACE}<w:spacing w:before="160" w:after="80"/></w:pPr><w:r><w:rPr>${_RF}<w:b/><w:sz w:val="${lv === 2 ? 28 : 24}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
-const _HR = `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="6" w:color="999999"/></w:pBdr>${_NOSPACE}</w:pPr></w:p>`;
+    : `<w:p><w:pPr><w:pStyle w:val="Heading${lv}"/><w:keepNext/>${lv === 2 ? '<w:pBdr><w:bottom w:val="single" w:sz="4" w:color="999999"/></w:pBdr>' : ''}${_NOSPACE}<w:spacing w:before="160" w:after="80"/></w:pPr><w:r><w:rPr>${_RF}<w:b/><w:sz w:val="${lv === 2 ? 28 : 24}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
+const _HR = `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="4" w:color="999999"/></w:pBdr>${_NOSPACE}</w:pPr></w:p>`;
 const _PAGEBREAK = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
 
 // 결재란 — 공문서 상단 우측 승인 표 ('결 재' 세로병합 + 역할별 '(인)' 중앙 서명칸).
