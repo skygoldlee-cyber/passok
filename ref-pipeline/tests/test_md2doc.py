@@ -807,6 +807,9 @@ class TestDocxOutput:
         d = self._doc("> 인용문\n", tmp_path)
         assert len(d.tables) == 1
         assert "인용문" in d.tables[0].cell(0, 0).text
+        # 콜아웃 셀도 세로 중앙 (일반 표와 동일 규약)
+        from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
+        assert d.tables[0].cell(0, 0).vertical_alignment == WD_CELL_VERTICAL_ALIGNMENT.CENTER
 
     def test_keep_wrapper_blocks_stay_separate(self, tmp_path):
         # 스마트 페이지네이션의 .keep div 안 헤딩+목록이 한 단락으로 합쳐지면 안 됨
@@ -886,3 +889,22 @@ class TestDocxOutput:
         body = t.rows[1].cells
         assert all(p.alignment == WD_ALIGN_PARAGRAPH.CENTER for p in body[0].paragraphs)
         assert not any(p.alignment == WD_ALIGN_PARAGRAPH.CENTER for p in body[1].paragraphs)
+
+    def test_fence_markers_stripped_in_body(self, tmp_path):
+        # ::: 마커는 HTML 본문에서도 제거 — DOCX와 동일 규약
+        import md2doc
+        body = md2doc.md_to_html_body(
+            "문단\n\n:::sign\n서명란\n:::end\n", render_mermaid=False,
+        )
+        assert ":::" not in body and "서명란" in body
+
+    def test_kv_class_on_two_col_table(self, tmp_path):
+        # 2열 표는 kv 클래스 — CSS가 라벨 열 가운데 정렬 (DOCX 규약과 동일)
+        import md2doc
+        body = md2doc.md_to_html_body(
+            "| 라벨 | 내용 |\n|---|---|\n| A | B |\n\n"
+            "| a | b | c |\n|---|---|---|\n| 1 | 2 | 3 |\n",
+            render_mermaid=False,
+        )
+        assert 'table class="kv"' in body
+        assert body.count("<table") == 2  # 3열 표는 kv 아님

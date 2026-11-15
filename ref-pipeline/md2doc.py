@@ -1995,12 +1995,50 @@ def md_to_html_body(
     _heading_map = _build_heading_map(getattr(md, "toc", "") or "")
     body = _linkify_inline_toc(body, _heading_map)
     body = _repair_dead_fragment_links(body, _heading_map)
+    body = _strip_fence_markers(body)
+    body = _mark_kv_tables(body)
     if render_mermaid:
         body = _prerender_mermaid_to_svg(
             body, progress_cb=progress_cb, allow_network=allow_network
         )
     body = _apply_smart_pagination(body, new_page_h2=new_page_h2)
     return body
+
+
+def _strip_fence_markers(body: str) -> str:
+    """:::sign/:::end 등 doc-md 펜스 마커 제거 — DOCX 경로(_emit_block)와 동일 규약.
+
+    마커는 PassOK 내부 구조 표시라 어떤 출력에도 노출되면 안 된다.
+    <p> 안의 마커 전용 라인만 지우고, 라인만 남으면 단락째 제거한다.
+    (pre/코드 펜스 안의 :::는 출력 내용이므로 보존 — 여기서는 <p>만 본다)
+    """
+    def fix_p(m: re.Match) -> str:
+        lines = [
+            l for l in m.group(2).split("\n")
+            if not re.fullmatch(r"[ \t]*:::[\w-]+[ \t]*", l)
+        ]
+        inner = "\n".join(lines)
+        return "" if not inner.strip() else f"<p{m.group(1)}>{inner}</p>"
+
+    return re.sub(r"<p([^>]*)>(.*?)</p>", fix_p, body, flags=re.S)
+
+
+def _mark_kv_tables(body: str) -> str:
+    """2열 표(라벨|내용 구조)에 kv 클래스 부여 — CSS 라벨 열 가운데 정렬용.
+
+    DOCX는 ncols==2 판별로 라벨 열을 중앙 정렬한다 — CSS는 열 개수를
+    셀 수 없어 표 자체에 표시를 달아 같은 규약을 재현한다.
+    """
+    def repl(m: re.Match) -> str:
+        open_tag, inner = m.group(0), m.group(1)
+        if not open_tag.startswith("<table>") or "<table" in inner:
+            return m.group(0)  # 속성 보유·중첩 표는 건드리지 않는다
+        first_tr = re.search(r"<tr\b[^>]*>(.*?)</tr>", inner, re.S)
+        if first_tr and len(re.findall(r"<t[dh]\b", first_tr.group(1))) == 2:
+            return '<table class="kv">' + inner + "</table>"
+        return m.group(0)
+
+    return re.sub(r"<table\b[^>]*>(.*?)</table>", repl, body, flags=re.S)
 
 
 # 이 줄 수를 넘는 <pre>는 한 페이지에 못 들어갈 수 있어 내부 분할 허용
@@ -2617,6 +2655,7 @@ def _emit_callout(container, node: _HNode, ctx: _DocxCtx) -> None:
     _tbl_borders(tbl, sz=4, color=_DOCX_BQ_EDGE)
     cell = tbl.cell(0, 0)
     _tc_shd(cell, _DOCX_BQ_FILL)
+    cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
     tcPr = cell._tc.get_or_add_tcPr()
     borders = OxmlElement("w:tcBorders")
     left = OxmlElement("w:left")
