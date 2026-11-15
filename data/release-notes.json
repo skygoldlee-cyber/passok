@@ -1,5 +1,17 @@
 [
   {
+    "version": "v20261115-4f3df7b",
+    "date": "2026-11-15",
+    "notes": [
+      "[수정·check] webp 게이트 vercelignore 매칭 결함 2건 — CRLF trim·** 이중 변환",
+      "[테스트·refpipe] probe 픽스처 문서ID 콜아웃 반영 — 표 수·인덱스 갱신",
+      "[정리·docs] probe.md 픽스처 문서 ID 부여 + .vercelignore 오염 라인 정리",
+      "[정리·docs] md-tokens 목록 등록·테스트 픽스처 배포 예외·COMMANDS 카탈로그 재생성",
+      "[기능·doc-md] 문서 파이프라인 공용화·인라인 확장·ref-pipeline 정합 일괄 개선",
+      "[정리·release] v20261115-2eb20ac 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261115-2eb20ac",
     "date": "2026-11-15",
     "notes": [
@@ -217,15 +229,6 @@
     "notes": [
       "[수정·ux] Discord 커뮤니티 버튼 플랫폼 기본 초대 폴백 — 전 시험 노출",
       "[정리·release] v20261112-033eb8a 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261112-033eb8a",
-    "date": "2026-11-12",
-    "notes": [
-      "[기능·quality] 순환복잡도 래칫 도입 — check:cplx (기준선 340건)",
-      "[기능·deploy] comingSoon 팩 스테이징 제외 — 배포 페이로드 −63%",
-      "[정리·release] v20261112-a14877c 스탬프 확정 [no-docs]"
     ]
   }
 ]
