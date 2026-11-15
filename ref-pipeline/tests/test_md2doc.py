@@ -1089,10 +1089,10 @@ class TestDocxOutput:
         assert len(media) >= 2  # 로컬 PNG + data URI PNG
         from docx import Document
         d = Document(str(out))
-        # 표 3종 + 콜아웃 인용(1×1 표) + :::sign 서명란 표 + :::approve 결재란 표
-        assert len(d.tables) == 6
+        # 문서ID 콜아웃 + 표 3종 + 콜아웃 인용(1×1 표) + :::sign 서명란 표 + :::approve 결재란 표
+        assert len(d.tables) == 7
         # rowspan/colspan 병합 표 — 세로·가로 병합 모두 유지
-        t = d.tables[2]
+        t = d.tables[3]
         assert t.cell(1, 0).text == t.cell(2, 0).text  # rowspan '공통' vMerge
         assert t.cell(3, 0).text == t.cell(3, 1).text  # colspan '가로병합'
         texts = [p.text for p in d.paragraphs]
