@@ -99,11 +99,25 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
             <button id="share" data-arg="#out|요양일지|mask">공유</button></section>`);
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
+        await tapMenu('공유용'); // 개인정보 문서는 내보내기 모드 선택이 먼저 — 가림이 기본
         await tapMenu('본문 복사');
         await vi.waitFor(() => expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalled());
         const text = globalThis.navigator.clipboard.writeText.mock.calls[0][0];
         expect(text).not.toContain('010-1234-5678');
-        expect(text).toContain('[연락처]');
+        expect(text).not.toContain('김철수');
+        expect(text).toContain('010-****-****'); // 전화 국번만 가림 — 모든 경로 동일 규약
+        expect(text).toContain('김 ○○'); // 성만 남기고 이름 가림
+    });
+
+    it('mask 시 내부 보관용 모드는 원문 그대로', async () => {
+        setup(`<section class="view-section">
+            <pre id="out">김철수 일지 — 010-1234-5678</pre>
+            <button id="share" data-arg="#out|요양일지|mask">공유</button></section>`);
+        const { careShare } = await import('../../../../src/exams/carework/care-share.js');
+        await careShare(document.getElementById('share').dataset.arg);
+        await tapMenu('내부 보관용');
+        await tapMenu('본문 복사');
+        await vi.waitFor(() => expect(globalThis.navigator.clipboard.writeText).toHaveBeenCalledWith('김철수 일지 — 010-1234-5678'));
     });
 
     it('입력도 없는 빈 뷰 → "내보낼 내용이 없습니다" 안내', async () => {
@@ -158,11 +172,12 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
             <button id="share" data-arg="#doc|표 문서|mask">공유</button></section>`);
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
+        await tapMenu('공유용'); // 모드 선택 — 가림본으로 PDF 렌더
         await tapMenu('PDF 파일 다운로드');
         await vi.waitFor(() => expect(pdfSpy).toHaveBeenCalled());
         const rendered = pdfSpy.mock.calls[0][0]; // pdfFileFromEl의 첫 인자 = 렌더 컨테이너
         expect(rendered.querySelector('table')).toBeTruthy(); // 표 구조가 렌더 대상에 유지
-        expect(rendered.textContent).toContain('[인명]'); // 텍스트 노드만 가림
+        expect(rendered.textContent).toContain('김 ○○'); // 텍스트 노드만 가림 — 구조 유지
         expect(rendered.textContent).not.toContain('김철수');
     });
 
@@ -200,6 +215,7 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         (/** @type {any} */ (window)).careVisitCsvExport = () => Promise.resolve(csv);
         await careShare(document.getElementById('share').dataset.arg);
+        await tapMenu('공유용'); // mask 문서 — 모드 선택 후 메뉴
         await tapMenu('카카오톡');
         await tapMenu('Excel로 보내기'); // 형식 선택 — xlsx만 생성
         await vi.waitFor(() => expect(sheetSpy).toHaveBeenCalled()); // 실제 xlsx 생성 확인
@@ -215,6 +231,7 @@ describe('CO-13 careShare 내보내기 메뉴', () => {
         (/** @type {any} */ (window)).careRosterCsvExport = xlsxSpy;
         const { careShare } = await import('../../../../src/exams/carework/care-share.js');
         await careShare(document.getElementById('share').dataset.arg);
+        await tapMenu('공유용'); // mask 문서 — 모드 선택 후 메뉴
         await tapMenu('Excel 내보내기');
         await vi.waitFor(() => expect(xlsxSpy).toHaveBeenCalled());
     });

@@ -178,6 +178,23 @@ export function careFormSeedFile(toolKey) {
 
 /** 기관 양식 파일(.docx·.xlsx·.csv·.pdf) → 본문 추출 → 연동 사본 편집기에 로드 */
 /** @param {HTMLInputElement} input */
+/** 양식 파일 → 본문 텍스트 — xlsx/csv는 MD 표로, docx/hwpx/pdf는 텍스트로 */
+/** @param {File} f */
+async function _extractSeedBody(f) {
+    const n = (f.name || '').toLowerCase();
+    if (/\.(xlsx|xls|csv)$/.test(n)) {
+        const { extractFormXlsx } = await import('../care-form-pdf.js');
+        const { parseCsv } = await import('../../../content/csv-utils.js');
+        return parseCsv((await extractFormXlsx(f)).text) // 표 구조 보존 — MD 표 행으로
+            .filter(r => r.some(c => String(c || '').trim()))
+            .map(r => '| ' + r.map(c => String(c || '').trim()).join(' | ') + ' |').join('\n');
+    }
+    if (n.endsWith('.hwp') && !n.endsWith('.hwpx')) throw new Error('구형 .hwp는 지원하지 않습니다 — 한글에서 Word(docx)로 저장해 올려주세요.');
+    const { extractFormDocx, extractFormPdf, extractFormHwpx } = await import('../care-form-pdf.js');
+    return (await (n.endsWith('.docx') ? extractFormDocx(f) : n.endsWith('.hwpx') ? extractFormHwpx(f) : extractFormPdf(f))).text;
+}
+
+/** @param {HTMLInputElement} input */
 async function _onSeedFile(input) {
     const f = input.files?.[0];
     input.value = '';
@@ -189,18 +206,7 @@ async function _onSeedFile(input) {
     showToast('양식 파일을 분석하는 중입니다…');
     let body = '';
     try {
-        const n = (f.name || '').toLowerCase();
-        if (/\.(xlsx|xls|csv)$/.test(n)) {
-            const { extractFormXlsx } = await import('../care-form-pdf.js');
-            const { parseCsv } = await import('../../../content/csv-utils.js');
-            body = parseCsv((await extractFormXlsx(f)).text) // 표 구조 보존 — MD 표 행으로
-                .filter(r => r.some(c => String(c || '').trim()))
-                .map(r => '| ' + r.map(c => String(c || '').trim()).join(' | ') + ' |').join('\n');
-        } else {
-            if (n.endsWith('.hwp') && !n.endsWith('.hwpx')) throw new Error('구형 .hwp는 지원하지 않습니다 — 한글에서 Word(docx)로 저장해 올려주세요.');
-            const { extractFormDocx, extractFormPdf, extractFormHwpx } = await import('../care-form-pdf.js');
-            body = (await (n.endsWith('.docx') ? extractFormDocx(f) : n.endsWith('.hwpx') ? extractFormHwpx(f) : extractFormPdf(f))).text;
-        }
+        body = await _extractSeedBody(f);
     } catch (e) {
         showToast(e instanceof Error && e.message ? e.message : '파일을 읽지 못했습니다 — 텍스트 기반 파일인지 확인하세요.', 'error');
         return;

@@ -1,6 +1,6 @@
 // src/exams/carework/views/care-incident.js — 사고 보고서 뷰
 // @spec UX-FORM-03 — 시험 전용 실무 뷰 (DA-13)
-import { INCIDENT_TYPES, SEVERITIES, incidentTypeLabel, severityLabel, buildIncidentText, buildIncidentMd, incidentsToCsv } from '../care-incident.js';
+import { INCIDENT_TYPES, SEVERITIES, incidentTypeLabel, severityLabel, familyText, buildIncidentText, buildIncidentMd, incidentsToCsv } from '../care-incident.js';
 import { markFunnel } from '../care-funnel.js';
 import { listIncidents, saveIncident, removeIncident } from '../incident-store.js';
 import { attachClientPicker, clientField } from '../care-client-field.js';
@@ -37,13 +37,22 @@ function readForm() {
         date: _val('inc-date', ''),
         time: _val('inc-time', ''),
         ...clientField('inc-client'),
+        room: _val('inc-room', ''),
         place: _val('inc-place', ''),
         type: _val('inc-type', ''),
         severity: _val('inc-severity', ''),
         desc: _val('inc-desc', ''),
         action: _val('inc-action', ''),
+        hospital: _val('inc-hospital', ''),
         witness: _val('inc-witness', ''),
         familyNotified: /** @type {HTMLInputElement|null} */ ($('inc-family'))?.checked || false,
+        familyAt: _val('inc-family-dt', ''),
+        familyTo: _val('inc-family-who', ''),
+        familyHow: _val('inc-family-how', ''),
+        reportAt: _val('inc-report-dt', ''),
+        mgrTime: _val('inc-mgr-time', ''),
+        prevent: _val('inc-prevent', ''),
+        followup: _val('inc-followup', ''),
     };
 }
 
@@ -76,7 +85,7 @@ export function careIncidentDocMd() {
         발생장소: f.place, 사고유형: incidentTypeLabel(f.type),
         중증도: severityLabel(f.severity), 발생경위: f.desc,
         조치내용: f.action, 목격자: f.witness,
-        가족통지: f.familyNotified ? '완료' : '미완료',
+        가족통지: familyText(f), 재발방지: f.prevent, 경과: f.followup,
     }) + docMdSign([['보고자', 'author'], ['확인(시설장)', 'confirmer']]) : '';
 }
 
@@ -196,27 +205,26 @@ function _renderPhotos() {
     ).join('') || '<span class="care-log-hint">현장·상해 부위 등 사진을 첨부하면 출력물에 함께 표시됩니다 (최대 3장)</span>';
 }
 
-export function initCareIncidentView() {
-    markFunnel('tool:care-incident');
-    voiceButtonsInit(); // 음성 입력 미지원 브라우저는 🎤 숨김
-    const _incClientEl = $('inc-client');
-    if (_incClientEl) attachClientPicker(/** @type {HTMLInputElement} */ (_incClientEl));
-    const d = /** @type {HTMLInputElement|null} */ ($('inc-date'));
-    if (d && !d.value) d.value = todayKey();
-    const t = $('inc-type');
-    if (t && !t.children.length)
-        t.innerHTML = INCIDENT_TYPES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
-    const s = $('inc-severity');
-    if (s && !s.children.length)
-        s.innerHTML = SEVERITIES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
-    // 대처카드 초안 소비 — 카드에서 "사고보고서 작성"으로 진입 시 유형·경위 선기입 (일회성)
+/** 사진 파일 선택 처리 — 상한까지 리사이즈 dataURI로 누적 */
+/** @param {HTMLInputElement} pf */
+const _onPhotoPick = async pf => {
+    for (const file of [...(pf.files || [])].slice(0, PHOTO_MAX - _photos.length)) {
+        try { _photos.push(await signFileToDataUri(file)); }
+        catch { showToast('사진을 읽지 못했습니다.', 'error'); }
+    }
+    pf.value = '';
+    _renderPhotos();
+};
+
+/** 폼 기본값 — 대처카드 초안 소비(일회성 선기입) + 마지막 저장값 복원 (빈 필드만) */
+/** @param {Element|null} t */
+const _incPrefill = t => {
     const draft = getJSON(STORAGE_KEYS.CARE_INCIDENT_DRAFT);
     if (draft && typeof draft === 'object') {
         removeItem(STORAGE_KEYS.CARE_INCIDENT_DRAFT);
         if (draft.type && t) /** @type {HTMLSelectElement} */ (t).value = draft.type;
         if (draft.desc) { const de = /** @type {HTMLInputElement|null} */ ($('inc-desc')); if (de) de.value = draft.desc; }
     }
-    // 마지막 저장값 자동 기입 — 반복 입력(장소·성명·시간대·목격자) 기본값 복원 (빈 필드만)
     const last = getJSON(STORAGE_KEYS.CARE_LAST_INCIDENT);
     if (last && typeof last === 'object') {
         for (const [k, v] of Object.entries(last)) {
@@ -224,16 +232,35 @@ export function initCareIncidentView() {
             if (el && !el.value && typeof v === 'string' && v) el.value = v;
         }
     }
+};
+
+/** 날짜 기본값 — 발생일은 오늘, 보고 일시는 지금 (작성 시점이 곧 보고 시점, 수정 가능) */
+const _incDefaultDates = () => {
+    const d = /** @type {HTMLInputElement|null} */ ($('inc-date'));
+    if (d && !d.value) d.value = todayKey();
+    const rd = /** @type {HTMLInputElement|null} */ ($('inc-report-dt'));
+    if (rd && !rd.value) {
+        const n = new Date(), p = (/** @type {number} */ x) => String(x).padStart(2, '0');
+        rd.value = `${n.getFullYear()}-${p(n.getMonth() + 1)}-${p(n.getDate())}T${p(n.getHours())}:${p(n.getMinutes())}`;
+    }
+};
+
+export function initCareIncidentView() {
+    markFunnel('tool:care-incident');
+    voiceButtonsInit(); // 음성 입력 미지원 브라우저는 🎤 숨김
+    const _incClientEl = $('inc-client');
+    if (_incClientEl) attachClientPicker(/** @type {HTMLInputElement} */ (_incClientEl));
+    _incDefaultDates();
+    const t = $('inc-type');
+    if (t && !t.children.length)
+        t.innerHTML = INCIDENT_TYPES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+    const s = $('inc-severity');
+    if (s && !s.children.length)
+        s.innerHTML = SEVERITIES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+    _incPrefill(t);
     // 사진 첨부 — 파일 선택 시 리사이즈 dataURI로 변환해 썸네일에 추가 (재진입 시 onchange 재할당 → 중복 바인딩 없음)
     const pf = /** @type {HTMLInputElement|null} */ ($('inc-photo-file'));
-    if (pf) pf.onchange = async () => {
-        for (const file of [...(pf.files || [])].slice(0, PHOTO_MAX - _photos.length)) {
-            try { _photos.push(await signFileToDataUri(file)); }
-            catch { showToast('사진을 읽지 못했습니다.', 'error'); }
-        }
-        pf.value = '';
-        _renderPhotos();
-    };
+    if (pf) pf.onchange = () => _onPhotoPick(pf);
     _renderPhotos();
     renderSaved();
     void renderFacility();

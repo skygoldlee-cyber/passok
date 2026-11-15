@@ -35,3 +35,29 @@ export const fmtDocNames = (t, maskedOnly = false) => String(t || '').split(/([ 
     _NAME_TOKEN.test(tok) && (!maskedOnly || /[○△◇*＊●]/.test(tok))
         && (_SURNAME2.has(tok.slice(0, 2)) || _SURNAME1.has(tok[0] || ''))
         ? fmtDocName(tok) : tok).join('');
+
+// — 마스킹 표기 규약 — 모든 내보내기 경로(복사·PDF·docx·공유)가 같은 형태를 쓴다.
+//   이름: 성만 남기고 이름은 ○으로 가림 — '김민수' → '김 ○○', '남궁민수' → '남궁 ○○', '김수' → '김 ○'
+//   전화: 국번만 가림 — '010-1234-5678' → '010-****-****' (뒷자리도 미노출 — 부분 노출은 추정 공격에 취약)
+/**
+ * 성명 마스킹 — 성 뒤 한 칸 + ○. 이미 가려진 값(김○○)은 같은 규약으로 정규화
+ * @param {string} n
+ */
+export const maskDocName = n => {
+    const s = String(n || '').trim();
+    if (!s) return '';
+    const m = s.match(_NAME_SPLIT);
+    if (!m) { const cs = [...s]; return `${cs[0]}${'○'.repeat(Math.max(1, cs.length - 1))}`; }
+    const a = m[1] || '', b = m[2] || '';
+    const dots = '○'.repeat(Math.max(1, [...b].length + [...a.slice(1)].length));
+    return `${_SURNAME2.has(a) ? a : a.slice(0, 1)} ${dots}`;
+};
+
+/**
+ * 전화번호 마스킹 — 국번·뒷자리 전량 가림 (앞 지역번호만 유지)
+ * @param {string} p
+ */
+export const maskDocPhone = p => {
+    const m = String(p || '').match(/^(0\d{1,2})[-\s]?(\d{3,4})[-\s]?(\d{4})$/);
+    return m ? `${m[1]}-****-****` : '[연락처]';
+};

@@ -115,6 +115,7 @@ export function careCalcRun() {
         + basisHtml
         + `<div class="care-doc-sec">계산 결과</div><table class="care-doc"><tbody>${d.rows.map(docRow).join('')}</tbody></table>`
         + `<p class="care-calc-src">근거(${EFFECTIVE_YEAR}년 기준): 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시</p>`
+        + `<p class="care-calc-src">※ 실제 월 납부액 = 급여 본인부담금 + 한도 초과분(전액 자부담) + 비급여(식재료비·간식비 등, 입력 금액만 반영). 비급여 미입력 시 급여 본인부담만 표시됩니다.</p>`
         + (rateYearStale() ? `<p class="care-calc-err">⚠ ${EFFECTIVE_YEAR}년 고시 기준 — 현재 연도 고시가 아직 반영되지 않았으므로 결과는 참고용입니다.</p>` : '')
         + `<p class="care-doc-disclaimer">※ 계산 결과는 참고용 예상액입니다 — 실제 청구액은 공단 심사·기관 계약에 따라 달라질 수 있습니다.</p>`;
 }
@@ -128,6 +129,7 @@ export function careCalcDocMd() {
         + `\n\n### ${d.basisTitle}\n\n` + mdTable(['등급', '금액'], d.basisRows.map((/** @type {*} */ b) => b.sel ? [`▶ ${b.row[0]}`, b.row[1]] : b.row))
         + '\n\n### 계산 결과\n\n' + mdTable(['항목', '금액'], d.rows.map((/** @type {string[]} */ r) => [r[0] || '', r[1] || '']))
         + `\n\n근거(${EFFECTIVE_YEAR}년 기준): 노인장기요양보험법 §40 · 제공기준 고시 §13 · 본인부담금 감경 고시`
+        + '\n\n※ 실제 월 납부액 = 급여 본인부담금 + 한도 초과분(전액 자부담) + 비급여(식재료비·간식비 등, 입력 금액만 반영). 비급여 미입력 시 급여 본인부담만 표시됩니다.'
         + '\n\n※ 계산 결과는 참고용 예상액입니다 — 실제 청구액은 공단 심사·기관 계약에 따라 달라질 수 있습니다.';
 }
 

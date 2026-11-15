@@ -45,16 +45,31 @@ export function buildVisitText(v) {
 
 /** 방문 기록 1건 → 항목별 행 표 — 일별 제출 문서 형식 (항목|내용 2열 kv). 다열 표는 목록용 Excel에 한정 */
 /** @param {*} v */
+/** @param {*} v */
+const _visitResultRow = v => {
+    const r = v.status === 'done' ? v.result : null;
+    if (r?.summary) return ['결과·특이사항', r.summary];
+    return v.status === 'canceled' ? ['결과', '취소'] : null; // 상태는 결과로 표현
+};
+
+/** 방문 일시 표기 — 완료 기록은 실제 일시, 그 외 예정 일시 */
+/** @param {*} v */
+const _visitWhen = v => {
+    const r = v.status === 'done' ? v.result : null;
+    const d = r?.date || v.date || '', t = r?.time || v.time || '';
+    return t ? `${d} ${t}` : d;
+};
+
+/** @param {*} v */
 export const visitKvMd = (v) => {
     const rel = relationLabel(v.relation);
-    const r = v.status === 'done' ? v.result : null; // 완료 시 실제 방문 일시·결과 사용
     const rows = [
-        ['방문일', `${r?.date || v.date || ''}${(r?.time || v.time) ? ' ' + (r?.time || v.time) : ''}`], ['대상자', fmtDocName(v.client)],
+        ['방문일', _visitWhen(v)], ['대상자', fmtDocName(v.client)],
         ['방문객', `${fmtDocName(v.visitor)}${rel ? ` (${rel})` : ''}`], ['연락처', v.phone || ''],
         ['목적', v.purpose || ''],
     ];
-    if (r?.summary) rows.push(['결과·특이사항', r.summary]);
-    else if (v.status === 'canceled') rows.push(['결과', '취소']); // 상태는 결과로 표현
+    const rr = _visitResultRow(v);
+    if (rr) rows.push(rr);
     return mdTable(['항목', '내용'], rows);
 };
 

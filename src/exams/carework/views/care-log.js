@@ -70,7 +70,9 @@ export function careLogDocMd() {
         일시: `${f.date}${f.start ? ` ${f.start}~${f.end || ''}` : ''}`,
         급여종류: SERVICE_TYPES.find(s => s.key === f.service)?.label || f.service,
         특이사항: f.note, 비고: f.note,
-    }) + docMdSign([['작성자(요양보호사)', 'author'], ['확인자', 'confirmer']]) : '';
+        // 결재선 — 재가 급여(방문요양·목욕·간호보조)는 담당·센터장, 시설 급여는 담당·팀장·시설장
+    }) + docMdSign([['작성자(요양보호사)', 'author'], ['확인자', 'confirmer']],
+        f.service === 'daycare' || f.service === 'shortstay' ? ['담당', '팀장', '시설장'] : ['담당', '센터장']) : '';
 }
 
 /** CO-07 공단 급여제공기록지 양식 복사 — ERP·공단 앱에 붙여넣기 (이중 입력 해소) */

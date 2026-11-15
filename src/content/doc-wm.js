@@ -11,11 +11,12 @@ import { esc } from '../core/sanitize.js';
 /**
  * 워터마크 문구 — "기관명 · 출력일(로컬)". 기관명 없으면 빈 문자열(미출력)
  * @param {string} org - 기관·조직명
+ * @param {string} [date] - 출력일 'YYYY-MM-DD' — 호출층 단일 날짜 소스 (미지정 시 당일)
  * @returns {string}
  */
-export const docWmText = org => {
+export const docWmText = (org, date) => {
     const o = String(org || '').trim();
-    return o ? `${o} · ${todayKey()}` : '';
+    return o ? `${o} · ${date || todayKey()}` : '';
 };
 
 /** 문구 대략 폭(em) — CJK 1em, 라틴·숫자 0.55em, 공백 0.35em (실측 대신 보수 추정) */

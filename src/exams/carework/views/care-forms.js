@@ -41,8 +41,14 @@ const _lookup = (/** @type {string} */ raw) => {
         box.innerHTML = `<p class="care-log-hint docissue-warn">발행 기록이 없는 번호입니다 — 번호를 다시 확인하거나, 다른 기기에서 발행된 문서일 수 있습니다.</p>`;
         return;
     }
+    box.innerHTML = _issueCardHtml(it);
+};
+
+/** 발행 대장 레코드 → 대조 결과 카드 HTML */
+/** @param {*} it */
+const _issueCardHtml = it => {
     const qr = qrDataUrl(it.docNo);
-    box.innerHTML = `<div class="docissue-card">
+    return `<div class="docissue-card">
         <div><strong>${esc(it.docNo)}</strong></div>
         <div class="docissue-meta">${esc(it.tool || '')} · ${esc(it.org || '')} — 발행 ${esc(it.rev || 1)}회 · 최근 ${esc(String(it.issuedAt || '').replace('T', ' '))} · ${esc(_kinds(it))}</div>
         ${(it.files || []).length ? `<ul class="docissue-files">${it.files.slice(-5).map((/** @type {string} */ f) => `<li>${esc(f)}</li>`).join('')}</ul>` : ''}
