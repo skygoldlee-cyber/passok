@@ -1,6 +1,13 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 fix(hazmat): 필기 과목 3과목으로 교정 + 자료 수집
+
+Q-Net 확인 결과 필기는 3과목(물질의 물리화학적 성질 추가) — 스캐폴드 시점 2과목 구성을 교정.
+
+- **manifest** — `physchem`(1)·`fire`(2)·`hazprop`(3), integratedExam 20×3·90분
+- **자료 수집** (tmp/materials/hazmat, gitignore) — 출제기준 2025~2029(mcrtrNo=340, UBI 캡처 1094항목)·법령 9종 DRF·시험구성 원문. jmCd=2121. 기출은 CBT 비공개 확인 → 자체 생성 필요
+
 ## 2026-11-16 feat(hazmat): 위험물산업기사 시험팩 스캐폴드 (draft)
 
 `scaffold:exam`으로 `hazmat` 팩 골격 생성 후 실제 과목 구성 반영 — `comingSoon`·tier `draft`로 시작, 콘텐츠는 플레이스홀더.

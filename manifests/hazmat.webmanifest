@@ -2,7 +2,7 @@
   "id": "passok",
   "name": "PassOK",
   "short_name": "PassOK",
-  "description": "위험물산업기사 — 필기 2과목(화재예방과 소화방법·위험물의 성질과 취급)",
+  "description": "위험물산업기사 — 필기 3과목(물리화학적 성질·화재예방과 소화방법·위험물 성질 및 취급) + 실기 필답",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
