@@ -827,3 +827,18 @@ class TestDocxOutput:
         in_path.write_text("# t\n", encoding="utf-8")
         with pytest.raises(RuntimeError, match="python-docx"):
             md2doc.convert_markdown_to_docx(in_path, allow_network=False)
+
+    def test_adjacent_tables_get_separator(self, tmp_path):
+        # OOXML에서 단락 없이 인접한 <w:tbl>은 Word가 한 표로 병합 — 빈 단락을 끼운다
+        d = self._doc(
+            "| A | B |\n|---|---|\n| 1 | x |\n\n| C | D |\n|---|---|\n| 2 | y |\n",
+            tmp_path,
+        )
+        tags = [c.tag.split("}")[1] for c in d.element.body.iterchildren()]
+        assert "p" in tags[tags.index("tbl"):]
+
+    def test_fence_marker_paragraphs_skipped(self, tmp_path):
+        d = self._doc("본문\n\n:::sign\n서명란\n:::end\n", tmp_path)
+        texts = [p.text for p in d.paragraphs]
+        assert not any(t.startswith(":::") for t in texts)
+        assert "서명란" in texts

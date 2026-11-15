@@ -2500,8 +2500,15 @@ def _emit_svg(container, idx: int, ctx: _DocxCtx) -> None:
 def _emit_node(par, node: _HNode, ctx: _DocxCtx, st: dict) -> None:
     """인라인 노드 → 단락 런. st는 상속 서식 플래그."""
     if not node.tag:
-        if node.text:
-            _style_run(par.add_run(node.text), st)
+        text = node.text
+        if ":::" in text:
+            # :::sign 등 단락 안에 섞인 펜스 마커 라인도 제거
+            text = "\n".join(
+                l for l in text.split("\n")
+                if not re.fullmatch(r":::[\w-]*", l.strip())
+            )
+        if text.strip():
+            _style_run(par.add_run(text), st)
         return
     tag = node.tag
     if tag == "br":
@@ -2580,9 +2587,31 @@ def _emit_list(container, node: _HNode, ctx: _DocxCtx, level: int) -> None:
         n += 1
 
 
+def _container_el(container):
+    """블록이 쌓이는 XML 요소 — Document는 w:body, 셀은 w:tc."""
+    if hasattr(container, "element"):
+        return container.element.body
+    return container._tc
+
+
+def _add_table(container, rows: int, cols: int):
+    """표 추가 — 직전이 표면 빈 단락을 끼운다.
+
+    OOXML에서 단락 없이 인접한 <w:tbl>은 Word가 한 표로 병합해 출력한다 —
+    MD에서 빈 줄로 구분된 별도 표도 화면·인쇄에서 붙어 보이는 원인.
+    """
+    el = _container_el(container)
+    if el is not None:
+        # body 말미의 sectPr(섹션 속성)는 내용이 아니므로 건너뛴다
+        last = next((c for c in reversed(el) if c.tag != qn("w:sectPr")), None)
+        if last is not None and last.tag == qn("w:tbl"):
+            container.add_paragraph()
+    return container.add_table(rows=rows, cols=cols)
+
+
 def _emit_callout(container, node: _HNode, ctx: _DocxCtx) -> None:
     """blockquote/콜아웃 → 1×1 음영 표 — print.html의 좌측 바+배경을 재현."""
-    tbl = container.add_table(rows=1, cols=1)
+    tbl = _add_table(container, 1, 1)
     _tbl_borders(tbl, sz=4, color=_DOCX_BQ_EDGE)
     cell = tbl.cell(0, 0)
     _tc_shd(cell, _DOCX_BQ_FILL)
@@ -2625,7 +2654,7 @@ def _emit_table(container, node: _HNode, ctx: _DocxCtx) -> None:
         )
     if not ncols:
         return
-    tbl = container.add_table(rows=len(grid), cols=ncols)
+    tbl = _add_table(container, len(grid), ncols)
     _tbl_borders(tbl)
     head_n = len(head_trs)
     for ri, cells in enumerate(grid):
@@ -2727,6 +2756,9 @@ def _emit_block(container, node: _HNode, ctx: _DocxCtx) -> None:
             _p_bdr(par, "bottom", 12, "999999")
         return
     if tag == "p":
+        # :::sign/:::end 등 doc-md 펜스 마커 단독 단락은 구조 마커 — 출력하지 않음
+        if re.fullmatch(r":::[\w-]*", _flatten_text(node).strip()):
+            return
         par = container.add_paragraph()
         _emit_inline(par, node, ctx)
         return
