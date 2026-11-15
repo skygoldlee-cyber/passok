@@ -1,6 +1,14 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 fix(check): webp 게이트 .vercelignore 글롭 매칭 결함 2건
+
+`tools/check/check_webp_only.js`의 무시 패턴 해석 버그 수정 — 실제로는 매칭되지 않던 패턴이 규약 위반으로 오인됐다.
+
+- **CRLF 미트림** — 패턴 필터만 `trim()`하고 정규식 변환은 원본 라인을 사용해, CRLF 줄의 ``이 패턴 끝에 붙어 영구 미스매치. `.map(l => l.trim())`으로 해소
+- **`**` 이중 변환** — `**`→`.*` 후 `*`→`[^/]*`가 `.*` 내부 `*`까지 치환해 `**` 재귀 패턴이 전부 깨짐. ` ` 플레이스홀더 경유로 교정
+- `.vercelignore` — `ref-pipeline/tests/.pytest-tmp/**` 재귀 패턴으로 보정 (pytest 산출 이미지 차단)
+
 ## 2026-11-15 fix(ref-pipeline): 표 셀 정렬 — DOCX·HTML·PDF 3경로 중앙 정합
 
 셀 텍스트가 상단에 배치되는 문제를 출력 경로별로 해소.

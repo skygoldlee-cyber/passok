@@ -13,10 +13,10 @@ const ALLOW = [/^icons\//, /^tests\//, /^vendor\//, /^docs\//, /^landing-qr/];
 const SKIP = /^(node_modules|\.git|tmp|coverage|coverage-merged|coverage-unit|test-results)/;
 // .vercelignore에 명시된 원본 마스터 패턴 — 배포 제외 대상이면 허용
 const IGNORE_PATTERNS = fs.readFileSync(path.join(ROOT, '.vercelignore'), 'utf-8')
-    .split('\n').filter(l => l.trim() && !l.startsWith('#'));
+    .split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#'));
 function ignored(rel) {
     return IGNORE_PATTERNS.some(p => {
-        const pat = p.replace(/\*\*/g, '.*').replace(/\*/g, '[^/]*');
+        const pat = p.replace(/\*\*/g, ' ').replace(/\*/g, '[^/]*').replace(/ /g, '.*');
         try { return new RegExp('^' + pat + '$').test(rel); } catch { return false; }
     });
 }
