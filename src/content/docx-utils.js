@@ -230,9 +230,12 @@ const _P = (line, i, boldLines) => line
     ? `<w:p><w:pPr>${_NOSPACE}<w:snapToGrid w:val="0"/><w:spacing w:after="40" w:line="336" w:lineRule="auto"/><w:jc w:val="left"/></w:pPr><w:r><w:rPr>${_RF}${i < boldLines ? '<w:b/>' : ''}<w:sz w:val="22"/></w:rPr>${_runs(_wrap(line, _TW - 300))}</w:r></w:p>`
     : `<w:p><w:pPr>${_NOSPACE}<w:spacing w:line="150" w:lineRule="exact"/></w:pPr></w:p>`;
 // 메타줄 — 제목 바로 아래 기관명·출력일. 중앙·회색·소자로 공문서 머리 격식
-/** @param {string} t */
+// 단락 테두리(pBdr) 가로선 — Word는 텍스트 영역보다 양끝 ~1.5pt 넓게 그려 표 외곽선과 어긋남.
+// 좌우 들여쓰기 1pt씩 주면 선 끝이 표 외곽선(≈70.3/525.0pt)과 일치한다
+const _PBDR_IND = '<w:ind w:left="20" w:right="20"/>';
 // 메타줄(기관명·출력일) — 중앙 소자 + 하단 가는선 (공문서 제목-본문 분리 관행)
-const _meta = t => `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="4" w:space="10" w:color="999999"/></w:pBdr>${_NOSPACE}<w:spacing w:after="140"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
+/** @param {string} t */
+const _meta = t => `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="4" w:space="10" w:color="999999"/></w:pBdr>${_NOSPACE}<w:spacing w:after="140"/>${_PBDR_IND}<w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="18"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
 
 // 각주성 줄 — '※'/'근거'로 시작하는 법적 근거·주의 문구. 소자 회색으로 본문과 격을 낮춘다
 // (9pt라 한 줄 수용량이 넓어 근거 열거가 본문폭을 넘어 2줄로 깨지는 것도 막는다)
@@ -579,8 +582,8 @@ const _tblRow = (r, i, cx) => `<w:tr><w:trPr><w:cantSplit/><w:trHeight w:val="44
  */
 const _h = (t, lv) => lv === 1
     ? `<w:p><w:pPr><w:pStyle w:val="Heading1"/>${_NOSPACE}<w:spacing w:before="80" w:after="80"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:b/><w:u w:val="double"/><w:sz w:val="40"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`
-    : `<w:p><w:pPr><w:pStyle w:val="Heading${lv}"/><w:keepNext/>${lv === 2 ? '<w:pBdr><w:bottom w:val="single" w:sz="4" w:color="999999"/></w:pBdr>' : ''}${_NOSPACE}<w:spacing w:before="160" w:after="80"/></w:pPr><w:r><w:rPr>${_RF}<w:b/><w:sz w:val="${lv === 2 ? 28 : 24}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
-const _HR = `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="4" w:color="999999"/></w:pBdr>${_NOSPACE}</w:pPr></w:p>`;
+    : `<w:p><w:pPr><w:pStyle w:val="Heading${lv}"/><w:keepNext/>${lv === 2 ? '<w:pBdr><w:bottom w:val="single" w:sz="4" w:color="999999"/></w:pBdr>' : ''}${_NOSPACE}<w:spacing w:before="160" w:after="80"/>${lv === 2 ? _PBDR_IND : ''}</w:pPr><w:r><w:rPr>${_RF}<w:b/><w:sz w:val="${lv === 2 ? 28 : 24}"/></w:rPr><w:t xml:space="preserve">${esc(t)}</w:t></w:r></w:p>`;
+const _HR = `<w:p><w:pPr><w:pBdr><w:bottom w:val="single" w:sz="4" w:color="999999"/></w:pBdr>${_NOSPACE}${_PBDR_IND}</w:pPr></w:p>`;
 const _PAGEBREAK = '<w:p><w:r><w:br w:type="page"/></w:r></w:p>';
 
 // 결재란 — 공문서 상단 우측 승인 표 ('결 재' 세로병합 + 역할별 '(인)' 중앙 서명칸).
