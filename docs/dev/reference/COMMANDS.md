@@ -22,7 +22,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `content` | 33 | 콘텐츠 통합 검증 — 교재 교체 등 대규모 콘텐츠 변경 후 (--quick, --content-only, --build 옵션) |
 | `docs` | 21 | 문서 정합 묶음 — 경로 참조·문서 ID·트리·명령 정합 등 |
 | `ci` | 32 | CI 게이트 로컬 재현 — ci.yml과 토큰 1:1 대응 |
-| `all` | 66 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
+| `all` | 67 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
 | `refs` | 6 | 참조자료 검증 묶음 — 레이아웃·귀속·신선도·인용 라인·병합 품질 |
 | `freshness` | 10 | 생성물 신선도 묶음 — 파생물 미재생성 감지 |
 | `audit` | 13 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |

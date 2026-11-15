@@ -148,6 +148,7 @@ src/                    # ES Modules
   content/doc-stamp.js         # 생성 문서 추적 번호 — `유형-YYYYMMDD-내용해시6` (cosmetic FO-70 체계, CO-22)
   content/doc-issues.js        # 문서 발행 대장 팩토리 — 시험별 키/기관명 결합형 공용 스토어 (CO-22)
   content/doc-md.js            # 문서 MD 초안 빌더·미리보기 팩토리 — createDocMd({org, sign}) 공급자 주입형, 시험 팩은 내용(MD)만 제공 (CO-13, DA-24)
+  content/md-tokens.js         # 문서 MD 분류 규약 공용 정본 — 마커·인라인·이미지 토큰 + apprRoles·imgLineKey (doc-md·docx-utils 공유, CO-13, DA-24)
   content/qr.js                # QR 인코더 — 의존성 0, 매트릭스/PNG/data URL (문서번호 검증용, CO-22)
   study/scratchpad.js          # 스크래치패드 캔버스 (계산 연습용)
   study/trainer-calc.js       # 계산 트레이너 문제 생성기 (순수 로직, 전역 스코프 실행)
