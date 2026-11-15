@@ -1,6 +1,14 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 feat(check): active 승격 기준 상향 — 과목당 모의고사 3회분
+
+`check_exam_onboard` 정량 기준을 과목당 ≥20문 → **모의고사 3회 비반복 구성량**(integratedExam.questionsPerSubject×3, 미선언 60)으로 교체. NEW_EXAM_RUNBOOK §승격 기준 동기 갱신.
+
+- **두 층 기준** — active 승격: 과목당 3회분(신규 팩 오류 차단) / 정식 팩 sanity: 과목당 1회분(운영 최소량 경고)
+- hazmat 67/88/68문 — 3회분 기준 충족 (승격 후보 표시)
+- 기존 active 4팩(broker·indsafe·compapp2·carework)은 `MOCK3X_GRANDFATHERED` — 상향 전 승격 팩으로 미달이 오류 아닌 보강 권장 경고
+
 ## 2026-11-16 feat(hazmat): 문제은행 4지선다화 + 과목1 67문 확충
 
 실제 시험 형식(객관식 4지선다) 맞춤 + 모의고사 3회분(과목당 20문×3=60문) 확보.
