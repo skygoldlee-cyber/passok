@@ -1,14 +1,29 @@
 {
  "physchem": {
-  "cards": {},
+  "cards": {
+   "physchem_card_353523": "준금속",
+   "physchem_card_c36245": "산 (Acid)",
+   "physchem_card_c62c7c": "염기 (Base)"
+  },
   "quizzes": {}
  },
  "fire": {
-  "cards": {},
+  "cards": {
+   "fire_card_d01378": "A급 화재",
+   "fire_card_90c50e": "B급 화재",
+   "fire_card_f16726": "C급 화재",
+   "fire_card_543520": "할로겐화합물",
+   "fire_card_fb7218": "물분무등 소화설비"
+  },
   "quizzes": {}
  },
  "hazprop": {
-  "cards": {},
-  "quizzes": {}
+  "cards": {
+   "hazprop_card_266a2f": "예방규정 작성 대상",
+   "hazprop_card_890dc4": "사고 조사 및 교육"
+  },
+  "quizzes": {
+   "hazprop_quiz_fd3e78": "지정수량 10배 이상의 제조소·일반취급소, 100배 이상의 옥외저장소, 150배 이상의 옥내저장소, 200배 이상의 옥외탱크저장소, 암반탱크저장소, 이송취급소 등|예방규정 작성 대상"
+  }
  }
 }
