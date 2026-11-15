@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261115-2eb20ac",
+    "date": "2026-11-15",
+    "notes": [
+      "[문서·docx] 생성 스펙 동기화 — 헤더 워터마크·푸터 QR·:::approve/:::landscape·표 정합 + 셀 음영 아래 묻힘 한계 명문화",
+      "[문서·dev] DOCX_GENERATION — §11 md2doc DOCX 경로 + 함정 3건 추가",
+      "[문서·dev] CHANGES — 표 셀 정렬 3경로 정합 이력 (vAlign·compact spacing·kv)",
+      "[수정·ref-pipeline] DOCX 셀 텍스트 상단 치우침 — 셀 단락 콤팩트 spacing",
+      "[수정·ref-pipeline] 표 셀 정렬 3경로 정합 + 펜스 마커·kv 클래스 공통 처리",
+      "[기능·ref-pipeline] DOCX 표 셀 중앙 정렬 — 세로 중앙 + 헤더·레이블 열 가로 중앙",
+      "[문서·dev] CHANGES — md2doc DOCX 표 레이아웃 수정 이력 (인접 병합·마커·열 폭)",
+      "[기능·ref-pipeline] DOCX 표 열 폭 내용 비례 배분 + 2열 표 라벨 열 통일",
+      "[수정·ref-pipeline] DOCX 인접 표 병합 방지 + ::: 펜스 마커 제거",
+      "[기능·ref-pipeline] md2doc DOCX 출력 — PDF와 내용 정합 경로"
+    ]
+  },
+  {
     "version": "v20261115-cd5d0cd",
     "date": "2026-11-15",
     "notes": [
@@ -210,17 +226,6 @@
       "[기능·quality] 순환복잡도 래칫 도입 — check:cplx (기준선 340건)",
       "[기능·deploy] comingSoon 팩 스테이징 제외 — 배포 페이로드 −63%",
       "[정리·release] v20261112-a14877c 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261112-a14877c",
-    "date": "2026-11-12",
-    "notes": [
-      "[수정·build] law-links.js lawUrlFor 가드를 제너레이터 템플릿에 동기화",
-      "[문서·commands] check:uia 카탈로그 동기화",
-      "[기능·types] Phase 2 마무리 — strict 통합 + noImplicitReturns·exactOptionalPropertyTypes 활성화",
-      "[기능·types] 컴파일러 강화 Phase 2 — noUncheckedIndexedAccess 전량 소진·활성화",
-      "[정리·release] v20261112-0fd18e3 스탬프 확정 [no-docs]"
     ]
   }
 ]
