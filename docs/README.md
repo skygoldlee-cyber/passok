@@ -550,6 +550,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-PPL-01 | `ref-pipeline/README.md` |
 | DOC-PPL-02 | `ref-pipeline/audiobook/README.md` |
 | DOC-PPL-03 | `ref-pipeline/audiobook/AUDIOBOOK_SUMMARY.md` |
+| DOC-PPL-04 | `ref-pipeline/tests/fixtures/probe.md` |
 - **인코딩**: UTF-8 (BOM 없음)
 - **신규 문서 추가 시**: 이 인덱스의 해당 분류 표에 행 추가 + 읽기 순서 경로에 필요 시 반영
 - **시점 스냅샷 문서** (리뷰·조사 보고서): `docs/exams/<id>/report_archive/`에 두거나 문서 상단에 작성 시점 명시
