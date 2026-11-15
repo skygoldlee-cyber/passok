@@ -1,6 +1,16 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-15 fix(ref-pipeline): 표 셀 정렬 — DOCX·HTML·PDF 3경로 중앙 정합
+
+셀 텍스트가 상단에 배치되는 문제를 출력 경로별로 해소.
+
+- **DOCX** — 모든 표 셀 `vAlign=center` + 헤더·2열 표 라벨 열 `jc=center` (앱 docx-utils `_cell` 규약). `_emit_callout`의 1×1 표에도 동일 적용
+- **셀 단락 콤팩트 spacing** — `vAlign`이 있어도 텍스트가 위로 치우치던 실제 원인: Normal의 `line=396`(1.65배)·`after=80`(4pt)이 셀 단락까지 상속돼 행을 34pt로 부풀리고, Word가 후행 여백 포함 블록을 중앙화해 텍스트가 8pt 위로 편향. `_compact_cell`이 셀 단락을 space 0/0·line 1.0으로 → 실측 텍스트 중심 = 행 중심. `_tbl_cell_mar`로 셀 상하 75dxa (print.html padding 5px 해당)
+- **HTML·PDF** — `print.html`·`doc.html`의 `vertical-align: top` → `middle`, `th` 가운데. `_mark_kv_tables`가 2열 표에 `kv` 클래스 부여 → CSS 라벨 열 가운데로 DOCX 규약 재현
+- **`:::` 마커 공통 제거** — `_strip_fence_markers`가 `<p>` 안 마커 라인을 DOCX와 같은 규칙으로 제거 → `:::sign`/`:::end`가 PDF에 노출되던 누수 해소
+- 검증 — pytest 95 · Word COM→PDF 벡터 실측(텍스트 중심 = 행 중심) · 인수인계서·행정사 ref 실물 렌더 확인
+
 ## 2026-11-15 fix(ref-pipeline): DOCX 표 레이아웃 — 인접 표 병합 방지·펜스 마커 제거·열 폭 내용 비례
 
 `md2doc --docx` 출력의 표 관련 결함 3건 수정.
