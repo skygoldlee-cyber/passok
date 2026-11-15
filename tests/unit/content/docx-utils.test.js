@@ -99,6 +99,18 @@ test('docxFileMd — 열 너비 내용 기반 배분: 레이블 열이 내용 �
     assert.strictEqual(ws[0] + ws[1], 9072, '열 너비 합계가 본문 폭과 불일치');
 });
 
+test('docxFileMd — 연속 2열 표는 라벨 열 폭 통일 (열 경계 계단 방지)', async () => {
+    // 인수인계서 등 상하 인접 2열 표의 라벨 경계가 어긋나면 좌측이 지저분해 보임 — 문서 내 단일 폭
+    const md = '| 항목 | 내용 |\n|---|---|\n| 일시 | 2026-11-15 |\n\n'
+        + '| 구분 | 인계 내용 |\n|---|---|\n| 당일 수행 서비스 | 투약 확인 |';
+    const { entries } = await unzip(docxFileMd(md, 'doc'));
+    const doc = entries['word/document.xml'];
+    const ws = [...doc.matchAll(/<w:gridCol w:w="(\d+)"/g)].map(m => +m[1]);
+    assert.deepStrictEqual(ws.slice(0, 2), ws.slice(2, 4), `두 2열 표의 라벨 열 폭 불일치 — ${ws}`);
+    // 최장 라벨 '당일 수행 서비스'(CJK 7 + 공백 2) 한 줄 폭 = 7×220 + 2×80 + 셀 여백 320
+    assert.strictEqual(ws[0], 7 * 220 + 2 * 80 + 320, '라벨 열이 최장 라벨 한 줄 폭과 불일치');
+});
+
 test('docxFileMd — 다열 표(min 합계 초과)는 최소폭 비율 축소 배분', async () => {
     // 9열 — 균등 fallback이면 어느 열도 어절을 못 담는다. 긴 토큰 열이 더 넓어야 함
     const md = '| 방문일 | 시간 | 대상자 | 방문객 | 연락처 | 관계 | 목적 | 상태 | 결과 |\n|---|---|---|---|---|---|---|---|---|\n'

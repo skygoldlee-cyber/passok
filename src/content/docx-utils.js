@@ -503,12 +503,40 @@ const _cell = (c, head, w, shd, center, keep, merge) => {
 };
 // 표 음영 — 흑백 인쇄 가독성: 머리행만 연청색, 데이터행은 짝수만 아주 옅은 줄무늬, 레이블 열은 연회색
 const _SHD_HEAD = 'D9E6F7', _SHD_ZEBRA = 'F2F6FB', _SHD_LABEL = 'EFEFEF';
+/** @param {?string[][]} rows @param {number} w0 @returns {number} */
+const _kvRowsW = (rows, w0) => {
+    if (!rows || Math.max(0, ...rows.map(r => r.length)) !== 2) return w0;
+    return rows.reduce((m, r) => Math.max(m, _estW(String(r[0] || '').trim()) + _CPAD), w0);
+};
+
+/** 문서 내 2열 표(항목|내용 서식)의 라벨 열 통일 폭 — 표마다 내용 기반 폭이 달라지면 위아래 표의 열 경계가
+ *  계단처럼 어긋나므로, 문서에서 가장 긴 라벨이 한 줄에 들어가는 폭을 모든 2열 표에 공유한다
+ *  (공문 서식의 라벨 열은 문서 전체 단일 폭). _colWs의 잉여 배분폭이 아닌 내용 적합 폭 기준.
+ * @param {string} md @returns {number} */
+const _kvLabelW = md => {
+    // :::sign 블록 제거 — 서명란 줄은 |…| 표 행이 아니지만 방어적으로 제외
+    const txt = String(md || '').replace(/:::sign[\s\S]*?:::end/g, '');
+    let w0 = 0;
+    /** @type {string[][] | null} */ let rows = null;
+    const done = () => { w0 = _kvRowsW(rows, w0); rows = null; };
+    for (const line of txt.split('\n')) {
+        const t = line.trim();
+        if (t.startsWith('|') && t.endsWith('|')) {
+            if (!/^\|[\s:|-]+\|$/.test(t)) (rows = rows || []).push(t.slice(1, -1).split('|')); // 구분행 제외 — _mdStruct와 동일 규약
+        } else done();
+    }
+    done();
+    return w0 ? Math.min(Math.max(w0, 1600), Math.floor(_TW * 0.4)) : 0;
+};
+
 /**
  * @param {string[][]} rows
+ * @param {number} [w0] - 2열 표 라벨 열 통일 폭 (dxa, 문서 내 공유)
  * @returns {string}
  */
-const _tbl = rows => {
+const _tbl = (rows, w0 = 0) => {
     const ws = _colWs(rows);
+    if (w0 && ws.length === 2) { ws[0] = w0; ws[1] = _TW - w0; }
     const n = ws.length;
     const grid = ws.map(w => `<w:gridCol w:w="${w}"/>`).join('');
     const wAt = (/** @type {number} */ i) => ws[i];
@@ -742,8 +770,9 @@ const _mdBody = (md, imgMap = {}, doc = null) => {
     // 문서 선두 삽입은 제목이 결재란 좌측으로 치우쳐 중앙이 깨졌다 (렌더 리뷰).
     const roles = _apprRoles(md);
     const st = { tbl: /** @type {string[][] | null} */ (null), sign: /** @type {string[] | null} */ (null), sigLines: /** @type {string[] | null} */ (null), meta: false, apprXml: roles ? _approve(roles) : null };
+    const w0 = _kvLabelW(md);
     const cx = { out,
-        flush: () => { if (st.tbl) { out.push(_tbl(st.tbl)); st.tbl = null; } },
+        flush: () => { if (st.tbl) { out.push(_tbl(st.tbl, w0)); st.tbl = null; } },
         emitAppr: () => { if (st.apprXml) { out.push(st.apprXml); st.apprXml = null; } } };
     for (const line of String(md || '').split('\n')) _mdLine(line, st, cx);
     cx.flush();
