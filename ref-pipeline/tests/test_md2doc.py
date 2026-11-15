@@ -889,6 +889,13 @@ class TestDocxOutput:
         body = t.rows[1].cells
         assert all(p.alignment == WD_ALIGN_PARAGRAPH.CENTER for p in body[0].paragraphs)
         assert not any(p.alignment == WD_ALIGN_PARAGRAPH.CENTER for p in body[1].paragraphs)
+        # 셀 단락은 콤팩트 — Normal의 후행 여백이 행을 부풀려 vAlign이
+        # 여백 포함 블록을 중앙화하면 텍스트가 위로 치우친다
+        from docx.shared import Pt
+        for c in body:
+            for p in c.paragraphs:
+                assert p.paragraph_format.space_after == Pt(0)
+                assert p.paragraph_format.line_spacing == 1.0
 
     def test_fence_markers_stripped_in_body(self, tmp_path):
         # ::: 마커는 HTML 본문에서도 제거 — DOCX와 동일 규약

@@ -2669,6 +2669,7 @@ def _emit_callout(container, node: _HNode, ctx: _DocxCtx) -> None:
     )
     _emit_blocks(cell, node, ctx)
     _drop_empty_first(cell)
+    _compact_cell(cell)
 
 
 def _est_cell_w(node: _HNode) -> int:
@@ -2742,6 +2743,27 @@ def _apply_col_widths(tbl, widths_emu: list[int]) -> None:
             gc.set(qn("w:w"), str(int(w / 635)))  # EMU→dxa
 
 
+def _tbl_cell_mar(tbl) -> None:
+    """셀 상하 여백 — print.html의 td padding 5px에 해당."""
+    mar = OxmlElement("w:tblCellMar")
+    for name, v in (("top", 75), ("bottom", 75)):
+        el = OxmlElement(f"w:{name}")
+        el.set(qn("w:w"), str(v))
+        el.set(qn("w:type"), "dxa")
+        mar.append(el)
+    tbl._tbl.tblPr.insert_element_before(mar, "w:tblLook")
+
+
+def _compact_cell(cell) -> None:
+    """셀 단락을 콤팩트하게 — Normal의 1.65배·후행 여백이 행을 부풀리고,
+    vAlign 중앙화가 여백 포함 블록 기준이라 텍스트가 위로 치우치는 것을 방지."""
+    for p in cell.paragraphs:
+        pf = p.paragraph_format
+        pf.space_before = Pt(0)
+        pf.space_after = Pt(0)
+        pf.line_spacing = 1.0
+
+
 def _emit_table(container, node: _HNode, ctx: _DocxCtx) -> None:
     head_trs: list[_HNode] = []
     trs: list[_HNode] = []
@@ -2768,6 +2790,7 @@ def _emit_table(container, node: _HNode, ctx: _DocxCtx) -> None:
         return
     tbl = _add_table(container, len(grid), ncols)
     _tbl_borders(tbl)
+    _tbl_cell_mar(tbl)
     if ncols == 2 and ctx.kv_label_emu:
         widths = [ctx.kv_label_emu, ctx.content_emu - ctx.kv_label_emu]
     else:
@@ -2792,6 +2815,7 @@ def _emit_table(container, node: _HNode, ctx: _DocxCtx) -> None:
                 _tc_shd(tcell, _DOCX_HEAD_FILL)
             tcell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
             _emit_blocks_cell(tcell, cnode, ctx, head=head)
+            _compact_cell(tcell)
             # 헤더·2열 표 라벨 열은 가로 중앙 (앱 docx-utils _cell 규약 — 공문 서식)
             if head or (ncols == 2 and ci == 0):
                 for p in tcell.paragraphs:
