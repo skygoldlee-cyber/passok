@@ -357,18 +357,20 @@ test('docxFileMd — docProps/core.xml: 번호·기관·제목·판본 + 패키�
     assert.ok(docXml.includes('시행일자'), '상단 서식란 시행일자 미부여');
 });
 
-test('docxFileMd — doc.qr: 서명란 좌측 QR 부동 표 + media 파트 + 관계', async () => {
+test('docxFileMd — doc.qr: 푸터 QR 표 + 자체 media 파트 + 관계 (부동 표 안 이미지는 인쇄 경로 탈락)', async () => {
     const png = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10, 1, 2, 3]);
     const doc = { no: 'LOG-20261114-a3f2c1', qr: { data: png } };
     const { entries } = await unzip(docxFileMd('# t\n\n본문', 'doc', '', { doc }));
-    assert.ok(entries['word/media/img_0.png'], 'QR 미디어 파트 누락');
-    assert.ok(entries['word/_rels/document.xml.rels'].includes('media/img_0.png'), 'QR 이미지 관계 누락');
+    assert.ok(entries['word/media/img_qr.png'], 'QR 미디어 파트 누락');
+    assert.ok(entries['word/_rels/footer1.xml.rels'].includes('media/img_qr.png'), '푸터 QR 이미지 관계 누락');
+    const ftr = entries['word/footer1.xml'];
+    assert.ok(ftr.includes('진위 확인'), 'QR 용도 캡션 누락');
+    assert.ok(ftr.includes('docno.png'), 'QR 이미지 런 누락');
+    assert.ok(ftr.includes('문서번호 LOG-20261114-a3f2c1'), '푸터 문서번호 누락');
+    assert.ok(!ftr.includes('<w:tblpPr'), '푸터 QR는 부동 표가 아니어야 함 — 인쇄→PDF 탈락 방지');
     const docXml = entries['word/document.xml'];
-    // QR 캡션은 번호 재표기 대신 용도를 표기 — 번호 자체는 상단 서식란·푸터에 이미 있다 (렌더 리뷰)
     assert.ok(docXml.includes('문서번호') && docXml.includes('LOG-20261114-a3f2c1'), '상단 서식란 문서번호 누락');
-    assert.ok(docXml.includes('진위 확인'), 'QR 용도 캡션 누락');
-    assert.ok(docXml.includes('docno.png'), 'QR 이미지 런 누락');
-    assert.ok(docXml.indexOf('docno.png') > docXml.indexOf('끝.'), 'QR 부동 표는 종결 표기 뒤 — 서명란과 앵커 쪽 통일');
+    assert.ok(!docXml.includes('docno.png'), '본문 QR 잔재 — 부동 표 안 이미지는 인쇄→PDF에서 탈락');
 });
 
 test('docxFileMd — doc 미지정 시 파트 구성 불변 (기존 6엔트리 + 이미지)', async () => {

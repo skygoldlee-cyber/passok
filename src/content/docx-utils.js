@@ -3,7 +3,7 @@
 // [Content_Types]·_rels·document·document.rels·styles·settings·(+header)·footer 엔트리면
 // Word·HWP·Google Docs 정상 개방 — settings.xml로 인쇄 레이아웃(A4 페이지 경계 표시)을 강제한다.
 // opts.doc(문서 추적 메타 {no,org,title,rev,qr}) 지정 시 docProps/core.xml·푸터 문서번호·
-// 서명란 좌측 QR 부동 표를 추가한다 — docProps 파트는 OOXML 표준이라 모든 뷰어가 무시하거나 읽는다.
+// 푸터 QR 표를 추가한다 — docProps 파트는 OOXML 표준이라 모든 뷰어가 무시하거나 읽는다.
 import { esc } from '../core/sanitize.js';
 
 const _enc = new TextEncoder();
@@ -126,9 +126,24 @@ const _fI = (/** @type {string} */ t) => `<w:r>${_FRP}<w:instrText xml:space="pr
 const _fS = (/** @type {string} */ t) => `<w:r>${_FRP}<w:fldChar w:fldCharType="separate"/></w:r><w:r>${_FRP}<w:t xml:space="preserve">${t}</w:t></w:r>`;
 const _fF = (/** @type {string} */ instr, /** @type {string} */ dft) => _fB + _fI(instr) + _fS(dft) + _fE;
 const _FRP_NO = _FRP.replace('<w:sz w:val="18"/>', '<w:sz w:val="14"/>'); // 문서번호행 — 쪽 번호보다 한 단계 소자
-/** @param {string} [docNo] - 문서 추적 번호 — 지정 시 쪽 번호 아래 소자로 모든 쪽에 표기 */
-const _footer = docNo => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:p><w:pPr>${_NOSPACE}<w:jc w:val="center"/></w:pPr><w:r>${_FRP}<w:t xml:space="preserve">— </w:t></w:r>${_fF('PAGE', '1')}<w:r>${_FRP}<w:t xml:space="preserve"> / </w:t></w:r>${_fF('NUMPAGES', '1')}<w:r>${_FRP}<w:t xml:space="preserve"> —</w:t></w:r></w:p>${docNo ? `<w:p><w:pPr>${_NOSPACE}<w:spacing w:before="20"/><w:jc w:val="center"/></w:pPr><w:r>${_FRP_NO}<w:t xml:space="preserve">문서번호 ${esc(docNo)}</w:t></w:r></w:p>` : ''}</w:ftr>`;
+// 푸터 QR — 본문 종결 부동 표 안 wp:inline 이미지는 인쇄→PDF·일부 변환 경로에서 탈락해
+// (Word 화면엔 보이고 PDF엔 없는 증상) 푸터 일반 표로 옮겼다. 푸터는 렌더러 무관 동일 출력·
+// 모든 쪽 반복이라 쪽마다 진위 확인이 가능하다.
+const _FTR_QR_EMU = 504000; // 푸터 QR 0.55" — 본문(0.75") 대비 소형으로 푸터 높이 절약
+const _FTR_RELS = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/image" Target="media/img_qr.png"/></Relationships>`;
+/** @param {{rid:string, id:number}} img @param {string} no */
+const _ftrQrTbl = (img, no) => `<w:tbl><w:tblPr><w:tblW w:w="${_TW}" w:type="dxa"/><w:tblBorders>${_QR_NIL_B}</w:tblBorders><w:tblLayout w:type="fixed"/>${_TCMAR0}</w:tblPr><w:tblGrid><w:gridCol w:w="1200"/><w:gridCol w:w="${_TW - 1200}"/></w:tblGrid><w:tr>`
+    + `<w:tc><w:tcPr><w:tcW w:w="1200" w:type="dxa"/><w:vAlign w:val="top"/></w:tcPr><w:p><w:pPr>${_NOSPACE}</w:pPr>${_imgRun({ ...img, cx: _FTR_QR_EMU, cy: _FTR_QR_EMU, name: '문서번호 QR', file: 'docno.png', desc: `문서번호 QR ${no || ''}` })}</w:p></w:tc>`
+    + `<w:tc><w:tcPr><w:tcW w:w="${_TW - 1200}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr>`
+    + `<w:p><w:pPr>${_NOSPACE}</w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="14"/></w:rPr><w:t xml:space="preserve">진위 확인 — 발행 대장 대조</w:t></w:r></w:p>`
+    + (no ? `<w:p><w:pPr>${_NOSPACE}</w:pPr><w:r><w:rPr>${_FRP_NO}</w:rPr><w:t xml:space="preserve">문서번호 ${esc(no)}</w:t></w:r></w:p>` : '')
+    + `</w:tc></w:tr></w:tbl>`;
+// 푸터 QR 캡션·문서번호는 우측이 아닌 QR 옆 좌측 정렬 — 서명 부동 표(우측 하단)와 겹치지 않도록
+/** @param {string} [docNo] - 문서 추적 번호 — 지정 시 쪽 번호 아래 소자로 모든 쪽에 표기
+ *  @param {?{rid:string, id:number}} [qr] - 문서번호 QR — 지정 시 QR+캡션·번호 표 + 중앙 쪽 번호 */
+const _footer = (docNo, qr = null) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<w:ftr xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">${qr ? `${_ftrQrTbl(qr, docNo || '')}<w:p><w:pPr>${_NOSPACE}<w:spacing w:before="20"/><w:jc w:val="center"/></w:pPr><w:r>${_FRP}<w:t xml:space="preserve">— </w:t></w:r>${_fF('PAGE', '1')}<w:r>${_FRP}<w:t xml:space="preserve"> / </w:t></w:r>${_fF('NUMPAGES', '1')}<w:r>${_FRP}<w:t xml:space="preserve"> —</w:t></w:r></w:p>` : `<w:p><w:pPr>${_NOSPACE}<w:jc w:val="center"/></w:pPr><w:r>${_FRP}<w:t xml:space="preserve">— </w:t></w:r>${_fF('PAGE', '1')}<w:r>${_FRP}<w:t xml:space="preserve"> / </w:t></w:r>${_fF('NUMPAGES', '1')}<w:r>${_FRP}<w:t xml:space="preserve"> —</w:t></w:r></w:p>${docNo ? `<w:p><w:pPr>${_NOSPACE}<w:spacing w:before="20"/><w:jc w:val="center"/></w:pPr><w:r>${_FRP_NO}<w:t xml:space="preserve">문서번호 ${esc(docNo)}</w:t></w:r></w:p>` : ''}`}</w:ftr>`;
 
 // 코어 속성 — docProps/core.xml. 파일이 복사·이름변경돼도 문서번호·기관·판본이 파일 안에 남는다
 // (파일명만 바꾸면 추적 불가 — 추적성의 파일 내장 층). revision은 발행 차수(재발행 시 증가)
@@ -168,28 +183,39 @@ const _wmPicPara = (rid, id = 0) => `${_wmOpen(id, 0)}http://schemas.openxmlform
 /** @param {string} text - 워터마크 문구 @param {number} [id] - wp:docPr id */
 const _wmPara = (text, id = 0) => `${_wmOpen(id, 1)}http://schemas.microsoft.com/office/word/2010/wordprocessingShape"><wps:wsp xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape"><wps:cNvSpPr txBox="1"/><wps:spPr><a:xfrm rot="-2700000"><a:off x="0" y="0"/><a:ext cx="12192000" cy="1270000"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></wps:spPr><wps:txbx><w:txbxContent><w:p><w:pPr>${_NOSPACE}<w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="auto"/><w:jc w:val="center"/></w:pPr><w:r><w:rPr><w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/><w:color w:val="C0C0C0"/><w:b/><w:i/><w:sz w:val="${_wmFont(text) * 2}"/><w14:textFill xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml"><w14:solidFill><w14:srgbClr w14:val="C0C0C0"><w14:alpha w14:val="100000"/></w14:srgbClr></w14:solidFill></w14:textFill></w:rPr><w:t xml:space="preserve">${esc(text)}</w:t></w:r></w:p></w:txbxContent></wps:txbx><wps:bodyPr wrap="none" lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr" horzOverflow="overflow" vertOverflow="overflow"/></wps:wsp>${_wmClose}`;
 
+/** @param {?{xml:string, img?:?{data:Uint8Array}}} hdr @returns {Array.<[string, Uint8Array]>} */
+const _hdrParts = hdr => (hdr ? [
+    /** @type {[string, Uint8Array]} */(['word/header1.xml', _enc.encode(hdr.xml)]),
+    ...(hdr.img ? [ /** @type {[string, Uint8Array]} */(['word/_rels/header1.xml.rels', _enc.encode(_HDR_RELS)]), /** @type {[string, Uint8Array]} */(['word/media/img_wm.png', hdr.img.data]) ] : []),
+] : []);
+/** @param {?{data:Uint8Array}} qr - 푸터 QR — 자체 관계·미디어 파트 (본문 이미지 풀과 분리) @returns {Array.<[string, Uint8Array]>} */
+const _qrParts = qr => (qr ? [
+    /** @type {[string, Uint8Array]} */(['word/_rels/footer1.xml.rels', _enc.encode(_FTR_RELS)]),
+    /** @type {[string, Uint8Array]} */(['word/media/img_qr.png', qr.data]),
+] : []);
 /**
  * @param {string} docXml - word/document.xml 내용
  * @param {Array.<{data: Uint8Array}>} [imgs] - 본문 이미지 (word/media/img_N.png 순번)
- * @param {?{no?:string, org?:string, title?:string, rev?:number, date?:string}} [doc] - 문서 추적 메타 — 지정 시 docProps/core.xml·푸터 문서번호 추가
+ * @param {?{no?:string, org?:string, title?:string, rev?:number, date?:string, qr?:{data:Uint8Array}}} [doc] - 문서 추적 메타 — 지정 시 docProps/core.xml·푸터 문서번호·푸터 QR 추가
  * @param {?{xml:string, img?:?{data:Uint8Array}}} [hdr] - header1.xml 내용 (+워터마크 PNG 시 자체 rels·미디어 동봉)
  * @returns {Array.<[string, Uint8Array]>}
  */
-const _parts = (docXml, imgs = [], doc = null, hdr = null) => [
-    ['[Content_Types].xml', _enc.encode(_types(imgs.length > 0 || !!(hdr && hdr.img), !!doc, !!hdr))],
-    ['_rels/.rels', _enc.encode(_rels(!!doc))],
-    ['word/_rels/document.xml.rels', _enc.encode(_docrels(imgs.length, !!hdr))],
-    ['word/document.xml', _enc.encode(docXml)],
-    ['word/styles.xml', _enc.encode(_STYLES)],
-    ['word/settings.xml', _enc.encode(SETTINGS)],
-    ...(hdr ? [
-        /** @type {[string, Uint8Array]} */(['word/header1.xml', _enc.encode(hdr.xml)]),
-        ...(hdr.img ? [ /** @type {[string, Uint8Array]} */(['word/_rels/header1.xml.rels', _enc.encode(_HDR_RELS)]), /** @type {[string, Uint8Array]} */(['word/media/img_wm.png', hdr.img.data]) ] : []),
-    ] : []),
-    ['word/footer1.xml', _enc.encode(_footer(doc ? doc.no : undefined))],
-    ...(doc ? [/** @type {[string, Uint8Array]} */(['docProps/core.xml', _enc.encode(_coreXml(doc))])] : []),
-    ...imgs.map((img, i) => /** @type {[string, Uint8Array]} */([`word/media/img_${i}.png`, img.data])),
-];
+const _parts = (docXml, imgs = [], doc = null, hdr = null) => {
+    const qr = _qrMeta(doc);
+    return [
+        ['[Content_Types].xml', _enc.encode(_types(imgs.length > 0 || !!qr || !!(hdr && hdr.img), !!doc, !!hdr))],
+        ['_rels/.rels', _enc.encode(_rels(!!doc))],
+        ['word/_rels/document.xml.rels', _enc.encode(_docrels(imgs.length, !!hdr))],
+        ['word/document.xml', _enc.encode(docXml)],
+        ['word/styles.xml', _enc.encode(_STYLES)],
+        ['word/settings.xml', _enc.encode(SETTINGS)],
+        ..._hdrParts(hdr),
+        ['word/footer1.xml', _enc.encode(_footer(doc ? doc.no : undefined, qr ? { rid: 'rId1', id: _dpNext() } : null))],
+        ..._qrParts(qr),
+        ...(doc ? [/** @type {[string, Uint8Array]} */(['docProps/core.xml', _enc.encode(_coreXml(doc))])] : []),
+        ...imgs.map((img, i) => /** @type {[string, Uint8Array]} */([`word/media/img_${i}.png`, img.data])),
+    ];
+};
 
 // 서체 — 라틴·한글 모두 맑은 고딕으로 통일 (미지정 시 라틴은 Calibri로 바뀌어 두서 없음)
 const _RF = '<w:rFonts w:ascii="Malgun Gothic" w:hAnsi="Malgun Gothic" w:eastAsia="Malgun Gothic"/>';
@@ -588,44 +614,27 @@ const _imgRun = img => `<w:r><w:drawing><wp:inline xmlns:wp="http://schemas.open
  *  같은 상한을 공유해야 한다 (렌더 픽셀은 이 상한의 2x로 인쇄 선명도를 확보하고 표시 pt만 여기로 전달) */
 export const DOCX_SIGN_MAX = { author: { w: 74, h: 38 }, approve: { w: 52, h: 40 } };
 
-// 문서번호 QR — 서명란 좌측 부동 표(테두리 없음). 서명 표와 동일하게 본문 여백 하단
-// (tblpYSpec=bottom) 기준이라 마지막 쪽 하단에서 서명란 바로 왼쪽에 놓인다.
-// 서명 없는 문서는 하단 좌측(tblpX=0)에 배치. 캡션 소자 + 약 2cm QR.
-// 스캔하면 'PASSOK-DOC:<문서번호>' — 발행 대장(CO-22)에서 검색 대조하는 진위 확인 용도.
-// 캡션에 번호는 반복하지 않는다 — 상단 서식란·푸터에 이미 표기돼 3중 표기였음 (렌더 리뷰).
-const _QR_TW = 2600;
-const _QR_EMU = 720000;
 const _QR_NIL_B = ['top', 'left', 'bottom', 'right', 'insideH', 'insideV'].map(b => `<w:${b} w:val="nil"/>`).join('');
-/** @param {{rid:string, id:number}} img @param {string} no */
-const _qrParas = (img, no) => (no ? `<w:p><w:pPr>${_NOSPACE}<w:jc w:val="center"/></w:pPr><w:r><w:rPr>${_RF}<w:color w:val="595959"/><w:sz w:val="14"/></w:rPr><w:t xml:space="preserve">진위 확인 — 발행 대장 대조</w:t></w:r></w:p>` : '')
-    + `<w:p><w:pPr>${_NOSPACE}<w:spacing w:before="40"/><w:jc w:val="center"/></w:pPr>${_imgRun({ ...img, cx: _QR_EMU, cy: _QR_EMU, name: '문서번호 QR', file: 'docno.png', desc: `문서번호 QR ${no || ''}` })}</w:p>`;
-// QR 단독 — 서명 없는 문서는 하단 좌측 부동 표
-/** @param {{rid:string, id:number}} img @param {string} no */
-const _qrTbl = (img, no) => `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="0" w:tblpYSpec="bottom" w:leftFromText="60" w:rightFromText="60" w:topFromText="60" w:bottomFromText="60"/><w:tblW w:w="${_QR_TW}" w:type="dxa"/><w:tblBorders>${_QR_NIL_B}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid><w:gridCol w:w="${_QR_TW}"/></w:tblGrid>`
-    + `<w:tr><w:tc><w:tcPr><w:tcW w:w="${_QR_TW}" w:type="dxa"/><w:vAlign w:val="center"/></w:tcPr>${_qrParas(img, no)}</w:tc></w:tr></w:tbl>`;
 
-// 종결 부동 표 — 서명란(+문서번호 QR)을 한 행에 묶어 마지막 쪽 하단에 통째로 배치.
+// 종결 부동 표 — 서명란을 마지막 쪽 하단에 통째로 배치.
 // cantSplit 단일 행이라 쪽 경계에서 행이 쪼개지지 않는다 — 별개 부동 표 2개를 :::end 지점에
 // 두면 앵커 아래 공간보다 크거나 서로 다른 쪽에 앵커될 때 표가 분할·이탈됐다 (평가체크리스트 4쪽 사례).
 const _TCMAR0 = '<w:tcMar><w:top w:w="0" w:type="dxa"/><w:left w:w="0" w:type="dxa"/><w:bottom w:w="0" w:type="dxa"/><w:right w:w="0" w:type="dxa"/></w:tcMar>'; // 서명 셀 — 내부 표가 테두리·여백을 갖고 있어 셀 여백 0
 const _MIN_P = '<w:p><w:pPr><w:spacing w:before="0" w:after="0" w:line="20" w:lineRule="exact"/></w:pPr></w:p>'; // 셀 내 중첩 표 뒤 필수 단락 — 최소 높이
-/** @param {string[]} sigLines @param {Object} imgMap @param {?{img:{rid:string,id:number}, no:string}} qr */
 // 서명 셀 여유폭 — 내부 표는 셀보다 _SIG_SLK 좁게 둔다. 내부 표 폭=셀 폭이면 이중 외곽선의
 // 바깥 선분(~38tw)이 셀 경계를 넘어가고, 중첩 표를 셀 경계에서 잘라내는 렌더러에서 서명란
 // 우측선이 깎여 보인다. 여유폭이 외곽선 여유분+렌더러별 셀 여백 차이를 흡수한다.
 const _SIG_SLK = 300;
 const _SIG_IND = 60; // 내부 표 좌측 들여쓰기 — 좌측 외곽선(~38tw)도 셀 경계 안에 그려지도록
-/** @param {?string[]} sigLines @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} imgMap @param {?{img:{rid:string,id:number}, no:string}} qr @param {?{date?:string}} [doc] - 문서 표기일 단일 소스 */
-const _closeTbl = (sigLines, imgMap, qr, doc = null) => {
-    const cells = [];
-    if (qr && qr.img) cells.push({ w: _QR_TW, mar: '', v: 'bottom', xml: _qrParas(qr.img, qr.no) });
-    if (sigLines) cells.push({ w: _SIG_W + _SIG_SLK, mar: _TCMAR0, v: 'top', xml: _sigInner(sigLines, imgMap, (doc || {}).date || '') + _MIN_P });
+/** @param {string[]} sigLines @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} imgMap @param {?{date?:string}} [doc] - 문서 표기일 단일 소스 */
+const _closeTbl = (sigLines, imgMap, doc = null) => {
+    const cells = [{ w: _SIG_W + _SIG_SLK, mar: _TCMAR0, v: 'top', xml: _sigInner(sigLines, imgMap, (doc || {}).date || '') + _MIN_P }];
     const w = cells.reduce((s, c) => s + c.w, 0);
     // tblpX는 그리드 총폭이 아니라 내용 우측 끝(들여쓰기+내부 표 폭) 기준 — 서명 박스 우측선이 본문 표와 정렬.
     // +88 보정: 중첩 표 구조에서 실 렌더 위치가 tblpX 산술보다 ~65tw 좌측에 착지하고 본문 표 외곽선은
     // 텍스트 경계보다 ~24tw 우측에 그려져, 보정 없으면 서명란 우측선이 본문 표보다 ~128tw 안쪽에 뜬다
     // (인수인계서 PDF 실측 519.2pt vs 본문 표 525.6pt — 결재란 +102와 다른 중첩 구조)
-    const vis = (qr && qr.img ? _QR_TW : 0) + (sigLines ? _SIG_IND + _SIG_W : 0);
+    const vis = _SIG_IND + _SIG_W;
     return `<w:tbl><w:tblPr><w:tblpPr w:horzAnchor="margin" w:vertAnchor="margin" w:tblpX="${_TW - vis + 88}" w:tblpYSpec="bottom" w:leftFromText="180" w:rightFromText="180" w:topFromText="180" w:bottomFromText="180"/><w:tblW w:w="${w}" w:type="dxa"/><w:tblBorders>${_QR_NIL_B}</w:tblBorders><w:tblLayout w:type="fixed"/>${_CELL_MAR}</w:tblPr><w:tblGrid>${cells.map(c => `<w:gridCol w:w="${c.w}"/>`).join('')}</w:tblGrid>`
         + `<w:tr><w:trPr><w:cantSplit/></w:trPr>` + cells.map(c => `<w:tc><w:tcPr><w:tcW w:w="${c.w}" w:type="dxa"/>${c.mar}<w:vAlign w:val="${c.v}"/></w:tcPr>${c.xml}</w:tc>`).join('') + '</w:tr></w:tbl>';
 };
@@ -658,7 +667,6 @@ const _sigInner = (lines, imgMap = {}, date = '') => `<w:tbl><w:tblPr><w:tblW w:
 /**
  * @param {string} md
  * @param {Object<string,{rid:string,cx:number,cy:number,id:number}>} [imgMap]
- * @param {?{img:{rid:string,id:number}, no:string}} [qr] - 문서번호 QR — 서명란과 같은 종결 부동 표에 삽입
  * @param {?{no?:string, recipient?:string, cc?:string, date?:string}} [doc] - 지정 시 제목 위에 공문서 상단 서식란(문서번호·시행일자·수신·참조) 부여
  * @returns {string}
  */
@@ -724,9 +732,8 @@ const _mdLine = (line, st, cx) => {
 };
 
 /** @param {string} md @param {Object<string,{data:Uint8Array,rid:string,cx:number,cy:number,id:number}>} [imgMap]
- *  @param {?{img:{data:Uint8Array,rid:string,id:number}, no:string}} [qr]
  *  @param {?{no?:string,org?:string,title?:string,rev?:number,recipient?:string,cc?:string,date?:string}} [doc] */
-const _mdBody = (md, imgMap = {}, qr = null, doc = null) => {
+const _mdBody = (md, imgMap = {}, doc = null) => {
     const out = [];
     if (doc && (doc.no || doc.recipient || doc.cc)) out.push(_formBlk(doc)); // 상단 서식란 — 제목 위 좌측 (결재란은 부동 표라 우측 정합 유지)
     // 결재란 — :::approve 마커로 역할 지정 (기본 담당·팀장·시설장, 'none'이면 미부여).
@@ -741,8 +748,8 @@ const _mdBody = (md, imgMap = {}, qr = null, doc = null) => {
     cx.flush();
     cx.emitAppr(); // 메타 없는 문서 폴백 — 본문 끝 앵커라도 부동 표는 상단 여백에 렌더
     // 종결 부동 표는 끝. 뒤에 둔다 — 앵커가 본문 흐름 말미라 항상 마지막 쪽 하단에 통째로 놓인다.
-    // 서명+QR은 _closeTbl 한 표(서명 없으면 QR만 _qrTbl 하단 좌측)
-    const close = st.sigLines ? _closeTbl(st.sigLines, imgMap, qr, doc) : (qr && qr.img ? _qrTbl(qr.img, qr.no) : '');
+    // 서명란은 _closeTbl 부동 표로 마지막 쪽 하단 배치 (문서번호 QR은 푸터 — 부동 표 안 이미지는 인쇄 경로 탈락)
+    const close = st.sigLines ? _closeTbl(st.sigLines, imgMap, doc) : '';
     return out.join('') + _END + close;
 };
 
@@ -795,7 +802,7 @@ const _densify = body => {
     return _densifyTail(body, estC, estT, flt) || { body, dens: _DENS.normal };
 };
 
-/** 문서번호 QR 메타 — doc.qr 지정 시 본문 이미지 풀에 편입 */
+/** 문서번호 QR 메타 — doc.qr 지정 시 푸터 표 삽입 (자체 미디어 파트 img_qr.png·footer 관계 사용) */
 /** @param {?{qr?:{data?:Uint8Array}, no?:string}} doc */
 const _qrMeta = doc => (doc && doc.qr && doc.qr.data ? { data: doc.qr.data, no: doc.no || '' } : null);
 
@@ -805,7 +812,7 @@ const _qrMeta = doc => (doc && doc.qr && doc.qr.data ? { data: doc.qr.data, no: 
  *   :::page 쪽 나눔, :::sign 서명란, :::closing 종결 문구 마커 지원)
  * @param {string} filename - 확장자 제외 파일명
  * @param {string} [wm] - 워터마크 문구 (header1.xml 배치 — 모든 쪽 반복, 텍스트 상자 폴백)
- * @param {{images?: Object<string,{data:Uint8Array,w:number,h:number}>, wmImg?: {data:Uint8Array}, doc?: {no?:string, org?:string, title?:string, rev?:number, qr?:{data:Uint8Array}, recipient?:string, cc?:string, date?:string}}} [opts] - images: `{{img:key}}` 토큰(서명란)용 서명 PNG 바이트 + 표시 크기(px) — 셀 안 인라인 삽입, wmImg: 알파 구운 워터마크 PNG (지정 시 텍스트 대신 사용), doc: 문서 추적 메타 (core.xml·푸터 번호·date는 시행일자·서명일 단일 소스, qr 지정 시 서명란 좌측 QR 부동 표, no/recipient/cc 지정 시 상단 서식란 부여)
+ * @param {{images?: Object<string,{data:Uint8Array,w:number,h:number}>, wmImg?: {data:Uint8Array}, doc?: {no?:string, org?:string, title?:string, rev?:number, qr?:{data:Uint8Array}, recipient?:string, cc?:string, date?:string}}} [opts] - images: `{{img:key}}` 토큰(서명란)용 서명 PNG 바이트 + 표시 크기(px) — 셀 안 인라인 삽입, wmImg: 알파 구운 워터마크 PNG (지정 시 텍스트 대신 사용), doc: 문서 추적 메타 (core.xml·푸터 번호·date는 시행일자·서명일 단일 소스, qr 지정 시 푸터 QR 표, no/recipient/cc 지정 시 상단 서식란 부여)
  */
 export function docxFileMd(md, filename, wm = '', opts = {}) {
     _dpId = 100; // wp:docPr id 할당기 리셋 — 문서마다 유일 순번 (중복 id는 Word 복구 경고 유발)
@@ -813,10 +820,8 @@ export function docxFileMd(md, filename, wm = '', opts = {}) {
     _TW = land ? _TW_LAND : _TW_PORT;
     const doc = opts.doc || null;
     const pool = _imgPool(String(md || ''), opts.images);
-    // 문서번호 QR — 본문 이미지와 같은 미디어 풀 (rId6~ 연번)
-    const qm = _qrMeta(doc);
-    const qrIm = qm ? { data: qm.data, rid: pool.add(qm.data), id: _dpNext() } : null;
-    const r0 = _densify(_mdBody(md, pool.imgMap, qrIm ? { img: qrIm, no: qm ? qm.no : '' } : null, doc));
+    // 문서번호 QR은 푸터 표에 삽입 — _parts가 자체 미디어 파트·관계를 만든다 (본문 이미지 풀과 분리)
+    const r0 = _densify(_mdBody(md, pool.imgMap, doc));
     // 워터마크는 header1.xml에 1개 — 모든 쪽에 반복 (본문 분산 앵커 구버전 폐기)
     const hdr = _wmHdr(wm, opts.wmImg || null);
     const body = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w10="urn:schemas-microsoft-com:office:word"><w:body>${r0.body}${_sect(!!hdr, land)}</w:body></w:document>`;
