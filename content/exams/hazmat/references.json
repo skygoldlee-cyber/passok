@@ -1,7 +1,17 @@
 {
   "schemaVersion": 1,
   "_comment": "참조자료 매핑 설정. lawRefs: content/lawdb.json의 법령 id 목록 (나열 순서 = 매칭 우선순위). noticeCore: 고시 감시 배너의 기준 문서명. 자세한 구조는 design/MULTI_EXAM_DB_DESIGN.md §4",
-  "lawRefs": [],
+  "lawRefs": [
+    "dangerous-goods-safety-act",
+    "dangerous-goods-safety-decree",
+    "dangerous-goods-safety-rule",
+    "dangerous-goods-detail-std",
+    "fire-facility-act",
+    "fire-facility-decree",
+    "fire-facility-rule",
+    "fire-prevention-act",
+    "fire-service-basic-act"
+  ],
   "noticeCore": null,
   "subjectDefaultRefdoc": {},
   "subjectDirMap": {},
