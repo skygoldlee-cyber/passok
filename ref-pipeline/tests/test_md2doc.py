@@ -865,3 +865,24 @@ class TestDocxOutput:
         w0 = d.tables[0].columns[0].width
         w1 = d.tables[1].columns[0].width
         assert w0 == w1
+
+    def test_table_cell_alignment(self, tmp_path):
+        # 셀은 세로 중앙; 헤더·2열 표 라벨 열은 가로 중앙 (docx-utils _cell 규약)
+        from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
+
+        d = self._doc(
+            "| 라벨 | 내용 |\n|---|---|\n| 일시 | 2026-11-15 주간 |\n",
+            tmp_path,
+        )
+        t = d.tables[0]
+        for row in t.rows:
+            for c in row.cells:
+                assert c.vertical_alignment == WD_CELL_VERTICAL_ALIGNMENT.CENTER
+        # 헤더 행 — 두 셀 모두 가로 중앙
+        for c in t.rows[0].cells:
+            assert all(p.alignment == WD_ALIGN_PARAGRAPH.CENTER for p in c.paragraphs)
+        # 본문 — 라벨 열은 중앙, 내용 열은 좌측(기본)
+        body = t.rows[1].cells
+        assert all(p.alignment == WD_ALIGN_PARAGRAPH.CENTER for p in body[0].paragraphs)
+        assert not any(p.alignment == WD_ALIGN_PARAGRAPH.CENTER for p in body[1].paragraphs)

@@ -31,7 +31,8 @@ from dataclasses import dataclass, field
 # 미설치 환경에서도 HTML/PDF 경로는 정상 동작하도록 지연 검증한다.
 try:
     import docx as _docx
-    from docx.enum.text import WD_COLOR_INDEX
+    from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
+    from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_COLOR_INDEX
     from docx.oxml import OxmlElement
     from docx.oxml.ns import qn
     from docx.opc.constants import RELATIONSHIP_TYPE as _RT
@@ -2747,9 +2748,15 @@ def _emit_table(container, node: _HNode, ctx: _DocxCtx) -> None:
             if span > 1 and ci + span <= ncols:
                 tcell = tcell.merge(tbl.cell(ri, ci + span - 1))
             tcell.width = Emu(int(sum(widths[ci:ci + span])))  # tcW — 병합 셀은 합산 폭
-            if cnode.tag == "th" or ri < head_n:
+            head = cnode.tag == "th" or ri < head_n
+            if head:
                 _tc_shd(tcell, _DOCX_HEAD_FILL)
-            _emit_blocks_cell(tcell, cnode, ctx, head=cnode.tag == "th" or ri < head_n)
+            tcell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+            _emit_blocks_cell(tcell, cnode, ctx, head=head)
+            # 헤더·2열 표 라벨 열은 가로 중앙 (앱 docx-utils _cell 규약 — 공문 서식)
+            if head or (ncols == 2 and ci == 0):
+                for p in tcell.paragraphs:
+                    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
             ci += span
 
 
