@@ -33,13 +33,13 @@
   },
   "exams": {
     "subject1": {
-      "questions": 3
+      "questions": 28
     },
     "subject2": {
-      "questions": 3
+      "questions": 88
     },
     "subject3": {
-      "questions": 3
+      "questions": 68
     }
   }
 }
