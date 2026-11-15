@@ -21,7 +21,7 @@
 
 // @spec P-01~06,O-04,UX-PWA-03,LP-07
 
-const CACHE_VERSION = 'v20261115-4f3df7b';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
+const CACHE_VERSION = 'v20261115-18cbe0d';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
 const DATA_CACHE_VERSION = 'v1';           // 데이터: 안정(해시 파일명이 변경 감지 담당) — 캐시 포맷이 바뀔 때만 수동 증가
 // 캐시 접두사는 플랫폼 브랜드(passok) — 시험 무관 공유 캐시.
 // 구 접두사(passory-*·cosmetic-pass-*)는 activate의 비현재 캐시 전수 삭제로 자동 정리된다.
@@ -240,7 +240,9 @@ const DATA_ASSETS = [
   './data/exams/distmgr3/registry.js',
   './data/exams/distmgr3/id_migration.js',
   './data/exams/carework/registry.js',
-  './data/exams/carework/id_migration.js'
+  './data/exams/carework/id_migration.js',
+  './data/exams/hazmat/registry.js',
+  './data/exams/hazmat/id_migration.js'
 ];
 
 /** 설치 시 프리캐시할 마크다운 문서 (매뉴얼·요약집 — 오프라인 보장)
@@ -426,6 +428,10 @@ const MD_ASSETS = [
   './content/exams/carework/교재/careprac/2과목_요양보호실기_이야기형.md',
   './content/exams/carework/문제은행/과목1_요양보호론_문제은행.md',
   './content/exams/carework/문제은행/과목2_요양보호실기_문제은행.md',
+  './content/exams/hazmat/교재/fire/1과목_화재예방과 소화방법.md',
+  './content/exams/hazmat/교재/hazprop/2과목_위험물의 성질과 취급.md',
+  './content/exams/hazmat/문제은행/과목1_문제은행.md',
+  './content/exams/hazmat/문제은행/과목2_문제은행.md',
   // MD_ASSETS:END
 ];
 

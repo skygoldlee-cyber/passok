@@ -1,11 +1,20 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 feat(hazmat): 위험물산업기사 시험팩 스캐폴드 (draft)
+
+`scaffold:exam`으로 `hazmat` 팩 골격 생성 후 실제 과목 구성 반영 — `comingSoon`·tier `draft`로 시작, 콘텐츠는 플레이스홀더.
+
+- **과목** — 필기 2과목: `fire`(화재예방과 소화방법)·`hazprop`(위험물의 성질과 취급). integratedExam 20+20문·60분·합격 60·과락 40
+- **exams.json** — group `산업안전`, 아이콘 `fa-fire-extinguisher`, syllabus 선언
+- **후속** — 수집 목록 `tmp/materials/hazmat/NEEDS.md`. pilot 승격엔 출제기준 md+표준 챕터, active엔 과목당 ≥20문·위험물안전관리법 lawdb 추가 필요
+
 ## 2026-11-16 fix(check): webp 게이트 .vercelignore 글롭 매칭 결함 2건
 
 `tools/check/check_webp_only.js`의 무시 패턴 해석 버그 수정 — 실제로는 매칭되지 않던 패턴이 규약 위반으로 오인됐다.
 
-- **CRLF 미트림** — 패턴 필터만 `trim()`하고 정규식 변환은 원본 라인을 사용해, CRLF 줄의 ``이 패턴 끝에 붙어 영구 미스매치. `.map(l => l.trim())`으로 해소
+- **CRLF 미트림** — 패턴 필터만 `trim()`하고 정규식 변환은 원본 라인을 사용해, CRLF 줄의 `
+`이 패턴 끝에 붙어 영구 미스매치. `.map(l => l.trim())`으로 해소
 - **`**` 이중 변환** — `**`→`.*` 후 `*`→`[^/]*`가 `.*` 내부 `*`까지 치환해 `**` 재귀 패턴이 전부 깨짐. ` ` 플레이스홀더 경유로 교정
 - `.vercelignore` — `ref-pipeline/tests/.pytest-tmp/**` 재귀 패턴으로 보정 (pytest 산출 이미지 차단)
 

@@ -224,6 +224,9 @@ const _EXAM_LAW_URLS = {
     ["노인장기요양보험법시행규칙", "https://www.law.go.kr/법령/노인장기요양보험법시행규칙"],
     ["치매관리법", "https://www.law.go.kr/법령/치매관리법"],
     ["치매관리법시행령", "https://www.law.go.kr/법령/치매관리법시행령"]
+    ],
+    "hazmat": [
+
     ]
 };
 

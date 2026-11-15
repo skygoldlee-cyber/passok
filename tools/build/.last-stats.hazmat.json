@@ -1,0 +1,32 @@
+{
+  "subjects": {
+    "fire": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/fire/1과목_화재예방과 소화방법.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    },
+    "hazprop": {
+      "cards": 0,
+      "quizzes": 0,
+      "files": {
+        "교재/hazprop/2과목_위험물의 성질과 취급.md": {
+          "cards": 0,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {
+    "subject1": {
+      "questions": 3
+    },
+    "subject2": {
+      "questions": 3
+    }
+  }
+}
