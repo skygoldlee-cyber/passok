@@ -4,7 +4,7 @@
 ## 2026-11-16 fix(refs): CI content traceability 실패 해소 — 세부기준 평탄화 분할 + 메타 패턴 확장
 
 - **ref_md 초장문 19줄**: 세부기준(소방청고시)의 DRF 접착 라인을 reflow_flat_lines로 분할 (+461줄). 분할 마커 없는 잔여 6줄은 `할 것나.`/`것4.`/`것(1)`/`것(가)` 접착 항목 규칙 4종을 도구에 추가해 해소 ((1)의·(가)의 참조는 공백 요구로 보호)
-- **메타 의심 헤딩 7건**: hazmat 교재의 📌 핵심 요약 류 챕터 요약 카드가 META_KEYWORD_RE에 걸렸으나 _STORY_META_PATTERNS 미매칭 — `핵심\s*요약` 패턴 추가 (메타 섹션 의도 확정)
+- **메타 의심 헤딩 7건**: hazmat 교재의 📌 핵심 요약 류 챕터 요약 카드가 META_KEYWORD_RE에 걸렸으나 _STORY_META_PATTERNS 미매칭 — 기존 계약(📌 챕터 핵심 요약 = 비메타 콘텐츠, reader-toc.test.js 고정)에 따라 **비메타 확정·meta_sections_baseline.json 기준선 갱신** (패턴 추가 방식은 기존 테스트와 충돌해 폐기)
 - 로컬 check:content --content-only 22단계 전량 통과
 
 ## 2026-11-16 fix(analysis): esc-ok 검토 면제 주석 — check:escape 기준선 복구
