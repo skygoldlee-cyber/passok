@@ -1,6 +1,19 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 refactor(content): hazmat 교재 헤딩 체계를 CS-12 표준으로 전환 — 구식 Chapter+### 절 → 📚Chapter+## 절
+
+- **동기**: hazmat 표준형 3개 파일만 구식 체계(`## Chapter` → `### N.` 절 → `#### N.M` 소절 → `#####` 세부)를 사용 — `textbook_anchors.js`의 `SECTION_RE`(`^## \d+\.`)가 절을 인식 못해 **모든 인용이 `N.0` 챕터 앵커로 귀속**, 리더 `parseTextbookContent`는 `## ` 경계로 절을 나눠 **16개 거대 카드**로 렌더(DR-11 절 CTA 미발화), DR-10 인쇄 목차·DR-09 QR 칩·CS-12 번호 게이트가 전부 챕터 단위로 무력화되던 상태
+- **변환** (`tmp/migrate_hazmat_headings.js`, 1회성 — 총 1,623 헤딩 라인):
+  - `## Chapter NN.` → `## 📚 Chapter NN.` (16건)
+  - `### N.` → `## N.` (59건 — 번호·챕터별 연속성 그대로)
+  - `### 자유` → 유지 (6건 — 절 내 소절로 사용 중)
+  - `#### N.M` → `### M.` (682건 — 절 내 소절 번호, 절 접두 제거. N·M 연속성 사전 검증 후 기계 변환)
+  - `#### 자유` → 번호 절 소속은 `### 자유`(223건), 자유 `###` 소속은 `####` 유지(23건 — 계층 보존)
+  - `##### N.M.K` → `#### M.K` (26건 — 부모 `#### N.M`→`### M.` 승격에 맞춰 재번호), `##### 자유` → `####` (707건)
+- **효과 검증**: `check:numbering` 위반 0건(최초 실행 때 78건 — `#####` 3단 번호 유지 오류, 재번호 후 통과), `sync_citation_lines --check` 6,884건 변경 없음(행 번호 불변이라 #L 인용 무영향), `build:data` 재생성으로 hazmat CID_SECTION 앵커 317건 전부 `N.0`→`N.M` 절 단위로 세분화, QUESTION_CHAPTERS도 절 제목 매핑으로 정밀화. 저장 진술의 구 `N.0` cid는 여전히 유효 앵커라 데이터 손실 없음
+- 소형 구식 팩 15개(수백~수천자 스텁)는 미전환 — 향후 온보딩 시 표준 체계로 작성 예정. 이제 리더에서 hazmat 절이 카드로 분리되고 절 CTA·§앵커 드릴이 표준 팩과 동일하게 동작
+
 ## 2026-11-16 feat(analysis): 함정 유형 약점 진단 — AN-11 오답 분석 trap 집계 (DOC-DSN-52 Phase 3 후속)
 
 - `tools/build/build_question_chapters.js` — 문항 블록의 `> **함정:**` 메타 행 파싱 → `question_chapters.js`에 `QUESTION_TRAPS` 맵(`<exam>_q<N>` → 태그 배열) 추가 방출. carework 재생성 142건 = 파일럿 편입 수와 일치, 미태깅 팩은 빈 맵
