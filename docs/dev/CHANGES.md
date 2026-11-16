@@ -1,6 +1,12 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 fix(analysis): esc-ok 검토 면제 주석 — check:escape 기준선 복구
+
+- analysis-view.js:243의 `${trapHtml || '<p…>'}` 보간이 check:escape 신규 후보로 검출돼 CI(HTML escape sink check) 실패
+- trapHtml은 내부 생성 마크업·폴백은 정적 리터럴이라 이스케이프 불가 — `/*esc-ok*/` 면제 주석 부착으로 검토 완료 명시
+- 로컬 `check:escape` 통과 확인 — 배포 전 CI 레드 원인 해소
+
 ## 2026-11-16 feat(exam): hazmat(위험물산업기사) active 승격 — comingSoon 해제
 
 - **승격 선언**: exams.json comingSoon 제거·tier pilot→active — 온보딩 게이트 '정식' 진단 통과

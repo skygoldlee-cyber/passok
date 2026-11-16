@@ -240,7 +240,7 @@ function _renderWrongCauseInsight() {
     if (sum.total === 0) {
         // 원인 태깅은 없어도 함정 유형은 자동 집계 — 태그된 오답이 있으면 그걸로 카드를 채운다
         el.innerHTML = `<h4>🧩 오답 패턴 분석</h4>
-            ${trapHtml || '<p class="analysis-empty">오답 복습에서 "틀린 이유"를 태그하면 최근 7일의 실수 패턴을 분석합니다.</p>'}${goBtnHtml}`;
+            ${trapHtml || '<p class="analysis-empty">오답 복습에서 "틀린 이유"를 태그하면 최근 7일의 실수 패턴을 분석합니다.</p>' /*esc-ok — 내부 생성 마크업·정적 리터럴 폴백*/}${goBtnHtml}`;
         return;
     }
     const rowsHtml = Object.entries(getWrongCauseLabels())
