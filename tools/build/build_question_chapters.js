@@ -10,11 +10,12 @@
  *   window.CHAPTER_RANGES    = { "law": [[시작라인, "Chapter 01. ..."], ...], ... }
  *   window.CID_SECTION       = { "law": { "123": "1.2", ... }, ... } — 레거시 conceptId(L####) → §앵커
  *   window.CHAPTER_TITLES    = { "law": { "1": "Chapter 01. ...", ... }, ... } — §앵커 챕터 표시명
+ *   window.QUESTION_TRAPS    = { "subject1_q1": ["수치바꿔치기"], ... } — 문항 함정 유형 (AI-39/AN-11)
  *
  * 실행: node tools/build/build_question_chapters.js   (build:data 체인에 포함)
  */
 
-// @spec BP-01,AN-10
+// @spec BP-01,AN-10,AN-11
 
 const fs = require('fs');
 const path = require('path');
@@ -26,6 +27,8 @@ const { makeAnchorResolver, CHAPTER_RE } = require('./textbook_anchors.js');
 const CHAPTER_HEADING_RE = /^##\s+(?:📚\s*)?((?:Chapter\s+)?\d+\..+?)\s*$/;
 // 문항 구분: "**Q12.**"
 const QUESTION_BLOCK_RE = /\*\*Q(\d+)\.\*\*/g;
+// 함정 유형 메타 행: "> **함정:** 유형1, 유형2" (AI-39 — 어휘 검증은 exams.plugin 빌드 게이트가 담당)
+const TRAP_LINE_RE = /^>\s*\*\*함정\s*[:：]?\s*\*\*\s*[:：]?\s*(.+)$/m;
 // 교재(표준형) 인용 링크: [라벨](<../교재/.../파일.md#L123>) — 참조자료 경로는 제외
 const TEXTBOOK_CIT_RE = /\]\(<([^>]*?교재[^>]*?\.md)#L(\d+)>\)/g;
 
@@ -94,6 +97,7 @@ function buildForExam(target) {
 
     // 2) 문제은행 각 문항의 첫 교재 인용 → 챕터 해석 + 인용 라인 전수의 §앵커 환산
     const questionChapters = {};
+    const questionTraps = {}; // <exam>_q<N> → 함정 유형[] (AI-39/AN-11)
     const cidSection = {}; // subjKey → { "라인": "N.M" } — 레거시 conceptId(L####) → §앵커 (AN-10)
     const resolveAnchor = makeAnchorResolver();
     let mapped = 0;
@@ -110,6 +114,11 @@ function buildForExam(target) {
         for (let i = 0; i < marks.length; i++) {
             const qNum = parseInt(marks[i][1], 10);
             const block = md.slice(marks[i].index, i + 1 < marks.length ? marks[i + 1].index : md.length);
+            const trapMatch = block.match(TRAP_LINE_RE);
+            if (trapMatch) {
+                const traps = trapMatch[1].replace(/\*\*/g, '').split(/[,，·]/).map(s => s.trim()).filter(Boolean);
+                if (traps.length) questionTraps[`${exam.key}_q${qNum}`] = [...new Set(traps)];
+            }
             // 인용 라인 전수를 §앵커로 환산해 적재 — 과거 번들의 conceptId가 첫 인용 외의
             // 라인을 참조했어도 이관 경로가 열리도록 전수 수집한다 (AN-10)
             for (const cm of block.matchAll(TEXTBOOK_CIT_RE)) {
@@ -140,12 +149,14 @@ function buildForExam(target) {
         `var CHAPTER_RANGES = ${JSON.stringify(subjectRanges)};\n` +
         `var CID_SECTION = ${JSON.stringify(cidSection)};\n` +
         `var CHAPTER_TITLES = ${JSON.stringify(chapterTitles)};\n` +
+        `var QUESTION_TRAPS = ${JSON.stringify(questionTraps)};\n` +
         'window.QUESTION_CHAPTERS = QUESTION_CHAPTERS;\n' +
         'window.CHAPTER_RANGES = CHAPTER_RANGES;\n' +
         'window.CID_SECTION = CID_SECTION;\n' +
-        'window.CHAPTER_TITLES = CHAPTER_TITLES;\n';
+        'window.CHAPTER_TITLES = CHAPTER_TITLES;\n' +
+        'window.QUESTION_TRAPS = QUESTION_TRAPS;\n';
     fs.writeFileSync(path.join(outDir, 'question_chapters.js'), body, 'utf8');
-    console.log(`[question-chapters] ${target.id}: 문항 ${mapped}건 매핑 (미해석 ${unmapped}건, 다중파일 충돌 ${ambig}건), 과목 ${Object.keys(subjectRanges).length}개 챕터 경계 → ${target.dataRoot}/question_chapters.js`);
+    console.log(`[question-chapters] ${target.id}: 문항 ${mapped}건 매핑 (미해석 ${unmapped}건, 다중파일 충돌 ${ambig}건), 함정 태그 ${Object.keys(questionTraps).length}건, 과목 ${Object.keys(subjectRanges).length}개 챕터 경계 → ${target.dataRoot}/question_chapters.js`);
 }
 
 for (const target of getExamTargets(ROOT)) {

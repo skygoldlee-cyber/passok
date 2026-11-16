@@ -1,5 +1,5 @@
 // src/data-loader.js — 학습 데이터 로더
-// @spec DA-03,PF-01,PF-02,PF-03,PF-07,DA-02,AI-22,DA-16
+// @spec DA-03,PF-01,PF-02,PF-03,PF-07,DA-02,AI-22,DA-16,AN-11
 // [변경] 교재/카드/퀴즈(STUDY_DATA)는 더 이상 사전 빌드된 data/subjects/*.js 번들을 쓰지 않고,
 //        content/*.md 를 런타임에 fetch → src/reader/textbook-parser.js 로 파싱하여 조립한다.
 //        - http(s): content/manifest.json + content/**/*.md 라이브 fetch (항상 최신, 재빌드 불필요)
@@ -36,7 +36,7 @@ export const DataLoader = {
     _manifest: null,
     /** @type {Object.<string, number>|null} */
     _comboIndex: null,
-    /** @type {{questions: Object.<string, string>, ranges: Object.<string, any>, cidSection: Object.<string, Object.<string, string>>, chapterTitles: Object.<string, Object.<string, string>>}|null} */
+    /** @type {{questions: Object.<string, string>, ranges: Object.<string, any>, cidSection: Object.<string, Object.<string, string>>, chapterTitles: Object.<string, Object.<string, string>>, traps: Object.<string, string[]>}|null} */
     _questionChapters: null,
     /** @type {string|null} */
     _registryExamId: null,
@@ -507,7 +507,8 @@ export const DataLoader = {
             questions: window.QUESTION_CHAPTERS || {},
             ranges: window.CHAPTER_RANGES || {},
             cidSection: window.CID_SECTION || {},        // 레거시 conceptId(L####) → §앵커 (AN-10)
-            chapterTitles: window.CHAPTER_TITLES || {}   // §앵커 챕터 표시명 (AN-10)
+            chapterTitles: window.CHAPTER_TITLES || {},  // §앵커 챕터 표시명 (AN-10)
+            traps: window.QUESTION_TRAPS || {}           // 문항 함정 유형 (AI-39/AN-11)
         };
         return this._questionChapters;
     },

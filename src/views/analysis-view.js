@@ -1,5 +1,5 @@
 // src/views/analysis-view.js — 학습 진단(개인화 분석) 뷰 컨트롤러
-// @spec AN-01~09,SC-11,SC-12,D-23,PS-01,PS-04,PS-05,PS-09,PS-10
+// @spec AN-01~09,AN-11,SC-11,SC-12,D-23,PS-01,PS-04,PS-05,PS-09,PS-10
 //
 // dashboard.js에서 분리 (모듈 경계 정리) — 학습 진단 뷰의 진단 카드 7종,
 // 과목별 학습 진입(startSubject*), 주간 리포트보내기를 전담한다.
@@ -23,7 +23,8 @@ import { getWeakStatements, getDueStatementSids, getAnomalousStatements, getAllS
 import {
     computeSubjectWeakChapters, computeWeeklyGrowth, computePassGap,
     computeWeakConceptClusters, computePaceProjection, estimateUntaggedCauses,
-    computeStudyPattern, buildWeeklyReportText, computeMasteryLevels, normalizeCidAnchor, subjectFromSid
+    computeStudyPattern, buildWeeklyReportText, computeMasteryLevels, normalizeCidAnchor, subjectFromSid,
+    computeTrapWeakness
 } from '../study/analysis-engine.js';
 import { SemanticIndex } from '../search/semantic-index.js';
 import { generateClinic, estimatePassProb, weeklyReport, weakRefLink } from '../study/personalization.js';
@@ -203,15 +204,43 @@ function _renderAnalysisOnboarding() {
     hint.innerHTML = html;
 }
 
-/** 오답 패턴 분석 카드 — 최근 7일 원인 분포 + 권장 학습법 */
+/** 함정 유형별 대처 조언 (AN-11) — 진단 상위 유형에 학습 지침을 붙인다 */
+const TRAP_ADVICE = {
+    '유사용어혼동': '비슷한 용어를 나란히 비교 표로 정리해 보세요',
+    '수치바꿔치기': '선지의 수치·단위·범위를 원문 기준과 꼭 대조하세요',
+    '절대표현': '"항상·절대·모두·반드시" 같은 단정 표현을 경계하세요',
+    '주어치환': '행위 주체가 누구인지(대상자/보호자/시설·국가) 확인하세요',
+    '예외조항': '"~은 제외·다만" 같은 단서·예외 조항을 끝까지 확인하세요'
+};
+
+/** 함정 유형 진단 HTML (AN-11) — 오답 문항의 q.trap 태그를 집계한 유형별 약점 */
+function _trapWeaknessHtml() {
+    const qc = DataLoader._questionChapters || { traps: {} };
+    const rows = computeTrapWeakness({
+        quizResults: state.quizResults, weakCards: state.weakCards,
+        questionTraps: qc.traps, resolveQuiz: resolveWrongQuiz
+    });
+    if (!rows.length) return '';
+    const top = rows[0];
+    const diag = top && top.wrongs >= 2
+        ? `<p class="analysis-advice"><strong>당신은 ${esc(top.tag)} 유형에 약합니다</strong> — ${esc((/** @type {Object.<string,string>} */ (TRAP_ADVICE))[top.tag] || '해당 유형의 출제 함정을 확인하세요')}</p>`
+        : '';
+    const rowsHtml = rows.slice(0, 3).map(r =>
+        `<div class="wc-row"><span>${esc(r.tag)}</span><strong>${r.wrongs}건/${r.attempts}문</strong></div>`).join('');
+    return `<div class="wc-subhead">🪤 함정 유형 (전체 누적)</div>${rowsHtml}${diag}`;
+}
+
+/** 오답 패턴 분석 카드 — 최근 7일 원인 분포 + 권장 학습법 + 함정 유형 진단 (AN-11) */
 function _renderWrongCauseInsight() {
     const el = document.getElementById('analysis-wrong-cause');
     if (!el) return;
     const sum = computeWrongCauseSummary(state.wrongCauses);
     const goBtnHtml = `<button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="review-view"><i class="fa-solid fa-star" aria-hidden="true"></i> 오답 복습으로</button>`;
+    const trapHtml = _trapWeaknessHtml();
     if (sum.total === 0) {
+        // 원인 태깅은 없어도 함정 유형은 자동 집계 — 태그된 오답이 있으면 그걸로 카드를 채운다
         el.innerHTML = `<h4>🧩 오답 패턴 분석</h4>
-            <p class="analysis-empty">오답 복습에서 "틀린 이유"를 태그하면 최근 7일의 실수 패턴을 분석합니다.</p>${goBtnHtml}`;
+            ${trapHtml || '<p class="analysis-empty">오답 복습에서 "틀린 이유"를 태그하면 최근 7일의 실수 패턴을 분석합니다.</p>'}${goBtnHtml}`;
         return;
     }
     const rowsHtml = Object.entries(getWrongCauseLabels())
@@ -229,7 +258,7 @@ function _renderWrongCauseInsight() {
 
     el.innerHTML = `<h4>🧩 오답 패턴 분석 <span class="analysis-meta">최근 7일 · ${esc(sum.total)}건</span></h4>
         ${rowsHtml}
-        <p class="analysis-advice">${esc(sum.advice)}</p>${estRowsHtml}${goBtnHtml}`;
+        <p class="analysis-advice">${esc(sum.advice)}</p>${estRowsHtml}${trapHtml}${goBtnHtml}`;
 }
 
 /** 취약 진술 카드 — 반복 오판 진술 수 + 오늘 복습 대기 + 리뷰 딥링크 */
@@ -690,7 +719,7 @@ export function exportAnalysisReport() {
         ? DataLoader.getSubjectList() : [];
     const nameOf = (/** @type {string} */ k) => { const s = subjects.find((/** @type {*} */ x) => x.key === k); return s ? s.name : k; };
     const dday = getDDay();
-    const qc = (DataLoader._questionChapters) || { questions: {}, ranges: {}, cidSection: {}, chapterTitles: {} };
+    const qc = (DataLoader._questionChapters) || { questions: {}, ranges: {}, cidSection: {}, chapterTitles: {}, traps: {} };
     const est = compositeEstimate();
     // 주간 배분 과목별 준수 (SC-11) — 배분이 없으면(시험일 미설정·완료) null
     const totalCards = subjects.reduce((s, m) => s + displayCounts(m).cards, 0);
@@ -725,6 +754,10 @@ export function exportAnalysisReport() {
             ..._ktInputs()
         }),
         pattern: computeStudyPattern(getStudyCalendar()),
+        trapWeakness: computeTrapWeakness({
+            quizResults: state.quizResults, weakCards: state.weakCards,
+            questionTraps: qc.traps, resolveQuiz: resolveWrongQuiz
+        }),
         recEffect: evaluateRecommendationEffect(getSubjCounts(), nameOf),
         actual: getActualResult(),
         bias: computeCalibrationBias(getActualResult()),

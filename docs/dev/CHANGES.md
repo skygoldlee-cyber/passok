@@ -1,6 +1,16 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 feat(analysis): 함정 유형 약점 진단 — AN-11 오답 분석 trap 집계 (DOC-DSN-52 Phase 3 후속)
+
+- `tools/build/build_question_chapters.js` — 문항 블록의 `> **함정:**` 메타 행 파싱 → `question_chapters.js`에 `QUESTION_TRAPS` 맵(`<exam>_q<N>` → 태그 배열) 추가 방출. carework 재생성 142건 = 파일럿 편입 수와 일치, 미태깅 팩은 빈 맵
+- `src/content/data-loader.js` — `loadQuestionChapters`가 `window.QUESTION_TRAPS`를 `_questionChapters.traps`로 노출
+- `src/study/analysis-engine.js` — `computeTrapWeakness` 신규: 정오 전건(quizResults)의 시도·오답을 함정 유형별 버킷에 귀속 — 문항 해석은 `resolveQuiz` 번들 `quiz.trap` 우선·`QUESTION_TRAPS` 폴백, `weak_quiz_`/`weak_exam_` 접두사·`weak_sim_<exam>_q<N>`는 원문항 정규화(단원 집계와 동일 규약), weak_sim 약점 카드는 오답 증거 1건. 복수 태그 문항은 각 유형에 1건씩, 정렬은 오답 수→오답률→시도 수
+- `src/views/analysis-view.js` — 오답 패턴 카드에 "🪤 함정 유형(전체 누적)" 절: 상위 3유형 `오답 N건/시도 M문` + 최상위 유형(오답≥2건) "당신은 ○○ 유형에 약합니다" + 유형별 대처 조언(`TRAP_ADVICE`). 원인 태깅(AN-02) 없어도 자동 집계라 독립 표시, 태그된 오답 없으면 절 숨김. 주간 리포트 `buildWeeklyReportText`에 `p.trapWeakness` 상위 2유형 "취약 함정 유형" 행 추가 + 호출부 연결
+- `css/dashboard.css` — `.wc-subhead` 섹션 구분 스타일
+- 단위 테스트 6건 신규(analysis-engine.test.js) — 복수 태그 집계·resolveQuiz 우선/맵 폴백·weak_sim 귀속·무태그 안전 폴백·정렬 규약·리포트 행
+- SPEC AN-11 신설(§3.1.5 카운트 10→11), 파일 @spec 태그 갱신(analysis-engine·analysis-view·data-loader·build_question_chapters)
+
 ## 2026-11-16 feat(content): 함정 유형(trap) 태그 도입 — AI-39 스키마·도구·carework 파일럿 (DOC-DSN-52 Phase 3)
 
 - `src/content/questions.js` — `TRAP_TAGS`(유사용어혼동·수치바꿔치기·절대표현·주어치환·예외조항) 어휘 정본 + `Question.trap` 필드 + `validateQuestion` 화이트리스트 검증. STANDARD_TAGS와 별도 축(함정 방식 기술)

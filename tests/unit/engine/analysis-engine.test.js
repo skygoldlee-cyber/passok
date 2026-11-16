@@ -1,5 +1,5 @@
 // tests/unit/analysis-engine.test.js — 학습 진단 분석 엔진 순수 로직
-// @spec AN-01,AN-02,D-16,D-21,D-22
+// @spec AN-01,AN-02,AN-11,D-16,D-21,D-22
 // 과목 무관 데이터 주입형 — 임의 과목 키로 검증 (모듈화 요구: 과목 변경 시 코드 수정 불필요)
 
 import { test } from 'node:test';
@@ -510,4 +510,104 @@ test('D-22: weak_*·시뮬 문항 id도 원문항으로 귀속 — 복습 세션
         assert.equal(out[0].chapter, '제1장');
         assert.ok(out[0].mastery > 0.9, `weak/시뮬 판정 미귀속이면 0.5 정체 — mastery=${out[0].mastery}`);
     } finally { globalThis.window = prev; }
+});
+
+test('AN-11 computeTrapWeakness: 오답 문항의 함정 태그를 유형별로 집계', async () => {
+    const { computeTrapWeakness } = await import(ENGINE);
+    const out = computeTrapWeakness({
+        quizResults: {
+            'subject1_q1': { correct: false },  // 수치바꿔치기+절대표현 — 복수 태그는 양쪽 집계
+            'subject1_q2': { correct: false },  // 수치바꿔치기
+            'subject1_q3': { correct: true },   // 수치바꿔치기 정답 — 시도만 증가
+            'subject1_q9': { correct: false },  // 태그 없음 — 집계 제외
+        },
+        weakCards: new Set(),
+        questionTraps: {
+            'subject1_q1': ['수치바꿔치기', '절대표현'],
+            'subject1_q2': ['수치바꿔치기'],
+            'subject1_q3': ['수치바꿔치기'],
+        }
+    });
+    assert.equal(out[0].tag, '수치바꿔치기');
+    assert.equal(out[0].wrongs, 2);
+    assert.equal(out[0].attempts, 3);
+    assert.equal(out[1].tag, '절대표현');
+    assert.equal(out[1].wrongs, 1);
+});
+
+test('AN-11 computeTrapWeakness: resolveQuiz의 번들 trap 우선 — 맵은 폴백', async () => {
+    const { computeTrapWeakness } = await import(ENGINE);
+    const resolveQuiz = (id) => id === 'subjA_quiz_7'
+        ? { quiz: { trap: ['주어치환'] }, subjectId: 'subjA' } : null;
+    const out = computeTrapWeakness({
+        quizResults: {
+            'weak_quiz_subjA_quiz_7': { correct: false },  // 접두사 정규화 → 번들 trap
+            'subject1_q4': { correct: false },             // resolveQuiz 실패 → questionTraps 폴백
+        },
+        weakCards: new Set(),
+        questionTraps: { 'subject1_q4': ['예외조항'] },
+        resolveQuiz
+    });
+    const tags = out.map(r => r.tag).sort();
+    assert.deepEqual(tags, ['예외조항', '주어치환']);
+});
+
+test('AN-11 computeTrapWeakness: weak_sim 약점 카드는 오답 증거 1건', async () => {
+    const { computeTrapWeakness } = await import(ENGINE);
+    const out = computeTrapWeakness({
+        quizResults: {},
+        weakCards: new Set(['weak_sim_subject1_q5', 'weak_sim_subject1_combo_abc123']),
+        questionTraps: { 'subject1_q5': ['유사용어혼동'] }
+    });
+    // combo 꼬리(_q 없음)는 parseWeakSimId가 null — 유사용어혼동만 1건
+    assert.equal(out.length, 1);
+    assert.equal(out[0].tag, '유사용어혼동');
+    assert.equal(out[0].wrongs, 1);
+});
+
+test('AN-11 computeTrapWeakness: 태그 없는 오답만 있으면 빈 진단 (거짓 진단 없음)', async () => {
+    const { computeTrapWeakness } = await import(ENGINE);
+    const out = computeTrapWeakness({
+        quizResults: { 'subject1_q1': { correct: false }, 'subject1_q2': { correct: false } },
+        weakCards: new Set(),
+        questionTraps: {}
+    });
+    assert.deepEqual(out, []);
+    // questionTraps 인자 자체가 없는(구형 번들) 환경도 안전
+    assert.deepEqual(computeTrapWeakness({ quizResults: { 'a_q1': { correct: false } } }), []);
+});
+
+test('AN-11 computeTrapWeakness: 정렬 — 오답 수 우선, 동률이면 오답률', async () => {
+    const { computeTrapWeakness } = await import(ENGINE);
+    const out = computeTrapWeakness({
+        quizResults: {
+            'q_a': { correct: false }, 'q_b': { correct: false },  // 태그A 오답2
+            'q_c': { correct: false }, 'q_d': { correct: true },
+            'q_e': { correct: true }, 'q_f': { correct: true },     // 태그B 오답1/시도4
+            'q_g': { correct: false },                              // 태그C 오답1/시도1 → B보다 위
+        },
+        weakCards: new Set(),
+        questionTraps: {
+            'q_a': ['태그A'], 'q_b': ['태그A'],
+            'q_c': ['태그B'], 'q_d': ['태그B'], 'q_e': ['태그B'], 'q_f': ['태그B'],
+            'q_g': ['태그C'],
+        }
+    });
+    assert.deepEqual(out.map(r => r.tag), ['태그A', '태그C', '태그B']);
+});
+
+test('AN-11 buildWeeklyReportText: 취약 함정 유형 행 — 상위 2유형만 표기', async () => {
+    const { buildWeeklyReportText } = await import(ENGINE);
+    const text = buildWeeklyReportText({
+        appName: 'PassOK',
+        trapWeakness: [
+            { tag: '수치바꿔치기', attempts: 5, wrongs: 3, wrongRate: 0.6 },
+            { tag: '절대표현', attempts: 4, wrongs: 1, wrongRate: 0.25 },
+            { tag: '주어치환', attempts: 2, wrongs: 1, wrongRate: 0.5 },  // 3위 — 리포트는 2유형까지만
+        ]
+    });
+    assert.match(text, /취약 함정 유형: 수치바꿔치기 \(오답 3건\) · 절대표현 \(오답 1건\)/);
+    assert.ok(!text.includes('주어치환'));
+    // 집계 없으면 행 자체가 없음
+    assert.ok(!buildWeeklyReportText({ appName: 'PassOK' }).includes('함정'));
 });

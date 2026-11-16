@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 7e119e3de7e324a6
-> 생성: 2026-11-16 · 원천: SPEC.md(716개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: b2aca437d7a1cba5
+> 생성: 2026-11-16 · 원천: SPEC.md(717개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 716개 — 문서 연결 475 · 소스 연결 635 · 테스트 연결 676 · 보고서 연결 109
+**커버리지 요약**: 요구사항 717개 — 문서 연결 475 · 소스 연결 636 · 테스트 연결 677 · 보고서 연결 109
 
 ---
 
@@ -68,6 +68,7 @@
 | AN-08 | ✅ | 테스트 | — | src/study/analysis-engine.js<br>src/views/analysis-view.js | tests/fixtures/analysis-seed.js<br>tests/unit/engine/analysis-deepening.test.js | — | — |
 | AN-09 | ✅ | E2E 테스트 | DOC-DSN-18 | html/views/analysis.html<br>index.html<br>src/study/analysis-engine.js<br>src/views/analysis-view.js | tests/dom/study/study-dashboard.dom.test.js<br>tests/e2e/analysis-view.spec.js<br>tests/unit/engine/analysis-deepening.test.js | — | — |
 | AN-10 | ✅ | E2E 테스트 | DOC-DSN-18<br>DOC-DSN-33<br>DOC-DSN-52 | tools/build/build_question_chapters.js<br>tools/build/textbook_anchors.js | tests/e2e/analysis-view.spec.js<br>tests/unit/content/textbook-anchors.test.js | — | — |
+| AN-11 | ✅ | 테스트 | — | src/content/data-loader.js<br>src/study/analysis-engine.js<br>src/views/analysis-view.js<br>tools/build/build_question_chapters.js | tests/unit/engine/analysis-engine.test.js | — | — |
 
 ## 3.2 플래시카드
 
