@@ -36,6 +36,9 @@ const QUIET = process.argv.includes('--quiet');
 const MOCK_ROUNDS_REQUIRED = 3;
 const MOCK_ROUNDS_RECOMMENDED = 6;
 const DEFAULT_Q_PER_SUBJECT = 20;
+/** 정식 승격 팩 과목별 표준형 교재 최소 본문량 — 비공백 문자 기준.
+ *  ~A4 13쪽 분량. 시중 수험서 절당 4쪽·최소 5절 구성을 하한으로 삼는다. */
+const MIN_TEXTBOOK_CHARS_PER_SUBJECT = 20000;
 /** 과목 1회 출제 문항 수 — questionsPerSubject 선언 우선, 미선언 20 간주 */
 const perSubjectQ = (manifest, subjKey) =>
     ((manifest.integratedExam || {}).questionsPerSubject || {})[subjKey] || DEFAULT_Q_PER_SUBJECT;
@@ -51,6 +54,8 @@ const floorFor = (manifest, subjKey) => perSubjectQ(manifest, subjKey);
 
 /** 기준 상향(모의고사 3회분) 이전 정식 승격 팩 — 신기준 미달은 오류가 아닌 보강 권장(warn)으로 보고 */
 const MOCK3X_GRANDFATHERED = new Set(['broker', 'indsafe', 'compapp2', 'carework']);
+/** 교재 볼륨 하한 신설 이전 active 팩 — 스텁 볼륨도 차단이 아닌 보강 권장(warn)으로 보고 */
+const TEXTBOOK_VOLUME_GRANDFATHERED = new Set(['broker', 'indsafe', 'compapp2']);
 
 /** 성숙도 티어 — draft(선언) < pilot(출제기준+표준형 챕터) < active(pilot+과목당 ≥최소 문항) */
 const TIERS = ['draft', 'pilot', 'active'];
@@ -97,6 +102,23 @@ function questionCount(contentRoot, file) {
     const p = path.join(ROOT, contentRoot, '문제은행', file);
     if (!fs.existsSync(p)) return null;
     return (fs.readFileSync(p, 'utf-8').match(/^###\s*Q\d+/gm) || []).length;
+}
+
+/** 과목별 표준형 교재 본문량 — manifest chapters[] 선언 파일의 비공백 문자 합계 */
+function textbookChars(contentRoot, subject) {
+    let total = 0;
+    for (const c of subject.chapters || []) {
+        const f = typeof c === 'string' ? c : c.file;
+        if (!f) continue;
+        const p = path.join(ROOT, contentRoot, subject.dir || '', f);
+        if (fs.existsSync(p)) {
+            total += fs.readFileSync(p, 'utf-8')
+                .replace(/```[\s\S]*?```/g, '')
+                .replace(/[#>*`\-\[\]()|]/g, '')
+                .replace(/\s/g, '').length;
+        }
+    }
+    return total;
 }
 
 const targets = getExamTargets(ROOT);
@@ -184,6 +206,13 @@ for (const t of targets) {
                 if (MOCK3X_GRANDFATHERED.has(t.id)) warn(t.id, `${msg} (기준 상향 전 승격 팩 — 보강 권장)`);
                 else err(t.id, msg);
             }
+            const tbBySubject = Object.fromEntries(subjects.map((s) => [s.key, textbookChars(t.contentRoot, s)]));
+            const thinVol = subjects.filter((s) => (tbBySubject[s.key] || 0) < MIN_TEXTBOOK_CHARS_PER_SUBJECT);
+            if (thinVol.length) {
+                const msg = `tier active 요건: 과목당 표준형 교재 ${MIN_TEXTBOOK_CHARS_PER_SUBJECT}자 미충족 — ${thinVol.map((s) => `${s.key}:${tbBySubject[s.key] || 0}자`).join(', ')}`;
+                if (TEXTBOOK_VOLUME_GRANDFATHERED.has(t.id)) warn(t.id, `${msg} (볼륨 기준 신설 전 승격 팩 — 교재 보강 권장)`);
+                else err(t.id, msg);
+            }
         }
     }
 
@@ -209,6 +238,7 @@ for (const t of targets) {
     rows.push({
         id: t.id, soon, tier, subjects: subjects.length,
         textbookFiles: subjects.reduce((n, s) => n + (s.chapters || []).length, 0),
+        textbookKChars: Math.round(subjects.reduce((n, s) => n + textbookChars(t.contentRoot, s), 0) / 1000),
         totalQ, features: Object.keys(entry.features || {}).length,
         minRounds, optional: optional.join('+') || '-',
     });
@@ -217,10 +247,10 @@ for (const t of targets) {
 // ── 리포트 ──
 console.log('시험 팩 온보딩·승격 진단\n');
 const ID_W = Math.max(10, Math.max(...rows.map(r => r.id.length)) + 1);
-console.log('  ' + 'id'.padEnd(ID_W) + '등급'.padEnd(8) + 'tier'.padEnd(7) + '과목'.padEnd(5) + '챕터'.padEnd(5) + '문항'.padEnd(8) + '모의회분'.padEnd(9) + 'features'.padEnd(9) + '선택자산');
+console.log('  ' + 'id'.padEnd(ID_W) + '등급'.padEnd(8) + 'tier'.padEnd(7) + '과목'.padEnd(5) + '챕터'.padEnd(5) + '교재k자'.padEnd(8) + '문항'.padEnd(8) + '모의회분'.padEnd(9) + 'features'.padEnd(9) + '선택자산');
 for (const r of rows) {
     console.log('  ' + r.id.padEnd(ID_W) + (r.soon ? '준비중' : '정식').padEnd(8) + String(r.tier).padEnd(7)
-        + String(r.subjects).padEnd(5) + String(r.textbookFiles).padEnd(5)
+        + String(r.subjects).padEnd(5) + String(r.textbookFiles).padEnd(5) + String(r.textbookKChars).padEnd(8)
         + String(r.totalQ).padEnd(8) + String(r.minRounds === null ? '-' : `${r.minRounds}/권장${MOCK_ROUNDS_RECOMMENDED}`).padEnd(9)
         + String(r.features).padEnd(9) + r.optional);
 }

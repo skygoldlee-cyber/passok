@@ -1,6 +1,12 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 feat(gates+content): active 티어 교재 볼륨 게이트 + labor 헤딩 표준화 + 스텁 팩 본문 확장
+
+- **교재 볼륨 게이트** (`check_exam_onboard.js`): active 티어에 과목당 표준형 본문 20,000자(~A4 13쪽) 하한 신설 — 기존 승격 팩(broker·indsafe·compapp2)은 경고, 신규 승격은 구조 오류. 리포트 표에 "교재k자" 열 추가
+- **labor 헤딩 표준화** (`tmp/migrate_labor_headings.js`): `### N.` 번호 절 2,739건 → `## N.` 승격, `### 📖 기출 핵심 정리` 59건 → `## 📖` 챕터 카드 — 리더 절 카드 분할·§앵커가 labor에서도 작동. 인용 라인 불변·번호 게이트 위반 0
+- **active 스텁 본문 확장 (ai-draft)**: compapp2 스켈레톤 슬롯 22개 LLM 본문 채우기(`tmp/fill_compapp2_slots.js`), broker 160소절·indsafe 82소절 압축 불릿 → 해설 본문 확장(`tmp/expand_sections.js`) — 전량 `<!-- ai-draft: 검수 필요 -->` 표기
+
 ## 2026-11-16 feat(content): carework 챕터 요약 카드 + 생성 문항 표기 정리
 
 - **carework `## 📌 챕터 핵심 요약` 16카드 신규** (`tmp/gen_carework_summaries.js`, AI 초안 — `<!-- ai-draft -->` 표기): cosmetic 관례 순서(본문 → 요약 → 확인문제 → 다음 챕터)로 확인문제 카드 앞에 삽입. "이 챕터에서 배운 것" + "핵심 3가지" 구조, LLM 초안 → 형식 검증(구조·길이) 후 편입
