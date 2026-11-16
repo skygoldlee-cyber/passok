@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: f0eeec547fdd911f
+> 입력 해시: 6b9eba12801115e3
 > 생성: 2026-11-16 · 원천: SPEC.md(711개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -1031,6 +1031,7 @@
 | DOC-BIZ-10 | docs/exams/carework/business/이용자_관점_평가_2026-11-13.md | ROAD-P5 |
 | DOC-BIZ-11 | docs/exams/carework/business/개인정보처리_위탁계약서_초안.md | — |
 | DOC-BIZ-12 | docs/exams/carework/business/전문가검토_의뢰서.md | — |
+| DOC-BIZ-13 | docs/dev/business/자격시험_학습매체_경쟁분석.md | — |
 | DOC-DEV-01 | docs/dev/SPEC.md | — |
 | DOC-DEV-02 | docs/dev/ARCHITECTURE.md | — |
 | DOC-DEV-03 | docs/dev/CHANGES.md | — |
@@ -1163,6 +1164,7 @@
 ## 부록 C — 관련 SPEC ID 헤더 누락 문서
 
 - docs/assets/README.md
+- docs/dev/business/자격시험_학습매체_경쟁분석.md
 - docs/dev/runbooks/CONTENT_PIPELINE_SPEC.md
 - docs/dev/runbooks/E2E_TEST_SUPABASE.md
 - docs/exams/carework/business/개인정보처리_위탁계약서_초안.md

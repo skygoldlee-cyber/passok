@@ -127,6 +127,7 @@ docs/
 | [DOC_CONVENTIONS.md](DOC_CONVENTIONS.md) | 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 규약 + 게이트 매핑 (DOC-DEV-08) |
 | [CODE_CONVENTIONS.md](CODE_CONVENTIONS.md) | 코드 규약 정본 — 파일 계층·명칭·금지 패턴·저장소/UI/추적성 규약 + 규약→게이트 매핑 (DOC-DEV-09) |
 | [SPEC.md](dev/SPEC.md) | 요구사양 명세서 — 구현된 기능을 역공학해 정리 (현행 기준서) |
+| [자격시험_학습매체_경쟁분석.md](dev/business/자격시험_학습매체_경쟁분석.md) | 전 팩 공통 — 교재·인강·CBT 매체별 약점 분석 + 구현 현황 대조(부록 A 갭 4개) (DOC-BIZ-13) |
 | [TRACE_MATRIX.md](dev/TRACE_MATRIX.md) | SPEC↔코드 추적 매트릭스 — 요구사항별 @spec 태그·테스트·문서 매핑 (자동 생성 — `npm run build:trace`) |
 | [COMPLEXITY_BACKLOG.md](dev/COMPLEXITY_BACKLOG.md) | 순환복잡도 상위 함수 분해 백로그 — 임계 초과 함수 목록·분해 순서 (⚙️ 생성물 — `node tools/check/check_complexity.js --report`) (DOC-DEV-14) |
 | [AI_COACH_DESIGN.md](dev/design/AI_COACH_DESIGN.md) | AI 코치 설계 — 서버측 Gemini 런타임 학습 기능·ai-proxy·ai_usage 계측 (DOC-DSN-40) |
@@ -536,6 +537,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-BIZ-10 | `docs/exams/carework/business/이용자_관점_평가_2026-11-13.md` |
 | DOC-BIZ-11 | `docs/exams/carework/business/개인정보처리_위탁계약서_초안.md` |
 | DOC-BIZ-12 | `docs/exams/carework/business/전문가검토_의뢰서.md` |
+| DOC-BIZ-13 | `docs/dev/business/자격시험_학습매체_경쟁분석.md` |
 | DOC-ARC-01 | docs/exams/cosmetic/report_archive/Cosmetic Master Business Plan.md |
 | DOC-ARC-02 | `docs/exams/cosmetic/report_archive/EXTERNAL_REVIEW_LEARNING_PRO.md` |
 | DOC-ARC-03 | `docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md` |

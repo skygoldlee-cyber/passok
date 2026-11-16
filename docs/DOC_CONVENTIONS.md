@@ -33,6 +33,7 @@ docs/
 | `design/` | 설계 **의도** 문서 | "무엇을/왜 그렇게" — 설계안·가이드·계획·로드맵·흐름 명세 | SUPABASE_DESIGN · USER_FLOW · UIUX_DESIGN_GUIDE |
 | `reference/` | **현행 구현** 기술 명세·참조 | "지금 어떻게 동작" — 화면 지도·로직 해설·환경·테스트 정책 | SCREEN_MAP · FLASHCARD_LOGIC · TESTING |
 | `runbooks/` | 실행 절차 | "어떻게 수행" — 작업 순서·운영 체크리스트 | DEPLOYMENT_GUIDE · CONTENT_WORKFLOW |
+| `business/` | 플랫폼 사업 분석·시장 조사 | 전 시험 팩 공통인 사업·매체 전략 | 자격시험_학습매체_경쟁분석 (DOC-BIZ-13) |
 
 **design ↔ reference 경계**: 의도·결정·계획은 design, 구현 사실의 기술은 reference다. 예 — `USER_FLOW`(흐름 계약=설계 의도)는 design, `SCREEN_MAP`(화면 인벤토리=현행 사실)는 reference.
 
