@@ -2,6 +2,7 @@
 
 > 본 문서는 교재(`content/exams/hazmat/교재/`)의 챕터가 참조자료(`content/exams/hazmat/참조자료/ref_md/`)의 어느 문서를 근거로 삼는지 정의한다.
 > **관련 SPEC ID**: `RR-01~16` (참조자료 연결) · `CS-*` (참조자료 디렉토리 구조)
+> **문서 ID**: DOC-REF-21
 > **범위**: exam:hazmat · 판본: textbook
 
 ---

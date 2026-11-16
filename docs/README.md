@@ -101,7 +101,7 @@ docs/
 │   ├── reference/             ← 명세·로직·참조 문서 (18개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (4개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (2개 — 사용자 매뉴얼·개인정보처리방침 + images/ — 런타임 fetch·배포 대상)
-└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (11개)
+└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (11개) · docs/exams/hazmat/ (1개)
     ├── README.md              ← 시험별 문서 인덱스
     ├── user/                  ← 학습자 문서 (5개)
     ├── business/              ← 사업 기획·시장 조사·마케팅 문서 (cosmetic 6개 · carework 6개)
@@ -181,7 +181,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [NUMBERING_SYSTEM.md](exams/cosmetic/reference/NUMBERING_SYSTEM.md) | 교재 챕터/섹션 십진 번호체계 |
 | [QUESTION_SCHEMA_DESIGN.md](dev/design/QUESTION_SCHEMA_DESIGN.md) | 문항 데이터 스키마 — 복수정답형의 "진술 단위 O/X → 조합 도출" 구조 |
 | [COMBO_GENERATION_GUIDE.md](dev/runbooks/COMBO_GENERATION_GUIDE.md) | 복수정답형 드릴 생성 도구 — `build_combo_drills.js` + `ref_statements.js` |
-| [TEXTBOOK_REFERENCE_MAPPING.md](exams/cosmetic/reference/TEXTBOOK_REFERENCE_MAPPING.md) | 교재 챕터/섹션 ↔ 참조자료 파일 매핑 정의 |
+| [TEXTBOOK_REFERENCE_MAPPING.md](exams/cosmetic/reference/TEXTBOOK_REFERENCE_MAPPING.md) | 교재 챕터/섹션 ↔ 참조자료 파일 매핑 정의 (cosmetic) |
+| [TEXTBOOK_REFERENCE_MAPPING.md](exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md) | 교재 챕터/섹션 ↔ 참조자료 파일 매핑 정의 (hazmat) (DOC-REF-21) |
 | [COMBO_STUDY_STRATEGY.md](dev/reference/COMBO_STUDY_STRATEGY.md) | 복수정답형 학습 전략 — 진술 원자 단위 학습법, 전략→기능 매핑 (코드 주석에서 참조) |
 | [ENGINEERING_PRACTICES.md](dev/reference/ENGINEERING_PRACTICES.md) | 소프트웨어 공학 요소 — SSOT, 신선도 게이트, 추적성, 다층 검증, 결정성 빌드 등 |
 | [SOFTWARE_ENGINEERING_TECHNIQUES.md](dev/reference/SOFTWARE_ENGINEERING_TECHNIQUES.md) | 적용 공학 기법 카탈로그 — PBT·변이 테스트·성능 예산·ADR·도메인 경계·오류 텔레메트리 포함 전 기법 색인 |
@@ -460,6 +461,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-REF-18 | `docs/dev/reference/CONVENTIONS_CHEATSHEET.md` |
 | DOC-REF-19 | `docs/dev/reference/COMMANDS.md` |
 | DOC-REF-20 | `docs/dev/reference/DOCX_GENERATION.md` |
+| DOC-REF-21 | `docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md` |
 | DOC-RBK-01 | `docs/dev/runbooks/AUDIO_HOSTING_GUIDE.md` |
 | DOC-RBK-02 | `docs/dev/runbooks/COMBO_GENERATION_GUIDE.md` |
 | DOC-RBK-03 | `docs/dev/runbooks/CONTENT_WORKFLOW.md` |
