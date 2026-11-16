@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261116-20bf8e5",
+    "date": "2026-11-16",
+    "notes": [
+      "[수정·reader] 메타 규약 접근 정정 — 요약 카드는 비메타 콘텐츠로 기준선 승인",
+      "[수정·refs] 세부기준 평탄화 분할 + 메타 요약 패턴 — CI content traceability 해소",
+      "[수정·analysis] esc-ok 검토 면제 주석 — check:escape 기준선 복구",
+      "[정리·build] 파생물 동기 — keyword-index·sw.js (참조자료 정규화 반영)",
+      "[수정·carework] ref_md 링크 괄호 퍼센트 인코딩 — audit_card_quality BROKEN_LINK 해소",
+      "[기능·exam] hazmat(위험물산업기사) active 승격 — comingSoon 해제",
+      "[content·refs] 참조자료 레지스트리 정규화 — 과목 귀속·lawdb 조인 완결",
+      "[content·refs] hazmat 과목별 참조자료 8종 추가 — law.go.kr DRF 원문 ref_md",
+      "[review·content] hazmat 문제은행 362문 전량 검수 — 사실 오류 0, 헤더 검수 완료 표기",
+      "[review·content] hazmat 확인문제 80문 전량 검수 — ai-draft 마커 제거"
+    ]
+  },
+  {
     "version": "v20261116-277666b",
     "date": "2026-11-16",
     "notes": [
@@ -235,14 +251,6 @@
       "[리팩터링·complexity] 2라운드 — _requestAi·evaluateStability 분해 (336→334)",
       "[리팩터링·complexity] 상위 복잡도 3함수 분해 — markStoryNarrative·populateExamCards·care-flow _render (340→336)",
       "[정리·release] v20261112-f735eae 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-52523f5",
-    "date": "2026-11-13",
-    "notes": [
-      "[수정·ui] 라이선스 코드 입력 진입점 단일화 — 설정 패널만 유지",
-      "[정리·release] v20261113-b582e0c 스탬프 확정 [no-docs]"
     ]
   }
 ]
