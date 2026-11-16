@@ -1,6 +1,10 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 docs(design): DOC-DSN-52 학습매체 연결 설계 — DOC-BIZ-13 갭 실행안
+
+`LEARNING_MEDIA_LINK_DESIGN.md` 신설 — 부록 A 갭 1·2순위의 실행 설계. Phase 1 `#/trainer/concept/<cid>` 개념 문항 딥링크(conceptId·cidSection·weak-items 패턴·해시 라우팅 전부 기존 자산 재사용), Phase 2 종이 교재 QR(qr.js→URL 페이로드·docx/pdf 섹션 훅), Phase 3 함정(`trap`) 태그(cosmetic 파일럿→ai:* 자동 태깅). 부록 A 표에 설계 문서 링크 반영.
+
 ## 2026-11-16 docs(biz): DOC-BIZ-13 원문 v2 반영 — §4 "그 밖의 학습매체" 14개 매체 추가
 
 원문 갱신(96→126줄) 반영 — 저자가 팩 공통으로 일반화 + §4 신설(대면교육·요약집·암기카드·유튜브·오디오·Anki·커뮤니티·관리형·스토리형·AI튜터·공식자료). §4에도 구현 현황 열 부기: Anki 대응=내장 플래시카드+자동 생성·FSRS, AI 튜터=DOC-DSN-40, 관리형=study-tracker 부분, 커뮤니티·오디오·실기영상 미구현. 부록 A 갭을 5개로 재정렬.
