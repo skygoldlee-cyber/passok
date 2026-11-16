@@ -45,6 +45,7 @@
                 "html/views/textbook.html",
                 "html/views/trainer.html",
                 "src/study/analysis-engine.js",
+                "src/study/concept-drill.js",
                 "src/shell/app-dashboard.js",
                 "src/shell/app-fallback.js",
                 "src/shell/app-shell.js",

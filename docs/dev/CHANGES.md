@@ -1,6 +1,10 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 fix(gates): domain-map에 concept-drill.js 등록
+
+`src/study/concept-drill.js`(DR-08 신규 모듈) 미분류로 저장소 전 파일 분류 게이트 실패 — platform 도메인 규칙 추가. 배포 파생물 재생성 중 발견.
+
 ## 2026-11-16 fix(refpipe): DOCX 이미지 포맷 대응 — SVG 래스터·WebP PIL 변환·%20 경로
 
 `md2doc.py` `_emit_image`/`_resolve_image` 수정 3건 — ① SVG 감지 `data.lstrip()[:5]`가 4바이트 `b"<svg"`와 불일치해 직접 시작 SVG 미감지 → startswith 판정 ② 로컬 이미지 경로 `urllib.parse.unquote` 누락으로 `a%20b.png` 파일 미발견 ③ WebP 등 미지원 포맷은 `_pil_png`(Pillow) PNG 재인코딩 폴백 추가. 파일럿 DOCX에 이미지 19개 전량 PNG 임베딩 확인. pytest `TestDocxImageFormats` 3건 + requirements Pillow 명시.
