@@ -1,6 +1,13 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 content(refs): hazmat 과목별 참조자료 8종 추가 — law.go.kr DRF 원문 ref_md
+
+- **과목별 ref_md 배치**: 과목1/위험물안전관리법 · 과목2/화재예방법+시행령+시행규칙+재난 및 안전관리 기본법 · 과목3/위험물안전관리법 시행령+시행규칙+위험물안전관리에 관한 세부기준 — 출제기준 대조 과목 귀속
+- **법령 원문 직입력**: 국가법령정보센터 DRF API 텍스트를 MD로 변환 (조문·항·호 구조, 시행일자 메타 헤더) — 세부기준은 AdmRulService 경로로 별도 취득 (184단위·139k자)
+- **레지스트리 등록**: references.json — subjectDirMap(physchem→과목1/fire→과목2/hazprop→과목3)·docSubjectRules 4규칙·selfAuthoredDocs 9종·subjectDefaultRefdoc — pdf-registry·law-links 재생성
+- 게이트: reflayout·refsubjects 통과 · 인용 동기 미발견 0 · subjectDefaultRefdoc의 referenceLaw 미등록 경고는 carework와 동일한 advisory (비차단)
+
 ## 2026-11-16 review(content): hazmat 문제은행 362문 전량 검수 — 사실 오류 0, 헤더 검수 완료 표기
 
 - **전량 정답·선지·해설 대조**: 과목1 122·과목2 120·과목3 120문 전문 검수 — 정답-선지 정합·해설 일치·법령 수치 교차검증, 사실 오류 0건

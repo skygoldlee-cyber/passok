@@ -1223,13 +1223,19 @@ const _EXAM_TABLES = {
     "hazmat": {
         contentRoot: "content/exams/hazmat",
         SUBJECT_DIR_MAP: {
-
+        "physchem": "과목1",
+        "fire": "과목2",
+        "hazprop": "과목3"
         },
         REF_MD_SUBJECTS: {
 
         },
         REF_DIRS: {
-
+        "ref_md": [
+            "과목1",
+            "과목2",
+            "과목3"
+        ]
         },
         SOURCE_REF_MAP: [
 
