@@ -45,10 +45,8 @@
    "physchem_card_f783fa": "에테르 (Ether)",
    "physchem_card_85f957": "케톤 (Ketone)",
    "physchem_card_12545b": "에스터 (Ester)",
-   "physchem_card_8e8b13": "물에 대한 용해성",
-   "physchem_card_1f3619": "전기전도성",
-   "physchem_card_216d18": "가연성 및 인화성",
    "physchem_card_4f0c0e": "주요 결합 형태",
+   "physchem_card_1f3619": "전기전도성",
    "physchem_card_7a9d4b": "가연성 및 내열성",
    "physchem_card_98da5f": "반응 속도",
    "physchem_card_f238f8": "공유결합성 무기화합물",
@@ -63,16 +61,12 @@
    "physchem_card_ad1a98": "금속 탄화물 및 인화물",
    "physchem_card_a40694": "금속 수소화물",
    "physchem_card_9f16cc": "할로젠간 화합물",
-   "physchem_card_b8481b": "주요 화학결합",
-   "physchem_card_7e9353": "가연성",
-   "physchem_card_7ed1da": "용매 용해도",
    "physchem_card_df56f4": "알파선",
    "physchem_card_5161db": "베타선",
    "physchem_card_ee7b36": "감마선"
   },
   "quizzes": {
-   "physchem_quiz_a1f969": "공유결합의 절단 및 재형성이 필요해 비교적 느림|화학 반응 속도",
-   "physchem_quiz_9b5d16": "비교적 낮음 (상온 액체 다수)|녹는점 및 끓는점"
+   "physchem_quiz_a1f969": "공유결합의 절단 및 재형성이 필요해 비교적 느림|화학 반응 속도"
   }
  },
  "fire": {

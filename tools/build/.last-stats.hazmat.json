@@ -1,12 +1,12 @@
 {
   "subjects": {
     "physchem": {
-      "cards": 68,
-      "quizzes": 2,
+      "cards": 63,
+      "quizzes": 1,
       "files": {
         "교재/physchem/1과목_물질의 물리화학적 성질_표준형.md": {
-          "cards": 77,
-          "quizzes": 2
+          "cards": 66,
+          "quizzes": 1
         }
       }
     },
