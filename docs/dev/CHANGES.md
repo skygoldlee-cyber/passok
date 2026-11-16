@@ -1,6 +1,16 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 refactor(content): 표준형 교재 파일명 *_표준형.md 전 팩 통일 (91건)
+
+교재 표준 파일명을 CS-12 스캔 패턴(`*_표준형.md`)과 불일치하던 전 팩 91파일에 일괄 부여 — 번호체계 게이트의 스캔 누락 해소.
+
+- **rename-batch 전파** — sync_textbook_files.js --rename-batch로 manifest file/storyFile·sw.js MD_ASSETS·콘텐츠 md 인용 경로 321지점 일괄 전파. 설정 문서(`PASSMULA_...시리즈설정문서.md`)는 교재가 아니라 복원
+- **헤딩 번호 정합화 1668건** — 신규 스캔 대상 107파일에서 구식 접두(가./(N)/N)/알파벳) 제거 + 체커 상태기계 기반 재번호(부모 ### 번호 있으면 N.M 부여, 없으면 제거). check_numbering 위반 1700→0
+- **sync 도구 보정** — chapters[].file에 `/` 포함 시(`../theory/…` 상호참조) 표준형 자동할당 스킵 — appraisal 구 골격 챕터의 타 과목 참조 보존
+- **하드코딩 참조 정리** — check_scenario_items.js의 carework 표준형 경로 신규명으로 갱신
+- 검증: sync:citations 6884 무결 · build:data 파서 일치 · check:onboard 오류 0 · story 재생성
+
 ## 2026-11-16 feat(ai): 심화 보강 CE-06 리라이트 — audit 60자+ 761→14
 
 `ai_ce06_refine.js` 신설 — 심화 보강 블록을 ### 절 단위로 LLM 재작성(문장 ≤40자·문단 ≤3문장·표 분할, 사실·수치 보존 요구). 수치·단위 토큰 다중집합 비교로 불일치 출력 자동 기각.

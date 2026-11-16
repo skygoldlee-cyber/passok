@@ -4,7 +4,7 @@
       "cards": 4,
       "quizzes": 4,
       "files": {
-        "교재/civil/민법_총칙물권.md": {
+        "교재/civil/민법_총칙물권_표준형.md": {
           "cards": 4,
           "quizzes": 4
         }
@@ -14,7 +14,7 @@
       "cards": 3,
       "quizzes": 0,
       "files": {
-        "교재/econ/경제학원론.md": {
+        "교재/econ/경제학원론_표준형.md": {
           "cards": 3,
           "quizzes": 0
         }
@@ -24,11 +24,11 @@
       "cards": 0,
       "quizzes": 0,
       "files": {
-        "교재/realestate/부동산학원론.md": {
+        "교재/realestate/부동산학원론_표준형.md": {
           "cards": 0,
           "quizzes": 0
         },
-        "교재/realestate/../theory/부동산학개론.md": {
+        "교재/realestate/../theory/부동산학개론_표준형.md": {
           "cards": 0,
           "quizzes": 0
         }
@@ -38,7 +38,7 @@
       "cards": 0,
       "quizzes": 0,
       "files": {
-        "교재/law/감정평가관련법규.md": {
+        "교재/law/감정평가관련법규_표준형.md": {
           "cards": 0,
           "quizzes": 0
         }
@@ -48,7 +48,7 @@
       "cards": 3,
       "quizzes": 1,
       "files": {
-        "교재/accounting/회계학.md": {
+        "교재/accounting/회계학_표준형.md": {
           "cards": 3,
           "quizzes": 1
         }
@@ -58,11 +58,11 @@
       "cards": 4,
       "quizzes": 2,
       "files": {
-        "교재/appraisalthy/감정평가이론.md": {
+        "교재/appraisalthy/감정평가이론_표준형.md": {
           "cards": 4,
           "quizzes": 2
         },
-        "교재/appraisalthy/감정평가_통계원론.md": {
+        "교재/appraisalthy/감정평가_통계원론_표준형.md": {
           "cards": 0,
           "quizzes": 0
         }
@@ -72,7 +72,7 @@
       "cards": 0,
       "quizzes": 0,
       "files": {
-        "교재/appraisallaw/감정평가및보상법규.md": {
+        "교재/appraisallaw/감정평가및보상법규_표준형.md": {
           "cards": 0,
           "quizzes": 0
         }
@@ -82,7 +82,7 @@
       "cards": 3,
       "quizzes": 2,
       "files": {
-        "교재/appraisalwork/감정평가실무.md": {
+        "교재/appraisalwork/감정평가실무_표준형.md": {
           "cards": 3,
           "quizzes": 2
         }
