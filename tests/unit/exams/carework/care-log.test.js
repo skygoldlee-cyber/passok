@@ -32,7 +32,7 @@ test('상수 계약 — 서비스 5종·활동 3그룹', () => {
 });
 test('관찰 칩 입력은 본문에 반영 — 미선택 시 생략', () => {
     const t = buildCareLog({ ...base, obs: { meal: '전', sleep: '양호', voided: '' } });
-    assert.match(t, /\[상태 관찰\] 식사량: 전 · 수면: 양호/);
+    assert.match(t, /\[상태 관찰\] 식사량: 전량 · 수면: 양호/); // 칩 축약값은 공단 기록지 표현으로 확장
     assert.ok(!t.includes('배변'));
     assert.ok(!buildCareLog(base).includes('상태 관찰')); // obs 없으면 행 자체 생략
 });
@@ -42,7 +42,7 @@ test('격식표 MD — 기본정보·서비스·특이사항이 표로 구성', 
     assert.match(md, /\| 대상자 \| 김 ○○ 님 \|/);
     assert.match(md, /\| 급여 종류 \| 방문요양 \|/);
     assert.match(md, /\| 신체활동 지원 \| 식사 보조 \|/); // 선택 그룹만 행
-    assert.match(md, /\| 상태 관찰 \| 식사량: 전 \|/);
+    assert.match(md, /\| 상태 관찰 \| 식사량: 전량 \|/);
     assert.match(md, /\| 특이사항 \|/);
     assert.match(md, /\|---\|/); // MD 표 구분행 존재 — docxFileMd가 표로 변환
     assert.ok(!md.includes('정서·인지 지원')); // 미선택 그룹 생략

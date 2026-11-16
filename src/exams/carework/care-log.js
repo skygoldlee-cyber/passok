@@ -18,34 +18,60 @@ export const ACTIVITY_GROUPS = [
     { key: 'cognitive', label: '정서·인지 지원', items: ['말벗·정서 지원', '인지활동·여가', '상태 관찰'] },
 ];
 
-/** @param {{date:string, client:string, service:string, start:string, end:string, activities:Object<string,string[]>, note:string}} in_ */
 /** @param {*} in_ */
+const _reqOk = in_ => Boolean(in_ && in_.date && in_.client && in_.service);
+
+/** @param {string} k */
+const _svcLabel = k => SERVICE_TYPES.find((/** @type {*} */ s) => s.key === k)?.label || k;
+
+/** 일시 표기 — 'YYYY-MM-DD HH:MM~HH:MM' (시작시각 없으면 일자만) */
+/** @param {*} in_ */
+const _when = in_ => `${in_.date}${in_.start ? ` ${in_.start}~${in_.end || ''}` : ''}`;
+
+/** 빈 입력 대체 — '  ' → 기본 문구 */
+/** @param {string} s @param {string} d */
+const _or = (s, d) => (s || '').trim() || d;
+
+/** 선택 활동 → [그룹라벨, '항목 · 항목'] 쌍 (미선택 그룹 생략) */
+/** @param {*} acts */
+const _actRows = acts => /** @type {string[][]} */ (ACTIVITY_GROUPS
+    .map(g => {
+        const sel = ((acts || {})[g.key] || []).filter(Boolean);
+        return sel.length ? [g.label, sel.join(' · ')] : null;
+    }).filter(Boolean));
+
+/** @param {string[]} head @param {string[][]} rows */
+const _kvTbl = (head, rows) =>
+    ['| ' + head.join(' | ') + ' |', '|' + head.map(() => '---').join('|') + '|',
+        ...rows.map(r => '| ' + r.join(' | ') + ' |')].join('\n');
+
+/** @param {{date:string, client:string, service:string, start:string, end:string, activities:Object<string,string[]>, note:string, obs?:Object<string,string>}} in_ */
 export function buildCareLog(in_) {
-    if (!in_ || !in_.date || !in_.client || !in_.service) return null;
-    const svc = SERVICE_TYPES.find(s => s.key === in_.service)?.label || in_.service;
-    const lines = ['■ 요양일지'];
-    lines.push(`일시: ${in_.date}${in_.start ? ` ${in_.start}~${in_.end || ''}` : ''}`);
-    lines.push(`대상자: ${fmtDocName(in_.client)} 님`);
-    lines.push(`급여 종류: ${svc}`);
-    lines.push('', '■ 제공 서비스 내용');
-    const acts = in_.activities || {};
-    for (const g of ACTIVITY_GROUPS) {
-        const sel = (acts[g.key] || []).filter(Boolean);
-        if (sel.length) lines.push(`[${g.label}] ${sel.join(' · ')}`);
-    }
+    if (!_reqOk(in_)) return null;
+    const lines = ['■ 요양일지',
+        `일시: ${_when(in_)}`,
+        `대상자: ${fmtDocName(in_.client)} 님`,
+        `급여 종류: ${_svcLabel(in_.service)}`,
+        '', '■ 제공 서비스 내용'];
+    for (const [label, text] of _actRows(in_.activities)) lines.push(`[${label}] ${text}`);
     const obs = obsText(in_.obs);
     if (obs) lines.push(`[상태 관찰] ${obs}`);
     lines.push('', '■ 특이사항');
-    lines.push(`- ${(in_.note || '').trim() || '특이사항 없음'}`);
+    lines.push(`- ${_or(in_.note, '특이사항 없음')}`);
     lines.push('', '제공자: 요양보호사 ____________');
     return lines.join('\n');
 }
 
 const _OBS_LABELS = /** @type {[string, string][]} */ ([['meal', '식사량'], ['sleep', '수면'], ['voided', '배변']]);
-/** 관찰 칩 입력 → '식사량: 전 · 수면: 양호 · 배변: 정상' (미선택 항목 생략) */
+// 공단 급여제공기록지 표현 — 칩 축약값(전/반/소)은 출력에서 정식 표기로 확장
+// (P1-4 '붙여넣기 재사용' — 기록지에 그대로 옮길 수 있는 문구여야 함)
+const _OBS_FULL = /** @type {Object<string, Object<string,string>>} */ ({
+    meal: { '전': '전량', '반': '½ 이상', '소': '½ 미만' },
+});
+/** 관찰 칩 입력 → '식사량: 전량 · 수면: 양호 · 배변: 정상' (미선택 항목 생략) */
 /** @param {*} obs */
 const obsText = obs => _OBS_LABELS
-    .map(([k, label]) => obs && obs[k] ? `${label}: ${obs[k]}` : '')
+    .map(([k, label]) => obs && obs[k] ? `${label}: ${(_OBS_FULL[k] || {})[obs[k]] || obs[k]}` : '')
     .filter(Boolean).join(' · ');
 
 /**
@@ -54,26 +80,17 @@ const obsText = obs => _OBS_LABELS
  * @param {*} in_
  */
 export function buildCareLogMd(in_) {
-    if (!in_ || !in_.date || !in_.client || !in_.service) return null;
-    const svc = SERVICE_TYPES.find(s => s.key === in_.service)?.label || in_.service;
-    const tbl = (/** @type {string[]} */ head, /** @type {string[][]} */ rows) =>
-        ['| ' + head.join(' | ') + ' |', '|' + head.map(() => '---').join('|') + '|',
-            ...rows.map(r => '| ' + r.join(' | ') + ' |')].join('\n');
-    const out = [tbl(['항목', '내용'], [
-        ['일시', `${in_.date}${in_.start ? ` ${in_.start}~${in_.end || ''}` : ''}`],
+    if (!_reqOk(in_)) return null;
+    const out = [_kvTbl(['항목', '내용'], [
+        ['일시', _when(in_)],
         ['대상자', `${fmtDocName(in_.client)} 님`],
-        ['급여 종류', svc],
+        ['급여 종류', _svcLabel(in_.service)],
     ])];
-    const rows = [];
-    const acts = in_.activities || {};
-    for (const g of ACTIVITY_GROUPS) {
-        const sel = (acts[g.key] || []).filter(Boolean);
-        if (sel.length) rows.push([g.label, sel.join(' · ')]);
-    }
+    const rows = _actRows(in_.activities);
     const obs = obsText(in_.obs);
     if (obs) rows.push(['상태 관찰', obs]);
-    if (rows.length) out.push(tbl(['구분', '제공 서비스 내용'], rows));
-    out.push(tbl(['특이사항'], [[(in_.note || '').trim() || '특이사항 없음']]));
+    if (rows.length) out.push(_kvTbl(['구분', '제공 서비스 내용'], rows));
+    out.push(_kvTbl(['특이사항'], [[_or(in_.note, '특이사항 없음')]]));
     return out.join('\n\n');
 }
 
@@ -81,15 +98,14 @@ export function buildCareLogMd(in_) {
 /** @param {*} in_ */
 export function buildRecordText(in_) {
     if (!in_ || !in_.date || !in_.client) return null;
-    const svc = SERVICE_TYPES.find(s => s.key === in_.service)?.label || in_.service;
     const acts = Object.values(in_.activities || {}).flat().filter(Boolean);
     return [
         '급여제공기록지',
         `대상자: ${fmtDocName(in_.client)}`,
         `일시: ${in_.date} ${in_.start || ''}~${in_.end || ''}`,
-        `급여종류: ${svc}`,
+        `급여종류: ${_svcLabel(in_.service)}`,
         `서비스 내용: ${acts.length ? acts.join(', ') : '(내용 기록)'}`,
-        `특이사항: ${(in_.note || '').trim() || '없음'}`,
+        `특이사항: ${_or(in_.note, '없음')}`,
     ].join('\n');
 }
 

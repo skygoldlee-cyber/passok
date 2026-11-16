@@ -68,6 +68,8 @@
                 "src/content/doc-wm.js",
                 "src/content/doc-stamp.js",
                 "src/content/doc-issues.js",
+                "src/content/doc-md.js",
+                "src/content/md-tokens.js",
                 "src/content/qr.js",
                 "src/content/data-loader.js",
                 "src/content/unpack.js",

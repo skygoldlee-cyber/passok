@@ -168,6 +168,10 @@ combo_baseline.json
 # icons/passok-logo.png(1254px)는 icon-192/512·maskable 생성용 마스터 — 배포 미포함
 icons/passok-logo.png
 
+# ref-pipeline 테스트 픽스처·pytest 산출물 — 배포 무관 로컬 테스트 자산
+ref-pipeline/tests/fixtures/*.png
+ref-pipeline/tests/.pytest-tmp/**
+
 # ---------- 🖼️ ref_md 원본 마스터 (배포 제외 — .webp만 서빙) ----------
 # ref_md 이미지는 webp 재인코딩본만 배포 — jpeg/png는 참조 링크 원본 마스터로 저장소 보존
 # 실제 경로는 ref_md/과목N/<문서>/images/ 2단계 — 1단계 패턴은 매칭되지 않으므로 2단계로 명시

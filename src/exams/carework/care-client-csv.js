@@ -78,7 +78,8 @@ export const clientKvMd = (c) => {
     const rows = [
         ['성명', fmtDocName(c.name)], ['상태', c.status || ''], ['호실', c.room || ''],
         ['생년월일', c.birth || ''], ['비상연락처', c.phone || ''],
-        ['알레르기', c.allergy || ''], ['주의사항', c.caution || ''], ['메모', fmtDocNames(c.memo, true)],
+        // 알레르기 공란은 '없음'이 아니라 '미확인' — 안전 정보의 공백·음성 혼동 방지 (렌더 리뷰)
+        ['알레르기', c.allergy || '미확인'], ['주의사항', c.caution || ''], ['메모', fmtDocNames(c.memo, true)],
         ['수납 서류', checked.length ? checked.join(' · ') : '없음'],
         ['미수납 서류', missing.length ? missing.join(' · ') : '없음'],
     ];

@@ -1,11 +1,11 @@
 // src/exams/carework/views/care-roster.js — 교대 근무표 뷰
 // @spec UX-FORM-03 — 시험 전용 실무 뷰 (DA-13)
-import { ROSTER_SHIFTS, shiftLabel, buildRosterText, rosterToCsv, csvToRoster } from '../care-roster.js';
+import { ROSTER_SHIFTS, shiftLabel, buildRosterText, buildRosterGridMd, rosterToCsv, csvToRoster } from '../care-roster.js';
 import { markFunnel } from '../care-funnel.js';
 import { listRoster, saveRoster, removeRoster, upsertRoster, syncPendingRoster } from '../roster-store.js';
 import { readTableFile, downloadSheet } from '../../../content/xlsx-utils.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
-import { docMdHead, csvToMdTable, mdToHtml, docMdSign } from '../doc-md.js';
+import { docMdHead, mdToHtml, docMdSign } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 import { refreshOrgName, fmtDocNames } from '../facility.js';
 import { showToast, showConfirm, requireFields } from '../../../ui-utils.js';
@@ -53,7 +53,8 @@ function renderPreview() {
 export function careRosterDocMd() {
     const items = listRoster();
     if (!items.length) return '';
-    return docMdHead('교대 근무표') + '\n' + renderToolBody('careRoster', { 근무표: csvToMdTable(rosterToCsv(items.map(r => ({ ...r, worker: fmtDocNames(r.worker) })))) }) + docMdSign([['작성자', 'author']]);
+    // 날짜×근무조 격자 — 미배정 칸이 '미배정'으로 명시돼 근무 공백이 문서에 보인다
+    return docMdHead('교대 근무표') + '\n' + renderToolBody('careRoster', { 근무표: buildRosterGridMd(items) }) + docMdSign([['작성자', 'author']]);
 }
 
 /** 근무표 문서 미리보기 — 배정 목록을 문서로 렌더 (내보내기 메뉴 자동 생성기, 복사·인쇄·PDF 공통 원본) */

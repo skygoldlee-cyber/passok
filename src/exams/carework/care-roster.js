@@ -14,6 +14,34 @@ export function shiftLabel(key) {
     return ROSTER_SHIFTS.find((/** @type {*} */ s) => s.key === key)?.label || key || '';
 }
 
+/** 날짜 목록 → 최소~최대 연속 날짜 (로컬 날짜 기준, 62일 초과 구간은 등록일만 반환) */
+const _fillDates = (/** @type {string[]} */ ds) => {
+    if (ds.length < 2) return ds;
+    const out = [];
+    const end = new Date(`${ds[ds.length - 1]}T12:00:00`);
+    for (const d = new Date(`${ds[0]}T12:00:00`); d <= end && out.length <= 62; d.setDate(d.getDate() + 1))
+        out.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`);
+    return out.length > 62 ? ds : out;
+};
+
+/**
+ * 배정 목록 → 날짜×근무조 격자 MD 표 — 미배정 셀은 '미배정'으로 명시
+ * (목록형은 공백 근무조가 눈에 띄지 않아 격자로 전환 — 렌더 리뷰)
+ * @param {Array<{date:string,shift:string,worker:string,note?:string}>} items
+ */
+export function buildRosterGridMd(items) {
+    if (!items.length) return '';
+    const cell = new Map();
+    for (const r of items) {
+        const k = `${r.date}|${r.shift}`;
+        const w = fmtDocNames(r.worker) + (r.note ? ` · ${r.note}` : '');
+        cell.set(k, cell.has(k) ? `${cell.get(k)}, ${w}` : w);
+    }
+    const dates = _fillDates([...new Set(items.map(x => x.date).filter(Boolean))].sort());
+    const rows = dates.map(d => `| ${d} | ${ROSTER_SHIFTS.map(s => cell.get(`${d}|${s.key}`) || '미배정').join(' | ')} |`);
+    return [`| 날짜 | ${ROSTER_SHIFTS.map(s => s.label).join(' | ')} |`, `|${'---|'.repeat(ROSTER_SHIFTS.length + 1)}`, ...rows].join('\n');
+}
+
 /**
  * 근무 배정 목록 → 교대 근무표 텍스트 (날짜 오름차순)
  * @param {Array<{date:string,shift:string,worker:string,note?:string}>} items

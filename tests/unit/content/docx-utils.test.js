@@ -31,16 +31,21 @@ test('파일명·타입 + 필수 엔트리 + EOCD', async () => {
     assert.ok(f.type.includes('wordprocessingml.document'));
     const { entries, eocd } = await unzip(f);
     assert.deepEqual(Object.keys(entries), [
-        '[Content_Types].xml', '_rels/.rels', 'word/_rels/document.xml.rels', 'word/document.xml', 'word/settings.xml', 'word/footer1.xml',
+        '[Content_Types].xml', '_rels/.rels', 'word/_rels/document.xml.rels', 'word/document.xml', 'word/styles.xml', 'word/settings.xml', 'word/footer1.xml',
     ]);
     assert.ok(eocd, 'EOCD 레코드 없음');
     const settings = entries['word/settings.xml'];
     assert.ok(settings.includes('<w:view w:val="print"/>'), '인쇄 레이아웃 보기 강제 누락 — 페이지 경계 미표시 위험');
     assert.ok(settings.includes('<w:zoom w:percent="100"/>'), '확대율 100% 고정 누락');
-    // 바닥글 쪽 번호 — 공문서 격식 (PAGE 필드 자동 매김)
+    // 바닥글 쪽 번호 — 공문서 격식 (PAGE 필드 자동 매김). IF 중첩은 LibreOffice·한컴이
+    // 계산하지 않아 "11"로 깨지므로 단순 PAGE/NUMPAGES만 사용한다
     const footer = entries['word/footer1.xml'];
     assert.ok(footer.includes('PAGE') && footer.includes('NUMPAGES'), '쪽 번호 필드 누락');
-    assert.ok(footer.includes('&gt; 1'), '1쪽 문서 쪽 번호 생략 조건(IF NUMPAGES>1) 누락');
+    assert.ok(!footer.includes('IF '), 'IF 필드 잔존 — 미지원 뷰어에서 쪽 번호가 깨짐');
+    // styles.xml — 기본 글꼴·한글 언어·제목 스타일 (탐색창·PDF 북마크·접근성)
+    const styles = entries['word/styles.xml'];
+    assert.ok(styles.includes('w:eastAsia="ko-KR"'), '한글 언어 지정 누락 — 맞춤법·금칙이 영어 기준으로 동작');
+    assert.ok(styles.includes('w:styleId="Heading1"'), '제목 스타일 누락');
     assert.ok(entries['word/document.xml'].includes('w:footerReference'), '바닥글 참조 누락');
 });
 
@@ -94,6 +99,18 @@ test('docxFileMd — 열 너비 내용 기반 배분: 레이블 열이 내용 �
     assert.strictEqual(ws[0] + ws[1], 9072, '열 너비 합계가 본문 폭과 불일치');
 });
 
+test('docxFileMd — 연속 2열 표는 라벨 열 폭 통일 (열 경계 계단 방지)', async () => {
+    // 인수인계서 등 상하 인접 2열 표의 라벨 경계가 어긋나면 좌측이 지저분해 보임 — 문서 내 단일 폭
+    const md = '| 항목 | 내용 |\n|---|---|\n| 일시 | 2026-11-15 |\n\n'
+        + '| 구분 | 인계 내용 |\n|---|---|\n| 당일 수행 서비스 | 투약 확인 |';
+    const { entries } = await unzip(docxFileMd(md, 'doc'));
+    const doc = entries['word/document.xml'];
+    const ws = [...doc.matchAll(/<w:gridCol w:w="(\d+)"/g)].map(m => +m[1]);
+    assert.deepStrictEqual(ws.slice(0, 2), ws.slice(2, 4), `두 2열 표의 라벨 열 폭 불일치 — ${ws}`);
+    // 최장 라벨 '당일 수행 서비스'(CJK 7 + 공백 2) 한 줄 폭 = 7×220 + 2×80 + 셀 여백 320
+    assert.strictEqual(ws[0], 7 * 220 + 2 * 80 + 320, '라벨 열이 최장 라벨 한 줄 폭과 불일치');
+});
+
 test('docxFileMd — 다열 표(min 합계 초과)는 최소폭 비율 축소 배분', async () => {
     // 9열 — 균등 fallback이면 어느 열도 어절을 못 담는다. 긴 토큰 열이 더 넓어야 함
     const md = '| 방문일 | 시간 | 대상자 | 방문객 | 연락처 | 관계 | 목적 | 상태 | 결과 |\n|---|---|---|---|---|---|---|---|---|\n'
@@ -116,28 +133,31 @@ test('docxFileMd — 공문서 격식: 제목 중앙·메타줄·표머리 연�
     const md = '# 인수인계서\n\n○○요양원 · 2026-11-13 출력\n\n| A | B |\n|---|---|\n| 1 | 2 |\n| 3 | 4 |';
     const { entries } = await unzip(docxFileMd(md, 'doc'));
     const doc = entries['word/document.xml'];
-    // 제목(#) — 중앙 정렬·대자, 제목 직후 단락은 메타줄(중앙·회색·소자)
+    // 제목(#) — 중앙 정렬·대자·제목 스타일(탐색창·북마크), 제목 직후 단락은 메타줄(중앙·회색·소자)
     const titleIdx = doc.indexOf('인수인계서');
     assert.ok(doc.slice(0, titleIdx).includes('jc w:val="center"'), '제목 중앙 정렬 누락');
-    assert.ok(doc.includes('<w:sz w:val="36"/>'), '제목 대자(18pt) 누락');
+    assert.ok(doc.includes('<w:pStyle w:val="Heading1"/>'), '제목 스타일 누락 — 탐색창·PDF 북마크용');
+    assert.ok(doc.includes('<w:sz w:val="40"/>'), '제목 대자(20pt) 누락');
+    assert.ok(doc.includes('<w:u w:val="double"/>'), '제목 이중 밑줄 누락');
     const metaIdx = doc.indexOf('○○요양원 · 2026-11-13 출력');
     assert.ok(metaIdx > titleIdx && doc.slice(titleIdx, metaIdx).includes('w:color w:val="595959"'), '메타줄 회색 소자 처리 누락');
     // 표 — 머리 연청 음영·중앙 정렬·수직 가운데·페이지 넘김 시 머리 반복·내부선 연회색
-    assert.ok(doc.includes('w:fill="DEEAF6"'), '표머리 연청 음영 누락');
+    assert.ok(doc.includes('w:fill="D9E6F7"'), '표머리 연청 음영 누락');
     assert.ok(doc.includes('<w:tblHeader/>'), '표머리 반복(tblHeader) 누락');
     assert.ok(doc.includes('<w:vAlign w:val="center"/>'), '셀 수직 가운데 누락');
-    assert.ok(doc.includes('w:color="BFBFBF"'), '내부선 연회색 누락');
-    assert.ok(doc.includes('w:val="thinThickSmallGap"'), '외곽 이중선(가는선+굵은선) 누락');
-    assert.ok(doc.includes('w:color="404040"'), '외곽선 색 누락');
+    assert.ok(doc.includes('w:color="999999"'), '내부선 회색 누락 — D9D9D9급 연색은 인쇄·PDF에서 소멸');
+    // 외곽선 — 얇은 단선(흑백 인쇄 가독성·토너 절감). 이중선·진회색은 렌더 리뷰에서 탁하다고 지적됨
+    assert.ok(doc.includes('w:val="single"'), '외곽 단선 누락');
+    assert.ok(doc.includes('w:color="595959"'), '외곽선 색 누락');
     assert.ok(doc.includes('w:ascii="Malgun Gothic"'), '라틴·숫자 서체 통일 누락');
     // 행 속성 — 페이지 경계 행 분할 금지 + 최소 행 높이(여유 있는 행간)
     assert.ok(doc.includes('<w:cantSplit/>'), '행 분할 방지 누락');
     assert.ok(doc.includes('<w:trHeight'), '최소 행 높이 누락');
-    // 2열 표 레이블 열 음영 + 짝수 행 줄무늬
-    assert.ok(doc.includes('w:fill="F2F2F2"'), '레이블 열 음영 누락');
-    assert.ok(doc.includes('w:fill="F7F9FC"'), '짝수 행 줄무늬 음영 누락');
-    // 타이포 — 제목 명조계·본문 1.15배 줄간격·'끝.' 종결 표기
-    assert.ok(doc.includes('w:eastAsia="바탕"'), '제목 명조 서체 누락');
+    // 2열 표 레이블 열 음영 + 짝수 행 연한 줄무늬 (진회색 D0D0D0 계열은 인쇄 시 탁함)
+    assert.ok(doc.includes('w:fill="EFEFEF"'), '레이블 열 음영 누락');
+    assert.ok(doc.includes('w:fill="F2F6FB"'), '짝수 행 줄무늬 음영 누락');
+    // 타이포 — 맑은 고딕 통일(플랫폼 무관)·본문 1.4배 줄간격·'끝.' 종결 표기
+    assert.ok(!doc.includes('w:eastAsia="바탕"'), '한 군데만 명조체 사용 — 플랫폼별 대체 글꼴로 떨어짐');
     assert.ok(doc.includes('w:line="336"'), '줄간격 1.4배 누락');
     assert.ok(doc.includes('끝.'), '문서 종결 표기 누락');
 });
@@ -146,10 +166,11 @@ test('docxFileMd — 서명 문서 공문서 격식: 결재란·발신일·(인)
     const md = '# 인수인계서\n\n메타\n\n:::sign\n인계자(서명): 김요양\n:::end';
     const { entries } = await unzip(docxFileMd(md, 'doc'));
     const doc = entries['word/document.xml'];
-    // 결재란 — 문서 선두 우측 정렬 표, '결 재' 세로병합 + 담당·팀장·시설장
+    // 결재란 — 우측 상단 부동 표, '결 재' 세로병합 + 담당·팀장·시설장.
+    // 부동 표는 메타줄 뒤에 삽입한다 — 선두 삽입은 제목을 좌측으로 밀어 중앙 정렬이 깨졌다 (렌더 리뷰)
     const approveIdx = doc.indexOf('결 재');
-    const titleIdx = doc.indexOf('인수인계서');
-    assert.ok(approveIdx >= 0 && approveIdx < titleIdx, '결재란 선두 배치 누락');
+    const metaIdx = doc.indexOf('메타');
+    assert.ok(approveIdx > metaIdx, '결재란은 메타줄 뒤 삽입 — 선두 삽입 시 제목이 치우침');
     assert.ok(doc.includes('w:tblpX="5334"'), '결재란 우측 상단 부동 앵커 누락');
     assert.ok(doc.includes('w:gridCol w:w="960"'), '결재란 열 폭 부족 — 시설장(11pt) 줄넘김 방지 하한');
     assert.ok(doc.includes('<w:vMerge'), '결재란 세로병합 누락');
@@ -173,9 +194,10 @@ test('docxFileMd — :::sign 서명란은 하단 우측 부동 표, 셀 어절 �
     const doc = entries['word/document.xml'];
     assert.ok(doc.includes('w:tblpPr'), '서명란 부동 표(tblpPr) 누락');
     assert.ok(doc.includes('w:tblpYSpec="bottom"'), '서명란 하단 앵커 누락 — A4 하단 배치 아님');
-    // 명시적 tblpX — XSpec="right"는 우측 초과, 이중 외곽선 포함 우측끝을 본문 표와 정합(+102 보정)
-    // 내부 표 들여쓰기(_SIG_IND=60)만큼 좌측으로 — 시각적 우측선 위치는 4974 시절과 동일
-    assert.ok(doc.includes('w:tblpX="4914"'), '서명란 우측 앵커(본문폭−서명폭−들여쓰기+102 보정) 누락');
+    // 명시적 tblpX — XSpec="right"는 우측 초과, 이중 외곽선 포함 우측끝을 본문 표와 정합(−10 보정 —
+    // 중첩 표 실 착지 ≈ tblpX+vis+20tw, PDF 실측으로 서명란 우측선을 본문 표 외곽선 524.98pt에 일치)
+    // 내부 표 들여쓰기(_SIG_IND=60)만큼 좌측으로 — 시각적 우측선은 본문 표 외곽선과 일치
+    assert.ok(doc.includes('w:tblpX="4802"'), '서명란 우측 앵커(본문폭−서명폭−들여쓰기−10 보정) 누락');
     assert.ok(doc.includes('인계자(서명): 김요양'), '서명 내용 누락');
     assert.ok(!doc.includes(':::sign'), '마커가 본문에 노출됨');
     assert.ok(doc.includes('<w:kinsoku/>'), '금칙 규칙(어절 줄바꿈) 누락');
@@ -196,91 +218,74 @@ test('docxFileMd — 좁은 셀 긴 텍스트는 어절 경계 <w:br/> 사전 �
     assert.ok(doc.includes('서비스제공내역을'), '어절 중간 분리(서비스제공내역을)');
 });
 
-test('워터마크 — 문구 지정 시 본문 앵커 삽입, 미지정 시 생략', async () => {
+test('워터마크 — 문구 지정 시 헤더 파트 앵커(모든 쪽 반복), 미지정 시 생략', async () => {
     const { entries } = await unzip(docxFileMd('# t\n\n본문', 'doc', '테스트요양원 · 2026-11-14'));
+    // 헤더 배치 — 본문 앵커는 1쪽에만 묶이고, 페이지 경계 추정 분산은 농도를 들쭉날쭉하게 했다.
+    // 헤더 도형은 렌더러가 모든 쪽에 반복하므로 쪽 수·길이와 무관하게 동일 농도다 (렌더 리뷰)
+    const hdr = entries['word/header1.xml'];
+    assert.ok(hdr, 'header1.xml 누락 — 워터마크는 헤더 파트로 이동');
+    assert.ok(hdr.includes('테스트요양원'), '워터마크 문구 누락');
+    assert.ok(hdr.includes('rot="-2700000"'), '대각선 회전(-45°) 누락 — VML rotation은 txbx에 무력이라 DrawingML 필수');
+    assert.ok(hdr.includes('w:txbxContent'), '회전 텍스트 상자 누락 — textpath는 렌더러별로 깨짐');
+    assert.ok(hdr.includes('<wp:positionH relativeFrom="page"><wp:align>center</wp:align>'), '수평 중앙 앵커 누락');
+    assert.ok(hdr.includes('<wp:positionV relativeFrom="page"><wp:align>center</wp:align>'), '수직 중앙 앵커 누락');
+    assert.ok(hdr.includes('w14:srgbClr w14:val="C0C0C0"'), '회색 누락');
     const doc = entries['word/document.xml'];
-    assert.ok(doc.includes('w:drawing'), '본문 앵커 워터마크 드로잉 누락');
-    assert.ok(doc.includes('테스트요양원'), '워터마크 문구 누락');
-    assert.ok(doc.includes('rot="-2700000"'), '대각선 회전(-45°) 누락 — VML rotation은 txbx에 무력이라 DrawingML 필수');
-    assert.ok(doc.includes('w:txbxContent'), '회전 텍스트 상자 누락 — textpath는 렌더러별로 깨짐');
-    // 텍스트 뒤 배치 — w14:alpha 미지원 렌더러는 기본색을 solid로 그리므로, 앞면이면 본문을 가림
-    assert.ok(doc.includes('<wp:positionH relativeFrom="page"><wp:align>center</wp:align>'), '수평 중앙 앵커 누락');
-    assert.ok(doc.includes('<wp:positionV relativeFrom="page"><wp:align>center</wp:align>'), '수직 중앙 앵커 누락');
-    assert.ok(doc.includes('behindDoc="1"'), '텍스트 뒤 배치 누락 — alpha 미지원 렌더러에서 앞면 solid는 본문을 가림');
-    assert.ok(doc.includes('w14:srgbClr w14:val="C0C0C0"'), '회색 누락 — 뒤 배치라 가림 무관하니 확실히 보이는 농도 필요');
-    assert.ok(doc.includes('w14:alpha w14:val="100000"'), '불투명 100% 누락 — alpha 의존 시 미지원 렌더러에서 농도가 달라짐');
-    assert.ok(!doc.includes('<wp:posOffset>'), 'posOffset 미사용 — 페이지별 위치 차이 발생');
-    // 헤더 앵커는 렌더러가 본문 아래층에 그려(behindDoc 무시) "본문 위 덮기" 불가 — 헤더 파트 사용 안 함
-    assert.ok(!('word/header1.xml' in entries), '헤더 파트 없어야 함 — 본문 앵커만 앞면 표시 가능');
+    assert.ok(doc.includes('<w:headerReference'), '헤더 참조 누락 — 모든 쪽 반복의 연결 고리');
+    assert.ok(!doc.includes('<wp:anchor'), '본문 앵커 잔존 — 헤더 전환으로 본문에는 앵커 없어야 함');
     const { entries: plain } = await unzip(docxFileMd('# t\n\n본문', 'doc'));
-    assert.ok(!plain['word/document.xml'].includes('w:drawing'), '워터마크 미지정 시 드로잉 없어야 함');
-    assert.ok(!('word/header1.xml' in plain), '헤더 파트 없어야 함');
-    // 다중 페이지 — 추정 경계(360pt)마다 앵커 + 문서 끝 앵커로 마지막 쪽 보장
+    assert.ok(!('word/header1.xml' in plain), '워터마크 미지정 시 헤더 없어야 함');
+    // 다중 페이지 — 헤더 앵커 1개가 모든 쪽에 반복 (쪽별 분산 앵커 구버전 폐기)
     const longMd = '# t\n\n' + Array.from({ length: 50 }, (_, i) => '단락 ' + i).join('\n\n');
     const { entries: long } = await unzip(docxFileMd(longMd, 'doc', '테스트요양원'));
-    const longDoc = long['word/document.xml'];
-    const anchors = (longDoc.match(/<wp:anchor/g) || []).length;
-    assert.ok(anchors >= 4, `긴 문서 앵커 부족 (${anchors}) — 경계 간격 + 끝쪽 앵커 필요`);
-    for (const id of ['id="100"', 'id="101"', 'id="102"']) assert.ok(longDoc.includes(id), `docPr ${id} 누락 — 앵커 id는 유일해야 함`);
-    // 모든 앵커는 용지 중앙 — relativeFrom="page" + align=center라 세로·가로 자동 인지
-    const posV = longDoc.match(/<wp:positionV relativeFrom="page"><wp:align>center<\/wp:align>/g) || [];
-    assert.equal(posV.length, anchors, '모든 앵커가 용지 세로 중앙이어야 함');
+    assert.equal((long['word/header1.xml'].match(/<wp:anchor/g) || []).length, 1, '헤더 워터마크 앵커는 1개 — 모든 쪽에 반복');
+    assert.ok(!long['word/document.xml'].includes('<wp:anchor'), '긴 문서에도 본문 앵커 없음 — 헤더가 전 쪽 커버');
 });
 
-test('워터마크 — 페이지 누락 방지: 장문 단락 분할 + 문서 끝 앵커', async () => {
-    // 경계를 넘는 장문 단락 — 단락 내부가 쪽 경계를 삼키면 빈 쪽 발생 → <w:br/> 위치에서 분할해 앵커 삽입.
-    // 한 단락에 <w:br/>가 충분히 있도록 _wrap 유도 — 긴 한 줄 텍스트가 줄바꿈되며 경계 여러 개를 넘는 케이스
-    const md = '# t\n\n' + Array.from({ length: 20 }, (_, i) => `앞쪽 단락 ${i}`).join('\n\n') + '\n\n' + '가'.repeat(2000);
+test('워터마크 — 장문·쪽 나눔과 무관하게 전 쪽 적용 (헤더 방식)', async () => {
+    // 본문 분산 앵커 시대에는 쪽 경계 추정을 놓치면 빈 쪽이 생겼다 — 헤더 워터마크는 구조상 불가
+    const md = '# t\n\n' + '가'.repeat(2000) + '\n\n:::page\n\n둘째 쪽';
     const { entries } = await unzip(docxFileMd(md, 'doc', '테스트요양원'));
-    const doc = entries['word/document.xml'];
-    // 분할된 단락 사이에 앵커 — </w:p> 직후 앵커 단락이 오고 다시 <w:p><w:pPr>가 열림
-    const splitAnchor = /(<\/w:p>)(<w:p><w:pPr><w:spacing w:after="0" w:line="40" w:lineRule="exact"\/>)/.test(doc);
-    assert.ok(splitAnchor, '장문 단락 분할 앵커 누락 — 단락 내부 쪽 경계는 분할해야 함');
-    // 끝쪽 앵커 — 본문 마지막 요소 근처에 앵커 (마지막 앵커 뒤 콘텐츠가 새 쪽이어도 커버)
-    const lastAnchor = doc.lastIndexOf('<wp:anchor');
-    const tail = doc.slice(lastAnchor);
-    const tailEls = (tail.match(/<w:p[ >]/g) || []).length + (tail.match(/<w:tbl[ >]/g) || []).length;
-    assert.ok(tailEls <= 8, `마지막 앵커 뒤 요소 과다 (${tailEls}) — 문서 끝 앵커가 누락됐을 수 있음`);
+    assert.ok(entries['word/header1.xml'].includes('테스트요양원'), '헤더 워터마크 — :::page 뒤 새 쪽에도 자동 반복');
+    assert.ok(entries['word/document.xml'].includes('<w:br w:type="page"/>'), '쪽 나눔 브레이크 누락');
 });
 
-test('워터마크 PNG — wmImg 지정 시 알파 이미지 앵커 (w14:alpha·behindDoc 무시 뷰어 대응)', async () => {
+test('워터마크 PNG — wmImg 지정 시 헤더에 알파 이미지 앵커 (w14:alpha 무시 뷰어 대응)', async () => {
     const png = new Uint8Array([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A]);
     const { entries } = await unzip(docxFileMd('# t\n\n본문', 'doc', '테스트요양원', { wmImg: { data: png, w: 1280, h: 180 } }));
-    const doc = entries['word/document.xml'];
-    assert.ok(doc.includes('pic:pic'), '그림 워터마크 누락 — 이미지 알파는 렌더러 무관 적용');
-    assert.ok(doc.includes('r:embed="rId6"'), '워터마크 이미지 관계 참조 누락');
-    assert.ok(doc.includes('behindDoc="0"'), '앞면 배치 누락 — 워터마크는 본문 위에 덮어야 함 (요구사항)');
-    assert.ok(doc.includes('rot="-2700000"'), '대각선 회전 누락');
-    assert.ok(!doc.includes('w:txbxContent'), 'PNG 지정 시 텍스트 상자 경로 사용 안 함');
-    assert.ok(entries['word/media/img_0.png'], '워터마크 미디어 파트 누락');
-    assert.ok(entries['word/_rels/document.xml.rels'].includes('media/img_0.png'), '워터마크 이미지 관계 선언 누락');
-    assert.ok(!('word/header1.xml' in entries), '헤더 파트 없어야 함 — 헤더 도형은 본문 아래에만 그려짐');
-    // 서명 이미지와 공존 — 서명이 rId6~, 워터마크는 그 다음 연번 (서명 rid 밀림 금지)
+    const hdr = entries['word/header1.xml'];
+    assert.ok(hdr.includes('pic:pic'), '그림 워터마크 누락 — 이미지 알파는 렌더러 무관 적용');
+    assert.ok(hdr.includes('r:embed="rId1"'), '헤더 이미지는 header1.xml.rels의 rId1 참조');
+    assert.ok(hdr.includes('rot="-2700000"'), '대각선 회전 누락');
+    assert.ok(!hdr.includes('w:txbxContent'), 'PNG 지정 시 텍스트 상자 경로 사용 안 함');
+    assert.ok(entries['word/media/img_wm.png'], '워터마크 미디어 파트 누락');
+    assert.ok(entries['word/_rels/header1.xml.rels'].includes('img_wm.png'), '헤더 관계 선언 누락 — 헤더 그림은 헤더 rels 기준');
+    assert.ok(!entries['word/document.xml'].includes('pic:pic'), '본문 그림 없음 — 워터마크는 헤더 전용');
+    // 본문 이미지와 공존 — 서명은 본문 rels rId6~·media/img_N, 워터마크는 헤더 rels rId1·media/img_wm (풀 분리)
     const md = ':::sign\n작성자: {{img:a}}\n:::end';
     const { entries: both } = await unzip(docxFileMd(md, 'doc', 'wm', { images: { a: { data: png, w: 90, h: 60 } }, wmImg: { data: png } }));
-    const bothDoc = both['word/document.xml'];
-    assert.ok(bothDoc.includes('r:embed="rId6"'), '서명 이미지 rId6 유지');
-    assert.ok(bothDoc.includes('r:embed="rId7"'), '워터마크 이미지는 서명 다음 rId7');
-    assert.ok(both['word/media/img_1.png'], '워터마크는 서명 다음 미디어 인덱스');
+    assert.ok(both['word/document.xml'].includes('r:embed="rId6"'), '서명 이미지 rId6 유지');
+    assert.ok(both['word/header1.xml'].includes('r:embed="rId1"'), '워터마크는 헤더 rels rId1');
+    assert.ok(both['word/media/img_0.png'] && both['word/media/img_wm.png'], '본문·헤더 미디어 파트 분리');
 });
 
-test('서명 이미지 — 서명란 {{img:key}}·결재란에 (인) 위 앵커 오버레이로 삽입', async () => {
+test('서명 이미지 — 서명란 {{img:key}}를 셀 인라인 이미지로 삽입 (미참조 이미지는 임베드 안 함)', async () => {
     const png = new Uint8Array([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A]);
     const md = '# t\n\n:::sign\n작성자: {{img:author}}\n확인자: 박 시설\n:::end';
+    // 인라인 삽입 — 고정 좌표 앵커는 (인)·라벨 위에 겹쳐 글자를 덮었다 (렌더 리뷰).
+    // 미사용 approve 이미지는 참조 없으면 임베드하지 않는다 — 같은 서명의 이중 임베드 방지
     const { entries } = await unzip(docxFileMd(md, 'doc', '', { images: { author: { data: png, w: 90, h: 61 }, approve: { data: png, w: 52, h: 35 } } }));
     const doc = entries['word/document.xml'];
-    assert.ok(doc.includes('wp:anchor'), '앵커 오버레이 누락 — 서명은 (인) 위에 겹치는 날인 배치');
-    assert.ok(doc.includes('<wp:positionH relativeFrom="character">'), '서명란 (인) 우측 끝 정합 앵커 누락');
-    assert.ok(doc.includes('<wp:positionH relativeFrom="column"><wp:align>center</wp:align></wp:positionH>'), '결재란 (인) 중앙 정합 앵커 누락');
-    assert.ok(doc.includes('<wp:positionV relativeFrom="line"><wp:align>center</wp:align></wp:positionV>'), '(인) 줄 세로 중앙 누락');
-    assert.ok(doc.includes('<w:t>(인)</w:t>'), '(인) 표기 유지 — 이미지는 그 위 오버레이');
+    assert.ok(doc.includes('wp:inline'), '인라인 이미지 누락 — 앵커 오버레이는 글자를 덮어 폐기');
+    assert.ok(!doc.includes('wp:anchor'), '앵커 오버레이 잔존 — 서명은 셀 안 인라인이어야 함');
+    assert.ok(doc.includes('<w:t>(인)</w:t>'), '(인) 표기 — 이미지 없는 서명 칸은 빈칸 유지 (미결재 자동 서명 금지)');
     assert.ok(doc.includes('r:embed="rId6"'), '서명란 이미지 관계 참조 누락 — 본문 이미지는 rId6~ 연번');
-    assert.ok(doc.includes('r:embed="rId7"'), '결재란 담당 칸 서명(approve 키) 참조 누락');
-    assert.ok(doc.includes('<w:tab w:val="right"'), '우측 탭 정지 누락 — (인)을 셀 우측에 정렬');
+    assert.ok(!doc.includes('r:embed="rId7"'), '미참조 approve 이미지 임베드됨 — 위·변조 오해 방지 위해 자동 서명 없음');
+    assert.ok(doc.includes('<w:tab w:val="right"'), '우측 탭 정지 누락 — 서명을 셀 우측에 정렬');
     assert.ok(doc.includes('descr="서명"'), '대체 텍스트 누락');
     assert.ok(!doc.includes('{{img'), '토큰 잔존 — 치환 실패');
     assert.ok(entries['word/media/img_0.png'], '미디어 파트 누락');
-    assert.ok(entries['word/media/img_1.png'], '결재란용 미디어 파트 누락');
+    assert.ok(!entries['word/media/img_1.png'], '미참조 이미지 임베드됨 — 본문 미참조 서명은 생략해야 함');
     assert.ok(entries['word/_rels/document.xml.rels'].includes('media/img_0.png'), '이미지 관계 선언 누락');
     assert.ok(entries['[Content_Types].xml'].includes('Extension="png"'), 'png 콘텐츠 타입 누락');
     // 이미지 미지정 시 토큰은 빈 서명 자리로 치환 (토큰 잔존 금지)
@@ -293,14 +298,13 @@ test('서명 이미지 — 서명란 {{img:key}}·결재란에 (인) 위 앵커 
     assert.ok(pdoc.includes('<w:tab/></w:r><w:r>') && pdoc.includes('(인)'), '(인) 탭 뒤 배치 누락');
 });
 
-test('docxFileMd — :::page 페이지 나눔: 강제 브레이크 + 워터마크 새 쪽 앵커', async () => {
+test('docxFileMd — :::page 페이지 나눔: 강제 브레이크 + 헤더 워터마크가 새 쪽에도 반복', async () => {
     const md = '# 기록\n\n### 1. 김 ○○ — 2026-11-05\n\n| 항목 | 내용 |\n|---|---|\n| 대상자 | 김 ○○ |\n\n:::page\n\n### 2. 이 ○○ — 2026-11-06\n\n| 항목 | 내용 |\n|---|---|\n| 대상자 | 이 ○○ |';
     const { entries } = await unzip(docxFileMd(md, 'doc', '행복요양원'));
     const doc = entries['word/document.xml'];
     assert.ok(doc.includes('<w:br w:type="page"/>'), '페이지 나눔 브레이크 누락');
-    // 브레이크 직후 새 쪽에 워터마크 앵커 — 1쪽뿐 아니라 2쪽에도 앵커가 있어야 함 (경계 추정 리셋)
-    const brk = doc.indexOf('<w:br w:type="page"/>');
-    assert.ok(doc.slice(brk).includes('행복요양원'), '페이지 나눔 뒤 새 쪽 워터마크 앵커 누락');
+    // 헤더 워터마크 — 쪽 나눔 뒤 새 쪽도 렌더러가 자동 반복 (본문 앵커 시대의 쪽별 앵커 삽입 불필요)
+    assert.ok(entries['word/header1.xml'].includes('행복요양원'), '헤더 워터마크 누락');
 });
 
 
@@ -361,19 +365,24 @@ test('docxFileMd — docProps/core.xml: 번호·기관·제목·판본 + 패키�
     assert.ok(footer.includes('문서번호 LOG-20261114-a3f2c1'), '푸터 문서번호 누락 — 모든 쪽 표기 기대');
     const docXml = entries['word/document.xml'];
     assert.ok(docXml.includes('테스트요양원 · 2026-11-14 출력'), '메타줄 누락');
-    assert.ok(!docXml.includes('문서번호'), '메타줄·본문에 문서번호 미병기 — 번호는 푸터·QR에만 표기');
+    assert.ok(docXml.includes('문서번호') && docXml.includes('LOG-20261114-a3f2c1'), '상단 서식란 문서번호 미부여 — 공문서 표준 서식');
+    assert.ok(docXml.includes('시행일자'), '상단 서식란 시행일자 미부여');
 });
 
-test('docxFileMd — doc.qr: 서명란 좌측 QR 부동 표 + media 파트 + 관계', async () => {
+test('docxFileMd — doc.qr: 푸터 QR 표 + 자체 media 파트 + 관계 (부동 표 안 이미지는 인쇄 경로 탈락)', async () => {
     const png = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10, 1, 2, 3]);
     const doc = { no: 'LOG-20261114-a3f2c1', qr: { data: png } };
     const { entries } = await unzip(docxFileMd('# t\n\n본문', 'doc', '', { doc }));
-    assert.ok(entries['word/media/img_0.png'], 'QR 미디어 파트 누락');
-    assert.ok(entries['word/_rels/document.xml.rels'].includes('media/img_0.png'), 'QR 이미지 관계 누락');
+    assert.ok(entries['word/media/img_qr.png'], 'QR 미디어 파트 누락');
+    assert.ok(entries['word/_rels/footer1.xml.rels'].includes('media/img_qr.png'), '푸터 QR 이미지 관계 누락');
+    const ftr = entries['word/footer1.xml'];
+    assert.ok(ftr.includes('진위 확인'), 'QR 용도 캡션 누락');
+    assert.ok(ftr.includes('docno.png'), 'QR 이미지 런 누락');
+    assert.ok(ftr.includes('문서번호 LOG-20261114-a3f2c1'), '푸터 문서번호 누락');
+    assert.ok(!ftr.includes('<w:tblpPr'), '푸터 QR는 부동 표가 아니어야 함 — 인쇄→PDF 탈락 방지');
     const docXml = entries['word/document.xml'];
-    assert.ok(docXml.includes('문서번호 LOG-20261114-a3f2c1'), 'QR 캡션 문서번호 누락');
-    assert.ok(docXml.includes('docno.png'), 'QR 이미지 런 누락');
-    assert.ok(docXml.indexOf('docno.png') > docXml.indexOf('끝.'), 'QR 부동 표는 종결 표기 뒤 — 서명란과 앵커 쪽 통일');
+    assert.ok(docXml.includes('문서번호') && docXml.includes('LOG-20261114-a3f2c1'), '상단 서식란 문서번호 누락');
+    assert.ok(!docXml.includes('docno.png'), '본문 QR 잔재 — 부동 표 안 이미지는 인쇄→PDF에서 탈락');
 });
 
 test('docxFileMd — doc 미지정 시 파트 구성 불변 (기존 6엔트리 + 이미지)', async () => {
@@ -383,16 +392,78 @@ test('docxFileMd — doc 미지정 시 파트 구성 불변 (기존 6엔트리 +
     assert.ok(!entries['word/footer1.xml'].includes('문서번호'), 'doc 미지정인데 푸터 번호 삽입됨');
 });
 
-test('docxFile — doc 미지정 시 기존 6엔트리 유지 (회귀)', async () => {
+test('docxFile — doc 미지정 시 기본 엔트리 유지 (회귀)', async () => {
     const { entries } = await unzip(docxFile('첫째\n둘째', 'doc'));
     assert.deepEqual(Object.keys(entries), [
-        '[Content_Types].xml', '_rels/.rels', 'word/_rels/document.xml.rels', 'word/document.xml', 'word/settings.xml', 'word/footer1.xml',
+        '[Content_Types].xml', '_rels/.rels', 'word/_rels/document.xml.rels', 'word/document.xml', 'word/styles.xml', 'word/settings.xml', 'word/footer1.xml',
     ]);
 });
 
 test('docxFile — opts.doc: 평문 경로도 core.xml + 푸터 번호 부여', async () => {
     const doc = { no: 'INC-20261113-b7e4d2', org: '테스트요양원', rev: 1 };
-    const { entries } = await unzip(docxFile('제목\n기관 · 2026-11-13 출력 · 문서번호 INC-20261113-b7e4d2\n\n본문', 'doc', 2, '', null, { doc }));
+    const { entries } = await unzip(docxFile('제목\n기관 · 2026-11-13 출력 · 문서번호 INC-20261113-b7e4d2\n\n본문', 'doc', 2, '', { doc }));
     assert.ok(entries['docProps/core.xml'].includes('<dc:identifier>INC-20261113-b7e4d2</dc:identifier>'));
     assert.ok(entries['word/footer1.xml'].includes('문서번호 INC-20261113-b7e4d2'));
+});
+
+test('docxFileMd — 본문 {{img:key}} 단독 줄은 중앙 인라인 이미지 단락 (토큰 누수 금지)', async () => {
+    const png = new Uint8Array([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A]);
+    const md = '# t\n\n본문\n\n{{img:chart}}\n\n뒤 줄';
+    const { entries } = await unzip(docxFileMd(md, 'doc', '', { images: { chart: { data: png, w: 400, h: 200 } } }));
+    const doc = entries['word/document.xml'];
+    assert.ok(doc.includes('wp:inline'), '본문 이미지 인라인 삽입 누락');
+    assert.ok(doc.includes('r:embed="rId6"'), '본문 이미지 관계 참조 누락');
+    assert.ok(doc.includes('descr="chart"'), '이미지 키 대체 텍스트 누락');
+    assert.ok(!doc.includes('{{img'), '토큰 리터럴 누수');
+    assert.ok(entries['word/media/img_0.png'], '미디어 파트 누락');
+});
+
+test('docxFileMd — 미등록 {{img:key}}·행 중간 토큰은 (이미지) 텍스트 표기', async () => {
+    const { entries } = await unzip(docxFileMd('# t\n\n{{img:none}}\n\n참고 {{img:x}} 그림', 'doc'));
+    const doc = entries['word/document.xml'];
+    assert.ok(!doc.includes('{{img'), '토큰 리터럴 누수');
+    assert.ok((doc.match(/\(이미지\)/g) || []).length >= 2, '플레이스홀더 표기 누락');
+    assert.ok(doc.includes('참고 (이미지) 그림'), '행 중간 토큰 치환 누락');
+});
+
+test('docxFileMd — 코드 펜스는 등폭 단락으로 원문 보존, 펜스 내 마커 미해석', async () => {
+    const md = '# t\n\n```\n| a | b |\n:::sign\n```\n\n본문';
+    const { entries } = await unzip(docxFileMd(md, 'doc'));
+    const doc = entries['word/document.xml'];
+    assert.ok(doc.includes('Courier New'), '등폭 폰트 누락');
+    assert.ok(doc.includes('| a | b |'), '펜스 내 표 행은 원문 유지');
+    assert.ok(!doc.includes('<w:tbl>'), '펜스 내 표 행이 표로 렌더됨');
+    assert.ok(!doc.includes('결 재'), '펜스 내 :::sign이 결재란으로 해석됨');
+    assert.ok(!doc.includes('```'), '펜스 마커 누수');
+    const un = await unzip(docxFileMd('# t\n\n```\ncode line', 'doc'));
+    assert.ok(un.entries['word/document.xml'].includes('code line'), '미닫힘 펜스 내용 유실');
+});
+
+test('docxFileMd — 인라인 **굵게**·`코드`가 런 서식으로 (본문·표 셀 공통)', async () => {
+    const md = '# t\n\n메타\n\n**중요** 사항과 `값`\n\n| 항목 | 내용 |\n|---|---|\n| a | **필수** |';
+    const { entries } = await unzip(docxFileMd(md, 'doc'));
+    const doc = entries['word/document.xml'];
+    assert.ok(/<w:b\/><w:sz w:val="22"\/><\/w:rPr><w:t[^>]*>중요<\/w:t>/.test(doc), '굵게 런 누락');
+    assert.ok(doc.includes('Courier New'), '코드 등폭 폰트 누락');
+    assert.ok((doc.match(/<w:t[^>]*>필수<\/w:t>/) || []).length >= 1, '표 셀 굵게 누락');
+    assert.ok(!doc.includes('**중요**'), '마커 리터럴 누수');
+});
+
+test('docxFileMd — 인라인 *기울임*·~~취소~~·[링크]가 런 서식으로', async () => {
+    const { entries } = await unzip(docxFileMd('# t\n\n메타\n\n*강조* 와 ~~삭제~~ 그리고 [참고](https://x.kr)', 'doc'));
+    const doc = entries['word/document.xml'];
+    assert.ok(/<w:i\/><w:sz w:val="22"\/><\/w:rPr><w:t[^>]*>강조<\/w:t>/.test(doc), '기울임 런 누락');
+    assert.ok(doc.includes('<w:strike/>'), '취소선 누락');
+    assert.ok(/<w:u w:val="single"\/>/.test(doc) && doc.includes('0B5FFF'), '링크 스타일 누락');
+    assert.ok(doc.includes('>참고<'), '링크 텍스트 누락');
+    assert.ok(!doc.includes('~~삭제~~') && !doc.includes('[참고]'), '마커 리터럴 누수');
+});
+
+test('docxFileMd — ![alt](key) 단독 줄은 인라인 이미지, 행 중간은 (이미지) 표기', async () => {
+    const png = { data: new Uint8Array([137, 80, 78, 71]), w: 10, h: 10 };
+    const { entries } = await unzip(docxFileMd('# t\n\n메타\n\n![도식](fig1)\n\n참고 ![x](fig1) 끝', 'doc', null, { images: { fig1: png } }));
+    const doc = entries['word/document.xml'];
+    assert.ok(doc.includes('wp:inline'), '단독 줄 이미지 삽입 누락');
+    assert.ok(!doc.includes('![x](') && (doc.match(/\(이미지\)/g) || []).length >= 1, '행 중간 이미지 표기 누락');
+    assert.ok(entries['word/media/img_0.png'], '미디어 파트 누락');
 });

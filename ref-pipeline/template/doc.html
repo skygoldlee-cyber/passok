@@ -1334,12 +1334,14 @@
     article th, article td {
       border: 1px solid var(--td-border);
       padding: 0.65rem 0.85rem;
-      vertical-align: top;
+      vertical-align: middle;
       overflow-wrap: break-word;
       word-break: keep-all;
       hyphens: auto;
     }
-    article th { background: var(--th-bg); font-weight: 600; color: var(--th-fg); border-color: var(--th-border); }
+    article th { background: var(--th-bg); font-weight: 600; color: var(--th-fg); border-color: var(--th-border); text-align: center; }
+    /* 2열 표(라벨|내용)의 라벨 열은 가운데 — DOCX 출력과 같은 공문 서식 규약 */
+    article .kv > tbody > tr > td:first-child, article .kv > tr > td:first-child { text-align: center; }
     article tbody tr:nth-child(even) { background: var(--tr-even); }
     article tbody tr:hover { background: var(--tr-hover); }
     /* Enhanced Practical Notes & Callouts */

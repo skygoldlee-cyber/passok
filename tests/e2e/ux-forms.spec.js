@@ -38,7 +38,7 @@ test.describe('UX-FORM-03 — 필드 인라인 오류', () => {
         await expect(page.locator(`#${errId}`)).toHaveCount(0);
         // 정상 생성 — 오류 없이 문서 렌더
         await page.locator('[data-click="careLogGenerate"]').click();
-        await expect(page.locator('#log-preview .doc-md')).toContainText('김인라인');
+        await expect(page.locator('#log-preview .doc-md')).toContainText('김 인라인'); // 문서 표기는 fmtDocName(성·이름 한 칸) 적용
     });
 });
 

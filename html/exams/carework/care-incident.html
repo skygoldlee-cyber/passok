@@ -8,6 +8,7 @@
         <label>발생일 <input id="inc-date" type="date"></label>
         <label>시간 <input id="inc-time" type="time"></label>
         <label>대상자 성명 <input id="inc-client" type="text" placeholder="예: 김○○"></label>
+        <label>호실·방 <input id="inc-room" type="text" placeholder="예: 302호"></label>
         <label>발생 장소 <input id="inc-place" type="text" placeholder="예: 302호 침실, 공동거실"></label>
         <label>사고 유형 <select id="inc-type"></select></label>
         <label>중증도 <select id="inc-severity"></select></label>
@@ -15,8 +16,28 @@
     <div class="care-calc-form">
         <label>발생 경위 <input id="inc-desc" type="text" placeholder="발견 경위·상황 설명"><button type="button" class="btn btn-secondary care-voice-btn" data-click="careIncidentVoiceToggle" data-arg="inc-desc" title="말로 입력 — 누르고 말하기">🎤</button></label>
         <label>조치 내용 <input id="inc-action" type="text" placeholder="응급조치·연락·이송 내용"><button type="button" class="btn btn-secondary care-voice-btn" data-click="careIncidentVoiceToggle" data-arg="inc-action" title="말로 입력 — 누르고 말하기">🎤</button></label>
+        <label>병원 이송·진료 <select id="inc-hospital">
+            <option value="">해당 없음</option>
+            <option value="transfer">이송 (응급실 등)</option>
+            <option value="visit">외래 진료</option>
+            <option value="declined">이송·진료 거부</option>
+        </select></label>
         <label>목격자 <input id="inc-witness" type="text" placeholder="선택"></label>
         <label class="care-log-merge"><input id="inc-family" type="checkbox"> 가족 통지 완료</label>
+        <label>통지 일시 <input id="inc-family-dt" type="datetime-local"></label>
+        <label>통지 대상 <input id="inc-family-who" type="text" placeholder="예: 장남 김○○"></label>
+        <label>통지 방법 <select id="inc-family-how">
+            <option value="">선택</option>
+            <option value="전화">전화</option>
+            <option value="문자·메신저">문자·메신저</option>
+            <option value="방문">방문</option>
+        </select></label>
+    </div>
+    <div class="care-calc-form">
+        <label>보고 일시 <input id="inc-report-dt" type="datetime-local"></label>
+        <label>시설장 보고 시각 <input id="inc-mgr-time" type="time"></label>
+        <label>재발 방지 대책 <input id="inc-prevent" type="text" placeholder="예: 침대 난간 상시 확인, 미끄럼 방지 매트"></label>
+        <label>경과 기록 <input id="inc-followup" type="text" placeholder="사후 경과·추가 조치 (선택)"></label>
         <div class="care-photo">
             <button type="button" class="btn btn-secondary" data-click="careIncidentPhotoPick">📷 사진 추가</button>
             <input id="inc-photo-file" type="file" accept="image/*" multiple class="is-hidden">

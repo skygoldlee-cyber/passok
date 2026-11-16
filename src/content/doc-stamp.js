@@ -8,7 +8,8 @@ import { todayKey, fnv1aHex } from '../core/utils.js';
  * 문서 번호 발급 — `PREFIX-YYYYMMDD-해시6` (예: LOG-20261114-a3f2c1)
  * @param {string} prefix - 문서 유형 접두어 (대문자 2~4자 — 시험 팩이 문서 종류별로 부여)
  * @param {*} seed - 내용 시드 (보통 MD 초안 문자열 — 직렬화 후 해시)
+ * @param {string} [date] - 발행일 'YYYY-MM-DD' — 호출층 단일 날짜 소스 (미지정 시 당일)
  * @returns {string}
  */
-export const docStamp = (prefix, seed) =>
-    `${String(prefix || 'DOC').toUpperCase()}-${todayKey().replace(/-/g, '')}-${fnv1aHex(JSON.stringify(seed)).slice(0, 6)}`;
+export const docStamp = (prefix, seed, date) =>
+    `${String(prefix || 'DOC').toUpperCase()}-${(date || todayKey()).replace(/-/g, '')}-${fnv1aHex(JSON.stringify(seed)).slice(0, 6)}`;

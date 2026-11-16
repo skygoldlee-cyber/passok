@@ -35,14 +35,17 @@ export const createDocIssueStore = ({ key, org = () => '', idPrefix = 'issue' })
         if (!docNo) return { docNo: '', rev: 0 };
         const ex = findDocIssue(docNo);
         const rev = ((ex && ex.rev) || 0) + 1;
-        const entry = {
-            docNo, tool, kind, hash: hash || (ex && ex.hash) || '', org: org() || '', rev, issuedAt: localDateTimeNow(),
-            files: [...new Set([...(ex ? ex.files || [] : []), ...filenames])].slice(-30),
-            kinds: [...new Set([...(ex ? ex.kinds || [] : []), kind].filter(Boolean))],
-        };
-        _store.add(entry, ex && ex.id);
+        _store.add(_issueEntry({ docNo, tool, kind, filenames, hash, ex, rev }), ex && ex.id);
         return { docNo, rev };
     };
+
+    /** 대장 행 조립 — 기존 행의 파일·형식 이력에 이번 발행을 누적 */
+    /** @param {{docNo:string, tool:string, kind:string, filenames:string[], hash:string, ex:*, rev:number}} p */
+    const _issueEntry = ({ docNo, tool, kind, filenames, hash, ex, rev }) => ({
+        docNo, tool, kind, hash: hash || (ex && ex.hash) || '', org: org() || '', rev, issuedAt: localDateTimeNow(),
+        files: [...new Set([...(ex ? ex.files || [] : []), ...filenames])].slice(-30),
+        kinds: [...new Set([...(ex ? ex.kinds || [] : []), kind].filter(Boolean))],
+    });
 
     return { list, findDocIssue, nextDocRev, recordDocIssue };
 };

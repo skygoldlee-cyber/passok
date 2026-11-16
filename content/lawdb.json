@@ -629,6 +629,123 @@
    "watch": {
     "target": "law"
    }
+  },
+  {
+   "id": "dangerous-goods-safety-act",
+   "name": "위험물안전관리법",
+   "type": "law",
+   "slug": "위험물안전관리법",
+   "matchKeys": [
+    "위험물안전관리법",
+    "위험물안전관리법"
+   ],
+   "watch": {
+    "target": "law"
+   }
+  },
+  {
+   "id": "dangerous-goods-safety-decree",
+   "name": "위험물안전관리법 시행령",
+   "type": "law",
+   "slug": "위험물안전관리법시행령",
+   "matchKeys": [
+    "위험물안전관리법시행령",
+    "위험물안전관리법시행령"
+   ],
+   "watch": {
+    "target": "law"
+   }
+  },
+  {
+   "id": "dangerous-goods-safety-rule",
+   "name": "위험물안전관리법 시행규칙",
+   "type": "law",
+   "slug": "위험물안전관리법시행규칙",
+   "matchKeys": [
+    "위험물안전관리법시행규칙",
+    "위험물안전관리법시행규칙"
+   ],
+   "watch": {
+    "target": "law"
+   }
+  },
+  {
+   "id": "dangerous-goods-detail-std",
+   "name": "위험물안전관리에 관한 세부기준",
+   "type": "admrul",
+   "slug": "위험물안전관리에관한세부기준",
+   "matchKeys": [
+    "위험물안전관리에관한세부기준",
+    "위험물안전관리에관한세부기준"
+   ],
+   "watch": {
+    "target": "admrul"
+   }
+  },
+  {
+   "id": "fire-facility-act",
+   "name": "소방시설 설치 및 관리에 관한 법률",
+   "type": "law",
+   "slug": "소방시설설치및관리에관한법률",
+   "matchKeys": [
+    "소방시설설치및관리에관한법률",
+    "소방시설설치및관리에관한법률"
+   ],
+   "watch": {
+    "target": "law"
+   }
+  },
+  {
+   "id": "fire-facility-decree",
+   "name": "소방시설 설치 및 관리에 관한 법률 시행령",
+   "type": "law",
+   "slug": "소방시설설치및관리에관한법률시행령",
+   "matchKeys": [
+    "소방시설설치및관리에관한법률시행령",
+    "소방시설설치및관리에관한법률시행령"
+   ],
+   "watch": {
+    "target": "law"
+   }
+  },
+  {
+   "id": "fire-facility-rule",
+   "name": "소방시설 설치 및 관리에 관한 법률 시행규칙",
+   "type": "law",
+   "slug": "소방시설설치및관리에관한법률시행규칙",
+   "matchKeys": [
+    "소방시설설치및관리에관한법률시행규칙",
+    "소방시설설치및관리에관한법률시행규칙"
+   ],
+   "watch": {
+    "target": "law"
+   }
+  },
+  {
+   "id": "fire-prevention-act",
+   "name": "화재의 예방 및 안전관리에 관한 법률",
+   "type": "law",
+   "slug": "화재의예방및안전관리에관한법률",
+   "matchKeys": [
+    "화재의예방및안전관리에관한법률",
+    "화재의예방및안전관리에관한법률"
+   ],
+   "watch": {
+    "target": "law"
+   }
+  },
+  {
+   "id": "fire-service-basic-act",
+   "name": "소방기본법",
+   "type": "law",
+   "slug": "소방기본법",
+   "matchKeys": [
+    "소방기본법",
+    "소방기본법"
+   ],
+   "watch": {
+    "target": "law"
+   }
   }
  ]
 }

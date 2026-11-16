@@ -431,10 +431,15 @@ export function buildSalesRecordHtml(batches) {
  * 고객 알레르기 이력 + 제품 주의사항을 담는다.
  * @param {*} d - {customer:{name,skinType,allergies}, product:{formulaName,batchNo}, ingredientsNote}
  */
+/** @param {*} p */
+const _consentProductLine = p => (p.formulaName || p.batchNo)
+  ? `<p class="fp-meta-line">대상 제품: ${esc(p.formulaName || '—')}${p.batchNo ? ` (배치 ${esc(p.batchNo)})` : ''}</p>` : '';
+
+/** @param {*} d */
 export function buildConsentHtml(d) {
   const c = d.customer || {};
   const p = d.product || {};
-  const allergyLine = c.allergies && c.allergies.length
+  const allergyLine = (c.allergies || []).length
     ? esc(c.allergies.join(', ')) : '보고된 알레르기 없음';
   const stamp = fpDocStamp('CONSENT', [c.name, c.skinType, p.formulaName, p.batchNo]);
   return `<div class="fp-doc" data-doc-no="${stamp}" data-doc-tool="맞춤형화장품 사용 안내·동의서">
@@ -442,7 +447,7 @@ export function buildConsentHtml(d) {
     <h1>맞춤형화장품 사용 안내·동의서</h1>
     <p class="fp-meta-line">고객: ${esc(c.name || '—')}${c.skinType ? ` · 피부타입 ${esc(c.skinType)}` : ''} · 발행일: ${esc(todayKey())} · 문서 ${esc(stamp)}</p>
     ${fpDocQr(stamp)}
-    ${p.formulaName || p.batchNo ? `<p class="fp-meta-line">대상 제품: ${esc(p.formulaName || '—')}${p.batchNo ? ` (배치 ${esc(p.batchNo)})` : ''}</p>` : ''}
+    ${_consentProductLine(p)}
     <h3>고객 알레르기 이력</h3>
     <p class="fp-notes">${allergyLine}</p>
     <h3>사용 전 안내사항</h3>

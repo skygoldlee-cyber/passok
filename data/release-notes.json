@@ -1,12 +1,46 @@
 [
   {
-    "version": "v20261114-45cd04b",
-    "date": "2026-11-14",
+    "version": "v20261115-4f3df7b",
+    "date": "2026-11-15",
     "notes": [
+      "[수정·check] webp 게이트 vercelignore 매칭 결함 2건 — CRLF trim·** 이중 변환",
+      "[테스트·refpipe] probe 픽스처 문서ID 콜아웃 반영 — 표 수·인덱스 갱신",
+      "[정리·docs] probe.md 픽스처 문서 ID 부여 + .vercelignore 오염 라인 정리",
+      "[정리·docs] md-tokens 목록 등록·테스트 픽스처 배포 예외·COMMANDS 카탈로그 재생성",
+      "[기능·doc-md] 문서 파이프라인 공용화·인라인 확장·ref-pipeline 정합 일괄 개선",
+      "[정리·release] v20261115-2eb20ac 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261115-2eb20ac",
+    "date": "2026-11-15",
+    "notes": [
+      "[문서·docx] 생성 스펙 동기화 — 헤더 워터마크·푸터 QR·:::approve/:::landscape·표 정합 + 셀 음영 아래 묻힘 한계 명문화",
+      "[문서·dev] DOCX_GENERATION — §11 md2doc DOCX 경로 + 함정 3건 추가",
+      "[문서·dev] CHANGES — 표 셀 정렬 3경로 정합 이력 (vAlign·compact spacing·kv)",
+      "[수정·ref-pipeline] DOCX 셀 텍스트 상단 치우침 — 셀 단락 콤팩트 spacing",
+      "[수정·ref-pipeline] 표 셀 정렬 3경로 정합 + 펜스 마커·kv 클래스 공통 처리",
+      "[기능·ref-pipeline] DOCX 표 셀 중앙 정렬 — 세로 중앙 + 헤더·레이블 열 가로 중앙",
+      "[문서·dev] CHANGES — md2doc DOCX 표 레이아웃 수정 이력 (인접 병합·마커·열 폭)",
+      "[기능·ref-pipeline] DOCX 표 열 폭 내용 비례 배분 + 2열 표 라벨 열 통일",
+      "[수정·ref-pipeline] DOCX 인접 표 병합 방지 + ::: 펜스 마커 제거",
+      "[기능·ref-pipeline] md2doc DOCX 출력 — PDF와 내용 정합 경로"
+    ]
+  },
+  {
+    "version": "v20261115-cd5d0cd",
+    "date": "2026-11-15",
+    "notes": [
+      "[테스트·e2e] ux-forms 성명 단언을 fmtDocName 출력으로 갱신",
+      "[테스트·e2e] carework 스펙을 성명 한 칸·문서번호 파일명 계약으로 갱신",
+      "[문서·docx] 생성 스펙 정본 동기화 — 구값 정정·미기재 계약 보충",
+      "[수정·docx] ※/근거 각주성 줄 소자 회색 처리 — 근거 열거 한 줄 표기",
+      "[수정·docx] 서명란 우측선 본문 표 정합 (+88tblpX) + 렌더 게이트 wm 기하 판정",
+      "[기능·docx] 공문서 치장 — 이중 밑줄 제목·상단 서식란·종결 문구",
+      "[수정·docx] 워터마크 경계 앵커 보수 튜닝 + 텍스트 폴백 진단 로그",
+      "[수정·docx] 워터마크 페이지 기하 재설계 + 공문서 레이아웃 정합",
       "[CI] CI 재실행 트리거 [no-docs]",
-      "[기능·carework] 문서번호 추적·QR·발행 대장 + (인) 위 서명 오버레이",
-      "[정리·release] v20261114-cfd1956 스탬프 확정 [no-docs]",
-      "[정리·release] v20261113-52523f5 스탬프 확정 [no-docs]"
+      "[기능·carework] 문서번호 추적·QR·발행 대장 + (인) 위 서명 오버레이"
     ]
   },
   {
@@ -56,6 +90,16 @@
       "[수정·carework] docx 워터마크 본문 앵커 회전 텍스트 상자로 확정",
       "[수정·carework] 워터마크 렌더 확정 — 본문 앵커 전면 VML + 캔버스 스탬프",
       "[수정·carework] 워터마크 셰이프를 Word 네이티브 구조로 재작성"
+    ]
+  },
+  {
+    "version": "v20261114-45cd04b",
+    "date": "2026-11-14",
+    "notes": [
+      "[CI] CI 재실행 트리거 [no-docs]",
+      "[기능·carework] 문서번호 추적·QR·발행 대장 + (인) 위 서명 오버레이",
+      "[정리·release] v20261114-cfd1956 스탬프 확정 [no-docs]",
+      "[정리·release] v20261113-52523f5 스탬프 확정 [no-docs]"
     ]
   },
   {

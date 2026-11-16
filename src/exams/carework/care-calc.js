@@ -2,16 +2,16 @@
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 import { GRADE_LIMITS, SELF_PAY_RATE, REDUCTIONS } from './care-calc-data.js';
 
-/** 월 한도 초과분을 전액 자부담으로 처리하는 재가급여 계산 */
-/** @param {string} gradeKey @param {number} monthlyUse @param {number} reductionRate */
-function calcHome(gradeKey, monthlyUse, reductionRate) {
+/** 월 한도 초과분·비급여(식재료비 등)를 전액 자부담으로 처리하는 재가급여 계산 */
+/** @param {string} gradeKey @param {number} monthlyUse @param {number} reductionRate @param {number} nonCovered */
+function calcHome(gradeKey, monthlyUse, reductionRate, nonCovered) {
     const g = GRADE_LIMITS.find((/** @type {*} */ x) => x.key === gradeKey);
-    if (!g || monthlyUse < 0) return null;
+    if (!g || monthlyUse < 0 || nonCovered < 0) return null;
     const covered = Math.min(monthlyUse, g.home);
     const overLimit = Math.max(0, monthlyUse - g.home);
     const selfCovered = Math.round(covered * SELF_PAY_RATE.home * (1 - reductionRate));
-    const selfPay = selfCovered + overLimit;
-    return { covered, overLimit, selfCovered, selfPay, publicPay: covered - selfCovered, limit: g.home, type: 'home' };
+    const selfPay = selfCovered + overLimit + nonCovered;
+    return { covered, overLimit, selfCovered, nonCovered, selfPay, publicPay: covered - selfCovered, limit: g.home, type: 'home' };
 }
 
 /** 시설급여 — 한도 없이 급여비용의 20% 본인부담 + 비급여(식재료비·상급침실료 등) 전액 자부담 */
@@ -30,7 +30,7 @@ function calcFacility(monthlyUse, reductionRate, nonCovered) {
 export function computeCareCost({ type, grade, monthlyUse, reduction, nonCovered = 0 }) {
     const r = REDUCTIONS.find(x => x.key === reduction);
     if (!r || typeof monthlyUse !== 'number' || !isFinite(monthlyUse)) return null;
-    if (type === 'home') return calcHome(grade, monthlyUse, r.rate);
+    if (type === 'home') return calcHome(grade, monthlyUse, r.rate, nonCovered);
     if (type === 'facility') return calcFacility(monthlyUse, r.rate, nonCovered);
     return null;
 }

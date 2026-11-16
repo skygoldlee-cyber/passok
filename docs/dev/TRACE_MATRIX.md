@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: a6dd1cc79e541554
-> 생성: 2026-11-14 · 원천: SPEC.md(710개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 4f97b55135da7f8e
+> 생성: 2026-11-15 · 원천: SPEC.md(710개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -621,7 +621,7 @@
 | CO-10 | ✅ lite (기록 유무 커버리지) | 테스트 | — | src/exams/carework/care-coverage.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
 | CO-11 | 미구현 — 조건부(법무 0b + facility 재개통) | — | — | — | — | — | — |
 | CO-12 | ✅ lite (배너·계측) | 테스트 | — | src/exams/carework/care-funnel.js<br>src/exams/carework/views/care-home.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
-| CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42<br>DOC-REF-20 | css/doc-export.css<br>src/content/doc-wm.js<br>src/content/docx-utils.js<br>src/content/pdf-utils.js<br>…외 2개 | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/doc-stamp.test.js<br>…외 3개 | — | — |
+| CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42<br>DOC-REF-20 | css/doc-export.css<br>src/content/doc-md.js<br>src/content/doc-wm.js<br>src/content/docx-utils.js<br>…외 4개 | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/doc-md.test.js<br>…외 4개 | — | — |
 | CO-14 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
 | CO-15 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
 | CO-16 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 문서 검토 | DOC-RBK-24 | — | — | — | — |
@@ -851,7 +851,7 @@
 | DA-21 | ✅ | 테스트 | — | css/dashboard.css<br>css/exams/carework/care-tools.css | tests/dom/exams/carework/care-views.test.js | — | — |
 | DA-22 | ✅ | 테스트 | — | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | — | — |
 | DA-23 | ✅ | 테스트 | — | src/core/utils.js | tests/unit/app/utils.test.js | — | — |
-| DA-24 | ✅ | 테스트 | DOC-REF-20 | src/content/doc-wm.js<br>src/content/docx-utils.js<br>src/exams/carework/doc-md.js | tests/unit/content/doc-wm.test.js<br>tests/unit/content/docx-utils.test.js | — | — |
+| DA-24 | ✅ | 테스트 | DOC-REF-20 | src/content/doc-md.js<br>src/content/doc-wm.js<br>src/content/docx-utils.js<br>src/content/md-tokens.js<br>…외 1개 | tests/unit/content/doc-md.test.js<br>tests/unit/content/doc-wm.test.js<br>tests/unit/content/docx-utils.test.js | — | — |
 | DA-25 | ✅ | 도구 검증 | — | tools/illustrate/capture_manual.js | — | — | — |
 | DA-26 | ✅ | 도구 검증 | — | tools/illustrate/capture_manual.js | — | — | — |
 
@@ -1089,6 +1089,7 @@
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |
 | DOC-PPL-02 | ref-pipeline/audiobook/README.md | AO-01, AO-02, AO-03, AO-04, AO-05 |
 | DOC-PPL-03 | ref-pipeline/audiobook/AUDIOBOOK_SUMMARY.md | AO-01, AO-02, AO-03, AO-04, AO-05 |
+| DOC-PPL-04 | ref-pipeline/tests/fixtures/probe.md | — |
 | DOC-RBK-01 | docs/dev/runbooks/AUDIO_HOSTING_GUIDE.md | AO-01, AO-02, AO-03, AO-04, AO-05, P-01, P-02, P-03, P-04, P-04a, P-05, P-06, P-07, P-08, P-09, P-10, P-11, P-12, P-13, P-14 |
 | DOC-RBK-02 | docs/dev/runbooks/COMBO_GENERATION_GUIDE.md | BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, BP-09, BP-10, BP-11, BP-12, BP-13, BP-14, BP-15, DR-02, DR-03, DR-04, DR-05, DR-06, DR-07 |
 | DOC-RBK-03 | docs/dev/runbooks/CONTENT_WORKFLOW.md | BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, DA-01, DA-02, DA-03, DA-04, DA-05, DA-06, DA-07, DA-08, DA-09 |
@@ -1169,3 +1170,4 @@
 - docs/exams/carework/design/CAREWORK_FACILITY_WORKSPACE.md
 - docs/exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md
 - docs/exams/cosmetic/business/유튜브-숏츠-시리즈-제작의뢰서.md
+- ref-pipeline/tests/fixtures/probe.md

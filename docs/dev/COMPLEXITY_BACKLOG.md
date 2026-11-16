@@ -9,7 +9,7 @@
 
 `node tools/check/check_complexity.js` (eslint complexity 임계 10, Δ 비교는 동일 임계 유지 필수).
 
-- 기준선: **323건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
+- 기준선: **314건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
 - 분해 순서: 복잡도 점수 내림차순 — 상위부터 처리해야 곡선이 꺾인다
 - 분해 완료 시 `--update`로 기준선을 축소하고 `--report`로 이 표를 재생성한다
 - 분해 규약: 렌더 분기는 `if` 체인 → early return·테이블 조회·서브함수 추출로 내리고, 동작 변경 없이 구조만 정리한다. 대형 렌더 함수는 섹션별 private 렌더 함수로 분할
@@ -46,7 +46,7 @@
 | 27 | `performTextbookSearch` | src/views/textbook-search.js:170 |
 | 26 | `renderTodayQueue` | src/views/dashboard-queue.js:262 |
 | 26 | `initReaderToolbar` | src/views/reader/reader-toolbar.js:340 |
-| 25 | `(anonymous)#2` | src/content/pdf-utils.js:300 |
+| 25 | `(anonymous)#2` | src/content/pdf-utils.js:328 |
 | 25 | `_matchSnippet` | src/search/search-index.js:111 |
 | 25 | `_listRefDocs` | src/search/search-sources.js:255 |
 | 25 | `createEntityCard` | src/views/dictionary.js:358 |
@@ -72,7 +72,6 @@
 | 23 | `renderReviewList` | src/views/quiz/quiz-review.js:87 |
 | 23 | `getAudioPathForChapter` | src/views/reader/reader-audio.js:35 |
 | 22 | `resolveDefaultExamId` | src/core/exam-context.js:16 |
-| 22 | `initCareIncidentView` | src/exams/carework/views/care-incident.js:199 |
 | 22 | `productOpen` | src/exams/cosmetic/views/formula-prod-detail.js:42 |
 | 22 | `_scrollToQuery` | src/reader/exam-viewer.js:779 |
 | 22 | `parseMarkdown` | src/reader/markdown-parser.js:108 |
@@ -80,10 +79,9 @@
 | 22 | `navigateToView` | src/shell/router.js:59 |
 | 22 | `runWithLoading` | src/ui-utils.js:59 |
 | 22 | `_renderWeakStatementInsight` | src/views/analysis-view.js:236 |
-| 21 | `_cutsWithTableSplit` | src/content/pdf-utils.js:149 |
-| 21 | `pdfFileFromElStyled` | src/content/pdf-utils.js:437 |
-| 21 | `buildHandover` | src/exams/carework/care-handover.js:15 |
-| 21 | `buildBatchRecordHtml` | src/exams/cosmetic/views/formula-print.js:52 |
+| 21 | `_cutsWithTableSplit` | src/content/pdf-utils.js:175 |
+| 21 | `pdfFileFromElStyled` | src/content/pdf-utils.js:465 |
+| 21 | `buildBatchRecordHtml` | src/exams/cosmetic/views/formula-print.js:61 |
 | 21 | `applyExamBranding` | src/shell/app-shell.js:195 |
 | 21 | `statusRows` | src/shell/notice-check.js:422 |
 | 21 | `chapterFromCid` | src/study/analysis-engine.js:88 |
@@ -96,7 +94,7 @@
 | 20 | `summarizeExamProgress` | src/views/exam-select.js:20 |
 | 20 | `refitPersonalModels` | src/views/personalization-view.js:89 |
 | 20 | `renderTextbookReader` | src/views/textbook-reader.js:300 |
-| 19 | `(anonymous)#5` | src/exams/carework/care-share.js:64 |
+| 19 | `(anonymous)#5` | src/exams/carework/care-share.js:74 |
 | 19 | `suspectOcrSubstitutions` | src/exams/cosmetic/formula-check.js:320 |
 | 19 | `extractProductFromImages` | src/exams/cosmetic/product-vision.js:246 |
 | 19 | `batchSave` | src/exams/cosmetic/views/formula-batch.js:256 |
@@ -108,10 +106,7 @@
 | 19 | `renderSimQuestion` | src/views/exam-sim/exam-sim-arena.js:176 |
 | 19 | `renderExpectedScore` | src/views/score-estimate.js:46 |
 | 19 | `renderWeakReview` | src/views/trainer-drills.js:557 |
-| 18 | `(anonymous)#7` | src/exams/carework/care-share.js:105 |
-| 18 | `initCareCalcView` | src/exams/carework/views/care-calc.js:133 |
-| 18 | `_onSeedFile` | src/exams/carework/views/care-custom-form.js:181 |
-| 18 | `initCareHandoverView` | src/exams/carework/views/care-handover.js:215 |
+| 18 | `initCareCalcView` | src/exams/carework/views/care-calc.js:152 |
 | 18 | `(anonymous)#14` | src/exams/cosmetic/views/formula-batch.js:49 |
 | 18 | `updateCalcComputed` | src/exams/cosmetic/views/formula-calc.js:70 |
 | 18 | `_doSearch` | src/reader/html-viewer.js:363 |
@@ -159,17 +154,16 @@
 | 16 | `_chapterAnchorForTitle` | src/views/textbook-reader.js:81 |
 | 16 | `submitOxDrillAnswer` | src/views/trainer-drills.js:346 |
 | 16 | `generateLimitsOptions` | src/views/trainer.js:181 |
-| 15 | `(anonymous)#1` | src/content/docx-utils.js:145 |
-| 15 | `_blockCuts` | src/content/pdf-utils.js:108 |
+| 15 | `_blockCuts` | src/content/pdf-utils.js:134 |
 | 15 | `sha256hex` | src/core/sha256.js:25 |
 | 15 | `loadProgress` | src/core/state.js:160 |
-| 15 | `buildCareLog` | src/exams/carework/care-log.js:22 |
+| 15 | `(anonymous)#6` | src/exams/carework/care-share.js:101 |
 | 15 | `clientTrends` | src/exams/carework/care-trend.js:17 |
-| 15 | `buildVisitText` | src/exams/carework/care-visit.js:26 |
+| 15 | `buildVisitText` | src/exams/carework/care-visit.js:28 |
 | 15 | `_openEditor` | src/exams/carework/views/care-custom-form.js:54 |
+| 15 | `_onSeedFile` | src/exams/carework/views/care-custom-form.js:197 |
 | 15 | `initCareFinderView` | src/exams/carework/views/care-finder.js:46 |
-| 15 | `initCareHomeView` | src/exams/carework/views/care-home.js:25 |
-| 15 | `careVisitResultOpen` | src/exams/carework/views/care-visit.js:65 |
+| 15 | `careVisitResultOpen` | src/exams/carework/views/care-visit.js:68 |
 | 15 | `boundedEditDistance` | src/exams/cosmetic/formula-check.js:292 |
 | 15 | `applyFormulaDefaults` | src/exams/cosmetic/views/formula-batch-form.js:184 |
 | 15 | `formulaCalcSave` | src/exams/cosmetic/views/formula-calc.js:628 |
@@ -190,15 +184,14 @@
 | 15 | `submitCalcAnswer` | src/views/trainer-calc-practice.js:76 |
 | 14 | `renderPerformanceChart` | src/charts.js:132 |
 | 14 | `buildComboSubjectMd` | src/content/combo-doc.js:44 |
+| 14 | `(anonymous)#1` | src/content/docx-utils.js:723 |
 | 14 | `resolveExamThemeTokens` | src/core/exam-context.js:182 |
 | 14 | `cleanOrphansForSubject` | src/core/state.js:314 |
 | 14 | `syncFacilityClients` | src/exams/carework/care-client-store.js:54 |
-| 14 | `(anonymous)#4` | src/exams/carework/care-roster.js:55 |
-| 14 | `(anonymous)#6` | src/exams/carework/care-share.js:91 |
-| 14 | `(anonymous)#10` | src/exams/carework/doc-md.js:39 |
-| 14 | `careAuditFileLoad` | src/exams/carework/views/care-audit.js:78 |
-| 14 | `initCareAuditView` | src/exams/carework/views/care-audit.js:149 |
-| 14 | `careCalcRun` | src/exams/carework/views/care-calc.js:63 |
+| 14 | `(anonymous)#4` | src/exams/carework/care-roster.js:84 |
+| 14 | `initCareAuditView` | src/exams/carework/views/care-audit.js:167 |
+| 14 | `_calcDocData` | src/exams/carework/views/care-calc.js:65 |
+| 14 | `(anonymous)#11` | src/exams/carework/views/care-incident.js:221 |
 | 14 | `findIngredient` | src/exams/cosmetic/formula-check.js:261 |
 | 14 | `parseExtractionResponse` | src/exams/cosmetic/product-vision.js:203 |
 | 14 | `renderStability` | src/exams/cosmetic/views/formula-calc.js:222 |
@@ -226,6 +219,7 @@
 | 13 | `ensureRegistry` | src/content/data-loader.js:70 |
 | 13 | `applyExamTheme` | src/core/exam-context.js:249 |
 | 13 | `deviceLabel` | src/core/utils.js:93 |
+| 13 | `(anonymous)#8` | src/exams/carework/doc-md.js:124 |
 | 13 | `(anonymous)#12` | src/exams/cosmetic/formula-check.js:363 |
 | 13 | `deductStock` | src/exams/cosmetic/material-ledger.js:188 |
 | 13 | `sectionFreshness` | src/exams/cosmetic/views/formula-audit.js:237 |
@@ -233,8 +227,8 @@
 | 13 | `(anonymous)#15` | src/exams/cosmetic/views/formula-batch.js:158 |
 | 13 | `(anonymous)#16` | src/exams/cosmetic/views/formula-calc.js:85 |
 | 13 | `_restoreCalcDraft` | src/exams/cosmetic/views/formula-calc.js:395 |
+| 13 | `buildAuditReportHtml` | src/exams/cosmetic/views/formula-print.js:320 |
 | 13 | `getPracticeViewTitles` | src/practice-registry.js:590 |
-| 13 | `showPlanCompare` | src/pro/pro-upgrade.js:237 |
 | 13 | `setupPWAInstall` | src/pwa/pwa-install.js:10 |
 | 13 | `detectPlatform` | src/pwa/pwa-install.js:61 |
 | 13 | `(anonymous)#25` | src/reader/exam-viewer.js:248 |
@@ -259,12 +253,11 @@
 | 12 | `parseCsv` | src/content/csv-utils.js:57 |
 | 12 | `loadDictionary` | src/content/data-loader.js:539 |
 | 12 | `getKnowledgeItems` | src/content/data-loader.js:560 |
-| 12 | `(anonymous)#3` | src/content/pdf-utils.js:335 |
+| 12 | `(anonymous)#3` | src/content/pdf-utils.js:363 |
 | 12 | `saveProgress` | src/core/state.js:250 |
-| 12 | `buildIncidentText` | src/exams/carework/care-incident.js:36 |
-| 12 | `buildRecordText` | src/exams/carework/care-log.js:43 |
-| 12 | `(anonymous)#8` | src/exams/carework/care-share.js:245 |
+| 12 | `(anonymous)#7` | src/exams/carework/care-share.js:140 |
 | 12 | `careFormTplSave` | src/exams/carework/views/care-custom-form.js:108 |
+| 12 | `(anonymous)#10` | src/exams/carework/views/care-handover.js:227 |
 | 12 | `importCustomRules` | src/exams/cosmetic/formula-rules.js:189 |
 | 12 | `sanitizeCustomer` | src/exams/cosmetic/formula-store.js:106 |
 | 12 | `fileToBase64Jpeg` | src/exams/cosmetic/product-vision.js:110 |
@@ -273,9 +266,9 @@
 | 12 | `updateStockWarn` | src/exams/cosmetic/views/formula-batch-form.js:283 |
 | 12 | `custImportFile` | src/exams/cosmetic/views/formula-customer.js:453 |
 | 12 | `matImportFile` | src/exams/cosmetic/views/formula-material.js:321 |
-| 12 | `buildAuditReportHtml` | src/exams/cosmetic/views/formula-print.js:311 |
 | 12 | `(anonymous)#23` | src/exams/cosmetic/views/formula-products.js:125 |
 | 12 | `mapSourceToRef` | src/pdf-registry.js:1303 |
+| 12 | `showPlanCompare` | src/pro/pro-upgrade.js:237 |
 | 12 | `(anonymous)#27` | src/reader/manual-viewer.js:198 |
 | 12 | `termHitQuality` | src/search/search-morpheme.js:77 |
 | 12 | `(anonymous)#31` | src/search/search-sources.js:422 |
@@ -299,17 +292,15 @@
 | 11 | `_getMd` | src/content/data-loader.js:243 |
 | 11 | `generateComboOptions` | src/content/questions.js:98 |
 | 11 | `extractFormPdf` | src/exams/carework/care-form-pdf.js:32 |
-| 11 | `(anonymous)#9` | src/exams/carework/care-visit.js:47 |
-| 11 | `_onTplFile` | src/exams/carework/form-template-editor.js:91 |
-| 11 | `(anonymous)#11` | src/exams/carework/form-template-store.js:66 |
+| 11 | `_onTplFile` | src/exams/carework/form-template-editor.js:93 |
+| 11 | `(anonymous)#9` | src/exams/carework/form-template-store.js:66 |
 | 11 | `parseLimitText` | src/exams/cosmetic/formula-check.js:35 |
 | 11 | `addCustomCandidate` | src/exams/cosmetic/formula-rules.js:129 |
 | 11 | `(anonymous)#17` | src/exams/cosmetic/views/formula-customer.js:66 |
 | 11 | `(anonymous)#19` | src/exams/cosmetic/views/formula-io.js:54 |
 | 11 | `(anonymous)#21` | src/exams/cosmetic/views/formula-material.js:85 |
-| 11 | `buildConsentHtml` | src/exams/cosmetic/views/formula-print.js:422 |
 | 11 | `(anonymous)#22` | src/exams/cosmetic/views/formula-products.js:95 |
-| 11 | `shouldShowProMoment` | src/pro/pro-upgrade.js:318 |
+| 11 | `shouldShowProMoment` | src/pro/pro-upgrade.js:316 |
 | 11 | `_titleFromPath` | src/reader/exam-viewer.js:61 |
 | 11 | `(anonymous)#26` | src/reader/exam-viewer.js:442 |
 | 11 | `_loadMd` | src/reader/exam-viewer.js:543 |

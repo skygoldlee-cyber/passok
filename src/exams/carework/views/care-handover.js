@@ -1,6 +1,7 @@
 // src/exams/carework/views/care-handover.js — 인수인계서 뷰
 // @spec UX-FORM-03 — 시험 전용 실무 뷰 (DA-13)
-import { buildHandover, buildHandoverMd, SHIFTS } from '../care-handover.js';
+import { buildHandover, buildHandoverMd, SHIFTS, serviceLabel } from '../care-handover.js';
+import { SERVICE_TYPES } from '../care-log.js';
 import { markFunnel } from '../care-funnel.js';
 import { listCareLogs, FREE_LIMIT } from '../care-log-store.js';
 import { saveHandover, listHandovers, deleteHandover, handoversToCsv } from '../handover-store.js';
@@ -36,9 +37,11 @@ const _val = (id, fb) => {
     return el && el.value ? el.value : fb;
 };
 
-function todayLogs() {
+function todayLogs(service = '') {
     const today = todayKey();
-    return listCareLogs().filter((/** @type {*} */ x) => x.date === today).map((/** @type {*} */ x) => `${x.client} — ${x.service}`);
+    return listCareLogs()
+        .filter((/** @type {*} */ x) => x.date === today && (!service || x.service === service))
+        .map((/** @type {*} */ x) => `${x.client} — ${serviceLabel(x.service)}`);
 }
 
 /** CO-05 오늘 기록으로 채우기 — 근무 일자의 일지·사고·방문을 대상자별로 집계해 폼 초안 반영 (작성자 검토 후 저장) */
@@ -62,11 +65,13 @@ export function careHandoverGenerate() {
         from: _val('ho-from', ''),
         to: _val('ho-to', ''),
         shift: _val('ho-shift', 'day'),
+        shiftTime: _val('ho-shift-time', ''),
+        service: _val('ho-service', ''),
         clients: _val('ho-clients', ''),
         status: _val('ho-status', ''),
         tasks: _val('ho-tasks', ''),
         caution: _val('ho-caution', ''),
-        logs: /** @type {HTMLInputElement|null} */ ($('ho-merge'))?.checked ? todayLogs() : [],
+        logs: /** @type {HTMLInputElement|null} */ ($('ho-merge'))?.checked ? todayLogs(_val('ho-service', '')) : [],
     };
     const t = buildHandover(_lastIn);
     const out = $('ho-preview');
@@ -142,13 +147,18 @@ export function careHandoverCsvExport() {
 }
 
 /** 인수인계서 MD 초안 — 헤더 + 격식표 생성문 (docx 파생 원본 — 평문이 아닌 표로 출력) */
+/** @param {*} i */
+const _hoDocParams = i => ({
+    인계내용: buildHandoverMd(i),
+    일시: `${i.date || ''}${i.shift ? ` (${i.shift} 근무조${i.shiftTime ? ` ${i.shiftTime}` : ''})` : ''}`,
+    급여유형: serviceLabel(i.service || ''),
+    인계자: i.from, 인수자: i.to, 대상자: i.clients,
+});
+
 export function careHandoverDocMd() {
-    const t = _lastIn ? buildHandoverMd(_lastIn) : null;
-    return t ? docMdHead('인수인계서') + '\n' + renderToolBody('careHandover', {
-        인계내용: t,
-        일시: `${_lastIn?.date || ''}${_lastIn?.shift ? ` (${_lastIn.shift} 근무조)` : ''}`,
-        인계자: _lastIn?.from, 인수자: _lastIn?.to, 대상자: _lastIn?.clients,
-    }) + docMdSign([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver']]) : '';
+    if (!_lastIn) return '';
+    return docMdHead('인수인계서') + '\n' + renderToolBody('careHandover', _hoDocParams(_lastIn))
+        + docMdSign([['인계자(서명)', 'author'], ['인수자(서명)', 'receiver']]);
 }
 
 /** 📤 공유·내보내기 게이트 — 기록 우선: 미저장 생성문은 자동 저장 후 careShare 위임 (저장 실패 시에만 차단) */
@@ -213,6 +223,22 @@ export async function careHandoverAck(handoverId) {
     renderFacility();
 }
 
+/** 폼 기본값 채움 — 홈 서명 설정의 인계자·인수자 + 마지막 저장값 복원 (빈 필드만, 서명 기본값 우선) */
+const _hoPrefill = () => {
+    const sign = getDocSign();
+    const fromEl = /** @type {HTMLInputElement|null} */ ($('ho-from'));
+    if (fromEl && !fromEl.value) fromEl.value = sign.author;
+    const toEl = /** @type {HTMLInputElement|null} */ ($('ho-to'));
+    if (toEl && !toEl.value) toEl.value = sign.receiver;
+    const last = getJSON(STORAGE_KEYS.CARE_LAST_HANDOVER);
+    if (last && typeof last === 'object') {
+        for (const [k, v] of Object.entries(last)) {
+            const el = /** @type {HTMLInputElement|null} */ ($(`ho-${k}`));
+            if (el && !el.value && typeof v === 'string' && v) el.value = v;
+        }
+    }
+};
+
 export function initCareHandoverView() {
     markFunnel('tool:care-handover');
     const _picker = /** @type {HTMLInputElement|null} */ ($('ho-clients'));
@@ -222,22 +248,12 @@ export function initCareHandoverView() {
     const s = $('ho-shift');
     if (s && !s.children.length)
         s.innerHTML = SHIFTS.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
+    const sv = $('ho-service');
+    if (sv && sv.children.length <= 1)
+        sv.innerHTML = '<option value="">전체</option>' + SERVICE_TYPES.map(x => `<option value="${x.key}">${x.label}</option>`).join('');
     const n = $('ho-logcount');
-    if (n) n.textContent = `오늘 저장된 일지 ${todayLogs().length}건 · 무료 저장 ${FREE_LIMIT}건 한도`;
-    // 홈 서명 설정의 작성자·인수자를 폼 기본값으로 — 문서 서명란과 폼 값 일치
-    const sign = getDocSign();
-    const fromEl = /** @type {HTMLInputElement|null} */ ($('ho-from'));
-    if (fromEl && !fromEl.value) fromEl.value = sign.author;
-    const toEl = /** @type {HTMLInputElement|null} */ ($('ho-to'));
-    if (toEl && !toEl.value) toEl.value = sign.receiver;
-    // 마지막 저장값 자동 기입 — 근무조·인계자·인수자 반복 입력 복원 (빈 필드만, 서명 기본값 우선)
-    const last = getJSON(STORAGE_KEYS.CARE_LAST_HANDOVER);
-    if (last && typeof last === 'object') {
-        for (const [k, v] of Object.entries(last)) {
-            const el = /** @type {HTMLInputElement|null} */ ($(`ho-${k}`));
-            if (el && !el.value && typeof v === 'string' && v) el.value = v;
-        }
-    }
+    if (n) n.textContent = `오늘 저장된 일지 ${todayLogs(_val('ho-service', '')).length}건 · 무료 저장 ${FREE_LIMIT}건 한도`;
+    _hoPrefill();
     renderSaved();
     void renderFacility();
     void refreshOrgName();

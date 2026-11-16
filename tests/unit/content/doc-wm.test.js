@@ -20,4 +20,10 @@ test('docWmHtml — .doc-wm 오버레이 마크업 + 이스케이프, 빈 문구
     assert.ok(html.includes('조이실버케어 요양원 · 2026-11-14'), '문구 누락');
     assert.equal(docWmHtml(''), '');
     assert.ok(docWmHtml('a<b&"c"').includes('a&lt;b&amp;&quot;c&quot;'), 'HTML 이스케이프 누락');
+    // 장문 기관명 — 회전 투영 폭이 페이지 폭을 넘지 않도록 font-size 축소
+    const long = docWmHtml('가'.repeat(40) + ' · 2026-11-14');
+    const m = long.match(/font-size:([\d.]+)em/);
+    assert.ok(m && parseFloat(m[1]) < 2.6, `장문 font-size 축소 누락 (${m && m[1]}) — 페이지 폭 초과`);
+    const short = docWmHtml('기관 · 2026-11-14').match(/font-size:([\d.]+)em/);
+    assert.equal(short && short[1], '2.60', '단문은 기본 2.6em 유지');
 });

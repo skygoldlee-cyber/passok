@@ -30,8 +30,23 @@ const { getExamTargets } = require('../build/exam_targets.js');
 const ROOT = path.resolve(__dirname, '..', '..');
 const QUIET = process.argv.includes('--quiet');
 
-/** 정식 승격 정량 기준 — 과목당 최소 문항 수 (manifest exams 파일 ###Q 실측) */
-const GRAD_MIN_PER_SUBJECT = 20;
+/** 정식 승격 정량 기준 — 과목당 모의고사 N회분 문항 (manifest exams 파일 ###Q 실측).
+ *  과목당 출제 문항 수는 manifest.integratedExam.questionsPerSubject 선언 우선,
+ *  미선언 시 DEFAULT_Q_PER_SUBJECT로 간주한다. */
+const MOCK_ROUNDS_REQUIRED = 3;
+const DEFAULT_Q_PER_SUBJECT = 20;
+/** 과목 1회 출제 문항 수 — questionsPerSubject 선언 우선, 미선언 20 간주 */
+const perSubjectQ = (manifest, subjKey) =>
+    ((manifest.integratedExam || {}).questionsPerSubject || {})[subjKey] || DEFAULT_Q_PER_SUBJECT;
+
+/** 과목별 요구 문항 수 — 모의고사 MOCK_ROUNDS_REQUIRED회 비반복 구성 가능량 (active 승격 기준) */
+const requiredFor = (manifest, subjKey) => MOCK_ROUNDS_REQUIRED * perSubjectQ(manifest, subjKey);
+
+/** 정식 팩 최소 sanity 바닥 — 과목당 1회분 미만이면 모의고사 1회도 비반복 구성 불가 */
+const floorFor = (manifest, subjKey) => perSubjectQ(manifest, subjKey);
+
+/** 기준 상향(모의고사 3회분) 이전 정식 승격 팩 — 신기준 미달은 오류가 아닌 보강 권장(warn)으로 보고 */
+const MOCK3X_GRANDFATHERED = new Set(['broker', 'indsafe', 'compapp2', 'carework']);
 
 /** 성숙도 티어 — draft(선언) < pilot(출제기준+표준형 챕터) < active(pilot+과목당 ≥최소 문항) */
 const TIERS = ['draft', 'pilot', 'active'];
@@ -124,13 +139,13 @@ for (const t of targets) {
     // ── 등급 정합 ──
     if (!soon && totalQ === 0) err(t.id, '정식 시험인데 문제은행 문항 0 — 콘텐츠 투입 또는 comingSoon 표기 필요');
     if (!soon && totalQ > 0 && subjects.length) {
-        const thin = subjects.filter((s) => (qBySubject[s.key] || 0) < GRAD_MIN_PER_SUBJECT);
+        const thin = subjects.filter((s) => (qBySubject[s.key] || 0) < floorFor(t.manifest, s.key));
         if (thin.length) {
-            warn(t.id, `정식 시험인데 과목 문항 부족 — ${thin.map((s) => `${s.key}:${qBySubject[s.key] || 0}문`).join(', ')} (기준 과목당 ≥${GRAD_MIN_PER_SUBJECT})`);
+            warn(t.id, `정식 시험인데 과목 문항 부족 — ${thin.map((s) => `${s.key}:${qBySubject[s.key] || 0}문`).join(', ')} (기준 과목당 모의고사 1회분)`);
         }
     }
     if (soon && subjects.length) {
-        const ready = subjects.filter((s) => (qBySubject[s.key] || 0) >= GRAD_MIN_PER_SUBJECT).length;
+        const ready = subjects.filter((s) => (qBySubject[s.key] || 0) >= requiredFor(t.manifest, s.key)).length;
         if (ready === subjects.length && totalQ > 0) {
             warn(t.id, `comingSoon이지만 전 과목 승격 기준 충족 (${totalQ}문) — 정식 전환 검토 (NEW_EXAM_RUNBOOK §승격)`);
         }
@@ -159,9 +174,11 @@ for (const t of targets) {
             }
         }
         if (lvl >= 2 && subjects.length) {
-            const thinT = subjects.filter((s) => (qBySubject[s.key] || 0) < GRAD_MIN_PER_SUBJECT);
+            const thinT = subjects.filter((s) => (qBySubject[s.key] || 0) < requiredFor(t.manifest, s.key));
             if (thinT.length) {
-                err(t.id, `tier active 요건: 과목당 ≥${GRAD_MIN_PER_SUBJECT}문 미충족 — ${thinT.map((s) => `${s.key}:${qBySubject[s.key] || 0}문`).join(', ')}`);
+                const msg = `tier active 요건: 과목당 모의고사 ${MOCK_ROUNDS_REQUIRED}회분 미충족 — ${thinT.map((s) => `${s.key}:${qBySubject[s.key] || 0}/필요${requiredFor(t.manifest, s.key)}문`).join(', ')}`;
+                if (MOCK3X_GRANDFATHERED.has(t.id)) warn(t.id, `${msg} (기준 상향 전 승격 팩 — 보강 권장)`);
+                else err(t.id, msg);
             }
         }
     }

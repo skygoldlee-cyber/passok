@@ -54,8 +54,10 @@
     font-size: 9.5pt; page-break-inside: avoid;
   }
   th, td { border: 1px solid #c9ced6; padding: 5px 8px; text-align: left;
-           vertical-align: top; }
-  th { background: #eef1f5; font-weight: 700; }
+           vertical-align: middle; }
+  th { background: #eef1f5; font-weight: 700; text-align: center; }
+  /* 2열 표(라벨|내용)의 라벨 열은 가운데 — DOCX 출력과 같은 공문 서식 규약 */
+  .kv > tbody > tr > td:first-child, .kv > tr > td:first-child { text-align: center; }
   tr { page-break-inside: avoid; }
   thead { display: table-header-group; }  /* 표 분할 시 헤더 행 반복 */
   hr { border: none; border-top: 1px solid #ccc; margin: 1.2em 0; }

@@ -64,9 +64,9 @@ export function renderTplPreview(prefix) {
     if (!el) return;
     const blk = _blockState[prefix];
     let body = readTplEditor(prefix).body;
-    if (blk?.values) body = body.replace(FIELD_RE, (m, k0) => blk.values[k0.trim()] ?? m); // 블록 실데이터 치환
+    if (blk?.values) body = body.replace(FIELD_RE, (/** @type {string} */ m, /** @type {string} */ k0) => blk.values[k0.trim()] ?? m); // 블록 실데이터 치환
     el.innerHTML = body.trim()
-        ? mdToHtml(body).replace(FIELD_RE, (m, k0) => {
+        ? mdToHtml(body).replace(FIELD_RE, (/** @type {string} */ m, /** @type {string} */ k0) => {
             const k = k0.trim();
             const auto = SYSTEM_KEYS.has(k);
             const tool = !auto && !!blk?.auto?.has(k);

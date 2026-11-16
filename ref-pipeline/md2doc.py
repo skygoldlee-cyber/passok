@@ -6,6 +6,8 @@ import html
 import re
 import argparse
 import base64
+from html.parser import HTMLParser
+from io import BytesIO
 import functools
 import glob
 import os
@@ -23,7 +25,21 @@ import tempfile
 import traceback
 import zlib
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+# python-docx — DOCX 출력(--docx / GUI DOCX 체크)에서만 필요.
+# 미설치 환경에서도 HTML/PDF 경로는 정상 동작하도록 지연 검증한다.
+try:
+    import docx as _docx
+    from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
+    from docx.enum.section import WD_ORIENT
+    from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK, WD_COLOR_INDEX
+    from docx.oxml import OxmlElement
+    from docx.oxml.ns import qn
+    from docx.opc.constants import RELATIONSHIP_TYPE as _RT
+    from docx.shared import Emu, Mm, Pt, RGBColor
+except ImportError:
+    _docx = None
 
 # Windows cp949 콘솔 대응 — 한글/유니코드 안내 메시지가 깨지지 않게 UTF-8 고정
 try:
@@ -813,6 +829,69 @@ def _mermaid_cache_write(src: str, svg: str, renderer: str = "mermaid.ink") -> N
         logger.warning("[mermaid-cache] write failed: %s", e)
 
 
+def _render_mermaid_locally(src: str) -> str | None:
+    """vendor mermaid.min.js + headless Chrome으로 다이어그램을 로컬 렌더한다.
+
+    원격 렌더러(mermaid.ink/kroki) 불가 환경용 — 오프라인 첫 빌드나
+    원격 장애 시에도 저장소 vendor 라이브러리만으로 SVG를 얻는다.
+    Chrome은 PDF 경로와 같은 의존이라 추가 요구 없다.
+    """
+    if not _REPO_VENDOR_MERMAID.is_file():
+        return None
+    browser = _find_browser()
+    if not browser:
+        return None
+    try:
+        mjs = _REPO_VENDOR_MERMAID.read_text(encoding="utf-8")
+    except Exception:
+        return None
+    # 소스는 URI 인코딩해 JS 문자열 리터럴 안전성 확보 (따옴표·한글 무관)
+    src_enc = urllib.parse.quote(src, safe="")
+    page = (
+        '<!DOCTYPE html><html><head><meta charset="utf-8"></head>'
+        '<body><div id="out"></div>'
+        f"<script>{mjs}</script>"
+        "<script>"
+        'mermaid.initialize({startOnLoad:false,theme:"default"});'
+        f'mermaid.render("m0",decodeURIComponent("{src_enc}"))'
+        '.then(function(r){'
+        'document.getElementById("out").innerHTML=r.svg;'
+        'document.title="__done__";})'
+        '.catch(function(e){document.title="__fail__";});'
+        "</script></body></html>"
+    )
+    try:
+        with tempfile.TemporaryDirectory(prefix="md2doc-mm-") as td:
+            hp = Path(td) / "m.html"
+            hp.write_text(page, encoding="utf-8")
+            r = subprocess.run(
+                [
+                    browser,
+                    "--headless=new",
+                    "--disable-gpu",
+                    "--virtual-time-budget=15000",
+                    "--dump-dom",
+                    hp.resolve().as_uri(),
+                ],
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=90,
+            )
+        m = re.search(r"(<svg\b[\s\S]*?</svg>)", r.stdout or "")
+        if m:
+            return _sanitize_svg(m.group(1))
+        tm = re.search(r"<title>([^<]*)", r.stdout or "")
+        logger.warning(
+            "[mermaid] 로컬 렌더 출력 없음 — title=%s",
+            tm.group(1) if tm else "?",
+        )
+    except Exception as e:
+        logger.warning("[mermaid] 로컬 렌더 실패: %s", e)
+    return None
+
+
 def _sanitize_svg(svg: str) -> str:
     """외부 렌더러(mermaid.ink/kroki) 응답의 실행 가능 요소를 제거한다.
 
@@ -858,13 +937,19 @@ def _prerender_mermaid_to_svg(html_body: str, progress_cb=None, allow_network: b
 
     def _fetch_svg(src: str, label: str = "") -> str | None:
         # 렌더러별 캐시 — 주 렌더러 키를 먼저 조회하고 폴백 키도 확인
-        for renderer in ("mermaid.ink", "kroki"):
+        for renderer in ("mermaid.ink", "kroki", "local"):
             svg = _mermaid_cache_read(src, renderer)
             if svg is not None:
                 return svg
 
         if not allow_network:
-            return None  # 오프라인 모드 — 캐시 미스는 클라이언트 렌더링 폴백
+            # 오프라인 — vendor mermaid + headless Chrome 로컬 렌더
+            # (네트워크 불필요). 불가 시 클라이언트 렌더링 폴백
+            svg = _render_mermaid_locally(src)
+            if svg is not None:
+                _mermaid_cache_write(src, svg, "local")
+                return svg
+            return None
 
         svg = None
         renderer_used = None
@@ -920,6 +1005,12 @@ def _prerender_mermaid_to_svg(html_body: str, progress_cb=None, allow_network: b
                     last_err = e
                     if _kattempt == 0:
                         time.sleep(1.0)
+
+        if svg is None:
+            # 원격 렌더러 전부 실패 — 로컬 렌더로 최종 폴백 (네트워크 불필요)
+            svg = _render_mermaid_locally(src)
+            if svg is not None:
+                renderer_used = "local"
 
         if svg is None:
             logger.warning("[Mermaid pre-render failed] %s: %s", label, last_err)
@@ -1008,6 +1099,9 @@ def _build_markdown(toc_permalink: bool = True) -> markdown.Markdown:
             "admonition",
             "attr_list",
             "md_in_html",
+            # ul 뒤 빈 줄로 이어지는 1. 항목이 같은 <ul>로 병합되는
+            # Python-Markdown 결함 교정 — 마커 종류가 다르면 새 목록
+            "sane_lists",
         ],
         extension_configs={
             "codehilite": {
@@ -1171,10 +1265,15 @@ def markdown_to_tailwind_html(md_text: str, title: str = "Document", config: Ren
     md_text = _tag_fenced_diagram_blocks_as_text(md_text)
     md_text = _normalize_diagram_codeblocks(md_text)
     md_text = _inline_mermaid_fences(md_text)
+    md_text = _render_passok_fences(md_text)
     md = _build_markdown(toc_permalink=True)
 
     html_body = md.convert(md_text)
     toc_html = getattr(md, "toc", "") or ""
+
+    # :::sign/:::approve 등 PassOK 펜스 마커·{{img:key}} 토큰 정화 —
+    # 인쇄/DOCX 경로(md_to_html_body)와 동일 규약을 독립 HTML에도 적용
+    html_body = _strip_fence_markers(html_body)
 
     # Convert ```mermaid blocks rendered by markdown/codehilite into <div class="mermaid">...</div>
     # Typical output: <pre><code class="language-mermaid">...</code></pre>
@@ -1417,8 +1516,9 @@ def run_gui(default_pdf: bool = False) -> int:
                         break
                     name = in_path.name
                     self.log.emit(f'[변환 시작] {name}')
-                    result = {'doc': name, 'html': None, 'pdf': None,
+                    result = {'doc': name, 'html': None, 'pdf': None, 'docx': None,
                               'want_html': o['html'], 'want_pdf': o['pdf'],
+                              'want_docx': o['docx'],
                               'status': 'OK', 'paths': []}
 
                     def cb(cur, tot, label, name=name):
@@ -1461,6 +1561,23 @@ def run_gui(default_pdf: bool = False) -> int:
                             result['status'] = 'FAIL'
                             self.log.emit(f'[오류] {name} (PDF): {e}')
 
+                    if o['docx']:
+                        try:
+                            written = convert_markdown_to_docx(
+                                in_path, out_path=self._dest(in_path, '.docx'),
+                                render_mermaid=not o['no_mermaid'],
+                                new_page_h2=o['new_page_h2'],
+                                allow_network=o['allow_network'],
+                                progress_cb=cb,
+                            )
+                            generated.append(str(written))
+                            result['docx'] = str(written)
+                            result['paths'].append(str(written))
+                            self.log.emit(f'[완료] {written}')
+                        except Exception as e:
+                            result['status'] = 'FAIL'
+                            self.log.emit(f'[오류] {name} (DOCX): {e}')
+
                     if result['status'] == 'FAIL':
                         fail += 1
                     self.doc_done.emit(result)
@@ -1472,7 +1589,7 @@ def run_gui(default_pdf: bool = False) -> int:
     class MainWindow(QMainWindow):
         def __init__(self):
             super().__init__()
-            self.setWindowTitle('md2doc — MD → HTML/PDF 변환기')
+            self.setWindowTitle('md2doc — MD → HTML/PDF/DOCX 변환기')
             self.resize(920, 680)
             self.setAcceptDrops(True)
             self.thread = None
@@ -1541,7 +1658,12 @@ def run_gui(default_pdf: bool = False) -> int:
                 '      ※ 사전 렌더링 실패분은 3.5MB 라이브러리를 임베드해 폴백 보장\n'
                 '해제: CDN 스크립트로 클라이언트 사이드 렌더링 (가벼운 HTML, PC 권장)')
             self.chk_pdf = QCheckBox('PDF 생성')
-            for cb in (self.chk_html, self.chk_mobile, self.chk_pdf):
+            self.chk_docx = QCheckBox('DOCX 생성')
+            self.chk_docx.setToolTip(
+                'Word 문서(.docx) 생성 — python-docx 필요\n'
+                'PDF와 동일한 본문(표·콜아웃·이미지·Mermaid)을 유지\n'
+                '(Mermaid는 PNG로 래스터 — PyMuPDF 필요)')
+            for cb in (self.chk_html, self.chk_mobile, self.chk_pdf, self.chk_docx):
                 row1.addWidget(cb)
             row1.addStretch(1)
             opt_lay.addLayout(row1)
@@ -1582,13 +1704,13 @@ def run_gui(default_pdf: bool = False) -> int:
 
             # 결과 테이블 + 로그 (스플리터)
             split = QSplitter(Qt.Vertical)
-            self.table = QTableWidget(0, 4)
-            self.table.setHorizontalHeaderLabels(['문서', 'HTML', 'PDF', '상태'])
+            self.table = QTableWidget(0, 5)
+            self.table.setHorizontalHeaderLabels(['문서', 'HTML', 'PDF', 'DOCX', '상태'])
             self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
             self.table.setSelectionBehavior(QAbstractItemView.SelectRows)
             self.table.horizontalHeader().setSectionResizeMode(
                 0, QHeaderView.Stretch)
-            for c in range(1, 4):
+            for c in range(1, 5):
                 self.table.horizontalHeader().setSectionResizeMode(
                     c, QHeaderView.ResizeToContents)
             self.table.doubleClicked.connect(self.open_selected)
@@ -1646,6 +1768,7 @@ def run_gui(default_pdf: bool = False) -> int:
             self.chk_html.setChecked(_saved('opt_html', 1))
             self.chk_mobile.setChecked(_saved('opt_mobile', 1))
             self.chk_pdf.setChecked(_saved('opt_pdf', 1 if default_pdf else 0))
+            self.chk_docx.setChecked(_saved('opt_docx', 0))
             self.keep_html.setChecked(_saved('opt_keep_html', 0))
             self.no_mermaid.setChecked(_saved('opt_no_mermaid', 0))
             self.new_page_h2.setChecked(_saved('opt_new_page_h2', 0))
@@ -1711,9 +1834,10 @@ def run_gui(default_pdf: bool = False) -> int:
                 QMessageBox.warning(
                     self, '입력 없음', '변환할 .md 파일이나 폴더를 추가하세요.')
                 return
-            if not (self.chk_html.isChecked() or self.chk_pdf.isChecked()):
+            if not (self.chk_html.isChecked() or self.chk_pdf.isChecked()
+                    or self.chk_docx.isChecked()):
                 QMessageBox.warning(
-                    self, '출력 없음', 'HTML 또는 PDF 중 하나 이상을 선택하세요.')
+                    self, '출력 없음', 'HTML·PDF·DOCX 중 하나 이상을 선택하세요.')
                 return
             missing = [p.name for p in paths if not p.is_file()]
             if missing:
@@ -1726,6 +1850,7 @@ def run_gui(default_pdf: bool = False) -> int:
             opts = {
                 'html': self.chk_html.isChecked(),
                 'pdf': self.chk_pdf.isChecked(),
+                'docx': self.chk_docx.isChecked(),
                 'render_config': RenderConfig(
                     # 모바일 모드에서는 사전 렌더링 실패분의 폴백으로만
                     # mermaid.js를 임베드한다 (성공 시 크기 비용 없음).
@@ -1799,7 +1924,10 @@ def run_gui(default_pdf: bool = False) -> int:
             self.table.setItem(row, 2, cell(
                 '✓' if r['pdf'] else ('✗' if r['want_pdf'] else '—'),
                 Qt.AlignCenter))
-            self.table.setItem(row, 3, cell(r['status'], Qt.AlignCenter))
+            self.table.setItem(row, 3, cell(
+                '✓' if r['docx'] else ('✗' if r['want_docx'] else '—'),
+                Qt.AlignCenter))
+            self.table.setItem(row, 4, cell(r['status'], Qt.AlignCenter))
             self._row_paths[row] = r.get('paths') or []
 
         def on_log(self, line):
@@ -1821,6 +1949,7 @@ def run_gui(default_pdf: bool = False) -> int:
                 settings.setValue('opt_html', int(self.chk_html.isChecked()))
                 settings.setValue('opt_mobile', int(self.chk_mobile.isChecked()))
                 settings.setValue('opt_pdf', int(self.chk_pdf.isChecked()))
+                settings.setValue('opt_docx', int(self.chk_docx.isChecked()))
                 settings.setValue('opt_keep_html', int(self.keep_html.isChecked()))
                 settings.setValue('opt_no_mermaid', int(self.no_mermaid.isChecked()))
                 settings.setValue('opt_new_page_h2', int(self.new_page_h2.isChecked()))
@@ -1940,6 +2069,7 @@ def md_to_html_body(
     # (md2doc.py와 동일한 전처리 — 변환 후 정규식은 codehilite 마크업과 불일치)
     if render_mermaid:
         md_text = _inline_mermaid_fences(md_text)
+    md_text = _render_passok_fences(md_text)
     md = _build_markdown(toc_permalink=False)
     body = md.convert(md_text)
     # 본문 내 목차의 깨진/누락된 앵커를 실제 헤딩 id로 교정한다 —
@@ -1950,12 +2080,142 @@ def md_to_html_body(
     _heading_map = _build_heading_map(getattr(md, "toc", "") or "")
     body = _linkify_inline_toc(body, _heading_map)
     body = _repair_dead_fragment_links(body, _heading_map)
+    body = _strip_fence_markers(body)
+    body = _mark_kv_tables(body)
     if render_mermaid:
         body = _prerender_mermaid_to_svg(
             body, progress_cb=progress_cb, allow_network=allow_network
         )
     body = _apply_smart_pagination(body, new_page_h2=new_page_h2)
     return body
+
+
+# PassOK 앱 내부 이미지 토큰 — 이 경로는 표준 MD만 다루므로 해석 불가 → 텍스트 표기
+_IMG_TOKEN_RE = re.compile(r"\{\{img:[\w-]+\}\}")
+
+
+_APPROVE_MARK_RE = re.compile(r"^:::approve(?:[ 	]+(.*))?$")
+_FENCE_TICK_RE = re.compile(r"^```")
+_TILDE_RE = re.compile(r"~~([^~]+)~~")  # 라인 단위 적용이라 [^~]로 충분
+
+
+def _render_passok_fences(text: str) -> str:
+    """:::sign…:::end·:::approve 마커를 서명란·결재란 HTML 표로 치환한다.
+
+    표는 block HTML이라 Markdown 변환을 그대로 통과하며, DOCX는 _emit_table이
+    테두리 표로 출력한다 — 마커 제거 후 내용만 평문으로 남기던 기존 동작을
+    의미 있는 서명·결재 서식으로 승격한다 (앱 부동 서명란과 다른 범용 표현).
+    ``` 펜스 안의 마커는 출력 내용이므로 건드리지 않는다.
+    """
+    if ":::" not in text and "~~" not in text:
+        return text
+    out, in_code, sign_rows = [], False, None
+    for line in text.splitlines():
+        s = line.strip()
+        if _FENCE_TICK_RE.match(s):
+            in_code = not in_code
+        if in_code:
+            out.append(line)
+            continue
+        if sign_rows is not None:
+            if s == ":::end":
+                rows = "".join(f"<tr><td>{r}</td></tr>" for r in sign_rows)
+                out.extend(["", f'<table class="doc-sign"><tbody>{rows}</tbody></table>', ""])
+                sign_rows = None
+            elif s:
+                label = html.escape(_IMG_TOKEN_RE.sub("(이미지)", re.sub(r"\s*\(인\)\s*$", "", s)))
+                sign_rows.append(f"{label} (인)")
+            continue
+        if s == ":::sign":
+            sign_rows = []
+            continue
+        am = _APPROVE_MARK_RE.match(s)
+        if am:
+            arg = (am.group(1) or "").strip()
+            if arg and arg != "none":
+                roles = [r.strip() for r in arg.split("|") if r.strip()]
+                head = "".join(f"<td>{html.escape(r)}</td>" for r in roles)
+                seals = "".join("<td>(인)</td>" for _ in roles)
+                out.extend(["", '<table class="doc-approve"><tbody>'
+                            f'<tr><td rowspan="2">결 재</td>{head}</tr><tr>{seals}</tr>'
+                            "</tbody></table>", ""])
+            continue
+        # Python-Markdown은 ~~취소~~ 미지원 — <del>로 사전 확장 (코드 펜스 밖만)
+        out.append(_TILDE_RE.sub(r"<del>\1</del>", line))
+    if sign_rows is not None:  # 미닫힘 :::sign — 수집된 줄은 표로 출력
+        rows = "".join(f"<tr><td>{r}</td></tr>" for r in sign_rows)
+        out.extend(["", f'<table class="doc-sign"><tbody>{rows}</tbody></table>', ""])
+    return "\n".join(out)
+
+
+
+def _sanitize_marker_lines(text: str) -> str:
+    """PassOK 내부 마커·토큰 정리 — DOCX(_emit_node)·HTML(_strip_fence_markers) 공용 규약.
+
+    - :::closing <문구>는 내용 문구라 접두만 제거하고 문구를 남긴다
+    - 그 외 :::marker 줄은 인자 유무 무관하게 제거 (:::approve 역할|역할·
+      :::approve none 등 인자 있는 설정 마커도 누수 금지)
+    - {{img:key}} 토큰은 (이미지) 텍스트로 치환 — 리터럴 누수 방지
+    """
+    if ":::" not in text and "{{img:" not in text:
+        return text
+    out = []
+    for l in text.split("\n"):
+        s = l.strip()
+        cm = re.match(r"^:::closing[ \t]+(.*)$", s, flags=re.S)
+        if cm:
+            out.append(cm.group(1))
+        elif re.match(r"^:::[\w-]+", s):
+            continue
+        else:
+            out.append(l)
+    return _IMG_TOKEN_RE.sub("(이미지)", "\n".join(out))
+
+
+def _strip_fence_markers(body: str) -> str:
+    """:::sign/:::end 등 doc-md 펜스 마커 제거 — DOCX 경로(_emit_block)와 동일 규약.
+
+    마커는 PassOK 내부 구조 표시라 어떤 출력에도 노출되면 안 된다.
+    인자 있는 마커(:::approve 역할·:::closing 문구)도 처리한다.
+    :::page는 쪽 나눔 의미라 <p>를 분할하고 <div class="new-page">로 치환해
+    PDF(.new-page CSS)·DOCX(_emit_block 페이지 브레이크) 양쪽에서 보존한다.
+    <p> 안의 마커 전용 라인만 지우고, 라인만 남으면 단락째 제거한다.
+    (pre/코드 펜스 안의 :::는 출력 내용이므로 보존 — 여기서는 <p>만 본다)
+    """
+    def fix_p(m: re.Match) -> str:
+        segs, buf = [], []
+        for l in m.group(2).split("\n"):
+            if re.fullmatch(r":::page", l.strip()):
+                segs.append(buf)
+                buf = []
+            else:
+                buf.append(l)
+        segs.append(buf)
+        parts = []
+        for s in segs:
+            inner = _sanitize_marker_lines("\n".join(s))
+            parts.append(f"<p{m.group(1)}>{inner}</p>" if inner.strip() else "")
+        return '<div class="new-page"></div>'.join(parts)
+
+    return re.sub(r"<p([^>]*)>(.*?)</p>", fix_p, body, flags=re.S)
+
+
+def _mark_kv_tables(body: str) -> str:
+    """2열 표(라벨|내용 구조)에 kv 클래스 부여 — CSS 라벨 열 가운데 정렬용.
+
+    DOCX는 ncols==2 판별로 라벨 열을 중앙 정렬한다 — CSS는 열 개수를
+    셀 수 없어 표 자체에 표시를 달아 같은 규약을 재현한다.
+    """
+    def repl(m: re.Match) -> str:
+        open_tag, inner = m.group(0), m.group(1)
+        if not open_tag.startswith("<table>") or "<table" in inner:
+            return m.group(0)  # 속성 보유·중첩 표는 건드리지 않는다
+        first_tr = re.search(r"<tr\b[^>]*>(.*?)</tr>", inner, re.S)
+        if first_tr and len(re.findall(r"<t[dh]\b", first_tr.group(1))) == 2:
+            return '<table class="kv">' + inner + "</table>"
+        return m.group(0)
+
+    return re.sub(r"<table\b[^>]*>(.*?)</table>", repl, body, flags=re.S)
 
 
 # 이 줄 수를 넘는 <pre>는 한 페이지에 못 들어갈 수 있어 내부 분할 허용
@@ -1982,9 +2242,12 @@ def _apply_smart_pagination(body: str, new_page_h2: bool = False) -> str:
        (짧은 블록만 통째 유지 → 큰 빈 공간 방지)
     """
     # 1) 헤딩 + 직후 블록 묶기
+    #    직후 블록의 닫는 태그는 여는 태그와 같은 것이어야 한다 — `</\2>` 역참조.
+    #    (이전엔 임의의 </p>|</ul>|</ol>|</blockquote> 첫 등장에서 끊겨, 목록 안
+    #    <p>가 있는 <ul>이 중간에 잘리고 </div>가 <li> 안에 꽂히는 깨진 HTML을 냈다)
     heading_pat = re.compile(
         r'(<h[2-4][^>]*>[\s\S]*?</h[2-4]>)'
-        r'(\s*<(?:p|ul|ol|blockquote)\b[^>]*>[\s\S]*?</(?:p|ul|ol|blockquote)>)?',
+        r'(\s*<(p|ul|ol|blockquote)\b[^>]*>[\s\S]*?</\3>)?',
         re.IGNORECASE,
     )
 
@@ -2117,6 +2380,1059 @@ def _embed_local_images(body: str, base_dir: Path) -> str:
     return re.sub(r'(<img\b[^>]*?\bsrc=")([^"]+)"', _repl, body, flags=re.IGNORECASE)
 
 
+# =============================================================================
+# DOCX 출력 (python-docx)
+#
+# PDF와 동일한 md_to_html_body 산출물을 DOCX로 걷는다 — 표·콜아웃·이미지·
+# mermaid(SVG→PNG 래스터)의 내용 정합이 파이프라인 수준에서 보장된다.
+# 헤딩 앵커(#id)는 Word 북마크 체계가 달라 일반 텍스트로 둔다.
+# =============================================================================
+
+_DOCX_BODY_FONT = "Malgun Gothic"   # print.html font-family — eastAsia까지 지정해야 한글 적용
+_DOCX_HEAD_PT = {1: 20, 2: 15, 3: 12.5, 4: 11, 5: 10.5, 6: 10.5}
+_DOCX_CONTENT_MM = 180              # @page margin 18mm 15mm → 본문폭 210-30
+_DOCX_CODE_FILL = "F6F8FA"          # print.html pre 배경
+_DOCX_CODE_EDGE = "D8DCE3"          # print.html pre 테두리
+_DOCX_HEAD_FILL = "EEF1F5"          # print.html th 배경
+_DOCX_BQ_FILL = "F4F7FB"            # print.html blockquote 배경
+_DOCX_BQ_EDGE = "C9D4E4"            # print.html blockquote 좌측 바
+_DOCX_TBL_EDGE = "C9CED6"           # print.html th/td 경계
+_DOCX_LINK_COLOR = "1A56DB"         # print.html a 색
+_DOCX_LIST_INDENT_MM = 7            # 목록 단계당 들여쓰기 (padding-left 1.6em 상당)
+
+_DOCX_CONTAINER_TAGS = frozenset({
+    "div", "section", "article", "details", "main", "figure", "center",
+    "header", "footer", "aside", "nav", "form", "fieldset", "hgroup",
+})
+_DOCX_INLINE_TAGS = frozenset({
+    "a", "abbr", "b", "bdi", "bdo", "big", "br", "cite", "code", "data",
+    "del", "dfn", "em", "i", "img", "ins", "kbd", "mark", "q", "rp",
+    "rt", "ruby", "s", "samp", "small", "span", "strike", "strong",
+    "sub", "sup", "time", "u", "var", "wbr",
+})
+# pPr 자식 순서 — shd 이후 태그 전수 (OOXML 스키마 순서)
+_PPR_AFTER_PBDR = (
+    "w:shd", "w:tabs", "w:suppressAutoHyphens", "w:kinsoku", "w:wordWrap",
+    "w:overflowPunct", "w:topLinePunct", "w:autoSpaceDE", "w:autoSpaceDN",
+    "w:bidi", "w:adjustRightInd", "w:snapToGrid", "w:spacing", "w:ind",
+    "w:contextualSpacing", "w:mirrorIndents", "w:suppressOverlap", "w:jc",
+    "w:textDirection", "w:textAlignment", "w:textboxTightWrap",
+    "w:outlineLvl", "w:divId", "w:cnfStyle", "w:rPr", "w:sectPr",
+    "w:pPrChange",
+)
+
+
+class _HNode:
+    """본문 HTML 경량 트리 노드 — tag 빈 문자열은 텍스트 노드."""
+
+    __slots__ = ("tag", "attrs", "kids", "text")
+
+    def __init__(self, tag: str = "", attrs: dict | None = None, text: str = "") -> None:
+        self.tag = tag
+        self.attrs = attrs or {}
+        self.kids: list[_HNode] = []
+        self.text = text
+
+    def attr(self, name: str) -> str:
+        return str(self.attrs.get(name) or "")
+
+
+class _BodyTree(HTMLParser):
+    """본문 HTML을 _HNode 트리로 조립한다 (svg는 사전 추출되어 없음)."""
+
+    _VOID = {"br", "img", "hr", "wbr", "col", "input", "meta", "link", "source"}
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.root = _HNode("#root")
+        self._stack = [self.root]
+
+    def handle_starttag(self, tag, attrs):
+        node = _HNode(tag.lower(), dict(attrs))
+        self._stack[-1].kids.append(node)
+        if tag.lower() not in self._VOID:
+            self._stack.append(node)
+
+    def handle_startendtag(self, tag, attrs):
+        self._stack[-1].kids.append(_HNode(tag.lower(), dict(attrs)))
+
+    def handle_endtag(self, tag):
+        tag = tag.lower()
+        for i in range(len(self._stack) - 1, 0, -1):
+            if self._stack[i].tag == tag:
+                del self._stack[i:]
+                break
+
+    def handle_data(self, data):
+        if data:
+            self._stack[-1].kids.append(_HNode(text=data))
+
+
+def _parse_body(body: str) -> tuple[_HNode, list[str]]:
+    """본문 HTML → (트리, svg 원본 목록). svg는 placeholder div로 치환한다."""
+    svgs: list[str] = []
+
+    def _repl(m: re.Match) -> str:
+        svgs.append(m.group(0))
+        return f'<div data-svg-idx="{len(svgs) - 1}"></div>'
+
+    # mermaid 사전렌더는 <img src="data:image/svg+xml;base64,..."> 형태 —
+    # 디코딩해 인라인 <svg>와 동일한 placeholder로 치환한다
+    def _repl_img(m: re.Match) -> str:
+        try:
+            svgs.append(base64.b64decode(m.group(1)).decode("utf-8"))
+        except Exception:
+            return m.group(0)
+        return f'<div data-svg-idx="{len(svgs) - 1}"></div>'
+
+    body = re.sub(
+        r'<img\b[^>]*src="data:image/svg\+xml;base64,([^"]+)"[^>]*/?>',
+        _repl_img, body,
+    )
+    tree = _BodyTree()
+    tree.feed(re.sub(r"<svg\b[\s\S]*?</svg>", _repl, body))
+    tree.close()
+    return tree.root, svgs
+
+
+def _flatten_text(node: _HNode) -> str:
+    out: list[str] = []
+    for k in node.kids:
+        out.append(k.text if not k.tag else _flatten_text(k))
+    return "".join(out)
+
+
+@dataclass
+class _DocxCtx:
+    doc: object
+    base_dir: Path
+    svgs: list[str] = field(default_factory=list)
+    new_page_h2: bool = False
+    allow_network: bool = True
+    content_emu: int = 0               # 본문 최대 폭 (EMU)
+    kv_label_emu: int = 0              # 2열 표 공유 라벨 폭 (0=미사용)
+    bm_next: int = 1                   # Word 북마크 w:id 연번
+
+
+def _ea_font(holder, name: str = _DOCX_BODY_FONT) -> None:
+    """ascii/hAnsi/eastAsia rFonts를 한 번에 지정 — eastAsia 누락 시 한글이 기본 폰트로 떨어진다."""
+    el = getattr(holder, "element", None)
+    if el is None:
+        el = getattr(holder, "_element", None)
+    if el is None:
+        return
+    rPr = el.get_or_add_rPr()
+    rFonts = rPr.find(qn("w:rFonts"))
+    if rFonts is None:
+        rFonts = OxmlElement("w:rFonts")
+        rPr.insert(0, rFonts)  # rFonts는 rPr 첫 자식이어야 함
+    for attr in ("w:ascii", "w:hAnsi", "w:eastAsia", "w:cs"):
+        rFonts.set(qn(attr), name)
+
+
+def _p_shd(par, fill: str) -> None:
+    pPr = par._p.get_or_add_pPr()
+    shd = OxmlElement("w:shd")
+    shd.set(qn("w:val"), "clear")
+    shd.set(qn("w:fill"), fill)
+    pPr.insert_element_before(shd, *_PPR_AFTER_PBDR)
+
+
+def _p_bdr(par, edge: str, sz: int, color: str) -> None:
+    pPr = par._p.get_or_add_pPr()
+    pBdr = pPr.find(qn("w:pBdr"))
+    if pBdr is None:
+        pBdr = OxmlElement("w:pBdr")
+        pPr.insert_element_before(pBdr, "w:shd", *_PPR_AFTER_PBDR)
+    el = OxmlElement(f"w:{edge}")
+    el.set(qn("w:val"), "single")
+    el.set(qn("w:sz"), str(sz))
+    el.set(qn("w:color"), color)
+    pBdr.append(el)
+
+
+def _tc_shd(cell, fill: str) -> None:
+    tcPr = cell._tc.get_or_add_tcPr()
+    shd = OxmlElement("w:shd")
+    shd.set(qn("w:val"), "clear")
+    shd.set(qn("w:fill"), fill)
+    tcPr.insert_element_before(
+        shd, "w:noWrap", "w:tcMar", "w:textDirection", "w:tcFitText",
+        "w:vAlign", "w:hideMark", "w:headers", "w:cellIns", "w:cellDel",
+        "w:cellMerge", "w:tcPrChange",
+    )
+
+
+def _tbl_borders(tbl, sz: int = 4, color: str = _DOCX_TBL_EDGE) -> None:
+    tblPr = tbl._tbl.tblPr
+    borders = OxmlElement("w:tblBorders")
+    for edge in ("top", "left", "bottom", "right", "insideH", "insideV"):
+        el = OxmlElement(f"w:{edge}")
+        el.set(qn("w:val"), "single")
+        el.set(qn("w:sz"), str(sz))
+        el.set(qn("w:color"), color)
+        borders.append(el)
+    tblPr.insert_element_before(
+        borders, "w:shd", "w:tblLayout", "w:tblCellMar", "w:tblLook",
+        "w:tblCaption", "w:tblDescription",
+    )
+
+
+def _add_hyperlink(par, url: str, text: str) -> None:
+    part = par.part
+    r_id = part.relate_to(url, _RT.HYPERLINK, is_external=True)
+    link = OxmlElement("w:hyperlink")
+    link.set(qn("r:id"), r_id)
+    run = OxmlElement("w:r")
+    rPr = OxmlElement("w:rPr")
+    rf = OxmlElement("w:rFonts")  # rFonts는 rPr 첫 자식
+    rf.set(qn("w:ascii"), _DOCX_BODY_FONT)
+    rf.set(qn("w:hAnsi"), _DOCX_BODY_FONT)
+    rf.set(qn("w:eastAsia"), _DOCX_BODY_FONT)
+    rPr.append(rf)
+    c = OxmlElement("w:color")
+    c.set(qn("w:val"), _DOCX_LINK_COLOR)
+    rPr.append(c)
+    u = OxmlElement("w:u")
+    u.set(qn("w:val"), "single")
+    rPr.append(u)
+    run.append(rPr)
+    t = OxmlElement("w:t")
+    t.set(qn("xml:space"), "preserve")
+    t.text = text
+    run.append(t)
+    link.append(run)
+    par._p.append(link)
+
+def _bookmark_name(raw: str) -> str:
+    """헤딩 id → Word 북마크명 — 영문·숫자·_ 외 문자는 _, 선행 숫자는 _ 접두, 40자 제한."""
+    name = re.sub(r"[^\w]", "_", raw)
+    if not re.match(r"^[A-Za-z_]", name):
+        name = "_" + name
+    return name[:40]
+
+
+def _p_bookmark(par, name: str, bid: int) -> None:
+    """단락 내용을 w:bookmarkStart/End로 감싼다 — <a href="#id"> 내부 링크 대상."""
+    bs, be = OxmlElement("w:bookmarkStart"), OxmlElement("w:bookmarkEnd")
+    bs.set(qn("w:id"), str(bid))
+    be.set(qn("w:id"), str(bid))
+    bs.set(qn("w:name"), name)
+    p = par._p
+    idx = 1 if len(p) and p[0].tag == qn("w:pPr") else 0
+    p.insert(idx, bs)
+    p.append(be)
+
+
+def _add_anchor_link(par, anchor: str, text: str) -> None:
+    """#id 내부 링크 → w:hyperlink w:anchor (외부 rId 불필요, 북마크로 이동)."""
+    link = OxmlElement("w:hyperlink")
+    link.set(qn("w:anchor"), anchor)
+    run = OxmlElement("w:r")
+    rPr = OxmlElement("w:rPr")
+    rf = OxmlElement("w:rFonts")
+    rf.set(qn("w:ascii"), _DOCX_BODY_FONT)
+    rf.set(qn("w:hAnsi"), _DOCX_BODY_FONT)
+    rf.set(qn("w:eastAsia"), _DOCX_BODY_FONT)
+    rPr.append(rf)
+    c = OxmlElement("w:color")
+    c.set(qn("w:val"), _DOCX_LINK_COLOR)
+    rPr.append(c)
+    u = OxmlElement("w:u")
+    u.set(qn("w:val"), "single")
+    rPr.append(u)
+    run.append(rPr)
+    t = OxmlElement("w:t")
+    t.set(qn("xml:space"), "preserve")
+    t.text = text
+    run.append(t)
+    link.append(run)
+    par._p.append(link)
+
+
+
+def _style_run(run, st: dict) -> None:
+    _ea_font(run, "Consolas" if st.get("code") else _DOCX_BODY_FONT)
+    f = run.font
+    if st.get("bold"):
+        f.bold = True
+    if st.get("italic"):
+        f.italic = True
+    if st.get("strike"):
+        f.strike = True
+    if st.get("u"):
+        f.underline = True
+    if st.get("sup"):
+        f.superscript = True
+    if st.get("sub"):
+        f.subscript = True
+    if st.get("size"):
+        f.size = Pt(st["size"])
+    if st.get("color"):
+        f.color.rgb = RGBColor.from_string(st["color"])
+    if st.get("code"):
+        f.size = Pt(9.5)
+        f.color.rgb = RGBColor(0xA3, 0x15, 0x15)
+    if st.get("mark"):
+        f.highlight_color = WD_COLOR_INDEX.YELLOW
+
+
+def _resolve_image(src: str, ctx: _DocxCtx) -> bytes | None:
+    """img src → 바이트. data URI·base_dir 상대경로·(온라인 시) http 지원."""
+    m = re.match(r"^data:image/[-\w.+]+;base64,(.*)$", src, re.DOTALL)
+    if m:
+        try:
+            return base64.b64decode(m.group(1))
+        except Exception:
+            return None
+    if re.match(r"(?i)^https?://", src):
+        if not ctx.allow_network:
+            logger.warning("[docx] 오프라인 — 원격 이미지 생략: %s", src)
+            return None
+        try:
+            req = urllib.request.Request(src, headers={"User-Agent": "Mozilla/5.0"})
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                return resp.read()
+        except Exception as e:
+            logger.warning("[docx] 이미지 다운로드 실패 %s: %s", src, e)
+            return None
+    p = Path(re.sub(r"(?i)^file://", "", src))
+    if not p.is_absolute():
+        p = ctx.base_dir / p
+    if p.is_file():
+        try:
+            return p.read_bytes()
+        except Exception:
+            return None
+    logger.warning("[docx] 이미지 없음: %s", src)
+    return None
+
+
+def _img_width_emu(data: bytes, node: _HNode | None, ctx: _DocxCtx):
+    """표시 폭 EMU — width 속성 우선, 없으면 자연 크기(본문폭 상한)."""
+    if node is not None:
+        w = node.attr("width").strip()
+        m = re.match(r"^(\d+(?:\.\d+)?)(px)?$", w)
+        if m:
+            return Emu(int(float(m.group(1)) * 9525))
+        m = re.match(r"^(\d+(?:\.\d+)?)mm$", w)
+        if m:
+            return Mm(float(m.group(1)))
+        m = re.match(r"^(\d+(?:\.\d+)?)%$", w)
+        if m:
+            return Emu(int(ctx.content_emu * float(m.group(1)) / 100))
+    try:
+        from docx.image.image import Image
+        im = Image.from_blob(data)
+        px = im.px_width
+        # 자연 폭은 이미지 DPI 기준 (pHYs 없으면 72dpi — 96dpi 가정 시 캡을 빗나가 클립된다)
+        dpi = getattr(im, "horz_dpi", None) or 72
+        nat = int(px * 914400 / dpi) if px else 0
+        if nat and nat > ctx.content_emu:
+            return Emu(int(ctx.content_emu))
+    except Exception:
+        pass
+    return None
+
+
+def _emit_image(run, node: _HNode, ctx: _DocxCtx) -> None:
+    src = node.attr("src")
+    if not src:
+        return
+    alt = node.attr("alt") or "(이미지)"
+    data = _resolve_image(src, ctx)
+    if data is None:
+        run.add_text(alt)  # 해석 실패 이미지 — 조용한 누락 대신 표기
+        return
+    # SVG(python-docx 미지원)는 PNG로 래스터화해 삽입 —
+    # data URI·로컬 .svg 파일 모두 해당
+    if data.lstrip()[:5].lower() in (b"<svg", b"<?xml"):
+        data = _svg_png(data.decode("utf-8", errors="replace"))
+        if data is None:
+            run.add_text(alt)
+            return
+    try:
+        run.add_picture(BytesIO(data), width=_img_width_emu(data, node, ctx))
+    except Exception as e:
+        logger.warning("[docx] 이미지 삽입 실패 %s: %s", src, e)
+        run.add_text(alt)
+
+
+def _svg_png_browser(svg_text: str) -> bytes | None:
+    """headless Chrome 스크린샷으로 SVG → PNG.
+
+    mermaid.ink SVG는 <text>·외부 폰트·복합 transform을 써서 PyMuPDF가
+    글자를 검은 박스로 깨뜨린다 — Chrome은 네이티브 SVG 렌더라 정확하다.
+    """
+    browser = _find_browser()
+    if not browser:
+        return None
+    m = re.search(
+        r'viewBox="[\d.\-]+\s+[\d.\-]+\s+([\d.]+)\s+([\d.]+)"', svg_text
+    )
+    if m:
+        w, h = float(m.group(1)), float(m.group(2))
+    else:
+        mw = re.search(r"max-width:\s*([\d.]+)px", svg_text)
+        w = float(mw.group(1)) if mw else 800.0
+        h = w * 0.75
+    w, h = max(1, int(round(w))), max(1, int(round(h)))
+    doc = (
+        '<!DOCTYPE html><html><head><meta charset="utf-8"></head>'
+        f'<body style="margin:0">{svg_text}</body></html>'
+    )
+    try:
+        with tempfile.TemporaryDirectory(prefix="md2doc-svg-") as td:
+            hp = Path(td) / "d.html"
+            pp = Path(td) / "d.png"
+            hp.write_text(doc, encoding="utf-8")
+            subprocess.run(
+                [
+                    browser,
+                    "--headless=new",
+                    "--disable-gpu",
+                    "--hide-scrollbars",
+                    "--force-device-scale-factor=2",
+                    f"--window-size={w},{h}",
+                    f"--screenshot={pp.resolve()}",
+                    hp.resolve().as_uri(),
+                ],
+                capture_output=True,
+                timeout=60,
+            )
+            if pp.exists() and pp.stat().st_size:
+                return pp.read_bytes()
+    except Exception as e:
+        logger.warning("[docx] SVG 브라우저 래스터 실패: %s", e)
+    return None
+
+
+def _svg_png(svg_text: str) -> bytes | None:
+    """mermaid 사전렌더 SVG → PNG — Chrome 스크린샷 우선, PyMuPDF 폴백."""
+    png = _svg_png_browser(svg_text)
+    if png is not None:
+        return png
+    try:
+        import pymupdf
+    except Exception:
+        logger.warning("[docx] 다이어그램 임베딩에는 Chrome 또는 PyMuPDF가 필요합니다 — 생략")
+        return None
+    try:
+        with pymupdf.open(stream=svg_text.encode("utf-8"), filetype="svg") as sd:
+            pix = sd[0].get_pixmap(matrix=pymupdf.Matrix(2, 2), alpha=False)
+            return pix.tobytes("png")
+    except Exception as e:
+        logger.warning("[docx] SVG 래스터 실패: %s", e)
+        return None
+
+
+def _emit_svg(container, idx: int, ctx: _DocxCtx) -> None:
+    if not (0 <= idx < len(ctx.svgs)):
+        return
+    png = _svg_png(ctx.svgs[idx])
+    if png is None:
+        return
+    try:
+        container.add_paragraph().add_run().add_picture(
+            BytesIO(png), width=_img_width_emu(png, None, ctx)
+        )
+    except Exception as e:
+        logger.warning("[docx] 다이어그램 이미지 삽입 실패: %s", e)
+
+
+def _emit_node(par, node: _HNode, ctx: _DocxCtx, st: dict) -> None:
+    """인라인 노드 → 단락 런. st는 상속 서식 플래그."""
+    if not node.tag:
+        text = _sanitize_marker_lines(node.text)
+        if text.strip():
+            _style_run(par.add_run(text), st)
+        return
+    tag = node.tag
+    if tag == "br":
+        par.add_run().add_break()
+        return
+    if tag == "img":
+        _emit_image(par.add_run(), node, ctx)
+        return
+    if node.attr("data-svg-idx"):
+        return  # 블록 <p> 안에 낀 placeholder는 별도 처리하지 않음(블록 경로에서 출력)
+    if tag == "a":
+        href = node.attr("href")
+        if not href:
+            for k in node.kids:
+                _emit_node(par, k, ctx, st)
+        elif href.startswith("#"):
+            # 내부 앵커 → Word 북마크 링크 (헤딩 id와 동일 정화로 대응)
+            _add_anchor_link(par, _bookmark_name(href[1:]), _flatten_text(node).strip() or href)
+        else:
+            text = _flatten_text(node).strip()
+            _add_hyperlink(par, href, text or href)
+        return
+    st = dict(st)
+    if tag in ("strong", "b"):
+        st["bold"] = True
+    elif tag in ("em", "i"):
+        st["italic"] = True
+    elif tag in ("s", "del", "strike"):
+        st["strike"] = True
+    elif tag == "u":
+        st["u"] = True
+    elif tag == "sup":
+        st["sup"] = True
+    elif tag == "sub":
+        st["sub"] = True
+    elif tag == "code":
+        st["code"] = True
+    elif tag == "mark":
+        st["mark"] = True
+    for k in node.kids:
+        _emit_node(par, k, ctx, st)
+
+
+def _trim_ws(kids: list[_HNode]) -> list[_HNode]:
+    """단락·li 가장자리의 공백 텍스트 제거 — 빈 줄 찌꺼기 방지."""
+    kids = list(kids)
+    while kids and not kids[0].tag and not kids[0].text.strip():
+        kids.pop(0)
+    while kids and not kids[-1].tag and not kids[-1].text.strip():
+        kids.pop()
+    return kids
+
+
+def _emit_inline(par, node: _HNode, ctx: _DocxCtx, st: dict | None = None) -> None:
+    for k in _trim_ws(node.kids):
+        _emit_node(par, k, ctx, st or {})
+
+
+def _emit_list(container, node: _HNode, ctx: _DocxCtx, level: int) -> None:
+    ordered = node.tag == "ol"
+    try:
+        n = int(node.attr("start") or "1")
+    except ValueError:
+        n = 1
+    for li in [k for k in node.kids if k.tag == "li"]:
+        par = container.add_paragraph()
+        pf = par.paragraph_format
+        pf.left_indent = Mm(_DOCX_LIST_INDENT_MM * (level + 1))
+        pf.space_after = Pt(1.5)
+        _style_run(par.add_run(f"{n}. " if ordered else "• "), {})
+        for k in _trim_ws(li.kids):
+            if k.tag in ("ul", "ol"):
+                _emit_list(container, k, ctx, level + 1)
+            elif k.tag == "p":
+                _emit_inline(par, k, ctx)
+            else:
+                _emit_node(par, k, ctx, {})
+        n += 1
+
+
+def _container_el(container):
+    """블록이 쌓이는 XML 요소 — Document는 w:body, 셀은 w:tc."""
+    if hasattr(container, "element"):
+        return container.element.body
+    return container._tc
+
+
+def _add_table(container, rows: int, cols: int):
+    """표 추가 — 직전이 표면 빈 단락을 끼운다.
+
+    OOXML에서 단락 없이 인접한 <w:tbl>은 Word가 한 표로 병합해 출력한다 —
+    MD에서 빈 줄로 구분된 별도 표도 화면·인쇄에서 붙어 보이는 원인.
+    """
+    el = _container_el(container)
+    if el is not None:
+        # body 말미의 sectPr(섹션 속성)는 내용이 아니므로 건너뛴다
+        last = next((c for c in reversed(el) if c.tag != qn("w:sectPr")), None)
+        if last is not None and last.tag == qn("w:tbl"):
+            container.add_paragraph()
+    return container.add_table(rows=rows, cols=cols)
+
+
+def _emit_callout(container, node: _HNode, ctx: _DocxCtx) -> None:
+    """blockquote/콜아웃 → 1×1 음영 표 — print.html의 좌측 바+배경을 재현."""
+    tbl = _add_table(container, 1, 1)
+    _tbl_borders(tbl, sz=4, color=_DOCX_BQ_EDGE)
+    cell = tbl.cell(0, 0)
+    _tc_shd(cell, _DOCX_BQ_FILL)
+    cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+    tcPr = cell._tc.get_or_add_tcPr()
+    borders = OxmlElement("w:tcBorders")
+    left = OxmlElement("w:left")
+    left.set(qn("w:val"), "single")
+    left.set(qn("w:sz"), "24")
+    left.set(qn("w:color"), _DOCX_BQ_EDGE)
+    borders.append(left)
+    tcPr.insert_element_before(
+        borders, "w:shd", "w:noWrap", "w:tcMar", "w:textDirection",
+        "w:tcFitText", "w:vAlign", "w:hideMark", "w:headers",
+    )
+    _emit_blocks(cell, node, ctx)
+    _drop_empty_first(cell)
+    _compact_cell(cell)
+
+
+def _est_cell_w(node: _HNode) -> int:
+    """셀 내용 추정 폭 — 전각(W/F)은 2, 그 외 1 (docx-utils.js _estW와 동일 규칙)."""
+    w = 0
+    for ch in _flatten_text(node):
+        w += 2 if unicodedata.east_asian_width(ch) in ("W", "F") else 1
+    return w
+
+
+def _col_widths_emu(grid: list[list[_HNode]], ncols: int, ctx: _DocxCtx) -> list[int]:
+    """열 폭 배분 — 열별 최장 셀 추정 폭에 비례, 합계는 본문폭."""
+    est = [0] * ncols
+    for row in grid:
+        ci = 0
+        for c in row:
+            try:
+                span = max(1, int(c.attr("colspan") or "1"))
+            except ValueError:
+                span = 1
+            if ci < ncols:
+                est[ci] = max(est[ci], _est_cell_w(c) // span)
+            ci += span
+    est = [max(e + 10, 12) for e in est]  # 셀 여백 추정 + 최소 폭
+    total = sum(est)
+    widths = [int(ctx.content_emu * e / total) for e in est]
+    widths[-1] += ctx.content_emu - sum(widths)  # 반올림 잔차를 마지막 열로
+    return widths
+
+
+# 추정 폭 단위 → EMU — 1단위 ≈ 10.5pt 본문의 절반 전각 폭
+_DOCX_EST_EMU = 66675
+
+
+def _kv_label_emu(root: _HNode, content_emu: int) -> int:
+    """문서 내 2열 표의 라벨 열을 하나의 폭으로 — 최장 라벨 기준.
+
+    인접 2열 표가 각자 폭을 가지면 라벨 경계가 계단처럼 어긋난다 (앱
+    docx-utils의 _kvLabelW와 같은 규약 — 공문 서식의 라벨 열은 단일 폭).
+    표 안의 표는 대상에서 제외한다.
+    """
+    best = 0
+    stack = [root]
+    while stack:
+        n = stack.pop()
+        if n.tag == "table":
+            rows = [
+                wrap for tr in n.kids
+                for wrap in ([tr] if tr.tag == "tr" else tr.kids)
+                if wrap.tag == "tr"
+            ]
+            if rows and len([k for k in rows[0].kids if k.tag in ("th", "td")]) == 2:
+                for tr in rows:
+                    cells = [k for k in tr.kids if k.tag in ("th", "td")]
+                    if cells:
+                        best = max(best, _est_cell_w(cells[0]))
+            continue  # 표 안의 표는 대상 아님
+        stack.extend(n.kids)
+    if not best:
+        return 0
+    emu = (best + 10) * _DOCX_EST_EMU  # +10: 셀 좌우 여백 추정
+    return int(min(max(emu, Mm(25)), content_emu * 0.4))
+
+
+def _apply_col_widths(tbl, widths_emu: list[int]) -> None:
+    """고정 레이아웃 + gridCol·tcW 동기 — 내용 비례 열 폭."""
+    tbl.autofit = False
+    grid_el = tbl._tbl.find(qn("w:tblGrid"))
+    if grid_el is not None:
+        for gc, w in zip(grid_el, widths_emu):
+            gc.set(qn("w:w"), str(int(w / 635)))  # EMU→dxa
+
+
+def _tbl_cell_mar(tbl) -> None:
+    """셀 상하 여백 — print.html의 td padding 5px에 해당."""
+    mar = OxmlElement("w:tblCellMar")
+    for name, v in (("top", 75), ("bottom", 75)):
+        el = OxmlElement(f"w:{name}")
+        el.set(qn("w:w"), str(v))
+        el.set(qn("w:type"), "dxa")
+        mar.append(el)
+    tbl._tbl.tblPr.insert_element_before(mar, "w:tblLook")
+
+
+def _compact_cell(cell) -> None:
+    """셀 단락을 콤팩트하게 — Normal의 1.65배·후행 여백이 행을 부풀리고,
+    vAlign 중앙화가 여백 포함 블록 기준이라 텍스트가 위로 치우치는 것을 방지."""
+    for p in cell.paragraphs:
+        pf = p.paragraph_format
+        pf.space_before = Pt(0)
+        pf.space_after = Pt(0)
+        pf.line_spacing = 1.0
+
+
+def _tr_props(tbl_row, header: bool) -> None:
+    """행 속성 — 헤더 행은 쪽 넘김 시 반복(tblHeader), 모든 행은 쪽 경계 분할 금지(cantSplit)."""
+    trPr = tbl_row._tr.get_or_add_trPr()
+    if header:
+        trPr.append(OxmlElement("w:tblHeader"))
+    trPr.append(OxmlElement("w:cantSplit"))
+
+
+def _emit_table(container, node: _HNode, ctx: _DocxCtx) -> None:
+    head_trs: list[_HNode] = []
+    trs: list[_HNode] = []
+    for wrap in node.kids:
+        if wrap.tag == "thead":
+            head_trs.extend(k for k in wrap.kids if k.tag == "tr")
+        elif wrap.tag in ("tbody", "tfoot"):
+            trs.extend(k for k in wrap.kids if k.tag == "tr")
+        elif wrap.tag == "tr":
+            trs.append(wrap)
+    all_trs = head_trs + trs
+    if not all_trs:
+        return
+    grid: list[list[_HNode]] = []
+    for tr in all_trs:
+        grid.append([k for k in tr.kids if k.tag in ("th", "td")])
+    # rowspan/colspan 점유 맵 — 이전 행의 rowspan이 차지하는 열을 후속 행 셀이 건너뛰게 한다
+    occupied: set = set()
+    spans: dict = {}  # id(셀 노드) → (colspan, rowspan)
+    ncols = 0
+    for ri, cells in enumerate(grid):
+        ci = 0
+        for cnode in cells:
+            while (ri, ci) in occupied:
+                ci += 1
+            try:
+                cspan = max(1, int(cnode.attr("colspan") or "1"))
+            except ValueError:
+                cspan = 1
+            try:
+                rspan = max(1, int(cnode.attr("rowspan") or "1"))
+            except ValueError:
+                rspan = 1
+            spans[id(cnode)] = (cspan, rspan)
+            for dr in range(1, rspan):
+                for dc in range(cspan):
+                    occupied.add((ri + dr, ci + dc))
+            ci += cspan
+        ncols = max(ncols, ci)
+    if not ncols:
+        return
+    tbl = _add_table(container, len(grid), ncols)
+    _tbl_borders(tbl)
+    _tbl_cell_mar(tbl)
+    if ncols == 2 and ctx.kv_label_emu:
+        widths = [ctx.kv_label_emu, ctx.content_emu - ctx.kv_label_emu]
+    else:
+        widths = _col_widths_emu(grid, ncols, ctx)
+    _apply_col_widths(tbl, widths)
+    head_n = len(head_trs)
+    for ri, cells in enumerate(grid):
+        _tr_props(tbl.rows[ri], ri < head_n)
+        ci = 0
+        for cnode in cells:
+            while (ri, ci) in occupied:
+                ci += 1
+            if ci >= ncols:
+                break
+            span, rspan = spans.get(id(cnode), (1, 1))
+            tcell = tbl.cell(ri, ci)
+            if (span > 1 or rspan > 1) and ci + span <= ncols:
+                tcell = tcell.merge(
+                    tbl.cell(min(ri + rspan, len(grid)) - 1, ci + span - 1)
+                )
+            tcell.width = Emu(int(sum(widths[ci:ci + span])))  # tcW — 병합 셀은 합산 폭
+            head = cnode.tag == "th" or ri < head_n
+            if head:
+                _tc_shd(tcell, _DOCX_HEAD_FILL)
+            tcell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+            _emit_blocks_cell(tcell, cnode, ctx, head=head)
+            _compact_cell(tcell)
+            # 헤더·2열 표 라벨 열은 가로 중앙 (앱 docx-utils _cell 규약 — 공문 서식)
+            if head or (ncols == 2 and ci == 0):
+                for p in tcell.paragraphs:
+                    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+            ci += span
+
+
+def _emit_pre(container, node: _HNode, ctx: _DocxCtx) -> None:
+    par = container.add_paragraph()
+    pf = par.paragraph_format
+    pf.space_before = Pt(4)
+    pf.space_after = Pt(6)
+    _p_shd(par, _DOCX_CODE_FILL)
+    for edge in ("top", "left", "bottom", "right"):
+        _p_bdr(par, edge, 4, _DOCX_CODE_EDGE)
+    lines = _flatten_text(node).split("\n")
+    while lines and not lines[-1].strip():
+        lines.pop()
+    for i, line in enumerate(lines):
+        if i:
+            par.add_run().add_break()
+        run = par.add_run(line)
+        run.font.name = "Consolas"
+        run.font.size = Pt(8.5)
+        _ea_font(run, "Consolas")
+
+
+def _is_inline(node: _HNode) -> bool:
+    return not node.tag or node.tag in _DOCX_INLINE_TAGS
+
+
+def _emit_blocks(container, node: _HNode, ctx: _DocxCtx) -> None:
+    inline_par = None
+    for kid in node.kids:
+        if _is_inline(kid) and (kid.tag or kid.text.strip()):
+            if inline_par is None:
+                inline_par = container.add_paragraph()
+            _emit_node(inline_par, kid, ctx, {})
+        else:
+            inline_par = None
+            _emit_block(container, kid, ctx)
+
+
+def _emit_blocks_cell(cell, node: _HNode, ctx: _DocxCtx, head: bool = False) -> None:
+    """셀 내용 — 인라인 우선 단락, 블록은 재귀. head면 굵게."""
+    st = {"bold": True} if head else {}
+    inline_par = None
+    for kid in node.kids:
+        if _is_inline(kid) and (kid.tag or kid.text.strip()):
+            if inline_par is None:
+                inline_par = cell.add_paragraph()
+            _emit_node(inline_par, kid, ctx, dict(st))
+        else:
+            inline_par = None
+            _emit_block(cell, kid, ctx)
+    _drop_empty_first(cell)
+
+
+def _drop_empty_first(cell) -> None:
+    """셀 기본 빈 단락 제거 — 블록 추가 전에 존재하는 placeholder."""
+    first = cell.paragraphs[0] if cell.paragraphs else None
+    if first is not None and not first.text.strip() and not first.runs:
+        first._p.getparent().remove(first._p)
+
+
+def _emit_block(container, node: _HNode, ctx: _DocxCtx) -> None:
+    tag = node.tag
+    if not tag:
+        t = _sanitize_marker_lines(node.text).strip()
+        if t:
+            container.add_paragraph(t)
+        return
+    # :::page 마커가 변환된 쪽 나눔 — PDF의 .new-page CSS와 동일 의미
+    if tag == "div" and "new-page" in (node.attr("class") or "").split():
+        container.add_paragraph().add_run().add_break(WD_BREAK.PAGE)
+        return
+    if tag in ("h1", "h2", "h3", "h4", "h5", "h6"):
+        lvl = int(tag[1])
+        par = container.add_paragraph()
+        pf = par.paragraph_format
+        pf.space_before = Pt(14 if lvl <= 2 else 10)
+        pf.space_after = Pt(5)
+        pf.keep_with_next = True
+        if tag == "h2" and ctx.new_page_h2:
+            pf.page_break_before = True
+        _emit_inline(par, node, ctx, {"bold": True, "size": _DOCX_HEAD_PT[lvl]})
+        if node.attr("id"):
+            _p_bookmark(par, _bookmark_name(node.attr("id")), ctx.bm_next)
+            ctx.bm_next += 1
+        if lvl == 1:
+            _p_bdr(par, "bottom", 24, "333333")
+        elif lvl == 2:
+            _p_bdr(par, "bottom", 12, "999999")
+        return
+    if tag == "p":
+        # :::sign/:::end 등 doc-md 펜스 마커 단독 단락은 구조 마커 — 출력하지 않음
+        # (인자 있는 마커 — :::approve 역할·:::landscape 등도 동일 제거)
+        if re.match(r"^:::[\w-]+", _flatten_text(node).strip()):
+            return
+        par = container.add_paragraph()
+        _emit_inline(par, node, ctx)
+        return
+    if tag in ("ul", "ol"):
+        _emit_list(container, node, ctx, 0)
+        return
+    if tag == "blockquote":
+        _emit_callout(container, node, ctx)
+        return
+    if tag == "table":
+        _emit_table(container, node, ctx)
+        return
+    if tag == "pre":
+        _emit_pre(container, node, ctx)
+        return
+    if tag == "hr":
+        par = container.add_paragraph()
+        par.paragraph_format.space_after = Pt(2)
+        _p_bdr(par, "bottom", 6, "999999")
+        return
+    if tag == "img":
+        _emit_image(container.add_paragraph().add_run(), node, ctx)
+        return
+    if tag == "dl":
+        for k in node.kids:
+            _emit_block(container, k, ctx)
+        return
+    if tag == "dt":
+        par = container.add_paragraph()
+        _emit_inline(par, node, ctx, {"bold": True})
+        return
+    if tag == "dd":
+        par = container.add_paragraph()
+        par.paragraph_format.left_indent = Mm(_DOCX_LIST_INDENT_MM)
+        _emit_inline(par, node, ctx)
+        return
+    if tag == "figcaption":
+        par = container.add_paragraph()
+        _emit_inline(par, node, ctx, {"italic": True, "color": "555555"})
+        return
+    if tag == "summary":
+        par = container.add_paragraph()
+        _emit_inline(par, node, ctx, {"bold": True})
+        return
+    if tag in ("tr", "td", "th", "thead", "tbody", "tfoot"):
+        return  # 부모 표가 소비 — 단독 등장 시 무시
+    if tag == "li":
+        # 목록 밖에 남은 li(스마트 페이지네이션이 깨뜨린 구조 등) — 불릿 폴백으로 내용 보존
+        par = container.add_paragraph()
+        par.paragraph_format.left_indent = Mm(_DOCX_LIST_INDENT_MM)
+        _style_run(par.add_run("• "), {})
+        for k in _trim_ws(node.kids):
+            if k.tag in ("ul", "ol"):
+                _emit_list(container, k, ctx, 1)
+            elif k.tag == "p":
+                _emit_inline(par, k, ctx)
+            else:
+                _emit_node(par, k, ctx, {})
+        return
+    if node.attr("data-svg-idx"):
+        try:
+            _emit_svg(container, int(node.attr("data-svg-idx")), ctx)
+        except ValueError:
+            pass
+        return
+    if tag in _DOCX_CONTAINER_TAGS or not tag:
+        cls = node.attr("class")
+        if "admonition" in cls:
+            _emit_callout(container, node, ctx)
+            return
+        if "mermaid" in cls.split():
+            # 미렌더 폴백(오프라인·실패) — 소스를 코드 블록으로 (--no-mermaid와 동일 표현).
+            # 정확한 클래스 매치 — 사전렌더 래퍼 div.mermaid-img는 자식
+            # data-svg-idx placeholder까지 내려가야 하므로 제외한다
+            _emit_pre(container, node, ctx)
+            return
+        for k in node.kids:
+            _emit_block(container, k, ctx)
+        return
+    # 알 수 없는 태그 → 텍스트 폴백 (내용 손실 방지)
+    t = _sanitize_marker_lines(_flatten_text(node)).strip()
+    if t:
+        container.add_paragraph(t)
+
+
+def _add_docx_page_footer(sec) -> None:
+    """섹션 푸터에 '— PAGE / NUMPAGES —' 필드 부착 (앱 docx-utils 푸터와 동일 규약)."""
+    from docx.oxml import OxmlElement
+    from docx.oxml.ns import qn
+
+    par = sec.footer.paragraphs[0]
+    par.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    def _txt(t: str):
+        r, te = OxmlElement("w:r"), OxmlElement("w:t")
+        te.set(qn("xml:space"), "preserve")
+        te.text = t
+        r.append(te)
+        return r
+
+    def _fld(instr: str):
+        f = OxmlElement("w:fldSimple")
+        f.set(qn("w:instr"), f" {instr} ")
+        f.append(_txt("1"))
+        return f
+
+    for el in (_txt("— "), _fld("PAGE"), _txt(" / "), _fld("NUMPAGES"), _txt(" —")):
+        par._p.append(el)
+
+
+def _html_body_to_docx(body: str, base_dir: Path, title: str,
+                       new_page_h2: bool, allow_network: bool,
+                       landscape: bool = False):
+    """md_to_html_body 산출 본문 HTML → python-docx Document.
+
+    PDF 경로와 같은 본문을 파싱하므로 표·콜아웃·이미지·mermaid 내용이
+    정합한다. 헤딩 앵커는 Word 북마크가 없어 일반 텍스트로 떨군다.
+    landscape=True(:::landscape 마커)면 A4 가로 용지로 출력한다.
+    """
+    if _docx is None:
+        raise RuntimeError(
+            "DOCX 출력에는 python-docx가 필요합니다 — pip install python-docx"
+        )
+    doc = _docx.Document()
+    sec = doc.sections[0]
+    if landscape:
+        sec.orientation = WD_ORIENT.LANDSCAPE
+        sec.page_width = Mm(297)
+        sec.page_height = Mm(210)
+    else:
+        sec.page_width = Mm(210)
+        sec.page_height = Mm(297)
+    sec.top_margin = Mm(18)
+    sec.bottom_margin = Mm(18)
+    sec.left_margin = Mm(15)
+    sec.right_margin = Mm(15)
+    _add_docx_page_footer(sec)
+    normal = doc.styles["Normal"]
+    normal.font.name = _DOCX_BODY_FONT
+    normal.font.size = Pt(10.5)
+    normal.font.color.rgb = RGBColor(0x1A, 0x1A, 0x1A)
+    _ea_font(normal)
+    npf = normal.paragraph_format
+    npf.line_spacing = 1.65
+    npf.space_after = Pt(4)
+    doc.core_properties.title = title
+
+    root, svgs = _parse_body(body)
+    content_mm = _DOCX_CONTENT_MM if not landscape else 297 - 30
+    ctx = _DocxCtx(
+        doc=doc, base_dir=base_dir, svgs=svgs,
+        new_page_h2=new_page_h2, allow_network=allow_network,
+        content_emu=Mm(content_mm),
+        kv_label_emu=_kv_label_emu(root, Mm(content_mm)),
+    )
+    _emit_blocks(doc, root, ctx)
+    return doc
+
+
+def convert_markdown_to_docx(
+    in_path: Path,
+    out_path: Path | None = None,
+    title: str | None = None,
+    render_mermaid: bool = True,
+    new_page_h2: bool = False,
+    progress_cb=None,
+    allow_network: bool = True,
+) -> Path:
+    """단일 Markdown 파일을 DOCX로 변환·저장하고 출력 경로를 반환한다.
+
+    본문은 PDF 경로와 동일한 md_to_html_body 산출물 — 표·콜아웃·이미지·
+    mermaid(SVG→PNG 래스터)의 내용 정합이 원천 보장된다.
+    """
+    md_text = in_path.read_text(encoding="utf-8-sig")
+    body = md_to_html_body(
+        md_text,
+        render_mermaid=render_mermaid,
+        new_page_h2=new_page_h2,
+        progress_cb=progress_cb,
+        allow_network=allow_network,
+    )
+    document = _html_body_to_docx(
+        body, in_path.parent, title or in_path.stem,
+        new_page_h2=new_page_h2, allow_network=allow_network,
+        landscape=bool(re.search(r"^[ \t]*:::landscape[ \t]*$", md_text, re.M)),
+    )
+    out_path = out_path or in_path.with_suffix(".docx")
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    document.save(str(out_path))
+    return out_path
+
+
 def html_to_pdf(html_path: Path, pdf_path: Path, browser: str) -> None:
     url = html_path.resolve().as_uri()
     cmd = [
@@ -2166,6 +3482,13 @@ def convert_markdown_to_pdf(
     # 출력 HTML은 임시 폴더에 생성되므로 상대경로 이미지를 data URI로 임베딩
     body = _embed_local_images(body, in_path.parent)
     doc = PRINT_TEMPLATE.replace("%%TITLE%%", html.escape(title or in_path.stem))
+    if re.search(r"^[ \t]*:::landscape[ \t]*$", md_text, re.M):
+        # :::landscape — DOCX 섹션과 동일하게 A4 가로. 세로 튜닝 값(본문폭·이미지 높이)도 함께 보정
+        doc = doc.replace("</style>", """
+  @page { size: A4 landscape; margin: 15mm 18mm; }
+  body { max-width: 261mm; }
+  img, svg { max-height: 165mm; }
+</style>""", 1)
     doc = doc.replace("%%BODY%%", body)
 
     out_path = out_path or in_path.with_suffix(".pdf")
@@ -2241,6 +3564,12 @@ if __name__ == "__main__":
         default=False,
         help="PDF 모드 — CLI는 MD→PDF로 동작, GUI는 PDF 생성 체크 상태로 진입 (헤드리스 Chrome 인쇄)",
     )
+    parser.add_argument(
+        "--docx",
+        action="store_true",
+        default=False,
+        help="DOCX 모드 — MD→DOCX로 동작 (python-docx 필요: pip install python-docx). --pdf와 함께 쓸 수 있다.",
+    )
     parser.add_argument("--out-dir", dest="out_dir", default=None,
                         help="PDF 모드: 출력 디렉토리 (다중 입력용)")
     parser.add_argument("--keep-html", dest="keep_html", action="store_true",
@@ -2283,30 +3612,48 @@ if __name__ == "__main__":
     if args.title and not single:
         raise SystemExit("--title can only be used with a single input file.")
 
-    # ── PDF 모드 (구 MD_to_PDF.py CLI 경로) ────────────────────────────
-    if args.pdf:
+    # ── PDF/DOCX 모드 (구 MD_to_PDF.py CLI 경로 + DOCX 추가) ──────────
+    if args.pdf or args.docx:
         out_dir = Path(args.out_dir) if args.out_dir else None
         done = 0
         for in_path in in_paths:
-            out_path = (Path(args.out_path) if (args.out_path and single)
-                        else (out_dir / (in_path.stem + '.pdf')) if out_dir
-                        else None)
-            try:
-                written = convert_markdown_to_pdf(
-                    in_path, out_path=out_path,
-                    title=args.title if single else None,
-                    keep_html=args.keep_html,
-                    render_mermaid=not args.no_mermaid,
-                    new_page_h2=args.new_page_h2,
-                    browser=args.browser,
-                    allow_network=not args.offline,
-                )
-                print(str(written))
-                done += 1
-            except Exception as e:
-                logger.error("[error] %s: %s", in_path, e)
+            if args.pdf:
+                out_path = (Path(args.out_path) if (args.out_path and single)
+                            else (out_dir / (in_path.stem + '.pdf')) if out_dir
+                            else None)
+                try:
+                    written = convert_markdown_to_pdf(
+                        in_path, out_path=out_path,
+                        title=args.title if single else None,
+                        keep_html=args.keep_html,
+                        render_mermaid=not args.no_mermaid,
+                        new_page_h2=args.new_page_h2,
+                        browser=args.browser,
+                        allow_network=not args.offline,
+                    )
+                    print(str(written))
+                    done += 1
+                except Exception as e:
+                    logger.error("[error] %s: %s", in_path, e)
+            if args.docx:
+                # 두 모드 동시 지정 시 --out 확장자를 형식에 맞춘다
+                out_path = (Path(args.out_path).with_suffix('.docx') if (args.out_path and single)
+                            else (out_dir / (in_path.stem + '.docx')) if out_dir
+                            else None)
+                try:
+                    written = convert_markdown_to_docx(
+                        in_path, out_path=out_path,
+                        title=args.title if single else None,
+                        render_mermaid=not args.no_mermaid,
+                        new_page_h2=args.new_page_h2,
+                        allow_network=not args.offline,
+                    )
+                    print(str(written))
+                    done += 1
+                except Exception as e:
+                    logger.error("[error] %s: %s", in_path, e)
         if not single:
-            logger.info("Converted %d/%d file(s).", done, len(in_paths))
+            logger.info("Converted %d output(s) from %d file(s).", done, len(in_paths))
         if done == 0:
             raise SystemExit("All conversions failed.")
         raise SystemExit(0)

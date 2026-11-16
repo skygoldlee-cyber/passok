@@ -107,12 +107,19 @@ const _MASKS = [
     (r, c) => (((r * c) % 2) + ((r * c) % 3)) % 2 === 0,
     (r, c) => (((r + c) % 2) + ((r * c) % 3)) % 2 === 0,
 ];
+/** 파인더 모듈 값 — 중심(3,3) 기준 링 거리: 외곽 링(3)·중심(≤1)은 1, 내부 링(2)·분리자(4)는 0 */
+/** @param {number} r @param {number} c */
+const _finderVal = (r, c) => {
+    const edge = Math.max(Math.abs(r - 3), Math.abs(c - 3));
+    return edge === 3 || edge <= 1 ? 1 : 0;
+};
+
 const _finder = (/** @type {number[][]} */ m, /** @type {number[][]} */ res, /** @type {number} */ x, /** @type {number} */ y) => {
     for (let r = -1; r <= 7; r++) for (let c = -1; c <= 7; c++) {
         const rr = y + r, cc = x + c, mr = m[rr], rs = res[rr];
         if (!mr || !rs || cc < 0 || cc >= m.length) continue;
         rs[cc] = 1;
-        mr[cc] = (r >= 0 && r <= 6 && c >= 0 && c <= 6 && (r === 0 || r === 6 || c === 0 || c === 6)) || (r >= 2 && r <= 4 && c >= 2 && c <= 4) ? 1 : 0;
+        mr[cc] = _finderVal(r, c);
     }
 };
 const _align = (/** @type {number[][]} */ m, /** @type {number[][]} */ res, /** @type {number} */ cx, /** @type {number} */ cy) => {
@@ -124,30 +131,165 @@ const _align = (/** @type {number[][]} */ m, /** @type {number[][]} */ res, /** 
     }
 };
 
-/** 마스크 적용 매트릭스 → 페널티 점수 (낮을수록 좋음, ISO 규칙 N1~N4) */
-const _penalty = (/** @type {number[][]} */ m) => {
-    const n = m.length;
-    let pen = 0;
-    const run = (/** @type {number[]} */ seq) => { // N1 — 같은 색 5+ 연속: 3+(길이-5)
+/** N1 — 같은 색 5+ 연속: 3+(길이-5) */
+/** @param {number[][]} m */
+const _penN1 = m => {
+    const n = m.length; let pen = 0;
+    const run = (/** @type {number[]} */ seq) => {
         let cur = -1, len = 0;
         for (const v of seq) { if (v === cur) len++; else { if (len >= 5) pen += 3 + len - 5; cur = v; len = 1; } }
         if (len >= 5) pen += 3 + len - 5;
     };
     for (let r = 0; r < n; r++) run(m[r] || []);
     for (let c = 0; c < n; c++) run(m.map(r => r[c] || 0));
-    for (let r = 0; r < n - 1; r++) for (let c = 0; c < n - 1; c++) { // N2 — 2×2 동색 블록
-        const a = (m[r] || [])[c], b = (m[r] || [])[c + 1], d = (m[r + 1] || [])[c], e = (m[r + 1] || [])[c + 1];
-        if (a === b && a === d && a === e) pen += 3;
+    return pen;
+};
+
+/** N2 — 2×2 동색 블록 개당 +3 */
+/** @param {number[][]} m */
+const _penN2 = m => {
+    const n = m.length; let pen = 0;
+    for (let r = 0; r < n - 1; r++) for (let c = 0; c < n - 1; c++) {
+        const a = (m[r] || [])[c];
+        if (a === (m[r] || [])[c + 1] && a === (m[r + 1] || [])[c] && a === (m[r + 1] || [])[c + 1]) pen += 3;
     }
-    const like = (/** @type {number[]} */ seq) => { // N3 — 파인더 유사 패턴(□■■■□■ + 전후 밝은 4)
+    return pen;
+};
+
+/** N3 — 파인더 유사 패턴(□■■■□■ + 전후 밝은 4) 개당 +40 */
+/** @param {number[][]} m */
+const _penN3 = m => {
+    const n = m.length; let pen = 0;
+    const like = (/** @type {number[]} */ seq) => {
         const s = seq.join('');
         for (const p of ['00001011101', '10111010000']) { let i = -1; while ((i = s.indexOf(p, i + 1)) >= 0) pen += 40; }
     };
     for (let r = 0; r < n; r++) like(m[r] || []);
     for (let c = 0; c < n; c++) like(m.map(r => r[c] || 0));
-    const dark = m.flat().filter(Boolean).length;
-    pen += Math.floor(Math.abs(dark / (n * n) - 0.5) * 20) * 10; // N4 — 어두운 비율 50% 이탈 5%당 +10
     return pen;
+};
+
+/** 마스크 적용 매트릭스 → 페널티 점수 (낮을수록 좋음, ISO 규칙 N1~N4) */
+const _penalty = (/** @type {number[][]} */ m) => {
+    const n = m.length, dark = m.flat().filter(Boolean).length;
+    // N4 — 어두운 비율 50% 이탈 5%당 +10
+    return _penN1(m) + _penN2(m) + _penN3(m) + Math.floor(Math.abs(dark / (n * n) - 0.5) * 20) * 10;
+};
+
+/** 버전 선택 — 수용 가능한 최소 버전 (EC M, v1~v7) */
+/** @param {number} bytes */
+const _pickVer = bytes => {
+    for (let i = 1; i <= 7; i++) { const tv = _VER[i]; if (tv && bytes <= tv.blocks.reduce((a, b) => a + b, 0) - 2) return { v: i, ver: tv }; }
+    return null;
+};
+
+/** 모듈 설정 + 예약 표시 */
+/** @param {number[][]} m @param {number[][]} res @param {number} r @param {number} c @param {number} val @param {number} [rs] */
+const _set = (m, res, r, c, val, rs = 0) => {
+    const mr = m[r]; if (mr) mr[c] = val;
+    if (rs) { const rr = res[r]; if (rr) rr[c] = 1; }
+};
+
+/** 현재 값 유지 + 예약 표시 — 포맷 자리에 이미 찍힌 기능 패턴 모듈을 그대로 두고 예약만 */
+/** @param {number[][]} m @param {number[][]} res @param {number} r @param {number} c */
+const _keep = (m, res, r, c) => _set(m, res, r, c, (m[r] || [])[c] || 0, 1);
+
+/** 포맷 정보 예약 영역 — (n-8,8) 고정 어두운 모듈 + 파인더 주변 포맷 자리는 데이터 배치 제외 */
+/** @param {number[][]} m @param {number[][]} res @param {number} n */
+const _fmtReserve = (m, res, n) => {
+    _set(m, res, n - 8, 8, 1, 1);
+    for (let i = 0; i <= 8; i++) if (i !== 6) { _keep(m, res, 8, i); _keep(m, res, i, 8); } // 좌상 포맷 영역
+    for (let i = 0; i < 8; i++) _keep(m, res, 8, n - 1 - i);   // 우상 포맷 영역 (행8·열 n-8~n-1)
+    for (let i = 0; i < 7; i++) _keep(m, res, n - 1 - i, 8);   // 좌하 포맷 영역 (열8·행 n-7~n-1)
+};
+
+/** 포맷 영역·버전 정보 예약 — 파인더 주변 포맷 자리 + v7 버전 정보 블록 */
+/** @param {number[][]} m @param {number[][]} res @param {number} n @param {number} v */
+const _layoutReserve = (m, res, n, v) => {
+    _fmtReserve(m, res, n);
+    const vinfo = _VINFO[v];
+    if (!vinfo) return;
+    // 버전 정보 (v7) — 우상·좌하 6×3, 비트 i는 _VINFO 문자열의 17-i (MSB 선두 문자열이라 역순)
+    for (let i = 0; i < 18; i++) {
+        const b = +vinfo.charAt(17 - i), r = Math.floor(i / 3), c = i % 3;
+        _set(m, res, r, n - 11 + c, b, 1); _set(m, res, n - 11 + c, r, b, 1);
+    }
+};
+
+/** 파인더 인접 위치 — 정렬 패턴 배치에서 제외되는 세 모서리 영역 */
+/** @param {number} cx @param {number} cy @param {number} n */
+const _nearFinder = (cx, cy, n) => (cx <= 8 && cy <= 8) || (cx >= n - 9 && cy <= 8) || (cx <= 8 && cy >= n - 9);
+
+/** 정렬 패턴 배치 — 파인더와 겹치는 위치 제외 */
+/** @param {number[][]} m @param {number[][]} res @param {number} n @param {number} v */
+const _layoutAlign = (m, res, n, v) => {
+    for (const cy of _ALIGN[v] || []) for (const cx of _ALIGN[v] || []) {
+        if (!_nearFinder(cx, cy, n) && !(res[cy] || [])[cx]) _align(m, res, cx, cy);
+    }
+};
+
+/** 기능 패턴 배치 — 파인더+분리자·정렬 패턴(파인더 겹침 제외)·타이밍 */
+/** @param {number[][]} m @param {number[][]} res @param {number} n @param {number} v */
+const _layoutFunc = (m, res, n, v) => {
+    _finder(m, res, 0, 0); _finder(m, res, n - 7, 0); _finder(m, res, 0, n - 7);
+    _layoutAlign(m, res, n, v);
+    for (let i = 8; i < n - 8; i++) { _set(m, res, 6, i, i % 2 === 0 ? 1 : 0, 1); _set(m, res, i, 6, i % 2 === 0 ? 1 : 0, 1); }
+    _layoutReserve(m, res, n, v);
+};
+
+/** 데이터 배치 — 우하단부터 2열 지그재그, 6열(타이밍) 건너뜀 */
+/** @param {number[][]} m @param {number[][]} res @param {number[]} cws @param {number} n */
+const _place = (m, res, cws, n) => {
+    const dataBits = cws.flatMap(b => Array.from({ length: 8 }, (_, i) => (b >> (7 - i)) & 1));
+    let di = 0, dir = -1, r = n - 1;
+    const fill = (/** @type {number} */ rr, /** @type {number} */ cc) => {
+        if (!(res[rr] || [])[cc]) _set(m, res, rr, cc, di < dataBits.length ? dataBits[di++] || 0 : 0);
+    };
+    for (let c = n - 1; c > 0; c -= 2) {
+        if (c === 6) c--;
+        for (; r >= 0 && r < n; r += dir) { fill(r, c); fill(r, c - 1); }
+        dir = -dir; r += dir;
+    }
+};
+
+/** 마스크 k 적용 사본 — 비예약 모듈만 반전 */
+/** @param {number[][]} m @param {number[][]} res @param {number} n @param {number} k */
+const _masked = (m, res, n, k) => {
+    const mm = m.map(row => row.slice()), mk = _MASKS[k];
+    for (let rr = 0; rr < n; rr++) for (let cc = 0; cc < n; cc++) {
+        const mrow = mm[rr];
+        if (mk && !(res[rr] || [])[cc] && mk(rr, cc) && mrow) mrow[cc] = (mrow[cc] || 0) ^ 1;
+    }
+    return mm;
+};
+
+/** 최적 마스크 선정 — 8 후보에 페널티 점수 최소 선택 */
+/** @param {number[][]} m @param {number[][]} res @param {number} n */
+const _bestMask = (m, res, n) => {
+    /** @type {?number[][]} */ let best = null;
+    let bestMask = 0, bestPen = Infinity;
+    for (let k = 0; k < 8; k++) {
+        if (!_MASKS[k]) continue;
+        const mm = _masked(m, res, n, k), p = _penalty(mm);
+        if (p < bestPen) { bestPen = p; best = mm; bestMask = k; }
+    }
+    return best ? { m: best, mask: bestMask } : null;
+};
+
+/** 포맷 정보 사본 1 (좌상 파인더 주변): (8,0..5)=f14..f9 · (8,7)=f8 · (8,8)=f7 · (7,8)=f6 · (5..0,8)=f5..f0 */
+/** @param {number[][]} fm @param {(i:number)=>number} b */
+const _fmtCopy1 = (fm, b) => {
+    for (let i = 0; i <= 5; i++) { const row = fm[8]; if (row) row[i] = b(i); }
+    const row = fm[8]; if (row) { row[7] = b(6); row[8] = b(7); }
+    const r7 = fm[7]; if (r7) r7[8] = b(8);
+    for (let i = 0; i <= 5; i++) { const row2 = fm[5 - i]; if (row2) row2[8] = b(9 + i); }
+};
+
+/** 포맷 정보 사본 2 (우상·좌하): (n-1..n-7, 8)=f14..f8 · (8, n-8..n-1)=f7..f0 */
+/** @param {number[][]} fm @param {number} n @param {(i:number)=>number} b */
+const _fmtCopy2 = (fm, n, b) => {
+    for (let i = 0; i <= 6; i++) { const row = fm[n - 1 - i]; if (row) row[8] = b(i); }
+    for (let i = 0; i <= 7; i++) { const row = fm[8]; if (row) row[n - 8 + i] = b(7 + i); }
 };
 
 /**
@@ -155,80 +297,23 @@ const _penalty = (/** @type {number[][]} */ m) => {
  * @param {string} text
  */
 export const qrMatrix = (/** @type {string} */ text) => {
-    const bytes = new TextEncoder().encode(String(text || '')).length;
-    let v = 0;
-    for (let i = 1; i <= 7; i++) { const tv = _VER[i]; if (tv && bytes <= tv.blocks.reduce((a, b) => a + b, 0) - 2) { v = i; break; } }
-    const ver = v ? _VER[v] : null;
-    if (!v || !ver) return null;
+    const pick = _pickVer(new TextEncoder().encode(String(text || '')).length);
+    if (!pick) return null;
+    const { v, ver } = pick;
     const data = _dataCW(String(text), ver);
     if (!data) return null;
-    const cws = _codewords(data, ver);
     const n = 17 + 4 * v;
     /** @type {number[][]} */ const m = Array.from({ length: n }, () => new Array(n).fill(0)); // 모듈 값
     /** @type {number[][]} */ const res = m.map(r => r.map(() => 0));                          // 기능 패턴 예약
-    const _set = (/** @type {number} */ r, /** @type {number} */ c, /** @type {number} */ val, /** @type {number} */ rs_ = 0) => {
-        const mr = m[r]; if (mr) mr[c] = val;
-        if (rs_) { const rr = res[r]; if (rr) rr[c] = 1; }
-    };
-    // 파인더 + 분리자
-    _finder(m, res, 0, 0); _finder(m, res, n - 7, 0); _finder(m, res, 0, n - 7);
-    // 정렬 패턴 (파인더와 겹치는 위치 제외)
-    for (const cy of _ALIGN[v] || []) for (const cx of _ALIGN[v] || []) {
-        if ((cx <= 8 && cy <= 8) || (cx >= n - 9 && cy <= 8) || (cx <= 8 && cy >= n - 9)) continue;
-        if (!(res[cy] || [])[cx]) _align(m, res, cx, cy);
-    }
-    // 타이밍
-    for (let i = 8; i < n - 8; i++) { _set(6, i, i % 2 === 0 ? 1 : 0, 1); _set(i, 6, i % 2 === 0 ? 1 : 0, 1); }
-    // 어두운 모듈 + 포맷 정보 예약 영역 — (n-8,8) 고정 어두운 모듈, 파인더 주변 포맷 자리는 데이터 배치 제외
-    _set(n - 8, 8, 1, 1);
-    for (let i = 0; i <= 8; i++) { if (i !== 6) { _set(8, i, (m[8] || [])[i] || 0, 1); _set(i, 8, (m[i] || [])[8] || 0, 1); } } // 좌상 포맷 영역
-    for (let i = 0; i < 8; i++) _set(8, n - 1 - i, (m[8] || [])[n - 1 - i] || 0, 1);   // 우상 포맷 영역 (행8·열 n-8~n-1)
-    for (let i = 0; i < 7; i++) _set(n - 1 - i, 8, (m[n - 1 - i] || [])[8] || 0, 1);   // 좌하 포맷 영역 (열8·행 n-7~n-1)
-    const vinfo = _VINFO[v];
-    if (vinfo) { // 버전 정보 (v7) — 우상·좌하 6×3, 비트 i는 _VINFO 문자열의 17-i (MSB 선두 문자열이라 역순)
-        for (let i = 0; i < 18; i++) {
-            const b = +vinfo.charAt(17 - i), r = Math.floor(i / 3), c = i % 3;
-            _set(r, n - 11 + c, b, 1); _set(n - 11 + c, r, b, 1);
-        }
-    }
-    // 데이터 배치 — 우하단부터 2열 지그재그, 6열(타이밍) 건너뜀
-    const dataBits = cws.flatMap(b => Array.from({ length: 8 }, (_, i) => (b >> (7 - i)) & 1));
-    let di = 0, dir = -1, r = n - 1;
-    for (let c = n - 1; c > 0; c -= 2) {
-        if (c === 6) c--;
-        for (; r >= 0 && r < n; r += dir) {
-            for (const cc of [c, c - 1]) {
-                if ((res[r] || [])[cc]) continue;
-                _set(r, cc, di < dataBits.length ? dataBits[di++] || 0 : 0);
-            }
-        }
-        dir = -dir; r += dir;
-    }
-    // 최적 마스크 선정 + 포맷 정보 기록
-    /** @type {?number[][]} */ let best = null;
-    let bestMask = 0, bestPen = Infinity;
-    for (let k = 0; k < 8; k++) {
-        const mm = m.map(row => row.slice()), mk = _MASKS[k];
-        if (!mk) continue;
-        for (let rr = 0; rr < n; rr++) for (let cc = 0; cc < n; cc++) {
-            const mrow = mm[rr];
-            if (!(res[rr] || [])[cc] && mk(rr, cc) && mrow) mrow[cc] = (mrow[cc] || 0) ^ 1;
-        }
-        const p = _penalty(mm);
-        if (p < bestPen) { bestPen = p; best = mm; bestMask = k; }
-    }
+    _layoutFunc(m, res, n, v);
+    _place(m, res, _codewords(data, ver), n);
+    const best = _bestMask(m, res, n);
     if (!best) return null;
-    const fm = best;
     // 포맷 정보 — _FMT 문자열은 f14..f0 (MSB 선두): b(i) = f[i] → 비트(14-i)
-    const f = _FMT[bestMask] || '', b = (/** @type {number} */ i) => +f.charAt(i);
-    // 사본 1 (좌상 파인더 주변): (8,0..5)=f14..f9 · (8,7)=f8 · (8,8)=f7 · (7,8)=f6 · (5..0,8)=f5..f0
-    for (let i = 0; i <= 5; i++) { const row = fm[8]; if (row) row[i] = b(i); }
-    { const row = fm[8]; if (row) { row[7] = b(6); row[8] = b(7); } const r7 = fm[7]; if (r7) r7[8] = b(8); }
-    for (let i = 0; i <= 5; i++) { const row = fm[5 - i]; if (row) row[8] = b(9 + i); }
-    // 사본 2 (우상·좌하): (n-1..n-7, 8)=f14..f8 · (8, n-8..n-1)=f7..f0
-    for (let i = 0; i <= 6; i++) { const row = fm[n - 1 - i]; if (row) row[8] = b(i); }
-    for (let i = 0; i <= 7; i++) { const row = fm[8]; if (row) row[n - 8 + i] = b(7 + i); }
-    return { size: n, at: (/** @type {number} */ x, /** @type {number} */ y) => { const row = fm[y]; return !!(row && row[x]); }, version: v, mask: bestMask };
+    const f = _FMT[best.mask] || '', b = (/** @type {number} */ i) => +f.charAt(i);
+    const fm = best.m;
+    _fmtCopy1(fm, b); _fmtCopy2(fm, n, b);
+    return { size: n, at: (/** @type {number} */ x, /** @type {number} */ y) => { const row = fm[y]; return !!(row && row[x]); }, version: v, mask: best.mask };
 };
 
 // — 최소 PNG 인코더 (1비트 흑백, 무압축 deflate) — 캔버스 없이 결정적 PNG.

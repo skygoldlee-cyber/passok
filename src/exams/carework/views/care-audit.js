@@ -1,6 +1,6 @@
 // src/exams/carework/views/care-audit.js — 평가 체크리스트 뷰
 // @spec CO-19 — 시험 전용 실무 뷰 (DA-13)
-import { loadAuditSections, loadCustomSections, saveCustomSections, clearCustomSections, loadChecks, toggleCheck, clearChecks, auditProgress, pushAuditState } from '../care-audit.js';
+import { loadAuditSections, loadCustomSections, saveCustomSections, clearCustomSections, loadChecks, toggleCheck, clearChecks, auditProgress, pushAuditState, auditEdition } from '../care-audit.js';
 import { auditRowsToSections } from '../audit-import.js';
 import { docHeadHtml, docSignHtml, refreshOrgName, myMembership, listRecords } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
@@ -53,8 +53,15 @@ function render() {
 export function careAuditDocMd() {
     if (!_sections.length) return '';
     const c = loadChecks();
-    const rows = _sections.flatMap((/** @type {*} */ s) => s.items.map((/** @type {*} */ i) => [s.title, c[i.id] ? '✔' : '□', i.text, i.ref]));
-    return docMdHead('평가 체크리스트') + '\n' + renderToolBody('careAudit', { 점검표: mdTable(['영역', '점검', '항목', '근거'], rows) }) + docMdSign([['점검자', 'author'], ['기관장(확인)', 'confirmer']]);
+    // 미충족(□) 항목은 조치 계획·담당·기한을 기입할 수 있게 기입란을 남긴다 — 충족 항목은 공란
+    const rows = _sections.flatMap((/** @type {*} */ s) => s.items.map((/** @type {*} */ i) =>
+        [s.title, c[i.id] ? '✔' : '□', i.text, i.ref, c[i.id] ? '' : '＿＿＿', c[i.id] ? '' : '＿＿', c[i.id] ? '' : '＿＿＿']));
+    const p = auditProgress(_sections);
+    const pct = p.total ? Math.round(p.done / p.total * 100) : 0;
+    return docMdHead('평가 체크리스트')
+        + `\n평가지표 판본: ${auditEdition()} · 충족 ${p.done}/${p.total}항목 (${pct}%)\n`
+        + renderToolBody('careAudit', { 점검표: mdTable(['영역', '점검', '항목', '근거', '조치 계획', '담당', '기한'], rows) })
+        + docMdSign([['점검자', 'author'], ['기관장(확인)', 'confirmer']]);
 }
 
 export function careAuditPrint() {
@@ -80,24 +87,10 @@ export async function careAuditFileLoad() {
     const f = input?.files?.[0];
     if (input) input.value = '';
     if (!f) return;
-    /** @type {string[][]} */ const rows = [];
-    /** @type {string[]} */ const lines = [];
+    /** @type {string[][]} */ let rows = [];
+    /** @type {string[]} */ let lines = [];
     try {
-        if (/\.(xlsx|xls|csv)$/i.test(f.name || '')) {
-            const { extractFormXlsx } = await import('../care-form-pdf.js');
-            const { parseCsv } = await import('../../../content/csv-utils.js');
-            rows.push(...parseCsv((await extractFormXlsx(f)).text));
-        } else {
-            const name = (f.name || '').toLowerCase();
-            if (name.endsWith('.hwp') && !name.endsWith('.hwpx')) throw new Error('구형 .hwp는 지원하지 않습니다 — 한글에서 Word(docx)로 저장해 올려주세요.');
-            const { extractFormDocx, extractFormHwpx } = await import('../care-form-pdf.js');
-            const { text } = await (name.endsWith('.hwpx') ? extractFormHwpx(f) : extractFormDocx(f));
-            for (const l of String(text).split('\n')) {
-                const t = l.trim();
-                if (/^\|.*\|$/.test(t)) rows.push(t.slice(1, -1).split('|').map(c => c.trim()));
-                else if (t) lines.push(t);
-            }
-        }
+        ({ rows, lines } = await _parseAuditFile(f));
     } catch (e) {
         showToast(e instanceof Error && e.message ? e.message : '파일을 읽지 못했습니다 — 텍스트 기반 Word·Excel 파일인지 확인하세요.', 'error');
         return;
@@ -117,6 +110,29 @@ export async function careAuditFileLoad() {
 
 function _removeImportPreview() {
     $('audit-import-preview')?.remove();
+}
+
+/** 업로드 점검표 파일 → {rows, lines} — xlsx/csv·docx/hwpx 분기 */
+/** @param {File} f */
+async function _parseAuditFile(f) {
+    /** @type {string[][]} */ const rows = [];
+    /** @type {string[]} */ const lines = [];
+    if (/\.(xlsx|xls|csv)$/i.test(f.name || '')) {
+        const { extractFormXlsx } = await import('../care-form-pdf.js');
+        const { parseCsv } = await import('../../../content/csv-utils.js');
+        rows.push(...parseCsv((await extractFormXlsx(f)).text));
+        return { rows, lines };
+    }
+    const name = (f.name || '').toLowerCase();
+    if (name.endsWith('.hwp') && !name.endsWith('.hwpx')) throw new Error('구형 .hwp는 지원하지 않습니다 — 한글에서 Word(docx)로 저장해 올려주세요.');
+    const { extractFormDocx, extractFormHwpx } = await import('../care-form-pdf.js');
+    const { text } = await (name.endsWith('.hwpx') ? extractFormHwpx(f) : extractFormDocx(f));
+    for (const l of String(text).split('\n')) {
+        const t = l.trim();
+        if (/^\|.*\|$/.test(t)) rows.push(t.slice(1, -1).split('|').map(c => c.trim()));
+        else if (t) lines.push(t);
+    }
+    return { rows, lines };
 }
 
 /** 업로드 점검표 파싱 결과 검토 블록 — 적용/취소 버튼 (data-click 불가, 직접 바인딩) */

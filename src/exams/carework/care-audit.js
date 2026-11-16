@@ -8,6 +8,8 @@ import { pushState } from './facility.js';
 const KEY = 'carework_audit_checks';
 /** @type {*[]|null} */
 let _sections = null;
+/** @type {{version:number, note:string}|null} */
+let _meta = null;
 
 /** 기관 업로드 점검표 — 저장되면 기본 고시 점검표 대신 사용 */
 export function loadCustomSections() {
@@ -28,8 +30,16 @@ export async function loadAuditSections() {
     if (_sections) return _sections;
     const res = await fetch('./content/exams/carework/실무/audit_checklist.json');
     if (!res.ok) throw new Error(`audit_checklist ${res.status}`);
-    _sections = (await res.json()).sections;
+    const j = await res.json();
+    _meta = { version: j.version || 1, note: j.note || '' };
+    _sections = j.sections;
     return _sections;
+}
+
+/** 점검표 판본 라벨 — 문서에 표기할 평가지표 출처·버전 (P1-7 판본 표기 요구) */
+export function auditEdition() {
+    if (loadCustomSections()) return '기관 등록 점검표';
+    return `평가지표 자체 체크리스트 v${_meta?.version ?? 1} (장기요양기관 평가방법 고시 기반)`;
 }
 
 export function loadChecks() {

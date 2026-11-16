@@ -1,0 +1,45 @@
+{
+  "subjects": {
+    "physchem": {
+      "cards": 69,
+      "quizzes": 2,
+      "files": {
+        "교재/physchem/1과목_물질의 물리화학적 성질.md": {
+          "cards": 78,
+          "quizzes": 2
+        }
+      }
+    },
+    "fire": {
+      "cards": 76,
+      "quizzes": 12,
+      "files": {
+        "교재/fire/2과목_화재예방과 소화방법.md": {
+          "cards": 86,
+          "quizzes": 12
+        }
+      }
+    },
+    "hazprop": {
+      "cards": 315,
+      "quizzes": 101,
+      "files": {
+        "교재/hazprop/3과목_위험물의 성질 및 취급.md": {
+          "cards": 385,
+          "quizzes": 101
+        }
+      }
+    }
+  },
+  "exams": {
+    "subject1": {
+      "questions": 67
+    },
+    "subject2": {
+      "questions": 88
+    },
+    "subject3": {
+      "questions": 68
+    }
+  }
+}

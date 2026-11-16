@@ -38,8 +38,8 @@
     },
     "src/content/docx-utils.js": {
       "count": 1,
-      "max": 15,
-      "sum": 15
+      "max": 14,
+      "sum": 14
     },
     "src/content/pdf-utils.js": {
       "count": 5,
@@ -91,30 +91,15 @@
       "max": 11,
       "sum": 11
     },
-    "src/exams/carework/care-handover.js": {
-      "count": 1,
-      "max": 21,
-      "sum": 21
-    },
-    "src/exams/carework/care-incident.js": {
-      "count": 1,
-      "max": 12,
-      "sum": 12
-    },
-    "src/exams/carework/care-log.js": {
-      "count": 2,
-      "max": 15,
-      "sum": 27
-    },
     "src/exams/carework/care-roster.js": {
       "count": 1,
       "max": 14,
       "sum": 14
     },
     "src/exams/carework/care-share.js": {
-      "count": 4,
+      "count": 3,
       "max": 19,
-      "sum": 63
+      "sum": 46
     },
     "src/exams/carework/care-trend.js": {
       "count": 1,
@@ -122,14 +107,14 @@
       "sum": 15
     },
     "src/exams/carework/care-visit.js": {
-      "count": 2,
+      "count": 1,
       "max": 15,
-      "sum": 26
+      "sum": 15
     },
     "src/exams/carework/doc-md.js": {
       "count": 1,
-      "max": 14,
-      "sum": 14
+      "max": 13,
+      "sum": 13
     },
     "src/exams/carework/form-template-editor.js": {
       "count": 1,
@@ -142,9 +127,9 @@
       "sum": 11
     },
     "src/exams/carework/views/care-audit.js": {
-      "count": 2,
+      "count": 1,
       "max": 14,
-      "sum": 28
+      "sum": 14
     },
     "src/exams/carework/views/care-calc.js": {
       "count": 2,
@@ -153,8 +138,8 @@
     },
     "src/exams/carework/views/care-custom-form.js": {
       "count": 3,
-      "max": 18,
-      "sum": 45
+      "max": 15,
+      "sum": 42
     },
     "src/exams/carework/views/care-finder.js": {
       "count": 1,
@@ -163,18 +148,13 @@
     },
     "src/exams/carework/views/care-handover.js": {
       "count": 1,
-      "max": 18,
-      "sum": 18
-    },
-    "src/exams/carework/views/care-home.js": {
-      "count": 1,
-      "max": 15,
-      "sum": 15
+      "max": 12,
+      "sum": 12
     },
     "src/exams/carework/views/care-incident.js": {
       "count": 1,
-      "max": 22,
-      "sum": 22
+      "max": 14,
+      "sum": 14
     },
     "src/exams/carework/views/care-visit.js": {
       "count": 1,
@@ -257,9 +237,9 @@
       "sum": 23
     },
     "src/exams/cosmetic/views/formula-print.js": {
-      "count": 3,
+      "count": 2,
       "max": 21,
-      "sum": 44
+      "sum": 34
     },
     "src/exams/cosmetic/views/formula-prod-detail.js": {
       "count": 1,
@@ -298,8 +278,8 @@
     },
     "src/pro/pro-upgrade.js": {
       "count": 2,
-      "max": 13,
-      "sum": 24
+      "max": 12,
+      "sum": 23
     },
     "src/pwa/pwa-install.js": {
       "count": 3,

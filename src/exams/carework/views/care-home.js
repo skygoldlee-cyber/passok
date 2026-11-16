@@ -47,13 +47,12 @@ export function initCareHomeView() {
             : `💡 오늘 기록 ${done}건을 남겼어요 — 근무 마무리는 「인수인계」로 넘기세요`;
     }
     // 미사용 도구 "처음" 마크 — 퍼널 사용 횟수 0인 도구
-    const used = funnelStats()?.tools || {};
-    document.querySelectorAll('.care-home-nav a[href^="#/"]').forEach(a => {
-        if (a.querySelector('.care-new')) return;
-        const slug = /** @type {HTMLAnchorElement} */ (a).href.split('#/')[1];
-        if (slug && !((used[`tool:${slug}`] || 0) > 0)) a.insertAdjacentHTML('beforeend', '<span class="care-new">처음</span>');
-    });
-    // 출력물 서명 설정 — 홈 입력값을 저장값으로 채움
+    _markNewTools(funnelStats()?.tools || {});
+    _initSignSettings();
+}
+
+/** 출력물 서명 설정 — 홈 입력값을 저장값으로 채우고 워터마크·서명 이미지 바인딩 */
+const _initSignSettings = () => {
     const sign = getDocSign();
     const aEl = /** @type {HTMLInputElement|null} */ ($('home-sign-author'));
     const cEl = /** @type {HTMLInputElement|null} */ ($('home-sign-confirmer'));
@@ -96,7 +95,17 @@ export function initCareHomeView() {
         });
     }
     renderImg();
-}
+};
+
+/** 미사용 도구에 "처음" 마크 부착 — 퍼널 사용 횟수 0인 내비 링크 */
+/** @param {Object<string, number>} used */
+const _markNewTools = used => {
+    document.querySelectorAll('.care-home-nav a[href^="#/"]').forEach(a => {
+        if (a.querySelector('.care-new')) return;
+        const slug = /** @type {HTMLAnchorElement} */ (a).href.split('#/')[1];
+        if (slug && !((used[`tool:${slug}`] || 0) > 0)) a.insertAdjacentHTML('beforeend', '<span class="care-new">처음</span>');
+    });
+};
 
 /** 서명 이미지 선택 — 숨긴 file input 트리거 (버튼 스타일 피커) */
 export function careSignImagePick() {

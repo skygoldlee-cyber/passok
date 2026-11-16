@@ -9,6 +9,7 @@ import { docWmText, docWmPng } from '../../content/doc-wm.js';
 import { docStamp } from '../../content/doc-stamp.js';
 import { qrPng, qrDataUrl } from '../../content/qr.js';
 import { docHeadHtml, getOrgName, getDocSign, docSignImages } from './facility.js';
+import { maskDocName, maskDocPhone } from './name-fmt.js';
 import { pinDocSignBottom } from './doc-md.js';
 import { docPrefix, recordDocIssue, nextDocRev } from './doc-issue-store.js';
 import { getJSON, setJSON } from '../../core/storage.js';
@@ -16,10 +17,14 @@ import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { proFeatureNotice, refreshProBadges } from '../../pro/pro-upgrade.js';
 import { todayKey, fnv1aHex } from '../../core/utils.js';
 
-const _NAME_RE = /(김|이|박|최|정|강|조|윤|장|임|한|오|서|신|권|황|안|송|전|홍|고|문|양|손|배|백|허|유|남|심|노|하|곽|성|차|주|우|구|민|류|나|진|엄|채|원|천|방|공|현|함|변|염|추|도|소|석|선|설|마|길|연|위|표|명|기|반|왕|금|옥|육|인|맹|제|모|탁|어|은|편|남궁|독고|제갈|황보|선우)[가-힣]{1,2}(?!\s*(식사|산책|요양|보호|관리|확인|기록|완료|시작|교대))/g;
+const _NAME_RE = /(김|이|박|최|정|강|조|윤|장|임|한|오|서|신|권|황|안|송|전|홍|고|문|양|손|배|백|허|유|남|심|노|하|곽|성|차|주|우|구|민|류|나|진|엄|채|원|천|방|공|현|함|변|염|추|도|소|석|선|설|마|길|연|위|표|명|기|반|왕|금|옥|육|인|맹|제|모|탁|어|은|편|남궁|독고|제갈|황보|선우)[가-힣○△◇*＊●]{1,2}(?!\s*(식사|산책|요양|보호|관리|확인|기록|완료|시작|교대))/g;
 const _PHONE_RE = /0\d{1,2}[-\s]?\d{3,4}[-\s]?\d{4}/g;
-const _mask = (/** @type {string} */ t) => t.replace(_NAME_RE, (/** @type {string} */ m) => m.length <= 4 ? '[인명]' : m)
-    .replace(_PHONE_RE, '[연락처]'); // 인명 먼저 — [연락처]의 '연'이 성씨 정규식에 재마스킹되지 않도록
+// 마스킹 규약 — 인명은 maskDocName(김 ○○), 전화는 maskDocPhone(010-****-****)로 경로별 표기를 통일.
+// 생년월일이 적힌 줄은 날짜 전체를 가린다 — 수급자 L0 식별 정보의 외부 유출 차단.
+const _mask = (/** @type {string} */ t) => String(t || '').split('\n').map(l =>
+    (l.includes('생년월일') || l.includes('주민등록') ? l.replace(/\b(19|20)\d{2}[-.]\d{1,2}[-.]\d{1,2}\b/g, '****-**-**') : l)
+        .replace(_NAME_RE, m => maskDocName(m))
+        .replace(_PHONE_RE, m => maskDocPhone(m))).join('\n'); // 인명 먼저 — 마스크된 값이 다른 패턴에 재매칭되지 않도록
 
 /** 공유 감사 로그 — 수급자 정보 외부 전송 이력 L0 로컬 기록 (기관 감사 증적, 최근 50건) */
 const _audit = (/** @type {string} */ title, /** @type {string} */ flag, /** @type {string[]} */ names) => {
@@ -101,7 +106,8 @@ const _arg = (/** @type {string} */ arg) => {
     const stamp = todayKey();
     /** @type {*} */
     const ctx = {
-        sel: f[0] || '', title: f[1] || '문서', flag, gen, print, proKey, mdgen, text: '', md: '', docNo: '',
+        sel: f[0] || '', title: f[1] || '문서', flag, gen, print, proKey, mdgen, text: '', md: '', docNo: '', date: stamp,
+        mode: flag === 'mask' ? 'mask' : 'raw', textM: '', mdM: '', // 출력일 단일 소스 — 스탬프·워터마크·헤더·메타가 같은 날짜를 쓴다
         csvGen: gen.endsWith('CsvExport') ? gen : (alt.endsWith('CsvExport') ? alt : ''),
         fname: /** @type {null|function(string):string} */ (null),
     };
@@ -110,82 +116,112 @@ const _arg = (/** @type {string} */ arg) => {
     return ctx;
 };
 
+/** 생성 핸들러 실행 — 브리지 직접 호출 우선, 없으면 버튼 클릭 (공유 단독 완결) */
+/** @param {string} gen */
+const _tryGen = async gen => {
+    try {
+        const fn = (/** @type {any} */ (window))[gen];
+        if (typeof fn === 'function') await fn();
+        else /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click();
+    } catch { /* 계속 */ }
+};
+
+/** MD 표준 초안 페치 — 지정 시 docx 등 구조화 형식이 평문 대신 사용 (mask는 본문과 동일 적용) */
+/** @param {*} ctx */
+const _fetchMd = async ctx => {
+    try {
+        const md = await (/** @type {any} */ (window))[ctx.mdgen]?.();
+        ctx.md = md || '';
+        if (ctx.flag === 'mask' && ctx.md) ctx.mdM = _mask(ctx.md);
+    } catch { ctx.md = ''; }
+};
+
 /** 본문 확보 — 출력 요소 → 미생성 시 생성 핸들러 실행 → 오류 마커·실패 시 폼 양식 폴백 → mask 가림 */
 const _prepare = async (/** @type {*} */ ctx) => {
     const { sel, gen } = ctx;
     let raw = _readOut(sel);
-    // 공유 단독 완결 — 미생성 시 생성 핸들러 실행 (브리지 직접 호출 우선, 없으면 버튼 클릭)
-    if (!raw.trim() && gen && !gen.endsWith('CsvExport')) {
-        try {
-            const fn = (/** @type {any} */ (window))[gen];
-            if (typeof fn === 'function') await fn();
-            else /** @type {HTMLElement|null} */ (document.querySelector(`[data-click="${gen}"]`))?.click();
-        } catch { /* 계속 */ }
-        raw = _readOut(sel);
-    }
+    if (!raw.trim() && gen && !gen.endsWith('CsvExport')) { await _tryGen(gen); raw = _readOut(sel); }
     if ((sel.trim() && /** @type {HTMLElement|null} */ (document.querySelector(sel.trim()))?.querySelector('.care-calc-err'))) raw = ''; // 오류 마커만 있으면 양식으로
     if (!raw.trim()) raw = _formText(sel); // 생성 실패해도 양식(입력 항목·값)으로 공유
-    ctx.text = raw.trim() ? (ctx.flag === 'mask' ? _mask(raw) : raw) : '';
-    // MD 표준 초안 — 지정 시 docx 등 구조화 형식이 평문 대신 사용 (mask는 본문과 동일 적용)
-    if (ctx.mdgen) {
-        try {
-            const md = await (/** @type {any} */ (window))[ctx.mdgen]?.();
-            ctx.md = md ? (ctx.flag === 'mask' ? _mask(md) : md) : '';
-        } catch { ctx.md = ''; }
-    }
-    // 문서번호 — MD 초안(없으면 평문)을 시드로 유형-날짜-해시 부여. 동일 내용 재출력은 동일 번호
-    ctx.docNo = docStamp(docPrefix(ctx.title), ctx.md || ctx.text);
+    ctx.text = raw.trim() ? raw : '';
+    // mask 플래그 문서는 가림본을 별도 보관 — 내부 보관용(원문)/공유용(가림) 모드를 메뉴에서 고른다
+    if (ctx.flag === 'mask' && ctx.text) ctx.textM = _mask(ctx.text);
+    if (ctx.mdgen) await _fetchMd(ctx);
 };
 
-/** 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강
- *  @spec CO-20 — 인쇄 가독성 규칙(흰 배경·여백·검정 강제) 인라인 구현 — pdfFileFromElStyled와 동일 규약 */
-const _pdfFile = async (/** @type {*} */ ctx) => {
-    const wrap = document.createElement('div');
-    // html2canvas는 문서 좌표로 렌더 — fixed는 뷰포트에 노출(흰 플래시)되므로 문서 하단 absolute로 배치
-    wrap.style.cssText = 'position:absolute;left:0;top:100vh;width:700px;padding:24px;background:#fff;color:#000';
+/** 출력용 본문 — mode에 따라 가림본/원문 선택 */
+const _txt = (/** @type {*} */ c) => (c.mode === 'mask' ? (c.textM || c.text) : c.text);
+const _md = (/** @type {*} */ c) => (c.mode === 'mask' ? (c.mdM || c.md) : c.md);
+/** 출력 본문의 전체 해시 — QR 진위 페이로드·발행 대장 대조용 */
+const _hash = (/** @type {*} */ c) => fnv1aHex(JSON.stringify(_md(c) || _txt(c)));
+
+/** 문서번호 부여 — 출력 내용(모드 반영본)을 시드로 유형-날짜-해시 부여. 동일 내용 재출력은 동일 번호 */
+const _stampDoc = (/** @type {*} */ ctx) => { ctx.docNo = docStamp(docPrefix(ctx.title), _md(ctx) || _txt(ctx), ctx.date); };
+
+/** PDF 본문 조립 — 출력 요소 복제(가림 적용·DOM 워터마크 제거) 또는 폼 양식 폴백 */
+/** @param {HTMLElement} wrap @param {*} ctx */
+const _pdfBody = (wrap, ctx) => {
     const outEl = ctx.sel.trim() && document.querySelector(ctx.sel.trim());
     if (outEl && outEl.textContent?.trim()) {
         const clone = /** @type {HTMLElement} */ (outEl.cloneNode(true));
         clone.querySelector('.doc-wm')?.remove(); // DOM 워터마크는 제거 — 캔버스 스탬프와 중복 방지
-        if (ctx.flag === 'mask') { // 텍스트 노드만 가림 — 표 구조는 유지
+        if (ctx.mode === 'mask') { // 텍스트 노드만 가림 — 표 구조는 유지
             const walker = document.createTreeWalker(clone, NodeFilter.SHOW_TEXT);
             for (let n = walker.nextNode(); n; n = walker.nextNode()) n.nodeValue = _mask(n.nodeValue || '');
         }
         if (!clone.querySelector('.care-doc-head')) wrap.innerHTML = docHeadHtml(ctx.title); // 인쇄와 동일 헤더
         wrap.appendChild(clone);
-    } else { // 미리보기 없음 — 폼 양식은 헤더+텍스트로 구성
-        wrap.innerHTML = docHeadHtml(ctx.title);
-        const pre = document.createElement('pre');
-        pre.style.cssText = 'white-space:pre-wrap;font:13px/1.6 "Malgun Gothic",sans-serif;color:#111';
-        pre.textContent = ctx.text;
-        wrap.appendChild(pre);
+        return;
     }
-    // 인쇄 가독성 — 테마 색상(회색 계열) 제거: 배경 흰색·텍스트 검정으로 강제
-    wrap.querySelectorAll('*').forEach((/** @type {Element} */ e2) => {
-        const el2 = /** @type {HTMLElement} */ (e2);
-        if (el2.closest('.doc-wm')) return; // 워터마크 옅은 회색 유지 — 검정 강제 제외
-        el2.style.color = '#000';
-        if (!el2.classList.contains('care-doc-head')) el2.style.background = 'transparent';
-        el2.style.borderColor = '#000';
-    });
+    wrap.innerHTML = docHeadHtml(ctx.title); // 미리보기 없음 — 폼 양식은 헤더+텍스트로 구성
+    const pre = document.createElement('pre');
+    pre.style.cssText = 'white-space:pre-wrap;font:13px/1.6 "Malgun Gothic",sans-serif;color:#111';
+    pre.textContent = _txt(ctx);
+    wrap.appendChild(pre);
+};
+
+/** 문서번호 + QR 삽입 — 서명란 좌측(docx _qrTbl과 동일 배치), 서명 없으면 하단 좌측 */
+/** @param {HTMLElement} wrap @param {*} ctx */
+const _pdfQr = (wrap, ctx) => {
+    const qr = qrDataUrl(_qrPayload(ctx)); // 검증 페이로드 — 문서번호 + 본문 해시 (인쇄 번호와 대조·발행 대장 확인용)
+    const sign = /** @type {HTMLElement|null} */ (wrap.querySelector('.doc-sign'));
+    const d = document.createElement('div');
+    d.className = 'doc-qr-spot';
+    if (sign) d.style.right = `${88 + sign.offsetWidth + 24}px`; else d.style.left = '88px';
+    d.innerHTML = `<div class="doc-qr-cap">문서번호 ${esc(ctx.docNo)}</div>${qr ? `<img class="doc-qr-img" src="${esc(qr)}" alt="문서번호 QR">` : ''}`;
+    wrap.appendChild(d);
+};
+
+/** 인쇄 가독성 — 테마 색상(회색 계열) 제거: 배경 흰색·텍스트 검정으로 강제 */
+/** @param {HTMLElement} wrap */
+const _pdfInk = wrap => wrap.querySelectorAll('*').forEach((/** @type {Element} */ e2) => {
+    const el2 = /** @type {HTMLElement} */ (e2);
+    if (el2.closest('.doc-wm')) return; // 워터마크 옅은 회색 유지 — 검정 강제 제외
+    el2.style.color = '#000';
+    if (!el2.classList.contains('care-doc-head')) el2.style.background = 'transparent';
+    el2.style.borderColor = '#000';
+});
+
+/** 공유 PDF = 인쇄 미리보기 DOM 그대로 — 헤더가 미포함이면 문서 헤더만 보강
+ *  @spec CO-20 — 인쇄 가독성 규칙(흰 배경·여백·검정 강제) 인라인 구현 — pdfFileFromElStyled와 동일 규약 */
+const _pdfFile = async (/** @type {*} */ ctx) => {
+    const wrap = document.createElement('div');
+    // :::landscape 문서 — docx 가로 용지와 정합 맞춰 가로 페이지로 출력 (폭 비례 확장 — 세로 700px↔210mm)
+    const land = /^:::landscape\s*$/m.test(_md(ctx));
+    // html2canvas는 문서 좌표로 렌더 — fixed는 뷰포트에 노출(흰 플래시)되므로 문서 하단 absolute로 배치
+    wrap.style.cssText = `position:absolute;left:0;top:100vh;width:${land ? 990 : 700}px;padding:24px;background:#fff;color:#000`;
+    _pdfBody(wrap, ctx);
+    _pdfInk(wrap);
     document.body.appendChild(wrap); // 레이아웃 확정 후 서명란 폭 측정 — detached 상태에선 offsetWidth=0
-    pinDocSignBottom(wrap); // 서명란 페이지 하단 우측 고정 — docx 부동 표와 동일 위치
-    if (ctx.docNo) { // 문서번호 + QR — 서명란 좌측(docx _qrTbl과 동일 배치), 서명 없으면 하단 좌측
-        const qr = qrDataUrl(ctx.docNo);
-        const sign = /** @type {HTMLElement|null} */ (wrap.querySelector('.doc-sign'));
-        const d = document.createElement('div');
-        d.className = 'doc-qr-spot';
-        if (sign) d.style.right = `${88 + sign.offsetWidth + 24}px`; else d.style.left = '88px';
-        d.innerHTML = `<div class="doc-qr-cap">문서번호 ${esc(ctx.docNo)}</div>${qr ? `<img class="doc-qr-img" src="${esc(qr)}" alt="문서번호 QR">` : ''}`;
-        wrap.appendChild(d);
-    }
-    try { return await pdfFileFromEl(wrap, ctx.fname('pdf').replace(/\.pdf$/, ''), _wmText()); }
+    pinDocSignBottom(wrap, land ? { minHeight: '700px' } : undefined); // 서명란 페이지 하단 우측 고정 — docx 부동 표와 동일 위치
+    if (ctx.docNo) _pdfQr(wrap, ctx);
+    try { return await pdfFileFromEl(wrap, ctx.fname('pdf').replace(/\.pdf$/, ''), _wmText(ctx), { landscape: land }); }
     finally { wrap.remove(); }
 };
 
 const _copyRaw = (/** @type {*} */ ctx) => {
     if (!navigator.clipboard?.writeText) { showToast('공유·복사를 지원하지 않는 환경입니다.', 'error'); return; }
-    const raw = (ctx.md || ctx.text).replace(/\{\{img:[\w-]+\}\}/g, '(서명)'); // 서명 이미지 토큰은 텍스트 표기로
+    const raw = (_md(ctx) || _txt(ctx)).replace(/\{\{img:[\w-]+\}\}/g, '(이미지)'); // 이미지 토큰은 텍스트 표기로
     navigator.clipboard.writeText(raw).then( // MD 초안이 있으면 구조(표) 텍스트로 복사
         () => showToast('클립보드에 복사했습니다 — 카톡 등에 붙여넣으세요.'),
         () => showToast('복사 실패 — 인쇄·PDF를 이용하세요.', 'error'));
@@ -211,36 +247,39 @@ const _actPdf = async (/** @type {*} */ ctx) => {
     } catch { showToast('PDF 생성 실패 — 인쇄를 이용하세요.', 'error'); }
 };
 
-/** 워터마크 문구 — 설정 켜짐 + 기관명 있을 때만 (docx 회전 상자·미리보기 .doc-wm·PDF 스탬프 동일 문구) */
-const _wmText = () => (getDocSign().wm ? docWmText(getOrgName()) : '');
+/** 워터마크 문구 — 설정 켜짐 + 기관명 있을 때만, 날짜는 문서 출력일(ctx.date)과 동일 소스 */
+const _wmText = (/** @type {*} */ ctx) => (getDocSign().wm ? docWmText(getOrgName(), ctx.date) : '');
+
+/** QR 페이로드 — 문서번호 + 본문 해시 (스캔 시 인쇄 번호와 대조·발행 대장의 hash와 확인 가능) */
+const _qrPayload = (/** @type {*} */ ctx) => (ctx.docNo ? `PASSOK ${ctx.docNo} #${_hash(ctx).slice(0, 12)}` : '');
 
 /** 발행 대장 기록 — 파일 생성·다운로드 성공 후 호출 (실패 경로는 기록하지 않음) */
 const _issue = (/** @type {*} */ ctx, /** @type {string} */ kind, /** @type {string[]} */ filenames = []) => {
     try {
-        recordDocIssue({ docNo: ctx.docNo, tool: ctx.title, kind, filenames, hash: fnv1aHex(JSON.stringify(ctx.md || ctx.text)) });
+        recordDocIssue({ docNo: ctx.docNo, tool: ctx.title, kind, filenames, hash: _hash(ctx) });
     } catch { /* 대장 기록 실패는 출력을 막지 않는다 */ }
 };
 
-/** 문서 추적 메타 — docx core.xml·푸터·QR 부동 표용. QR는 문서번호 평문(오프라인 검색 대응), 캔버스 불가 시 생략 */
+/** 문서 추적 메타 — docx core.xml·푸터·QR 부동 표용. QR는 번호+해시 페이로드(오프라인 대조 가능), 캔버스 불가 시 생략 */
 const _docMeta = (/** @type {*} */ ctx) => {
-    const qr = ctx.docNo ? qrPng(ctx.docNo) : null;
-    return { no: ctx.docNo, org: getOrgName(), title: ctx.title, rev: nextDocRev(ctx.docNo), ...(qr ? { qr } : {}) };
+    const qr = ctx.docNo ? qrPng(_qrPayload(ctx)) : null;
+    return { no: ctx.docNo, org: getOrgName(), title: ctx.title, date: ctx.date, rev: nextDocRev(ctx.docNo), ...(qr ? { qr } : {}) };
 };
 
 /** 공유 Word — MD 초안이 있으면 구조 보존 변환(표·헤딩), 없으면 헤더+본문 단락 폴백 */
 const _docxFile = async (/** @type {*} */ ctx) => {
-    const wm = _wmText();
+    const wm = _wmText(ctx);
     // 알파 구운 PNG 우선 — w14:alpha·behindDoc 무시 뷰어에서도 이미지 알파라 동일 농도 (캔버스 불가 시 텍스트 상자 폴백)
     const wmImg = wm ? docWmPng(wm) : null;
     const doc = _docMeta(ctx);
-    if (ctx.md) { // MD 초안 — {{img:}} 토큰은 등록 서명 이미지 PNG로 치환 (합성 실패 시 공란 폴백)
+    if (_md(ctx)) { // MD 초안 — {{img:}} 토큰은 등록 서명 이미지 PNG로 치환 (합성 실패 시 공란 폴백)
         const images = await docSignImages();
         const opts = { ...(images ? { images } : {}), ...(wmImg ? { wmImg } : {}), doc };
-        return docxFileMd(ctx.md, ctx.fname('docx').replace(/\.docx$/, ''), wm, opts);
+        return docxFileMd(_md(ctx), ctx.fname('docx').replace(/\.docx$/, ''), wm, opts);
     }
     const org = getOrgName();
-    const head = `${ctx.title}\n${org ? org + ' · ' : ''}${todayKey()} 출력`;
-    return docxFile(`${head}\n\n${ctx.text}`, ctx.fname('docx').replace(/\.docx$/, ''), 2, wm, wmImg, { doc });
+    const head = `${ctx.title}\n${org ? org + ' · ' : ''}${ctx.date} 출력`;
+    return docxFile(`${head}\n\n${_txt(ctx)}`, ctx.fname('docx').replace(/\.docx$/, ''), 2, wm, { ...(wmImg ? { wmImg } : {}), doc });
 };
 
 const _actDocx = async (/** @type {*} */ ctx) => {
@@ -293,20 +332,28 @@ const _actShare = async (/** @type {*} */ ctx, /** @type {string} */ kind = 'all
     await Promise.allSettled(tasks); // 생성 완료 후 버튼 — 시트에 선택 파일 첨부
     _issue(ctx, 'share', files.map((/** @type {File} */ f) => f.name));
     _audit(ctx.title, ctx.flag, files.map((/** @type {File} */ f) => f.name));
-    const fs = files, { title } = ctx, text = (ctx.md || ctx.text).replace(/\{\{img:[\w-]+\}\}/g, '(서명)'); // 텍스트 공유도 MD 초안 기본 — 이미지 토큰은 (서명) 표기
-    _shareBtn(`📤 ${title} 공유하기`, async () => {
-        const ok = !_filesBlocked && fs.length && (typeof navigator.canShare !== 'function' || navigator.canShare({ files: fs }));
-        try {
-            await navigator.share(ok ? { title, files: fs } : { title, text });
-            showToast('공유 시트를 열었습니다.');
-        } catch (e) {
-            const n = /** @type {Error} */ (e)?.name;
-            if (n === 'AbortError') return;
-            if (ok && n === 'NotAllowedError') _filesBlocked = true; // 파일 첨부 차단 — 다음 탭은 텍스트만
-            diag(`공유 시트를 열지 못했습니다 — 사유: ${n || e} · 파일첨부:${ok ? 'Y' : 'N'} · 파일은 다운로드로 대체합니다.`);
-            _downloadAll(fs);
-        }
-    });
+    const fs = files, { title } = ctx, text = (_md(ctx) || _txt(ctx)).replace(/\{\{img:[\w-]+\}\}/g, '(이미지)'); // 텍스트 공유도 MD 초안 기본 — 이미지 토큰은 (이미지) 표기
+    _shareBtn(`📤 ${title} 공유하기`, () => _doShare(fs, title, text));
+};
+
+/** 공유 시트 실패 처리 — AbortError는 사용자 취소라 무시, NotAllowedError면 파일 첨부 차단 플래그 */
+/** @param {*} e @param {boolean} ok @param {File[]} fs */
+const _shareErr = (e, ok, fs) => {
+    const n = /** @type {Error} */ (e)?.name;
+    if (n === 'AbortError') return;
+    if (ok && n === 'NotAllowedError') _filesBlocked = true; // 파일 첨부 차단 — 다음 탭은 텍스트만
+    diag(`공유 시트를 열지 못했습니다 — 사유: ${n || e} · 파일첨부:${ok ? 'Y' : 'N'} · 파일은 다운로드로 대체합니다.`);
+    _downloadAll(fs);
+};
+
+/** navigator.share 호출 — 파일 첨부 가능하면 파일, 아니면 텍스트만 */
+/** @param {File[]} fs @param {string} title @param {string} text */
+const _doShare = async (fs, title, text) => {
+    const ok = !_filesBlocked && fs.length && (typeof navigator.canShare !== 'function' || navigator.canShare({ files: fs }));
+    try {
+        await navigator.share(ok ? { title, files: fs } : { title, text });
+        showToast('공유 시트를 열었습니다.');
+    } catch (e) { _shareErr(e, Boolean(ok), fs); }
 };
 
 /** 하단 시트 공용 렌더 — 스크림·헤더·항목 버튼. 각 항목 탭이 새 제스처라 share()·클립보드 제스처 계약을 만족. */
@@ -357,7 +404,7 @@ const _pickShareKind = (/** @type {*} */ ctx) => {
 
 /** 내보내기 메뉴 — 항목 조립 후 _sheet로 렌더 */
 const _openMenu = (/** @type {*} */ ctx) => {
-    const masked = ctx.flag === 'mask' ? ' (인명 가림)' : '';
+    const masked = ctx.mode === 'mask' ? ' (인명 가림)' : '';
     const items = [];
     // 파일 첨부 시트는 터치 기기 전용 — Windows 데스크톱은 canShare 통과 후에도 share({files})가
     // OS 수준 NotAllowedError로 거절되고 카톡 PC판은 공유 대상 미등록이라 항목 자체를 숨긴다.
@@ -382,7 +429,15 @@ export async function careShare(arg) {
     const ctx = _arg(arg);
     await _prepare(ctx);
     if (!ctx.text && !ctx.csvGen) { showToast('내보낼 내용이 없습니다 — 항목을 입력하세요.', 'error'); return; }
-    // 개인정보 통제는 인명 가림(mask)으로 보장 — 확인 다이얼로그 없이 한 번 클릭으로 공유 (정책 주의는 비차단 안내)
-    if (ctx.flag === 'mask' && ctx.text) showToast('인명·연락처가 가려진 본문으로 공유됩니다 — 기관 정책을 확인하세요.');
+    // 개인정보 문서는 내보내기 모드를 먼저 고른다 — 공유용(인명·연락처·생년월일 가림)이 기본이며,
+    // 내부 보관용은 원문 그대로. 인쇄·복사·파일 모든 경로에 같은 모드가 적용된다.
+    if (ctx.flag === 'mask' && ctx.text) {
+        _sheet(ctx, `${ctx.title} — 내보내기 모드를 선택하세요`, [
+            { label: '🔒 공유용 — 인명·연락처 가림', run: async () => { ctx.mode = 'mask'; _stampDoc(ctx); _openMenu(ctx); } },
+            { label: '🗂️ 내부 보관용 — 원문 그대로', run: async () => { ctx.mode = 'raw'; _stampDoc(ctx); showToast('원문 출력 — 개인정보가 포함됩니다. 외부 전송 전 기관 정책을 확인하세요.'); _openMenu(ctx); } },
+        ]);
+        return;
+    }
+    _stampDoc(ctx);
     _openMenu(ctx);
 }
