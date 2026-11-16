@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: c16aaf753f232885
+> 입력 해시: 1e828ec49a76179a
 > 생성: 2026-11-16 · 원천: SPEC.md(717개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -221,7 +221,7 @@
 | TS-14 | ✅ | 테스트 | — | src/search/search-index.js<br>src/search/search-morpheme.js<br>src/views/textbook-search.js | tests/dom/search/morph-search.dom.test.js<br>tests/unit/app/search-index.test.js<br>tests/unit/app/search-morpheme.test.js | — | — |
 | TS-15 | ✅ | 테스트 | DOC-RBK-08 | src/search/search-index.js<br>src/search/search-sources.js<br>src/views/textbook-search.js | tests/dom/search/glossary-search.dom.test.js | — | — |
 | TS-16 | ✅ | 테스트 | DOC-RBK-08 | src/search/search-index.js<br>src/search/search-sources.js<br>src/views/textbook-search.js | tests/dom/search/glossary-search.dom.test.js<br>tests/unit/app/search-morpheme.test.js | — | — |
-| TS-17 | ✅ | 테스트 | DOC-RBK-08 | src/search/search-index.js<br>tools/check/check_meta_sections.js | tests/dom/exam/exam-index-scope.dom.test.js<br>tests/unit/gates/check-meta-sections.test.js | — | — |
+| TS-17 | ✅ | 테스트 | DOC-RBK-08 | src/search/search-index.js<br>tools/check/check_meta_sections.js | tests/dom/exam/exam-index-scope.dom.test.js<br>tests/unit/gates/check-meta-sections.test.js<br>tests/unit/reader-toc-meta.test.js | — | — |
 | TS-18 | ✅ | 테스트 | DOC-RBK-08 | src/search/search-index.js<br>src/search/search-sources.js<br>src/views/textbook-search.js | tests/dom/study/study-search.dom.test.js<br>tests/unit/app/search-index.test.js | — | — |
 
 ## 3.10 성분 사전
