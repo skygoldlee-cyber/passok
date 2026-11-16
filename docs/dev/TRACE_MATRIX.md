@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 504a78128e294ad7
-> 생성: 2026-11-16 · 원천: SPEC.md(714개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: ae9cb32cc8e38ffb
+> 생성: 2026-11-16 · 원천: SPEC.md(715개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 714개 — 문서 연결 475 · 소스 연결 633 · 테스트 연결 674 · 보고서 연결 109
+**커버리지 요약**: 요구사항 715개 — 문서 연결 475 · 소스 연결 634 · 테스트 연결 675 · 보고서 연결 109
 
 ---
 
@@ -413,9 +413,10 @@
 | DR-05 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-21<br>DOC-RBK-02<br>DOC-REF-01 | src/study/statement-tracker.js<br>src/views/trainer-drills.js | tests/dom/study/study-trainer-drills.dom.test.js<br>tests/unit/engine/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-06 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/views/exam-sim/exam-sim-arena.js<br>src/views/exam-sim/exam-simulator.js<br>src/views/trainer-drills.js | tests/dom/study/study-trainer-drills.dom.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-07 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/content/questions.js<br>src/views/trainer-drills.js | tests/dom/study/study-trainer-drills.dom.test.js<br>tests/fixtures/sample-questions.js<br>tests/unit/app/property-based.test.js<br>tests/unit/content/questions.test.js<br>…외 1개 | DOC-ARC-05<br>DOC-ARC-09 | — |
-| DR-08 | ✅ | 테스트 | — | src/study/concept-drill.js | tests/unit/concept-drill.test.js | — | — |
+| DR-08 | ✅ | 테스트 | — | src/study/concept-drill.js | tests/dom/reader/reader-concept-link.dom.test.js<br>tests/unit/concept-drill.test.js | — | — |
 | DR-09 | ✅ | 테스트 | — | tools/build/build_textbook_print.js | tests/unit/content/textbook-print.test.js | — | — |
 | DR-10 | ✅ | 테스트 | — | ref-pipeline/tests/test_textbook_pdf.py<br>ref-pipeline/textbook_pdf.py | tests/unit/content/textbook-print.test.js | — | — |
+| DR-11 | ✅ | 테스트 | — | src/views/reader/reader-render.js | tests/dom/reader/reader-concept-link.dom.test.js | — | — |
 | ND-01 | ✅ | 테스트 | DOC-USR-03<br>DOC-USR-04<br>DOC-USR-05<br>DOC-USR-06 | src/views/trainer-drills.js<br>src/views/trainer.js | tests/dom/exams/cosmetic/review-drills-formula.dom.test.js | — | — |
 | RV-01 | ✅ | 테스트 | DOC-DSN-21 | html/views/review.html<br>index.html<br>src/views/quiz/quiz-review.js<br>src/views/quiz/quiz.js<br>…외 1개 | tests/dom/exams/cosmetic/review-drills-formula.dom.test.js<br>tests/dom/study/study-review.dom.test.js | — | — |
 | RV-02 | ✅ | 테스트 | DOC-DSN-21 | html/views/review.html<br>index.html | tests/dom/study/study-review.dom.test.js | — | — |

@@ -732,6 +732,34 @@
 .reader-note-btn.has-note { color: var(--color-primary); }
 .reader-section-card.has-note > .reader-section-header .reader-section-title { color: var(--color-primary); }
 
+/* 개념 문항 풀기 CTA (DR-11) — 절 말미 개념 드릴 딥링크. 인쇄 QR 칩(DR-09)의 디지털 대응 */
+.reader-concept-cta {
+    margin-top: var(--space-3, 0.75rem);
+    padding-top: var(--space-3, 0.75rem);
+    border-top: 1px dashed var(--border-color, rgba(255, 255, 255, 0.15));
+}
+.reader-concept-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2, 0.5rem);
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-md, 10px);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    font-size: var(--text-0-85rem, 0.85rem);
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition-base);
+}
+.reader-concept-link:hover {
+    background: var(--color-primary);
+    color: var(--color-text-on-primary, #fff);
+}
+.reader-concept-cid {
+    font-size: 0.85em;
+    opacity: 0.75;
+}
+
 /* 메모 표시 블록 — 섹션 본문 상단의 인용 카드 형태 */
 .reader-note-view {
     display: flex;

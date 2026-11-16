@@ -1,6 +1,12 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 feat(reader): 리더 절 문항 풀기 CTA — DR-11 인쇄 QR의 디지털 대응 (DOC-DSN-52 §3.3)
+
+- `reader-render.js buildSectionsHtml` — `📚 Chapter NN.` 컨텍스트 추적 + `getTocLevel(title)===1`(`M.` 번호 절)에만 §N.M 앵커 계산, 카드 본문 말미에 `<a href="#/trainer/concept/N.M">` "이 절 문항 풀기 §N.M" 링크 렌더. 인쇄 QR 칩(DR-09)과 동일 배치(절 말미)·동일 라벨 — Chapter 헤더·비번호 절(요약·확인문제·이야기 회상)·Chapter 이전 서두는 링크 없음
+- 해시 네비게이션만으로 완결 — 라우터 `trainer` 슬러그 → `initTrainer` DR-08 인터셉트 → 개념 드릴 + `#/quiz` 정규화(뒤로가기=리더). 별도 data-click 핸들러 불필요. 표준형·이야기형 공통(`Chapter NN. > M.` 공유), 웹툰 씬은 별도 경로
+- DOM 테스트 3건 신규(`reader-concept-link.dom.test.js`) — 번호 절 링크·비대상 절 제외·N.M 소제목 제외·장 경계 번호 리셋 검증
+
 ## 2026-11-16 feat(refpipe): 교재 전용 인쇄 템플릿 — 표지·목차·러닝헤드·쪽수 (DR-10)
 
 - `ref-pipeline/textbook_pdf.py` + `template/print-textbook.html` 신설 — `build_textbook_print --formats pdf`가 이 경로로 산출. Chrome print의 @page 마진박스·counter(page)·outline 미지원을 2패스+PyMuPDF로 해소: 1패스 PDF의 h2 크기 스팬(13~17pt)으로 절별 물리 쪽 추출 → 목차 쪽수 주입 2패스 → 본문 각 쪽 좌 서명·우 장명 러닝헤드 + 중앙 "- N -" 쪽수 스탬프 (표지·목차 제외). 목차는 `#id` 내부링크로 PDF GoTo 유지, 스탬프 폰트 TEXTBOOK_PDF_FONT>malgun>Noto 탐색·BMP 밖 문자 제거
