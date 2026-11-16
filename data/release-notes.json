@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261117-0d38dc9",
+    "date": "2026-11-17",
+    "notes": [
+      "[리팩터링·refs] 출제기준 저장 위치 통일 — 전 21팩 ref_md/ 직하 평탄형",
+      "[정리·release] v20261116-a66ca3b 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261116-a66ca3b",
     "date": "2026-11-16",
     "notes": [
@@ -237,16 +245,6 @@
       "a11y: 터치 타깃 축소 + 줌 패닝 단일 포인터 대체 (WCAG 2.2 2.5.7)",
       "[telemetry] 퍼널 페이로드·판정 계측 정비 (EVAL_2026-10-30 권고 #2)",
       "[정리·release] v20261113-6d0053e 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-6d0053e",
-    "date": "2026-11-13",
-    "notes": [
-      "[수정·docs:registry] DA-15 — 시험 디렉터리 동적 수집으로 시험 ID 리터럴 제거",
-      "[tools·ai] 공급자별 모델 env + .env→ai-proxy secrets 동기화 도구",
-      "[문서] 문서 정합 정리 — 인덱스·레지스트리 동기화, carework design 격리, docs:registry 게이트",
-      "[정리·release] v20261113-03813b0 스탬프 확정 [no-docs]"
     ]
   }
 ]
