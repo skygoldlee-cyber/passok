@@ -46,10 +46,11 @@ function mdFiles(dir) {
 function countCitations(text) {
   const counts = {};
   // ref_md/과목N/{doc}/ 구조 — 과목 세그먼트는 건너뛰고 문서 디렉터리만 집계
-  const re = /ref_md\/(?:과목\d\/)?([^/)#\s]+)\//g;
+  // ref_md/{doc}.md 평탄 문서 링크도 집계
+  const re = /ref_md\/(?:과목\d\/)?([^/)#\s]+)\/|ref_md\/([^/)#\s]+\.md)/g;
   let m;
   while ((m = re.exec(text))) {
-    let doc = m[1];
+    let doc = (m[1] || m[2]).replace(/\.md$/, '');
     try { doc = decodeURIComponent(doc); } catch { /* 인코딩 깨진 링크는 원형 유지 */ }
     counts[doc] = (counts[doc] || 0) + 1;
   }
@@ -58,9 +59,10 @@ function countCitations(text) {
 
 function main() {
   const strict = process.argv.includes('--strict');
-  // ref_md/과목N/{doc}/ 구조 — 과목 폴더 1단계 아래가 문서 디렉터리
+  // ref_md/과목N/{doc}/ + ref_md/{doc}.md 평탄 문서 (출제기준 등 과목 공통)
   const refDocs = [];
   for (const e of fs.readdirSync(REF_MD, { withFileTypes: true })) {
+    if (e.isFile() && e.name.endsWith('.md')) { refDocs.push(e.name.replace(/\.md$/, '')); continue; }
     if (!e.isDirectory()) continue;
     if (/^과목\d+$/.test(e.name)) {
       for (const d of fs.readdirSync(path.join(REF_MD, e.name), { withFileTypes: true })) {

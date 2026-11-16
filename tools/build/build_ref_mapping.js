@@ -44,12 +44,18 @@ const MARK_START = '<!-- refmap:auto:start -->';
 const MARK_END = '<!-- refmap:auto:end -->';
 
 // ref_md/과목N/<doc>/ 링크에서 귀속 과목 + 문서명(꼬리 제거) 추출
+// ref_md/<doc>.md 평탄 문서(출제기준 등)는 귀속 '공통'으로 표기
 // 디렉터리명은 디코딩하면 괄호를 포함하므로 인코딩 상태로 추출 후 이름만 디코딩
 function refName(raw) {
   const m = raw.match(/ref_md\/(과목\d)\/([^/]+)\//);
-  if (!m) return null;
-  const short = decodeURIComponent(m[2]).replace(/\([^)]*\)/g, '').trim();
-  return { subj: m[1].replace('과목', '과'), short };
+  if (m) {
+    const short = decodeURIComponent(m[2]).replace(/\([^)]*\)/g, '').trim();
+    return { subj: m[1].replace('과목', '과'), short };
+  }
+  const f = raw.match(/ref_md\/([^/\s)]+\.md)/);
+  if (!f) return null;
+  const short = decodeURIComponent(f[1]).replace(/\.md$/, '').replace(/\([^)]*\)/g, '').trim();
+  return { subj: '공통', short };
 }
 
 function scanTextbook(file) {
@@ -65,8 +71,8 @@ function scanTextbook(file) {
     }
     if (back || !cur) continue;
     if (!l.includes('ref_md/')) continue;
-    for (const m of l.matchAll(/\(([^)]*ref_md[^)]*)\)|ref_md\/(과목\d)\/([^/)\s]+)\//g)) {
-      const raw = m[1] || ('ref_md/' + m[2] + '/' + m[3] + '/');
+    for (const m of l.matchAll(/\(([^)]*ref_md[^)]*)\)|ref_md\/(과목\d)\/([^/)\s]+)\/|ref_md\/([^/)\s]+\.md)/g)) {
+      const raw = m[1] || (m[2] ? 'ref_md/' + m[2] + '/' + m[3] + '/' : 'ref_md/' + m[4]);
       const r = refName(raw);
       if (r) cur.docs.set(r.short + ` (${r.subj})`, true);
     }

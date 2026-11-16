@@ -1,6 +1,13 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 refactor(refs): 출제기준 저장 위치 통일 — 전 21팩 ref_md/ 직하 평탄형
+
+- **파일 이동**: 20팩 `ref_md/과목1/{문서}/{문서}.md` → `ref_md/{문서}.md` (git mv) + hazmat 파일도 명명 규약으로 통일 (`위험물산업기사 출제기준(한국산업인력공단)(2025).md`) — 출제기준은 과목 공통 문서이므로 과목 폴더 밖이 자연 귀속
+- **도구 평탄 지원**: `REF_MD_FLAT` 테이블 신설(build_pdf_registry) — REF_FILE_TO_PATH가 평탄 문서에 `ref_md/{doc}.md` 경로 생성. check_reflayout(② 루트 .md 인덱싱)·check_ref_lines·check_ref_subjects·build_ref_mapping(평탄 링크 패턴)·build_keyword_index 동일 지원
+- **규약 회귀 테스트**: tests/unit/refmd-syllabus-flat.test.js — 전 팩 평탄 1건·과목N 중첩 0건 고정
+- 게이트: reflayout·refsubjects·reflines·refmd_format·manifest·onboard·check:content 전량 통과
+
 ## 2026-11-16 feat(exam): hazmat 서브브랜드 Passzard·practiceName Danger OS 등록
 
 - exams.json hazmat — `appNameEn: "Passzard"`·`practiceName: "Danger OS"` 신설, title/logoMain/logoSub를 브랜드 규약으로 갱신 (PassOK — 위험물산업기사 (Passzard))

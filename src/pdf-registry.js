@@ -68,6 +68,9 @@ const _EXAM_TABLES = {
             "안전기준_별표4_유통안전관리시험방법.pdf": "과목3",
             "시행규칙_별표3_사용시주의사항.pdf": "과목4"
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
         "법령고시": [
             "화장품법(법률)(제21525호)(20261008).pdf",
@@ -264,6 +267,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -312,6 +318,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -361,6 +370,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -441,6 +453,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -491,6 +506,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -557,6 +575,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -620,6 +641,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
         "ref_md": [
             "과목1",
@@ -715,6 +739,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
         "ref_md": [
             "과목1",
@@ -825,6 +852,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -874,6 +904,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -907,6 +940,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -940,6 +976,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -973,6 +1012,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -1006,6 +1048,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -1039,6 +1084,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -1072,6 +1120,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -1115,6 +1166,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -1158,6 +1212,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -1214,6 +1271,9 @@ const _EXAM_TABLES = {
             "요양보호 실기 서비스 제공기준(발췌).pdf": "과목2",
             "요양보호 실기 안전·인권 기준(발췌).pdf": "과목2"
         },
+        REF_MD_FLAT: [
+            "요양보호사 출제기준(국시원)(2024).pdf"
+        ],
         REF_DIRS: {
         "ref_md": [
             "노인복지법(법률).pdf",
@@ -1291,6 +1351,9 @@ const _EXAM_TABLES = {
             "위험물안전관리법 시행규칙(부령).pdf": "과목3",
             "위험물안전관리에 관한 세부기준(소방청고시).pdf": "과목3"
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
         "ref_md": [
             "위험물안전관리법(법률).pdf",
@@ -1318,7 +1381,7 @@ const _EXAM_TABLES = {
             { name: "화재의 예방 및 안전관리에 관한 법률 시행령", file: "화재의 예방 및 안전관리에 관한 법률 시행령(대통령령).pdf", type: "md" },
             { name: "화재의 예방 및 안전관리에 관한 법률 시행규칙", file: "화재의 예방 및 안전관리에 관한 법률 시행규칙(부령).pdf", type: "md" },
             { name: "재난 및 안전관리 기본법", file: "재난 및 안전관리 기본법(법률).pdf", type: "md" },
-            { name: "위험물산업기사 출제기준(2025)", file: "위험물산업기사_출제기준_2025.pdf", type: "md" }
+            { name: "위험물산업기사 출제기준(2025)", file: "위험물산업기사 출제기준(한국산업인력공단)(2025).pdf", type: "md" }
         ]
         },
         REFERENCE_COMMON: [
@@ -1359,12 +1422,15 @@ for (const [eid, t] of Object.entries(_EXAM_TABLES)) {
     const fileToPath = {};
     /** @type {Object.<string,string>} */
     const registry = {};
+    const flatSet = new Set(/** @type {string[]} */ (t.REF_MD_FLAT || []));
     for (const dir of dirPriority) {
         for (const f of /** @type {Object.<string,string[]>} */ (refDirs)[dir] || []) {
             if (!fileToPath[f]) {
                 const base = f.replace(/\.pdf$/, '');
                 const sub = /** @type {Object.<string,string>} */ (t.REF_MD_SUBJECTS || {})[f];
-                fileToPath[f] = `${root}/참조자료/ref_md/${sub ? sub + '/' : ''}${base}/${base}.md`;
+                fileToPath[f] = flatSet.has(f)
+                    ? `${root}/참조자료/ref_md/${base}.md`
+                    : `${root}/참조자료/ref_md/${sub ? sub + '/' : ''}${base}/${base}.md`;
                 registry[f] = dir;
             }
         }
@@ -1379,7 +1445,7 @@ for (const [eid, t] of Object.entries(_EXAM_TABLES)) {
  *   SOURCE_REF_MAP?: Array<*>, KEYWORD_REF_MAP?: Array<*>, REFERENCE_FILES?: Object,
  *   REFERENCE_COMMON?: Array<*>, REFERENCE_INGREDIENTS?: Array<*>, REFERENCE_LAW?: Array<*>,
  *   NOTICE_INGREDIENT_DOCS?: Array<*>,
- *   REF_FILE_TO_PATH?: Object, REF_REGISTRY?: Object, REF_MD_SUBJECTS?: Object}}
+ *   REF_FILE_TO_PATH?: Object, REF_REGISTRY?: Object, REF_MD_SUBJECTS?: Object, REF_MD_FLAT?: string[]}}
  */
 export function getRefTables() {
     const id = getActiveExamId();
@@ -1438,6 +1504,9 @@ export function mapSourceToRef(sourceText) {
     if (!refFile) return '';
 
     const base = refFile.replace(/\.pdf$/, '');
+    if ((t.REF_MD_FLAT || []).includes(refFile)) {
+        return `${t.contentRoot || 'content'}/참조자료/ref_md/${base}.md`;
+    }
     const sub = /** @type {Object.<string,string>} */ (t.REF_MD_SUBJECTS || {})[refFile];
     return `${t.contentRoot || 'content'}/참조자료/ref_md/${sub ? sub + '/' : ''}${base}/${base}.md`;
 }

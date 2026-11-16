@@ -4,11 +4,12 @@
  *
  *   ① 물리 PDF 폴더    {contentRoot}/참조자료/{법령고시,공통,과목N,_archive}/*.pdf
  *   ② ref_md 변환본    {contentRoot}/참조자료/ref_md/과목N/{문서}/{문서}.md
+ *                      {contentRoot}/참조자료/ref_md/{문서}.md — 평탄 문서 (출제기준 등 과목 공통)
  *   ③ references.json  {contentRoot}/references.json (refDirs·referenceFiles·subjectDirMap 선언)
  *   ④ 생성 규칙        references.json docSubjectRules → ref_statements.js docSubject()
  *
  * 검증 규칙 (시험별 독립 적용):
- *   - refDirs에 등록된 PDF → ref_md/과목N/{base}/{base}.md 존재 + N == docSubject(base)
+ *   - refDirs에 등록된 PDF → ref_md/과목N/{base}/{base}.md 또는 평탄 ref_md/{base}.md 존재 + N == docSubject(base)
  *   - 물리 PDF → refDirs에 등장 (미등록 PDF 차단, _archive 제외)
  *   - ref_md/과목N/{doc} → 출처 PDF 존재(고아 감지, references.json selfAuthoredDocs 선언 문서는 면제) + 폴더 과목 == docSubject(doc)
  *   - _archive PDF → ref_md 요구 없음 / _구 ref_md는 허용(교재 참조용, 생성 제외)
@@ -86,6 +87,12 @@ function checkExam(t) {
   const refMdDocs = {}; // doc → {subject, mdPath}
   if (fs.existsSync(REF_MD)) {
     for (const e of fs.readdirSync(REF_MD, { withFileTypes: true })) {
+      if (e.isFile() && e.name.endsWith('.md')) {
+        // ref_md/{doc}.md 평탄 문서 — 출제기준 등 과목 공통 (귀속은 docSubjectRules)
+        const base = e.name.replace(/\.md$/, '');
+        refMdDocs[base] = { subject: docSubject(base, CONTENT), mdPath: path.join(REF_MD, e.name), flat: true };
+        continue;
+      }
       if (!e.isDirectory()) continue;
       const sm = e.name.match(/^과목(\d)$/);
       if (!sm) continue; // index.html 등 비과목 항목 무시

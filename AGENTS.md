@@ -78,7 +78,7 @@ npm.cmd run check:content             # 콘텐츠 통합 검증 (교재 교체 �
 
 # 참조자료 PDF → ref_md 변환·식약처 고시 감지 (ref-pipeline — Python, 별도 작업실)
 # ※ 원본 PDF·교재/*/images/*.png 마스터는 git 추적 해제 — GitHub Releases 에셋 외부 호스팅 (DOC-RBK-12). pdf_hosting.json 선언 시험만 해당
-# ※ PDF 교체/재변환 절차: ⓪ fetch:refpdfs(미복원 시) ① PDF 교체 ② convert:refs ③ verify:refs ④ ref_md_v2 → ref_md/과목N/{문서}/ 승격 ⑤ check:reffresh -- --update — 교체 PDF는 릴리스 에셋에도 업로드 (해시로 감지)
+# ※ PDF 교체/재변환 절차: ⓪ fetch:refpdfs(미복원 시) ① PDF 교체 ② convert:refs ③ verify:refs ④ ref_md_v2 → ref_md/과목N/{문서}/ 승격 (출제기준 등 과목 공통 문서는 ref_md/{문서}.md 평탄형) ⑤ check:reffresh -- --update — 교체 PDF는 릴리스 에셋에도 업로드 (해시로 감지)
 # ※ ref_md는 `#L####` 라인 인용이 의존 — 항상 시각적 줄 그대로(segment=False) 변환. 대상 시험 해석(--exam > EXAM_CONTENT_ROOT > EXAM_ID > exams.json default)은 _exam_root.py 공용
 # ※ 고시 감지 크론은 선택(Settings→Secrets LAW_OC_KEY) — 개정 원문 자동 확보·대조 절차 상세는 COMMANDS.md convert/fetch 그룹 + docs/dev/runbooks/
 ```
@@ -402,7 +402,7 @@ content/                # 시험 콘텐츠 컨테이너
     law_verified.json   # check_laws.py 수동 검증값 {"문서명": ["번호","시행일","판정"]}
     교재/                # 4과목 MD 파일 (표준형 4 + 이야기형 4 = 8파일, 총 19챕터 — 과목별 2·5·5·7)
     문제은행/            # 과목별 문제은행 MD
-    참조자료/            # 법령고시/별표/참조자료 — PDF는 공통·과목1~4 폴더, MD 변환본은 ref_md/과목N/{문서}/{문서}.md (과목 폴더가 귀속의 진실)
+    참조자료/            # 법령고시/별표/참조자료 — PDF는 공통·과목1~4 폴더, MD 변환본은 ref_md/과목N/{문서}/{문서}.md (과목 문서) + ref_md/{문서}.md 평탄형 (출제기준 등 과목 공통 문서)
       원료/              # 원료 참조자료 MD — GENERATED-TABLE 표는 knowledge/ingredients.json에서 빌드 재생성 (마커 밖 서술만 수기)
     knowledge/          # 지식DB SSOT — ingredients.json (원료 1,402종 items + meta 버전·이력, db_version.json 계승)
     audiobook/          # 오디오북 MP3 산출물 (생성 스크립트는 ref-pipeline/audiobook/)
