@@ -25,7 +25,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `all` | 67 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
 | `refs` | 6 | 참조자료 검증 묶음 — 레이아웃·귀속·신선도·인용 라인·병합 품질 |
 | `freshness` | 10 | 생성물 신선도 묶음 — 파생물 미재생성 감지 |
-| `audit` | 13 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |
+| `audit` | 14 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |
 
 ## 2. 검증 단계 카탈로그 (steps.js 레지스트리)
 
@@ -340,11 +340,12 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 |---|---|---|
 | `npm run ratchet:coverage` | `node tools/check/coverage_merge.js --ratchet` | 유닛(node:test + c8)과 DOM(vitest) 커버리지 병합 |
 
-### `audit:*` — 8개
+### `audit:*` — 9개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
 | `npm run audit:cards` | `node tools/audit/audit_card_quality.js` | 콘텐츠 품질 자동 감사 도구 |
+| `npm run audit:ce06` | `node tools/audit/audit_ce06.js` | CE-06 가독성·정보 밀도 규약 감사 (advisory) |
 | `npm run audit:combo` | `node tools/audit/audit_combo.js` | 복수정답형 생성 번들 품질 감사 |
 | `npm run audit:study` | `node tools/audit/audit_study_quality.js` | 스마트학습·맞춤학습 품질 감사 |
 | `npm run audit:tools` | `node tools/audit/audit_tool_usage.js` | tools/ 도달성·단계 생존 감사 (advisory 전용, 종료 0) |

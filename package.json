@@ -107,6 +107,7 @@
     "test:watch": "node --test --watch \"tests/unit/**/*.test.js\"",
     "serve": "node serve.js",
     "audit:cards": "node tools/audit/audit_card_quality.js",
+    "audit:ce06": "node tools/audit/audit_ce06.js",
     "check:adlint": "node tools/check/check_adlint_coverage.js",
     "check:binary": "node tools/check/check_binary.js",
     "check:manifest": "node tools/check/check_manifest.js",
