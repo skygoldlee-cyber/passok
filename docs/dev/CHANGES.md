@@ -1,6 +1,10 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 feat(check): 모의고사 권장 6회분 추가 — 준비도 표 회분 열
+
+승격 필수 3회분 위에 **권장 6회분** 계층 추가. `check:onboard` 리포트에 `모의회분` 열(min 달성 회수/권장6) + 요건 충족 팩 대상 권장량 미달 info 힌트 (hazmat 3/권장6 — 증산 권장 표시). 비차단 advisory.
+
 ## 2026-11-16 feat(check): active 승격 기준 상향 — 과목당 모의고사 3회분
 
 `check_exam_onboard` 정량 기준을 과목당 ≥20문 → **모의고사 3회 비반복 구성량**(integratedExam.questionsPerSubject×3, 미선언 60)으로 교체. NEW_EXAM_RUNBOOK §승격 기준 동기 갱신.

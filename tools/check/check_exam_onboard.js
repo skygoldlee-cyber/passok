@@ -34,6 +34,7 @@ const QUIET = process.argv.includes('--quiet');
  *  과목당 출제 문항 수는 manifest.integratedExam.questionsPerSubject 선언 우선,
  *  미선언 시 DEFAULT_Q_PER_SUBJECT로 간주한다. */
 const MOCK_ROUNDS_REQUIRED = 3;
+const MOCK_ROUNDS_RECOMMENDED = 6;
 const DEFAULT_Q_PER_SUBJECT = 20;
 /** 과목 1회 출제 문항 수 — questionsPerSubject 선언 우선, 미선언 20 간주 */
 const perSubjectQ = (manifest, subjKey) =>
@@ -41,6 +42,9 @@ const perSubjectQ = (manifest, subjKey) =>
 
 /** 과목별 요구 문항 수 — 모의고사 MOCK_ROUNDS_REQUIRED회 비반복 구성 가능량 (active 승격 기준) */
 const requiredFor = (manifest, subjKey) => MOCK_ROUNDS_REQUIRED * perSubjectQ(manifest, subjKey);
+
+/** 과목별 권장 문항 수 — 모의고사 MOCK_ROUNDS_RECOMMENDED회 비반복 구성량 (품질 권장, 비차단) */
+const recommendedFor = (manifest, subjKey) => MOCK_ROUNDS_RECOMMENDED * perSubjectQ(manifest, subjKey);
 
 /** 정식 팩 최소 sanity 바닥 — 과목당 1회분 미만이면 모의고사 1회도 비반복 구성 불가 */
 const floorFor = (manifest, subjKey) => perSubjectQ(manifest, subjKey);
@@ -183,28 +187,42 @@ for (const t of targets) {
         }
     }
 
+    // ── 모의고사 권장량(6회분) 진단 — 승격 요건(3회분) 충족 팩에만 증산 권장 안내 ──
+    if (subjects.length) {
+        const readyAll = subjects.every((s) => (qBySubject[s.key] || 0) >= requiredFor(t.manifest, s.key));
+        const recThin = subjects.filter((s) => (qBySubject[s.key] || 0) < recommendedFor(t.manifest, s.key));
+        if (readyAll && recThin.length) {
+            info(t.id, `모의고사 권장 ${MOCK_ROUNDS_RECOMMENDED}회분 미달 — ${recThin.map((s) => `${s.key}:${qBySubject[s.key] || 0}/권장${recommendedFor(t.manifest, s.key)}문`).join(', ')} (승격 요건 ${MOCK_ROUNDS_REQUIRED}회분은 충족, 증산 권장)`);
+        }
+    }
+
     // ── 선택 자산 진단 ──
     const hasRefs = fs.existsSync(path.join(cr, '참조자료'));
     const pdfHosting = fs.existsSync(path.join(cr, '참조자료', 'pdf_hosting.json'));
     if (hasRefs && !pdfHosting) info(t.id, '참조자료/ 존재 — 원본 PDF 편입 시 pdf_hosting.json 외부화 선언 검토 (DOC-RBK-12)');
     const optional = ['docs', 'knowledge', '피드백', 'number-drills'].filter((d) => fs.existsSync(path.join(cr, d)));
 
+    const minRounds = subjects.length
+        ? Math.min(...subjects.map((s) => Math.floor((qBySubject[s.key] || 0) / perSubjectQ(t.manifest, s.key))))
+        : null;
+
     rows.push({
         id: t.id, soon, tier, subjects: subjects.length,
         textbookFiles: subjects.reduce((n, s) => n + (s.chapters || []).length, 0),
         totalQ, features: Object.keys(entry.features || {}).length,
-        optional: optional.join('+') || '-',
+        minRounds, optional: optional.join('+') || '-',
     });
 }
 
 // ── 리포트 ──
 console.log('시험 팩 온보딩·승격 진단\n');
 const ID_W = Math.max(10, Math.max(...rows.map(r => r.id.length)) + 1);
-console.log('  ' + 'id'.padEnd(ID_W) + '등급'.padEnd(8) + 'tier'.padEnd(7) + '과목'.padEnd(5) + '챕터'.padEnd(5) + '문항'.padEnd(8) + 'features'.padEnd(9) + '선택자산');
+console.log('  ' + 'id'.padEnd(ID_W) + '등급'.padEnd(8) + 'tier'.padEnd(7) + '과목'.padEnd(5) + '챕터'.padEnd(5) + '문항'.padEnd(8) + '모의회분'.padEnd(9) + 'features'.padEnd(9) + '선택자산');
 for (const r of rows) {
     console.log('  ' + r.id.padEnd(ID_W) + (r.soon ? '준비중' : '정식').padEnd(8) + String(r.tier).padEnd(7)
         + String(r.subjects).padEnd(5) + String(r.textbookFiles).padEnd(5)
-        + String(r.totalQ).padEnd(8) + String(r.features).padEnd(9) + r.optional);
+        + String(r.totalQ).padEnd(8) + String(r.minRounds === null ? '-' : `${r.minRounds}/권장${MOCK_ROUNDS_RECOMMENDED}`).padEnd(9)
+        + String(r.features).padEnd(9) + r.optional);
 }
 
 for (const m of infos) console.log(`\nℹ ${m}`);
