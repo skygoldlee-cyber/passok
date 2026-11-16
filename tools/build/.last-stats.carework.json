@@ -1,22 +1,22 @@
 {
   "subjects": {
     "caretheory": {
-      "cards": 233,
-      "quizzes": 106,
+      "cards": 237,
+      "quizzes": 108,
       "files": {
         "교재/caretheory/1과목_요양보호론.md": {
-          "cards": 244,
-          "quizzes": 109
+          "cards": 248,
+          "quizzes": 111
         }
       }
     },
     "careprac": {
-      "cards": 155,
-      "quizzes": 60,
+      "cards": 156,
+      "quizzes": 62,
       "files": {
         "교재/careprac/2과목_요양보호실기.md": {
-          "cards": 156,
-          "quizzes": 60
+          "cards": 160,
+          "quizzes": 62
         }
       }
     }
