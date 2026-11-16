@@ -1,6 +1,12 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 feat(build): 교재 인쇄 QR 산출 정식화 — build_textbook_print.js + DR-09
+
+- `tools/build/build_textbook_print.js` 신설 — 표준형 교재 절 말미에 `#/trainer/concept/<cid>` QR 칩 빌드타임 주입 (tmp 파일럿 `inject_qr.mjs` 승격). 절별 문항 수는 문제은행 교재 인용→§앵커(AN-10) 해석으로 집계, 인용 파일 일치 문항만 유효·0문 절 칩 생략·칩에 문항 수 표기·:::page 펜스 앞 절 말미 배치·page-break-inside:avoid. 산출 `dist/textbook-print/`(gitignore)에 스테이징 MD+images 후 md2doc 연계 PDF·DOCX·인쇄HTML (`npm run build:textbook-print -- --exam <id>`)
+- 검증: carework 종단 실행 — 1과목 칩 17개(절별 2~14문 표기)·2과목 25개(0문 절 1개 자동 생략), PDF/DOCX/print.html 산출·DOCX 미디어 20개 정상 임베딩. 단위 테스트 6건
+- SPEC DR-09 신설 (§3.20 카운트 28→30 교정 — DR-08 반영 누락분 포함), COMMANDS 카탈로그·AGENTS 도구 목록 반영, DOC-DSN-52 Phase 2 상태 갱신
+
 ## 2026-11-16 fix(gates): domain-map에 concept-drill.js 등록
 
 `src/study/concept-drill.js`(DR-08 신규 모듈) 미분류로 저장소 전 파일 분류 게이트 실패 — platform 도메인 규칙 추가. 배포 파생물 재생성 중 발견.

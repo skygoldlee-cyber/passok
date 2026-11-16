@@ -56,13 +56,18 @@ DOC-BIZ-13의 핵심 통찰: 종이 교재·인강·CBT는 모두 정보 공급�
 - 교재 리더 섹션 도구에 "이 개념 문항 풀기" — 이미 §앵커를 알므로 `#/trainer/concept/<cid>`로 이동만 하면 됨
 - 취약 분석(AN-04)·약점 리뷰의 기존 단원 딥링크와 같은 data-click 위임 규약
 
-## 4. Phase 2 — 종이 교재 QR
+## 4. Phase 2 — 종이 교재 QR ✅ (DR-09, 2026-11-16 정식화)
 
 - 교재 DOCX/PDF 산출 시 각 절 말미에 "QR → 이 절 문항 n개" 칩 삽입
 - QR payload: `https://<호스트>/#/trainer/concept/<cid>` — 스캔 즉시 앱(또는 브라우저) 진입
-- 삽입 지점: `docx-utils.js`/`pdf-utils.js`의 섹션 렌더 훅. `wm` 인자와 같은 옵션 체계(`qr: {concept: cid}`)로 주입
-- 절별 문항 수는 build:data 시점 집계 → 0개 절은 칩 생략
-- **전제**: 인쇄 교재 산출물이 실제로 만들어져야 노출됨 — CE-06 유보 항목(인쇄 판형)과 연동되는 첫 인쇄 표면. 파일럿은 리더 인앱 버튼(3.3)부터 검증하고, 인쇄 산출물 도입 시 Phase 2 활성화
+- 절별 문항 수는 문제은행 교재 인용→§앵커 해석으로 집계 → 0개 절은 칩 생략
+
+**정식 구현**: `tools/build/build_textbook_print.js` (`npm run build:textbook-print -- --exam <id>`)
+- 표준형 MD → 절 말미 `<div class="concept-qr" data-cid>` 칩 주입 → `dist/textbook-print/<exam>/<subject>/`에 스테이징(MD+images 복사) → md2doc으로 PDF·DOCX·인쇄HTML 산출
+- 문항 집계는 인용 파일이 현재 교재와 일치하는 것만 유효 — 과목 내 다중 교재 파일의 앵커 번호는 파일 독립
+- 칩에 문항 수 표기("이 절 문항 N개 풀기"), 0문 절 자동 생략, `:::page` 펜스 앞에 절 말미 배치
+- 검증: carework — 1과목 17칩(2~14문/절)·2과목 25칩(0문 절 1개 생략), DOCX 미디어 정상 임베딩
+- 잔여: 교재 전용 템플릿(표지·목차·러닝헤드)은 별도 과제 — 현재는 md2doc 범용 print 템플릿 사용
 
 ### 4-1. 파일럿 결과 (2026-11-16, cosmetic 1과목)
 

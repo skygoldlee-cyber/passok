@@ -129,7 +129,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 
 ## 3. npm 스크립트 전체 (package.json)
 
-### `build:*` — 22개
+### `build:*` — 23개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -155,6 +155,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run build:ogimage` | `node tools/build/build_og_image.js` | 1200×630 OG 공유 미리보기 이미지 생성 |
 | `npm run build:icons` | `node tools/build/build_icons.js` | 앱 아이콘 파생 생성·검증 파이프라인 |
 | `npm run build:commands` | `node tools/build/build_command_reference.js` | docs/dev/reference/COMMANDS.md 생성기 |
+| `npm run build:textbook-print` | `node tools/build/build_textbook_print.js` | 표준형 교재 인쇄 산출물 빌드 (DR-09, DOC-DSN-52 Phase 2) |
 
 ### `sync:*` — 2개
 
