@@ -398,7 +398,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run admin:discord` | `node tools/deploy/register_admin_bot.js` | Discord 슬래시 명령 일괄 등록 (AD-11) |
 | `npm run admin:facility-backup` | `node tools/supabase/dump_facility.js` | 기관(facility) 테이블 백업·복원 (DOC-RBK-24 §2~§3 절차 도구) |
 
-### `ai:*` — 19개
+### `ai:*` — 20개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -408,6 +408,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run ai:dupcheck` | `node tools/ai/ai_dupcheck.js` | 초안 ↔ 기존 문항 유사도 상한 검사 (중복 출제 방지) |
 | `npm run ai:statements` | `node tools/ai/ai_statements.js` | 복수정답형 진술 설계: 참 진술의 거짓 반전 변형 + 재조합 후보 |
 | `npm run ai:tag` | `node tools/ai/ai_tag.js` | STANDARD_TAGS·난이도·conceptId 자동 제안 |
+| `npm run ai:trap` | `node tools/ai/ai_trap.js` | 문항 함정 유형(trap) 초안 제안 + 리뷰 편입 |
 | `npm run ai:lint` | `node tools/ai/ai_lint.js` | 발문 품질 검수 (기계 게이트가 못 잡는 영역) |
 | `npm run ai:coverage` | `node tools/ai/ai_coverage.js` | 출제 커버리지 갭 분석 |
 | `npm run ai:stale` | `node tools/ai/ai_stale_scan.js` | 법령 개정 영향 분석 (ref_md 변경 ↔ 인용 문항 재판정) |

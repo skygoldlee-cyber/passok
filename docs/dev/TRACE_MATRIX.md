@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: ae9cb32cc8e38ffb
-> 생성: 2026-11-16 · 원천: SPEC.md(715개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 7e119e3de7e324a6
+> 생성: 2026-11-16 · 원천: SPEC.md(716개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 715개 — 문서 연결 475 · 소스 연결 634 · 테스트 연결 675 · 보고서 연결 109
+**커버리지 요약**: 요구사항 716개 — 문서 연결 475 · 소스 연결 635 · 테스트 연결 676 · 보고서 연결 109
 
 ---
 
@@ -560,6 +560,7 @@
 | AI-36 | ✅ | 테스트 | — | — | tests/dom/study/study-aicoach.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
 | AI-37 | ✅ | 테스트 | — | src/ai/gen-gate.js | tests/unit/engine/gen-gate.test.js | — | — |
 | AI-38 | ✅ | 테스트 | — | — | tests/unit/engine/ai-client.test.js | — | — |
+| AI-39 | ✅ | 테스트 | — | tools/ai/ai_trap.js<br>tools/ai/lib/traps.js<br>tools/build/plugins/exams.plugin.js | tests/unit/ai/traps.test.js | — | — |
 
 ## 3.28 주관식 연습 자기채점
 

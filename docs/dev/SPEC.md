@@ -199,7 +199,7 @@
 | 3.24 | **학습 품질 감사** | 주간 배분·학습 진단 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
 | 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
 | 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트·Discord 운영 알림·조회 봇·커뮤니티 공지·기관 활동 | AD-01~AD-13 (13) |
-| 3.27 | **AI 제작 지원** | author-time AI 초안 생성·검토 파이프라인 — `tmp/ai_drafts/` → 사람 리뷰 → content/ 편입 | AI-01~AI-38 (37) |
+| 3.27 | **AI 제작 지원** | author-time AI 초안 생성·검토 파이프라인 — `tmp/ai_drafts/` → 사람 리뷰 → content/ 편입 | AI-01~AI-39 (38) |
 | 3.28 | **주관식 연습** | 서술형 답안 작성·자기채점 루브릭·자동저장 | WP-01~WP-08 (8) |
 | 3.29 | **서비스 소개 (랜딩)** | `/landing.html` 정적 소개 페이지 — 시험 카드·체험 데모(퀴즈·학습계획)·설치 CTA·SEO/OG·프로모션 진입점 | LP-01~LP-14 (14) |
 | 3.30 | **개인 맞춤 고도화** | 개념 단위 약점 진단·개인화 스케줄·합격 예측 — 기존 자산(FSRS·BKT·진술 추적·임베딩)의 조합 계층 `src/study/personalization.js` | PS-01~PS-11 (11) |
@@ -752,6 +752,7 @@
 | AI-38 | 약점 생성형 미니퀴즈 (Pro) — `quiz_gen` kind: 취약 개념·근거·기존 발문(중복 금지) 구조화 입력 → items 배열 생성. kind별 responseSchema·정규화(`KINDS[kind].read`) 라우팅, 클라이언트 `requestWeakQuizGen` + gen-gate 통과분만 `state.quiz.data` 출제 + `[AI 생성]` 컨텍스트 표시. Pro 게이트(`hasProEntitlement`) + 오답 리뷰 "AI 미니퀴즈 PRO" 버튼 | ✅ |
 | AI-35 | 주간 플랜 조정 — `plan_adjust` kind: 주간 수치(weekly_diagnosis와 동일 구조화 인자) + 여유 선택지(부족/보통/넉넉 — 자유 텍스트 없음, AI-30 준수) → 다음 주 배분·우선순위 조언 2~3문장. 학습 리듬 카드 여유 select + "AI 플랜 조정" 버튼, 조언만 표시(실제 배분 변경 없음) | ✅ |
 | AI-36 | 교재 질의응답 — `textbook_qa` kind: 자유 질문(≤200자, AI-30 개정 경계형) + SemanticIndex 임베딩 검색 근거 스니펫(top-k 진술/문항 텍스트) → 근거 범위 답변 + 인용 스니펫 목록. 학습 리듬 카드 "교재에 물어보기" 입력, 답변+인용+`AI 생성` 배지 인라인 표시 | ✅ |
+| AI-39 | **함정 유형(trap) 태그** — 문항 오지의 함정 방식을 닫힌 어휘 `TRAP_TAGS`(유사용어혼동·수치바꿔치기·절대표현·주어치환·예외조항, `src/content/questions.js` 정본)로 기술. STANDARD_TAGS와 별도 축. 문제은행 정답 블록 `> **함정:** 유형1, 유형2` 메타 행 → `exams.plugin.js`가 번들 `q.trap`으로 편입(어휘 밖 값은 빌드 실패 = 화이트리스트 게이트, `validateQuestion`도 동일 검증). `ai:trap`이 규칙 후보(lib/traps.js — 수치마스크·절대 화행·예외 표현·선지 bigram 유사도) + LLM 보완으로 초안 생성 → 사람 리뷰 후 `--write` 편입. 파일럿: carework 142문 태깅 (DOC-DSN-52 Phase 3) | ✅ |
 
 ### 3.28 주관식 연습 자기채점 (Written Practice)
 

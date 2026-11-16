@@ -158,6 +158,7 @@
     "ai:dupcheck": "node tools/ai/ai_dupcheck.js",
     "ai:statements": "node tools/ai/ai_statements.js",
     "ai:tag": "node tools/ai/ai_tag.js",
+    "ai:trap": "node tools/ai/ai_trap.js",
     "ai:lint": "node tools/ai/ai_lint.js",
     "ai:coverage": "node tools/ai/ai_coverage.js",
     "ai:stale": "node tools/ai/ai_stale_scan.js",

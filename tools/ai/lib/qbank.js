@@ -59,7 +59,7 @@ function parseQuestionBank(mdPath) {
         const line = lines[i];
         const am = line.match(/^\*\*Q(\d+)\.\*\*\s*$/);
         if (am) {
-            ans = { answer: null, answerNum: null, accepts: [], citations: [], explain: null };
+            ans = { answer: null, answerNum: null, accepts: [], citations: [], explain: null, trap: [] };
             answers.set(Number(am[1]), ans);
             continue;
         }
@@ -78,6 +78,8 @@ function parseQuestionBank(mdPath) {
         }
         const amEx = line.match(/\*\*해설\*\*\s*[:：]\s*(.+)$/);
         if (amEx) ans.explain = amEx[1].trim();
+        const amTrap = line.match(/^>\s*\*\*함정\s*[:：]?\s*\*\*\s*[:：]?\s*(.+)$/);
+        if (amTrap) ans.trap = amTrap[1].replace(/\*\*/g, '').split(/[,，·]/).map(s => s.trim()).filter(Boolean);
     }
 
     return { questions, answers };

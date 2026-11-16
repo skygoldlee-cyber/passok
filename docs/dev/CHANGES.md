@@ -1,6 +1,14 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 feat(content): 함정 유형(trap) 태그 도입 — AI-39 스키마·도구·carework 파일럿 (DOC-DSN-52 Phase 3)
+
+- `src/content/questions.js` — `TRAP_TAGS`(유사용어혼동·수치바꿔치기·절대표현·주어치환·예외조항) 어휘 정본 + `Question.trap` 필드 + `validateQuestion` 화이트리스트 검증. STANDARD_TAGS와 별도 축(함정 방식 기술)
+- `tools/build/plugins/exams.plugin.js` — 정답 블록 `> **함정:** 유형1, 유형2` 메타 행을 번들 `q.trap`으로 편입, 어휘 밖 값은 빌드 실패(화이트리스트 게이트). `sync_citation_lines.js` 메타 라인 제외에 함정 추가
+- `tools/ai/lib/traps.js` + `tools/ai/ai_trap.js` — 규칙 후보(수치마스크·절대 화행·예외 표현·선지 bigram 유사도) + LLM 보완(주어치환 등 규칙 비검출 유형)으로 `tmp/ai_drafts/<exam>/traps_*.md` 초안 → 사람 리뷰 → `ai:trap --write` 편입(기존 함정 행 교체, 재실행 안전)
+- 파일럿: carework 262문 초안 → 기계 리뷰 필터(LLM 전용 태그 근거 검증 — "옳은 것은?"형 절대표현 과적용 적발·제거) → **142문 확정 편입**(과목1 62 + 과목2 80), 번들 `q.trap` 유입 확인. 오답 분석 집계 확장은 태그 축적 후 후속
+- 양식 문서 TEXTBOOK_AUTHORING_GUIDE §4.3에 `> **함정:**` 규약 등록, 단위 테스트 15건
+
 ## 2026-11-16 feat(reader): 리더 절 문항 풀기 CTA — DR-11 인쇄 QR의 디지털 대응 (DOC-DSN-52 §3.3)
 
 - `reader-render.js buildSectionsHtml` — `📚 Chapter NN.` 컨텍스트 추적 + `getTocLevel(title)===1`(`M.` 번호 절)에만 §N.M 앵커 계산, 카드 본문 말미에 `<a href="#/trainer/concept/N.M">` "이 절 문항 풀기 §N.M" 링크 렌더. 인쇄 QR 칩(DR-09)과 동일 배치(절 말미)·동일 라벨 — Chapter 헤더·비번호 절(요약·확인문제·이야기 회상)·Chapter 이전 서두는 링크 없음

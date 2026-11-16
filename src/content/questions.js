@@ -51,8 +51,14 @@
  * @property {string} [explain]          // 전체 해설(선택)
  * @property {number} [difficulty]       // 1~5
  * @property {string[]} [tags]           // STANDARD_TAGS 어휘 권장
+ * @property {string[]} [trap]           // TRAP_TAGS 어휘 — 오지 함정 유형 (AI-39)
  * @property {string} [source]           // '제10회 기출 변형' 등
  */
+
+// 함정 유형 어휘 (DOC-DSN-52 Phase 3) — STANDARD_TAGS(주제 축)와 별도 축.
+// 오지가 수험자를 걸리게 하는 "방식"을 기술한다 — 오답 분석의 유형별 진단 입력.
+// 문제은행 정답 블록의 `> **함정:** 유형1, 유형2` 메타 행이 이 필드로 편입된다.
+const TRAP_TAGS = ['유사용어혼동', '수치바꿔치기', '절대표현', '주어치환', '예외조항'];
 
 // 과목별 만점 — 기본 시험(4과목) 기준. 다른 시험의 문항을 검증할 때는
 // validateQuestion(q, subjectMax)에 해당 시험 manifest의 과목 맵을 넘긴다.
@@ -165,6 +171,12 @@ function validateQuestion(q, subjectMax = SUBJECT_MAX) {
   } else {
     errs.push(`알 수 없는 type: ${q.type}`);
   }
+  if (q.trap !== undefined) {
+    if (!Array.isArray(q.trap)) errs.push('trap 필드는 배열이어야 함');
+    else q.trap.forEach(t => {
+      if (!TRAP_TAGS.includes(t)) errs.push(`알 수 없는 함정 유형: ${t} (허용: ${TRAP_TAGS.join('/')})`);
+    });
+  }
   return errs;
 }
 
@@ -268,5 +280,5 @@ function scoreExam(questions, responses) {
 
 export {
   normalizeText, deriveComboAnswer, generateComboOptions, validateQuestion,
-  gradeAnswer, scoreExam,
+  gradeAnswer, scoreExam, TRAP_TAGS,
 };
