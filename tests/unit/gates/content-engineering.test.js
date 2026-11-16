@@ -1,5 +1,5 @@
 // tests/unit/content-engineering.test.js — 교재 콘텐츠 공학 요구사항
-// @spec CE-01,CE-02,CE-03,CE-04,CE-05,TR-16a
+// @spec CE-01,CE-02,CE-03,CE-04,CE-05,CE-06,TR-16a
 // 표준형 교재 4과목이 학습 가이드·한 줄 요약·비교표·확인문제·용어 정리
 // 구조를 갖추는지 검증하고, 모바일 툴바 자동 숨김 구현을 고정한다.
 
@@ -95,4 +95,19 @@ test('TR-16a: 아래 스크롤 시 크롬 숨김·위 스크롤 시 복귀가 �
     .filter(f => String(f).endsWith('.css'))
     .map(f => readFileSync(join(ROOT, 'css', f), 'utf-8')).join('\n');
   assert.ok(/\.reader-chrome-hidden/.test(css), 'reader-chrome-hidden CSS 규칙');
+});
+
+// ---------- CE-06: 가독성·정보 밀도 규약 (작성지침 §3.10) ----------
+
+test('CE-06: 작성지침 §3.10이 가독성·밀도 규약 수치를 선언한다', () => {
+  const guide = readFileSync(join(ROOT, 'docs', 'dev', 'runbooks', 'TEXTBOOK_AUTHORING_GUIDE.md'), 'utf-8');
+  const s = guide.indexOf('### 3.10');
+  const e = guide.indexOf('## 4. 문제은행');
+  assert.ok(s > -1 && e > s, 'TEXTBOOK_AUTHORING_GUIDE §3.10 없음');
+  const body = guide.slice(s, e);
+  assert.ok(/40자/.test(body), '문장 40자 규칙 없음');
+  assert.ok(/4열\s*×\s*6행/.test(body), '표 4열×6행 상한 없음');
+  assert.ok(/7항목/.test(body), '목록 7항목 상한 없음');
+  assert.ok(/덜어내기 우선순위/.test(body), '덜어내기 우선순위 없음');
+  assert.ok(/캡션/.test(body), '이미지 캡션 규칙 없음');
 });

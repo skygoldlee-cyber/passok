@@ -94,6 +94,10 @@ const ALLOWED = [
         file: 'tools/import/enrich_facility_stats.js', contains: '요양보호사',
         reason: '공단 XLSX 인력현황 시트의 컬럼명 자체가 시험 도메인 콘텐츠 — 원천 데이터 스키마 키'
     },
+    {
+        file: 'tools/check/check_exam_onboard.js', contains: "'broker'",
+        reason: 'MOCK3X_GRANDFATHERED — 모의고사 3회분 기준 상향 시점에 이미 active였던 팩의 고정 스냅샷 명단. 시점 고정값이라 exams.json 해석 대상이 아님 (신규 팩은 추가 불가, 상향 이력의 정책 상수)'
+    },
 ];
 
 /* ---------- 코드 채널 추출 (주석 제거 — 문자열은 보존) ---------- */
