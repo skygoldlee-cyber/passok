@@ -1131,3 +1131,51 @@ class TestDocxBookmarks:
         xml = zipfile.ZipFile(str(out)).read("word/document.xml").decode("utf-8")
         assert "w:bookmarkStart" in xml and 'w:name="_2"' in xml
         assert 'w:anchor="_2"' in xml  # 내부 링크 → 북마크 이동
+
+
+class TestDocxImageFormats:
+    """DOCX 이미지 삽입 — SVG 래스터·WebP PIL 변환·URL 인코딩 경로 해석."""
+
+    @staticmethod
+    def _media(out: Path):
+        import zipfile
+        return [n for n in zipfile.ZipFile(str(out)).namelist() if n.startswith("word/media/")]
+
+    def test_svg_image_rasterized_to_png(self, tmp_path):
+        # <svg 직접 시작 파일도 PNG 래스터로 임베드 — 이전 [:5]==b"<svg" 비교는
+        # 5바이트 슬라이스라 절대 일치하지 않아 add_picture가 원시 SVG에 실패했다
+        (tmp_path / "d.svg").write_text(
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 50">'
+            '<rect width="100" height="50" fill="#3366cc"/></svg>',
+            encoding="utf-8")
+        src = tmp_path / "a.md"
+        src.write_text("![d](d.svg)\n", encoding="utf-8")
+        out = tmp_path / "a.docx"
+        md2doc.convert_markdown_to_docx(src, out_path=out, render_mermaid=False)
+        media = self._media(out)
+        assert any(n.lower().endswith(".png") for n in media), \
+            f"SVG가 PNG로 임베드되지 않음: {media}"
+
+    def test_webp_image_converted_to_png(self, tmp_path):
+        pytest.importorskip("PIL")
+        from PIL import Image
+        Image.new("RGB", (16, 16), (30, 90, 200)).save(tmp_path / "w.webp", "WEBP")
+        src = tmp_path / "a.md"
+        src.write_text("![w](w.webp)\n", encoding="utf-8")
+        out = tmp_path / "a.docx"
+        md2doc.convert_markdown_to_docx(src, out_path=out, render_mermaid=False)
+        media = self._media(out)
+        assert any(n.lower().endswith(".png") for n in media), \
+            f"WebP가 PNG로 임베드되지 않음: {media}"
+
+    def test_urlencoded_image_filename(self, tmp_path):
+        # 'a b.png'를 'a%20b.png'로 참조 — 로컬 경로도 unquote해야 파일을 찾는다
+        pytest.importorskip("PIL")
+        from PIL import Image
+        Image.new("RGB", (8, 8), (0, 0, 0)).save(tmp_path / "a b.png", "PNG")
+        src = tmp_path / "a.md"
+        src.write_text("![x](a%20b.png)\n", encoding="utf-8")
+        out = tmp_path / "a.docx"
+        md2doc.convert_markdown_to_docx(src, out_path=out, render_mermaid=False)
+        media = self._media(out)
+        assert media, "URL 인코딩 파일명의 이미지가 임베드되지 않음"

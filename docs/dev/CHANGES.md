@@ -1,6 +1,10 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 fix(refpipe): DOCX 이미지 포맷 대응 — SVG 래스터·WebP PIL 변환·%20 경로
+
+`md2doc.py` `_emit_image`/`_resolve_image` 수정 3건 — ① SVG 감지 `data.lstrip()[:5]`가 4바이트 `b"<svg"`와 불일치해 직접 시작 SVG 미감지 → startswith 판정 ② 로컬 이미지 경로 `urllib.parse.unquote` 누락으로 `a%20b.png` 파일 미발견 ③ WebP 등 미지원 포맷은 `_pil_png`(Pillow) PNG 재인코딩 폴백 추가. 파일럿 DOCX에 이미지 19개 전량 PNG 임베딩 확인. pytest `TestDocxImageFormats` 3건 + requirements Pillow 명시.
+
 ## 2026-11-16 test(design): 교재 인쇄 파일럿 — 절별 QR 칩 A4 출력물 검증 (DOC-DSN-52 §4-1)
 
 cosmetic 1과목 표준형 MD → `md2doc.py`로 절 말미 `concept/N.M` QR 칩이 들어간 A4 PDF 89쪽·DOCX 생성 (`tmp/print_pilot/`). `qr.js` qrPng를 Node 전처리로 재사용 — 인쇄 인코더와 앱 딥링크가 동일 출처. 발견: `--keep-html`은 입력 옆에 산출(콘텐츠 오염 주의)·DOCX는 SVG/WebP 이미지 미지원(PNG 변환 전처리 필요)·`images/`는 MD 위치 기준 해석. 설계 문서 §4-1에 결과 기록.

@@ -2696,7 +2696,8 @@ def _resolve_image(src: str, ctx: _DocxCtx) -> bytes | None:
         except Exception as e:
             logger.warning("[docx] 이미지 다운로드 실패 %s: %s", src, e)
             return None
-    p = Path(re.sub(r"(?i)^file://", "", src))
+    # MD의 URL 인코딩 경로(%20 등)를 디코딩 — HTML 경로(_embed_local_images)와 동일 규약
+    p = Path(re.sub(r"(?i)^file://", "", urllib.parse.unquote(src)))
     if not p.is_absolute():
         p = ctx.base_dir / p
     if p.is_file():
@@ -2745,17 +2746,47 @@ def _emit_image(run, node: _HNode, ctx: _DocxCtx) -> None:
         run.add_text(alt)  # 해석 실패 이미지 — 조용한 누락 대신 표기
         return
     # SVG(python-docx 미지원)는 PNG로 래스터화해 삽입 —
-    # data URI·로컬 .svg 파일 모두 해당
-    if data.lstrip()[:5].lower() in (b"<svg", b"<?xml"):
+    # data URI·로컬 .svg 파일 모두 해당. [:5] 슬라이스는 4바이트 b"<svg"와
+    # 절대 일치하지 않으므로 startswith로 판정한다.
+    head = data.lstrip()[:64].lower()
+    if head.startswith(b"<svg") or head.startswith(b"<?xml"):
         data = _svg_png(data.decode("utf-8", errors="replace"))
         if data is None:
             run.add_text(alt)
             return
     try:
         run.add_picture(BytesIO(data), width=_img_width_emu(data, node, ctx))
-    except Exception as e:
-        logger.warning("[docx] 이미지 삽입 실패 %s: %s", src, e)
-        run.add_text(alt)
+        return
+    except Exception:
+        pass
+    # WebP 등 python-docx 미지원 포맷 — PIL PNG 재인코딩 후 재시도
+    png = _pil_png(data)
+    if png is not None:
+        try:
+            run.add_picture(BytesIO(png), width=_img_width_emu(png, node, ctx))
+            return
+        except Exception as e:
+            logger.warning("[docx] 변환 이미지 삽입 실패 %s: %s", src, e)
+    else:
+        logger.warning("[docx] 이미지 삽입 실패 %s — 지원 포맷 아님", src)
+    run.add_text(alt)
+
+
+def _pil_png(data: bytes) -> bytes | None:
+    """PIL로 PNG 재인코딩 — WebP 등 python-docx 미지원 포맷 대응. PIL 부재·실패 시 None."""
+    try:
+        from PIL import Image as _PILImage
+    except Exception:
+        return None
+    try:
+        im = _PILImage.open(BytesIO(data))
+        if im.mode not in ("RGB", "RGBA", "L"):
+            im = im.convert("RGBA" if "A" in im.getbands() or im.mode == "P" else "RGB")
+        buf = BytesIO()
+        im.save(buf, "PNG")
+        return buf.getvalue()
+    except Exception:
+        return None
 
 
 def _svg_png_browser(svg_text: str) -> bytes | None:
