@@ -1,6 +1,10 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 test(design): 교재 인쇄 파일럿 — 절별 QR 칩 A4 출력물 검증 (DOC-DSN-52 §4-1)
+
+cosmetic 1과목 표준형 MD → `md2doc.py`로 절 말미 `concept/N.M` QR 칩이 들어간 A4 PDF 89쪽·DOCX 생성 (`tmp/print_pilot/`). `qr.js` qrPng를 Node 전처리로 재사용 — 인쇄 인코더와 앱 딥링크가 동일 출처. 발견: `--keep-html`은 입력 옆에 산출(콘텐츠 오염 주의)·DOCX는 SVG/WebP 이미지 미지원(PNG 변환 전처리 필요)·`images/`는 MD 위치 기준 해석. 설계 문서 §4-1에 결과 기록.
+
 ## 2026-11-16 feat(study): DR-08 개념 문항 딥링크 — DOC-DSN-52 Phase 1 구현
 
 `#/trainer/concept/<cid>` 해시 진입 시 해당 개념의 기존 문항을 선별해 5문 미니퀴즈 출제. 신규 `src/study/concept-drill.js` — normalizeConceptCid(`2.3`·`§2.3`·레거시 `L####`→CID_SECTION 환산) + pickConceptQuestions(직접 일치→같은 장 인접 보충, 오답→미풀이→풀이 이력 정렬, cap). `startConceptDrill`(quiz-review.js) — 전 과목 지연 로드 후 state.quiz.data 주입·기존 퀴즈 세션 재사용, 문항 0개면 안내 토스트. 의미 그룹명 conceptId(신고주체 등)도 원형 매칭 지원. data-click 핸들러 등록 — 인앱 링크·외부 QR 공용. 리더 섹션 버튼(§3.3)은 카드→§앵커 매핑 선행 필요로 후속. 단위 테스트 6건 + SPEC DR-08 행. (수습: trainer→quiz-review 정적 import가 trainer→…→dashboard→trainer 순환을 만들어 analysis-view 모듈 수준 훅 등록 TDZ 오류 — 호출 시점 지연 import로 차단)
