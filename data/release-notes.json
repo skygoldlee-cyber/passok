@@ -1,5 +1,20 @@
 [
   {
+    "version": "v20261116-277666b",
+    "date": "2026-11-16",
+    "notes": [
+      "[수정·gates] domain-map에 concept-drill.js 등록 — 신규 study 모듈 미분류 해소",
+      "[수정·refpipe] DOCX 이미지 포맷 대응 — SVG 래스터·WebP PIL 변환·%20 경로",
+      "[문서·design] DOC-DSN-52 §4-1 교재 인쇄 파일럿 결과 기록",
+      "[기능·study] DR-08 개념 문항 딥링크 — #/trainer/concept/<cid> 세션",
+      "[문서·design] DOC-DSN-52 학습매체 연결 설계 — 개념 딥링크 + QR + 함정 태그",
+      "[문서·biz] DOC-BIZ-13 원문 v2 반영 — §4 학습매체 확장 14종 + 구현 대조",
+      "[문서·biz] DOC-BIZ-13 팩 공통 서술로 일반화 — 범위 통합·§3 플랫폼 표기",
+      "[문서·biz] DOC-BIZ-13 학습 매체 경쟁 분석 — 전 팩 공통 docs/dev/business 등재",
+      "[정리·release] v20261116-fe4de8d 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261116-fe4de8d",
     "date": "2026-11-16",
     "notes": [
@@ -228,15 +243,6 @@
     "notes": [
       "[수정·ui] 라이선스 코드 입력 진입점 단일화 — 설정 패널만 유지",
       "[정리·release] v20261113-b582e0c 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261112-f735eae",
-    "date": "2026-11-12",
-    "notes": [
-      "[수정·css] 커뮤니티 버튼 라벨·배지 줄바꿈 규약 + 로드맵 키 등록",
-      "[기능·pro] Discord 커뮤니티 Pro 표기 — feature-plan discord_community 등록",
-      "[정리·release] v20261112-2c98b87 스탬프 확정 [no-docs]"
     ]
   }
 ]
