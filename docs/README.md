@@ -93,7 +93,7 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (103개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (104개)
 │   ├── 수위 문서 (6개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·COMPLEXITY_BACKLOG·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (20개 — README + ADR 19건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (24개)

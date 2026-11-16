@@ -618,6 +618,7 @@
 | DR-05 | **취약 진술 리뷰 패널** — conceptId 개념 그룹핑(참/거짓 혼동쌍 대조), 복습 대상 필터, 졸업 수 표시 (표면 위치는 복습 뷰 — RV-02) | ✅ |
 | DR-06 | **복수정답형 모의고사 연동** — `startComboMockExam`으로 combo 번들→시뮬 형식 평탄화, 채점 시 `deriveComboJudgments`로 진술 판정 역산 → 취약 추적·FSRS 반영 | ✅ |
 | DR-07 | **문항 스키마 정합성** — single/combo/short/ox 4유형, `deriveComboAnswer`로 정답 도출 + `validateQuestion` 유일성 검증 (정답 오타 구조적 차단, `questions.js`) | ✅ |
+| DR-08 | **개념 문항 딥링크** — `#/trainer/concept/<cid>` 해시 진입 시 conceptId 직접 일치 문항 우선·같은 장 인접 개념 보충·오답/미풀이 우선 정렬로 5문 선정 세션 (`concept-drill.js` 순수 선별 + `startConceptDrill` — 선정형이라 은행 무수정, DOC-DSN-52 Phase 1) | ✅ |
 
 ### 3.21 UI 모드 전환 (학습 ↔ 실무)
 

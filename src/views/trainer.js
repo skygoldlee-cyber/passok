@@ -377,6 +377,19 @@ export function initTrainer() {
         return;
     }
 
+    // 개념 문항 딥링크 (DR-08) — #/trainer/concept/<cid> 진입 시 개념 드릴 세션을 연다.
+    // 세션이 퀴즈 뷰로 전환되므로 해시를 #/quiz로 정규화해 뒤로가기가 훈련소로 돌아오게 한다.
+    // quiz-review는 지연 import — 정적 import면 trainer→quiz-review→dashboard→trainer 순환으로
+    // 모듈 평가 순서가 깨져 analysis-view의 모듈 수준 훅 등록이 TDZ 오류를 낸다.
+    const conceptMatch = location.hash.match(/^#\/trainer\/concept\/(.+)$/);
+    if (conceptMatch) {
+        try { history.replaceState({ view: 'quiz-view' }, '', '#/quiz'); }
+        catch (_) { /* 제한 환경 무시 */ }
+        const cid = decodeURIComponent(conceptMatch[1] || '');
+        void import('./quiz/quiz-review.js').then(m => m.startConceptDrill(cid));
+        return;
+    }
+
     // 사장된 서브패널 해시 정규화 — 나가기 버튼·딥링크 잔여 해시를 #/trainer로 복원.
     // 뒤로가기 경유(hashchange → initTrainer)는 이미 #/trainer라 이 분기를 타지 않는다.
     if (location.hash.startsWith('#/trainer/')) {

@@ -1,7 +1,7 @@
 // src/views/quiz.js - 기출 퀴즈 및 오답 복습 뷰 로직 (데일리 챌린지는 daily-challenge.js, 오답 노트는 quiz-review.js로 분리)
 // @spec Q-01~12,RV-01,PS-07,PS-08
 export { tagWrongCause, tagWrongCauseAt, wrongActionCard, wrongActionTextbook, wrongActionSimilar } from './quiz-wrong-cause.js';
-export { renderReviewList, removeWeakCard, setReviewFilter, startWeakFocusQuiz, startWeakConceptQuiz, startWeakGenQuiz } from './quiz-review.js';
+export { renderReviewList, removeWeakCard, setReviewFilter, startWeakFocusQuiz, startWeakConceptQuiz, startConceptDrill, startWeakGenQuiz } from './quiz-review.js';
 
 import { state, saveProgress } from '../../core/state.js';
 import { safeTextWithBreaks, esc } from '../../core/sanitize.js';

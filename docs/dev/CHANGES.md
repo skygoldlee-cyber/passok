@@ -1,6 +1,10 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 feat(study): DR-08 개념 문항 딥링크 — DOC-DSN-52 Phase 1 구현
+
+`#/trainer/concept/<cid>` 해시 진입 시 해당 개념의 기존 문항을 선별해 5문 미니퀴즈 출제. 신규 `src/study/concept-drill.js` — normalizeConceptCid(`2.3`·`§2.3`·레거시 `L####`→CID_SECTION 환산) + pickConceptQuestions(직접 일치→같은 장 인접 보충, 오답→미풀이→풀이 이력 정렬, cap). `startConceptDrill`(quiz-review.js) — 전 과목 지연 로드 후 state.quiz.data 주입·기존 퀴즈 세션 재사용, 문항 0개면 안내 토스트. 의미 그룹명 conceptId(신고주체 등)도 원형 매칭 지원. data-click 핸들러 등록 — 인앱 링크·외부 QR 공용. 리더 섹션 버튼(§3.3)은 카드→§앵커 매핑 선행 필요로 후속. 단위 테스트 6건 + SPEC DR-08 행. (수습: trainer→quiz-review 정적 import가 trainer→…→dashboard→trainer 순환을 만들어 analysis-view 모듈 수준 훅 등록 TDZ 오류 — 호출 시점 지연 import로 차단)
+
 ## 2026-11-16 docs(design): DOC-DSN-52 학습매체 연결 설계 — DOC-BIZ-13 갭 실행안
 
 `LEARNING_MEDIA_LINK_DESIGN.md` 신설 — 부록 A 갭 1·2순위의 실행 설계. Phase 1 `#/trainer/concept/<cid>` 개념 문항 딥링크(conceptId·cidSection·weak-items 패턴·해시 라우팅 전부 기존 자산 재사용), Phase 2 종이 교재 QR(qr.js→URL 페이로드·docx/pdf 섹션 훅), Phase 3 함정(`trap`) 태그(cosmetic 파일럿→ai:* 자동 태깅). 부록 A 표에 설계 문서 링크 반영.

@@ -162,6 +162,7 @@ src/                    # ES Modules
   study/study-tracker-adherence.js   # 계획 준수율·학습 마일스톤 (computePlanAdherence, evalStudyMilestones)
   study/study-tracker-alloc.js       # 과목별 가중 배분 순수 로직 (computeSubjectAllocation, apportionByWeight, selectExamRiskSession)
   study/statement-tracker.js  # 진술 원자(sid) 단위 오판 통계·졸업 추적 (FSRS 연동)
+  study/concept-drill.js      # 개념 문항 딥링크 선별 순수 로직 — #/trainer/concept/<cid> 진입 시 conceptId 직접 일치→같은 장 인접 보충, 오답/미풀이 우선 (DR-08, DOC-DSN-52)
   search/semantic-index.js     # 의미 유사도 이웃 인덱스 조회 — 사전계산 임베딩 번들 지연 로드 (SEM-02~04, features.semantic) + 앵커 프록시 자유 검색 searchByText (SEM-08 v1)
   study/reader-notes.js       # 리더 섹션 메모 스토어 — 북마크 키(subj|chapterKey|title) 매핑 scoped 저장 (TR-30)
   shell/shortcuts-help.js     # 키보드 단축키 도움말 — SHORTCUT_GROUPS 정본 + `?` 키 오버레이 (UX-HELP-01)
