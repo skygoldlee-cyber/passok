@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 25fc9f49b1a9af71
+> 입력 해시: 4519232f2fa615ab
 > 생성: 2026-11-16 · 원천: SPEC.md(717개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -180,22 +180,22 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| RR-01 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js<br>tools/build/build_ref_mapping.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
-| RR-02 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/views/reader/reader-ref-links.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
-| RR-03 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/views/reader/reader-ref-links.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
-| RR-04 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/keyword-index.js<br>src/views/reader/reader-ref-links.js<br>tools/build/build_keyword_index.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
-| RR-05 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js<br>src/views/reader/reader-ref-links.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
-| RR-06 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js<br>src/views/reader/reader-ref-links.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
-| RR-07 | 폐기 | 문서 검토 | DOC-REF-04<br>DOC-REF-07 | — | — | — | — |
-| RR-08 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
-| RR-09 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
-| RR-10 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
-| RR-11 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
-| RR-12 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
-| RR-13 | ✅ | 테스트 | DOC-DSN-10<br>DOC-RBK-12<br>DOC-REF-04<br>DOC-REF-07 | src/pdf-registry.js<br>src/reader/html-viewer.js<br>tools/build/build_pdf_registry.js<br>tools/check/check_link_lint.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/unit/content/ref-link-labels.test.js<br>tests/unit/gates/link-lint.test.js<br>tests/unit/gates/markdown-links.test.js<br>…외 1개 | — | — |
-| RR-14 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | css/print.css<br>src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
-| RR-15 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | css/html-viewer.css<br>src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
-| RR-16 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
+| RR-01 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | src/reader/html-viewer.js<br>tools/build/build_ref_mapping.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
+| RR-02 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | src/views/reader/reader-ref-links.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
+| RR-03 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | src/views/reader/reader-ref-links.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
+| RR-04 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | src/keyword-index.js<br>src/views/reader/reader-ref-links.js<br>tools/build/build_keyword_index.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
+| RR-05 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | src/reader/html-viewer.js<br>src/views/reader/reader-ref-links.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
+| RR-06 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | src/reader/html-viewer.js<br>src/views/reader/reader-ref-links.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/dom/reader/reader-ref-links.dom.test.js | — | — |
+| RR-07 | 폐기 | 문서 검토 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | — | — | — | — |
+| RR-08 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
+| RR-09 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
+| RR-10 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
+| RR-11 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
+| RR-12 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
+| RR-13 | ✅ | 테스트 | DOC-DSN-10<br>DOC-RBK-12<br>DOC-REF-04<br>DOC-REF-07<br>…외 1개 | src/pdf-registry.js<br>src/reader/html-viewer.js<br>tools/build/build_pdf_registry.js<br>tools/check/check_link_lint.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/unit/content/ref-link-labels.test.js<br>tests/unit/gates/link-lint.test.js<br>tests/unit/gates/markdown-links.test.js<br>…외 1개 | — | — |
+| RR-14 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | css/print.css<br>src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
+| RR-15 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | css/html-viewer.css<br>src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
+| RR-16 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
 | RR-17 | ✅ | 테스트 | DOC-DSN-10 | src/law-links.js<br>src/views/reader/reader-ref-links.js<br>tools/build/build_pdf_registry.js<br>tools/check/check_law_urls.js | tests/dom/reader/reader-ref-links.dom.test.js<br>tests/unit/gates/law-links.test.js | — | 국가법령정보센터(law.go.kr) 한글주소 — 공식 최신 통합본 링크 규약 |
 | RR-18 | ✅ | 테스트 | — | src/reader/reader-format.js | tests/unit/content/reader-format-general.test.js | — | — |
 | RR-19 | ✅ | 테스트 | DOC-DEV-05<br>DOC-DSN-10 | src/shell/notice-check.js<br>src/views/reader/reader-ref-links.js | tests/dom/reader/reader-ref-links.dom.test.js<br>tests/unit/gates/notice-check.test.js | — | 식약처 고시 개정 감지 — 시행 예정본(현행 아님) 구분, `notice_status.json` |
@@ -895,18 +895,18 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| CS-01 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | ref-pipeline/batch_convert.py<br>ref-pipeline/md2doc.py<br>src/reader/textbook-core.js<br>tools/build/build_study_md_bundle.js<br>…외 3개 | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
-| CS-02 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | tools/build/index.js<br>tools/build/plugins/exams.plugin.js<br>tools/sync/sync_textbook_files.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
-| CS-03 | ✅ | 테스트 | DOC-ADR-12<br>DOC-DSN-48<br>DOC-PPL-01<br>DOC-RBK-03<br>…외 4개 | ref-pipeline/check_laws.py<br>ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py<br>tools/check/check_ref_freshness.js<br>…외 2개 | tests/unit/gates/content-structure.test.js<br>tests/unit/refmd-syllabus-flat.test.js | DOC-ARC-08 | — |
-| CS-04 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | tools/build/index.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
-| CS-05 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | ref-pipeline/batch_convert.py<br>ref-pipeline/md2doc.py | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
-| CS-06 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | tools/build/build_keyword_index.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
-| CS-07 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | ref-pipeline/audiobook/cleanup_empty_mp3.py<br>ref-pipeline/audiobook/generate_all_mp3.py<br>ref-pipeline/audiobook/md_chunker.py<br>ref-pipeline/audiobook/mp3_merger.py<br>…외 6개 | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
-| CS-08 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | tools/build/build_study_md_bundle.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
-| CS-09 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | ref-pipeline/convert.py<br>tools/check/check_ref_subjects.js<br>tools/check/check_reflayout.js<br>tools/check/check_refmerge.js | tests/unit/gates/content-structure.test.js<br>tests/unit/refmd-syllabus-flat.test.js | DOC-ARC-08 | — |
-| CS-10 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 3개 | ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
-| CS-11 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-07 | tools/ai/ai_textbook.js | tests/unit/content/ai-textbook.test.js<br>tests/unit/content/scaffold-chapter.test.js | — | — |
-| CS-12 | ✅ | 도구 검증 | DOC-DSN-53<br>DOC-REF-07 | tools/check/check_numbering.js | — | — | — |
+| CS-01 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | ref-pipeline/batch_convert.py<br>ref-pipeline/md2doc.py<br>src/reader/textbook-core.js<br>tools/build/build_study_md_bundle.js<br>…외 3개 | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
+| CS-02 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | tools/build/index.js<br>tools/build/plugins/exams.plugin.js<br>tools/sync/sync_textbook_files.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
+| CS-03 | ✅ | 테스트 | DOC-ADR-12<br>DOC-DSN-48<br>DOC-PPL-01<br>DOC-RBK-03<br>…외 5개 | ref-pipeline/check_laws.py<br>ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py<br>tools/check/check_ref_freshness.js<br>…외 2개 | tests/unit/gates/content-structure.test.js<br>tests/unit/refmd-syllabus-flat.test.js | DOC-ARC-08 | — |
+| CS-04 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | tools/build/index.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
+| CS-05 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | ref-pipeline/batch_convert.py<br>ref-pipeline/md2doc.py | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
+| CS-06 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | tools/build/build_keyword_index.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
+| CS-07 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | ref-pipeline/audiobook/cleanup_empty_mp3.py<br>ref-pipeline/audiobook/generate_all_mp3.py<br>ref-pipeline/audiobook/md_chunker.py<br>ref-pipeline/audiobook/mp3_merger.py<br>…외 6개 | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
+| CS-08 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | tools/build/build_study_md_bundle.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
+| CS-09 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | ref-pipeline/convert.py<br>tools/check/check_ref_subjects.js<br>tools/check/check_reflayout.js<br>tools/check/check_refmerge.js | tests/unit/gates/content-structure.test.js<br>tests/unit/refmd-syllabus-flat.test.js | DOC-ARC-08 | — |
+| CS-10 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
+| CS-11 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | tools/ai/ai_textbook.js | tests/unit/content/ai-textbook.test.js<br>tests/unit/content/scaffold-chapter.test.js | — | — |
+| CS-12 | ✅ | 도구 검증 | DOC-DSN-53<br>DOC-REF-07<br>docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | tools/check/check_numbering.js | — | — | — |
 
 ## 5.5 교재 콘텐츠 학습 보조 요소
 
@@ -1153,6 +1153,7 @@
 | DOC-USR-06 | docs/exams/cosmetic/user/subject4_numbers.md | ND-01 |
 | DOC-USR-07 | docs/user/user_manual.md | MV-01, MV-02, MV-03, MV-04 |
 | DOC-USR-18 | docs/user/PRIVACY_POLICY.md | AI-25, AI-26, AI-27, AI-28, AU-08, AU-09, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, UX-MET-05, UX-MET-06, UX-MET-07, UX-MET-08 |
+| docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, CS-11, CS-12, RR-01, RR-02, RR-03, RR-04, RR-05, RR-06, RR-07, RR-08, RR-09, RR-10, RR-11, RR-12, RR-13, RR-14, RR-15, RR-16 |
 
 ## 부록 B — 테스트 갭 (소스 연결 있으나 테스트 @spec 미연결)
 
