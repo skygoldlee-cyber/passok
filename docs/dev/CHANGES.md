@@ -1,6 +1,15 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 content(refs): 참조자료 레지스트리 정규화 — hazmat 12종·carework 23종 과목 귀속·lawdb 조인
+
+- **① 교재-법령 스팟 대조**: 과목2·3 교재의 법령 수치(예방규정 배수 10/100/150/200배·중복선임 특례 7개/5개/300m·대규모 기준 3천배/50만배)를 시행령 조문과 대조 — 전부 일치. 별표 표문(지정수량표·배수합산·소화설비 1,000㎡)은 DRF 조문 응답에 미포함 — 별표 취득은 후속 과제
+- **② 레지스트리 정규화**: refDirs 디렉터리 나열 → 파일 단위 선언으로 교체, 문서명에 발령기관 꼬리((법률)(대통령령)(부령)(소방청고시)) 부여 — cosmetic 파일명 규약 준용. REF_MD_SUBJECTS hazmat 12건·carework 23건 생성으로 검색 소스 편입
+- **hazmat 보완**: lawRefs 선언 대비 누락 문서 4종 추가 생성(소방시설법 3종·소방기본법) — lawRefs 순서를 하위법령 우선으로 재정렬해 contains 매칭 정확도 확보
+- **carework 정규화**: 법령 8종 디렉터리 발령기관 꼬리 리네임 + 교재·문제은행 딥링크 31건 경로 갱신 + docSubjectRules·referenceLaw 신설
+- **advisory 해소**: subjectDefaultRefdoc-referenceLaw 미등록 경고·markStaleRefLinks 조인 불일치 전량 해소. 잔존: carework 과목2 기본 문서(자체 작성 발췌본 — lawdb 조인 비대상, 의도적 보류) + 복수 매칭 선택 정보 로그(정상)
+- 게이트: reflayout·refsubjects·enc 통과 · 인용 동기 미발견 0
+
 ## 2026-11-16 content(refs): hazmat 과목별 참조자료 8종 추가 — law.go.kr DRF 원문 ref_md
 
 - **과목별 ref_md 배치**: 과목1/위험물안전관리법 · 과목2/화재예방법+시행령+시행규칙+재난 및 안전관리 기본법 · 과목3/위험물안전관리법 시행령+시행규칙+위험물안전관리에 관한 세부기준 — 출제기준 대조 과목 귀속
