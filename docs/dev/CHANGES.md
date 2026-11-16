@@ -1,6 +1,11 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 docs(plan): 교재 보완 로드맵 신설 (DOC-DSN-53) — 전 팩 볼륨·구조·카드 규약 잔여 과제 추적 문서화
+
+- **`docs/dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md` 신설**: 21개 팩 표준형 실측(비공백 문자, A4 ~1,500자/쪽) 스냅샷 + 잔여 과제를 우선순위별로 정리 — ① ai-draft 검수(확장본 263곳·생성문항 142문·요약카드 16개) ② 헤딩 비표준 팩 정규화(indsafe·compapp2 등, labor 스크립트 재사용) ③ 게이트 미달 4과목 2차 확장(broker 3·compapp2 computer) ④ 카드 규약 확산(labor ✅ 등) ⑤ 대형 팩 심화 정책
+- 인덱스 등록: docs/README.md 문서 목록 + ID 레지스트리(DOC-DSN-53), design 버킷 31→32개
+
 ## 2026-11-16 feat(gates+content): active 티어 교재 볼륨 게이트 + labor 헤딩 표준화 + 스텁 팩 본문 확장
 
 - **교재 볼륨 게이트** (`check_exam_onboard.js`): active 티어에 과목당 표준형 본문 20,000자(~A4 13쪽) 하한 신설 — 기존 승격 팩(broker·indsafe·compapp2)은 경고, 신규 승격은 구조 오류. 리포트 표에 "교재k자" 열 추가

@@ -93,11 +93,11 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (104개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (105개)
 │   ├── 수위 문서 (6개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·COMPLEXITY_BACKLOG·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (20개 — README + ADR 19건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (24개)
-│   ├── design/                ← 설계·계획·평가 문서 (31개)
+│   ├── design/                ← 설계·계획·평가 문서 (32개)
 │   ├── reference/             ← 명세·로직·참조 문서 (18개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (4개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (2개 — 사용자 매뉴얼·개인정보처리방침 + images/ — 런타임 fetch·배포 대상)
@@ -235,6 +235,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [DEPLOY_PIPELINE_DESIGN.md](dev/design/DEPLOY_PIPELINE_DESIGN.md) | 배포 파이프라인 속도 개선 설계 — 게이트 실패 반복·CI 직렬 대기 해소 (DOC-DSN-49) |
 | [ACCOUNT_LINKING_DESIGN.md](dev/design/ACCOUNT_LINKING_DESIGN.md) | 계정 연결 설계 — 로그인 수단 간 유료 권한 통합 (linkIdentity·충돌 수동 복구 경로, DOC-DSN-50) |
 | [LEARNING_MEDIA_LINK_DESIGN.md](dev/design/LEARNING_MEDIA_LINK_DESIGN.md) | 학습매체 연결 설계 — `#/trainer/concept/<cid>` 개념 문항 딥링크 + 교재 QR + 함정(`trap`) 태그 Phase 1~3 (DOC-DSN-52, DOC-BIZ-13 부록 A 갭 실행 설계) |
+| [TEXTBOOK_IMPROVEMENT_ROADMAP.md](dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md) | 교재 보완 로드맵 — 팩별 볼륨·구조·카드 규약 현황 + 잔여 과제(ai-draft 검수·헤딩 정규화·2차 확장) 추적 (DOC-DSN-53) |
 | [CHANGES.md](dev/CHANGES.md) | 코드 변경 이력 (Changelog) — 변경의 이유와 맥락 |
 
 ### 제품 전략·기획
@@ -438,6 +439,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-50 | `docs/dev/design/ACCOUNT_LINKING_DESIGN.md` |
 | DOC-DSN-51 | `docs/exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md` |
 | DOC-DSN-52 | `docs/dev/design/LEARNING_MEDIA_LINK_DESIGN.md` |
+| DOC-DSN-53 | `docs/dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |
