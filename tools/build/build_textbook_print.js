@@ -149,6 +149,26 @@ function parseArgs(argv) {
     return a;
 }
 
+/** 장 시작은 새 쪽 — `## 📚 Chapter` 앞에 :::page 주입 (PDF·DOCX 공통 페이지 브레이크, 기존 마커는 중복 안 함) */
+function addChapterPageBreaks(mdText) {
+    const out = [];
+    for (const l of mdText.replace(/\r\n/g, '\n').split('\n')) {
+        if (CHAPTER_RE.test(l)) {
+            let prev = out.length - 1;
+            while (prev >= 0 && !out[prev].trim()) prev--;
+            if (prev < 0 || out[prev].trim() !== ':::page') out.push(':::page', '');
+        }
+        out.push(l);
+    }
+    return out.join('\n');
+}
+
+/** 표지 제목 — 교재 첫 `# ` 헤딩, 없으면 파일명 */
+function titleOf(mdText, fileName) {
+    const m = mdText.match(/^#\s+(.+)$/m);
+    return (m ? m[1].trim() : fileName.replace(/\.md$/, '')).replace(/_표준형$/, '');
+}
+
 /** 디렉터리 재귀 복사 (images/ 스테이징용) */
 function copyDir(src, dst) {
     if (!fs.existsSync(src)) return 0;
@@ -207,18 +227,32 @@ function main() {
             const stageDir = path.join(outRoot, subj.key);
             fs.mkdirSync(stageDir, { recursive: true });
             const stageMd = path.join(stageDir, file.replace(/\.md$/, '_QR.md'));
-            const { md, chips, skipped } = injectQrChips(fs.readFileSync(mdPath, 'utf-8'), { countFor, qrPngB64 });
+            const { md, chips, skipped } = injectQrChips(
+                addChapterPageBreaks(fs.readFileSync(mdPath, 'utf-8')), { countFor, qrPngB64 });
             fs.writeFileSync(stageMd, md, 'utf8');
             copyDir(path.join(path.dirname(mdPath), 'images'), path.join(stageDir, 'images'));
             console.log(`[textbook-print] ${subj.key}/${file}: 칩 ${chips.length}개 주입 (0문 절 생략 ${skipped.length}개) → ${path.relative(ROOT, stageMd)}`);
             built++;
 
             if (!args.mdOnly) {
-                const margs = [path.join(ROOT, 'ref-pipeline', 'md2doc.py'), '--cli', '--in', stageMd,
-                    '--out-dir', stageDir, '--keep-html'];
-                for (const f of args.formats) margs.push(`--${f}`);
-                const r = spawnSync(process.env.PYTHON || 'python', margs, { stdio: 'inherit' });
-                if (r.status !== 0) console.warn(`[textbook-print] md2doc 실패 (${file}, exit ${r.status}) — 스테이징 MD는 유지`);
+                const py = process.env.PYTHON || 'python';
+                // PDF는 교재 전용 템플릿(표지·목차·러닝헤드) 2패스 산출, 나머지 포맷은 md2doc
+                if (args.formats.includes('pdf')) {
+                    const title = titleOf(fs.readFileSync(mdPath, 'utf-8'), file);
+                    const r = spawnSync(py, [path.join(ROOT, 'ref-pipeline', 'textbook_pdf.py'),
+                        '--in', stageMd, '--out', stageMd.replace(/\.md$/, '.pdf'),
+                        '--title', title, '--subtitle', `${target.manifest.name || target.id} ${subj.name || ''}`.trim(),
+                        '--keep-html'], { stdio: 'inherit' });
+                    if (r.status !== 0) console.warn(`[textbook-print] textbook_pdf 실패 (${file}, exit ${r.status}) — 스테이징 MD는 유지`);
+                }
+                const rest = args.formats.filter(f => f !== 'pdf');
+                if (rest.length) {
+                    const margs = [path.join(ROOT, 'ref-pipeline', 'md2doc.py'), '--cli', '--in', stageMd,
+                        '--out-dir', stageDir];
+                    for (const f of rest) margs.push(`--${f}`);
+                    const r = spawnSync(py, margs, { stdio: 'inherit' });
+                    if (r.status !== 0) console.warn(`[textbook-print] md2doc 실패 (${file}, exit ${r.status}) — 스테이징 MD는 유지`);
+                }
             }
         }
     }
@@ -226,4 +260,4 @@ function main() {
 }
 
 if (require.main === module) main();
-module.exports = { injectQrChips, qrChipHtml, countQuestionsByAnchor };
+module.exports = { injectQrChips, qrChipHtml, countQuestionsByAnchor, addChapterPageBreaks, titleOf };

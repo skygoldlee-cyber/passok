@@ -1,5 +1,6 @@
 // tests/unit/content/textbook-print.test.js — 교재 인쇄 QR 칩 주입
-// @spec DR-09
+// @spec DR-09 — QR 칩 주입·문항 수 집계
+// @spec DR-10 — 교재 인쇄 템플릿 JS측 지원(장 쪽나눔·표지 제목 추출). Python측 2패스·스탬프는 ref-pipeline/tests/test_textbook_pdf.py
 // 표준형 교재 절 말미 개념 문항 QR 주입 — 0문 절 생략·문항 수 표기·절 경계 배치 검증
 
 import { test, after } from 'node:test';
@@ -14,7 +15,7 @@ after(() => { for (const d of _tmpDirs) fs.rmSync(d, { recursive: true, force: t
 function tmpDir(prefix) { const d = fs.mkdtempSync(path.join(os.tmpdir(), prefix)); _tmpDirs.push(d); return d; }
 
 const require = createRequire(import.meta.url);
-const { injectQrChips, qrChipHtml, countQuestionsByAnchor } =
+const { injectQrChips, qrChipHtml, countQuestionsByAnchor, addChapterPageBreaks, titleOf } =
     require('../../../tools/build/build_textbook_print.js');
 const { anchorBoundariesOf, anchorAt } = require('../../../tools/build/textbook_anchors.js');
 
@@ -83,6 +84,19 @@ test('qrChipHtml: 문항 수·cid·앵커·분할 방지 속성', () => {
     assert.ok(html.includes('data-cid="2.3"'));
     assert.ok(html.includes('page-break-inside:avoid'));
     assert.ok(html.includes('BASE64'));
+});
+
+test('addChapterPageBreaks: ## 📚 Chapter 앞 :::page 주입 — 기존 마커 중복 없음', () => {
+    const md = ['# 제목', '## 📚 Chapter 01. A', '본문', ':::page', '', '## 📚 Chapter 02. B', '본문', '## 1. 절'].join('\n');
+    const out = addChapterPageBreaks(md);
+    assert.equal((out.match(/:::page/g) || []).length, 2); // Ch02 앞 기존 마커 재사용 — 3개 아님
+    assert.ok(out.indexOf(':::page') < out.indexOf('## 📚 Chapter 01'));
+    assert.ok(!out.includes(':::page\n## 1. 절')); // 일반 절에는 미적용
+});
+
+test('titleOf: 첫 # 헤딩 → 표지 제목, 없으면 파일명(표준형 접미 제거)', () => {
+    assert.equal(titleOf('# 1과목 요양보호론 (필기)\n본문', 'x_표준형.md'), '1과목 요양보호론 (필기)');
+    assert.equal(titleOf('## 소제목만\n본문', '2과목_표준형.md'), '2과목');
 });
 
 test('countQuestionsByAnchor: Q블록 첫 교재 인용 → 파일·앵커별 집계, 참조자료·중복 인용 제외', () => {

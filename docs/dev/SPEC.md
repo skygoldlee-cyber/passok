@@ -192,7 +192,7 @@
 | 3.17 | **콘텐츠 품질 감사** | 카드 품질·복수정답·인용 유효성 자동 감사 | CQ-01~CQ-06 (6) |
 | 3.18 | **Formula OS** | 사업 유형별 실무 — 고객·포뮬러·조제 기록·원료 장부·표시사항·광고·기성품 분석·이상사례·법규 체크리스트·LOT 추적·판매내역서·동의서·재고 차감·종합 점검 보고서 출력 | FO-01~FO-70 (70) |
 | 3.19 | **계정·동기화** | Supabase 로그인·클라우드 스냅샷 동기화(선택적) | AU-01~AU-10 (10) |
-| 3.20 | **캘린더·복습·드릴** | 학습 캘린더·목표·학습 계획·계획 준수·과목 배분·뽀모도로·취약 진술 드릴 | SC-01~SC-16·RV-01~RV-04·ND-01·DR-01~DR-09 (30) |
+| 3.20 | **캘린더·복습·드릴** | 학습 캘린더·목표·학습 계획·계획 준수·과목 배분·뽀모도로·취약 진술 드릴 | SC-01~SC-16·RV-01~RV-04·ND-01·DR-01~DR-10 (31) |
 | 3.21 | **UI 모드 전환** | 학습 ↔ 실무(Formula OS) 모드 전환 | UM-01·UM-02·UM-04~UM-06 (5) |
 | 3.22 | **시험 선택·전환** | 멀티시험 팩 선택·전환·레지스트리 기반 | ES-01~ES-11 (11) |
 | 3.23 | **사용자 의견** | 피드백 폼·건의 수신 | FB-01~FB-08 (8) |
@@ -620,6 +620,7 @@
 | DR-07 | **문항 스키마 정합성** — single/combo/short/ox 4유형, `deriveComboAnswer`로 정답 도출 + `validateQuestion` 유일성 검증 (정답 오타 구조적 차단, `questions.js`) | ✅ |
 | DR-08 | **개념 문항 딥링크** — `#/trainer/concept/<cid>` 해시 진입 시 conceptId 직접 일치 문항 우선·같은 장 인접 개념 보충·오답/미풀이 우선 정렬로 5문 선정 세션 (`concept-drill.js` 순수 선별 + `startConceptDrill` — 선정형이라 은행 무수정, DOC-DSN-52 Phase 1) | ✅ |
 | DR-09 | **교재 인쇄 QR 칩** — 표준형 교재 절(`## N.M`) 말미에 `#/trainer/concept/<cid>` 딥링크 QR 칩을 빌드타임 주입 (`tools/build/build_textbook_print.js`). 절별 문항 수는 문제은행의 교재 인용을 §앵커(AN-10)로 해석해 집계 — 인용 파일이 해당 교재와 일치하는 문항만 유효, 0문 절 칩 생략·칩에 문항 수 표기·`page-break-inside:avoid` 절단 방지. 산출은 `dist/textbook-print/<exam>/<subject>/`(gitignore)에 스테이징 MD+images 복사 후 md2doc 연계로 PDF·DOCX·인쇄HTML 생성 (`npm run build:textbook-print -- --exam <id>`, DOC-DSN-52 Phase 2) | ✅ |
+| DR-10 | **교재 인쇄 템플릿** — 표지·목차·러닝헤드·쪽수를 갖춘 교재 전용 인쇄 산출 (`ref-pipeline/textbook_pdf.py` + `template/print-textbook.html`). Chrome print는 @page 마진박스·counter(page)·outline 미지원이므로 2패스 구현: 1패스 PDF에서 h2 크기 스팬(13~17pt)으로 절별 물리 쪽 추출 → 목차 쪽수 채워 2패스 → PyMuPDF로 본문 각 쪽에 좌 서명·우 장명 러닝헤드와 중앙 쪽수 스탬프 (표지·목차 전면 제외, 인쇄 쪽수 = 물리 쪽 − 전면). 목차 항목은 내부 `#id` 링크로 PDF GoTo 유지, 장 시작은 `:::page` 주입으로 새 쪽 보장. 스탬프 폰트는 `TEXTBOOK_PDF_FONT`>malgun>Noto 탐색, BMP 밖 문자 제거. DOCX는 범용 경로 유지 | ✅ |
 
 ### 3.21 UI 모드 전환 (학습 ↔ 실무)
 

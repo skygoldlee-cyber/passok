@@ -1,6 +1,12 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 feat(refpipe): 교재 전용 인쇄 템플릿 — 표지·목차·러닝헤드·쪽수 (DR-10)
+
+- `ref-pipeline/textbook_pdf.py` + `template/print-textbook.html` 신설 — `build_textbook_print --formats pdf`가 이 경로로 산출. Chrome print의 @page 마진박스·counter(page)·outline 미지원을 2패스+PyMuPDF로 해소: 1패스 PDF의 h2 크기 스팬(13~17pt)으로 절별 물리 쪽 추출 → 목차 쪽수 주입 2패스 → 본문 각 쪽 좌 서명·우 장명 러닝헤드 + 중앙 "- N -" 쪽수 스탬프 (표지·목차 제외). 목차는 `#id` 내부링크로 PDF GoTo 유지, 스탬프 폰트 TEXTBOOK_PDF_FONT>malgun>Noto 탐색·BMP 밖 문자 제거
+- `build_textbook_print`: `## 📚 Chapter` 앞 `:::page` 자동 주입(장 첫 페이지, PDF·DOCX 공통) + 표지 제목(첫 # 헤딩)·부제(시험+과목명) 전달
+- 검증: carework 1과목 A4 145쪽 — 표지·쪽수 있는 목차·러닝헤드·쪽수 스탬프 전부 텍스트 추출 확인, DOCX 회귀 없음. pytest 9건 + 단위 테스트 8건(신규 2건 포함)
+
 ## 2026-11-16 feat(build): 교재 인쇄 QR 산출 정식화 — build_textbook_print.js + DR-09
 
 - `tools/build/build_textbook_print.js` 신설 — 표준형 교재 절 말미에 `#/trainer/concept/<cid>` QR 칩 빌드타임 주입 (tmp 파일럿 `inject_qr.mjs` 승격). 절별 문항 수는 문제은행 교재 인용→§앵커(AN-10) 해석으로 집계, 인용 파일 일치 문항만 유효·0문 절 칩 생략·칩에 문항 수 표기·:::page 펜스 앞 절 말미 배치·page-break-inside:avoid. 산출 `dist/textbook-print/`(gitignore)에 스테이징 MD+images 후 md2doc 연계 PDF·DOCX·인쇄HTML (`npm run build:textbook-print -- --exam <id>`)
