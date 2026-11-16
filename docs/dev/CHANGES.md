@@ -1,6 +1,11 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-16 feat(exam): hazmat 서브브랜드 Passzard·practiceName Danger OS 등록
+
+- exams.json hazmat — `appNameEn: "Passzard"`·`practiceName: "Danger OS"` 신설, title/logoMain/logoSub를 브랜드 규약으로 갱신 (PassOK — 위험물산업기사 (Passzard))
+- data/exams.js·매니페스트 21개 재생성 — 브랜드 전파 확인, check:manifest 오류 0
+
 ## 2026-11-16 fix(refs): CI content traceability 실패 해소 — 세부기준 평탄화 분할 + 메타 패턴 확장
 
 - **ref_md 초장문 19줄**: 세부기준(소방청고시)의 DRF 접착 라인을 reflow_flat_lines로 분할 (+461줄). 분할 마커 없는 잔여 6줄은 `할 것나.`/`것4.`/`것(1)`/`것(가)` 접착 항목 규칙 4종을 도구에 추가해 해소 ((1)의·(가)의 참조는 공백 요구로 보호)
