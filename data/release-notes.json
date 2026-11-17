@@ -1,5 +1,16 @@
 [
   {
+    "version": "v20261117-0740aaf",
+    "date": "2026-11-17",
+    "notes": [
+      "[문서·hazmat] 과목1 Ch01 정정분 매핑 문서 갱신 [no-test]",
+      "[content·hazmat] 과목1 Ch01 출처 선언에 OpenStax 검증 참조 명기 [no-test]",
+      "[content·hazmat] 과목1 Ch01 결합에너지 수치·승화/응결 용어 정정 [no-test]",
+      "[수정·reader] 목차 챕터 그룹이 중간 📌 카드에서 끊기는 버그 수정",
+      "[정리·release] v20261117-4bbc870 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261117-4bbc870",
     "date": "2026-11-17",
     "notes": [
@@ -242,15 +253,6 @@
       "[리팩터링·complexity] AU-10 잔여 함수 분해 — auth-view·quiz 래칫 복구 (324→323) [no-test]",
       "[정리·release] v20261113-6c631e2 스탬프 확정 [no-docs]",
       "[정리·release] v20261112-fb182cb 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-6c631e2",
-    "date": "2026-11-13",
-    "notes": [
-      "[문서·design] AU-10 운영 적용 절차 §7 추가 — 콘솔 접근 경로 명시",
-      "[기능·auth] AU-10 로그인 수단 연결 구현 — linkIdentity·분리 방지·동일인 재활성",
-      "[정리·release] v20261113-e4f4ae9 스탬프 확정 [no-docs]"
     ]
   }
 ]
