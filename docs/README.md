@@ -531,6 +531,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-USR-24 | content/exams/carework/docs/4단계 런타임 플로우 설계.md |
 | DOC-USR-25 | `content/exams/carework/docs/학습안내서.md` |
 | DOC-USR-26 | content/exams/carework/docs/웹툰 컷 가이드라인.md |
+| DOC-USR-27 | content/exams/cosmetic/docs/인물 설정표.md |
+| DOC-USR-28 | content/exams/hazmat/docs/인물 설정표.md |
 | DOC-BIZ-01 | `docs/exams/cosmetic/business/FORMULA_OS_경쟁전략.md` |
 | DOC-BIZ-02 | `docs/exams/cosmetic/business/맞춤형화장품_조제관리사_자격증플랫폼_사업기획서.md` |
 | DOC-BIZ-03 | `docs/exams/cosmetic/business/맞춤형화장품판매업소_조사_2026-09.md` |
