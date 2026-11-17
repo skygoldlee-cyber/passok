@@ -1,6 +1,11 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-18 feat(reader): 진도 바 호버 % 표시 + ARIA 진행률
+
+- 상단 진도 바 호버 시 `읽기 진도 N%` 네이티브 툴팁 — 스크롤 핸들러의 pct를 `title`에 동기화
+- `role="progressbar"`·`aria-valuenow/aria-label` 추가 — 스크린리더가 진행률을 읽을 수 있음
+
 ## 2026-11-18 docs(spec): 이야기형 정본 문서 2종 규약을 CS-13으로 등록
 
 - **신규 요구사항**: `*_이야기형.md`/`story/` 패치 제공 팩은 ① `교재/docs/*_시리즈설정문서.md`(Series Bible — 운용 규칙)와 ② `docs/인물 설정표.md`(인물 사실 설정 정본)를 의무 보유 — 인물 충돌 시 설정표 선갱신·전 자산 동기화

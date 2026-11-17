@@ -92,6 +92,12 @@ let cachedCards = null; // 카드 목록 캐싱 (단원 전환 시 초기화됨)
                 const max = container.scrollHeight - container.clientHeight;
                 const pct = max > 0 ? (container.scrollTop / max) * 100 : 0;
                 progressFill.style.width = pct + '%';
+                const progressBar = progressFill.parentElement;
+                if (progressBar) {
+                    const pctRound = Math.round(pct);
+                    progressBar.title = `읽기 진도 ${pctRound}%`;
+                    progressBar.setAttribute('aria-valuenow', String(pctRound));
+                }
             }
             // Chrome auto-hide (TR-22/23): 아래로 스크롤 시 크롬 오버레이를 숨기고
             // 위로 올리면 복귀 — 크롬은 absolute 오버레이라 본문 높이 변동 없이

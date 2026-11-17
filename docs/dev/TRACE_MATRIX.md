@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 096cc6a890f4624e
+> 입력 해시: 75e15b4896b99124
 > 생성: 2026-11-17 · 원천: SPEC.md(719개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -142,9 +142,9 @@
 | TR-18 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader-extras.css<br>css/reader.css<br>src/views/reader/reader-toolbar.js<br>src/views/textbook-reader.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
 | TR-19 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/e2e/reader-flow.spec.js<br>tests/unit/gates/reader-analysis-gates.test.js | — | — |
 | TR-20 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/reader/image-zoom.js<br>src/views/reader/reader-render.js | tests/dom/shell/onboarding-zoom.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
-| TR-21 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader.css<br>html/views/textbook-reader.html<br>index.html<br>src/views/reader/reader-toolbar.js | tests/e2e/toc-sidebar.spec.js | — | — |
-| TR-22 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader.css<br>html/views/textbook-reader.html<br>index.html<br>src/views/reader/reader-toolbar.js | tests/e2e/toc-sidebar.spec.js | — | — |
-| TR-23 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader.css<br>html/views/textbook-reader.html<br>index.html<br>src/views/reader/reader-toolbar.js | tests/e2e/scroll-occlusion.spec.js<br>tests/e2e/toc-sidebar.spec.js | — | — |
+| TR-21 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader.css<br>html/views/textbook-reader.html<br>index.html<br>src/views/reader/reader-toolbar.js | tests/dom/reader/reader-progress.dom.test.js<br>tests/e2e/toc-sidebar.spec.js | — | — |
+| TR-22 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader.css<br>html/views/textbook-reader.html<br>index.html<br>src/views/reader/reader-toolbar.js | tests/dom/reader/reader-progress.dom.test.js<br>tests/e2e/toc-sidebar.spec.js | — | — |
+| TR-23 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader.css<br>html/views/textbook-reader.html<br>index.html<br>src/views/reader/reader-toolbar.js | tests/dom/reader/reader-progress.dom.test.js<br>tests/e2e/scroll-occlusion.spec.js<br>tests/e2e/toc-sidebar.spec.js | — | — |
 | TR-24 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-05 | — | tests/dom/reader/reader-keyboard.dom.test.js | — | — |
 | TR-25 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-05 | — | tests/dom/reader/reader-keyboard.dom.test.js | — | — |
 | TR-26 | ✅ | E2E 테스트 | DOC-RBK-07<br>DOC-REF-05 | src/reader/zoom-gestures.js | tests/dom/reader/zoom-gestures.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
