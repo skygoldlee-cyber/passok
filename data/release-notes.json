@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261118-03939b7",
+    "date": "2026-11-18",
+    "notes": [
+      "[문서] 판본 문서 갱신일 동기화 — Series Bible 인용 표기 정정 무영향 확인",
+      "[수정·content] LL-05 링크 린트 위반 해소 — 원시 경로를 DOC ID 참조로 대체",
+      "[문서·design] hazmat 실무도구 수요·경쟁 판단 반영 — 목표 재정의",
+      "[문서·design] hazmat 실무도구 설계 법령 2차 검토 반영",
+      "[수정·content] 과목3 문제은행 Series Bible 인용 경로를 교재/docs/로 갱신",
+      "[문서·design] hazmat 실무도구 설계 법령 검토 반영 — 판정·근거 전면 교정",
+      "[문서·review] cosmetic·carework 실무도구 설계 현행성 점검 반영",
+      "[문서·design] hazmat 실무도구 설계안 신설 (DOC-DSN-55)",
+      "[기능·reader] 진도 바 호버 시 읽기 진도 % 툴팁 + ARIA 진행률 표시",
+      "[수정·test] ST-07 시리즈 설정 문서 경로를 CS-13 정본 위치로 갱신"
+    ]
+  },
+  {
     "version": "v20261117-0bcf0e3",
     "date": "2026-11-17",
     "notes": [
@@ -233,20 +249,6 @@
       "[기능·carework] 문서번호 추적·QR·발행 대장 + (인) 위 서명 오버레이",
       "[정리·release] v20261114-cfd1956 스탬프 확정 [no-docs]",
       "[정리·release] v20261113-52523f5 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-a1dfc7f",
-    "date": "2026-11-13",
-    "notes": [
-      "[기능·carework] HWPX(아래한글) 양식 추출 + 출력 라벨 한글 호환 표기",
-      "[문서·carework] 전문가 검토 의뢰서 (DOC-BIZ-12) — 법무 0b 검토 패키지",
-      "[기능·ops] 기관 데이터 백업·복원 도구 + 운영 절차 런북 (법무 0b 별지2 잔여 해소)",
-      "[문서·carework] 처리방침 수탁 조항 + 계약서 리전 정정 — 법무 0b A2",
-      "[문서·carework] 개인정보처리 위탁계약서 초안 — DOC-BIZ-11, 법무 0b 산출물",
-      "[문서·carework] 기관 자체 서버DB 상황별 연동 — DSN-51 §6 추가",
-      "[문서·carework] 기관 사이트 라이선스 설계 — DOC-DSN-51",
-      "[정리·release] v20261113-be6ce0d 스탬프 확정 [no-docs]"
     ]
   }
 ]
