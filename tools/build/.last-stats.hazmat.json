@@ -11,12 +11,12 @@
       }
     },
     "fire": {
-      "cards": 76,
-      "quizzes": 12,
+      "cards": 88,
+      "quizzes": 18,
       "files": {
         "교재/fire/2과목_화재예방과 소화방법_표준형.md": {
-          "cards": 86,
-          "quizzes": 12
+          "cards": 102,
+          "quizzes": 18
         }
       }
     },
