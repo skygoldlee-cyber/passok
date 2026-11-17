@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261117-0d38dc9",
+    "date": "2026-11-17",
+    "notes": [
+      "[리팩터링·refs] 출제기준 저장 위치 통일 — 전 21팩 ref_md/ 직하 평탄형",
+      "[정리·release] v20261116-a66ca3b 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261117-caa65fa",
     "date": "2026-11-17",
     "notes": [
@@ -12,14 +20,6 @@
       "[수정·hazmat] physchem 교재 2차 출판 검수 — 분류 정정·중복 잔재·표기 마무리",
       "[수정·hazmat] physchem 교재 출판 검수 — 내용 오류·표기 통일·중복 압축·확인문제 보강",
       "[정리·release] v20261117-0d38dc9 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261117-0d38dc9",
-    "date": "2026-11-17",
-    "notes": [
-      "[리팩터링·refs] 출제기준 저장 위치 통일 — 전 21팩 ref_md/ 직하 평탄형",
-      "[정리·release] v20261116-a66ca3b 스탬프 확정 [no-docs]"
     ]
   },
   {
@@ -171,6 +171,16 @@
     ]
   },
   {
+    "version": "v20261114-45cd04b",
+    "date": "2026-11-14",
+    "notes": [
+      "[CI] CI 재실행 트리거 [no-docs]",
+      "[기능·carework] 문서번호 추적·QR·발행 대장 + (인) 위 서명 오버레이",
+      "[정리·release] v20261114-cfd1956 스탬프 확정 [no-docs]",
+      "[정리·release] v20261113-52523f5 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261113-a1dfc7f",
     "date": "2026-11-13",
     "notes": [
@@ -251,6 +261,82 @@
       "spec+css: UX-TXT-01 신설 — 단어 단위 줄바꿈 전면 상속",
       "[ux] 컨트롤 간 여백 규약 정합 — 모바일 nowrap 액션 행 정리",
       "[정리·release] v20261113-437ccbe 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-437ccbe",
+    "date": "2026-11-13",
+    "notes": [
+      "a11y: 터치 타깃 축소 + 줌 패닝 단일 포인터 대체 (WCAG 2.2 2.5.7)",
+      "[telemetry] 퍼널 페이로드·판정 계측 정비 (EVAL_2026-10-30 권고 #2)",
+      "[정리·release] v20261113-6d0053e 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-6d0053e",
+    "date": "2026-11-13",
+    "notes": [
+      "[수정·docs:registry] DA-15 — 시험 디렉터리 동적 수집으로 시험 ID 리터럴 제거",
+      "[tools·ai] 공급자별 모델 env + .env→ai-proxy secrets 동기화 도구",
+      "[문서] 문서 정합 정리 — 인덱스·레지스트리 동기화, carework design 격리, docs:registry 게이트",
+      "[정리·release] v20261113-03813b0 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-03813b0",
+    "date": "2026-11-13",
+    "notes": [
+      "[리팩터링·complexity] 5라운드 — ai-client 파싱 클러스터·_bankLoad 분해 (330→324)",
+      "[리팩터링·complexity] 4라운드 — formatSectionContentForReader 파이프라인화 (331→330)",
+      "[리팩터링·complexity] 3라운드 — buildWeeklyDiagnosisPrompt·populateSubjectSelects·flowNext 분해 (334→331)",
+      "[리팩터링·complexity] 2라운드 — _requestAi·evaluateStability 분해 (336→334)",
+      "[리팩터링·complexity] 상위 복잡도 3함수 분해 — markStoryNarrative·populateExamCards·care-flow _render (340→336)",
+      "[정리·release] v20261112-f735eae 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-52523f5",
+    "date": "2026-11-13",
+    "notes": [
+      "[수정·ui] 라이선스 코드 입력 진입점 단일화 — 설정 패널만 유지",
+      "[정리·release] v20261113-b582e0c 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261112-f735eae",
+    "date": "2026-11-12",
+    "notes": [
+      "[수정·css] 커뮤니티 버튼 라벨·배지 줄바꿈 규약 + 로드맵 키 등록",
+      "[기능·pro] Discord 커뮤니티 Pro 표기 — feature-plan discord_community 등록",
+      "[정리·release] v20261112-2c98b87 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261112-2c98b87",
+    "date": "2026-11-12",
+    "notes": [
+      "[수정·ux] Discord 커뮤니티 버튼 플랫폼 기본 초대 폴백 — 전 시험 노출",
+      "[정리·release] v20261112-033eb8a 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261112-033eb8a",
+    "date": "2026-11-12",
+    "notes": [
+      "[기능·quality] 순환복잡도 래칫 도입 — check:cplx (기준선 340건)",
+      "[기능·deploy] comingSoon 팩 스테이징 제외 — 배포 페이로드 −63%",
+      "[정리·release] v20261112-a14877c 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261112-a14877c",
+    "date": "2026-11-12",
+    "notes": [
+      "[수정·build] law-links.js lawUrlFor 가드를 제너레이터 템플릿에 동기화",
+      "[문서·commands] check:uia 카탈로그 동기화",
+      "[기능·types] Phase 2 마무리 — strict 통합 + noImplicitReturns·exactOptionalPropertyTypes 활성화",
+      "[기능·types] 컴파일러 강화 Phase 2 — noUncheckedIndexedAccess 전량 소진·활성화",
+      "[정리·release] v20261112-0fd18e3 스탬프 확정 [no-docs]"
     ]
   }
 ]

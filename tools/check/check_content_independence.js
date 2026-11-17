@@ -98,6 +98,18 @@ const ALLOWED = [
         file: 'tools/check/check_exam_onboard.js', contains: "'broker'",
         reason: 'MOCK3X_GRANDFATHERED — 모의고사 3회분 기준 상향 시점에 이미 active였던 팩의 고정 스냅샷 명단. 시점 고정값이라 exams.json 해석 대상이 아님 (신규 팩은 추가 불가, 상향 이력의 정책 상수)'
     },
+    {
+        file: 'tools/check/check_exam_onboard.js', contains: "'indsafe'",
+        reason: '동일 — MOCK3X_GRANDFATHERED grandfathered 팩 id'
+    },
+    {
+        file: 'tools/check/check_exam_onboard.js', contains: "'compapp2'",
+        reason: '동일 — MOCK3X_GRANDFATHERED grandfathered 팩 id'
+    },
+    {
+        file: 'tools/check/check_exam_onboard.js', contains: "'carework'",
+        reason: '동일 — MOCK3X_GRANDFATHERED grandfathered 팩 id'
+    },
 ];
 
 /* ---------- 코드 채널 추출 (주석 제거 — 문자열은 보존) ---------- */
