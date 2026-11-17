@@ -14,6 +14,8 @@ import { hasProEntitlement, proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { requestWeakQuizGen } from '../../ai/ai-client.js';
 import { filterGeneratedItems } from '../../ai/gen-gate.js';
 import { computeWrongCauseSummary, getWrongCauseLabels } from '../../study/recommendations.js';
+import { normalizeConceptCid, pickConceptQuestions } from '../../study/concept-drill.js';
+import { DataLoader } from '../../content/data-loader.js';
 import { shuffle } from '../../core/utils.js';
 import { updateGlobalStats } from '../dashboard.js';
 import { _beginQuizRun } from './quiz.js';
@@ -240,6 +242,38 @@ export function startWeakConceptQuiz() {
     }
     state.quiz.data = /** @type {Array<*>} */ (shuffle(items));
     _beginQuizRun();
+}
+
+/**
+ * 개념 문항 딥링크 세션 (DR-08, DOC-DSN-52 Phase 1) — `#/trainer/concept/<cid>`
+ * 진입 시 해당 개념의 기존 문항을 선별해 미니퀴즈로 출제한다.
+ * 선정형(은행 재편성)이라 신규 콘텐츠 없이 동작 — 문항 0개면 안내만 하고 복귀.
+ * @param {string} cidRaw - 해시 슬러그 (`2.3`·`§2.3`·레거시 `L####`)
+ */
+export async function startConceptDrill(cidRaw) {
+    // §앵커 환산 실패 시 conceptId 원형(의미 그룹명 등)으로도 선별을 시도한다
+    const cid = normalizeConceptCid(cidRaw, window.CID_SECTION || {}) || String(cidRaw || '').trim();
+    if (!cid) {
+        showToast('개념 주소를 해석하지 못했습니다.', 'info');
+        return;
+    }
+    const subs = DataLoader.getSubjectList();
+    await Promise.all(subs.map((/** @type {*} */ s) => DataLoader.loadSubject(s.key)));
+    const wrongIds = new Set(
+        Object.keys(state.quizResults || {}).filter(id => !(state.quizResults[id] || {}).correct));
+    const solvedIds = new Set(Object.keys(state.quizResults || {}));
+    const items = pickConceptQuestions(window.STUDY_DATA || {}, cid, {
+        cap: 5, wrongIds, solvedIds, cidSection: window.CID_SECTION || {},
+    });
+    if (!items.length) {
+        showToast(`개념 ${esc(cid)} 문항이 아직 없습니다 — 교재 해당 절을 먼저 학습하세요.`, 'info');
+        return;
+    }
+    state.quiz.data = /** @type {Array<*>} */ (shuffle(items));
+    state.quiz.diagnostic = false;
+    switchView('quiz-view', { scrollTop: true });
+    _beginQuizRun();
+    showToast(`개념 ${esc(cid)} 문항 ${items.length}개를 출제했습니다.`, 'info');
 }
 
 /**

@@ -200,6 +200,7 @@ const AUDIT_STEPS = [
   npmStep('audit:adlint', 'check:adlint', '감사', '광고 문구 사전 커버리지 감사 (FO-68)', { prio: 'p2' }),
   npmStep('audit:lawurls', 'check:lawurls', '감사', 'law.go.kr 라이브 링크 검증 (외부 드리프트 — 네트워크 필요)', { prio: 'p2' }),
   nodeStep('audit:onboard', 'tools/check/check_exam_onboard.js', '감사', '시험 팩 온보딩·승격 진단 (comingSoon↔콘텐츠 정합·필수 선언·선택 자산)', { prio: 'p2' }),
+  nodeStep('audit:ce06', 'tools/audit/audit_ce06.js', '감사', 'CE-06 가독성·정보 밀도 감사 — 문장·문단·표·목록·도식 규약 위반 지표 (원문 인용 섹션 면제, 비차단)', { prio: 'p2' }),
   nodeStep('audit:tools', 'tools/audit/audit_tool_usage.js', '감사', 'tools/ 도달성·죽은 단계 감사 — 진입점→import 그래프 도달 불가 파일·프리셋 미소속 단계', { prio: 'p2' }),
   nodeStep('audit:gateutil', 'tools/audit/audit_gate_utility.js', '감사', 'P2 단계 효용 감사 — 실행 텔레메트리·기준선 갱신 이력으로 미발화/고빈도 게이트 식별', { prio: 'p2' }),
 ];

@@ -1,6 +1,10 @@
-// @spec BP-01,CS-02
+// @spec BP-01,CS-02,AI-39
 const fs = require('fs');
 const path = require('path');
+
+// 함정 유형 어휘 (AI-39, DOC-DSN-52 Phase 3) — 정본은 src/content/questions.js의 TRAP_TAGS.
+// Node 24는 CJS의 require(ESM)를 지원 — 어휘 이원화 없이 정본을 직접 참조한다.
+const { TRAP_TAGS } = require(path.join(__dirname, '..', '..', '..', 'src', 'content', 'questions.js'));
 
 // 마크다운 링크 → 라벨만 추출.
 // ](<url>) 형태는 URL 내부 괄호가 허용되므로 일반 ](…) 보다 먼저 처리해야
@@ -119,6 +123,21 @@ const parseExamFile = (filePath, examId, examTitle) => {
         continue;
       }
 
+      // 신형식: > **함정:** 유형1, 유형2 → trap 배열 (AI-39 — TRAP_TAGS 화이트리스트,
+      // 어휘 위반은 빌드 실패로 게이트). currentQuestion은 answersMap 엔트리.
+      const trapMatch = line.match(/^>\s*\*\*함정\s*[:：]?\s*\*\*\s*[:：]?\s*(.+)$/);
+      if (trapMatch) {
+        if (currentQuestion) {
+          const traps = trapMatch[1].replace(/\*\*/g, '').split(/[,，·]/).map(s => s.trim()).filter(Boolean);
+          const bad = traps.filter(t => !TRAP_TAGS.includes(t));
+          if (bad.length) {
+            throw new Error(`${path.basename(filePath)}: 알 수 없는 함정 유형 "${bad.join(', ')}" — 허용 어휘: ${TRAP_TAGS.join('/')}`);
+          }
+          currentQuestion.trap = [...new Set([...(currentQuestion.trap || []), ...traps])];
+        }
+        continue;
+      }
+
       const ansMatch = line.match(ansRegex1) || line.match(ansRegex2) || line.match(ansRegex3) || line.match(ansRegex4) || line.match(ansRegexAlt);
       if (ansMatch) {
         const qNum = parseInt(ansMatch[1]);
@@ -167,6 +186,7 @@ const parseExamFile = (filePath, examId, examTitle) => {
     if (ansData) {
       q.answer = ansData.answer;
       q.explanation = ansData.explanation || '별도의 상세 해설이 제공되지 않습니다.';
+      if (ansData.trap && ansData.trap.length) q.trap = ansData.trap;
     }
     
     if (q.type === 'ox' && q.options.length === 0) {

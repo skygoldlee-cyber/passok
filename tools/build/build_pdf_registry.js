@@ -76,7 +76,7 @@ function examTablesJs(refs, contentRoot) {
     `        ${JSON.stringify(k)}: ${JSON.stringify(v)}`
   ).join(',\n');
 
-  // REF_MD_SUBJECTS: 파일명 → ref_md 과목 서브디렉터리 (ref_md/과목N/{doc}/ 구조)
+  // REF_MD_SUBJECTS: 파일명 → 논리 과목 귀속 (ref_md/과목N/{doc}/ 디렉터리 or 평탄 문서의 docSubjectRules 귀속)
   const refMdSubjects = {};
   for (const files of Object.values(obj(refs.refDirs))) {
     for (const f of files) {
@@ -88,6 +88,18 @@ function examTablesJs(refs, contentRoot) {
     `            ${JSON.stringify(k)}: ${JSON.stringify(v)}`
   ).join(',\n');
 
+  // REF_MD_FLAT: ref_md/{doc}.md 직하 평탄 문서 (출제기준 등 과목 공통 — 과목N/{doc}/ 외부)
+  const refMdFlat = [];
+  for (const files of Object.values(obj(refs.refDirs))) {
+    for (const f of files) {
+      const base = f.replace(/\.pdf$/i, '');
+      if (fs.existsSync(path.join(WORKSPACE_DIR, contentRoot, '참조자료', 'ref_md', base + '.md'))) {
+        refMdFlat.push(f);
+      }
+    }
+  }
+  const refMdFlatJs = refMdFlat.map(f => `            ${JSON.stringify(f)}`).join(',\n');
+
   return `        contentRoot: ${JSON.stringify(contentRoot)},
         SUBJECT_DIR_MAP: {
 ${subjMapJs}
@@ -95,6 +107,9 @@ ${subjMapJs}
         REF_MD_SUBJECTS: {
 ${refMdSubjJs}
         },
+        REF_MD_FLAT: [
+${refMdFlatJs}
+        ],
         REF_DIRS: {
 ${refDirsJs}
         },
@@ -366,12 +381,15 @@ for (const [eid, t] of Object.entries(_EXAM_TABLES)) {
     const fileToPath = {};
     /** @type {Object.<string,string>} */
     const registry = {};
+    const flatSet = new Set(/** @type {string[]} */ (t.REF_MD_FLAT || []));
     for (const dir of dirPriority) {
         for (const f of /** @type {Object.<string,string[]>} */ (refDirs)[dir] || []) {
             if (!fileToPath[f]) {
                 const base = f.replace(/\\.pdf$/, '');
                 const sub = /** @type {Object.<string,string>} */ (t.REF_MD_SUBJECTS || {})[f];
-                fileToPath[f] = \`\${root}/참조자료/ref_md/\${sub ? sub + '/' : ''}\${base}/\${base}.md\`;
+                fileToPath[f] = flatSet.has(f)
+                    ? \`\${root}/참조자료/ref_md/\${base}.md\`
+                    : \`\${root}/참조자료/ref_md/\${sub ? sub + '/' : ''}\${base}/\${base}.md\`;
                 registry[f] = dir;
             }
         }
@@ -386,7 +404,7 @@ for (const [eid, t] of Object.entries(_EXAM_TABLES)) {
  *   SOURCE_REF_MAP?: Array<*>, KEYWORD_REF_MAP?: Array<*>, REFERENCE_FILES?: Object,
  *   REFERENCE_COMMON?: Array<*>, REFERENCE_INGREDIENTS?: Array<*>, REFERENCE_LAW?: Array<*>,
  *   NOTICE_INGREDIENT_DOCS?: Array<*>,
- *   REF_FILE_TO_PATH?: Object, REF_REGISTRY?: Object, REF_MD_SUBJECTS?: Object}}
+ *   REF_FILE_TO_PATH?: Object, REF_REGISTRY?: Object, REF_MD_SUBJECTS?: Object, REF_MD_FLAT?: string[]}}
  */
 export function getRefTables() {
     const id = getActiveExamId();
@@ -445,6 +463,9 @@ export function mapSourceToRef(sourceText) {
     if (!refFile) return '';
 
     const base = refFile.replace(/\\.pdf$/, '');
+    if ((t.REF_MD_FLAT || []).includes(refFile)) {
+        return \`\${t.contentRoot || 'content'}/참조자료/ref_md/\${base}.md\`;
+    }
     const sub = /** @type {Object.<string,string>} */ (t.REF_MD_SUBJECTS || {})[refFile];
     return \`\${t.contentRoot || 'content'}/참조자료/ref_md/\${sub ? sub + '/' : ''}\${base}/\${base}.md\`;
 }

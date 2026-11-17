@@ -96,7 +96,7 @@ const ALLOWED = [
     },
     {
         file: 'tools/check/check_exam_onboard.js', contains: "'broker'",
-        reason: "MOCK3X_GRANDFATHERED — 기준 상향(과목당 3회분) 이전 active 승격 팩의 id 목록. 승격 진단 도구라 팩 id를 직접 열거하는 것이 기능"
+        reason: 'MOCK3X_GRANDFATHERED — 모의고사 3회분 기준 상향 시점에 이미 active였던 팩의 고정 스냅샷 명단. 시점 고정값이라 exams.json 해석 대상이 아님 (신규 팩은 추가 불가, 상향 이력의 정책 상수)'
     },
     {
         file: 'tools/check/check_exam_onboard.js', contains: "'indsafe'",

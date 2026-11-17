@@ -152,7 +152,8 @@ function syncManifest(target) {
         const { standard, story } = scanTextbookDir(dirAbs);
         for (const ch of s.chapters || []) {
             // dir 안에 표준형이 정확히 1개면 file을 그걸로 동기화
-            if (standard.length === 1 && ch.file !== standard[0]) {
+            // file에 '/'가 있으면 다른 과목 dir을 가리키는 수동 상호참조(예: ../theory/…) — 자동 동기화 대상 아님
+            if (standard.length === 1 && ch.file !== standard[0] && !(ch.file || '').includes('/')) {
                 report(target.id, 'manifest', `chapters.file "${ch.file}" → "${standard[0]}" (${s.dir})`);
                 edits.push({ search: `"file": ${jstr(ch.file)}`, replace: `"file": ${jstr(standard[0])}` });
                 ch.file = standard[0];

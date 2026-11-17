@@ -49,7 +49,7 @@
     "src/content/questions.js": {
       "count": 3,
       "max": 30,
-      "sum": 69
+      "sum": 71
     },
     "src/core/exam-context.js": {
       "count": 3,
@@ -263,8 +263,8 @@
     },
     "src/pdf-registry.js": {
       "count": 1,
-      "max": 12,
-      "sum": 12
+      "max": 15,
+      "sum": 15
     },
     "src/practice-registry.js": {
       "count": 2,
@@ -403,8 +403,13 @@
     },
     "src/study/analysis-engine.js": {
       "count": 11,
-      "max": 29,
-      "sum": 184
+      "max": 31,
+      "sum": 186
+    },
+    "src/study/concept-drill.js": {
+      "count": 2,
+      "max": 18,
+      "sum": 33
     },
     "src/study/fsrs.js": {
       "count": 1,
@@ -603,8 +608,8 @@
     },
     "src/views/reader/reader-render.js": {
       "count": 4,
-      "max": 24,
-      "sum": 69
+      "max": 31,
+      "sum": 76
     },
     "src/views/reader/reader-toolbar.js": {
       "count": 4,
@@ -649,7 +654,7 @@
     "src/views/trainer.js": {
       "count": 3,
       "max": 17,
-      "sum": 44
+      "sum": 47
     },
     "src/written/written-grading.js": {
       "count": 2,

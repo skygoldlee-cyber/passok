@@ -1,5 +1,5 @@
 // views/reader-render.js — 챕터 본문 렌더 (TOC·섹션 카드·바인딩)
-// @spec TR-01,TR-02,TR-05,TR-15,TR-20,TR-27,SA-02,SA-03,UX-FORM-05
+// @spec TR-01,TR-02,TR-05,TR-15,TR-20,TR-27,SA-02,SA-03,UX-FORM-05,DR-11
 // textbook-reader.js에서 분리 — _renderChapterContentInternal 이관.
 // 파일 로컬 상태를 쓰지 않는 순수 렌더 경로로, 진입·상태·진척은
 // textbook-reader.js / reader-progress.js가 담당한다.
@@ -365,11 +365,18 @@ function renderAudioPlayerArea(hasAudio) {
 // 섹션 카드 HTML 생성 — ctx: {subjId, chapterIdx, displayTitles, bookmarks,
 //   chapterRefPath, subjRefFiles, subjDirName, glossaryItems, notes}
 /** @param {*} chapter @param {*} ctx */
-function buildSectionsHtml(chapter, ctx) {
+export function buildSectionsHtml(chapter, ctx) {
     const { subjId, chapterIdx, displayTitles, bookmarks,
         chapterRefPath, subjRefFiles, subjDirName, glossaryItems, notes } = ctx;
     let html = '';
+    // 절 문항 딥링크 (DR-11) — "📚 Chapter NN." 이후 "M." 번호 절은 §N.M 앵커를 갖는다.
+    // 인쇄 QR 칩(DR-09)과 동일 번호 규약 — Chapter 헤더·비번호 절(요약·확인문제·서두)은 링크 없음.
+    let chapterNum = 0;
     chapter.sections.forEach((/** @type {*} */ section, /** @type {number} */ idx) => {
+        const chMatch = String(section.title || '').match(/Chapter\s+(\d+)\./i);
+        if (chMatch) chapterNum = parseInt(chMatch[1] || '0', 10);
+        const conceptCid = (chapterNum > 0 && getTocLevel(section.title) === 1)
+            ? `${chapterNum}.${parseInt(String(section.title || '').trim(), 10)}` : '';
         // 북마크 키는 콘텐츠 기반 (TR-27) — 위치 인덱스는 교재 편집 시 오표적
         const bookmarkKey = bookmarkKeyOf(subjId,
             chapter.chapterKey || chapter.chapterTitle || chapterIdx, section.title || idx);
@@ -406,6 +413,7 @@ function buildSectionsHtml(chapter, ctx) {
                     <div class="textbook-reader-section-content">
                         ${sectionHtml}
                     </div>
+                    ${conceptCid ? `<div class="reader-concept-cta"><a class="reader-concept-link" href="#/trainer/concept/${conceptCid}"><i class="fa-solid fa-circle-question" aria-hidden="true"></i> 이 절 문항 풀기 <span class="reader-concept-cid">§${conceptCid}</span></a></div>` : ''}
                 </div>
             </div>
         `;

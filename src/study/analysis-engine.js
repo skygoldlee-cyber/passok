@@ -1,5 +1,5 @@
 // src/analysis-engine.js — 학습 진단(analysis-view) 심층 분석 순수 로직
-// @spec AN-01,AN-02,AN-07,AN-08,AN-09,D-16,D-21,D-22,SC-15
+// @spec AN-01,AN-02,AN-07,AN-08,AN-09,AN-11,D-16,D-21,D-22,SC-15
 //
 // 모든 함수는 DOM 비의존·과목 무관 — 데이터를 주입받아 계산만 한다.
 // 과목 키/단원명은 manifest·question_chapters·statement_stats에서 동적으로 해석하므로
@@ -308,6 +308,63 @@ export function computeSubjectWeakChapters(p) {
         g.chapters.length = Math.min(g.chapters.length, perSubj);
     });
     return out.sort((a, b) => a.minMastery - b.minMastery);
+}
+
+// @spec AN-11
+/**
+ * 함정 유형(trap)별 오답 집계 — 오답 문항의 `q.trap` 태그를 모아
+ * "당신은 ○○ 유형에 약합니다" 유형 진단의 근거로 쓴다 (AN-11, AI-39 후속).
+ * 해석 경로 (문항 단위 — trap이 없는 문항은 집계에서 제외):
+ *   - 퀴즈 정오 전건(quizResults): weak_(quiz|exam)_ 접두사 정규화 →
+ *     resolveQuiz의 로드된 번들 `quiz.trap` 우선, 실패 시 p.questionTraps 폴백
+ *   - 약점 카드 weak_sim_<exam>_q<N>: 오답 증거 1건으로 집계 (단원 집계와 동일 규약)
+ * trap은 복수 태그 가능 — 한 문항이 두 유형을 가지면 양쪽에 각각 1건씩 반영.
+ * @param {object} p
+ * @param {*} p.quizResults state.quizResults (정오 전건)
+ * @param {Set<string>} [p.weakCards] state.weakCards
+ * @param {*} [p.questionTraps] QUESTION_TRAPS 맵 — { "<exam>_q<N>": ["수치바꿔치기", ...] }
+ * @param {(id:string)=>{quiz:*,subjectId:string}|null} [p.resolveQuiz] weak-items.resolveWrongQuiz
+ * @returns {Array<{tag:string, attempts:number, wrongs:number, wrongRate:number}>}
+ *   오답이 있는 유형만 — 오답 수 내림차순, 동률 시 오답률·시도 수 순
+ */
+export function computeTrapWeakness(p) {
+    const buckets = new Map(); // tag → {tag, attempts, wrongs}
+    const bump = (/** @type {string} */ tag, /** @type {boolean} */ correct) => {
+        const cur = buckets.get(tag) || { tag, attempts: 0, wrongs: 0 };
+        cur.attempts++;
+        if (!correct) cur.wrongs++;
+        buckets.set(tag, cur);
+    };
+    /** 문항 id → 함정 태그 배열 */
+    const trapsFor = (/** @type {string} */ id) => {
+        const sim = parseWeakSimId(id);
+        const qid = sim ? `${sim.examId}_q${sim.qNum}` : id.replace(/^weak_(quiz|exam)_/, '');
+        const resolved = p.resolveQuiz ? p.resolveQuiz(qid) : null;
+        if (resolved && resolved.quiz && Array.isArray(resolved.quiz.trap) && resolved.quiz.trap.length) {
+            return resolved.quiz.trap;
+        }
+        return (p.questionTraps && p.questionTraps[qid]) || [];
+    };
+
+    // (a) 퀴즈 정오 전건 → 시도·정답 모두 집계 (오답률 산출용)
+    Object.entries(p.quizResults || {}).forEach(([id, r]) => {
+        if (!r) return;
+        const traps = trapsFor(id);
+        if (!traps.length) return;
+        traps.forEach((/** @type {string} */ t) => bump(t, !!r.correct));
+    });
+    // (b) 약점 카드 weak_sim_* — 오답 증거 1건 (단원 집계 (b)와 동일 규약)
+    (p.weakCards ? [...p.weakCards] : []).forEach(id => {
+        const sim = parseWeakSimId(id);
+        if (!sim) return;
+        const traps = (p.questionTraps && p.questionTraps[`${sim.examId}_q${sim.qNum}`]) || [];
+        traps.forEach((/** @type {string} */ t) => bump(t, false));
+    });
+
+    return [...buckets.values()]
+        .filter(b => b.wrongs > 0)
+        .map(b => ({ ...b, wrongRate: b.attempts > 0 ? b.wrongs / b.attempts : 0 }))
+        .sort((a, b) => (b.wrongs - a.wrongs) || (b.wrongRate - a.wrongRate) || (b.attempts - a.attempts));
 }
 
 /* =======================================================
@@ -637,6 +694,7 @@ export function computeStudyPattern(calendar) {
  * @param {*} [p.plan] SC-06 계획 준수 요약 {weekActual, weekTarget, percent, statusLabel}
  * @param {Array<*>|null} [p.planBySubject] SC-11 과목별 준수 행 [{name, done, cards, quizDone, quizzes}] — 주간 배분 대비 실적
  * @param {*|null} [p.recEffect] AN-06 evaluateRecommendationEffect 결과 — 지난 추천 대상 과목의 정답률 변화
+ * @param {Array<*>} [p.trapWeakness] AN-11 computeTrapWeakness 결과 — 함정 유형별 오답 집계 (있으면 상위 2유형 표기)
  * @param {*|null} [p.actual] AN-05 getActualResult 결과 — 실제 시험 자가 보고 {passed, score}
  * @param {number} [p.bias] AN-05 computeCalibrationBias 결과 — 0이면 보정 표기 생략
  * @param {string|null} [p.ddayLabel] D-day 표기
@@ -674,6 +732,11 @@ export function buildWeeklyReportText(p) {
         if (p.pattern.topBand) bits.push(`집중 시간대 ${p.pattern.topBand.label}`);
         if (p.pattern.topDow) bits.push(`최다 요일 ${p.pattern.topDow.label}`);
         if (bits.length) lines.push(`■ 학습 패턴: ${bits.join(' · ')}`);
+    }
+    // AN-11 — 함정 유형 진단: computeTrapWeakness 결과의 상위 유형을 리포트에 표기
+    const tw = (p.trapWeakness || []).filter((/** @type {*} */ t) => t.wrongs > 0).slice(0, 2);
+    if (tw.length) {
+        lines.push(`■ 취약 함정 유형: ${tw.map((/** @type {*} */ t) => `${t.tag} (오답 ${t.wrongs}건)`).join(' · ')}`);
     }
     if (p.plan) {
         lines.push(`■ 주간 계획 대비: 카드 ${p.plan.weekActual}/${p.plan.weekTarget}장 (${p.plan.percent}%) — ${p.plan.statusLabel}`);

@@ -64,6 +64,7 @@ import {
     startDiagnosticQuiz,
     requestAiFeedback,
     startWeakConceptQuiz,
+    startConceptDrill,
     startWeakGenQuiz
 } from '../views/quiz/quiz.js';
 import {
@@ -620,6 +621,7 @@ const DELEGATED_HANDLERS = {
     tagWrongCause, tagWrongCauseAt, wrongActionCard, wrongActionTextbook, wrongActionSimilar,
     requestAiFeedback,
     startWeakConceptQuiz,
+    startConceptDrill,
     startWeakGenQuiz,
     startDiagnosticQuiz,
     // 실제 시험 결과 자가 보고 (C1)

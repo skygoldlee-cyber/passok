@@ -152,6 +152,8 @@ function buildForExam(target) {
         for (const f of REF_DIRS[dir] || []) {
             const base = f.replace(/\.pdf$/, '');
             if (!REF_FILE_TO_PATH[f]) {
+                const flat = `${contentRoot}/참조자료/ref_md/${base}.md`;
+                if (fs.existsSync(path.join(ROOT, flat))) { REF_FILE_TO_PATH[f] = flat; continue; }
                 const sub = docSubject(base, path.join(ROOT, contentRoot));
                 REF_FILE_TO_PATH[f] = `${contentRoot}/참조자료/ref_md/${sub ? `과목${sub}/` : ''}${base}/${base}.md`;
             }

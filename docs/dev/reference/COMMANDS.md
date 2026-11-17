@@ -25,7 +25,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `all` | 67 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
 | `refs` | 6 | 참조자료 검증 묶음 — 레이아웃·귀속·신선도·인용 라인·병합 품질 |
 | `freshness` | 10 | 생성물 신선도 묶음 — 파생물 미재생성 감지 |
-| `audit` | 13 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |
+| `audit` | 14 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |
 
 ## 2. 검증 단계 카탈로그 (steps.js 레지스트리)
 
@@ -129,7 +129,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 
 ## 3. npm 스크립트 전체 (package.json)
 
-### `build:*` — 22개
+### `build:*` — 23개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -155,6 +155,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run build:ogimage` | `node tools/build/build_og_image.js` | 1200×630 OG 공유 미리보기 이미지 생성 |
 | `npm run build:icons` | `node tools/build/build_icons.js` | 앱 아이콘 파생 생성·검증 파이프라인 |
 | `npm run build:commands` | `node tools/build/build_command_reference.js` | docs/dev/reference/COMMANDS.md 생성기 |
+| `npm run build:textbook-print` | `node tools/build/build_textbook_print.js` | 표준형 교재 인쇄 산출물 빌드 (DR-09, DOC-DSN-52 Phase 2) |
 
 ### `sync:*` — 2개
 
@@ -340,11 +341,12 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 |---|---|---|
 | `npm run ratchet:coverage` | `node tools/check/coverage_merge.js --ratchet` | 유닛(node:test + c8)과 DOM(vitest) 커버리지 병합 |
 
-### `audit:*` — 8개
+### `audit:*` — 9개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
 | `npm run audit:cards` | `node tools/audit/audit_card_quality.js` | 콘텐츠 품질 자동 감사 도구 |
+| `npm run audit:ce06` | `node tools/audit/audit_ce06.js` | CE-06 가독성·정보 밀도 규약 감사 (advisory) |
 | `npm run audit:combo` | `node tools/audit/audit_combo.js` | 복수정답형 생성 번들 품질 감사 |
 | `npm run audit:study` | `node tools/audit/audit_study_quality.js` | 스마트학습·맞춤학습 품질 감사 |
 | `npm run audit:tools` | `node tools/audit/audit_tool_usage.js` | tools/ 도달성·단계 생존 감사 (advisory 전용, 종료 0) |
@@ -396,7 +398,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run admin:discord` | `node tools/deploy/register_admin_bot.js` | Discord 슬래시 명령 일괄 등록 (AD-11) |
 | `npm run admin:facility-backup` | `node tools/supabase/dump_facility.js` | 기관(facility) 테이블 백업·복원 (DOC-RBK-24 §2~§3 절차 도구) |
 
-### `ai:*` — 19개
+### `ai:*` — 20개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -406,6 +408,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run ai:dupcheck` | `node tools/ai/ai_dupcheck.js` | 초안 ↔ 기존 문항 유사도 상한 검사 (중복 출제 방지) |
 | `npm run ai:statements` | `node tools/ai/ai_statements.js` | 복수정답형 진술 설계: 참 진술의 거짓 반전 변형 + 재조합 후보 |
 | `npm run ai:tag` | `node tools/ai/ai_tag.js` | STANDARD_TAGS·난이도·conceptId 자동 제안 |
+| `npm run ai:trap` | `node tools/ai/ai_trap.js` | 문항 함정 유형(trap) 초안 제안 + 리뷰 편입 |
 | `npm run ai:lint` | `node tools/ai/ai_lint.js` | 발문 품질 검수 (기계 게이트가 못 잡는 영역) |
 | `npm run ai:coverage` | `node tools/ai/ai_coverage.js` | 출제 커버리지 갭 분석 |
 | `npm run ai:stale` | `node tools/ai/ai_stale_scan.js` | 법령 개정 영향 분석 (ref_md 변경 ↔ 인용 문항 재판정) |

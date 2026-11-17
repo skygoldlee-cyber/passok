@@ -67,6 +67,8 @@ function buildFileToPath(contentRoot, refs) {
     for (const f of refDirs[dir] || []) {
       const base = f.replace(/\.pdf$/i, '');
       if (!map[f]) {
+        const flat = `${contentRoot}/참조자료/ref_md/${base}.md`;
+        if (fs.existsSync(path.join(ROOT, flat))) { map[f] = flat; continue; }
         const sub = docSubject(base, path.join(ROOT, contentRoot));
         map[f] = `${contentRoot}/참조자료/ref_md/${sub ? `과목${sub}/` : ''}${base}/${base}.md`;
       }

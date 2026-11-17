@@ -1,6 +1,6 @@
 {
   "name": "passok",
-  "version": "2026.11.15",
+  "version": "2026.11.17",
   "description": "PassOK — 멀티시험 자격시험 스마트 학습 플랫폼",
   "engines": {
     "node": ">=24"
@@ -107,6 +107,7 @@
     "test:watch": "node --test --watch \"tests/unit/**/*.test.js\"",
     "serve": "node serve.js",
     "audit:cards": "node tools/audit/audit_card_quality.js",
+    "audit:ce06": "node tools/audit/audit_ce06.js",
     "check:adlint": "node tools/check/check_adlint_coverage.js",
     "check:binary": "node tools/check/check_binary.js",
     "check:manifest": "node tools/check/check_manifest.js",
@@ -157,6 +158,7 @@
     "ai:dupcheck": "node tools/ai/ai_dupcheck.js",
     "ai:statements": "node tools/ai/ai_statements.js",
     "ai:tag": "node tools/ai/ai_tag.js",
+    "ai:trap": "node tools/ai/ai_trap.js",
     "ai:lint": "node tools/ai/ai_lint.js",
     "ai:coverage": "node tools/ai/ai_coverage.js",
     "ai:stale": "node tools/ai/ai_stale_scan.js",
@@ -182,7 +184,8 @@
     "check:terms": "node tools/check/check_terms.js",
     "audit:specfresh": "node tools/audit/audit_spec_fresh.js",
     "audit:doclinks": "node tools/audit/audit_doc_links.js",
-    "check:provenance": "node tools/check/check_doc_provenance.js"
+    "check:provenance": "node tools/check/check_doc_provenance.js",
+    "build:textbook-print": "node tools/build/build_textbook_print.js"
   },
   "keywords": [
     "cosmetics",

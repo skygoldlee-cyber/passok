@@ -68,6 +68,9 @@ const _EXAM_TABLES = {
             "안전기준_별표4_유통안전관리시험방법.pdf": "과목3",
             "시행규칙_별표3_사용시주의사항.pdf": "과목4"
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
         "법령고시": [
             "화장품법(법률)(제21525호)(20261008).pdf",
@@ -264,6 +267,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -312,6 +318,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -361,6 +370,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -441,6 +453,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -491,6 +506,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -557,6 +575,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -620,6 +641,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
         "ref_md": [
             "과목1",
@@ -715,6 +739,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
         "ref_md": [
             "과목1",
@@ -825,6 +852,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -874,6 +904,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -907,6 +940,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -940,6 +976,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -973,6 +1012,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -1006,6 +1048,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -1039,6 +1084,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -1072,6 +1120,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -1115,6 +1166,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -1158,6 +1212,9 @@ const _EXAM_TABLES = {
         REF_MD_SUBJECTS: {
 
         },
+        REF_MD_FLAT: [
+
+        ],
         REF_DIRS: {
 
         },
@@ -1190,12 +1247,58 @@ const _EXAM_TABLES = {
         "careprac": "과목2"
         },
         REF_MD_SUBJECTS: {
-
+            "노인복지법(법률).pdf": "과목1",
+            "노인복지법 시행령(대통령령).pdf": "과목1",
+            "노인복지법 시행규칙(부령).pdf": "과목1",
+            "노인장기요양보험법(법률).pdf": "과목1",
+            "노인장기요양보험법 시행령(대통령령).pdf": "과목1",
+            "노인장기요양보험법 시행규칙(부령).pdf": "과목1",
+            "치매관리법(법률).pdf": "과목1",
+            "치매관리법 시행령(대통령령).pdf": "과목1",
+            "노인학대 신고의 접수 및 상담방법 등 운영기준에 관한 고시.pdf": "과목1",
+            "요양보호사 실무경력자의 재가장기요양기관 관리책임자 양성 교육과정.pdf": "과목1",
+            "요양보호사 출제기준(국시원)(2024).pdf": "과목1",
+            "장기요양 본인부담금 감경에 관한 고시.pdf": "과목1",
+            "장기요양 비용 계산 기준(2026).pdf": "과목1",
+            "장기요양급여 제공기준 및 급여비용 산정방법 등에 관한 고시.pdf": "과목1",
+            "장기요양급여비용 청구 및 심사·지급업무 처리기준.pdf": "과목1",
+            "장기요양기관 대상 인권교육 운영 및 교육기관 지정 등에 관한 고시.pdf": "과목1",
+            "장기요양기관 평가방법 등에 관한 고시.pdf": "과목1",
+            "장기요양기관 폐쇄회로 텔레비전의 해상도 등 고시.pdf": "과목1",
+            "장기요양등급판정기준에 관한 고시.pdf": "과목1",
+            "장기요양보험료 경감고시.pdf": "과목1",
+            "기관 평가 대비 실무 기준(발췌).pdf": "과목2",
+            "요양보호 실기 서비스 제공기준(발췌).pdf": "과목2",
+            "요양보호 실기 안전·인권 기준(발췌).pdf": "과목2"
         },
+        REF_MD_FLAT: [
+            "요양보호사 출제기준(국시원)(2024).pdf"
+        ],
         REF_DIRS: {
         "ref_md": [
-            "과목1",
-            "과목2"
+            "노인복지법(법률).pdf",
+            "노인복지법 시행령(대통령령).pdf",
+            "노인복지법 시행규칙(부령).pdf",
+            "노인장기요양보험법(법률).pdf",
+            "노인장기요양보험법 시행령(대통령령).pdf",
+            "노인장기요양보험법 시행규칙(부령).pdf",
+            "치매관리법(법률).pdf",
+            "치매관리법 시행령(대통령령).pdf",
+            "노인학대 신고의 접수 및 상담방법 등 운영기준에 관한 고시.pdf",
+            "요양보호사 실무경력자의 재가장기요양기관 관리책임자 양성 교육과정.pdf",
+            "요양보호사 출제기준(국시원)(2024).pdf",
+            "장기요양 본인부담금 감경에 관한 고시.pdf",
+            "장기요양 비용 계산 기준(2026).pdf",
+            "장기요양급여 제공기준 및 급여비용 산정방법 등에 관한 고시.pdf",
+            "장기요양급여비용 청구 및 심사·지급업무 처리기준.pdf",
+            "장기요양기관 대상 인권교육 운영 및 교육기관 지정 등에 관한 고시.pdf",
+            "장기요양기관 평가방법 등에 관한 고시.pdf",
+            "장기요양기관 폐쇄회로 텔레비전의 해상도 등 고시.pdf",
+            "장기요양등급판정기준에 관한 고시.pdf",
+            "장기요양보험료 경감고시.pdf",
+            "기관 평가 대비 실무 기준(발췌).pdf",
+            "요양보호 실기 서비스 제공기준(발췌).pdf",
+            "요양보호 실기 안전·인권 기준(발췌).pdf"
         ]
         },
         SOURCE_REF_MAP: [
@@ -1214,7 +1317,14 @@ const _EXAM_TABLES = {
 
         ],
         REFERENCE_LAW: [
-
+        { name: "노인복지법", file: "노인복지법(법률).pdf", type: "pdf", dir: "ref_md" },
+        { name: "노인복지법 시행령", file: "노인복지법 시행령(대통령령).pdf", type: "pdf", dir: "ref_md" },
+        { name: "노인복지법 시행규칙", file: "노인복지법 시행규칙(부령).pdf", type: "pdf", dir: "ref_md" },
+        { name: "노인장기요양보험법", file: "노인장기요양보험법(법률).pdf", type: "pdf", dir: "ref_md" },
+        { name: "노인장기요양보험법 시행령", file: "노인장기요양보험법 시행령(대통령령).pdf", type: "pdf", dir: "ref_md" },
+        { name: "노인장기요양보험법 시행규칙", file: "노인장기요양보험법 시행규칙(부령).pdf", type: "pdf", dir: "ref_md" },
+        { name: "치매관리법", file: "치매관리법(법률).pdf", type: "pdf", dir: "ref_md" },
+        { name: "치매관리법 시행령", file: "치매관리법 시행령(대통령령).pdf", type: "pdf", dir: "ref_md" }
         ],
         NOTICE_INGREDIENT_DOCS: [
 
@@ -1223,13 +1333,42 @@ const _EXAM_TABLES = {
     "hazmat": {
         contentRoot: "content/exams/hazmat",
         SUBJECT_DIR_MAP: {
-
+        "physchem": "과목1",
+        "fire": "과목2",
+        "hazprop": "과목3"
         },
         REF_MD_SUBJECTS: {
-
+            "위험물안전관리법(법률).pdf": "과목1",
+            "화재의 예방 및 안전관리에 관한 법률(법률).pdf": "과목2",
+            "화재의 예방 및 안전관리에 관한 법률 시행령(대통령령).pdf": "과목2",
+            "화재의 예방 및 안전관리에 관한 법률 시행규칙(부령).pdf": "과목2",
+            "소방시설 설치 및 관리에 관한 법률(법률).pdf": "과목2",
+            "소방시설 설치 및 관리에 관한 법률 시행령(대통령령).pdf": "과목2",
+            "소방시설 설치 및 관리에 관한 법률 시행규칙(부령).pdf": "과목2",
+            "소방기본법(법률).pdf": "과목2",
+            "재난 및 안전관리 기본법(법률).pdf": "과목2",
+            "위험물안전관리법 시행령(대통령령).pdf": "과목3",
+            "위험물안전관리법 시행규칙(부령).pdf": "과목3",
+            "위험물안전관리에 관한 세부기준(소방청고시).pdf": "과목3"
         },
-        REF_DIRS: {
+        REF_MD_FLAT: [
 
+        ],
+        REF_DIRS: {
+        "ref_md": [
+            "위험물안전관리법(법률).pdf",
+            "화재의 예방 및 안전관리에 관한 법률(법률).pdf",
+            "화재의 예방 및 안전관리에 관한 법률 시행령(대통령령).pdf",
+            "화재의 예방 및 안전관리에 관한 법률 시행규칙(부령).pdf",
+            "소방시설 설치 및 관리에 관한 법률(법률).pdf",
+            "소방시설 설치 및 관리에 관한 법률 시행령(대통령령).pdf",
+            "소방시설 설치 및 관리에 관한 법률 시행규칙(부령).pdf",
+            "소방기본법(법률).pdf",
+            "재난 및 안전관리 기본법(법률).pdf",
+            "위험물안전관리법 시행령(대통령령).pdf",
+            "위험물안전관리법 시행규칙(부령).pdf",
+            "위험물안전관리에 관한 세부기준(소방청고시).pdf"
+        ]
         },
         SOURCE_REF_MAP: [
 
@@ -1238,7 +1377,12 @@ const _EXAM_TABLES = {
 
         ],
         REFERENCE_FILES: {
-
+        "law": [
+            { name: "화재의 예방 및 안전관리에 관한 법률 시행령", file: "화재의 예방 및 안전관리에 관한 법률 시행령(대통령령).pdf", type: "md" },
+            { name: "화재의 예방 및 안전관리에 관한 법률 시행규칙", file: "화재의 예방 및 안전관리에 관한 법률 시행규칙(부령).pdf", type: "md" },
+            { name: "재난 및 안전관리 기본법", file: "재난 및 안전관리 기본법(법률).pdf", type: "md" },
+            { name: "위험물산업기사 출제기준(2025)", file: "위험물산업기사 출제기준(한국산업인력공단)(2025).pdf", type: "md" }
+        ]
         },
         REFERENCE_COMMON: [
 
@@ -1247,7 +1391,15 @@ const _EXAM_TABLES = {
 
         ],
         REFERENCE_LAW: [
-
+        { name: "위험물안전관리법", file: "위험물안전관리법(법률).pdf", type: "pdf", dir: "ref_md" },
+        { name: "위험물안전관리법 시행령", file: "위험물안전관리법 시행령(대통령령).pdf", type: "pdf", dir: "ref_md" },
+        { name: "위험물안전관리법 시행규칙", file: "위험물안전관리법 시행규칙(부령).pdf", type: "pdf", dir: "ref_md" },
+        { name: "위험물안전관리에 관한 세부기준", file: "위험물안전관리에 관한 세부기준(소방청고시).pdf", type: "pdf", dir: "ref_md" },
+        { name: "화재의 예방 및 안전관리에 관한 법률", file: "화재의 예방 및 안전관리에 관한 법률(법률).pdf", type: "pdf", dir: "ref_md" },
+        { name: "소방시설 설치 및 관리에 관한 법률", file: "소방시설 설치 및 관리에 관한 법률(법률).pdf", type: "pdf", dir: "ref_md" },
+        { name: "소방시설 설치 및 관리에 관한 법률 시행령", file: "소방시설 설치 및 관리에 관한 법률 시행령(대통령령).pdf", type: "pdf", dir: "ref_md" },
+        { name: "소방시설 설치 및 관리에 관한 법률 시행규칙", file: "소방시설 설치 및 관리에 관한 법률 시행규칙(부령).pdf", type: "pdf", dir: "ref_md" },
+        { name: "소방기본법", file: "소방기본법(법률).pdf", type: "pdf", dir: "ref_md" }
         ],
         NOTICE_INGREDIENT_DOCS: [
 
@@ -1270,12 +1422,15 @@ for (const [eid, t] of Object.entries(_EXAM_TABLES)) {
     const fileToPath = {};
     /** @type {Object.<string,string>} */
     const registry = {};
+    const flatSet = new Set(/** @type {string[]} */ (t.REF_MD_FLAT || []));
     for (const dir of dirPriority) {
         for (const f of /** @type {Object.<string,string[]>} */ (refDirs)[dir] || []) {
             if (!fileToPath[f]) {
                 const base = f.replace(/\.pdf$/, '');
                 const sub = /** @type {Object.<string,string>} */ (t.REF_MD_SUBJECTS || {})[f];
-                fileToPath[f] = `${root}/참조자료/ref_md/${sub ? sub + '/' : ''}${base}/${base}.md`;
+                fileToPath[f] = flatSet.has(f)
+                    ? `${root}/참조자료/ref_md/${base}.md`
+                    : `${root}/참조자료/ref_md/${sub ? sub + '/' : ''}${base}/${base}.md`;
                 registry[f] = dir;
             }
         }
@@ -1290,7 +1445,7 @@ for (const [eid, t] of Object.entries(_EXAM_TABLES)) {
  *   SOURCE_REF_MAP?: Array<*>, KEYWORD_REF_MAP?: Array<*>, REFERENCE_FILES?: Object,
  *   REFERENCE_COMMON?: Array<*>, REFERENCE_INGREDIENTS?: Array<*>, REFERENCE_LAW?: Array<*>,
  *   NOTICE_INGREDIENT_DOCS?: Array<*>,
- *   REF_FILE_TO_PATH?: Object, REF_REGISTRY?: Object, REF_MD_SUBJECTS?: Object}}
+ *   REF_FILE_TO_PATH?: Object, REF_REGISTRY?: Object, REF_MD_SUBJECTS?: Object, REF_MD_FLAT?: string[]}}
  */
 export function getRefTables() {
     const id = getActiveExamId();
@@ -1349,6 +1504,9 @@ export function mapSourceToRef(sourceText) {
     if (!refFile) return '';
 
     const base = refFile.replace(/\.pdf$/, '');
+    if ((t.REF_MD_FLAT || []).includes(refFile)) {
+        return `${t.contentRoot || 'content'}/참조자료/ref_md/${base}.md`;
+    }
     const sub = /** @type {Object.<string,string>} */ (t.REF_MD_SUBJECTS || {})[refFile];
     return `${t.contentRoot || 'content'}/참조자료/ref_md/${sub ? sub + '/' : ''}${base}/${base}.md`;
 }

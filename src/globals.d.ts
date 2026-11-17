@@ -75,6 +75,8 @@ declare global {
     CHAPTER_RANGES?: Record<string, any>;
     CID_SECTION?: Record<string, Record<string, string>>;
     CHAPTER_TITLES?: Record<string, Record<string, string>>;
+    /** 문항→함정 유형 맵 (data/question_chapters.js — AI-39/AN-11) */
+    QUESTION_TRAPS?: Record<string, string[]>;
     /** 문제집 file:// 폴백 번들 (build_exam_bundles.js) */
     __EXAM_MD__?: Record<string, string>;
     /** 안정 ID 마이그레이션 맵 (data/id_migration.js) */

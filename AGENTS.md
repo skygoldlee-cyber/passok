@@ -78,7 +78,7 @@ npm.cmd run check:content             # 콘텐츠 통합 검증 (교재 교체 �
 
 # 참조자료 PDF → ref_md 변환·식약처 고시 감지 (ref-pipeline — Python, 별도 작업실)
 # ※ 원본 PDF·교재/*/images/*.png 마스터는 git 추적 해제 — GitHub Releases 에셋 외부 호스팅 (DOC-RBK-12). pdf_hosting.json 선언 시험만 해당
-# ※ PDF 교체/재변환 절차: ⓪ fetch:refpdfs(미복원 시) ① PDF 교체 ② convert:refs ③ verify:refs ④ ref_md_v2 → ref_md/과목N/{문서}/ 승격 ⑤ check:reffresh -- --update — 교체 PDF는 릴리스 에셋에도 업로드 (해시로 감지)
+# ※ PDF 교체/재변환 절차: ⓪ fetch:refpdfs(미복원 시) ① PDF 교체 ② convert:refs ③ verify:refs ④ ref_md_v2 → ref_md/과목N/{문서}/ 승격 (출제기준 등 과목 공통 문서는 ref_md/{문서}.md 평탄형) ⑤ check:reffresh -- --update — 교체 PDF는 릴리스 에셋에도 업로드 (해시로 감지)
 # ※ ref_md는 `#L####` 라인 인용이 의존 — 항상 시각적 줄 그대로(segment=False) 변환. 대상 시험 해석(--exam > EXAM_CONTENT_ROOT > EXAM_ID > exams.json default)은 _exam_root.py 공용
 # ※ 고시 감지 크론은 선택(Settings→Secrets LAW_OC_KEY) — 개정 원문 자동 확보·대조 절차 상세는 COMMANDS.md convert/fetch 그룹 + docs/dev/runbooks/
 ```
@@ -162,6 +162,7 @@ src/                    # ES Modules
   study/study-tracker-adherence.js   # 계획 준수율·학습 마일스톤 (computePlanAdherence, evalStudyMilestones)
   study/study-tracker-alloc.js       # 과목별 가중 배분 순수 로직 (computeSubjectAllocation, apportionByWeight, selectExamRiskSession)
   study/statement-tracker.js  # 진술 원자(sid) 단위 오판 통계·졸업 추적 (FSRS 연동)
+  study/concept-drill.js      # 개념 문항 딥링크 선별 순수 로직 — #/trainer/concept/<cid> 진입 시 conceptId 직접 일치→같은 장 인접 보충, 오답/미풀이 우선 (DR-08, DOC-DSN-52)
   search/semantic-index.js     # 의미 유사도 이웃 인덱스 조회 — 사전계산 임베딩 번들 지연 로드 (SEM-02~04, features.semantic) + 앵커 프록시 자유 검색 searchByText (SEM-08 v1)
   study/reader-notes.js       # 리더 섹션 메모 스토어 — 북마크 키(subj|chapterKey|title) 매핑 scoped 저장 (TR-30)
   shell/shortcuts-help.js     # 키보드 단축키 도움말 — SHORTCUT_GROUPS 정본 + `?` 키 오버레이 (UX-HELP-01)
@@ -401,7 +402,7 @@ content/                # 시험 콘텐츠 컨테이너
     law_verified.json   # check_laws.py 수동 검증값 {"문서명": ["번호","시행일","판정"]}
     교재/                # 4과목 MD 파일 (표준형 4 + 이야기형 4 = 8파일, 총 19챕터 — 과목별 2·5·5·7)
     문제은행/            # 과목별 문제은행 MD
-    참조자료/            # 법령고시/별표/참조자료 — PDF는 공통·과목1~4 폴더, MD 변환본은 ref_md/과목N/{문서}/{문서}.md (과목 폴더가 귀속의 진실)
+    참조자료/            # 법령고시/별표/참조자료 — PDF는 공통·과목1~4 폴더, MD 변환본은 ref_md/과목N/{문서}/{문서}.md (과목 문서) + ref_md/{문서}.md 평탄형 (출제기준 등 과목 공통 문서)
       원료/              # 원료 참조자료 MD — GENERATED-TABLE 표는 knowledge/ingredients.json에서 빌드 재생성 (마커 밖 서술만 수기)
     knowledge/          # 지식DB SSOT — ingredients.json (원료 1,402종 items + meta 버전·이력, db_version.json 계승)
     audiobook/          # 오디오북 MP3 산출물 (생성 스크립트는 ref-pipeline/audiobook/)
@@ -419,7 +420,7 @@ data/                   # 빌드 생성 번들
   exams/cosmetic/       # 기본 시험 데이터 루트 (dataRoot: registry.js, subjects/, exams/, drills/, study_md/, docs_md/, id_migration.js 등)
   exams/<id>/           # 추가 시험 데이터 루트 (동일 구조)
 tools/                  # 빌드·검증 스크립트
-  build/                # 데이터 파이프라인 (manifest → registry + 해시 번들) + 생성기 (build_trace_matrix·scaffold_exam·drill-utils·trace)
+  build/                # 데이터 파이프라인 (manifest → registry + 해시 번들) + 생성기 (build_trace_matrix·scaffold_exam·drill-utils·trace·build_textbook_print 교재 인쇄 QR 산출)
   check/                # 차단 게이트·검증 스크립트 (run.js 통합 실행기·steps.js 단계 레지스트리·push_gate.js pre-push 적응형 게이트·check_*·verify_shell_assets·coverage_merge·impact_tests — audit_* 감사는 audit/로 분리)
   audit/                # 감사 도구 (audit_* — advisory 리포트·기준선 감사, audit:* 스크립트 진입점)
   config/               # 도구 설정 (domain-map.json 파일 계층 분류표·docs_paths_allowlist·citation_fingerprints·layer_registry z-index 대역 예외)

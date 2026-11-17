@@ -1,6 +1,249 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-17 fix(lossadj): ref_md 정본 역전 정리 — DRF 전문을 꼬리명 정본 위치로 승격 + 빈 디렉터리 42개 삭제
+
+- **꼬리명 정본화**: 농어업재해보험법(법률)·시행령(대통령령)·손해평가요령(농림축산식품부고시) 3건 — 꼬리 없는 디렉터리의 DRF/고시 원문 전문을 references.json 선언 꼬리명 위치로 승격, 기존 '파일럿 발췌본'을 대체하고 꼬리 없는 디렉터리 제거 (타 팩 명명 규약과 정합: 꼬리명=정본 전문)
+- **헤더 정규화**: 승격본에  + 시행일·제호·출처(DRF/고시 원문 전문) 블록 적용, 발췌본 표기 제거
+- **인용 재고정**: 과목2_문제은행 범위초과 3건 수동 정정 — 법률 L112→L38(제11조의3 업무)·L130→L42(제11조의5 자격취소), 시행령 L91→L42(제12조의6 합격기준); 자동 동기 4건 포함 lossadj 52/52 동일 확인
+- **빈 디렉터리 42개 삭제**: 11팩 knowledge/, 7팩 docs/, 6팩 문제은행/, 10팩 ref_md/과목1, 7곳 ref_md/**/images — 스캐폴딩 잔재로 IDE 미추적(U) 표시의 원인
+- 파생물: build:data·build:drills 재생성. 게이트: check:content 33단계 전량 통과(reflayout·reffresh·reflines·refformat·citations 포함)
+
+## 2026-11-17 fix(hazmat): physchem 교재 출판 검수 — 내용 오류·표기 통일·중복 압축·확인문제 보강
+
+- **내용 오류 9건**: 몰용해도 표 세제곱근/네제곱근/다섯제곱근 복원(∛·⁴√·⁵√), Ca₃(PO₄)₂를 A₃B₂형으로 재분류(108S⁵ 동일), 극성 결합↔분자 극성 구분(CO₂·CH₄ 무극성 분자 명시), 메탄올 O-H 결합해리엔탈피 CH₃O-H≈437 kJ/mol, 전기음성도 순서→IUPAC 화학식 원소 배열 서열로 정정(N>H 경고 추가), 아-/차아- 접두사 분리(hypo-=차아-), 제1류=산화성 고체 정정, 주수 소화 금지를 알칼리금속 과산화물+금수성 물질로 한정
+- **계통명/법령품명**: 삼황화사인·오황화이인·칠황화사인(린→인, 법령 품명 황화린은 유지), K₂Cr₂O₇ 품명 다이크로뮴산염류, 제2류 P→적린 명시(황린은 제3류), 핵 부피비 10⁻¹²~10⁻¹⁵, 주기별 원소 수 2·8·8·18·18·32·32(2n²와 구분), 대각선 규칙→주기 경향성, 탈수축합→탈수 작용, 홑원소·이례적 오탈자
+- **표기 통일**: 본문 H_2O·10^-19형 ASCII 표기 → 유니코드 첨자(ₓ·ˣ)로 확인문제와 통합(866+366건), 'n = 0,1,2,3,·s'→'…', →{ Δ X} 중괄호 깨짐 2건, 동위원소 표기(₋₁⁰e·₂⁴He·_{Z}^{A}X) 정돈, 대한화학회 표기 통일(뵐러·베르그만·시안산·시안화물·니트로·다이에틸·헨더슨-하셀바흐·셰브뢸·메탄)
+- **중복 압축**: 유·무기 역사(베르그만·셰브뢸·뵐러) 전체 서술 4곳·다양성자산 2곳·완충용액/헨더슨 식 2곳·벤젠 139pm/sp²/120° 2곳·용액 정의 1곳을 최초 정식 설명으로 통합하고 나머지는 '→ N. 제목 참조' 상호참조로 대체
+- **제목 계층**: '## 📌' 챕터 요약 7건을 #### 하향(대단원 ## 등가 해소), 📌 하위 ### 3건도 #### 동기화, #### 10.1~10.3·20.1~20.8 번호 충돌 접두 제거, '화학의 기초법칙' 이중 헤딩 병합
+- **심화 표시**: 화학 포텐셜·수소화 이온 첨가 메커니즘·E/Z 명명·S_N1/S_N2·LiBH₄·L-시스테인·쯔비터이온에 [심화·참고] 태그
+- **확인문제 보강**: ch1 +5문(pH·몰농도 계산·원자 구성 입자·주기율표 족·환원 판별), ch2 +2문(2-부텐 명명·알킬기 어근), ch3 +3문(무기 명명법·금수성 반응 생성물·방사선 특성) — 25문으로 확충, CS₂ 해설에 '제4류 특수인화물' 혼동 주의 추가
+- **'AI 초안 본문 — 검수 진행 중' 마커 제거** → '검수 완료'
+- **인용 동기**: 문제은행 교재 인용 76건 재고정(첨자 변환·압축 블록 앵커 이동 — 뵐러→L1738·P₄S₃→L2493·AB₂표→L1128)
+- 파생물: build:data(카드 스냅샷)·build:drills(hazmat 401문) 재생성. 게이트: check:content 22단계·meta·enc·reflines·numbering 전량 통과
+
+## 2026-11-16 refactor(refs): 출제기준 저장 위치 통일 — 전 21팩 ref_md/ 직하 평탄형
+
+- **파일 이동**: 20팩 `ref_md/과목1/{문서}/{문서}.md` → `ref_md/{문서}.md` (git mv) + hazmat 파일도 명명 규약으로 통일 (`위험물산업기사 출제기준(한국산업인력공단)(2025).md`) — 출제기준은 과목 공통 문서이므로 과목 폴더 밖이 자연 귀속
+- **도구 평탄 지원**: `REF_MD_FLAT` 테이블 신설(build_pdf_registry) — REF_FILE_TO_PATH가 평탄 문서에 `ref_md/{doc}.md` 경로 생성. check_reflayout(② 루트 .md 인덱싱)·check_ref_lines·check_ref_subjects·build_ref_mapping(평탄 링크 패턴)·build_keyword_index 동일 지원
+- **규약 회귀 테스트**: tests/unit/refmd-syllabus-flat.test.js — 전 팩 평탄 1건·과목N 중첩 0건 고정
+- 게이트: reflayout·refsubjects·reflines·refmd_format·manifest·onboard·check:content 전량 통과
+
+## 2026-11-16 feat(exam): hazmat 서브브랜드 Passzard·practiceName Danger OS 등록
+
+- exams.json hazmat — `appNameEn: "Passzard"`·`practiceName: "Danger OS"` 신설, title/logoMain/logoSub를 브랜드 규약으로 갱신 (PassOK — 위험물산업기사 (Passzard))
+- data/exams.js·매니페스트 21개 재생성 — 브랜드 전파 확인, check:manifest 오류 0
+
+## 2026-11-16 fix(refs): CI content traceability 실패 해소 — 세부기준 평탄화 분할 + 메타 패턴 확장
+
+- **ref_md 초장문 19줄**: 세부기준(소방청고시)의 DRF 접착 라인을 reflow_flat_lines로 분할 (+461줄). 분할 마커 없는 잔여 6줄은 `할 것나.`/`것4.`/`것(1)`/`것(가)` 접착 항목 규칙 4종을 도구에 추가해 해소 ((1)의·(가)의 참조는 공백 요구로 보호)
+- **메타 의심 헤딩 7건**: hazmat 교재의 📌 핵심 요약 류 챕터 요약 카드가 META_KEYWORD_RE에 걸렸으나 _STORY_META_PATTERNS 미매칭 — 기존 계약(📌 챕터 핵심 요약 = 비메타 콘텐츠, reader-toc.test.js 고정)에 따라 **비메타 확정·meta_sections_baseline.json 기준선 갱신** (패턴 추가 방식은 기존 테스트와 충돌해 폐기)
+- 로컬 check:content --content-only 22단계 전량 통과
+
+## 2026-11-16 fix(analysis): esc-ok 검토 면제 주석 — check:escape 기준선 복구
+
+- analysis-view.js:243의 `${trapHtml || '<p…>'}` 보간이 check:escape 신규 후보로 검출돼 CI(HTML escape sink check) 실패
+- trapHtml은 내부 생성 마크업·폴백은 정적 리터럴이라 이스케이프 불가 — `/*esc-ok*/` 면제 주석 부착으로 검토 완료 명시
+- 로컬 `check:escape` 통과 확인 — 배포 전 CI 레드 원인 해소
+
+## 2026-11-16 feat(exam): hazmat(위험물산업기사) active 승격 — comingSoon 해제
+
+- **승격 선언**: exams.json comingSoon 제거·tier pilot→active — 온보딩 게이트 '정식' 진단 통과
+- **충족 요건**: 출제기준 문서 · 표준형 챕터 전 과목 · 모의고사 6회분(권장 상한) · 교재 볼륨(과목당 20k 초과, 431k) · 과목별 참조자료 12종(lawdb 조인)
+- **검수 이력**: 확인문제 80문·문제은행 362문 전량 도메인 대조 — 사실 오류 0 (46bb16d70b·806989c644)
+- manifest _pilot → _activated 갱신 · exams-list·landing 재생성 · check:manifest 통과
+
+## 2026-11-16 content(refs): 참조자료 레지스트리 정규화 — hazmat 12종·carework 23종 과목 귀속·lawdb 조인
+
+- **① 교재-법령 스팟 대조**: 과목2·3 교재의 법령 수치(예방규정 배수 10/100/150/200배·중복선임 특례 7개/5개/300m·대규모 기준 3천배/50만배)를 시행령 조문과 대조 — 전부 일치. 별표 표문(지정수량표·배수합산·소화설비 1,000㎡)은 DRF 조문 응답에 미포함 — 별표 취득은 후속 과제
+- **② 레지스트리 정규화**: refDirs 디렉터리 나열 → 파일 단위 선언으로 교체, 문서명에 발령기관 꼬리((법률)(대통령령)(부령)(소방청고시)) 부여 — cosmetic 파일명 규약 준용. REF_MD_SUBJECTS hazmat 12건·carework 23건 생성으로 검색 소스 편입
+- **hazmat 보완**: lawRefs 선언 대비 누락 문서 4종 추가 생성(소방시설법 3종·소방기본법) — lawRefs 순서를 하위법령 우선으로 재정렬해 contains 매칭 정확도 확보
+- **carework 정규화**: 법령 8종 디렉터리 발령기관 꼬리 리네임 + 교재·문제은행 딥링크 31건 경로 갱신 + docSubjectRules·referenceLaw 신설
+- **advisory 해소**: subjectDefaultRefdoc-referenceLaw 미등록 경고·markStaleRefLinks 조인 불일치 전량 해소. 잔존: carework 과목2 기본 문서(자체 작성 발췌본 — lawdb 조인 비대상, 의도적 보류) + 복수 매칭 선택 정보 로그(정상)
+- 게이트: reflayout·refsubjects·enc 통과 · 인용 동기 미발견 0
+
+## 2026-11-16 content(refs): hazmat 과목별 참조자료 8종 추가 — law.go.kr DRF 원문 ref_md
+
+- **과목별 ref_md 배치**: 과목1/위험물안전관리법 · 과목2/화재예방법+시행령+시행규칙+재난 및 안전관리 기본법 · 과목3/위험물안전관리법 시행령+시행규칙+위험물안전관리에 관한 세부기준 — 출제기준 대조 과목 귀속
+- **법령 원문 직입력**: 국가법령정보센터 DRF API 텍스트를 MD로 변환 (조문·항·호 구조, 시행일자 메타 헤더) — 세부기준은 AdmRulService 경로로 별도 취득 (184단위·139k자)
+- **레지스트리 등록**: references.json — subjectDirMap(physchem→과목1/fire→과목2/hazprop→과목3)·docSubjectRules 4규칙·selfAuthoredDocs 9종·subjectDefaultRefdoc — pdf-registry·law-links 재생성
+- 게이트: reflayout·refsubjects 통과 · 인용 동기 미발견 0 · subjectDefaultRefdoc의 referenceLaw 미등록 경고는 carework와 동일한 advisory (비차단)
+
+## 2026-11-16 review(content): hazmat 문제은행 362문 전량 검수 — 사실 오류 0, 헤더 검수 완료 표기
+
+- **전량 정답·선지·해설 대조**: 과목1 122·과목2 120·과목3 120문 전문 검수 — 정답-선지 정합·해설 일치·법령 수치 교차검증, 사실 오류 0건
+- **의심 수치 교재·법령 대조**: 수증기 팽창률(650°C 4,200배 — 2,400배는 260°C값, 옳지 않은 정답 정확) · 압력수조 물 2/3·공기 1/3 · 일반취급소 특례(소비설비 7개·옮겨담기 5개·300m) · 윗부분 인상시험 플렉시블 6배/5분 — 전부 교재 일치
+- **유사 중복 쌍 확인**: 과목1 뵐러(21·25·113)·알파붕괴(27·67)·배수비례(33·73)·엔아인(61·109), 과목2 수증기폭발(25·27)·IG-541(54·62)·압력수조(63·67), 과목3 운송책임자(25·27)·예방규정(15·30·59) — 배치 생성 특성의 의도적 반복 드릴로 판단, 오류 없음. 다양성 개선은 선택 과제로 로드맵 기록
+- 문제은행 3파일 헤더 "AI 생성 초안 — 검수 진행 중" → "검수 완료" 갱신. 인용 동기 --check 미발견 0
+
+## 2026-11-16 review(content): hazmat 확인문제 80문 전량 검수 — ai-draft 마커 제거, 법령 원문 검증
+
+- **정답 정확성 전문 대조**: 16카드(3과목)×5문 전량 — 정답·선지·해설 일치, 오류 0건
+- **법령 원문 검증(law.go.kr)**: 의심 4건 전부 합격 — 화재안전영향평가심의회 12명(화재예방법 §22), 품명·수량·배수 변경신고 1일 전(위험물안전관리법 §6②), 예방규정 정기평가 4년(시행규칙 §63의2), 구조안전점검 주기 12/11/13년(시행규칙 §65)
+- **문제은행 표본 검수**: 등간격 30/362문 통과. 유사 중복 3쌍 발견(과목1 Q21↔Q25 뵐러·요소, Q61↔Q109 엔아인 번호, 과목2 Q25↔Q27 수증기폭발 — 정오 상반형이라 유지 가능, 다양성 관점 개선 여지)
+- ai-draft 마커 16건 제거 + 공백 정리, build:data 파서 출력 일치
+
+## 2026-11-16 docs(plan): 교재 보완 로드맵 신설 (DOC-DSN-53) — 전 팩 볼륨·구조·카드 규약 잔여 과제 추적 문서화
+
+- **`docs/dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md` 신설**: 21개 팩 표준형 실측(비공백 문자, A4 ~1,500자/쪽) 스냅샷 + 잔여 과제를 우선순위별로 정리 — ① ai-draft 검수(확장본 263곳·생성문항 142문·요약카드 16개) ② 헤딩 비표준 팩 정규화(indsafe·compapp2 등, labor 스크립트 재사용) ③ 게이트 미달 4과목 2차 확장(broker 3·compapp2 computer) ④ 카드 규약 확산(labor ✅ 등) ⑤ 대형 팩 심화 정책
+- 인덱스 등록: docs/README.md 문서 목록 + ID 레지스트리(DOC-DSN-53), design 버킷 31→32개
+
+## 2026-11-16 feat(gates+content): active 티어 교재 볼륨 게이트 + labor 헤딩 표준화 + 스텁 팩 본문 확장
+
+- **교재 볼륨 게이트** (`check_exam_onboard.js`): active 티어에 과목당 표준형 본문 20,000자(~A4 13쪽) 하한 신설 — 기존 승격 팩(broker·indsafe·compapp2)은 경고, 신규 승격은 구조 오류. 리포트 표에 "교재k자" 열 추가
+- **labor 헤딩 표준화** (`tmp/migrate_labor_headings.js`): `### N.` 번호 절 2,739건 → `## N.` 승격, `### 📖 기출 핵심 정리` 59건 → `## 📖` 챕터 카드 — 리더 절 카드 분할·§앵커가 labor에서도 작동. 인용 라인 불변·번호 게이트 위반 0
+- **active 스텁 본문 확장 (ai-draft)**: compapp2 스켈레톤 슬롯 22개 LLM 본문 채우기(`tmp/fill_compapp2_slots.js`), broker 160소절·indsafe 82소절 압축 불릿 → 해설 본문 확장(`tmp/expand_sections.js`) — 전량 `<!-- ai-draft: 검수 필요 -->` 표기
+
+## 2026-11-16 feat(content): carework 챕터 요약 카드 + 생성 문항 표기 정리
+
+- **carework `## 📌 챕터 핵심 요약` 16카드 신규** (`tmp/gen_carework_summaries.js`, AI 초안 — `<!-- ai-draft -->` 표기): cosmetic 관례 순서(본문 → 요약 → 확인문제 → 다음 챕터)로 확인문제 카드 앞에 삽입. "이 챕터에서 배운 것" + "핵심 3가지" 구조, LLM 초안 → 형식 검증(구조·길이) 후 편입
+- **생성 문항 표기 정리**: LLM 초안의 LaTeX 수식(`$\text{CO}_2$` 등 86건)을 유니코드 일반 텍스트(CO₂, Na₂O₂, O₂²⁻)로 변환 — 리더가 수식 렌더러를 탑재하지 않아 원문 그대로 노출되던 것 (`tmp/fix_latex.js`)
+- 인용 동기: 요약 카드 삽입 라인 이동분 carework 462건 갱신 (미발견 0)
+
+## 2026-11-16 feat(content): 표준형 챕터 카드 정합 — hazmat 요약 승격 + 확인문제 챕터별 배치 (hazmat·carework)
+
+- **hazmat `## 📌` 요약 카드 승격** (`tmp/promote_hazmat_summaries.js`): 절·챕터 말미의 "시험 포인트·핵심 요약" 꼬리 영역 36블록을 `## 📌` 카드로 승격 — 규칙은 "경계까지 후속 헤딩이 전부 자신보다 깊은 최초 요약 헤딩"만 카드화(첫 헤딩 레벨만큼 상승, 꼬리 내 번호 헤딩 무번호화). 절 중간 토픽별 요약 소절(후속 번호 `###` 존재) 86건은 내용 소절로 유지
+- **챕터별 `## ✅ 확인문제` 카드** (`tmp/gen_checkquiz.js`, AI 초안 — `<!-- ai-draft -->` 주석 표기, AI-01 검수 대상):
+  - hazmat 16챕터 × 5문 = **80문 신규** — 4지선다(필기 형식)·cosmetic `> **문제 N.**` 규약, Gemini 초안 → 형식 검증(선지 수·정답 유효·해설) 후 삽입
+  - carework 16챕터 = **62문 신규 + 기존 18문 챕터 재배치** — 기존 묶음 카드 3장(Ch01~07·Ch08·실기 통합)을 해체해 챕터별 배치, 부족분만 생성. 5지선다·`**N.**`+`> 정답:` 기존 팩 규약 유지
+  - 이야기형은 파생 재생성으로 동일 카드 자동 전파
+- 인용 동기: 카드 삽입 라인 이동으로 hazmat 474·carework 462건 갱신 — `sync_citation_lines` 전건 복구(미발견 0)
+
+## 2026-11-16 refactor(content): hazmat 교재 헤딩 체계를 CS-12 표준으로 전환 — 구식 Chapter+### 절 → 📚Chapter+## 절
+
+- **동기**: hazmat 표준형 3개 파일만 구식 체계(`## Chapter` → `### N.` 절 → `#### N.M` 소절 → `#####` 세부)를 사용 — `textbook_anchors.js`의 `SECTION_RE`(`^## \d+\.`)가 절을 인식 못해 **모든 인용이 `N.0` 챕터 앵커로 귀속**, 리더 `parseTextbookContent`는 `## ` 경계로 절을 나눠 **16개 거대 카드**로 렌더(DR-11 절 CTA 미발화), DR-10 인쇄 목차·DR-09 QR 칩·CS-12 번호 게이트가 전부 챕터 단위로 무력화되던 상태
+- **변환** (`tmp/migrate_hazmat_headings.js`, 1회성 — 총 1,623 헤딩 라인):
+  - `## Chapter NN.` → `## 📚 Chapter NN.` (16건)
+  - `### N.` → `## N.` (59건 — 번호·챕터별 연속성 그대로)
+  - `### 자유` → 유지 (6건 — 절 내 소절로 사용 중)
+  - `#### N.M` → `### M.` (682건 — 절 내 소절 번호, 절 접두 제거. N·M 연속성 사전 검증 후 기계 변환)
+  - `#### 자유` → 번호 절 소속은 `### 자유`(223건), 자유 `###` 소속은 `####` 유지(23건 — 계층 보존)
+  - `##### N.M.K` → `#### M.K` (26건 — 부모 `#### N.M`→`### M.` 승격에 맞춰 재번호), `##### 자유` → `####` (707건)
+- **효과 검증**: `check:numbering` 위반 0건(최초 실행 때 78건 — `#####` 3단 번호 유지 오류, 재번호 후 통과), `sync_citation_lines --check` 6,884건 변경 없음(행 번호 불변이라 #L 인용 무영향), `build:data` 재생성으로 hazmat CID_SECTION 앵커 317건 전부 `N.0`→`N.M` 절 단위로 세분화, QUESTION_CHAPTERS도 절 제목 매핑으로 정밀화. 저장 진술의 구 `N.0` cid는 여전히 유효 앵커라 데이터 손실 없음
+- 소형 구식 팩 15개(수백~수천자 스텁)는 미전환 — 향후 온보딩 시 표준 체계로 작성 예정. 이제 리더에서 hazmat 절이 카드로 분리되고 절 CTA·§앵커 드릴이 표준 팩과 동일하게 동작
+
+## 2026-11-16 feat(analysis): 함정 유형 약점 진단 — AN-11 오답 분석 trap 집계 (DOC-DSN-52 Phase 3 후속)
+
+- `tools/build/build_question_chapters.js` — 문항 블록의 `> **함정:**` 메타 행 파싱 → `question_chapters.js`에 `QUESTION_TRAPS` 맵(`<exam>_q<N>` → 태그 배열) 추가 방출. carework 재생성 142건 = 파일럿 편입 수와 일치, 미태깅 팩은 빈 맵
+- `src/content/data-loader.js` — `loadQuestionChapters`가 `window.QUESTION_TRAPS`를 `_questionChapters.traps`로 노출
+- `src/study/analysis-engine.js` — `computeTrapWeakness` 신규: 정오 전건(quizResults)의 시도·오답을 함정 유형별 버킷에 귀속 — 문항 해석은 `resolveQuiz` 번들 `quiz.trap` 우선·`QUESTION_TRAPS` 폴백, `weak_quiz_`/`weak_exam_` 접두사·`weak_sim_<exam>_q<N>`는 원문항 정규화(단원 집계와 동일 규약), weak_sim 약점 카드는 오답 증거 1건. 복수 태그 문항은 각 유형에 1건씩, 정렬은 오답 수→오답률→시도 수
+- `src/views/analysis-view.js` — 오답 패턴 카드에 "🪤 함정 유형(전체 누적)" 절: 상위 3유형 `오답 N건/시도 M문` + 최상위 유형(오답≥2건) "당신은 ○○ 유형에 약합니다" + 유형별 대처 조언(`TRAP_ADVICE`). 원인 태깅(AN-02) 없어도 자동 집계라 독립 표시, 태그된 오답 없으면 절 숨김. 주간 리포트 `buildWeeklyReportText`에 `p.trapWeakness` 상위 2유형 "취약 함정 유형" 행 추가 + 호출부 연결
+- `css/dashboard.css` — `.wc-subhead` 섹션 구분 스타일
+- 단위 테스트 6건 신규(analysis-engine.test.js) — 복수 태그 집계·resolveQuiz 우선/맵 폴백·weak_sim 귀속·무태그 안전 폴백·정렬 규약·리포트 행
+- SPEC AN-11 신설(§3.1.5 카운트 10→11), 파일 @spec 태그 갱신(analysis-engine·analysis-view·data-loader·build_question_chapters)
+
+## 2026-11-16 feat(content): 함정 유형(trap) 태그 도입 — AI-39 스키마·도구·carework 파일럿 (DOC-DSN-52 Phase 3)
+
+- `src/content/questions.js` — `TRAP_TAGS`(유사용어혼동·수치바꿔치기·절대표현·주어치환·예외조항) 어휘 정본 + `Question.trap` 필드 + `validateQuestion` 화이트리스트 검증. STANDARD_TAGS와 별도 축(함정 방식 기술)
+- `tools/build/plugins/exams.plugin.js` — 정답 블록 `> **함정:** 유형1, 유형2` 메타 행을 번들 `q.trap`으로 편입, 어휘 밖 값은 빌드 실패(화이트리스트 게이트). `sync_citation_lines.js` 메타 라인 제외에 함정 추가
+- `tools/ai/lib/traps.js` + `tools/ai/ai_trap.js` — 규칙 후보(수치마스크·절대 화행·예외 표현·선지 bigram 유사도) + LLM 보완(주어치환 등 규칙 비검출 유형)으로 `tmp/ai_drafts/<exam>/traps_*.md` 초안 → 사람 리뷰 → `ai:trap --write` 편입(기존 함정 행 교체, 재실행 안전)
+- 파일럿: carework 262문 초안 → 기계 리뷰 필터(LLM 전용 태그 근거 검증 — "옳은 것은?"형 절대표현 과적용 적발·제거) → **142문 확정 편입**(과목1 62 + 과목2 80), 번들 `q.trap` 유입 확인. 오답 분석 집계 확장은 태그 축적 후 후속
+- 양식 문서 TEXTBOOK_AUTHORING_GUIDE §4.3에 `> **함정:**` 규약 등록, 단위 테스트 15건
+
+## 2026-11-16 feat(reader): 리더 절 문항 풀기 CTA — DR-11 인쇄 QR의 디지털 대응 (DOC-DSN-52 §3.3)
+
+- `reader-render.js buildSectionsHtml` — `📚 Chapter NN.` 컨텍스트 추적 + `getTocLevel(title)===1`(`M.` 번호 절)에만 §N.M 앵커 계산, 카드 본문 말미에 `<a href="#/trainer/concept/N.M">` "이 절 문항 풀기 §N.M" 링크 렌더. 인쇄 QR 칩(DR-09)과 동일 배치(절 말미)·동일 라벨 — Chapter 헤더·비번호 절(요약·확인문제·이야기 회상)·Chapter 이전 서두는 링크 없음
+- 해시 네비게이션만으로 완결 — 라우터 `trainer` 슬러그 → `initTrainer` DR-08 인터셉트 → 개념 드릴 + `#/quiz` 정규화(뒤로가기=리더). 별도 data-click 핸들러 불필요. 표준형·이야기형 공통(`Chapter NN. > M.` 공유), 웹툰 씬은 별도 경로
+- DOM 테스트 3건 신규(`reader-concept-link.dom.test.js`) — 번호 절 링크·비대상 절 제외·N.M 소제목 제외·장 경계 번호 리셋 검증
+
+## 2026-11-16 feat(refpipe): 교재 전용 인쇄 템플릿 — 표지·목차·러닝헤드·쪽수 (DR-10)
+
+- `ref-pipeline/textbook_pdf.py` + `template/print-textbook.html` 신설 — `build_textbook_print --formats pdf`가 이 경로로 산출. Chrome print의 @page 마진박스·counter(page)·outline 미지원을 2패스+PyMuPDF로 해소: 1패스 PDF의 h2 크기 스팬(13~17pt)으로 절별 물리 쪽 추출 → 목차 쪽수 주입 2패스 → 본문 각 쪽 좌 서명·우 장명 러닝헤드 + 중앙 "- N -" 쪽수 스탬프 (표지·목차 제외). 목차는 `#id` 내부링크로 PDF GoTo 유지, 스탬프 폰트 TEXTBOOK_PDF_FONT>malgun>Noto 탐색·BMP 밖 문자 제거
+- `build_textbook_print`: `## 📚 Chapter` 앞 `:::page` 자동 주입(장 첫 페이지, PDF·DOCX 공통) + 표지 제목(첫 # 헤딩)·부제(시험+과목명) 전달
+- 검증: carework 1과목 A4 145쪽 — 표지·쪽수 있는 목차·러닝헤드·쪽수 스탬프 전부 텍스트 추출 확인, DOCX 회귀 없음. pytest 9건 + 단위 테스트 8건(신규 2건 포함)
+
+## 2026-11-16 feat(build): 교재 인쇄 QR 산출 정식화 — build_textbook_print.js + DR-09
+
+- `tools/build/build_textbook_print.js` 신설 — 표준형 교재 절 말미에 `#/trainer/concept/<cid>` QR 칩 빌드타임 주입 (tmp 파일럿 `inject_qr.mjs` 승격). 절별 문항 수는 문제은행 교재 인용→§앵커(AN-10) 해석으로 집계, 인용 파일 일치 문항만 유효·0문 절 칩 생략·칩에 문항 수 표기·:::page 펜스 앞 절 말미 배치·page-break-inside:avoid. 산출 `dist/textbook-print/`(gitignore)에 스테이징 MD+images 후 md2doc 연계 PDF·DOCX·인쇄HTML (`npm run build:textbook-print -- --exam <id>`)
+- 검증: carework 종단 실행 — 1과목 칩 17개(절별 2~14문 표기)·2과목 25개(0문 절 1개 자동 생략), PDF/DOCX/print.html 산출·DOCX 미디어 20개 정상 임베딩. 단위 테스트 6건
+- SPEC DR-09 신설 (§3.20 카운트 28→30 교정 — DR-08 반영 누락분 포함), COMMANDS 카탈로그·AGENTS 도구 목록 반영, DOC-DSN-52 Phase 2 상태 갱신
+
+## 2026-11-16 fix(gates): domain-map에 concept-drill.js 등록
+
+`src/study/concept-drill.js`(DR-08 신규 모듈) 미분류로 저장소 전 파일 분류 게이트 실패 — platform 도메인 규칙 추가. 배포 파생물 재생성 중 발견.
+
+## 2026-11-16 fix(refpipe): DOCX 이미지 포맷 대응 — SVG 래스터·WebP PIL 변환·%20 경로
+
+`md2doc.py` `_emit_image`/`_resolve_image` 수정 3건 — ① SVG 감지 `data.lstrip()[:5]`가 4바이트 `b"<svg"`와 불일치해 직접 시작 SVG 미감지 → startswith 판정 ② 로컬 이미지 경로 `urllib.parse.unquote` 누락으로 `a%20b.png` 파일 미발견 ③ WebP 등 미지원 포맷은 `_pil_png`(Pillow) PNG 재인코딩 폴백 추가. 파일럿 DOCX에 이미지 19개 전량 PNG 임베딩 확인. pytest `TestDocxImageFormats` 3건 + requirements Pillow 명시.
+
+## 2026-11-16 test(design): 교재 인쇄 파일럿 — 절별 QR 칩 A4 출력물 검증 (DOC-DSN-52 §4-1)
+
+cosmetic 1과목 표준형 MD → `md2doc.py`로 절 말미 `concept/N.M` QR 칩이 들어간 A4 PDF 89쪽·DOCX 생성 (`tmp/print_pilot/`). `qr.js` qrPng를 Node 전처리로 재사용 — 인쇄 인코더와 앱 딥링크가 동일 출처. 발견: `--keep-html`은 입력 옆에 산출(콘텐츠 오염 주의)·DOCX는 SVG/WebP 이미지 미지원(PNG 변환 전처리 필요)·`images/`는 MD 위치 기준 해석. 설계 문서 §4-1에 결과 기록.
+
+## 2026-11-16 feat(study): DR-08 개념 문항 딥링크 — DOC-DSN-52 Phase 1 구현
+
+`#/trainer/concept/<cid>` 해시 진입 시 해당 개념의 기존 문항을 선별해 5문 미니퀴즈 출제. 신규 `src/study/concept-drill.js` — normalizeConceptCid(`2.3`·`§2.3`·레거시 `L####`→CID_SECTION 환산) + pickConceptQuestions(직접 일치→같은 장 인접 보충, 오답→미풀이→풀이 이력 정렬, cap). `startConceptDrill`(quiz-review.js) — 전 과목 지연 로드 후 state.quiz.data 주입·기존 퀴즈 세션 재사용, 문항 0개면 안내 토스트. 의미 그룹명 conceptId(신고주체 등)도 원형 매칭 지원. data-click 핸들러 등록 — 인앱 링크·외부 QR 공용. 리더 섹션 버튼(§3.3)은 카드→§앵커 매핑 선행 필요로 후속. 단위 테스트 6건 + SPEC DR-08 행. (수습: trainer→quiz-review 정적 import가 trainer→…→dashboard→trainer 순환을 만들어 analysis-view 모듈 수준 훅 등록 TDZ 오류 — 호출 시점 지연 import로 차단)
+
+## 2026-11-16 docs(design): DOC-DSN-52 학습매체 연결 설계 — DOC-BIZ-13 갭 실행안
+
+`LEARNING_MEDIA_LINK_DESIGN.md` 신설 — 부록 A 갭 1·2순위의 실행 설계. Phase 1 `#/trainer/concept/<cid>` 개념 문항 딥링크(conceptId·cidSection·weak-items 패턴·해시 라우팅 전부 기존 자산 재사용), Phase 2 종이 교재 QR(qr.js→URL 페이로드·docx/pdf 섹션 훅), Phase 3 함정(`trap`) 태그(cosmetic 파일럿→ai:* 자동 태깅). 부록 A 표에 설계 문서 링크 반영.
+
+## 2026-11-16 docs(biz): DOC-BIZ-13 원문 v2 반영 — §4 "그 밖의 학습매체" 14개 매체 추가
+
+원문 갱신(96→126줄) 반영 — 저자가 팩 공통으로 일반화 + §4 신설(대면교육·요약집·암기카드·유튜브·오디오·Anki·커뮤니티·관리형·스토리형·AI튜터·공식자료). §4에도 구현 현황 열 부기: Anki 대응=내장 플래시카드+자동 생성·FSRS, AI 튜터=DOC-DSN-40, 관리형=study-tracker 부분, 커뮤니티·오디오·실기영상 미구현. 부록 A 갭을 5개로 재정렬.
+
+## 2026-11-16 docs(biz): DOC-BIZ-13 등재 — 학습 매체 경쟁 분석 + 구현 현황 대조
+
+`docs/dev/business/자격시험_학습매체_경쟁분석.md` — 전 팩 공통 전략 분석(교재·인강·CBT 약점 비교) 등재(docs/dev/business 버킷 신설, DOC-BIZ 접두사↔디렉터리 일치 유지). carework 한정 서술을 팩 공통 표현으로 재일반화(범위 헤더 통합·§3 플랫폼 우선 표기·출처 사례 명시). §3 대응표에 코드 대조 "구현 현황" 열 부기: 9행 중 5행 구현됨(FSRS·BKT·변형문항·인용·CareOS)·2행 부분(개념 태그·QR)·2행 미구현/부분(영상·대형글자). 부록 A에 실제 신규 갭 4개·원문 보정(2026 표준교재)·분석 공백 정리.
+
+## 2026-11-16 refactor(content): 표준형 교재 파일명 *_표준형.md 전 팩 통일 (91건)
+
+교재 표준 파일명을 CS-12 스캔 패턴(`*_표준형.md`)과 불일치하던 전 팩 91파일에 일괄 부여 — 번호체계 게이트의 스캔 누락 해소.
+
+- **rename-batch 전파** — sync_textbook_files.js --rename-batch로 manifest file/storyFile·sw.js MD_ASSETS·콘텐츠 md 인용 경로 321지점 일괄 전파. 설정 문서(`PASSMULA_...시리즈설정문서.md`)는 교재가 아니라 복원
+- **헤딩 번호 정합화 1668건** — 신규 스캔 대상 107파일에서 구식 접두(가./(N)/N)/알파벳) 제거 + 체커 상태기계 기반 재번호(부모 ### 번호 있으면 N.M 부여, 없으면 제거). check_numbering 위반 1700→0
+- **sync 도구 보정** — chapters[].file에 `/` 포함 시(`../theory/…` 상호참조) 표준형 자동할당 스킵 — appraisal 구 골격 챕터의 타 과목 참조 보존
+- **하드코딩 참조 정리** — check_scenario_items.js의 carework 표준형 경로 신규명으로 갱신
+- 검증: sync:citations 6884 무결 · build:data 파서 일치 · check:onboard 오류 0 · story 재생성
+
+## 2026-11-16 feat(ai): 심화 보강 CE-06 리라이트 — audit 60자+ 761→14
+
+`ai_ce06_refine.js` 신설 — 심화 보강 블록을 ### 절 단위로 LLM 재작성(문장 ≤40자·문단 ≤3문장·표 분할, 사실·수치 보존 요구). 수치·단위 토큰 다중집합 비교로 불일치 출력 자동 기각.
+
+- **carework 적용** — caretheory 30절(24+재시도 6 전량)·careprac 31절 재작성. audit:ce06 지표: 60자+ 문장 761→**14**(-98%), 표 초과 19→3. 이야기형 재생성·인용 6884 무결·build:data 파서 일치
+- **안전장치 실효** — 초기 프롬프트에서 LLM이 수치 포함 항목을 누락하는 사례(1세/2세/65세 소실)를 토큰 검증이 포착 → "수치 횟수 그대로 유지" 절대 규칙 보강 후 재시도 통과
+- **잔여** — 60자+ 14문장·목록 8+·LLM 중첩 불릿은 사람 검수 대상(심화 블록 "검수 진행 중" 표기 유지). 문장당 한 줄 포맷으로 연속 줄 지표는 증가 — 실제 가독성은 개선
+
+## 2026-11-16 feat(audit): CE-06 규약 보정 + 감사 도구 + 심화 보강 구조 정련
+
+CE-06 신설 후 기존 교재 대비 검토·적용 3종.
+
+- **A. 규약 보정** — `TEXTBOOK_AUTHORING_GUIDE` §3.10: ① 법령·고시·표준교재 **원문 인용 블록은 문장·문단 규칙 면제**(원문 분할 금지 — 출제 용어 그대로 원칙과 정합) ② **2열 용어·체크리스트 표는 행 상한 면제**(색인 성격 — 분할 시 탐색 저해). 실측 결과 기존 본문의 60자+ 위반 대부분이 법령 원문 섹션이라 예외 없이는 오탐이었음
+- **C. 감사 도구** — `tools/audit/audit_ce06.js` 신설(@spec CE-06): 문장 40/60자·문단·표(4열·6행, 2열 면제)·섹션 표 3+·목록 8+·들여쓰기·다이어그램 지표를 전 시험 교재(101파일) 대상 측정. 원문 인용 섹션(참조 자료·법령 명칭·제N조 비율) 자동 면제. steps.js audit 프리셋 + `npm run audit:ce06` 등록 — p2 advisory 비차단
+- **B. 심화 보강 정련** — carework 심화 블록에 **구조 분할만** 적용: 표 6행 분할(caretheory 1·careprac 6건, 헤더 반복)·4문장+ 문단의 문장경계 분할(13행). 이야기형 `build:story` 재생성·인용 6884링크 무결. **문장 내부 기계 분할(어미 치환)은 기각** — '없으며→없으다'·형용사 '중요하며→중요한다' 등 비문법 양산 확인 후 롤백. 잔여(60자+ ~760문장·목록 8+ 79·표 초과 19)는 AI 초안 검수 시 편집 리라이트 대상 — `audit:ce06`으로 추적 가능
+
+## 2026-11-16 docs(spec): CE-06 가독성·정보 밀도 규약 — 교재 제작 가이드 반영
+
+`자격시험 교재 제작 가이드 — 가독성·시인성 중심.pdf`를 검토해 디지털 교재에 적용되는 콘텐츠 규칙을 추출·명세화.
+
+- **SPEC CE-06** (§5.5) — "읽히는 교재" 기준 선언: 문장 40자/문단 3문장, 섹션당 표 1개·박스 2개·목록 7항목, 표 4열×6행, 강조 한 수단·색만 구분 금지, 다이어그램 상자 7개·12자, 이미지 장식 금지·캡션 필수. 정본은 `TEXTBOOK_AUTHORING_GUIDE` §3.10 (신설) — 문장 규칙·밀도 상한·덜어내기 우선순위·표 규격·강조/도식/이미지 규칙
+- **적용 유보** — 판형 B5·제본 여백·러닝헤드·종이·CMYK/dpi·실물 출력 독자 테스트는 인쇄 산출물 제작 시까지 유보(§3.10 말미 명시, doc-export.css·md2doc로 이관 예정)
+- **테스트** — content-engineering.test.js에 CE-06 규약 문서 존재 검증 추가 (@spec 연결로 커버리지 공백 해소)
+- **수습** — ① 이전 커밋의 MOCK3X_GRANDFATHERED 리터럴('broker')이 DA-15 전수 스캔에서 위반 → check_content_independence ALLOWED에 정책 상수로 등록 ② 가이드 PDF가 content/ 루트에서 도메인맵 미분류 → tmp/materials/guide/로 이동(gitignore 작업 자료)
+
+## 2026-11-16 feat(carework): 표준교재 기반 심화 보강 + 문제은행 3회분 충족 + 수치 정정
+
+보건복지부 표준교재 최신본(2026·4부 15장 61절)을 근거로 교재 심화 생성·문항 증산·검증 대조.
+
+- **교재 증강** — 절 단위 심화 본문 61절 생성(실패 0) → 각 교재 말미 `## 📚 심화 보강` 챕터로 추가(기존 본문·라인 불변). caretheory +167k자(30절)·careprac +214k자(31절). 2026본 신설 "1장 3절 노인의 특성 변화 및 생활 실태" 포함, 절 번호 2026 기준
+- **문제은행 증산** — ai:draft → 중복 제거(Jaccard>0.55) → caretheory 90→115, careprac 117→147. 필수 3회분(105/135) 충족. 5지선다 확인(CBT 안내서 예시문항 ①~⑤)
+- **수치 정정(검증 대조)** — ①목욕 수온 38~40℃→**35℃ 기준**(표준교재·은행 선지·해설·인용 전파 정정) ②경련 "5분 이상 지속 시 119"→**즉시 119 신고·15분 이내 종료** ③합격 표기 "과락 없음"→**각각 60% 이상**
+- **판정 보류** — 갱신 유효기간: 표준교재 2024본(4년/3년)은 구법, 2025.7.1 개정 시행령·2026본·현 교재 모두 5년/4년 — 현 교재 유지. 검증 노트 tmp/materials/carework/VALIDATION.md
+- 인용 동기 6884 링크 미발견 0 · build:data 파서 일치 · check:onboard 오류 0
+
+## 2026-11-16 feat(hazmat): 문제은행 권장 6회분 도달 — 과목당 120문
+
+ai:draft 3차 증산으로 전 과목 120문+(총 362문) 확보 — 권장 6회분 충족.
+
+- **증산** — physchem +55(67→122)·fire +32(88→120)·hazprop +52(68→120). 중복 제거(Jaccard>0.55) 223건 제외
+- **4지선다 변환** — 신규 139문 ⑤ 삭제·⑤정답 재번호 (변환기 정답-파싱 수정: 블록 단위 분할)
+- **사고 수습** — `ai_apply --drafts` 무인자 실행으로 타 시험 미리뷰 초안 4353건 오편입 → git 복원+초안 applied 마커 해제로 원복, hazmat만 --file 지정 재편입
+- check:onboard `6/권장6` · 경고 0
+
+## 2026-11-16 feat(check): 모의고사 권장 6회분 추가 — 준비도 표 회분 열
+
+승격 필수 3회분 위에 **권장 6회분** 계층 추가. `check:onboard` 리포트에 `모의회분` 열(min 달성 회수/권장6) + 요건 충족 팩 대상 권장량 미달 info 힌트 (hazmat 3/권장6 — 증산 권장 표시). 비차단 advisory.
+
 ## 2026-11-16 feat(check): active 승격 기준 상향 — 과목당 모의고사 3회분
 
 `check_exam_onboard` 정량 기준을 과목당 ≥20문 → **모의고사 3회 비반복 구성량**(integratedExam.questionsPerSubject×3, 미선언 60)으로 교체. NEW_EXAM_RUNBOOK §승격 기준 동기 갱신.
@@ -12322,3 +12565,32 @@ PWA에서 교재 근거 인용 링크(`[교재: L####](<../교재/.../*.md#L####
 ## 2026-10-28 fix: Visual Baselines GITHUB_TOKEN 쓰기 권한
 
 - workflow_run 트리거는 기본 토큰이 read-only라 baseline push가 403 — `permissions: contents: write` 선언으로 자동 복구 파이프라인 완성
+
+## 2026-11-17 content: hazmat 과목1 교재 2차 출판 검수 — 분류 정정·중복 잔재·표기 마무리
+
+- 내용 정정 5건: 유기화합물 위험물 분류(제1류→제5류·일부 제2류 고형알코올), 제6류 부식성 산류→산화성 액체, 과산화물 소화 문단 재배열(금지→이유→대체소화→예외 말미), Ch1 확인문제 10 반쪽반응형 재작성(대상 특정), E/Z 핵심포인트에 [심화] 태그
+- 중복 잔재 정리: §11 완충용액 #### 잔여 블록 삭제, §15 용액평형→§4·§8 참조 압축, 유기/무기 비교표 5→2개(정본+3장), 무기취급 탄소화합물 목록 2→1
+- 명명 통일(수험 관행): 메탄·에탄·프로판·부탄…데칸 / 메틸·부틸기 / 부텐·부틴 확인문제와 일치, 다이메틸·에스터·할로젠 통일
+- 표기 잔재: LaTeX `_{Z}^{A}X`→`X(Z, A)` 동위원소·K_sp 지수 지수체제 정리, CₙH₂ₙ₊₂ 일반식, `10^(−pH)`/`10^(−pOH)`, 분수 간소화, β⁻ decay·T₁/₂ 통일, 베타선 질량 0.00055 amu, 산화 판별 기준 화살표 잔여 제거
+- 문제은행 교재 인용 70건 재고정 + 문제은행 용어 동일 통일
+
+## 2026-11-17 content: hazmat 과목1 교재 3차 출판 검수 — 수식 표기·참조 제목·용어 마무리
+
+- log 표기 정정: `log(X)/(Y)` → `log(X/Y)` 5건 (헨더슨식·pH/pOH 정의·예제) — 오독 가능 표기 해소
+- `(A)/(B)` 분수 전면 `A/B` 통일 (~35곳: 엔트로피·밀도·몰수·농도 환산식·피폭선량 등)
+- 참조 제목 정정: 존재하지 않는 '3. 무기화합물 종류·특성' → 실제 절 '3. 유기화합물과의 물리화학적 특성 비교' 2곳
+- 동위원소 표기: `X(Z, A)` → `ᴬ_ZX^(q±)` 계열로 통일 (왼쪽 위 질량수·왼쪽 아래 원자번호·오른쪽 위 전하 — 위치를 글로 병기), 붕괴 반응식 `ᴬ⁻⁴_Z₋₂Y`·`⁴₂He`·`⁰₋₁e` 정규화
+- 용어 마무리(법령·수험 구표기): 다이에틸→디에틸, 다이메틸→디메틸, 폼알데하이드→포름알데하이드, 폼산→포름산 (다이크로뮴산염류는 현행 법령 품명이라 유지), 문제은행 동일 적용
+- `C_n H₂n+2` 잔여 → `CₙH₂ₙ₊₂`, 헤딩 앞 빈 줄 11곳 보장(코드 펜스 내부 제외)
+- 문제은행 교재 인용 재고정, 카드 스냅샷·드릴 재생성
+
+## 2026-11-17 content: hazmat 교재 📌출처 블록 + 교재-참조자료 매핑 문서 신설
+
+- physchem·fire·hazprop 3개 표준형 교재의 전 챕터에 `> 📌 **출처**` 블록 추가 (16챕터) — 챕터별 실제 근거 ref_md 딥링크 (출제기준 평탄 문서 + 과목 귀속 법령)
+- `docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md` 신설 — build:refmap §2 표로 교재→ref 실측 매핑 자동 추출 (cosmetic과 동일 규약)
+- 문제은행 교재 인용 178건 재동기 (출처 삽입에 따른 라인 이동)
+
+## 2026-11-17 fix: hazmat 교재 출처 표기 역할 명확화
+
+- 챕터 `📌출처`에서 출제기준을 "범위 명세"로 표기 정정 — 출제기준은 내용 소스가 아니라 출제 범위 문서
+- Ch01 기초화학은 "일반화학 기초 이론(자체 정리 — 법령·고시 직접 근거 없음)" 명시 (ref_md에 기초화학 근거 문서 부재)

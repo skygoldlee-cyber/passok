@@ -168,7 +168,7 @@ cosmetic의 모든 파일을 복사할 필요는 없다 — 필요한 분류의 
 
 - **파일럿 근거 주석**: comingSoon 시험은 `manifest.json`에 `_pilot`(또는 `_reform2028` 등) 필드로 파일럿 범위·후속 계획을 명기한다 (lossadj 선례 — `check:onboard`가 미선언 시 info로 안내)
 - **콘텐츠 증산 경로**: 문제은행은 AI 제작 체인(`ai:draft` → 리뷰 → 편입, AI_AUTHORING_DESIGN) + `ai:coverage` 갭 리포트로 범위를 정한다. 교재는 `scaffold:chapter` + `ai:textbook` (TEXTBOOK_AUTHORING_GUIDE §6.6). 법령 원문은 `ai:coverage`의 인용 LNN ↔ 교재 커버리지로 우선순위를 잡는다
-- **승격 정량 기준**: **과목당 모의고사 3회분** — `integratedExam.questionsPerSubject` 과목 출제 수×3, 미선언 과목은 20문×3=60문 간주 (manifest `exams` 파일의 `### Q` 실측). `npm run check:onboard`가 시험별 준비도 표·승격 후보 힌트·구조 결함을 출력한다 — `check:audit` 프리셋에 포함된 advisory 단계라 커밋을 차단하지 않는다. 기준 상향(구 ≥20문) 전 이미 정식이던 팩(broker·indsafe·compapp2·carework)은 `MOCK3X_GRANDFATHERED`로 오류 대신 보강 권장 경고가 된다 — 신규 승격 팩만 오류 차단 대상이다
+- **승격 정량 기준**: **과목당 모의고사 3회분**(필수) · **6회분**(권장) — `integratedExam.questionsPerSubject` 과목 출제 수×N, 미선언 과목은 20문 간주 (manifest `exams` 파일의 `### Q` 실측). `npm run check:onboard`가 시험별 준비도 표(모의회분 열)·승격 후보 힌트·권장량 미달 안내·구조 결함을 출력한다 — `check:audit` 프리셋에 포함된 advisory 단계라 커밋을 차단하지 않는다. 기준 상향(구 ≥20문) 전 이미 정식이던 팩(broker·indsafe·compapp2·carework)은 `MOCK3X_GRANDFATHERED`로 오류 대신 보강 권장 경고가 된다 — 신규 승격 팩만 오류 차단 대상이다
 - **정식 전환 절차**: `comingSoon` 제거 → `desc` 수치를 실측과 정합(`check:manifest`) → `build:data` ×2 → 커밋 → `check:content`·`check:all` → 배포. 전환 후에는 3단계 게이트와 동일한 검증을 통과해야 한다
 - **커뮤니티 표면 연동** (Discord 서버 운영 시 — DOC-DSN-36): 파일럿은 축소 채널(`#<시험>-알림신청`+`#<시험>-질문`+`@관심-<시험>` 역할)으로 등록하고, 정식 승격 시 풀 카테고리(공지·질문포럼·오류제보·스터디)로 확장한다. `exams.json`에 `discordInvite`(ES-08)를 선언하면 설정 메뉴에 커뮤니티 버튼이 노출된다 — 포럼 태그는 manifest `subjects` 이름과 맞춘다
 - **등록 파일럿의 잔여 작업 트래커**: `PILOT_EXAM_PROMOTION.md`(DOC-RBK-16) — lossadj·insadj·indsafe·admagent 시험별 승격 조건과 진행 체크리스트

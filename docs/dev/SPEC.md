@@ -173,7 +173,7 @@
 | § | 기능 영역 | 주요 지원 기능 | ID 범위 (요구 수) |
 |---|----------|---------------|------------------|
 | 3.1 | **대시보드** | 학습 통계·과목 진행률·정답률 히트맵·약점 추천·합격 전략·D-day·계획 등급·예상 점수·마스터리 레벨·일일 챌린지·오늘 할 일 큐 | D-01~D-23·TQ-01~TQ-05 (28) |
-| 3.1.5 | **학습 진단** | 오답 패턴·취약 진술·학습 리듬 진단·복합 예상 점수·추천 효과 추적·학습 패턴·주간 리포트·개념 앵커 | AN-01~AN-10 (10) |
+| 3.1.5 | **학습 진단** | 오답 패턴·취약 진술·학습 리듬 진단·복합 예상 점수·추천 효과 추적·학습 패턴·주간 리포트·개념 앵커·함정 유형 진단 | AN-01~AN-11 (11) |
 | 3.2 | **플래시카드** | 3D 플립·외움/헷갈림 분류·FSRS 간격 반복·셔플·난이도·과목 필터 | F-01~F-11 (11) |
 | 3.3 | **퀴즈** | 객관식 풀이·즉시 채점·오답 노트·과목·난이도 필터·해설 표시 | Q-01~Q-12 (12) |
 | 3.4 | **모의고사** | 실전 타이머 시뮬레이션·성적표·과목별 분석·성적 추이 | E-01~E-09 (9) |
@@ -192,14 +192,14 @@
 | 3.17 | **콘텐츠 품질 감사** | 카드 품질·복수정답·인용 유효성 자동 감사 | CQ-01~CQ-06 (6) |
 | 3.18 | **Formula OS** | 사업 유형별 실무 — 고객·포뮬러·조제 기록·원료 장부·표시사항·광고·기성품 분석·이상사례·법규 체크리스트·LOT 추적·판매내역서·동의서·재고 차감·종합 점검 보고서 출력 | FO-01~FO-70 (70) |
 | 3.19 | **계정·동기화** | Supabase 로그인·클라우드 스냅샷 동기화(선택적) | AU-01~AU-10 (10) |
-| 3.20 | **캘린더·복습·드릴** | 학습 캘린더·목표·학습 계획·계획 준수·과목 배분·뽀모도로·취약 진술 드릴 | SC-01~SC-16·RV-01~RV-04·ND-01·DR-01~DR-07 (28) |
+| 3.20 | **캘린더·복습·드릴** | 학습 캘린더·목표·학습 계획·계획 준수·과목 배분·뽀모도로·취약 진술 드릴 | SC-01~SC-16·RV-01~RV-04·ND-01·DR-01~DR-11 (32) |
 | 3.21 | **UI 모드 전환** | 학습 ↔ 실무(Formula OS) 모드 전환 | UM-01·UM-02·UM-04~UM-06 (5) |
 | 3.22 | **시험 선택·전환** | 멀티시험 팩 선택·전환·레지스트리 기반 | ES-01~ES-11 (11) |
 | 3.23 | **사용자 의견** | 피드백 폼·건의 수신 | FB-01~FB-08 (8) |
 | 3.24 | **학습 품질 감사** | 주간 배분·학습 진단 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
 | 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
 | 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트·Discord 운영 알림·조회 봇·커뮤니티 공지·기관 활동 | AD-01~AD-13 (13) |
-| 3.27 | **AI 제작 지원** | author-time AI 초안 생성·검토 파이프라인 — `tmp/ai_drafts/` → 사람 리뷰 → content/ 편입 | AI-01~AI-38 (37) |
+| 3.27 | **AI 제작 지원** | author-time AI 초안 생성·검토 파이프라인 — `tmp/ai_drafts/` → 사람 리뷰 → content/ 편입 | AI-01~AI-39 (38) |
 | 3.28 | **주관식 연습** | 서술형 답안 작성·자기채점 루브릭·자동저장 | WP-01~WP-08 (8) |
 | 3.29 | **서비스 소개 (랜딩)** | `/landing.html` 정적 소개 페이지 — 시험 카드·체험 데모(퀴즈·학습계획)·설치 CTA·SEO/OG·프로모션 진입점 | LP-01~LP-14 (14) |
 | 3.30 | **개인 맞춤 고도화** | 개념 단위 약점 진단·개인화 스케줄·합격 예측 — 기존 자산(FSRS·BKT·진술 추적·임베딩)의 조합 계층 `src/study/personalization.js` | PS-01~PS-11 (11) |
@@ -252,6 +252,7 @@
 | AN-08 | 학습 패턴 분석 — `recordStudyActivity`가 활동별 시간대 버킷(캘린더 엔트리 `h`)을 기록하고 `computeStudyPattern`이 최다 시간대·요일·주말 비중을 집계해 학습 리듬 카드에 표시 (활동 4일·8회 미만이면 미표시) | ✅ |
 | AN-09 | 주간 리포트보내기 — 진단 요약 섹션의 "주간 리포트" 버튼이 `buildWeeklyReportText`로 평문 리포트(학습량·정답률 추이·예상 점수·합격 갭·취약 단원·패턴·주간 계획 대비 실적·추천 효과·실제 시험 결과)를 생성, Web Share API 또는 클립보드로 출력 (`exportAnalysisReport`, `analysis_report` 액션 카운터). 계획 대비 실적은 SC-06 `computePlanAdherence` 요약을 `p.plan`으로, 과목별 실적/배정 행은 SC-09 배분 결과를 `p.planBySubject`로, 추천 효과는 AN-06 `evaluateRecommendationEffect`를 `p.recEffect`로, 실제 결과·보정은 AN-05 `getActualResult`+`computeCalibrationBias`를 `p.actual`/`p.bias`로 전달 (보정치 0이면 보정 문구 생략) | ✅ |
 | AN-10 | 교재-비의존 개념 식별자 — 진술 `conceptId`를 라인 좌표(L####)에서 구조 앵커(`§챕터.절`, 교재 `## 📚 Chapter N.`>`## M.` 번호체계 해석, `tools/build/textbook_anchors.js`)로 전환해 교재 편집·라인 시프트 시 개념 클러스터 분열을 방지한다. `build_combo_drills`가 문항 첫 교재 인용을 앵커로 해석해 부여하고, `question_chapters.js`에 `CID_SECTION`(레거시 L→앵커 환산)·`CHAPTER_TITLES`(앵커 챕터 표시명)를 함께 방출한다. 런타임은 `normalizeCidAnchor`로 저장 cid를 정규화(레거시 L####→앵커, `q:` 폴백 제외, 비-라인 키 유지)해 `computeWeakConceptClusters`·`chapterFromCid`·취약 진술 그룹핑(`trainer-drills`)에서 신구 형식을 동일 버킷으로 병합한다 — 저장 데이터 이관 없이 읽기 시점 정규화. 교재 인용 없는 문항은 `q:<문항id>` 폴백 유지 | ✅ |
+| AN-11 | **함정 유형(trap) 약점 진단** — 오답 문항의 `q.trap` 태그(AI-39, `TRAP_TAGS` 화이트리스트)를 유형별로 집계해 "당신은 수치바꿔치기 유형에 약합니다" 진단을 표시한다. `build_question_chapters`가 문제은행의 `> **함정:**` 메타 행을 파싱해 `question_chapters.js`에 `QUESTION_TRAPS` 맵(`<exam>_q<N>` → 태그 배열)을 방출하고, `computeTrapWeakness`가 정오 전건(quizResults)의 시도·오답을 유형별 버킷에 귀속한다 — 문항 해석은 `resolveQuiz`의 로드된 번들 `quiz.trap` 우선, 실패 시 `QUESTION_TRAPS` 폴백, `weak_quiz_`/`weak_exam_` 접두사·`weak_sim_<exam>_q<N>` id는 원문항으로 정규화(단원 집계와 동일 규약). 복수 태그 문항은 각 유형에 1건씩 반영, 정렬은 오답 수→오답률→시도 수. 오답 패턴 카드(`analysis-wrong-cause`)에 "함정 유형" 절로 상위 3유형(오답 N건/시도 M문)과 최상위 유형 대처 조언을 표시 — 오답 2건 미만 유형은 진단 문구를 생략(노이즈 억제), 태그된 오답이 없으면 절 전체를 숨겨 거짓 진단을 막는다. 사용자 원인 태깅(AN-02)이 없어도 자동 집계라 독립 표시되며, 주간 리포트(AN-09)는 `p.trapWeakness` 상위 2유형을 "취약 함정 유형" 행으로 포함한다. trap 미부여 시험 팩·구형 데이터는 빈 집계로 안전 폴백 | ✅ |
 
 ### 3.2 플래시카드 (Flashcard)
 
@@ -618,6 +619,10 @@
 | DR-05 | **취약 진술 리뷰 패널** — conceptId 개념 그룹핑(참/거짓 혼동쌍 대조), 복습 대상 필터, 졸업 수 표시 (표면 위치는 복습 뷰 — RV-02) | ✅ |
 | DR-06 | **복수정답형 모의고사 연동** — `startComboMockExam`으로 combo 번들→시뮬 형식 평탄화, 채점 시 `deriveComboJudgments`로 진술 판정 역산 → 취약 추적·FSRS 반영 | ✅ |
 | DR-07 | **문항 스키마 정합성** — single/combo/short/ox 4유형, `deriveComboAnswer`로 정답 도출 + `validateQuestion` 유일성 검증 (정답 오타 구조적 차단, `questions.js`) | ✅ |
+| DR-08 | **개념 문항 딥링크** — `#/trainer/concept/<cid>` 해시 진입 시 conceptId 직접 일치 문항 우선·같은 장 인접 개념 보충·오답/미풀이 우선 정렬로 5문 선정 세션 (`concept-drill.js` 순수 선별 + `startConceptDrill` — 선정형이라 은행 무수정, DOC-DSN-52 Phase 1) | ✅ |
+| DR-09 | **교재 인쇄 QR 칩** — 표준형 교재 절(`## N.M`) 말미에 `#/trainer/concept/<cid>` 딥링크 QR 칩을 빌드타임 주입 (`tools/build/build_textbook_print.js`). 절별 문항 수는 문제은행의 교재 인용을 §앵커(AN-10)로 해석해 집계 — 인용 파일이 해당 교재와 일치하는 문항만 유효, 0문 절 칩 생략·칩에 문항 수 표기·`page-break-inside:avoid` 절단 방지. 산출은 `dist/textbook-print/<exam>/<subject>/`(gitignore)에 스테이징 MD+images 복사 후 md2doc 연계로 PDF·DOCX·인쇄HTML 생성 (`npm run build:textbook-print -- --exam <id>`, DOC-DSN-52 Phase 2) | ✅ |
+| DR-10 | **교재 인쇄 템플릿** — 표지·목차·러닝헤드·쪽수를 갖춘 교재 전용 인쇄 산출 (`ref-pipeline/textbook_pdf.py` + `template/print-textbook.html`). Chrome print는 @page 마진박스·counter(page)·outline 미지원이므로 2패스 구현: 1패스 PDF에서 h2 크기 스팬(13~17pt)으로 절별 물리 쪽 추출 → 목차 쪽수 채워 2패스 → PyMuPDF로 본문 각 쪽에 좌 서명·우 장명 러닝헤드와 중앙 쪽수 스탬프 (표지·목차 전면 제외, 인쇄 쪽수 = 물리 쪽 − 전면). 목차 항목은 내부 `#id` 링크로 PDF GoTo 유지, 장 시작은 `:::page` 주입으로 새 쪽 보장. 스탬프 폰트는 `TEXTBOOK_PDF_FONT`>malgun>Noto 탐색, BMP 밖 문자 제거. DOCX는 범용 경로 유지 | ✅ |
+| DR-11 | **리더 절 문항 딥링크** — 교재 리더 절 카드 본문 말미에 "이 절 문항 풀기 §N.M" 링크 (`reader-render.js buildSectionsHtml`). §앵커는 `📚 Chapter NN.` 컨텍스트에서 `M.` 번호 절(getTocLevel 1)만 부여 — 인쇄 QR 칩(DR-09)과 동일 번호 규약, Chapter 헤더·비번호 절·Chapter 이전 서두는 링크 없음. `#/trainer/concept/<cid>` 해시로 라우터 경유 개념 드릴(DR-08) 진입 — 종이 QR의 디지털 대응판 (DOC-DSN-52 §3.3) | ✅ |
 
 ### 3.21 UI 모드 전환 (학습 ↔ 실무)
 
@@ -748,6 +753,7 @@
 | AI-38 | 약점 생성형 미니퀴즈 (Pro) — `quiz_gen` kind: 취약 개념·근거·기존 발문(중복 금지) 구조화 입력 → items 배열 생성. kind별 responseSchema·정규화(`KINDS[kind].read`) 라우팅, 클라이언트 `requestWeakQuizGen` + gen-gate 통과분만 `state.quiz.data` 출제 + `[AI 생성]` 컨텍스트 표시. Pro 게이트(`hasProEntitlement`) + 오답 리뷰 "AI 미니퀴즈 PRO" 버튼 | ✅ |
 | AI-35 | 주간 플랜 조정 — `plan_adjust` kind: 주간 수치(weekly_diagnosis와 동일 구조화 인자) + 여유 선택지(부족/보통/넉넉 — 자유 텍스트 없음, AI-30 준수) → 다음 주 배분·우선순위 조언 2~3문장. 학습 리듬 카드 여유 select + "AI 플랜 조정" 버튼, 조언만 표시(실제 배분 변경 없음) | ✅ |
 | AI-36 | 교재 질의응답 — `textbook_qa` kind: 자유 질문(≤200자, AI-30 개정 경계형) + SemanticIndex 임베딩 검색 근거 스니펫(top-k 진술/문항 텍스트) → 근거 범위 답변 + 인용 스니펫 목록. 학습 리듬 카드 "교재에 물어보기" 입력, 답변+인용+`AI 생성` 배지 인라인 표시 | ✅ |
+| AI-39 | **함정 유형(trap) 태그** — 문항 오지의 함정 방식을 닫힌 어휘 `TRAP_TAGS`(유사용어혼동·수치바꿔치기·절대표현·주어치환·예외조항, `src/content/questions.js` 정본)로 기술. STANDARD_TAGS와 별도 축. 문제은행 정답 블록 `> **함정:** 유형1, 유형2` 메타 행 → `exams.plugin.js`가 번들 `q.trap`으로 편입(어휘 밖 값은 빌드 실패 = 화이트리스트 게이트, `validateQuestion`도 동일 검증). `ai:trap`이 규칙 후보(lib/traps.js — 수치마스크·절대 화행·예외 표현·선지 bigram 유사도) + LLM 보완으로 초안 생성 → 사람 리뷰 후 `--write` 편입. 파일럿: carework 142문 태깅 (DOC-DSN-52 Phase 3) | ✅ |
 
 ### 3.28 주관식 연습 자기채점 (Written Practice)
 
@@ -1366,6 +1372,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | CE-03 | 비교표: 주요 개념/수치/기준 비교 | ✅ |
 | CE-04 | 확인문제: 객관식 4지선다 + 상세 해설 (단원 말미) | ✅ |
 | CE-05 | 용어 사전: 챕터별 `📌 용어 정리` 표 (챕터 말미) | ✅ |
+| CE-06 | **가독성·정보 밀도 규약**: 교재 본문은 "읽히는 교재" 기준으로 작성한다 — 문장 40자 이내·문단 3문장 이내, 섹션당 핵심 포인트 3~5개·표 1개·박스 2개·목록 7항목 상한, 덜어내기 우선순위(자주 출제→본문/드문 출제→보조/무관 배경→제외), 표 4열×6행·단위 머리행·숫자 우측, 강조 한 수단·색만으로 구분 금지, 다이어그램 상자 7개·12자·한 방향, 이미지 장식 금지·캡션 필수. 규약 정본은 `TEXTBOOK_AUTHORING_GUIDE` §3.10 — 출처: "자격시험 교재 제작 가이드 — 가독성·시인성 중심"(`tmp/materials/guide/`, 인쇄 규격은 적용 유보) | ✅ |
 
 ### 5.6 이야기형 교재 서사 구조
 

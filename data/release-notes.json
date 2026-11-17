@@ -1,5 +1,68 @@
 [
   {
+    "version": "v20261117-0d38dc9",
+    "date": "2026-11-17",
+    "notes": [
+      "[리팩터링·refs] 출제기준 저장 위치 통일 — 전 21팩 ref_md/ 직하 평탄형",
+      "[정리·release] v20261116-a66ca3b 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261116-a66ca3b",
+    "date": "2026-11-16",
+    "notes": [
+      "[기능·exam] hazmat 서브브랜드 Passzard·practiceName Danger OS 등록",
+      "[정리·release] v20261116-20bf8e5 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261116-20bf8e5",
+    "date": "2026-11-16",
+    "notes": [
+      "[수정·reader] 메타 규약 접근 정정 — 요약 카드는 비메타 콘텐츠로 기준선 승인",
+      "[수정·refs] 세부기준 평탄화 분할 + 메타 요약 패턴 — CI content traceability 해소",
+      "[수정·analysis] esc-ok 검토 면제 주석 — check:escape 기준선 복구",
+      "[정리·build] 파생물 동기 — keyword-index·sw.js (참조자료 정규화 반영)",
+      "[수정·carework] ref_md 링크 괄호 퍼센트 인코딩 — audit_card_quality BROKEN_LINK 해소",
+      "[기능·exam] hazmat(위험물산업기사) active 승격 — comingSoon 해제",
+      "[content·refs] 참조자료 레지스트리 정규화 — 과목 귀속·lawdb 조인 완결",
+      "[content·refs] hazmat 과목별 참조자료 8종 추가 — law.go.kr DRF 원문 ref_md",
+      "[review·content] hazmat 문제은행 362문 전량 검수 — 사실 오류 0, 헤더 검수 완료 표기",
+      "[review·content] hazmat 확인문제 80문 전량 검수 — ai-draft 마커 제거"
+    ]
+  },
+  {
+    "version": "v20261116-277666b",
+    "date": "2026-11-16",
+    "notes": [
+      "[수정·gates] domain-map에 concept-drill.js 등록 — 신규 study 모듈 미분류 해소",
+      "[수정·refpipe] DOCX 이미지 포맷 대응 — SVG 래스터·WebP PIL 변환·%20 경로",
+      "[문서·design] DOC-DSN-52 §4-1 교재 인쇄 파일럿 결과 기록",
+      "[기능·study] DR-08 개념 문항 딥링크 — #/trainer/concept/<cid> 세션",
+      "[문서·design] DOC-DSN-52 학습매체 연결 설계 — 개념 딥링크 + QR + 함정 태그",
+      "[문서·biz] DOC-BIZ-13 원문 v2 반영 — §4 학습매체 확장 14종 + 구현 대조",
+      "[문서·biz] DOC-BIZ-13 팩 공통 서술로 일반화 — 범위 통합·§3 플랫폼 표기",
+      "[문서·biz] DOC-BIZ-13 학습 매체 경쟁 분석 — 전 팩 공통 docs/dev/business 등재",
+      "[정리·release] v20261116-fe4de8d 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261116-fe4de8d",
+    "date": "2026-11-16",
+    "notes": [
+      "[정리·content] cosmetic 레퍼런스 문서 최종확인 갱신 + 임베딩 재생성",
+      "[정리·content] 리네임 후속 — labor 드릴 번들 재생성 + cosmetic 문서 최종확인 갱신",
+      "[리팩터링·content] 표준형 교재 *_표준형.md 전 팩 통일 + 번호 정합화",
+      "[수정·content] 심화 보강 구식 헤딩 번호 제거 — CS-12 게이트 복구",
+      "[기능·ai] 심화 보강 CE-06 리라이트 — carework 61절 LLM 재작성",
+      "[기능·audit] CE-06 규약 보정 + audit:ce06 도구 + 심화 보강 구조 정련",
+      "[문서·spec] CE-06 가독성·정보 밀도 규약 — 교재 제작 가이드 반영",
+      "[기능·carework] 표준교재 심화 보강 + 문제은행 3회분 충족 + 수치 정정",
+      "[기능·hazmat] 문제은행 권장 6회분 도달 — 과목당 120문(총 362문)",
+      "[기능·check] 모의고사 권장 6회분 계층 추가"
+    ]
+  },
+  {
     "version": "v20261115-4f3df7b",
     "date": "2026-11-15",
     "notes": [

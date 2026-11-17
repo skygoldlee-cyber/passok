@@ -238,7 +238,7 @@ function extractCitations(examFile, content) {
         const s = t.replace(/^>\s*/, '');
         // JS \b는 한글에 작동하지 않으므로 키워드 뒤 ** 또는 : 를 요구
         // ⚠️ 인용 위치 미검증 마커(fix_citation_targets --annotate)도 인용문 지문에서 제외
-        return /📖|^⚠️|(해설|허용\s*정답|보충|고득점\s*TIP|학습\s*TIP)\s*[*:：]/.test(s);
+        return /📖|^⚠️|(해설|허용\s*정답|보충|고득점\s*TIP|학습\s*TIP|함정)\s*[*:：]/.test(s);
     };
     const collectQuote = (pos) => {
         const start = lineIndexOf(pos) + 1;

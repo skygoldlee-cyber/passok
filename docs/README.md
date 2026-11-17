@@ -93,15 +93,15 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (102개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (105개)
 │   ├── 수위 문서 (6개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·COMPLEXITY_BACKLOG·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (20개 — README + ADR 19건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (24개)
-│   ├── design/                ← 설계·계획·평가 문서 (30개)
+│   ├── design/                ← 설계·계획·평가 문서 (32개)
 │   ├── reference/             ← 명세·로직·참조 문서 (18개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (4개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (2개 — 사용자 매뉴얼·개인정보처리방침 + images/ — 런타임 fetch·배포 대상)
-└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (11개)
+└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (11개) · docs/exams/hazmat/ (1개)
     ├── README.md              ← 시험별 문서 인덱스
     ├── user/                  ← 학습자 문서 (5개)
     ├── business/              ← 사업 기획·시장 조사·마케팅 문서 (cosmetic 6개 · carework 6개)
@@ -127,6 +127,7 @@ docs/
 | [DOC_CONVENTIONS.md](DOC_CONVENTIONS.md) | 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 규약 + 게이트 매핑 (DOC-DEV-08) |
 | [CODE_CONVENTIONS.md](CODE_CONVENTIONS.md) | 코드 규약 정본 — 파일 계층·명칭·금지 패턴·저장소/UI/추적성 규약 + 규약→게이트 매핑 (DOC-DEV-09) |
 | [SPEC.md](dev/SPEC.md) | 요구사양 명세서 — 구현된 기능을 역공학해 정리 (현행 기준서) |
+| [자격시험_학습매체_경쟁분석.md](dev/business/자격시험_학습매체_경쟁분석.md) | 전 팩 공통 — 교재·인강·CBT 매체별 약점 분석 + 구현 현황 대조(부록 A 갭 4개) (DOC-BIZ-13) |
 | [TRACE_MATRIX.md](dev/TRACE_MATRIX.md) | SPEC↔코드 추적 매트릭스 — 요구사항별 @spec 태그·테스트·문서 매핑 (자동 생성 — `npm run build:trace`) |
 | [COMPLEXITY_BACKLOG.md](dev/COMPLEXITY_BACKLOG.md) | 순환복잡도 상위 함수 분해 백로그 — 임계 초과 함수 목록·분해 순서 (⚙️ 생성물 — `node tools/check/check_complexity.js --report`) (DOC-DEV-14) |
 | [AI_COACH_DESIGN.md](dev/design/AI_COACH_DESIGN.md) | AI 코치 설계 — 서버측 Gemini 런타임 학습 기능·ai-proxy·ai_usage 계측 (DOC-DSN-40) |
@@ -180,7 +181,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [NUMBERING_SYSTEM.md](exams/cosmetic/reference/NUMBERING_SYSTEM.md) | 교재 챕터/섹션 십진 번호체계 |
 | [QUESTION_SCHEMA_DESIGN.md](dev/design/QUESTION_SCHEMA_DESIGN.md) | 문항 데이터 스키마 — 복수정답형의 "진술 단위 O/X → 조합 도출" 구조 |
 | [COMBO_GENERATION_GUIDE.md](dev/runbooks/COMBO_GENERATION_GUIDE.md) | 복수정답형 드릴 생성 도구 — `build_combo_drills.js` + `ref_statements.js` |
-| [TEXTBOOK_REFERENCE_MAPPING.md](exams/cosmetic/reference/TEXTBOOK_REFERENCE_MAPPING.md) | 교재 챕터/섹션 ↔ 참조자료 파일 매핑 정의 |
+| [TEXTBOOK_REFERENCE_MAPPING.md](exams/cosmetic/reference/TEXTBOOK_REFERENCE_MAPPING.md) | 교재 챕터/섹션 ↔ 참조자료 파일 매핑 정의 (cosmetic) |
+| [TEXTBOOK_REFERENCE_MAPPING.md](exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md) | 교재 챕터/섹션 ↔ 참조자료 파일 매핑 정의 (hazmat) (DOC-REF-21) |
 | [COMBO_STUDY_STRATEGY.md](dev/reference/COMBO_STUDY_STRATEGY.md) | 복수정답형 학습 전략 — 진술 원자 단위 학습법, 전략→기능 매핑 (코드 주석에서 참조) |
 | [ENGINEERING_PRACTICES.md](dev/reference/ENGINEERING_PRACTICES.md) | 소프트웨어 공학 요소 — SSOT, 신선도 게이트, 추적성, 다층 검증, 결정성 빌드 등 |
 | [SOFTWARE_ENGINEERING_TECHNIQUES.md](dev/reference/SOFTWARE_ENGINEERING_TECHNIQUES.md) | 적용 공학 기법 카탈로그 — PBT·변이 테스트·성능 예산·ADR·도메인 경계·오류 텔레메트리 포함 전 기법 색인 |
@@ -233,6 +235,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [ASSET_STORAGE_REVIEW.md](dev/design/ASSET_STORAGE_REVIEW.md) | 대형 자산 저장 검토 — 바이너리 git 관리 판단·외부화 기각 근거·LFS 후보 기준 (DOC-DSN-48) |
 | [DEPLOY_PIPELINE_DESIGN.md](dev/design/DEPLOY_PIPELINE_DESIGN.md) | 배포 파이프라인 속도 개선 설계 — 게이트 실패 반복·CI 직렬 대기 해소 (DOC-DSN-49) |
 | [ACCOUNT_LINKING_DESIGN.md](dev/design/ACCOUNT_LINKING_DESIGN.md) | 계정 연결 설계 — 로그인 수단 간 유료 권한 통합 (linkIdentity·충돌 수동 복구 경로, DOC-DSN-50) |
+| [LEARNING_MEDIA_LINK_DESIGN.md](dev/design/LEARNING_MEDIA_LINK_DESIGN.md) | 학습매체 연결 설계 — `#/trainer/concept/<cid>` 개념 문항 딥링크 + 교재 QR + 함정(`trap`) 태그 Phase 1~3 (DOC-DSN-52, DOC-BIZ-13 부록 A 갭 실행 설계) |
+| [TEXTBOOK_IMPROVEMENT_ROADMAP.md](dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md) | 교재 보완 로드맵 — 팩별 볼륨·구조·카드 규약 현황 + 잔여 과제(ai-draft 검수·헤딩 정규화·2차 확장) 추적 (DOC-DSN-53) |
 | [CHANGES.md](dev/CHANGES.md) | 코드 변경 이력 (Changelog) — 변경의 이유와 맥락 |
 
 ### 제품 전략·기획
@@ -435,6 +439,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-49 | `docs/dev/design/DEPLOY_PIPELINE_DESIGN.md` (구 DOC-DSN-90에서 재채번) |
 | DOC-DSN-50 | `docs/dev/design/ACCOUNT_LINKING_DESIGN.md` |
 | DOC-DSN-51 | `docs/exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md` |
+| DOC-DSN-52 | `docs/dev/design/LEARNING_MEDIA_LINK_DESIGN.md` |
+| DOC-DSN-53 | `docs/dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |
@@ -455,6 +461,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-REF-18 | `docs/dev/reference/CONVENTIONS_CHEATSHEET.md` |
 | DOC-REF-19 | `docs/dev/reference/COMMANDS.md` |
 | DOC-REF-20 | `docs/dev/reference/DOCX_GENERATION.md` |
+| DOC-REF-21 | `docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md` |
 | DOC-RBK-01 | `docs/dev/runbooks/AUDIO_HOSTING_GUIDE.md` |
 | DOC-RBK-02 | `docs/dev/runbooks/COMBO_GENERATION_GUIDE.md` |
 | DOC-RBK-03 | `docs/dev/runbooks/CONTENT_WORKFLOW.md` |
@@ -536,6 +543,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-BIZ-10 | `docs/exams/carework/business/이용자_관점_평가_2026-11-13.md` |
 | DOC-BIZ-11 | `docs/exams/carework/business/개인정보처리_위탁계약서_초안.md` |
 | DOC-BIZ-12 | `docs/exams/carework/business/전문가검토_의뢰서.md` |
+| DOC-BIZ-13 | `docs/dev/business/자격시험_학습매체_경쟁분석.md` |
 | DOC-ARC-01 | docs/exams/cosmetic/report_archive/Cosmetic Master Business Plan.md |
 | DOC-ARC-02 | `docs/exams/cosmetic/report_archive/EXTERNAL_REVIEW_LEARNING_PRO.md` |
 | DOC-ARC-03 | `docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md` |
