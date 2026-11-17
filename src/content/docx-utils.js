@@ -807,11 +807,15 @@ const _mdLine = (line, st, cx) => {
     if (!firstMeta) cx.out.push(_blockXml(t, cx.imgMap));
 };
 
+/** 상단 서식란 필요 여부 — 문서번호·수신·참조 중 하나라도 지정되면 부여 */
+/** @param {?{no?:string,recipient?:string,cc?:string}} doc */
+const _hasHeadBlk = doc => !!(doc && (doc.no || doc.recipient || doc.cc));
+
 /** @param {string} md @param {Object<string,{data:Uint8Array,rid:string,cx:number,cy:number,id:number}>} [imgMap]
  *  @param {?{no?:string,org?:string,title?:string,rev?:number,recipient?:string,cc?:string,date?:string}} [doc] */
 const _mdBody = (md, imgMap = {}, doc = null) => {
     const out = [];
-    if (doc && (doc.no || doc.recipient || doc.cc)) out.push(_formBlk(doc)); // 상단 서식란 — 제목 위 좌측 (결재란은 부동 표라 우측 정합 유지)
+    if (doc && _hasHeadBlk(doc)) out.push(_formBlk(doc)); // 상단 서식란 — 제목 위 좌측 (결재란은 부동 표라 우측 정합 유지)
     // 결재란 — :::approve 마커로 역할 지정 (기본 담당·팀장·시설장, 'none'이면 미부여).
     // 부동 표는 앵커 지점 뒤 단락만 감싸므로 제목·메타 줄 출력 뒤에 삽입한다 —
     // 문서 선두 삽입은 제목이 결재란 좌측으로 치우쳐 중앙이 깨졌다 (렌더 리뷰).
@@ -823,12 +827,19 @@ const _mdBody = (md, imgMap = {}, doc = null) => {
         emitAppr: () => { if (st.apprXml) { out.push(st.apprXml); st.apprXml = null; } } };
     for (const line of String(md || '').split('\n')) _mdLine(line, st, cx);
     cx.flush();
-    if (st.code) out.push(_codeP(st.code)); // 미닫힘 펜스 — 수집분 그대로 출력
+    const tail = _mdTail(st, cx, imgMap, doc); // out에 마무리 요소를 push한 뒤 부동 표 반환 — join 전 호출 필수
+    return out.join('') + tail;
+};
+
+/** 본문 변환 마무리 — 미닫힘 펜스 출력·결재란 폴백 앵커·종결 부동 표 반환.
+ *  종결 부동 표는 끝. 뒤에 둔다 — 앵커가 본문 흐름 말미라 항상 마지막 쪽 하단에 통째로 놓인다.
+ *  서명란은 _closeTbl 부동 표로 마지막 쪽 하단 배치 (문서번호 QR은 푸터 — 부동 표 안 이미지는 인쇄 경로 탈락) */
+/** @param {*} st @param {*} cx @param {*} imgMap @param {*} doc */
+const _mdTail = (st, cx, imgMap, doc) => {
+    if (st.code) cx.out.push(_codeP(st.code)); // 미닫힘 펜스 — 수집분 그대로 출력
     cx.emitAppr(); // 메타 없는 문서 폴백 — 본문 끝 앵커라도 부동 표는 상단 여백에 렌더
-    // 종결 부동 표는 끝. 뒤에 둔다 — 앵커가 본문 흐름 말미라 항상 마지막 쪽 하단에 통째로 놓인다.
-    // 서명란은 _closeTbl 부동 표로 마지막 쪽 하단 배치 (문서번호 QR은 푸터 — 부동 표 안 이미지는 인쇄 경로 탈락)
     const close = st.sigLines ? _closeTbl(st.sigLines, imgMap, doc) : '';
-    return out.join('') + _END + close;
+    return _END + close;
 };
 
 /** 본문 이미지 풀 — {{img:key}} 토큰이 실제 참조하는 것만 임베드 + 동일 바이트(crc·길이)는

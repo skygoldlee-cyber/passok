@@ -229,6 +229,32 @@ function _cutsWithTableSplit(root, availPx) {
 }
 
 /**
+ * 캔버스 → PDF 페이지 슬라이스 — cuts 경계별로 잘라 여백 입힌 페이지 캔버스에 옮겨
+ * addImage한다. 초대형 요소 조각은 고정 높이 서브슬라이스로 쪼갠다. (@spec CO-20/CO-21)
+ * @param {*} pdf - jsPDF 인스턴스
+ * @param {HTMLCanvasElement} canvas
+ * @param {number[]} cuts - 절단 위치 (css px)
+ * @param {{scale:number, pagePx:number, innerPx:number, mXPx:number, mYPx:number, sliceH:number, W:number, H:number, wm:string}} g - 페이지 기하·워터마크
+ */
+function _pdfSlicePages(pdf, canvas, cuts, g) {
+    for (let i = 0; i + 1 < cuts.length; i++) {
+        const y0 = Math.round((cuts[i] || 0) * g.scale), y1 = Math.min(Math.round((cuts[i + 1] || 0) * g.scale), canvas.height);
+        for (let off = 0; off < y1 - y0; off += g.sliceH) { // 초대형 요소 조각은 고정 높이 서브슬라이스
+            const h = Math.min(g.sliceH, y1 - y0 - off);
+            const pg = document.createElement('canvas');
+            pg.width = canvas.width; pg.height = g.pagePx;
+            const ctx = pg.getContext('2d');
+            if (!ctx) break;
+            ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, pg.width, pg.height);
+            ctx.drawImage(canvas, 0, y0 + off, canvas.width, h, g.mXPx, g.mYPx, g.innerPx, h);
+            _stampWatermark(pg, g.wm); // 페이지 중앙 대각선 — html2canvas/CSS 불의존 확정 스탬프
+            pdf.addImage(pg.toDataURL('image/jpeg', _JPEG_Q), 'JPEG', 0, 0, g.W, g.H, undefined, 'MEDIUM');
+            if (off + g.sliceH < y1 - y0 || i + 2 < cuts.length) pdf.addPage();
+        }
+    }
+}
+
+/**
  * 뷰 미리보기 요소 → PDF File (한글은 캔버스 이미지로 렌더)
  * @param {HTMLElement} el
  * @param {string} title - 확장자 제외 파일명
@@ -264,21 +290,7 @@ export async function pdfFileFromEl(el, title, wm = '', { landscape = false } = 
         const mYPx = Math.round(MY * pxPerMm);
         const mXPx = Math.round(MX * pxPerMm);
         const sliceH = Math.round((H - 2 * MY) * pxPerMm);
-        for (let i = 0; i + 1 < cuts.length; i++) {
-            const y0 = Math.round((cuts[i] || 0) * scale), y1 = Math.min(Math.round((cuts[i + 1] || 0) * scale), canvas.height);
-            for (let off = 0; off < y1 - y0; off += sliceH) { // 초대형 요소 조각은 고정 높이 서브슬라이스
-                const h = Math.min(sliceH, y1 - y0 - off);
-                const pg = document.createElement('canvas');
-                pg.width = canvas.width; pg.height = pagePx;
-                const ctx = pg.getContext('2d');
-                if (!ctx) break;
-                ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, pg.width, pg.height);
-                ctx.drawImage(canvas, 0, y0 + off, canvas.width, h, mXPx, mYPx, innerPx, h);
-                _stampWatermark(pg, wm); // 페이지 중앙 대각선 — html2canvas/CSS 불의존 확정 스탬프
-                pdf.addImage(pg.toDataURL('image/jpeg', _JPEG_Q), 'JPEG', 0, 0, W, H, undefined, 'MEDIUM');
-                if (off + sliceH < y1 - y0 || i + 2 < cuts.length) pdf.addPage();
-            }
-        }
+        _pdfSlicePages(pdf, canvas, cuts, { scale, pagePx, innerPx, mXPx, mYPx, sliceH, W, H, wm });
         _stampPageNumbers(pdf, W, H);
         const blob = pdf.output('blob');
         return new File([blob], `${title}.pdf`, { type: 'application/pdf' });

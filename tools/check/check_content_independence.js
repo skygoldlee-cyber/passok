@@ -94,6 +94,22 @@ const ALLOWED = [
         file: 'tools/import/enrich_facility_stats.js', contains: '요양보호사',
         reason: '공단 XLSX 인력현황 시트의 컬럼명 자체가 시험 도메인 콘텐츠 — 원천 데이터 스키마 키'
     },
+    {
+        file: 'tools/check/check_exam_onboard.js', contains: "'broker'",
+        reason: "MOCK3X_GRANDFATHERED — 기준 상향(과목당 3회분) 이전 active 승격 팩의 id 목록. 승격 진단 도구라 팩 id를 직접 열거하는 것이 기능"
+    },
+    {
+        file: 'tools/check/check_exam_onboard.js', contains: "'indsafe'",
+        reason: '동일 — MOCK3X_GRANDFATHERED grandfathered 팩 id'
+    },
+    {
+        file: 'tools/check/check_exam_onboard.js', contains: "'compapp2'",
+        reason: '동일 — MOCK3X_GRANDFATHERED grandfathered 팩 id'
+    },
+    {
+        file: 'tools/check/check_exam_onboard.js', contains: "'carework'",
+        reason: '동일 — MOCK3X_GRANDFATHERED grandfathered 팩 id'
+    },
 ];
 
 /* ---------- 코드 채널 추출 (주석 제거 — 문자열은 보존) ---------- */

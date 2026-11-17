@@ -172,6 +172,27 @@ export const createDocMd = ({ org = () => '', sign = () => ({}), images = () => 
      *  문구 자체는 공용 docWmText — docx 회전 상자·PDF 캔버스 스탬프와 동일 */
     const _wmText = () => (sign().wm ? docWmText(org()) : '');
 
+    /** 본문·메타 한 줄 — 문서 설정 마커는 생략, 첫 본문 요소 직전에 결재란 삽입 */
+    /** @param {string} t @param {boolean} firstMeta @param {*} st @param {*} cx */
+    const _mdBodyLine = (t, firstMeta, st, cx) => {
+        if (t.startsWith(':::approve') || t === ':::landscape') return; // 문서 설정 마커 — 출력 없음
+        if (firstMeta) cx.out.push(`<p class="doc-meta">${_inl(t.replace(/\{\{img:[\w-]+\}\}/g, '(이미지)'))}</p>`); // 제목 직후 메타줄 — 인라인·토큰도 본문과 동일 처리
+        if (st.apprHtml) { cx.out.push(st.apprHtml); st.apprHtml = ''; } // 메타 없는 문서 폴백 — 첫 비마커 줄 앞
+        if (!firstMeta) { const html = _textHtml(t); if (html) cx.out.push(html); }
+    };
+
+    /** 한 줄 변환 — 블록 상태·헤딩·빈 줄·본문 (docx-utils의 _mdLine과 동일 구조) */
+    /** @param {string} line @param {*} st @param {*} cx */
+    const _mdLine = (line, st, cx) => {
+        const t = line.trim();
+        if (_mdCode(line, t, st, cx) || _mdSign(t, st, cx) || _mdStruct(t, st, cx)) return;
+        cx.flush(false);
+        if (_mdHead(t, st, cx)) return;
+        if (!t) return; // 빈 줄 — meta 플래그 유지
+        const firstMeta = st.meta; st.meta = false;
+        _mdBodyLine(t, firstMeta, st, cx);
+    };
+
     /** MD 서브셋 → HTML — 미리보기·PDF 렌더 원본 (docx-utils의 _mdBody와 동일 서브셋) */
     /** @param {string} md */
     const mdToHtml = md => {
@@ -183,18 +204,7 @@ export const createDocMd = ({ org = () => '', sign = () => ({}), images = () => 
             if (st.tbl && !listOnly) { out.push(_tblHtml(st.tbl)); st.tbl = null; }
             if (st.list) { out.push(`<ul>${st.list.map(i => `<li>${_inl(i)}</li>`).join('')}</ul>`); st.list = null; }
         } };
-        for (const line of String(md || '').split('\n')) {
-            const t = line.trim();
-            if (_mdCode(line, t, st, cx) || _mdSign(t, st, cx) || _mdStruct(t, st, cx)) continue;
-            cx.flush(false);
-            if (_mdHead(t, st, cx)) continue;
-            if (!t) continue; // 빈 줄 — meta 플래그 유지
-            const firstMeta = st.meta; st.meta = false;
-            if (t.startsWith(':::approve') || t === ':::landscape') continue; // 문서 설정 마커 — 출력 없음
-            if (firstMeta) out.push(`<p class="doc-meta">${_inl(t.replace(/\{\{img:[\w-]+\}\}/g, '(이미지)'))}</p>`); // 제목 직후 메타줄 — 인라인·토큰도 본문과 동일 처리
-            if (st.apprHtml) { out.push(st.apprHtml); st.apprHtml = ''; } // 메타 없는 문서 폴백 — 첫 비마커 줄 앞
-            if (!firstMeta) { const html = _textHtml(t); if (html) out.push(html); }
-        }
+        for (const line of String(md || '').split('\n')) _mdLine(line, st, cx);
         cx.flush(false);
         if (st.code) out.push(`<pre class="doc-code">${_esc(st.code.join('\n'))}</pre>`); // 미닫힘 펜스 — 수집분 그대로 출력
         out.push('<p class="doc-end">끝.</p>'); // 공문서 종결 표기
