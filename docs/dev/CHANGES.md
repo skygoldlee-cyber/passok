@@ -1,6 +1,12 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-18 docs(exam): 인물 설정표 정본 신설(cosmetic·hazmat) + Series Bible 재배치
+
+- **신규 문서**: `cosmetic/docs/인물 설정표.md`(DOC-USR-27)·`hazmat/docs/인물 설정표.md`(DOC-USR-28) — carework 인물 설정표(DOC-USR-23)와 동일한 정본 문서 형식(등장인물 표·설정 규칙 6개·변경 이력)
+- **연결**: 양쪽 Series Bible 서두에 인물 설정표를 사실 설정 정본으로 참조하는 안내 추가 (carework 패턴 통일)
+- **재배치**: 3개 팩 Series Bible을 `교재/` 루트 → `교재/docs/`로 통일 이동
+
 ## 2026-11-18 docs(carework): 이야기형 교재 시리즈 설정 문서(Series Bible) 신설
 
 - **신규 문서**: `교재/두번째인생_이야기형교재_시리즈설정문서.md` — PASSMULA/SAFECHEM과 동일한 8절 구조
