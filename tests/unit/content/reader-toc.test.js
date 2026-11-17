@@ -13,7 +13,7 @@ const require = createRequire(import.meta.url);
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const {
     isStoryMetaSection, filterMetaSections, getTocLevel,
-    cleanRefTitle, extractSubHeadings, buildSectionDisplayTitles,
+    cleanRefTitle, extractSubHeadings, computeTocRoles, buildSectionDisplayTitles,
 } = require(join(ROOT, 'src/reader/reader-toc.js'));
 
 test('isStoryMetaSection — 메타 섹션 제목 판정', () => {
@@ -120,4 +120,31 @@ test('extractSubHeadings — ### / #### 추출, 코드블록 제외', () => {
     ]);
     assert.deepEqual(extractSubHeadings(''), []);
     assert.deepEqual(extractSubHeadings(null), []);
+});
+
+test('computeTocRoles — 절 사이 무번호 📌 카드는 챕터 자식 유지 (회귀)', () => {
+    const secs = [
+        { title: '📚 Chapter 01. 제1류' },
+        { title: '1. 성상 및 특성' },
+        { title: '📌 시험 핵심 포인트' },   // 절1·절2 사이 중간 카드
+        { title: '2. 저장 및 취급' },
+        { title: '📌 수험 대비 핵심 포인트' }, // 챕터 말미 카드
+        { title: '✅ 확인문제' },
+        { title: '📚 Chapter 02. 제2류' },
+        { title: '1. 성상 및 특성' },
+        { title: '2. 저장 및 취급' },
+    ];
+    assert.deepEqual(computeTocRoles(secs), [
+        'chapter', 'child', 'child', 'child', 'top', 'top', 'chapter', 'child', 'child',
+    ]);
+});
+
+test('computeTocRoles — 챕터 헤더 직후 인트로 무번호 절은 skip', () => {
+    const secs = [
+        { title: '📚 Chapter 01. 제1류' },
+        { title: '학습 안내' },
+        { title: '1. 성상' },
+        { title: '✅ 확인문제' },
+    ];
+    assert.deepEqual(computeTocRoles(secs), ['chapter', 'skip', 'child', 'top']);
 });

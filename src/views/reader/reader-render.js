@@ -14,7 +14,7 @@ import {
 } from '../../pdf-registry.js';
 import { collectGlossaryItems, renderGlossaryTable, appendGlossaryTocItem } from '../glossary-renderer.js';
 import {
-    getTocLevel,
+    getTocLevel, computeTocRoles,
     extractSubHeadings, buildSectionDisplayTitles
 } from '../../reader/reader-toc.js';
 import { renderSlotHtml } from '../../reader/webtoon-render.js';
@@ -73,16 +73,13 @@ function buildTocSectionItem(section, idx, minLevel, displayTitle) {
 function buildTocHtml(chapter, displayTitles) {
     let tocHtml = '';
     let inChapter = false;
-    let hasSeenNumbered = false;
+    const roles = computeTocRoles(chapter.sections);
     chapter.sections.forEach((/** @type {*} */ section, /** @type {number} */ idx) => {
         // 참조문서 헤더 (01_화장품법 등) — NN_ 접두사 제거 + 중복 제목 챕터 병기
         const displayTitle = displayTitles[idx];
+        const role = roles[idx];
 
-        const isChapterHeader = /Chapter\s+\d+/i.test(section.title);
-        const level = getTocLevel(section.title);
-        const isNumberedChild = level >= 1; // 1., (1), ①
-
-        if (isChapterHeader) {
+        if (role === 'chapter') {
             if (inChapter) tocHtml += `</div>`; // close previous chapter children
             // Chapter parent item
             tocHtml += `<div class="reader-toc-item toc-chapter" data-section-idx="${idx}" data-toc-title="${esc(section.title)}">`;
@@ -92,23 +89,15 @@ function buildTocHtml(chapter, displayTitles) {
             // Start chapter children container (기본 펼침)
             tocHtml += `<div class="reader-toc-children toc-chapter-children" data-parent-idx="${idx}">`;
             inChapter = true;
-            hasSeenNumbered = false;
-        } else if (inChapter) {
-            if (isNumberedChild) {
-                // 번호 있는 섹션 → Chapter 자식
-                hasSeenNumbered = true;
-                tocHtml += buildTocSectionItem(section, idx, 1, displayTitle);
-            } else if (hasSeenNumbered) {
-                // 번호 섹션 이후 비번호 섹션 → Chapter 종료, 최상위 레벨
-                tocHtml += `</div>`;
-                inChapter = false;
-                tocHtml += buildTocSectionItem(section, idx, 0, displayTitle);
-            }
-            // else: Chapter 헤더 직후 비번호 섹션 (intro) → TOC에서 생략
-        } else {
+        } else if (role === 'child') {
+            // 번호 섹션 및 챕터 내부 카드 → Chapter 자식
+            tocHtml += buildTocSectionItem(section, idx, 1, displayTitle);
+        } else if (role === 'top') {
+            if (inChapter) { tocHtml += `</div>`; inChapter = false; }
             // Chapter 밖 — 최상위 레벨
             tocHtml += buildTocSectionItem(section, idx, 0, displayTitle);
         }
+        // 'skip': Chapter 헤더 직후 비번호 섹션 (intro) → TOC에서 생략
     });
     if (inChapter) tocHtml += `</div>`; // close last chapter children
     return tocHtml;
