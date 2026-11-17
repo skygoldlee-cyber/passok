@@ -199,3 +199,25 @@ feature-plan.json             # careLog.save/pdf → pro 게이팅, 나머지 fr
 - 항목 id = sha256(섹션+텍스트+중복순번) — 같은 파일 재업로드 시 체크 상태 유지. 저장소 `carework_audit_custom`.
 - `loadAuditSections`가 커스텀 우선 → 미리보기·내보내기·사본 미리보기까지 동일 적용. "기본 점검표 복원"으로 고시 기본 복귀.
 - 서식(사본)과 항목(업로드)은 독립 축 — 둘 다 적용 가능.
+
+## 11. 구현 현황 스냅샷 (2026-11-18 확인)
+
+본 문서는 Phase 1~5 + CO-13·CO-18/19를 설계 범위로 한다 — 이후 확장은 별도 설계·SPEC으로 관리되며, 정본 상태는 SPEC §3.31 (CO-01~22)을 따른다.
+
+| 도구 | 본 문서 범위 | 구현 상태 | 비고 |
+|---|---|---|---|
+| careCalc 비용 계산 | Phase 1 | ✅ 구현 | |
+| careCard 대처카드 | Phase 2 | ✅ 구현 | |
+| careLog 요양일지 | Phase 3 | ✅ 구현 | 저장·내보내기 Pro (`care_log_save`·`care_log_export`) |
+| careAudit 평가 점검표 | Phase 4 | ✅ 구현 | 내보내기 Pro (`care_audit_export`), CO-19 커스텀 점검표 부분 구현 |
+| careHandover 인수인계 | Phase 5 | ✅ 구현 | 저장·공유 Pro (`care_handover_*`) |
+| careVisit 면회·방문 기록 | 범위 외 — 후속 | ✅ 구현 | Phase 6c — 저장·공유 Pro |
+| careIncident 사고·낙상 보고 | 범위 외 — 후속 | ✅ 구현 | Phase 6d — 저장·공유 Pro |
+| careRoster 교대 근무표 | 범위 외 — 후속 | ✅ 구현 | Phase 6d — 저장·공유 Pro |
+| careClients 대상자 명부 | 범위 외 — 후속 | ✅ 구현 | Phase 6d — 저장·공유 Pro |
+| careForms 서식 모음·발행 대장 | 범위 외 — 후속 | ✅ 구현 | CO-22 문서 추적성(번호·QR·발행 대장) |
+| careFinder 요양기관 찾기 | 범위 외 — 후속 | ✅ 구현 | Phase 6g |
+| careCustomForm 기관 자체 양식 | §10 서식 골격의 확장 | ✅ 구현 | CO-17 — 등록·기입·출력 완결 |
+| facility-join / facility-admin | 범위 외 (기관 워크스페이스) | ⚠ 오프 | DOC-DSN-43 — features off, CO-11/14~16 조건부 |
+
+공통 관찰: 생성·열람은 무료·**저장·공유·내보내기가 Pro** — §6 게이팅 모델이 후속 도구까지 일관 적용됨 (`feature-plan.json` `care_*_save`/`_share`/`_export` 키).

@@ -287,7 +287,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 
 | 문서 | 설명 |
 |------|------|
-| [CAREWORK_PRACTICE_TOOL_DESIGN.md](exams/carework/design/CAREWORK_PRACTICE_TOOL_DESIGN.md) | 요양보호사 현장도구 설계 — 시험→실무 구독 전환·careCalc/careCard/careLog 3단계 (DOC-DSN-42) |
+| [CAREWORK_PRACTICE_TOOL_DESIGN.md](exams/carework/design/CAREWORK_PRACTICE_TOOL_DESIGN.md) | 요양보호사 현장도구 설계 — 시험→실무 구독 전환·Phase 1~5 + CO-13·CO-18/19 + §11 구현 현황(Phase 6 계열 포함, 정본은 SPEC CO-01~22) (DOC-DSN-42) |
 | [CAREWORK_FACILITY_WORKSPACE.md](exams/carework/design/CAREWORK_FACILITY_WORKSPACE.md) | 기관 워크스페이스 설계 — PassOK가 기관 기록 서버가 되는 구독 확장 (DOC-DSN-43) |
 | [CARE_OS_DATAHUB_DESIGN.md](exams/carework/design/CARE_OS_DATAHUB_DESIGN.md) | Care OS 데이터 허브 — clientId 정규화·360° 카드·인수인계 로컬 다이제스트 (DOC-DSN-44, CO-01~05) |
 | [CAREWORK_SITE_LICENSE_DESIGN.md](exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md) | 기관 사이트 라이선스 — 요양원 단위 월권·기간권, facility_subscriptions + 멤버십 연동 entitlement (DOC-DSN-51) |
