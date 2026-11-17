@@ -1,5 +1,14 @@
 [
   {
+    "version": "v20261117-adc2d96",
+    "date": "2026-11-17",
+    "notes": [
+      "[문서·spec] TOC 챕터 그룹핑 규약을 TR-31로 규약화",
+      "[수정·reader] 목차 챕터 말미 📌/✅ 카드 들여쓰기 통일",
+      "[정리·release] v20261117-0740aaf 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261117-0740aaf",
     "date": "2026-11-17",
     "notes": [
@@ -239,20 +248,6 @@
     "notes": [
       "[수정·capture] manual-07-roster 상단 잘림 — sticky 헤더 캡처 제외",
       "[정리·release] v20261113-44da6c1 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-44da6c1",
-    "date": "2026-11-13",
-    "notes": [
-      "[문서] entity-store.js 디렉토리 구조 등록 — AGENTS·ARCHITECTURE 트리 정합",
-      "[리팩터링·store] entity-store 팩토리 신설 + carework 스토어 7개 이행",
-      "[리팩터링·practice] registry 피처 디스크립터 팩토리화 — enter 공용 구현 (910→662)",
-      "[리팩터링·pwa] standalone 감지 core/utils 공용화 — 5파일 판정 중복 제거",
-      "[정리] sw 버전 스탬프 + test_stats 실측 갱신 (build:derived) [no-docs] [no-test]",
-      "[리팩터링·complexity] AU-10 잔여 함수 분해 — auth-view·quiz 래칫 복구 (324→323) [no-test]",
-      "[정리·release] v20261113-6c631e2 스탬프 확정 [no-docs]",
-      "[정리·release] v20261112-fb182cb 스탬프 확정 [no-docs]"
     ]
   }
 ]
