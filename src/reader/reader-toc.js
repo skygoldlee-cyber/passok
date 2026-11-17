@@ -94,12 +94,12 @@ export function buildSectionDisplayTitles(sections) {
 /**
  * 섹션 배열의 각 항목에 TOC 역할을 부여한다.
  * - 'chapter': ## 📚 Chapter 헤더
- * - 'child': 챕터 자식 — 번호 절 + 챕터 내부 카드(번호 절 사이의 무번호 ## 📌/📊 등)
- * - 'top': 챕터 밖 최상위 — 챕터 말미 무번호 절(📌/✅) 및 챕터 외 항목
+ * - 'child': 챕터 자식 — 챕터 내부의 모든 절(번호 절, 중간·말미 ## 📌/✅ 카드 등)
+ * - 'top': 챕터 밖 최상위 — 첫 Chapter 이전 항목 및 챕터 없는 문서
  * - 'skip': 챕터 헤더 직후 첫 번호 절 이전의 인트로 무번호 절 (TOC 생략)
  *
- * 판정 기준: 무번호 절은 '챕터 종료'가 아니라, 다음 Chapter 전에 번호 절이
- * 다시 나오면 챕터 내부 카드로 본다(절별 ## 📌 요약 카드 관례 대응).
+ * 판정 기준: 챕터는 다음 Chapter 헤더까지 하나의 단위 — 챕터 말미 📌/✅도
+ * 번호 절과 같은 들여쓰기로 묶어 형제 정렬을 유지한다.
  * @param {{title: string}[]} sections
  * @returns {('chapter'|'child'|'top'|'skip')[]}
  */
@@ -119,19 +119,8 @@ export function computeTocRoles(sections) {
             if (isNumbered) {
                 roles[idx] = 'child';
                 hasSeenNumbered = true;
-            } else if (hasSeenNumbered) {
-                const nextChapter = sections.findIndex((s, i) => i > idx && /Chapter\s+\d+/i.test(s.title || ''));
-                const limit = nextChapter === -1 ? sections.length : nextChapter;
-                const hasLaterNumbered = sections.slice(idx + 1, limit)
-                    .some(s => getTocLevel(s.title) >= 1);
-                if (hasLaterNumbered) {
-                    roles[idx] = 'child';
-                } else {
-                    roles[idx] = 'top';
-                    inChapter = false;
-                }
             } else {
-                roles[idx] = 'skip';
+                roles[idx] = hasSeenNumbered ? 'child' : 'skip';
             }
         }
     });
