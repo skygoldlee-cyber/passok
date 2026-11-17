@@ -21,7 +21,7 @@
 
 // @spec P-01~06,O-04,UX-PWA-03,LP-07
 
-const CACHE_VERSION = 'v20261117-0bcf0e3';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
+const CACHE_VERSION = 'v20261118-c1d5c98';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
 const DATA_CACHE_VERSION = 'v1';           // 데이터: 안정(해시 파일명이 변경 감지 담당) — 캐시 포맷이 바뀔 때만 수동 증가
 // 캐시 접두사는 플랫폼 브랜드(passok) — 시험 무관 공유 캐시.
 // 구 접두사(passory-*·cosmetic-pass-*)는 activate의 비현재 캐시 전수 삭제로 자동 정리된다.
@@ -254,6 +254,7 @@ const MD_ASSETS = [
   './docs/user/user_manual.md',
   './content/exams/cosmetic/docs/formula_manual.md',
   './content/exams/cosmetic/docs/두음법_암기_총정리.md',
+  './content/exams/cosmetic/docs/인물 설정표.md',
   './content/exams/cosmetic/docs/학습안내서.md',
   './content/exams/cosmetic/교재/law/1과목_화장품법의이해_표준형.md',
   './content/exams/cosmetic/교재/law/1과목_화장품법의이해_이야기형.md',
@@ -428,6 +429,7 @@ const MD_ASSETS = [
   './content/exams/carework/교재/careprac/2과목_요양보호실기_이야기형.md',
   './content/exams/carework/문제은행/과목1_요양보호론_문제은행.md',
   './content/exams/carework/문제은행/과목2_요양보호실기_문제은행.md',
+  './content/exams/hazmat/docs/인물 설정표.md',
   './content/exams/hazmat/교재/physchem/1과목_물질의 물리화학적 성질_표준형.md',
   './content/exams/hazmat/교재/fire/2과목_화재예방과 소화방법_표준형.md',
   './content/exams/hazmat/교재/hazprop/3과목_위험물의 성질 및 취급_표준형.md',
