@@ -237,6 +237,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [ACCOUNT_LINKING_DESIGN.md](dev/design/ACCOUNT_LINKING_DESIGN.md) | 계정 연결 설계 — 로그인 수단 간 유료 권한 통합 (linkIdentity·충돌 수동 복구 경로, DOC-DSN-50) |
 | [LEARNING_MEDIA_LINK_DESIGN.md](dev/design/LEARNING_MEDIA_LINK_DESIGN.md) | 학습매체 연결 설계 — `#/trainer/concept/<cid>` 개념 문항 딥링크 + 교재 QR + 함정(`trap`) 태그 Phase 1~3 (DOC-DSN-52, DOC-BIZ-13 부록 A 갭 실행 설계) |
 | [TEXTBOOK_IMPROVEMENT_ROADMAP.md](dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md) | 교재 보완 로드맵 — 팩별 볼륨·구조·카드 규약 현황 + 잔여 과제(ai-draft 검수·헤딩 정규화·2차 확장) 추적 (DOC-DSN-53) |
+| [MEMORIZATION_AIDS_DESIGN.md](dev/design/MEMORIZATION_AIDS_DESIGN.md) | 암기 지원 도구 설계안 — 이야기형 확장·두음법 개인화·cloze 자동 생성·서사↔복습 결합 우선순위 (DOC-DSN-54, 제안 검토) |
 | [CHANGES.md](dev/CHANGES.md) | 코드 변경 이력 (Changelog) — 변경의 이유와 맥락 |
 
 ### 제품 전략·기획
@@ -441,6 +442,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-51 | `docs/exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md` |
 | DOC-DSN-52 | `docs/dev/design/LEARNING_MEDIA_LINK_DESIGN.md` |
 | DOC-DSN-53 | `docs/dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md` |
+| DOC-DSN-54 | `docs/dev/design/MEMORIZATION_AIDS_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |

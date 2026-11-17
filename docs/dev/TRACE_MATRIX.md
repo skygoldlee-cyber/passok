@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: a075dd197f443be1
+> 입력 해시: 096cc6a890f4624e
 > 생성: 2026-11-17 · 원천: SPEC.md(719개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -46,7 +46,7 @@
 | D-19 | ✅ | E2E 테스트 | DOC-DSN-32 | src/study/spaced-repetition.js | tests/dom/study/study-spacedrep.dom.test.js<br>tests/e2e/exam-risk.spec.js<br>tests/unit/engine/fsrs.test.js<br>tests/unit/engine/today-queue.test.js | — | — |
 | D-20 | ✅ | E2E 테스트 | DOC-DSN-32 | src/study/spaced-repetition.js | tests/dom/study/study-spacedrep.dom.test.js<br>tests/e2e/exam-risk.spec.js<br>tests/unit/engine/fsrs.test.js | — | — |
 | D-21 | ✅ | 테스트 | DOC-DSN-32 | src/study/analysis-engine.js | tests/unit/engine/analysis-engine.test.js | — | — |
-| D-22 | ✅ | E2E 테스트 | DOC-ADR-18<br>DOC-DSN-32 | src/study/analysis-engine.js<br>src/study/knowledge-tracing.js<br>src/study/spaced-repetition.js<br>src/views/exam-sim/exam-sim-arena.js<br>…외 1개 | tests/e2e/analysis-view.spec.js<br>tests/unit/engine/analysis-engine.test.js<br>tests/unit/engine/fsrs.test.js<br>tests/unit/engine/knowledge-tracing.test.js | — | — |
+| D-22 | ✅ | E2E 테스트 | DOC-ADR-18<br>DOC-DSN-32<br>DOC-DSN-54 | src/study/analysis-engine.js<br>src/study/knowledge-tracing.js<br>src/study/spaced-repetition.js<br>src/views/exam-sim/exam-sim-arena.js<br>…외 1개 | tests/e2e/analysis-view.spec.js<br>tests/unit/engine/analysis-engine.test.js<br>tests/unit/engine/fsrs.test.js<br>tests/unit/engine/knowledge-tracing.test.js | — | — |
 | D-23 | ✅ | 테스트 | — | src/study/study-tracker-alloc.js<br>src/study/study-tracker.js<br>src/views/analysis-view.js<br>src/views/dashboard-queue.js | tests/unit/engine/study-tracker.test.js | — | — |
 | TQ-01 | ✅ | 테스트 | DOC-DSN-32 | src/views/dashboard-queue.js<br>src/views/dashboard.js | tests/dom/study/study-dashboard.dom.test.js<br>tests/unit/engine/today-queue.test.js | — | — |
 | TQ-02 | ✅ | 테스트 | DOC-DSN-52 | src/views/dashboard-queue.js | tests/unit/engine/today-queue.test.js | — | — |
@@ -907,8 +907,8 @@
 | CS-09 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | ref-pipeline/convert.py<br>tools/check/check_ref_subjects.js<br>tools/check/check_reflayout.js<br>tools/check/check_refmerge.js | tests/unit/gates/content-structure.test.js<br>tests/unit/refmd-syllabus-flat.test.js | DOC-ARC-08 | — |
 | CS-10 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-11 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-07<br>DOC-REF-21 | tools/ai/ai_textbook.js | tests/unit/content/ai-textbook.test.js<br>tests/unit/content/scaffold-chapter.test.js | — | — |
-| CS-12 | ✅ | 도구 검증 | DOC-DSN-53<br>DOC-REF-07<br>DOC-REF-21 | tools/check/check_numbering.js | — | — | — |
-| CS-13 | ✅ | 테스트 | DOC-REF-07<br>DOC-REF-21 | — | tests/unit/gates/content-structure.test.js | — | — |
+| CS-12 | ✅ | 도구 검증 | DOC-DSN-53<br>DOC-DSN-54<br>DOC-REF-07<br>DOC-REF-21 | tools/check/check_numbering.js | — | — | — |
+| CS-13 | ✅ | 테스트 | DOC-DSN-54<br>DOC-REF-07<br>DOC-REF-21 | — | tests/unit/gates/content-structure.test.js | — | — |
 
 ## 5.5 교재 콘텐츠 학습 보조 요소
 
@@ -925,13 +925,13 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| ST-01 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/reader/reader-loader.js<br>src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-02 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-03 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-04 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-05 | ✅ | 테스트 | DOC-ADR-03<br>DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-06 | ✅ | 테스트 | DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-07 | ✅ | 테스트 | DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-01 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-RBK-07<br>DOC-RBK-13<br>…외 1개 | src/views/reader/reader-loader.js<br>src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-02 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-RBK-07<br>DOC-RBK-13<br>…외 1개 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-03 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-RBK-07<br>DOC-RBK-13<br>…외 1개 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-04 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-RBK-07<br>DOC-RBK-13<br>…외 1개 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-05 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-RBK-07<br>DOC-RBK-13<br>…외 1개 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-06 | ✅ | 테스트 | DOC-DSN-54<br>DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-07 | ✅ | 테스트 | DOC-DSN-54<br>DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
 
 ## 7.2 유료화 인프라
 
@@ -1094,6 +1094,7 @@
 | DOC-DSN-51 | docs/exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md | — |
 | DOC-DSN-52 | docs/dev/design/LEARNING_MEDIA_LINK_DESIGN.md | AN-10, CO-22, PS-05, TQ-02, UX-NAV-08 |
 | DOC-DSN-53 | docs/dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md | AI-01, AI-24, AN-10, CS-12, DA-06, DR-09, DR-10, DR-11, ES-01 |
+| DOC-DSN-54 | docs/dev/design/MEMORIZATION_AIDS_DESIGN.md | CS-12, CS-13, D-22, ST-01, ST-02, ST-03, ST-04, ST-05, ST-06, ST-07 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |
