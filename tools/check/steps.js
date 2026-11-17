@@ -225,6 +225,7 @@ const REMEDIES = {
   'content:id-migration': 'npm.cmd run build:data — ID 이관 맵 미재생성',
   'content:refformat': 'node tools/sync/fix_refmd_glyphs.js (PUA·잔재 치환) · node tools/sync/reflow_flat_lines.js (평탄화 분할)',
   'refs:format': 'node tools/sync/fix_refmd_glyphs.js (PUA·잔재 치환) · node tools/sync/reflow_flat_lines.js (평탄화 분할)',
+  'docs:notes': 'npm.cmd run fix:notes — APP_VERSION을 최신 노트 버전으로 정합 (version.js 한쪽 변경 머지의 스탬프 어긋남)',
 };
 
 // ── 프리셋 해석 ───────────────────────────────────────────────────────
