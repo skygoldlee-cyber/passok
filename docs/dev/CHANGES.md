@@ -1,6 +1,12 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-18 docs(spec): TOC 챕터 그룹핑 규약을 TR-31로 규약화 — 전 시험 팩 공통
+
+- **신규 요구사항**: `## 📚 Chapter`~다음 Chapter 사이 모든 `##` 절(번호·무번호 📌/✅ 포함)을 동일 들여쓰기 챕터 자식으로 표시, 인트로 무번호 절만 skip — 판정은 `computeTocRoles` 순수 함수가 정본, 팩별 분기 금지
+- **태그 정정**: `reader-toc.js`·`reader-toc.test.js`의 stale `@spec TR-06`(Mermaid)을 TR-15·TR-31로 교체, `reader-render.js`·`reader-advanced.spec.js`에 TR-31 추가
+- 검증: check:spec_refs·reader-toc 단위 테스트 통과
+
 ## 2026-11-18 fix(reader): 목차 챕터 그룹 들여쓰기 통일 — 중간·말미 📌/✅ 카드 모두 챕터 자식화
 
 - **버그**: `## N.` 번호 절 사이에 끼인 무번호 `## 📌` 카드가 '챕터 종료'로 오인되어 챕터별 섹션 1만 안쪽에 들어가고 2 이상이 최상위로 표시되던 문제. 후속으로 챕터 말미 `## 📌`/`## ✅`만 최상위로 빠져 형제 절과 들여쓰기가 어긋나는 증상 보고됨

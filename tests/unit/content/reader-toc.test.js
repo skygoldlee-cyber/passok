@@ -1,5 +1,5 @@
 // tests/unit/reader-toc.test.js — 리더 목차 추출 헬퍼 검증
-// @spec TR-06
+// @spec TR-15,TR-31
 // textbook-reader.js에서 reader-toc.js로 분리된 순수 함수군의 계약 고정:
 // 메타 섹션 판정·번호 기반 계층·참조 접두사 제거·코드블록 제외 하위 헤딩.
 

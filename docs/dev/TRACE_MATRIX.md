@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 03d476e836b07f7b
-> 생성: 2026-11-17 · 원천: SPEC.md(717개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 55f5b4b8ba096055
+> 생성: 2026-11-17 · 원천: SPEC.md(718개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 717개 — 문서 연결 479 · 소스 연결 636 · 테스트 연결 677 · 보고서 연결 109
+**커버리지 요약**: 요구사항 718개 — 문서 연결 480 · 소스 연결 637 · 테스트 연결 678 · 보고서 연결 109
 
 ---
 
@@ -126,7 +126,7 @@
 | TR-03 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
 | TR-04 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
 | TR-05 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/reader/reader-render.js<br>src/views/textbook-reader.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js | — | — |
-| TR-06 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader-mermaid.css<br>src/reader/mermaid-render.js<br>src/reader/mermaid-utils.js<br>src/reader/reader-toc.js<br>…외 1개 | tests/dom/reader/mermaid-zoom.dom.test.js<br>tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js<br>tests/unit/content/reader-toc.test.js<br>…외 6개 | — | — |
+| TR-06 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader-mermaid.css<br>src/reader/mermaid-render.js<br>src/reader/mermaid-utils.js<br>src/views/textbook-reader.js | tests/dom/reader/mermaid-zoom.dom.test.js<br>tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js<br>tests/unit/mermaid/mermaid-parser.test.js<br>…외 5개 | — | — |
 | TR-07 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/reader/mermaid-render.js<br>src/reader/mermaid-utils.js<br>src/views/textbook-reader.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js<br>tests/unit/mermaid/mermaid-parser.test.js<br>tests/unit/mermaid/mermaid-pipeline.test.js<br>…외 4개 | — | — |
 | TR-08 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/reader/mermaid-render.js<br>src/reader/mermaid-utils.js<br>src/views/textbook-reader.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js<br>tests/unit/mermaid/mermaid-parser.test.js<br>tests/unit/mermaid/mermaid-pipeline.test.js<br>…외 4개 | — | — |
 | TR-09 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/reader/markdown-parser.js<br>src/views/textbook-reader.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js<br>tests/unit/content/markdown-parser-general.test.js | — | — |
@@ -135,7 +135,7 @@
 | TR-12 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/reader/reader-progress.js<br>src/views/textbook-reader.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
 | TR-13 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-markers.spec.js | — | — |
 | TR-14 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | src/views/textbook-reader.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
-| TR-15 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader-extras.css<br>css/reader.css<br>src/views/reader/reader-render.js<br>src/views/reader/reader-toolbar.js<br>…외 1개 | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
+| TR-15 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader-extras.css<br>css/reader.css<br>src/reader/reader-toc.js<br>src/views/reader/reader-render.js<br>…외 2개 | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js<br>tests/unit/content/reader-toc.test.js | — | — |
 | TR-16 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader-extras.css<br>css/reader.css<br>src/views/reader/reader-toolbar.js<br>src/views/textbook-reader.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
 | TR-16a | ✅ | E2E 테스트 | DOC-RBK-07<br>DOC-REF-05 | src/views/reader/reader-toolbar.js | tests/e2e/reader-advanced.spec.js<br>tests/unit/gates/content-engineering.test.js | — | — |
 | TR-17 | ✅ | E2E 테스트 | DOC-DSN-11<br>DOC-RBK-07<br>DOC-REF-05 | css/reader-extras.css<br>css/reader.css<br>src/views/textbook-reader.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
@@ -151,6 +151,7 @@
 | TR-27 | ✅ | E2E 테스트 | DOC-ADR-08<br>DOC-RBK-07<br>DOC-REF-05 | src/views/reader/reader-render.js<br>src/views/reader/reader-toolbar.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
 | TR-28 | ✅ | E2E 테스트 | DOC-RBK-07<br>DOC-REF-05 | src/views/reader/reader-progress.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
 | TR-30 | ID-05 준수 — 위치 좌표 미사용. 본문 구간 드래그 하이라이트는 판본 갱신 시 드리프트 불가피로 범위 제외(섹션 단위로 수렴) | E2E 테스트 | DOC-RBK-07<br>DOC-REF-05 | src/study/reader-notes.js | tests/dom/reader/reader-notes.dom.test.js<br>tests/e2e/ux-surfaces.spec.js<br>tests/unit/app/reader-notes.test.js | — | — |
+| TR-31 | ✅ | E2E 테스트 | DOC-RBK-07<br>DOC-REF-05 | src/reader/reader-toc.js<br>src/views/reader/reader-render.js | tests/e2e/reader-advanced.spec.js<br>tests/unit/content/reader-toc.test.js | — | — |
 
 ## 3.6 교재 리더 — 학습 보조 도구
 
@@ -1106,7 +1107,7 @@
 | DOC-RBK-04 | docs/dev/runbooks/DEPLOYMENT_GUIDE.md | C-01, C-02, C-03, C-04, C-05, P-01, P-02, P-03, P-04, P-05, P-06, P-07, P-08, P-09, P-10, P-11, P-12, P-13 |
 | DOC-RBK-05 | docs/dev/runbooks/MULTI_MACHINE_SETUP.md | — |
 | DOC-RBK-06 | docs/dev/runbooks/Supabase_Custom_SMTP_MagicLink_OTP_설정가이드.md | AU-02, AU-03, AU-04 |
-| DOC-RBK-07 | docs/dev/runbooks/TEXTBOOK_AUTHORING_GUIDE.md | BP-15, CE-01, CE-02, CE-03, CE-04, CE-05, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, CS-11, ST-01, ST-02, ST-03, ST-04, ST-05, ST-06, ST-07, TR-01, TR-02, TR-03, TR-04, TR-05, TR-06, TR-07, TR-08, TR-09, TR-10, TR-11, TR-12, TR-13, TR-14, TR-15, TR-16, TR-16a, TR-17, TR-18, TR-19, TR-20, TR-21, TR-22, TR-23, TR-24, TR-25, TR-26, TR-27, TR-28, TR-30 |
+| DOC-RBK-07 | docs/dev/runbooks/TEXTBOOK_AUTHORING_GUIDE.md | BP-15, CE-01, CE-02, CE-03, CE-04, CE-05, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, CS-11, ST-01, ST-02, ST-03, ST-04, ST-05, ST-06, ST-07, TR-01, TR-02, TR-03, TR-04, TR-05, TR-06, TR-07, TR-08, TR-09, TR-10, TR-11, TR-12, TR-13, TR-14, TR-15, TR-16, TR-16a, TR-17, TR-18, TR-19, TR-20, TR-21, TR-22, TR-23, TR-24, TR-25, TR-26, TR-27, TR-28, TR-30, TR-31 |
 | DOC-RBK-08 | docs/dev/runbooks/TEXTBOOK_REPLACEMENT_RUNBOOK.md | BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, DA-01, ID-01, ID-02, ID-03, ID-04, P-14, TS-15, TS-16, TS-17, TS-18 |
 | DOC-RBK-09 | docs/dev/runbooks/VERIFY_DEPLOY_PIPELINE.md | BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, P-13 |
 | DOC-RBK-10 | docs/dev/runbooks/NEW_EXAM_RUNBOOK.md | BP-09, DA-11, DA-12, ES-01 |
@@ -1128,7 +1129,7 @@
 | DOC-REF-02 | docs/dev/reference/DEV_ENVIRONMENT.md | — |
 | DOC-REF-03 | docs/dev/reference/FLASHCARD_LOGIC.md | F-01, F-02, F-03, F-04, F-05, F-06, F-07, F-08, F-09, F-10, ID-01, ID-02, ID-03, ID-04, TR-01 |
 | DOC-REF-04 | docs/dev/reference/MD_TO_HTML_LOGIC.md | EV-01, EV-02, EV-03, EV-04, EV-05, EV-06, EV-07, EV-08, MV-01, MV-02, MV-03, MV-04, RR-01, RR-02, RR-03, RR-04, RR-05, RR-06, RR-07, RR-08, RR-09, RR-10, RR-11, RR-12, RR-13, RR-14, RR-15, RR-16, TR-01 |
-| DOC-REF-05 | docs/exams/cosmetic/reference/NUMBERING_SYSTEM.md | CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, ID-01, ID-02, ID-03, ID-04, TR-01, TR-02, TR-03, TR-04, TR-05, TR-06, TR-07, TR-08, TR-09, TR-10, TR-11, TR-12, TR-13, TR-14, TR-15, TR-16, TR-16a, TR-17, TR-18, TR-19, TR-20, TR-21, TR-22, TR-23, TR-24, TR-25, TR-26, TR-27, TR-28, TR-30 |
+| DOC-REF-05 | docs/exams/cosmetic/reference/NUMBERING_SYSTEM.md | CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, ID-01, ID-02, ID-03, ID-04, TR-01, TR-02, TR-03, TR-04, TR-05, TR-06, TR-07, TR-08, TR-09, TR-10, TR-11, TR-12, TR-13, TR-14, TR-15, TR-16, TR-16a, TR-17, TR-18, TR-19, TR-20, TR-21, TR-22, TR-23, TR-24, TR-25, TR-26, TR-27, TR-28, TR-30, TR-31 |
 | DOC-REF-06 | docs/dev/reference/TESTING.md | — |
 | DOC-REF-07 | docs/exams/cosmetic/reference/TEXTBOOK_REFERENCE_MAPPING.md | CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, CS-11, CS-12, RR-01, RR-02, RR-03, RR-04, RR-05, RR-06, RR-07, RR-08, RR-09, RR-10, RR-11, RR-12, RR-13, RR-14, RR-15, RR-16 |
 | DOC-REF-08 | docs/dev/reference/ENGINEERING_PRACTICES.md | BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, DA-01, DA-02, DA-03, DA-04, DA-05, DA-06, DA-07, DA-08, DA-09 |

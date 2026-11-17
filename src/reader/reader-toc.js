@@ -1,5 +1,5 @@
 // src/reader-toc.js — 교재 리더 목차(TOC) 추출 순수 헬퍼
-// @spec TR-06
+// @spec TR-15,TR-31
 // textbook-reader.js에서 분리 — 섹션 제목의 계층 판정·메타 섹션 필터·
 // 하위 헤딩 추출·슬러그 ID 생성. DOM 비의존 순수 로직.
 

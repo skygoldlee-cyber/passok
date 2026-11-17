@@ -1,5 +1,5 @@
 // views/reader-render.js — 챕터 본문 렌더 (TOC·섹션 카드·바인딩)
-// @spec TR-01,TR-02,TR-05,TR-15,TR-20,TR-27,SA-02,SA-03,UX-FORM-05,DR-11
+// @spec TR-01,TR-02,TR-05,TR-15,TR-20,TR-27,TR-31,SA-02,SA-03,UX-FORM-05,DR-11
 // textbook-reader.js에서 분리 — _renderChapterContentInternal 이관.
 // 파일 로컬 상태를 쓰지 않는 순수 렌더 경로로, 진입·상태·진척은
 // textbook-reader.js / reader-progress.js가 담당한다.
