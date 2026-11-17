@@ -1,11 +1,11 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
-## 2026-11-18 fix(reader): 과목 선택 셀렉트에 과목 번호 표기 — `N과목. 이름` 형식
+## 2026-11-18 fix(reader+dashboard): 과목 선택 셀렉트에 과목 번호 표기 — `N과목. 이름` 형식
 
-- **문제**: 교재 리더 과목 셀렉트가 `subj.name`만 표시해 과목 번호가 없었음 (대시보드 필터 버튼의 `N과목` 관례와 불일치)
-- **수정**: 옵션 라벨을 `manifest.order`(없으면 나열 순번) 기반 `${order}과목. ${name}`으로 변경 — insadj처럼 order가 건너뛰는 팩도 정확
-- **테스트**: DOM 테스트 기대값 갱신 + order 우선 케이스 추가, stubRegistry가 order를 통과하도록 수정
+- **문제**: 교재 리더·퀴즈·암기카드 과목 셀렉트가 `subj.name`만 표시해 과목 번호가 없었음 (대시보드 필터 버튼의 `N과목` 관례와 불일치)
+- **수정**: 옵션 라벨을 `manifest.order`(없으면 나열 순번) 기반 `${order}과목. ${name}`으로 변경 — 리더 `populateSubjects`와 대시보드 `_fillSubjectSelect`(퀴즈·암기카드 공용) 양쪽 적용. insadj처럼 order가 건너뛰는 팩도 정확
+- **테스트**: 리더·대시보드 DOM 테스트 기대값 갱신 + order 우선·폴백 케이스 추가, stubRegistry가 order를 통과하도록 수정
 
 ## 2026-11-18 docs(spec): TOC 챕터 그룹핑 규약을 TR-31로 규약화 — 전 시험 팩 공통
 
