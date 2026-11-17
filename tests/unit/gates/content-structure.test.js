@@ -1,5 +1,5 @@
 // tests/unit/content-structure.test.js — 콘텐츠 소스 레이아웃 검증
-// @spec CS-01,CS-02,CS-03,CS-04,CS-05,CS-06,CS-07,CS-08,CS-09,CS-10
+// @spec CS-01,CS-02,CS-03,CS-04,CS-05,CS-06,CS-07,CS-08,CS-09,CS-10,CS-13
 // manifest 선언 ↔ 실제 파일 구조 정합성, ref_md 귀속 계층,
 // ASCII 슬러그 산출물, 큐레이션/원료/오디오 경로를 고정한다.
 
@@ -187,4 +187,30 @@ test('CS-10: ref_md 문서의 이미지 참조가 images/ 상대 경로이고 �
     }
   }
   assert.ok(imgRefs > 0, '검증 대상 이미지 참조가 없음');
+});
+
+// ---------- CS-13: 이야기형 정본 문서 2종 (전 시험 팩) ----------
+
+test('CS-13: 이야기형을 제공하는 팩은 Series Bible + 인물 설정표를 갖춘다', () => {
+  const examsRoot = join(ROOT, 'content', 'exams');
+  const hasStory = (root, dir) =>
+    list(join(root, dir)).some(f => f.includes('이야기형') && isMd(f))
+    || existsSync(join(root, dir, 'story'));
+  let checked = 0;
+  for (const exam of list(examsRoot)) {
+    const examRoot = join(examsRoot, exam);
+    if (!statSync(examRoot).isDirectory()) continue;
+    const textbookRoot = join(examRoot, '교재');
+    if (!existsSync(textbookRoot)) continue;
+    // 과목 하위 디렉터리 중 하나라도 이야기형/서사 패치가 있으면 대상
+    const storyPack = list(textbookRoot).some(d =>
+      statSync(join(textbookRoot, d)).isDirectory() && hasStory(textbookRoot, d));
+    if (!storyPack) continue;
+    checked++;
+    const bibles = list(join(textbookRoot, 'docs')).filter(f => f.includes('시리즈설정문서') && isMd(f));
+    assert.ok(bibles.length > 0, `${exam}: 교재/docs/*_시리즈설정문서.md 없음`);
+    assert.ok(existsSync(join(examRoot, 'docs', '인물 설정표.md')),
+      `${exam}: docs/인물 설정표.md 없음 (이야기형 팩의 인물 정본)`);
+  }
+  assert.ok(checked >= 2, `이야기형 팩 탐지 실패 (현재 ${checked}개)`);
 });

@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 55f5b4b8ba096055
-> 생성: 2026-11-17 · 원천: SPEC.md(718개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 169105814d92ef21
+> 생성: 2026-11-17 · 원천: SPEC.md(719개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 718개 — 문서 연결 480 · 소스 연결 637 · 테스트 연결 678 · 보고서 연결 109
+**커버리지 요약**: 요구사항 719개 — 문서 연결 481 · 소스 연결 637 · 테스트 연결 679 · 보고서 연결 109
 
 ---
 
@@ -908,6 +908,7 @@
 | CS-10 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-11 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-07<br>DOC-REF-21 | tools/ai/ai_textbook.js | tests/unit/content/ai-textbook.test.js<br>tests/unit/content/scaffold-chapter.test.js | — | — |
 | CS-12 | ✅ | 도구 검증 | DOC-DSN-53<br>DOC-REF-07<br>DOC-REF-21 | tools/check/check_numbering.js | — | — | — |
+| CS-13 | ✅ | 테스트 | DOC-REF-07<br>DOC-REF-21 | — | tests/unit/gates/content-structure.test.js | — | — |
 
 ## 5.5 교재 콘텐츠 학습 보조 요소
 
@@ -1131,7 +1132,7 @@
 | DOC-REF-04 | docs/dev/reference/MD_TO_HTML_LOGIC.md | EV-01, EV-02, EV-03, EV-04, EV-05, EV-06, EV-07, EV-08, MV-01, MV-02, MV-03, MV-04, RR-01, RR-02, RR-03, RR-04, RR-05, RR-06, RR-07, RR-08, RR-09, RR-10, RR-11, RR-12, RR-13, RR-14, RR-15, RR-16, TR-01 |
 | DOC-REF-05 | docs/exams/cosmetic/reference/NUMBERING_SYSTEM.md | CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, ID-01, ID-02, ID-03, ID-04, TR-01, TR-02, TR-03, TR-04, TR-05, TR-06, TR-07, TR-08, TR-09, TR-10, TR-11, TR-12, TR-13, TR-14, TR-15, TR-16, TR-16a, TR-17, TR-18, TR-19, TR-20, TR-21, TR-22, TR-23, TR-24, TR-25, TR-26, TR-27, TR-28, TR-30, TR-31 |
 | DOC-REF-06 | docs/dev/reference/TESTING.md | — |
-| DOC-REF-07 | docs/exams/cosmetic/reference/TEXTBOOK_REFERENCE_MAPPING.md | CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, CS-11, CS-12, RR-01, RR-02, RR-03, RR-04, RR-05, RR-06, RR-07, RR-08, RR-09, RR-10, RR-11, RR-12, RR-13, RR-14, RR-15, RR-16 |
+| DOC-REF-07 | docs/exams/cosmetic/reference/TEXTBOOK_REFERENCE_MAPPING.md | CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, CS-11, CS-12, CS-13, RR-01, RR-02, RR-03, RR-04, RR-05, RR-06, RR-07, RR-08, RR-09, RR-10, RR-11, RR-12, RR-13, RR-14, RR-15, RR-16 |
 | DOC-REF-08 | docs/dev/reference/ENGINEERING_PRACTICES.md | BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, DA-01, DA-02, DA-03, DA-04, DA-05, DA-06, DA-07, DA-08, DA-09 |
 | DOC-REF-09 | docs/dev/reference/SCREEN_MAP.md | UM-01, UM-02, UM-03, UM-04, UM-05, UX-NAV-01, UX-NAV-08 |
 | DOC-REF-10 | docs/dev/reference/SOFTWARE_ENGINEERING_TECHNIQUES.md | — |
@@ -1145,7 +1146,7 @@
 | DOC-REF-18 | docs/dev/reference/CONVENTIONS_CHEATSHEET.md | DA-15, ID-05 |
 | DOC-REF-19 | docs/dev/reference/COMMANDS.md | — |
 | DOC-REF-20 | docs/dev/reference/DOCX_GENERATION.md | CO-13, CO-22, DA-24 |
-| DOC-REF-21 | docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, CS-11, CS-12, RR-01, RR-02, RR-03, RR-04, RR-05, RR-06, RR-07, RR-08, RR-09, RR-10, RR-11, RR-12, RR-13, RR-14, RR-15, RR-16 |
+| DOC-REF-21 | docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, CS-11, CS-12, CS-13, RR-01, RR-02, RR-03, RR-04, RR-05, RR-06, RR-07, RR-08, RR-09, RR-10, RR-11, RR-12, RR-13, RR-14, RR-15, RR-16 |
 | DOC-ROOT-01 | README.md | — |
 | DOC-ROOT-02 | AGENTS.md | — |
 | DOC-USR-01 | docs/exams/cosmetic/user/exam_strategy.md | — |

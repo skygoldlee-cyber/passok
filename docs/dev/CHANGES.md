@@ -1,6 +1,11 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-18 docs(spec): 이야기형 정본 문서 2종 규약을 CS-13으로 등록
+
+- **신규 요구사항**: `*_이야기형.md`/`story/` 패치 제공 팩은 ① `교재/docs/*_시리즈설정문서.md`(Series Bible — 운용 규칙)와 ② `docs/인물 설정표.md`(인물 사실 설정 정본)를 의무 보유 — 인물 충돌 시 설정표 선갱신·전 자산 동기화
+- **강제 수단**: content-structure 테스트에 전 팩 스캔 추가 — 이야기형 탐지 팩(carework·cosmetic 현재 2개)에서 두 문서 부재 시 실패
+
 ## 2026-11-18 docs(exam): 인물 설정표 정본 신설(cosmetic·hazmat) + Series Bible 재배치
 
 - **신규 문서**: `cosmetic/docs/인물 설정표.md`(DOC-USR-27)·`hazmat/docs/인물 설정표.md`(DOC-USR-28) — carework 인물 설정표(DOC-USR-23)와 동일한 정본 문서 형식(등장인물 표·설정 규칙 6개·변경 이력)
