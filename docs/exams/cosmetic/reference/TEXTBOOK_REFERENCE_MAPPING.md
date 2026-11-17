@@ -1,7 +1,7 @@
 # 교재-참조자료 매핑 가이드
 
 > 본 문서는 교재(`content/exams/cosmetic/교재/`)의 챕터가 참조자료(`content/exams/cosmetic/참조자료/ref_md/`)의 어느 문서를 근거로 삼는지 정의한다.
-> 최종 갱신: 2026-11-18 (교재/docs/ 하위 PASSMULA 시리즈 설정 문서·docs/인물 설정표 추가 — 교재 본문·매핑 무영향 확인)
+> 최종 갱신: 2026-11-18 (PASSMULA 시리즈 설정 문서·인물 설정표(DOC-USR-27) 추가·인용 표기 정정 — 교재 본문·매핑 무영향 확인)
 > **관련 SPEC ID**: `RR-01~16` (참조자료 연결) · `CS-*` (참조자료 디렉토리 구조)
 > **문서 ID**: DOC-REF-07
 > **범위**: exam:cosmetic · 판본: textbook
