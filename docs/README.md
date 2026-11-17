@@ -101,11 +101,11 @@ docs/
 │   ├── reference/             ← 명세·로직·참조 문서 (18개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (4개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (2개 — 사용자 매뉴얼·개인정보처리방침 + images/ — 런타임 fetch·배포 대상)
-└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (11개) · docs/exams/hazmat/ (1개)
+└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (11개) · docs/exams/hazmat/ (2개)
     ├── README.md              ← 시험별 문서 인덱스
     ├── user/                  ← 학습자 문서 (5개)
     ├── business/              ← 사업 기획·시장 조사·마케팅 문서 (cosmetic 6개 · carework 6개)
-    ├── design/                ← 시험 종속 설계 문서 (cosmetic 5개 — Formula OS 계열 · carework 4개)
+    ├── design/                ← 시험 종속 설계 문서 (cosmetic 5개 — Formula OS 계열 · carework 4개 · hazmat 1개)
     ├── reference/             ← 교재 종속 참조 문서 (2개 — 번호체계·참조매핑)
     ├── report_archive/        ← 시점 스냅샷 보고서 + 대체된 전략 원전 (11개)
     └── ingredients_audit_제2026-19호.md  ← 고시 대조 리포트 (판본: refmat)
@@ -292,6 +292,12 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [CARE_OS_DATAHUB_DESIGN.md](exams/carework/design/CARE_OS_DATAHUB_DESIGN.md) | Care OS 데이터 허브 — clientId 정규화·360° 카드·인수인계 로컬 다이제스트 (DOC-DSN-44, CO-01~05) |
 | [CAREWORK_SITE_LICENSE_DESIGN.md](exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md) | 기관 사이트 라이선스 — 요양원 단위 월권·기간권, facility_subscriptions + 멤버십 연동 entitlement (DOC-DSN-51) |
 
+## 🔧 설계 문서 (docs/exams/hazmat/design/)
+
+| 문서 | 설명 |
+|------|------|
+| [HAZMAT_PRACTICE_TOOL_DESIGN.md](exams/hazmat/design/HAZMAT_PRACTICE_TOOL_DESIGN.md) | 위험물 실무도구 설계 — 안전관리자 6단계(지정수량·혼재·소화·탱크·점검표·기록부), Pro 게이팅 (DOC-DSN-55) |
+
 ---
 
 ## 👤 사용자 문서 (docs/user/ · docs/exams/cosmetic/user/)
@@ -443,6 +449,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-52 | `docs/dev/design/LEARNING_MEDIA_LINK_DESIGN.md` |
 | DOC-DSN-53 | `docs/dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md` |
 | DOC-DSN-54 | `docs/dev/design/MEMORIZATION_AIDS_DESIGN.md` |
+| DOC-DSN-55 | `docs/exams/hazmat/design/HAZMAT_PRACTICE_TOOL_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |

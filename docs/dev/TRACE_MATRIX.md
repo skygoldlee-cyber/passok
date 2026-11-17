@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 75e15b4896b99124
+> 입력 해시: f9122f695023b592
 > 생성: 2026-11-17 · 원천: SPEC.md(719개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -445,10 +445,10 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| UM-01 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
-| UM-02 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
-| UM-03 | — | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
-| UM-04 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 2개 | src/practice-registry.js<br>src/shell/router.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/dom/shell/router.dom.test.js<br>tests/dom/shell/ui-structure.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
+| UM-01 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 3개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
+| UM-02 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 3개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
+| UM-03 | — | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 3개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
+| UM-04 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 3개 | src/practice-registry.js<br>src/shell/router.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/dom/shell/router.dom.test.js<br>tests/dom/shell/ui-structure.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
 | UM-05 | ✅ | 테스트 | DOC-DSN-01<br>DOC-DSN-02<br>DOC-DSN-11<br>DOC-DSN-25<br>…외 1개 | src/practice-registry.js<br>src/shell/ui-mode.js | tests/dom/common/common-uimode.dom.test.js<br>tests/unit/app/practice-registry.test.js | DOC-ARC-06 | — |
 | UM-06 | ✅ | 테스트 | — | src/practice-registry.js | tests/unit/practice-mode-contract.test.js | — | — |
 
@@ -628,7 +628,7 @@
 | CO-10 | ✅ lite (기록 유무 커버리지) | 테스트 | — | src/exams/carework/care-coverage.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
 | CO-11 | 미구현 — 조건부(법무 0b + facility 재개통) | — | — | — | — | — | — |
 | CO-12 | ✅ lite (배너·계측) | 테스트 | — | src/exams/carework/care-funnel.js<br>src/exams/carework/views/care-home.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
-| CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42<br>DOC-REF-20 | css/doc-export.css<br>src/content/doc-md.js<br>src/content/doc-wm.js<br>src/content/docx-utils.js<br>…외 4개 | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/doc-md.test.js<br>…외 4개 | — | — |
+| CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42<br>DOC-DSN-55<br>DOC-REF-20 | css/doc-export.css<br>src/content/doc-md.js<br>src/content/doc-wm.js<br>src/content/docx-utils.js<br>…외 4개 | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/doc-md.test.js<br>…외 4개 | — | — |
 | CO-14 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
 | CO-15 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
 | CO-16 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 문서 검토 | DOC-RBK-24 | — | — | — | — |
@@ -847,9 +847,9 @@
 | DA-10 | ✅ | 테스트 | — | src/auth-sync/sync.js<br>src/exams/cosmetic/customer-store.js | tests/unit/exams/cosmetic/customer-store.test.js | — | 개인정보보호법 — 상동 (조제관리사가 고객 개인정보를 클라우드에 올리지 않는 설계) |
 | DA-11 | ✅ | 테스트 | DOC-RBK-10 | tools/check/check_domain_map.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
 | DA-12 | ✅ | 테스트 | DOC-DEV-09<br>DOC-RBK-10 | src/core/uitext-defaults.js<br>tools/check/check_uitext.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
-| DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-BIZ-06<br>DOC-DEV-08<br>DOC-DEV-09<br>…외 3개 | — | tests/e2e/exam-switch.spec.js | — | — |
+| DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-BIZ-06<br>DOC-DEV-08<br>DOC-DEV-09<br>…외 4개 | — | tests/e2e/exam-switch.spec.js | — | — |
 | DA-14 | ✅ | 테스트 | — | src/pwa/pwa-manifest.js<br>src/shell/app-shell.js | tests/unit/app/exam-context.test.js | — | — |
-| DA-15 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-38<br>DOC-DSN-42<br>…외 3개 | src/core/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
+| DA-15 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-38<br>DOC-DSN-42<br>…외 4개 | src/core/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
 | DA-16 | ✅ | E2E 테스트 | — | src/content/data-loader.js<br>src/content/unpack.js<br>tools/build/build_study_md_bundle.js<br>tools/lib/content_pack.js | tests/dom/common/unpack.dom.test.js<br>tests/e2e/content-pack.spec.js<br>tests/unit/content-pack.test.js<br>tests/unit/content/data-loader-fallback.test.js | — | — |
 | DA-17 | ✅ | 테스트 | — | tools/lib/watermark.js | tests/unit/content-pack.test.js | — | — |
 | DA-18 | ✅ | 테스트 | DOC-BIZ-06<br>DOC-BIZ-07<br>DOC-DSN-44 | html/exams/carework/facility-admin.html<br>html/exams/carework/facility-join.html<br>src/exams/carework/views/facility-admin.js<br>src/exams/carework/views/facility-join.js | tests/dom/exams/carework/care-views.test.js | — | — |
@@ -908,7 +908,7 @@
 | CS-10 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-11 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-07<br>DOC-REF-21 | tools/ai/ai_textbook.js | tests/unit/content/ai-textbook.test.js<br>tests/unit/content/scaffold-chapter.test.js | — | — |
 | CS-12 | ✅ | 도구 검증 | DOC-DSN-53<br>DOC-DSN-54<br>DOC-REF-07<br>DOC-REF-21 | tools/check/check_numbering.js | — | — | — |
-| CS-13 | ✅ | 테스트 | DOC-DSN-54<br>DOC-REF-07<br>DOC-REF-21 | — | tests/unit/gates/content-structure.test.js | — | — |
+| CS-13 | ✅ | 테스트 | DOC-DSN-54<br>DOC-DSN-55<br>DOC-REF-07<br>DOC-REF-21 | — | tests/unit/gates/content-structure.test.js | — | — |
 
 ## 5.5 교재 콘텐츠 학습 보조 요소
 
@@ -981,14 +981,14 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| PAY-01 | 구현 (2026-10-22) | 테스트 | DOC-DSN-42<br>DOC-DSN-50 | src/pro/pro-redeem.js | tests/dom/pro/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
-| PAY-02 | 구현 (활성) | 테스트 | DOC-DSN-42 | src/pro/pro-upgrade.js | tests/dom/pro/pro-redeem.dom.test.js | — | — |
-| PAY-03 | 구현 (2026-10-22) | 테스트 | DOC-DSN-40<br>DOC-DSN-42<br>DOC-USR-18 | src/pro/pro-redeem.js | tests/dom/pro/pro-redeem.dom.test.js | — | — |
-| PAY-04 | 구현 (2026-10-22) | 테스트 | DOC-DSN-40<br>DOC-DSN-42<br>DOC-USR-18 | src/pro/pro-upgrade.js | tests/unit/app/usage-telemetry.test.js | — | — |
-| PAY-05 | 구현 (2026-10-22) | 테스트 | DOC-DSN-40<br>DOC-DSN-42<br>DOC-USR-18 | tools/check/issue_pro_code.js | tests/unit/app/pro-redeem.test.js | — | — |
-| PAY-06 | 구현 (2026-10-23) | 테스트 | DOC-DSN-40<br>DOC-DSN-42<br>DOC-USR-18 | src/pro/pro-redeem.js<br>src/pro/pro-upgrade.js | tests/dom/pro/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
-| PAY-07 | 구현 (2026-10-23) | 테스트 | DOC-DSN-40<br>DOC-DSN-42<br>DOC-USR-18 | html/views/dashboard.html<br>index.html<br>src/pro/pro-expiry.js<br>src/pro/pro-redeem.js<br>…외 2개 | tests/dom/pro/pro-plan.dom.test.js<br>tests/dom/pro/pro-redeem.dom.test.js<br>tests/unit/app/pro-expiry.test.js | — | — |
-| PAY-08 | 구현 (2026-10-23) | 테스트 | DOC-DSN-42 | src/pro/pro-redeem.js | tests/dom/pro/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
+| PAY-01 | 구현 (2026-10-22) | 테스트 | DOC-DSN-42<br>DOC-DSN-50<br>DOC-DSN-55 | src/pro/pro-redeem.js | tests/dom/pro/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
+| PAY-02 | 구현 (활성) | 테스트 | DOC-DSN-42<br>DOC-DSN-55 | src/pro/pro-upgrade.js | tests/dom/pro/pro-redeem.dom.test.js | — | — |
+| PAY-03 | 구현 (2026-10-22) | 테스트 | DOC-DSN-40<br>DOC-DSN-42<br>DOC-DSN-55<br>DOC-USR-18 | src/pro/pro-redeem.js | tests/dom/pro/pro-redeem.dom.test.js | — | — |
+| PAY-04 | 구현 (2026-10-22) | 테스트 | DOC-DSN-40<br>DOC-DSN-42<br>DOC-DSN-55<br>DOC-USR-18 | src/pro/pro-upgrade.js | tests/unit/app/usage-telemetry.test.js | — | — |
+| PAY-05 | 구현 (2026-10-22) | 테스트 | DOC-DSN-40<br>DOC-DSN-42<br>DOC-DSN-55<br>DOC-USR-18 | tools/check/issue_pro_code.js | tests/unit/app/pro-redeem.test.js | — | — |
+| PAY-06 | 구현 (2026-10-23) | 테스트 | DOC-DSN-40<br>DOC-DSN-42<br>DOC-DSN-55<br>DOC-USR-18 | src/pro/pro-redeem.js<br>src/pro/pro-upgrade.js | tests/dom/pro/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
+| PAY-07 | 구현 (2026-10-23) | 테스트 | DOC-DSN-40<br>DOC-DSN-42<br>DOC-DSN-55<br>DOC-USR-18 | html/views/dashboard.html<br>index.html<br>src/pro/pro-expiry.js<br>src/pro/pro-redeem.js<br>…외 2개 | tests/dom/pro/pro-plan.dom.test.js<br>tests/dom/pro/pro-redeem.dom.test.js<br>tests/unit/app/pro-expiry.test.js | — | — |
+| PAY-08 | 구현 (2026-10-23) | 테스트 | DOC-DSN-42<br>DOC-DSN-55 | src/pro/pro-redeem.js | tests/dom/pro/pro-redeem.dom.test.js<br>tests/unit/app/pro-redeem.test.js | — | — |
 
 ---
 
@@ -1095,6 +1095,7 @@
 | DOC-DSN-52 | docs/dev/design/LEARNING_MEDIA_LINK_DESIGN.md | AN-10, CO-22, PS-05, TQ-02, UX-NAV-08 |
 | DOC-DSN-53 | docs/dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md | AI-01, AI-24, AN-10, CS-12, DA-06, DR-09, DR-10, DR-11, ES-01 |
 | DOC-DSN-54 | docs/dev/design/MEMORIZATION_AIDS_DESIGN.md | CS-12, CS-13, D-22, ST-01, ST-02, ST-03, ST-04, ST-05, ST-06, ST-07 |
+| DOC-DSN-55 | docs/exams/hazmat/design/HAZMAT_PRACTICE_TOOL_DESIGN.md | CO-13, CS-13, DA-13, DA-15, PAY-01, PAY-02, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, PAY-08, UM-01, UM-02, UM-03, UM-04 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |
