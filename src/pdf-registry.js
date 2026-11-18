@@ -1420,7 +1420,9 @@ const _EXAM_TABLES = {
 
         ],
         REF_DIRS: {
-
+        "과목2": [
+            "한국전기설비규정(기후에너지환경부공고).pdf"
+        ]
         },
         SOURCE_REF_MAP: [
 
