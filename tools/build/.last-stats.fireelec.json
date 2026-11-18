@@ -22,11 +22,11 @@
     },
     "law": {
       "cards": 29,
-      "quizzes": 5,
+      "quizzes": 6,
       "files": {
         "교재/law/3과목_소방관계법규_표준형.md": {
           "cards": 29,
-          "quizzes": 5
+          "quizzes": 6
         }
       }
     },
