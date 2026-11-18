@@ -1,5 +1,5 @@
 // tests/unit/markdown-parser-general.test.js
-// @spec TR-01,TR-09
+// @spec TR-01,TR-09,TR-32
 // markdown-parser.js의 일반 MD→HTML 변환 로직을 합성 데이터로 검증.
 // 교재 콘텐츠와 무관하게 파싱 로직 자체가 정확해야 함.
 

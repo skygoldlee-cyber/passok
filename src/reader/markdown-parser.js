@@ -631,6 +631,7 @@ export function stripQaStamps(html) {
 
 /**
  * 간단한 LaTeX 수식을 HTML로 변환 (KaTeX 없이 자체 변환)
+ * @spec TR-32 — 지원 명령어 부분집합 계약 (콘텐츠 표기 규약은 CS-14)
  * 지원: \frac 분수 · _{}/^{} 아래·윗첨자 · 그리스문자 · 기본 기호(\times\cdot\leq 등)
  * @param {string} formula - $$ ... $$ 또는 $ ... $ 내부의 LaTeX 수식 문자열
  * @param {{inline?: boolean}} [opts] - inline이면 <span class="math-inline"> (문단 내 표시)
