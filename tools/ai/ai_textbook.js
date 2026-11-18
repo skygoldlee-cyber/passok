@@ -9,9 +9,11 @@
  * 도구가 결정론적으로 생성해 말미에 첨부한다 (형식 결함류 원천 차단).
  *
  * 사용법:
- *   node tools/ai/ai_textbook.js --exam insadj --doc "보험업법" [--lines 1-200] [--dry-run]
+ *   node tools/ai/ai_textbook.js --exam insadj --doc "보험업법" [--lines 1-200] [--suffix p1] [--dry-run]
+ *   - --lines 분할 실행 시 --suffix로 산출 파일명을 구분할 것 (기본 파일명은 실행마다 덮어씀)
  *
  * - --doc은 ref_md 문서 베이스명 또는 부분 문자열 (부분 매칭 다수 시 목록 출력 후 중단)
+ *   동일 문서가 복수 과목 ref_md에 있으면 `과목N/문서명` 형태로 과목을 지정할 수 있다.
  * - 조호 자기검증: 생성 본문의 제N조 언급이 청크 원문에 없으면 [폐기 후보] 표시 (AI-03)
  * - --dry-run/키 부재 시 전송 예정 프롬프트만 기록 (AI-02 계약)
  */
@@ -146,8 +148,8 @@ async function main() {
     if (!opts.doc) { console.error('--doc <ref 문서명> 필요'); process.exit(1); }
 
     const docs = findRefDocs(target);
-    const exact = docs.filter(d => d.docName === opts.doc);
-    const partial = docs.filter(d => d.docName.includes(opts.doc));
+    const exact = docs.filter(d => d.docName === opts.doc || `${d.subjectDir}/${d.docName}` === opts.doc);
+    const partial = docs.filter(d => d.docName.includes(opts.doc) || `${d.subjectDir}/${d.docName}`.includes(opts.doc));
     const matches = exact.length ? exact : partial;
     if (!matches.length) {
         console.error(`ref 문서 없음: ${opts.doc}\n사용 가능:\n${docs.map(d => `  ${d.subjectDir}/${d.docName}`).join('\n')}`);
@@ -187,7 +189,8 @@ async function main() {
     }
 
     const lines = assembleDraftLines({ target, doc, chunks, results });
-    const out = writeDraft(`${target.id}/textbook_${doc.docName.replace(/[\\/:*?"<>|]/g, '_')}.md`, lines, { model: llm.modelName() });
+    const suffix = opts.suffix ? `_${opts.suffix}` : '';
+    const out = writeDraft(`${target.id}/textbook_${doc.docName.replace(/[\\/:*?"<>|]/g, '_')}${suffix}.md`, lines, { model: llm.modelName() });
     console.log(`${doc.docName} (${doc.subjectDir}): 청크 ${chunks.length}개 → ${path.relative(ROOT, out)}`);
 }
 
