@@ -66,21 +66,21 @@
       "key": "subject1",
       "subject": "theory",
       "part": 1,
-      "title": "소방원론 911제",
+      "title": "소방원론 91제",
       "file": "과목1_문제은행.md"
     },
     {
       "key": "subject2",
       "subject": "elec",
       "part": 1,
-      "title": "소방전기일반 1제",
+      "title": "소방전기일반 601제",
       "file": "과목2_문제은행.md"
     },
     {
       "key": "subject3",
       "subject": "law",
       "part": 1,
-      "title": "소방관계법규 116제",
+      "title": "소방관계법규 546제",
       "file": "과목3_문제은행.md"
     },
     {

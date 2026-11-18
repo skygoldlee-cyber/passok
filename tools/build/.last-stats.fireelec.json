@@ -1,12 +1,12 @@
 {
   "subjects": {
     "theory": {
-      "cards": 0,
-      "quizzes": 0,
+      "cards": 40,
+      "quizzes": 6,
       "files": {
         "교재/theory/1과목_소방원론_표준형.md": {
-          "cards": 0,
-          "quizzes": 0
+          "cards": 41,
+          "quizzes": 6
         }
       }
     },
@@ -43,13 +43,13 @@
   },
   "exams": {
     "subject1": {
-      "questions": 911
+      "questions": 91
     },
     "subject2": {
-      "questions": 1
+      "questions": 601
     },
     "subject3": {
-      "questions": 116
+      "questions": 546
     },
     "subject4": {
       "questions": 290
