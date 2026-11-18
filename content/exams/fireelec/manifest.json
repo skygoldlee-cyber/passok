@@ -63,6 +63,13 @@
   ],
   "exams": [
     {
+      "key": "subject1",
+      "subject": "theory",
+      "part": 1,
+      "title": "소방원론 1제",
+      "file": "과목1_문제은행.md"
+    },
+    {
       "key": "subject3",
       "subject": "law",
       "part": 1,
