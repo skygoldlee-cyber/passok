@@ -3,6 +3,7 @@
 // ref_md의 HTML/MD 변환본을 fetch로 로드하여 DOM에 직접 주입 (iframe 없음)
 import { parseMarkdown } from './markdown-parser.js';
 import { esc } from '../core/sanitize.js';
+import { setText } from '../core/dom.js';
 import { CACHE } from '../config/cache.js';
 import { renderMermaidIn } from './mermaid-render.js';
 import { makeSessionCache } from '../shell/doc-overlay.js';
@@ -138,27 +139,13 @@ function close() {
     _contentEl = null;
 }
 
-/**
- * @param {string} htmlPath
- * @param {*} [searchKeyword]
- * @param {*} [anchorId]
- * @param {*} [lineNum]
- */
-async function openHtmlViewer(htmlPath, searchKeyword, anchorId, lineNum) {
-    const el = _ensureOverlay();
-    const titleEl = el.querySelector('#hr-title');
-    const scroll = el.querySelector('#hr-scroll');
-    if (!scroll) return;
-
-    const fileName = decodeURIComponent((htmlPath.split('/').pop() || '').replace(/\.(html|md)$/, ''));
-    if (titleEl) titleEl.textContent = fileName;
-
+/** 로딩 표시 준비 — 기존 콘텐츠 제거 후 스피너 부착 @param {HTMLElement} el @param {Element} scroll @returns {HTMLElement} */
+function _showViewerLoading(el, scroll) {
     // 기존 콘텐츠 제거
     const oldContent = scroll.querySelector('.hr-ov-content');
     if (oldContent) oldContent.remove();
 
-    // 로딩 표시
-    let loading = el.querySelector('#hr-loading');
+    let loading = /** @type {HTMLElement|null} */ (el.querySelector('#hr-loading'));
     if (!loading) {
         loading = document.createElement('div');
         loading.id = 'hr-loading';
@@ -169,13 +156,159 @@ async function openHtmlViewer(htmlPath, searchKeyword, anchorId, lineNum) {
     scroll.innerHTML = '';
     scroll.appendChild(loading);
     scroll.scrollTop = 0;
+    return loading;
+}
+
+/** HTML 문서 sanitize — script·on* 핸들러·javascript: URI 제거 + img 상대경로→절대경로 (XSS 방어) */
+function _sanitizeDocHtml(/** @type {string} */ rawText, /** @type {string} */ baseUrl) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(rawText, 'text/html');
+    doc.querySelectorAll('script').forEach(el => el.remove());
+    doc.querySelectorAll('*').forEach(el => {
+        // on* 이벤트 핸들러 속성 제거
+        for (const attr of Array.from(el.attributes)) {
+            if (attr.name.startsWith('on')) {
+                el.removeAttribute(attr.name);
+            }
+            // javascript: URI 제거 (href, src, action 등)
+            if ((attr.name === 'href' || attr.name === 'src' || attr.name === 'action' || attr.name === 'formaction') &&
+                attr.value && attr.value.trim().toLowerCase().startsWith('javascript:')) {
+                el.removeAttribute(attr.name);
+            }
+        }
+    });
+    doc.querySelectorAll('img').forEach(img => {
+        const src = img.getAttribute('src');
+        if (src && !src.startsWith('http') && !src.startsWith('data:')) {
+            img.src = new URL(src, baseUrl).href;
+        }
+    });
+    return doc.body.innerHTML;
+}
+
+/** 문서 fetch → innerHTML — sessionStorage 캐시 우선, MD는 parseMarkdown / HTML은 sanitize @param {string} fileUrl @param {boolean} isMarkdown @param {string} baseUrl */
+async function _fetchDocHtml(fileUrl, isMarkdown, baseUrl) {
+    const cached = _cache.get(fileUrl);
+    if (cached) return cached.html;
+
+    const resp = await fetch(fileUrl);
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const rawText = await resp.text();
+
+    // ref_md는 문장 중간 절단이 있는 PDF 추출 산출물 — 연속줄 병합 적용
+    const innerHTML = isMarkdown
+        ? parseMarkdown(rawText, {
+            allowInlineCode: false,
+            allowMermaid: true,
+            joinWraps: fileUrl.indexOf('ref_md') !== -1
+        })
+        : _sanitizeDocHtml(rawText, baseUrl);
+
+    // 캐시 저장 (LRU: 새 항목 추가 후 한도 초과 시 가장 오래된 항목 제거)
+    _cache.set(fileUrl, { html: innerHTML });
+    return innerHTML;
+}
+
+/**
+ * PDF→HTML 변환시 폰트별 <span> 분할 제거 (한글 키워드 검색을 위해)
+ * 예: <span>알</span><span>코올</span> → 알코올 (단일 텍스트 노드)
+ * 최적화: span 목록을 먼저 수집한 후 일괄 처리, normalize는 부모별 1회만 호출
+ * @param {Element} content
+ */
+function _flattenFontSpans(content) {
+    const spans = content.querySelectorAll('span');
+    const parentsToNormalize = new Set();
+    for (const span of spans) {
+        const parent = span.parentNode;
+        if (!parent) continue;
+        while (span.firstChild) {
+            parent.insertBefore(span.firstChild, span);
+        }
+        parent.removeChild(span);
+        parentsToNormalize.add(parent);
+    }
+    for (const p of parentsToNormalize) {
+        p.normalize();
+    }
+}
+
+/** MD 이미지 경로를 절대 경로로 변환 @param {Element} content @param {string} baseUrl */
+function _rebaseContentImgs(content, baseUrl) {
+    content.querySelectorAll('img').forEach(img => {
+        const src = img.getAttribute('src');
+        if (src && !src.startsWith('http') && !src.startsWith('data:')) {
+            img.src = new URL(src, baseUrl).href;
+        }
+    });
+}
+
+/** 검색 실행 — 결과 없고 공백 포함이면 첫 단어로 재검색 @param {*} searchKeyword */
+async function _runViewerSearch(searchKeyword) {
+    const effectiveSearch = searchKeyword;
+    if (!effectiveSearch || effectiveSearch.length < 2) return;
+    await _doSearch(effectiveSearch, true);
+    if (_searchResults.length === 0 && effectiveSearch.includes(' ')) {
+        const firstWord = effectiveSearch.split(' ')[0];
+        if (firstWord.length >= 2) {
+            await _doSearch(firstWord, true);
+        }
+    }
+}
+
+/** 스크롤 타겟: 첫 검색 결과 > 앵커 ID > heading 텍스트 (L###은 원본 <p> 인덱스 불일치로 스크롤 미사용) */
+function _scrollToViewerTarget(/** @type {Element} */ content, /** @type {*} */ anchorId, /** @type {*} */ lineNum, /** @type {*} */ effectiveSearch) {
+    if (!(anchorId || lineNum || effectiveSearch)) return;
+    let target = null;
+
+    // 1. 검색 결과가 있으면: 첫 번째 하이라이트로 스크롤
+    if (_searchResults.length > 0) {
+        target = _searchResults[0];
+    }
+    // 2. lineNum이 없고 anchorId가 있으면 ID로 직접 찾기 (출처 라인 제N조용)
+    if (!target && !lineNum && anchorId) {
+        target = content.querySelector(`#${CSS.escape(anchorId)}`);
+    }
+    // 3. heading 텍스트에 앵커 문자열이 포함된 요소 찾기
+    if (!target && !lineNum && anchorId) {
+        const headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6, .section-label, .page-header');
+        for (const h of headings) {
+            if (h.textContent.includes(anchorId)) {
+                target = h;
+                break;
+            }
+        }
+    }
+    if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        const targetEl = /** @type {HTMLElement} */ (target);
+        targetEl.style.transition = 'background 0.5s ease';
+        const origBg = targetEl.style.background;
+        targetEl.style.background = 'var(--highlight-yellow-strong)';
+        setTimeout(() => { targetEl.style.background = origBg; }, 1500);
+    }
+}
+
+/**
+ * @param {string} htmlPath
+ * @param {*} [searchKeyword]
+ * @param {*} [anchorId]
+ * @param {*} [lineNum]
+ */
+async function openHtmlViewer(htmlPath, searchKeyword, anchorId, lineNum) {
+    const el = _ensureOverlay();
+    const scroll = el.querySelector('#hr-scroll');
+    if (!scroll) return;
+
+    const fileName = decodeURIComponent((htmlPath.split('/').pop() || '').replace(/\.(html|md)$/, ''));
+    setText(el.querySelector('#hr-title'), fileName);
+
+    const loading = _showViewerLoading(el, scroll);
 
     _searchResults = [];
     _searchIdx = -1;
     const searchInput = /** @type {HTMLInputElement|null} */ (el.querySelector('#hr-search-input'));
     if (searchInput) searchInput.value = searchKeyword || '';
-    const countInitEl = el.querySelector('#hr-search-count');
-    if (countInitEl) countInitEl.textContent = '';
+    setText(el.querySelector('#hr-search-count'), '');
 
     _open();
 
@@ -184,52 +317,7 @@ async function openHtmlViewer(htmlPath, searchKeyword, anchorId, lineNum) {
         const isMarkdown = htmlPath.endsWith('.md');
         const baseUrl = fileUrl.substring(0, fileUrl.lastIndexOf('/') + 1);
 
-        // sessionStorage 캐싱: 재방문 시 fetch 0회로 즉시 렌더링
-        const cached = _cache.get(fileUrl);
-        let innerHTML = cached ? cached.html : null;
-
-        if (innerHTML === null) {
-            const resp = await fetch(fileUrl);
-            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-            const rawText = await resp.text();
-
-            if (isMarkdown) {
-                // ref_md는 문장 중간 절단이 있는 PDF 추출 산출물 — 연속줄 병합 적용
-                innerHTML = parseMarkdown(rawText, {
-                    allowInlineCode: false,
-                    allowMermaid: true,
-                    joinWraps: htmlPath.indexOf('ref_md') !== -1
-                });
-            } else {
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(rawText, 'text/html');
-                // XSS 방어: <script>, 이벤트 핸들러, javascript: URI 제거
-                doc.querySelectorAll('script').forEach(el => el.remove());
-                doc.querySelectorAll('*').forEach(el => {
-                    // on* 이벤트 핸들러 속성 제거
-                    for (const attr of Array.from(el.attributes)) {
-                        if (attr.name.startsWith('on')) {
-                            el.removeAttribute(attr.name);
-                        }
-                        // javascript: URI 제거 (href, src, action 등)
-                        if ((attr.name === 'href' || attr.name === 'src' || attr.name === 'action' || attr.name === 'formaction') &&
-                            attr.value && attr.value.trim().toLowerCase().startsWith('javascript:')) {
-                            el.removeAttribute(attr.name);
-                        }
-                    }
-                });
-                doc.querySelectorAll('img').forEach(img => {
-                    const src = img.getAttribute('src');
-                    if (src && !src.startsWith('http') && !src.startsWith('data:')) {
-                        img.src = new URL(src, baseUrl).href;
-                    }
-                });
-                innerHTML = doc.body.innerHTML;
-            }
-
-            // 캐시 저장 (LRU: 새 항목 추가 후 한도 초과 시 가장 오래된 항목 제거)
-            _cache.set(fileUrl, { html: innerHTML });
-        }
+        const innerHTML = await _fetchDocHtml(fileUrl, isMarkdown, baseUrl);
 
         loading.remove();
 
@@ -241,86 +329,13 @@ async function openHtmlViewer(htmlPath, searchKeyword, anchorId, lineNum) {
         _contentEl = content;
         renderMermaidIn(content, '[ref]');
 
-        // PDF→HTML 변환시 폰트별 <span> 분할 제거 (한글 키워드 검색을 위해)
-        // 예: <span>알</span><span>코올</span> → 알코올 (단일 텍스트 노드)
-        // 최적화: span 목록을 먼저 수집한 후 일괄 처리, normalize는 부모별 1회만 호출
-        if (!isMarkdown) {
-            const spans = content.querySelectorAll('span');
-            const parentsToNormalize = new Set();
-            for (const span of spans) {
-                const parent = span.parentNode;
-                if (!parent) continue;
-                while (span.firstChild) {
-                    parent.insertBefore(span.firstChild, span);
-                }
-                parent.removeChild(span);
-                parentsToNormalize.add(parent);
-            }
-            for (const p of parentsToNormalize) {
-                p.normalize();
-            }
-        }
-
-        // MD의 경우 이미지 경로를 절대 경로로 변환
-        if (isMarkdown) {
-            content.querySelectorAll('img').forEach(img => {
-                const src = img.getAttribute('src');
-                if (src && !src.startsWith('http') && !src.startsWith('data:')) {
-                    img.src = new URL(src, baseUrl).href;
-                }
-            });
-        }
+        if (!isMarkdown) _flattenFontSpans(content);
+        else _rebaseContentImgs(content, baseUrl); // MD의 경우 이미지 경로를 절대 경로로 변환
 
         // 검색어 결정: searchKeyword(셀 텍스트에서 추출)를 우선 사용
         // L### 번호는 스크롤 위치 힌트로만 사용 (검색어 덮어쓰지 않음)
-        const effectiveSearch = searchKeyword;
-        if (effectiveSearch && effectiveSearch.length >= 2) {
-            await _doSearch(effectiveSearch, true);
-            // 검색 결과가 없고 키워드에 공백이 있으면 첫 단어로 재검색
-            if (_searchResults.length === 0 && effectiveSearch.includes(' ')) {
-                const firstWord = effectiveSearch.split(' ')[0];
-                if (firstWord.length >= 2) {
-                    await _doSearch(firstWord, true);
-                }
-            }
-        }
-
-        // 스크롤 타겟 찾기
-        // 우선순위: 첫 번째 검색 결과(하이라이트된 키워드) > 앵커 ID > heading 텍스트
-        // L###은 원본 HTML <p> 인덱스이나 parseMarkdown <p>와 불일치하므로 스크롤에 사용하지 않음
-        if (anchorId || lineNum || effectiveSearch) {
-            let target = null;
-
-            // 1. 검색 결과가 있으면: 첫 번째 하이라이트로 스크롤
-            if (_searchResults.length > 0) {
-                target = _searchResults[0];
-            }
-
-            // 2. lineNum이 없고 anchorId가 있으면 ID로 직접 찾기 (출처 라인 제N조용)
-            if (!target && !lineNum && anchorId) {
-                target = content.querySelector(`#${CSS.escape(anchorId)}`);
-            }
-
-            // 3. heading 텍스트에 앵커 문자열이 포함된 요소 찾기
-            if (!target && !lineNum && anchorId) {
-                const headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6, .section-label, .page-header');
-                for (const h of headings) {
-                    if (h.textContent.includes(anchorId)) {
-                        target = h;
-                        break;
-                    }
-                }
-            }
-
-            if (target) {
-                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                const targetEl = /** @type {HTMLElement} */ (target);
-                targetEl.style.transition = 'background 0.5s ease';
-                const origBg = targetEl.style.background;
-                targetEl.style.background = 'var(--highlight-yellow-strong)';
-                setTimeout(() => { targetEl.style.background = origBg; }, 1500);
-            }
-        }
+        await _runViewerSearch(searchKeyword);
+        _scrollToViewerTarget(content, anchorId, lineNum, searchKeyword);
     } catch (err) {
         console.error('HTML viewer load failed:', err);
         loading.innerHTML = `<div style="color:var(--color-danger,#f85149);">문서 로딩 실패: ${esc(err instanceof Error ? err.message : String(err))}</div>`;

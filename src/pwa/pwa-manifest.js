@@ -9,21 +9,24 @@
 //    판정해 beforeinstallprompt가 발생하지 않고, connect-src 'self'가 fetch도 차단한다.
 // data/exams.js 이후, app.js(모듈) 이전에 로드되어야 한다.
 (function () {
-    try {
-        const exams = (window.EXAMS_LIST && window.EXAMS_LIST.exams) || [];
-        if (!exams.length) return;
+    /** 활성 시험 해석 — current_exam → default → 첫 항목 순 폴백 */
+    function resolveActiveExam(/** @type {*[]} */ exams) {
         let id = null;
         try { id = localStorage.getItem('current_exam'); } catch (e) { /* noop */ }
-        const exam = exams.find(e => e.id === id) || exams.find(e => e.default) || exams[0] || null;
-        if (!exam) return;
+        return exams.find((/** @type {*} */ e) => e.id === id) || exams.find((/** @type {*} */ e) => e.default) || exams[0] || null;
+    }
 
+    // 빌드 산출물 manifests/<id>.webmanifest(실제 파일)로 교체 — 시험별 shortcuts·id 반영.
+    // 생성물이 누락되면 링크가 404가 되어 설치가 깨질 수 있으므로, build:data 산출물 검증과
+    // check:datafresh가 파일 존재·신선도를 보장한다 (manifest.webmanifest 자체는 부팅 전까지의 폴백).
+    function applyManifestLink(/** @type {*} */ exam) {
         const link = /** @type {HTMLLinkElement|null} */ (document.querySelector('link[rel="manifest"]'));
-        if (!link) return;
-
-        // 빌드 산출물 manifests/<id>.webmanifest(실제 파일)로 교체 — 시험별 shortcuts·id 반영.
-        // 생성물이 누락되면 링크가 404가 되어 설치가 깨질 수 있으므로, build:data 산출물 검증과
-        // check:datafresh가 파일 존재·신선도를 보장한다 (manifest.webmanifest 자체는 부팅 전까지의 폴백).
+        if (!link) return false;
         link.href = 'manifests/' + encodeURIComponent(exam.id) + '.webmanifest';
+        return true;
+    }
+
+    function applyBrandIcons() {
         // 파비콘(탭/홈 브랜드 아이콘)은 시험 아이콘으로 전환하지 않는다 —
         // PassOK 브랜드 아이콘은 시험 무관 독립 정체성이어야 한다 (팩별 아이콘은 카드·manifest에만).
         // 다만 URL에 APP_VERSION 스탬프를 붙여 SW 프리캐시 키와 분리한다 —
@@ -33,7 +36,9 @@
             const el = /** @type {HTMLLinkElement|null} */ (document.querySelector(sel));
             if (el) el.href = `icons/passok-icon-192.png${v}`;
         }
+    }
 
+    function applyExamMeta(/** @type {*} */ exam) {
         // 문서 제목/설명도 활성 시험 기준으로 갱신
         if (exam.title) document.title = exam.title;
         const metaDesc = document.querySelector('meta[name="description"]');
@@ -44,33 +49,37 @@
         //  iOS는 추가 시점의 메타 값을 읽으므로 부팅 시 반영되어야 한다)
         const appleTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
         if (appleTitle) appleTitle.setAttribute('content', 'PassOK');
+    }
 
-        // 시험별 스킨 (DA-14) — 부팅 최초 프레임부터 활성 시험 팔레트를 적용한다.
-        // html[data-exam]은 CSS 측 규약 오버라이드(cascade)용 속성.
-        // theme 토큰은 인라인 변수라 .light-theme 재정의보다 우선한다 — 라이트에서는
-        // --color-* 를 표면 대비 안전 명도로 감쇠해 주입한다 (A-03).
-        // ⚠️ 화이트리스트 정규식·감쇠 로직은 exam-context.js THEME_TOKEN_RE/
-        //    darkenToLuminance와 동일 — 함께 갱신.
+    /** @param {number} v */
+    function lin(v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }
+
+    /** @param {string} hex @param {number} maxLum */
+    function darken(hex, maxLum) {
+        const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim());
+        if (!m) return null;
+        const n = parseInt(m[1] || '0', 16);
+        const r = n >> 16 & 255, g = n >> 8 & 255, b = n & 255;
+        for (let k = 1; k > 0; k -= 0.02) {
+            const rr = Math.round(r * k), gg = Math.round(g * k), bb = Math.round(b * k);
+            if (0.2126 * lin(rr) + 0.7152 * lin(gg) + 0.0722 * lin(bb) <= maxLum) {
+                return '#' + [rr, gg, bb].map(v2 => v2.toString(16).padStart(2, '0')).join('');
+            }
+        }
+        return '#000000';
+    }
+
+    // 시험별 스킨 (DA-14) — 부팅 최초 프레임부터 활성 시험 팔레트를 적용한다.
+    // html[data-exam]은 CSS 측 규약 오버라이드(cascade)용 속성.
+    // theme 토큰은 인라인 변수라 .light-theme 재정의보다 우선한다 — 라이트에서는
+    // --color-* 를 표면 대비 안전 명도로 감쇠해 주입한다 (A-03).
+    // ⚠️ 화이트리스트 정규식·감쇠 로직은 exam-context.js THEME_TOKEN_RE/
+    //    darkenToLuminance와 동일 — 함께 갱신.
+    function applyExamSkin(/** @type {*} */ exam) {
         document.documentElement.dataset.exam = exam.id;
         const savedTheme = localStorage.getItem('appTheme');
         const prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
         const isLight = (savedTheme || (prefersLight ? 'light' : 'dark')) === 'light';
-        /** @param {number} v */
-        const lin = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
-        /** @param {string} hex @param {number} maxLum */
-        const darken = (hex, maxLum) => {
-            const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim());
-            if (!m) return null;
-            const n = parseInt(m[1] || '0', 16);
-            const r = n >> 16 & 255, g = n >> 8 & 255, b = n & 255;
-            for (let k = 1; k > 0; k -= 0.02) {
-                const rr = Math.round(r * k), gg = Math.round(g * k), bb = Math.round(b * k);
-                if (0.2126 * lin(rr) + 0.7152 * lin(gg) + 0.0722 * lin(bb) <= maxLum) {
-                    return '#' + [rr, gg, bb].map(v2 => v2.toString(16).padStart(2, '0')).join('');
-                }
-            }
-            return '#000000';
-        };
         const theme = (exam && typeof exam.theme === 'object' && exam.theme) || {};
         /** @type {Object.<string, string>} */
         const applied = {};
@@ -88,5 +97,17 @@
         for (const token of Object.keys(applied)) {
             document.documentElement.style.setProperty(token, applied[token] || '');
         }
+    }
+
+    try {
+        const exams = (window.EXAMS_LIST && window.EXAMS_LIST.exams) || [];
+        if (!exams.length) return;
+        const exam = resolveActiveExam(exams);
+        if (!exam) return;
+        if (!applyManifestLink(exam)) return;
+
+        applyBrandIcons();
+        applyExamMeta(exam);
+        applyExamSkin(exam);
     } catch (e) { /* 정적 매니페스트 폴백 유지 */ }
 })();

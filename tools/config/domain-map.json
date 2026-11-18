@@ -76,6 +76,7 @@
                 "src/content/unpack.js",
                 "src/shell/doc-overlay.js",
                 "src/telemetry/error-telemetry.js",
+                "src/core/dom.js",
                 "src/core/entity-store.js",
                 "src/core/exam-context.js",
                 "src/shell/exam-data-boot.js",

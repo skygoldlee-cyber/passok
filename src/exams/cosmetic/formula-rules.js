@@ -249,6 +249,117 @@ function filterCandidateNames(names, index) {
   });
 }
 
+/** ① 제형 → 베이스 템플릿 (+ 맞춤 후보 병합, 알레르기 제외) */
+function _recommendedBases(/** @type {*} */ customer, /** @type {*} */ cu, /** @type {Map<string,*>} */ index, /** @type {(n:string)=>boolean} */ notAllergen) {
+  const template = (/** @type {Object.<string,*>} */ (BASE_TEMPLATES))[customer.formulation];
+  if (!template) return [];
+  return template.map((/** @type {*} */ r) => ({
+    role: r.role,
+    required: !!r.required,
+    candidates: filterCandidateNames(
+      r.candidates.concat((cu.base && cu.base[r.role]) || []), index)
+      .filter(notAllergen),
+  }));
+}
+
+/** ② 고민 + 피부유형 → 원료 후보 수집 (이름 dedupe, 이유 수집) @returns {Map<string,{reasons:Set<string>}>} */
+function _collectCandidateNames(/** @type {*} */ customer, /** @type {*} */ cu) {
+  /** @type {Map<string,{reasons:Set<string>}>} */
+  const seen = new Map(); // name → {reasons:Set}
+  const add = (/** @type {string} */ name, /** @type {string} */ reason) => {
+    if (!seen.has(name)) seen.set(name, { reasons: new Set([reason]) });
+    else /** @type {{reasons:Set<string>}} */ (seen.get(name)).reasons.add(reason);
+  };
+  (Array.isArray(customer.concerns) ? customer.concerns : []).forEach((/** @type {string} */ c) => {
+    ((/** @type {Object.<string,string[]>} */ (CONCERN_INGREDIENTS))[c] || []).forEach((/** @type {string} */ name) => add(name, c));
+    ((cu.concern && cu.concern[c]) || []).forEach((/** @type {string} */ name) => add(name, c));
+  });
+  ((/** @type {Object.<string,string[]>} */ (SKIN_INGREDIENTS))[customer.skinType] || []).forEach((/** @type {string} */ name) => add(name, '피부유형'));
+  ((cu.skin && cu.skin[customer.skinType]) || []).forEach((/** @type {string} */ name) => add(name, '피부유형'));
+  return seen;
+}
+
+/** 자극 주의 원료 판정 — 연령대(20세 미만·65세 초과) 또는 임신·수유 */
+function _isIrritantIngredient(/** @type {string} */ name, /** @type {*} */ ctx) {
+  return (ctx.youngOrOld && IRRITANT_INGREDIENTS.includes(name))
+    || (ctx.pregnant && PREGNANCY_CAUTION.includes(name));
+}
+
+/** 후보 1건 심사 → 추천 엔트리 (미등록·금지·알레르기 이력 원료는 null) @returns {{entry:*, overlaps:boolean}|null} */
+function _ingredientEntry(/** @type {string} */ name, /** @type {{reasons:Set<string>}} */ meta, /** @type {Map<string,*>} */ index, /** @type {*} */ ctx, /** @type {(n:string)=>boolean} */ notAllergen) {
+  const ing = index && index.get(name);
+  if (!ing || ing.type === 'banned') return null; // 미등록·금지 원료는 추천하지 않음
+  if (!notAllergen(name)) return null;            // 알레르기 이력 원료 제외
+  return {
+    // 사용 중인 제품/약물과의 성분 중복 감지 (자유 기술 문자열 부분 일치)
+    overlaps: !!(ctx.productsText && ctx.productsText.includes(name)),
+    entry: {
+      name,
+      reasons: [...meta.reasons],
+      type: ing.type || '',
+      limit: ing.limit || '',
+      irritant: _isIrritantIngredient(name, ctx),
+    }
+  };
+}
+
+/** ②b 후보 루프 → 추천 원료 확정 + 사용 중 제품과의 성분 중복 감지 @returns {{ingredients:*[], overlap:string[]}} */
+function _finalizeIngredients(/** @type {Map<string,{reasons:Set<string>}>} */ seen, /** @type {Map<string,*>} */ index, /** @type {*} */ ctx, /** @type {(n:string)=>boolean} */ notAllergen) {
+  /** @type {*[]} */
+  const ingredients = [];
+  /** @type {string[]} */
+  const overlap = [];
+  for (const [name, meta] of seen) {
+    const hit = _ingredientEntry(name, meta, index, ctx, notAllergen);
+    if (!hit) continue;
+    if (hit.overlaps) overlap.push(name);
+    ingredients.push(hit.entry);
+  }
+  return { ingredients, overlap };
+}
+
+/** ③ 주의문 생성 @returns {string[]} */
+function _cautionMessages(/** @type {*} */ customer, /** @type {*} */ ctx, /** @type {Set<string>} */ excludedByAllergy, /** @type {string[]} */ overlap) {
+  /** @type {string[]} */
+  const cautions = [];
+  if (excludedByAllergy.size) {
+    cautions.push(`알레르기 이력: ${[...excludedByAllergy].join(', ')} — 추천에서 자동 제외됨`);
+  }
+  if (ctx.pregnant) {
+    cautions.push('임신·수유 중: 레티놀 등 비타민A 유도체·살리실산 계열은 전문의 상담 후 사용 권장');
+  }
+  if (overlap.length) {
+    cautions.push(`사용 중인 제품/약물과 성분 중복 가능: ${overlap.join(', ')} — 병용 시 자극·중복 확인`);
+  }
+  if (customer.skinType === '민감성') {
+    cautions.push('민감성 피부: 향료·에탄올 계열은 자극 가능성 — 소량 패치 테스트 권장');
+  }
+  if (ctx.youngOrOld) {
+    cautions.push(
+      ctx.age < 20
+        ? '20세 미만: 고기능성·각질제거 원료는 저농도부터 시작 권장'
+        : '65세 이상: 피부 장벽 약화 가능 — 자극 원료는 저농도 권장'
+    );
+  }
+  return cautions;
+}
+
+/** 알레르기·부작용 이력 필터 — 모든 추천(기본·맞춤 후보 포함)에서 제외 + 제외 목록 수집 @returns {{notAllergen:(n:string)=>boolean, excludedByAllergy:Set<string>}} */
+function _allergyFilter(/** @type {*} */ customer) {
+  const allergies = new Set(
+    (Array.isArray(customer.allergies) ? customer.allergies : [])
+      .map((/** @type {*} */ a) => (typeof a === 'string' ? a.trim() : ''))
+      .filter(Boolean)
+  );
+  /** @type {Set<string>} */
+  const excludedByAllergy = new Set();
+  const notAllergen = (/** @type {string} */ n) => {
+    if (allergies.has(n)) { excludedByAllergy.add(n); return false; }
+    return true;
+  };
+  return { notAllergen, excludedByAllergy };
+}
+
 /**
  * 고객 조건으로 추천을 생성한다.
  * @param {*} customer - {gender, age, skinType, concerns[], formulation}
@@ -262,87 +373,22 @@ export function recommendFor(customer, index, custom) {
   if (!customer || typeof customer !== 'object') return result;
   const cu = custom && typeof custom === 'object' ? custom : emptyCustomRules();
 
-  // 알레르기·부작용 이력 원료 — 모든 추천(기본·맞춤 후보 포함)에서 제외
-  const allergies = new Set(
-    (Array.isArray(customer.allergies) ? customer.allergies : [])
-      .map((/** @type {*} */ a) => (typeof a === 'string' ? a.trim() : ''))
-      .filter(Boolean)
-  );
-  const excludedByAllergy = new Set();
-  const notAllergen = (/** @type {string} */ n) => {
-    if (allergies.has(n)) { excludedByAllergy.add(n); return false; }
-    return true;
-  };
+  const { notAllergen, excludedByAllergy } = _allergyFilter(customer);
 
-  // ① 제형 → 베이스 템플릿 (+ 맞춤 후보 병합, 알레르기 제외)
-  const template = (/** @type {Object.<string,*>} */ (BASE_TEMPLATES))[customer.formulation];
-  if (template) {
-    result.bases = template.map((/** @type {*} */ r) => ({
-      role: r.role,
-      required: !!r.required,
-      candidates: filterCandidateNames(
-        r.candidates.concat((cu.base && cu.base[r.role]) || []), index)
-        .filter(notAllergen),
-    }));
-  }
-
-  // ② 고민 + 피부유형 → 원료 추천 (이름 dedupe, 이유 수집)
-  /** @type {Map<string,{reasons:Set<string>}>} */
-  const seen = new Map(); // name → {reasons:Set}
-  const add = (/** @type {string} */ name, /** @type {string} */ reason) => {
-    if (!seen.has(name)) seen.set(name, { reasons: new Set([reason]) });
-    else /** @type {{reasons:Set<string>}} */ (seen.get(name)).reasons.add(reason);
-  };
-  (Array.isArray(customer.concerns) ? customer.concerns : []).forEach((/** @type {string} */ c) => {
-    ((/** @type {Object.<string,string[]>} */ (CONCERN_INGREDIENTS))[c] || []).forEach((/** @type {string} */ name) => add(name, c));
-    ((cu.concern && cu.concern[c]) || []).forEach((/** @type {string} */ name) => add(name, c));
-  });
-  ((/** @type {Object.<string,string[]>} */ (SKIN_INGREDIENTS))[customer.skinType] || []).forEach((/** @type {string} */ name) => add(name, '피부유형'));
-  ((cu.skin && cu.skin[customer.skinType]) || []).forEach((/** @type {string} */ name) => add(name, '피부유형'));
+  result.bases = _recommendedBases(customer, cu, index, notAllergen);
+  const seen = _collectCandidateNames(customer, cu);
 
   const age = typeof customer.age === 'number' ? customer.age : null;
-  const youngOrOld = age != null && (age < 20 || age > 65);
-  const pregnant = customer.pregnancy === '임신 중' || customer.pregnancy === '수유 중';
-  const productsText = typeof customer.products === 'string' ? customer.products : '';
-  /** @type {string[]} */
-  const overlap = [];
+  const ctx = {
+    age,
+    youngOrOld: age != null && (age < 20 || age > 65),
+    pregnant: customer.pregnancy === '임신 중' || customer.pregnancy === '수유 중',
+    productsText: typeof customer.products === 'string' ? customer.products : '',
+  };
 
-  for (const [name, meta] of seen) {
-    const ing = index && index.get(name);
-    if (!ing || ing.type === 'banned') continue; // 미등록·금지 원료는 추천하지 않음
-    if (!notAllergen(name)) continue;            // 알레르기 이력 원료 제외
-    // 사용 중인 제품/약물과의 성분 중복 감지 (자유 기술 문자열 부분 일치)
-    if (productsText && productsText.includes(name)) overlap.push(name);
-    result.ingredients.push({
-      name,
-      reasons: [...meta.reasons],
-      type: ing.type || '',
-      limit: ing.limit || '',
-      irritant: (youngOrOld && IRRITANT_INGREDIENTS.includes(name))
-        || (pregnant && PREGNANCY_CAUTION.includes(name)),
-    });
-  }
-
-  // ③ 주의문
-  if (excludedByAllergy.size) {
-    result.cautions.push(`알레르기 이력: ${[...excludedByAllergy].join(', ')} — 추천에서 자동 제외됨`);
-  }
-  if (pregnant) {
-    result.cautions.push('임신·수유 중: 레티놀 등 비타민A 유도체·살리실산 계열은 전문의 상담 후 사용 권장');
-  }
-  if (overlap.length) {
-    result.cautions.push(`사용 중인 제품/약물과 성분 중복 가능: ${overlap.join(', ')} — 병용 시 자극·중복 확인`);
-  }
-  if (customer.skinType === '민감성') {
-    result.cautions.push('민감성 피부: 향료·에탄올 계열은 자극 가능성 — 소량 패치 테스트 권장');
-  }
-  if (youngOrOld) {
-    result.cautions.push(
-      age < 20
-        ? '20세 미만: 고기능성·각질제거 원료는 저농도부터 시작 권장'
-        : '65세 이상: 피부 장벽 약화 가능 — 자극 원료는 저농도 권장'
-    );
-  }
+  const fin = _finalizeIngredients(seen, index, ctx, notAllergen);
+  result.ingredients = fin.ingredients;
+  result.cautions = _cautionMessages(customer, ctx, excludedByAllergy, fin.overlap);
 
   return result;
 }

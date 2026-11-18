@@ -259,6 +259,7 @@ passok/
 │   ├── pwa/pwa-install-capture.js  #   beforeinstallprompt 조기 캡처 + SW 등록
 │   ├── shell/theme-init.js           #   FOUC 방지 (페인트 전 테마 적용)
 │   ├── core/                   #   플랫폼 코어 — 의존성 리프·기반 계층 (전 모듈이 참조)
+│   │   ├── dom.js              #     널 가드 내장 DOM 헬퍼 (setText/toggleCls/showEl — 복잡도 억제)
 │   │   ├── entity-store.js     #     localStorage 엔티티 스토어 팩토리 — *-store 공통 CRUD·한도·훅 계약
 │   │   ├── exam-context.js     #     활성 시험 해석/전환, scopedKey 네임스페이스, hasFeature (리프 모듈)
 │   │   ├── paths.js            #     파일 경로 상수 중앙 관리

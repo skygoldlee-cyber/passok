@@ -162,9 +162,9 @@
       "sum": 96
     },
     "src/exams/cosmetic/formula-rules.js": {
-      "count": 3,
-      "max": 34,
-      "sum": 57
+      "count": 2,
+      "max": 12,
+      "sum": 23
     },
     "src/exams/cosmetic/formula-store.js": {
       "count": 1,
@@ -257,9 +257,9 @@
       "sum": 15
     },
     "src/exams/cosmetic/views/trainer-ingredients.js": {
-      "count": 2,
-      "max": 34,
-      "sum": 49
+      "count": 1,
+      "max": 15,
+      "sum": 15
     },
     "src/pdf-registry.js": {
       "count": 1,
@@ -278,13 +278,13 @@
     },
     "src/pwa/pwa-install.js": {
       "count": 3,
-      "max": 40,
-      "sum": 66
+      "max": 14,
+      "sum": 40
     },
     "src/pwa/pwa-manifest.js": {
       "count": 1,
-      "max": 37,
-      "sum": 37
+      "max": 19,
+      "sum": 19
     },
     "src/reader/exam-viewer.js": {
       "count": 7,
@@ -293,8 +293,8 @@
     },
     "src/reader/html-viewer.js": {
       "count": 2,
-      "max": 39,
-      "sum": 57
+      "max": 18,
+      "sum": 32
     },
     "src/reader/manual-viewer.js": {
       "count": 2,
@@ -318,8 +318,8 @@
     },
     "src/reader/textbook-core.js": {
       "count": 4,
-      "max": 42,
-      "sum": 118
+      "max": 23,
+      "sum": 71
     },
     "src/reader/webtoon-render.js": {
       "count": 2,
@@ -333,8 +333,8 @@
     },
     "src/search/search-index.js": {
       "count": 3,
-      "max": 36,
-      "sum": 78
+      "max": 25,
+      "sum": 59
     },
     "src/search/search-morpheme.js": {
       "count": 1,
@@ -528,28 +528,18 @@
     },
     "src/views/exam-sim/exam-sim-arena.js": {
       "count": 3,
-      "max": 31,
-      "sum": 65
+      "max": 19,
+      "sum": 45
     },
     "src/views/exam-sim/exam-sim-review.js": {
       "count": 1,
       "max": 11,
       "sum": 11
     },
-    "src/views/exam-sim/exam-sim-session.js": {
-      "count": 1,
-      "max": 36,
-      "sum": 36
-    },
-    "src/views/exam-sim/exam-sim-weak.js": {
-      "count": 2,
-      "max": 30,
-      "sum": 55
-    },
     "src/views/flashcard.js": {
-      "count": 2,
-      "max": 37,
-      "sum": 53
+      "count": 1,
+      "max": 16,
+      "sum": 16
     },
     "src/views/listeners/listeners-app.js": {
       "count": 1,

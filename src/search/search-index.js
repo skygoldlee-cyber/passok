@@ -372,26 +372,13 @@ function _countOccurrences(text, needle) {
  *   각 항목에는 _score(관련도 점수)가 부여돼 있다.
  *   failedTerms는 후보가 전혀 없는 쿼리 용어 — AND 불성립 시 안내 표시용.
  */
-export function runUnifiedSearch(query, filter = 'all') {
-    const _qt = performance.now();
-    const index = _getSearchIndex();
-    // 인덱스 구축(_buildInvertedIndex)이 어휘를 항상 함께 초기화한다
-    const morph = /** @type {{words:Set.<string>, prefixes:Set.<string>, cover:Map.<string, boolean>}} */ (_morphVocab);
-    const terms = query.split(/\s+/).filter(t => t.length > 0);
-    /** @type {Record<string, object[]>} kind별 버킷 + weak (부분 일치 공통 티어) */
-    const buckets = { weak: [] };
-    // 등록된 소스 kind는 결과가 없어도 빈 버킷으로 노출 — 소비자가 키 존재를 가드하지 않게
-    for (const src of _SOURCES.values()) buckets[src.kind] = buckets[src.kind] || [];
-
-    // TS-14 — registry.synonyms로 쿼리 용어를 동의 개념군으로 확장 (그룹 내 OR·그룹 간 AND)
-    const synMap = (DataLoader.registry && DataLoader.registry.synonyms) || null;
-    const termGroups = terms.map(t => expandSynonyms(t, synMap));
-
-    // 쿼리 전체가 인접 구문으로 나타나는 엔트리에 가산 — _searchText는 공백 정규화됨
-    const phrase = terms.length > 1 ? terms.join(' ') : '';
-
-    // 역색인 활용 — 각 용어 그룹의 후보 엔트리 집합을 구하고 교집합 계산
-    // 어절 토큰 인덱스를 쓰므로 어절 중간 매치까지 후보에 포함된다 (품질은 뒤에서 분류)
+/**
+ * 역색인 활용 — 각 용어 그룹의 후보 엔트리 집합을 구하고 교집합 계산.
+ * 어절 토큰 인덱스를 쓰므로 어절 중간 매치까지 후보에 포함된다 (품질은 뒤에서 분류).
+ * @param {string[][]} termGroups @param {*[]} index
+ * @returns {{candidateIndices: Set<number>|null, failedTerms: string[], groupIdf: number[]}}
+ */
+function _intersectTermGroups(termGroups, index) {
     /** @type {Set<number>|null} */
     let candidateIndices = null;
     /** @type {string[]} */
@@ -411,6 +398,72 @@ export function runUnifiedSearch(query, filter = 'all') {
             ? groupSet
             : new Set([...candidateIndices].filter(/** @param {number} i */ (i) => groupSet.has(i)));
     }
+    return { candidateIndices, failedTerms, groupIdf };
+}
+
+/**
+ * 엔트리 스코어링 — 그룹별 최고 매치 품질 합산 + 제목·구문 가산.
+ * TS-13/TS-14 — 그룹별 최고 매치 품질: 2=경계(본매치), 1=부분(중간), 0=없음.
+ * 모든 그룹이 매치돼야 결과이며, 하나라도 부분 매치뿐이면 '부분 일치' 티어로 내린다.
+ * @returns {{item:*, allStrong:boolean}|null} 모든 그룹 미매치 시 null
+ */
+/** 용어 그룹 하나의 최고 품질·제목가산·빈도 점수 @returns {{gBest:number, gTitleBoost:number, gHits:number}} */
+function _scoreTermGroup(/** @type {*} */ entry, /** @type {string} */ head, /** @type {string[]} */ group, /** @type {*} */ morph) {
+    let gBest = 0;
+    let gTitleBoost = 0;
+    let gHits = 0;
+    for (const variant of group) {
+        const q = termHitQuality(entry._searchText, variant, morph);
+        if (q > gBest) gBest = q;
+        if (q > 0) {
+            const cnt = _countOccurrences(entry._searchText, variant);
+            gHits += (variant === group[0]) ? cnt : cnt * 0.5;
+        }
+        // 제목 가산은 경계 정렬 매치에만 — '석유화학'식 어절-중간 겹침은 가산 제외
+        if (termHitQuality(head, variant, morph) === 2) {
+            gTitleBoost = Math.max(gTitleBoost, variant === group[0] ? 50 : 25);
+        }
+    }
+    return { gBest, gTitleBoost, gHits };
+}
+
+function _scoreSearchEntry(/** @type {*} */ entry, /** @type {string[][]} */ termGroups, /** @type {number[]} */ groupIdf, /** @type {string} */ phrase, /** @type {*} */ morph) {
+    let allStrong = true;
+    let hits = 0;
+    let titleBoost = 0;
+    const head = String(entry.title || '').toLowerCase();
+    for (let gi = 0; gi < termGroups.length; gi++) {
+        const { gBest, gTitleBoost, gHits } = _scoreTermGroup(entry, head, termGroups[gi] || [], morph);
+        if (gBest === 0) return null;
+        if (gBest < 2) allStrong = false;
+        hits += gHits * (groupIdf[gi] || 1);
+        titleBoost = Math.max(titleBoost, gTitleBoost);
+    }
+    const phraseBoost = (phrase && entry._searchText.includes(phrase)) ? PHRASE_BOOST : 0;
+    // 엔트리 필드를 그대로 얇게 복사해 _score를 부여 — 버킷은 엔트리 kind로 구분
+    // (kind→표시 티어 매핑은 뷰 계층 몫 — 코어는 종류명을 모른다)
+    return { item: { ...entry, _score: hits + titleBoost + phraseBoost }, allStrong };
+}
+
+export function runUnifiedSearch(/** @type {string} */ query, /** @type {string} */ filter = 'all') {
+    const _qt = performance.now();
+    const index = _getSearchIndex();
+    // 인덱스 구축(_buildInvertedIndex)이 어휘를 항상 함께 초기화한다
+    const morph = /** @type {{words:Set.<string>, prefixes:Set.<string>, cover:Map.<string, boolean>}} */ (_morphVocab);
+    const terms = query.split(/\s+/).filter((/** @type {string} */ t) => t.length > 0);
+    /** @type {Record<string, object[]>} kind별 버킷 + weak (부분 일치 공통 티어) */
+    const buckets = { weak: [] };
+    // 등록된 소스 kind는 결과가 없어도 빈 버킷으로 노출 — 소비자가 키 존재를 가드하지 않게
+    for (const src of _SOURCES.values()) buckets[src.kind] = buckets[src.kind] || [];
+
+    // TS-14 — registry.synonyms로 쿼리 용어를 동의 개념군으로 확장 (그룹 내 OR·그룹 간 AND)
+    const synMap = (DataLoader.registry && DataLoader.registry.synonyms) || null;
+    const termGroups = terms.map((/** @type {string} */ t) => expandSynonyms(t, synMap));
+
+    // 쿼리 전체가 인접 구문으로 나타나는 엔트리에 가산 — _searchText는 공백 정규화됨
+    const phrase = terms.length > 1 ? terms.join(' ') : '';
+
+    const { candidateIndices, failedTerms, groupIdf } = _intersectTermGroups(termGroups, index);
 
     // 후보 없는 그룹이 있거나 교집합이 비면 AND 매치 불가 — 전체 스캔 생략
     const searchEntries = (failedTerms.length > 0 || !candidateIndices || candidateIndices.size === 0)
@@ -418,42 +471,10 @@ export function runUnifiedSearch(query, filter = 'all') {
 
     for (const entry of searchEntries) {
         if (filter !== 'all' && filter !== entry.subjId) continue;
-        // TS-13/TS-14 — 그룹별 최고 매치 품질: 2=경계(본매치), 1=부분(중간), 0=없음
-        // 모든 그룹이 매치돼야 결과이며, 하나라도 부분 매치뿐이면 '부분 일치' 티어로 내린다
-        let allStrong = true;
-        let hits = 0;
-        let titleBoost = 0;
-        const head = String(entry.title || '').toLowerCase();
-        let excluded = false;
-        for (let gi = 0; gi < termGroups.length; gi++) {
-            const group = termGroups[gi] || [];
-            let gBest = 0;
-            let gTitleBoost = 0;
-            let gHits = 0;
-            for (const variant of group) {
-                const q = termHitQuality(entry._searchText, variant, morph);
-                if (q > gBest) gBest = q;
-                if (q > 0) {
-                    const cnt = _countOccurrences(entry._searchText, variant);
-                    gHits += (variant === group[0]) ? cnt : cnt * 0.5;
-                }
-                // 제목 가산은 경계 정렬 매치에만 — '석유화학'식 어절-중간 겹침은 가산 제외
-                if (termHitQuality(head, variant, morph) === 2) {
-                    gTitleBoost = Math.max(gTitleBoost, variant === group[0] ? 50 : 25);
-                }
-            }
-            if (gBest === 0) { excluded = true; break; }
-            if (gBest < 2) allStrong = false;
-            hits += gHits * (groupIdf[gi] || 1);
-            titleBoost = Math.max(titleBoost, gTitleBoost);
-        }
-        if (excluded) continue;
-        const phraseBoost = (phrase && entry._searchText.includes(phrase)) ? PHRASE_BOOST : 0;
-        // 엔트리 필드를 그대로 얇게 복사해 _score를 부여 — 버킷은 엔트리 kind로 구분
-        // (kind→표시 티어 매핑은 뷰 계층 몫 — 코어는 종류명을 모른다)
-        const item = { ...entry, _score: hits + titleBoost + phraseBoost };
-        if (!allStrong) buckets.weak?.push(item);
-        else (buckets[item.kind] = buckets[item.kind] || []).push(item);
+        const scored = _scoreSearchEntry(entry, termGroups, groupIdf, phrase, morph);
+        if (!scored) continue;
+        if (!scored.allStrong) buckets.weak?.push(scored.item);
+        else (buckets[scored.item.kind] = buckets[scored.item.kind] || []).push(scored.item);
     }
 
     _mark('query', performance.now() - _qt);
