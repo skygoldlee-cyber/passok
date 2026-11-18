@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261118-aba403e",
+    "date": "2026-11-18",
+    "notes": [
+      "[수정] analysis-view 추출 헬퍼 보간에 esc-ok 면제 주석 — CI 이스케이프 싱크 게이트 해소",
+      "[CI] dependency audit를 프로덕션 의존성 한정으로 조정 (--omit=dev)",
+      "[수정] combo 판정 모드 오답이 correctCount에 잘못 집계되던 버그",
+      "[리팩터링] 28~33 고복잡도 8개 함수 분해 — 래칫 기준선 303→299건 정착",
+      "[리팩터링] care-share 내보내기 골격 → content/doc-export 승격 + 분석 계열 고복잡도 분해",
+      "[리팩터링] 시험 공통 부품 platform 승격 — name-fmt·checklist-import·voice·store-fields",
+      "[리팩터링] 30+ 고복잡도 함수 11개 분해 — 래칫 기준선 315→309건·sum -293 정착",
+      "[문서] 판본 문서 갱신일 동기화 — Series Bible 인용 표기 정정 무영향 확인",
+      "[수정·content] LL-05 링크 린트 위반 해소 — 원시 경로를 DOC ID 참조로 대체",
+      "[문서·design] hazmat 실무도구 수요·경쟁 판단 반영 — 목표 재정의"
+    ]
+  },
+  {
     "version": "v20261117-0bcf0e3",
     "date": "2026-11-17",
     "notes": [
@@ -239,89 +255,6 @@
       "[수정·carework] docx 워터마크 본문 앵커 회전 텍스트 상자로 확정",
       "[수정·carework] 워터마크 렌더 확정 — 본문 앵커 전면 VML + 캔버스 스탬프",
       "[수정·carework] 워터마크 셰이프를 Word 네이티브 구조로 재작성"
-    ]
-  },
-  {
-    "version": "v20261114-45cd04b",
-    "date": "2026-11-14",
-    "notes": [
-      "[CI] CI 재실행 트리거 [no-docs]",
-      "[기능·carework] 문서번호 추적·QR·발행 대장 + (인) 위 서명 오버레이",
-      "[정리·release] v20261114-cfd1956 스탬프 확정 [no-docs]",
-      "[정리·release] v20261113-52523f5 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-a1dfc7f",
-    "date": "2026-11-13",
-    "notes": [
-      "[기능·carework] HWPX(아래한글) 양식 추출 + 출력 라벨 한글 호환 표기",
-      "[문서·carework] 전문가 검토 의뢰서 (DOC-BIZ-12) — 법무 0b 검토 패키지",
-      "[기능·ops] 기관 데이터 백업·복원 도구 + 운영 절차 런북 (법무 0b 별지2 잔여 해소)",
-      "[문서·carework] 처리방침 수탁 조항 + 계약서 리전 정정 — 법무 0b A2",
-      "[문서·carework] 개인정보처리 위탁계약서 초안 — DOC-BIZ-11, 법무 0b 산출물",
-      "[문서·carework] 기관 자체 서버DB 상황별 연동 — DSN-51 §6 추가",
-      "[문서·carework] 기관 사이트 라이선스 설계 — DOC-DSN-51",
-      "[정리·release] v20261113-be6ce0d 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-be6ce0d",
-    "date": "2026-11-13",
-    "notes": [
-      "[정리] 배포 전 파생물 재생성 [no-test]",
-      "[수정·content] 실무매뉴얼 보호자 전달 문구 완충 — 정량 주장 → 절차 지시",
-      "[테스트·e2e] 시각 기준선 자동 재생성 — CI 실패 감지 후 복구 (linux) [skip ci]",
-      "[테스트·e2e] 시각 회귀 표면 확장 + 오클루전 공용 검증 + 격리 스펙 근본 수정·해제",
-      "[수정·ui] 라이선스 코드 입력 진입점 단일화 — 설정 패널만 유지",
-      "[정리·release] v20261113-b582e0c 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-b582e0c",
-    "date": "2026-11-13",
-    "notes": [
-      "[수정·capture] manual-07-roster 상단 잘림 — sticky 헤더 캡처 제외",
-      "[정리·release] v20261113-44da6c1 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-44da6c1",
-    "date": "2026-11-13",
-    "notes": [
-      "[문서] entity-store.js 디렉토리 구조 등록 — AGENTS·ARCHITECTURE 트리 정합",
-      "[리팩터링·store] entity-store 팩토리 신설 + carework 스토어 7개 이행",
-      "[리팩터링·practice] registry 피처 디스크립터 팩토리화 — enter 공용 구현 (910→662)",
-      "[리팩터링·pwa] standalone 감지 core/utils 공용화 — 5파일 판정 중복 제거",
-      "[정리] sw 버전 스탬프 + test_stats 실측 갱신 (build:derived) [no-docs] [no-test]",
-      "[리팩터링·complexity] AU-10 잔여 함수 분해 — auth-view·quiz 래칫 복구 (324→323) [no-test]",
-      "[정리·release] v20261113-6c631e2 스탬프 확정 [no-docs]",
-      "[정리·release] v20261112-fb182cb 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-6c631e2",
-    "date": "2026-11-13",
-    "notes": [
-      "[문서·design] AU-10 운영 적용 절차 §7 추가 — 콘솔 접근 경로 명시",
-      "[기능·auth] AU-10 로그인 수단 연결 구현 — linkIdentity·분리 방지·동일인 재활성",
-      "[정리·release] v20261113-e4f4ae9 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-e4f4ae9",
-    "date": "2026-11-13",
-    "notes": [
-      "[수정·test+capture] DOM 단언 라벨 정합 + 사이드바 뷰포트 1450 압축",
-      "[기능·tools] DA-26 파이프라인 반영 — snap/shotPng 둘레 여백 자동화 + 전 삽화 재캡처",
-      "[문서] DA-26 신설 — 삽화 캡처 둘레 여백 규약 명문화",
-      "[기능·tools] manual-15-mask 캡처 자동화 — 수동 산출물을 SHOTS에 등록",
-      "[수정·content] 실무매뉴얼 삽화 전면 재캡처 — UX-TXT-01 반영 22장",
-      "[수정·content] manual-14-forms 삽화 재캡처 — UX-TXT-01 중간 분절 해소",
-      "[기능·carework] DOC-BIZ-10 후속 3건 — 🔖빈출 표기 정정·계정 연결 설계·exam-sim 검증",
-      "[문서·carework] DOC-BIZ-10 이용자 관점 평가 등재 — 외부 유료 전환 평가 + 코드 대조",
-      "[문서·carework] DOC-BIZ-07 인터뷰 스크립트 v3 — 판정 로직·질문 설계 정합",
-      "[정리·release] v20261113-9bda05c 스탬프 확정 [no-docs]"
     ]
   }
 ]
