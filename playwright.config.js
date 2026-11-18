@@ -36,6 +36,8 @@ export default defineConfig({
     use: {
         baseURL: 'http://localhost:3000',
         trace: 'retain-on-failure',
+        // 시나리오 결과화면 검토용 — 전 테스트 webm 영상 첨부 (trace 프레임 대비 용량 절감)
+        video: 'on',
     },
     projects: [
         { name: 'chromium', use: { ...devices['Desktop Chrome'] } },

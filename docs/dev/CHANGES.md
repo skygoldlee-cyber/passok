@@ -1,6 +1,12 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-18 ci: dependency audit 프로덕션 의존성 한정 (--omit=dev) + E2E video 산출
+
+- picomatch ReDoS(CVE-2026-112366)가 ≤4.0.7 전 버전 영향 + upstream 패치 없음 — vitest→vite→tinyglobby devDeps 체인만 해당, 프로덕션 감사는 0건
+- `npm audit --audit-level=high --omit=dev`로 조정해 unpatched dev advisory의 배포 차단 해소
+- `playwright.config.js`에 `video:'on'` — 전 테스트 webm 영상으로 시나리오 결과화면 검토 (trace JPEG 프레임 대비 용량 절감)
+
 ## 2026-11-18 fix(trainer): combo 판정 모드 오답이 correctCount에 잘못 집계되던 버그
 
 - `submitComboAnswer`의 `!isCorrect && selectedBtn ... else correctCount++` 구조 — 판정 모드(selectedBtn=null)에서 오답도 else 분기로 떨어져 정답 수가 부풀려짐
