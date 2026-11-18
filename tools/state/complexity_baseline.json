@@ -47,9 +47,9 @@
       "sum": 94
     },
     "src/content/questions.js": {
-      "count": 3,
-      "max": 30,
-      "sum": 71
+      "count": 1,
+      "max": 11,
+      "sum": 11
     },
     "src/core/exam-context.js": {
       "count": 3,
@@ -208,8 +208,8 @@
     },
     "src/exams/cosmetic/views/formula-io.js": {
       "count": 2,
-      "max": 28,
-      "sum": 39
+      "max": 13,
+      "sum": 24
     },
     "src/exams/cosmetic/views/formula-list.js": {
       "count": 2,
@@ -353,8 +353,8 @@
     },
     "src/shell/command-palette.js": {
       "count": 2,
-      "max": 29,
-      "sum": 45
+      "max": 16,
+      "sum": 29
     },
     "src/shell/exam-data-boot.js": {
       "count": 1,
@@ -497,9 +497,9 @@
       "sum": 47
     },
     "src/views/dashboard-queue.js": {
-      "count": 2,
-      "max": 33,
-      "sum": 59
+      "count": 1,
+      "max": 26,
+      "sum": 26
     },
     "src/views/dashboard.js": {
       "count": 1,
@@ -573,8 +573,8 @@
     },
     "src/views/quiz/quiz.js": {
       "count": 6,
-      "max": 29,
-      "sum": 101
+      "max": 24,
+      "sum": 96
     },
     "src/views/reader/reader-audio.js": {
       "count": 2,
@@ -588,8 +588,8 @@
     },
     "src/views/reader/reader-render.js": {
       "count": 4,
-      "max": 31,
-      "sum": 76
+      "max": 28,
+      "sum": 73
     },
     "src/views/reader/reader-toolbar.js": {
       "count": 4,
@@ -623,8 +623,8 @@
     },
     "src/views/trainer-drill-combo.js": {
       "count": 2,
-      "max": 29,
-      "sum": 42
+      "max": 13,
+      "sum": 24
     },
     "src/views/trainer-drills.js": {
       "count": 6,
@@ -642,9 +642,9 @@
       "sum": 35
     },
     "src/written/written-practice.js": {
-      "count": 4,
-      "max": 28,
-      "sum": 72
+      "count": 3,
+      "max": 18,
+      "sum": 44
     }
   }
 }

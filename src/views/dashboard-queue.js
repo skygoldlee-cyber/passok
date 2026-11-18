@@ -29,6 +29,263 @@ import { dailyCompletedKey } from '../core/storage-keys.js';
 const MAX_PLAN_ITEMS = 2; // 주간 배정 큐 항목 상한 — 과목 나열은 최대 2개
 
 /**
+ * 큐 항목 ⓪ — 시험일 미설정 안내. 역산 계획·주간 배분의 전제 조건이라 최우선.
+ * D-day 카드의 중복 설정 버튼은 제거 — 설정 액션은 이 큐가 단독 소유한다.
+ * @param {*} p
+ * @param {(item:*) => void} push
+ */
+function _pushGoalItem(p, push) {
+    if (p.dday !== null) return;
+    push({
+        kind: 'goal',
+        icon: 'fa-calendar-day', color: 'var(--color-primary)',
+        title: '시험일 설정',
+        reason: '학습 계획의 시작점 — 역산 계획·주간 목표가 생성됩니다',
+        actions: [{ click: 'openGoalSettings', label: '지금 설정', icon: 'fa-gear', cls: 'btn-primary' }]
+    });
+}
+
+/**
+ * 큐 항목 ① — FSRS 기한 도래 (시간 민감, 최우선).
+ * @param {*} p
+ * @param {(item:*) => void} push
+ * @param {(key:string) => string} subjName
+ * @returns {number} 도래 카드 수 — PS-03 정렬 우선순위 입력
+ */
+function _pushDueItem(p, push, subjName) {
+    const due = p.dueCardIds || [];
+    if (!due.length) return 0;
+    /** @type {Object.<string,number>} */
+    const bySubj = {};
+    due.forEach((/** @type {string} */ id) => {
+        const k = subjectKeyFromItemId(id);
+        if (k) bySubj[k] = (bySubj[k] || 0) + 1;
+    });
+    const top = Object.entries(bySubj).sort((a, b) => b[1] - a[1])[0];
+    push({
+        kind: 'due',
+        icon: 'fa-clock', color: 'var(--color-primary)',
+        title: `복습 카드 ${due.length}장`,
+        reason: top ? `FSRS 복습 시간 도래 — ${subjName(top[0])} ${top[1]}장 포함` : 'FSRS 복습 시간 도래',
+        actions: [{ click: 'startDueReview', label: '지금 복습', icon: 'fa-play', cls: 'btn-primary' }]
+    });
+    return due.length;
+}
+
+/**
+ * 큐 항목 ①+ — 개념 학습 이어하기. 적응형 플로우(careFlow)의 미완료·취약 개념 재진입 (코어 경로 우선).
+ * @param {*} p
+ * @param {(item:*) => void} push
+ */
+function _pushFlowItem(p, push) {
+    if (!p.flowResume) return;
+    const r = p.flowResume;
+    push({
+        kind: 'flow',
+        icon: 'fa-book-open-reader', color: 'var(--color-success)',
+        title: (/** @type {*} */ (r)).due ? `개념 학습 복습` : `개념 학습 이어하기`,
+        reason: r.due ? `${(/** @type {*} */ (r)).title} — 복습할 시간이 됐습니다`
+            : (/** @type {*} */ (r)).weak ? `${(/** @type {*} */ (r)).title} — 취약 표시된 개념입니다`
+            : `${(/** @type {*} */ (r)).title} — 진행 중인 단계부터 이어집니다`,
+        actions: [{ click: 'startConceptFlow', arg: (/** @type {*} */ (r)).id, label: '이어하기', icon: 'fa-play', cls: 'btn-primary' }]
+    });
+}
+
+/**
+ * 큐 항목 ② — 과락·위험 추천 (기존 엔진의 위험 신호는 계획보다 우선).
+ * @param {*} p
+ * @param {(item:*) => void} push
+ */
+function _pushDangerRecs(p, push) {
+    (p.recs || []).filter((/** @type {*} */ r) => r.icon === 'fa-triangle-exclamation')
+        .forEach((/** @type {*} */ r) => push({ kind: 'danger', ...r }));
+}
+
+/**
+ * 큐 항목 ③ — 주간 배정 잔여. 주간 배분(구 스마트학습, study_plan_pro) 이번 주 목표 미달분.
+ * @param {*} p
+ * @param {(item:*) => void} push
+ */
+function _pushAllocItems(p, push) {
+    (p.allocRemaining || [])
+        .filter((/** @type {*} */ a) => a.cardsLeft > 0 || a.quizzesLeft > 0)
+        .slice(0, MAX_PLAN_ITEMS)
+        .forEach((/** @type {*} */ a) => {
+        const parts = [];
+        if (a.cardsLeft > 0) parts.push(`카드 ${a.cardsLeft}장`);
+        if (a.quizzesLeft > 0) parts.push(`퀴즈 ${a.quizzesLeft}문`);
+        const actions = [];
+        if (a.cardsLeft > 0) actions.push({ click: 'startSubjectStudy', arg: a.key, label: '카드 학습', icon: 'fa-layer-group', cls: 'btn-primary' });
+        if (a.quizzesLeft > 0) actions.push({ click: 'startSubjectQuiz', arg: a.key, label: '퀴즈', icon: 'fa-play', cls: 'btn-secondary' });
+        push({
+            kind: 'alloc',
+            icon: 'fa-calendar-check', color: 'var(--color-primary)',
+            title: `${a.name} 주간 배정 잔여`,
+            reason: `이번 주 목표 미달 — ${parts.join(' · ')} 남음`,
+            actions
+        });
+    });
+}
+
+/**
+ * 큐 항목 ④ — 오답·헷갈림 재채점.
+ * @param {*} p
+ * @param {(item:*) => void} push
+ */
+function _pushReviewItem(p, push) {
+    if ((p.reviewCount || 0) <= 0) return;
+    push({
+        kind: 'review',
+        icon: 'fa-star', color: 'var(--color-warning)',
+        title: `복습 대기 ${p.reviewCount}건`,
+        reason: '틀린 문제·헷갈린 카드 재채점',
+        actions: [{ click: 'switchView', args: ['review-view', { scrollTop: true }], label: '복습 열기', icon: 'fa-arrow-right', cls: 'btn-primary' }]
+    });
+}
+
+/**
+ * 큐 항목 ⑤ — 취약 진술·혼동쌍 드릴.
+ * @param {*} p
+ * @param {(item:*) => void} push
+ */
+function _pushWeakItem(p, push) {
+    if ((p.weakStatementCount || 0) <= 0) return;
+    push({
+        kind: 'weak',
+        icon: 'fa-dumbbell', color: 'var(--color-warning)',
+        title: `취약 진술 ${p.weakStatementCount}개`,
+        reason: '혼동쌍·오판 진술 — 연속 정답 3회 시 졸업',
+        actions: [{ click: 'gotoWeakReview', label: '리뷰', icon: 'fa-crosshairs', cls: 'btn-primary' }]
+    });
+}
+
+/**
+ * 큐 항목 ⑤# — 무너진 개념 축. 약점 개념 클러스터 최상위의 클리닉 진입점 (PS-01·PS-10).
+ * @param {*} p
+ * @param {(item:*) => void} push
+ */
+function _pushClinicItem(p, push) {
+    if (!p.topCluster) return;
+    push({
+        kind: 'clinic',
+        icon: 'fa-flask-vial', color: 'var(--color-warning)',
+        title: `오개념 클리닉: ${(/** @type {*} */ (p.topCluster)).label}`,
+        reason: `같은 개념 축 ${(/** @type {*} */ (p.topCluster)).size}개 진술에서 ${(/** @type {*} */ (p.topCluster)).totalWrong}회 오판 — 개념 단위 복습 권장`,
+        actions: [{ click: 'switchView', args: ['analysis-view', { scrollTop: true }], label: '진단 보기', icon: 'fa-stethoscope', cls: 'btn-primary' }]
+    });
+}
+
+/**
+ * 큐 항목 ⑤+ — 시험일 목표 R 최종 인출. 다음 복습이 시험일 이후인 스케줄 사각지대 카드 (D-19).
+ * @param {*} p
+ * @param {(item:*) => void} push
+ */
+function _pushExamRiskItem(p, push) {
+    const examRisk = p.examRiskIds || [];
+    if (p.dday === null || p.dday === undefined || p.dday < 0 || p.dday > EXAM_R_WINDOW_DAYS || !examRisk.length) return;
+    push({
+        kind: 'examr',
+        icon: 'fa-bullseye', color: 'var(--color-danger)',
+        title: `시험 전 최종 인출 ${examRisk.length}장`,
+        reason: '시험일까지 기억률 95% 미만 예상 — 지금 한 번 더 인출',
+        actions: [{ click: 'startExamRiskReview', label: '인출 세션', icon: 'fa-play', cls: 'btn-primary' }]
+    });
+}
+
+/**
+ * 큐 항목 ⑥ — 잔여 추천 (정답률 최저·헷갈림 집중·미학습 — 중복 실행 제외).
+ * @param {*} p
+ * @param {(item:*) => void} push
+ */
+function _pushRestRecs(p, push) {
+    (p.recs || [])
+        .filter((/** @type {*} */ r) => r.icon !== 'fa-triangle-exclamation' && r.icon !== 'fa-clock')
+        .forEach((/** @type {*} */ r) => push({ kind: 'rec', ...r }));
+}
+
+/**
+ * TQ-05 빈 큐 — 학습 이력이 없으면 시작 안내 항목으로 대체 (챌린지보다 우선).
+ * goal 항목은 안내성이라 작업 항목 유무 판정에서 제외한다.
+ * @param {*} p
+ * @param {*[]} items
+ */
+function _pushStartItem(p, items) {
+    if (items.some(i => i.kind !== 'goal') || p.hasProgress) return;
+    const first = (p.subjects || [])[0];
+    if (p.flowCapable) {
+        items.push({
+            kind: 'start',
+            icon: 'fa-seedling', color: 'var(--color-success)',
+            title: '첫 학습 시작: 개념 학습',
+            reason: '개념 학습으로 진단 데이터를 쌓으면 맞춤 큐가 정확해집니다',
+            actions: [{ click: 'startConceptFlow', label: '시작', icon: 'fa-seedling', cls: 'btn-secondary' }]
+        });
+    } else if (first) {
+        items.push({
+            kind: 'start',
+            icon: 'fa-seedling', color: 'var(--color-success)',
+            title: `첫 학습 시작: ${first.name}`,
+            reason: '카드 학습으로 진단 데이터를 쌓으면 맞춤 큐가 정확해집니다',
+            actions: [{ click: 'startSubjectStudy', arg: first.key, label: '학습 시작', icon: 'fa-seedling', cls: 'btn-secondary' }]
+        });
+    }
+}
+
+/**
+ * 큐 항목 ⑦ — 일일 챌린지 미완료 (습관 유지 항목은 후순위).
+ * @param {*} p
+ * @param {(item:*) => void} push
+ */
+function _pushDailyItem(p, push) {
+    if (p.dailyDone !== false) return;
+    push({
+        kind: 'daily',
+        icon: 'fa-calendar-day', color: 'var(--color-success)',
+        title: '일일 챌린지 미완료',
+        reason: '5분 압축 세트 — 오늘의 학습 습관 유지',
+        actions: [{ click: 'startDailyChallenge', label: '챌린지', icon: 'fa-play', cls: 'btn-success' }]
+    });
+}
+
+/**
+ * PS-03 — 통합 학습 큐 우선순위 정렬 엔진. personalization.buildTodayQueue가
+ * 계획 밀림(최우선)→SRS 대기→취약 진술→미학습의 유형별 우선순위를 결정하면,
+ * 로컬 고유 항목(goal·danger·examr·review·clinic·rec·start·daily)은
+ * 고정 우선순위로 사이에 배치해 최종 순서를 만든다 (안정 정렬 — 동순위는 생성 순).
+ * @param {*[]} items
+ * @param {*} p
+ * @param {number} dueCount
+ */
+function _sortQueue(items, p, dueCount) {
+    const personal = buildPersonalQueue({
+        dueCount,
+        weakCount: p.weakStatementCount || 0,
+        behindSubjects: p.behindSubjects || [],
+        unlearnedCount: p.unlearnedCount || 0
+    });
+    const behindPrio = new Map();
+    let srsPrio = 0, weakPrio = 0;
+    personal.forEach((/** @type {*} */ i) => {
+        if (i.type === 'behind') behindPrio.set(i.payload.key, i.priority);
+        else if (i.type === 'srs') srsPrio = i.priority;
+        else if (i.type === 'weak') weakPrio = i.priority;
+    });
+    // PS-03 미관할 항목의 고정 우선순위 — 기존 상대 순서(due>danger>review>weak>examr>rec>start/daily) 보존
+    const FIXED_PRIO = {
+        goal: 1000, danger: 79, review: 70, clinic: 65, examr: 55, rec: 50, daily: 10, start: 5, flow: 75
+    };
+    const prioMap = new Map();
+    items.forEach(it => {
+        // alloc: 밀림 데이터가 있을 때만 개인화 우선순위(90+일수)로 승격 — 없으면 기존 위치(danger 아래)
+        prioMap.set(it, it.kind === 'alloc' ? (behindPrio.get(it.actions[0] && it.actions[0].arg) ?? 78)
+            : it.kind === 'due' ? (srsPrio || 80)
+            : it.kind === 'weak' ? (weakPrio || 60)
+            : (FIXED_PRIO[/** @type {keyof FIXED_PRIO} */ (it.kind)] ?? 40));
+    });
+    items.sort((a, b) => (prioMap.get(b) || 0) - (prioMap.get(a) || 0));
+}
+
+/**
  * 오늘 할 일 큐 생성 — 모든 추천 소스를 우선순위 병합 (TQ-01·TQ-02).
  * @param {Object} p
  * @param {string[]} [p.dueCardIds] FSRS 기한 도래 카드 id
@@ -64,189 +321,19 @@ export function buildTodayQueue(p = {}) {
         items.push(item);
     };
 
-    // ⓪ 시험일 미설정 — 역산 계획·주간 배분의 전제 조건이라 최우선.
-    // D-day 카드의 중복 설정 버튼은 제거 — 설정 액션은 이 큐가 단독 소유한다
-    if (p.dday === null) {
-        push({
-            kind: 'goal',
-            icon: 'fa-calendar-day', color: 'var(--color-primary)',
-            title: '시험일 설정',
-            reason: '학습 계획의 시작점 — 역산 계획·주간 목표가 생성됩니다',
-            actions: [{ click: 'openGoalSettings', label: '지금 설정', icon: 'fa-gear', cls: 'btn-primary' }]
-        });
-    }
-
-    // ① FSRS 기한 도래 — 시간 민감, 최우선
-    const due = p.dueCardIds || [];
-    if (due.length) {
-        /** @type {Object.<string,number>} */
-        const bySubj = {};
-        due.forEach(id => {
-            const k = subjectKeyFromItemId(id);
-            if (k) bySubj[k] = (bySubj[k] || 0) + 1;
-        });
-        const top = Object.entries(bySubj).sort((a, b) => b[1] - a[1])[0];
-        push({
-            kind: 'due',
-            icon: 'fa-clock', color: 'var(--color-primary)',
-            title: `복습 카드 ${due.length}장`,
-            reason: top ? `FSRS 복습 시간 도래 — ${subjName(top[0])} ${top[1]}장 포함` : 'FSRS 복습 시간 도래',
-            actions: [{ click: 'startDueReview', label: '지금 복습', icon: 'fa-play', cls: 'btn-primary' }]
-        });
-    }
-
-    // ①+ 개념 학습 이어하기 — 적응형 플로우(careFlow)의 미완료·취약 개념 재진입 (코어 경로 우선)
-    if (p.flowResume) {
-        const r = p.flowResume;
-        push({
-            kind: 'flow',
-            icon: 'fa-book-open-reader', color: 'var(--color-success)',
-            title: (/** @type {*} */ (r)).due ? `개념 학습 복습` : `개념 학습 이어하기`,
-            reason: r.due ? `${(/** @type {*} */ (r)).title} — 복습할 시간이 됐습니다`
-                : (/** @type {*} */ (r)).weak ? `${(/** @type {*} */ (r)).title} — 취약 표시된 개념입니다`
-                : `${(/** @type {*} */ (r)).title} — 진행 중인 단계부터 이어집니다`,
-            actions: [{ click: 'startConceptFlow', arg: (/** @type {*} */ (r)).id, label: '이어하기', icon: 'fa-play', cls: 'btn-primary' }]
-        });
-    }
-
-    // ② 과락·위험 추천 — 기존 엔진의 위험 신호는 계획보다 우선
-    const dangerRecs = (p.recs || []).filter(r => r.icon === 'fa-triangle-exclamation');
-    dangerRecs.forEach(r => push({ kind: 'danger', ...r }));
-
-    // ③ 주간 배정 잔여 — 주간 배분(구 스마트학습, study_plan_pro) 이번 주 목표 미달분
-    (p.allocRemaining || [])
-        .filter(a => a.cardsLeft > 0 || a.quizzesLeft > 0)
-        .slice(0, MAX_PLAN_ITEMS)
-        .forEach(a => {
-        const parts = [];
-        if (a.cardsLeft > 0) parts.push(`카드 ${a.cardsLeft}장`);
-        if (a.quizzesLeft > 0) parts.push(`퀴즈 ${a.quizzesLeft}문`);
-        const actions = [];
-        if (a.cardsLeft > 0) actions.push({ click: 'startSubjectStudy', arg: a.key, label: '카드 학습', icon: 'fa-layer-group', cls: 'btn-primary' });
-        if (a.quizzesLeft > 0) actions.push({ click: 'startSubjectQuiz', arg: a.key, label: '퀴즈', icon: 'fa-play', cls: 'btn-secondary' });
-        push({
-            kind: 'alloc',
-            icon: 'fa-calendar-check', color: 'var(--color-primary)',
-            title: `${a.name} 주간 배정 잔여`,
-            reason: `이번 주 목표 미달 — ${parts.join(' · ')} 남음`,
-            actions
-        });
-    });
-
-    // ④ 오답·헷갈림 재채점
-    if ((p.reviewCount || 0) > 0) {
-        push({
-            kind: 'review',
-            icon: 'fa-star', color: 'var(--color-warning)',
-            title: `복습 대기 ${p.reviewCount}건`,
-            reason: '틀린 문제·헷갈린 카드 재채점',
-            actions: [{ click: 'switchView', args: ['review-view', { scrollTop: true }], label: '복습 열기', icon: 'fa-arrow-right', cls: 'btn-primary' }]
-        });
-    }
-
-    // ⑤ 취약 진술·혼동쌍 드릴
-    if ((p.weakStatementCount || 0) > 0) {
-        push({
-            kind: 'weak',
-            icon: 'fa-dumbbell', color: 'var(--color-warning)',
-            title: `취약 진술 ${p.weakStatementCount}개`,
-            reason: '혼동쌍·오판 진술 — 연속 정답 3회 시 졸업',
-            actions: [{ click: 'gotoWeakReview', label: '리뷰', icon: 'fa-crosshairs', cls: 'btn-primary' }]
-        });
-    }
-
-    // ⑤# 무너진 개념 축 — 약점 개념 클러스터 최상위의 클리닉 진입점 (PS-01·PS-10)
-    if (p.topCluster) {
-        push({
-            kind: 'clinic',
-            icon: 'fa-flask-vial', color: 'var(--color-warning)',
-            title: `오개념 클리닉: ${(/** @type {*} */ (p.topCluster)).label}`,
-            reason: `같은 개념 축 ${(/** @type {*} */ (p.topCluster)).size}개 진술에서 ${(/** @type {*} */ (p.topCluster)).totalWrong}회 오판 — 개념 단위 복습 권장`,
-            actions: [{ click: 'switchView', args: ['analysis-view', { scrollTop: true }], label: '진단 보기', icon: 'fa-stethoscope', cls: 'btn-primary' }]
-        });
-    }
-
-    // ⑤+ 시험일 목표 R 최종 인출 — 다음 복습이 시험일 이후인 스케줄 사각지대 카드 (D-19)
-    const examRisk = p.examRiskIds || [];
-    if (p.dday !== null && p.dday !== undefined && p.dday >= 0 && p.dday <= EXAM_R_WINDOW_DAYS && examRisk.length) {
-        push({
-            kind: 'examr',
-            icon: 'fa-bullseye', color: 'var(--color-danger)',
-            title: `시험 전 최종 인출 ${examRisk.length}장`,
-            reason: '시험일까지 기억률 95% 미만 예상 — 지금 한 번 더 인출',
-            actions: [{ click: 'startExamRiskReview', label: '인출 세션', icon: 'fa-play', cls: 'btn-primary' }]
-        });
-    }
-
-    // ⑥ 잔여 추천 — 정답률 최저·헷갈림 집중·미학습 (중복 실행 제외)
-    (p.recs || [])
-        .filter(r => r.icon !== 'fa-triangle-exclamation' && r.icon !== 'fa-clock')
-        .forEach(r => push({ kind: 'rec', ...r }));
-
-    // TQ-05 빈 큐 — 학습 이력이 없으면 시작 안내 항목으로 대체 (챌린지보다 우선).
-    // goal 항목은 안내성이라 작업 항목 유무 판정에서 제외한다
-    if (!items.some(i => i.kind !== 'goal') && !p.hasProgress) {
-        const first = (p.subjects || [])[0];
-        if (p.flowCapable) {
-            items.push({
-                kind: 'start',
-                icon: 'fa-seedling', color: 'var(--color-success)',
-                title: '첫 학습 시작: 개념 학습',
-                reason: '개념 학습으로 진단 데이터를 쌓으면 맞춤 큐가 정확해집니다',
-                actions: [{ click: 'startConceptFlow', label: '시작', icon: 'fa-seedling', cls: 'btn-secondary' }]
-            });
-        } else if (first) {
-            items.push({
-                kind: 'start',
-                icon: 'fa-seedling', color: 'var(--color-success)',
-                title: `첫 학습 시작: ${first.name}`,
-                reason: '카드 학습으로 진단 데이터를 쌓으면 맞춤 큐가 정확해집니다',
-                actions: [{ click: 'startSubjectStudy', arg: first.key, label: '학습 시작', icon: 'fa-seedling', cls: 'btn-secondary' }]
-            });
-        }
-    }
-
-    // ⑦ 일일 챌린지 미완료 — 습관 유지 항목은 후순위
-    if (p.dailyDone === false) {
-        push({
-            kind: 'daily',
-            icon: 'fa-calendar-day', color: 'var(--color-success)',
-            title: '일일 챌린지 미완료',
-            reason: '5분 압축 세트 — 오늘의 학습 습관 유지',
-            actions: [{ click: 'startDailyChallenge', label: '챌린지', icon: 'fa-play', cls: 'btn-success' }]
-        });
-    }
-
-    // PS-03 — 통합 학습 큐 우선순위 정렬 엔진. personalization.buildTodayQueue가
-    // 계획 밀림(최우선)→SRS 대기→취약 진술→미학습의 유형별 우선순위를 결정하면,
-    // 로컬 고유 항목(goal·danger·examr·review·clinic·rec·start·daily)은
-    // 고정 우선순위로 사이에 배치해 최종 순서를 만든다 (안정 정렬 — 동순위는 생성 순).
-    const personal = buildPersonalQueue({
-        dueCount: due.length,
-        weakCount: p.weakStatementCount || 0,
-        behindSubjects: p.behindSubjects || [],
-        unlearnedCount: p.unlearnedCount || 0
-    });
-    const behindPrio = new Map();
-    let srsPrio = 0, weakPrio = 0;
-    personal.forEach((/** @type {*} */ i) => {
-        if (i.type === 'behind') behindPrio.set(i.payload.key, i.priority);
-        else if (i.type === 'srs') srsPrio = i.priority;
-        else if (i.type === 'weak') weakPrio = i.priority;
-    });
-    // PS-03 미관할 항목의 고정 우선순위 — 기존 상대 순서(due>danger>review>weak>examr>rec>start/daily) 보존
-    const FIXED_PRIO = {
-        goal: 1000, danger: 79, review: 70, clinic: 65, examr: 55, rec: 50, daily: 10, start: 5, flow: 75
-    };
-    const prioMap = new Map();
-    items.forEach(it => {
-        // alloc: 밀림 데이터가 있을 때만 개인화 우선순위(90+일수)로 승격 — 없으면 기존 위치(danger 아래)
-        prioMap.set(it, it.kind === 'alloc' ? (behindPrio.get(it.actions[0] && it.actions[0].arg) ?? 78)
-            : it.kind === 'due' ? (srsPrio || 80)
-            : it.kind === 'weak' ? (weakPrio || 60)
-            : (FIXED_PRIO[/** @type {keyof FIXED_PRIO} */ (it.kind)] ?? 40));
-    });
-    items.sort((a, b) => (prioMap.get(b) || 0) - (prioMap.get(a) || 0));
+    _pushGoalItem(p, push);                        // ⓪ 시험일 미설정
+    const dueCount = _pushDueItem(p, push, subjName); // ① FSRS 기한 도래
+    _pushFlowItem(p, push);                        // ①+ 개념 학습 이어하기
+    _pushDangerRecs(p, push);                      // ② 과락·위험 추천
+    _pushAllocItems(p, push);                      // ③ 주간 배정 잔여
+    _pushReviewItem(p, push);                      // ④ 오답·헷갈림 재채점
+    _pushWeakItem(p, push);                        // ⑤ 취약 진술 드릴
+    _pushClinicItem(p, push);                      // ⑤# 오개념 클리닉
+    _pushExamRiskItem(p, push);                    // ⑤+ 시험 전 최종 인출
+    _pushRestRecs(p, push);                        // ⑥ 잔여 추천
+    _pushStartItem(p, items);                      // TQ-05 빈 큐 시작 안내
+    _pushDailyItem(p, push);                       // ⑦ 일일 챌린지
+    _sortQueue(items, p, dueCount);                // PS-03 우선순위 정렬
 
     return items;
 }

@@ -101,6 +101,107 @@ function _matchScore(text, title, terms) {
 }
 
 /**
+ * 소스 1) 뷰 바로가기 매칭.
+ * @param {*[]} views @param {string[]} terms @param {(t:string,i:PaletteResult)=>void} push
+ */
+function _searchViews(views, terms, push) {
+    views.forEach((/** @type {*} */ v) => {
+        const s = _matchScore(v.label, v.label, terms);
+        if (s >= 0) push('view', {
+            type: 'view', icon: 'fa-arrow-right', title: v.label, sub: '화면 이동',
+            action: { kind: 'view', target: v.target }, score: s + 2
+        });
+    });
+}
+
+/**
+ * 소스 2) 과목 콘텐츠 — 교재 섹션 (카드·퀴즈는 매치 항목으로 착지 불가 → 범위 제외).
+ * 수집·리더 이동 목적지 해석은 검색 소스 프로바이더(search-sources.js)가 담당 (TS-18).
+ * @param {*} studyData @param {string[]} terms @param {(t:string,i:PaletteResult)=>void} push
+ */
+function _searchSections(studyData, terms, push) {
+    for (const e of /** @type {Iterable<*>} */ (collectTextbookSections(studyData))) {
+        const s = _matchScore(`${e.title} ${e.crumb || ''}`, e.title, terms);
+        if (s < 0) continue;
+        const [subject, gotoTitle, chAnchor] = e.nav.goto;
+        push('section', {
+            type: 'section', icon: 'fa-book-open', title: gotoTitle,
+            sub: `${e.subjName || subject} · ${e.crumb || '교재'}`,
+            action: { kind: 'section', subject, title: gotoTitle, anchor: chAnchor },
+            score: s + 1
+        });
+    }
+}
+
+/**
+ * 소스 3) 지식DB 사전 (초성 검색 지원 — 자모 쿼리는 getChosung 통과 후 substring 매칭).
+ * @param {*[]} ingredients @param {*} registry @param {string[]} terms @param {(t:string,i:PaletteResult)=>void} push
+ */
+function _searchIngredients(ingredients, registry, terms, push) {
+    const dictLabel = (registry.uiText && registry.uiText.dictionary && registry.uiText.dictionary.title) || '사전';
+    ingredients.forEach((/** @type {*} */ ing) => {
+        const name = (ing.name || '').toLowerCase();
+        const eng = (ing.engName || '').toLowerCase();
+        const chosung = getChosung(ing.name || '');
+        const hit = terms.every(t => name.includes(t) || eng.includes(t) || chosung.includes(getChosung(t)));
+        if (hit) push('ingredient', {
+            type: 'ingredient', icon: 'fa-flask', title: ing.name,
+            sub: ing.category ? `${dictLabel} · ${ing.category}` : dictLabel,
+            action: { kind: 'ingredient', name: ing.name }, score: name.startsWith(terms[0]) ? 2 : 1
+        });
+    });
+}
+
+/**
+ * 소스 4) 문제집/기출 파일.
+ * @param {*} registry @param {string[]} terms @param {(t:string,i:PaletteResult)=>void} push
+ */
+function _searchExams(registry, terms, push) {
+    (registry.exams || []).forEach((/** @type {*} */ exam) => {
+        const s = _matchScore(`${exam.title} ${exam.file}`, exam.title, terms);
+        if (s >= 0) push('exam', {
+            type: 'exam', icon: 'fa-file-lines', title: exam.title,
+            sub: '예상 문제집 열기',
+            action: { kind: 'exam', path: `문제은행/${exam.file}` }, score: s
+        });
+    });
+}
+
+/**
+ * 소스 5) 교재 섹션 메모 (TR-30) — 메모 본문+섹션 제목 매칭 → 해당 섹션으로 이동.
+ * @param {*} notes @param {string[]} terms @param {(t:string,i:PaletteResult)=>void} push
+ */
+function _searchNotes(notes, terms, push) {
+    for (const n of Object.values(notes)) {
+        if (!n || !n.note) continue;
+        const s = _matchScore(`${n.title || ''} ${n.note}`, n.title || '', terms);
+        if (s >= 0) push('note', {
+            type: 'note', icon: 'fa-note-sticky', title: n.title || '섹션 메모',
+            sub: `메모 · ${n.note.slice(0, 50)}`,
+            action: { kind: 'note', subject: n.subject, title: n.title }, score: s
+        });
+    }
+}
+
+/**
+ * 그룹 내 점수 정렬 후 플랫화 — 뷰·섹션·메모·성분·문제집 순.
+ * @param {Object.<string, PaletteResult[]>} groups
+ * @returns {PaletteResult[]}
+ */
+function _flattenGroups(groups) {
+    const order = ['view', 'section', 'note', 'ingredient', 'exam'];
+    /** @type {PaletteResult[]} */
+    const flat = [];
+    order.forEach(type => {
+        const g = groups[type];
+        if (!g) return;
+        g.sort((a, b) => b.score - a.score);
+        flat.push(...g);
+    });
+    return flat;
+}
+
+/**
  * 통합 검색 — 유형별 그룹 결과를 반환한다 (순수 함수, 테스트 가능).
  * @param {string} query
  * @param {*} [sources] - 테스트 주입용 {views, studyData, ingredients, exams}
@@ -119,77 +220,13 @@ export function searchAll(query, sources) {
     /** @param {string} type @param {PaletteResult} item */
     const push = (type, item) => { const g = groups[type]; if (g && g.length < MAX_PER_GROUP) g.push(item); };
 
-    // 1) 뷰 바로가기
-    views.forEach((/** @type {*} */ v) => {
-        const s = _matchScore(v.label, v.label, terms);
-        if (s >= 0) push('view', {
-            type: 'view', icon: 'fa-arrow-right', title: v.label, sub: '화면 이동',
-            action: { kind: 'view', target: v.target }, score: s + 2
-        });
-    });
+    _searchViews(views, terms, push);
+    _searchSections(studyData, terms, push);
+    _searchIngredients(ingredients, registry, terms, push);
+    _searchExams(registry, terms, push);
+    _searchNotes(src.notes || getReaderNotes(), terms, push);
 
-    // 2) 과목 콘텐츠 — 교재 섹션 (카드·퀴즈는 매치 항목으로 착지 불가 → 범위 제외)
-    // 수집·리더 이동 목적지 해석은 검색 소스 프로바이더(search-sources.js)가 담당 (TS-18)
-    for (const e of /** @type {Iterable<*>} */ (collectTextbookSections(studyData))) {
-        const s = _matchScore(`${e.title} ${e.crumb || ''}`, e.title, terms);
-        if (s >= 0) {
-            const [subject, gotoTitle, chAnchor] = e.nav.goto;
-            push('section', {
-                type: 'section', icon: 'fa-book-open', title: gotoTitle,
-                sub: `${e.subjName || subject} · ${e.crumb || '교재'}`,
-                action: { kind: 'section', subject, title: gotoTitle, anchor: chAnchor },
-                score: s + 1
-            });
-        }
-    }
-
-    // 3) 지식DB 사전 (초성 검색 지원 — 자모 쿼리는 getChosung 통과 후 substring 매칭)
-    const dictLabel = (registry.uiText && registry.uiText.dictionary && registry.uiText.dictionary.title) || '사전';
-    ingredients.forEach((/** @type {*} */ ing) => {
-        const name = (ing.name || '').toLowerCase();
-        const eng = (ing.engName || '').toLowerCase();
-        const chosung = getChosung(ing.name || '');
-        const hit = terms.every(t => name.includes(t) || eng.includes(t) || chosung.includes(getChosung(t)));
-        if (hit) push('ingredient', {
-            type: 'ingredient', icon: 'fa-flask', title: ing.name,
-            sub: ing.category ? `${dictLabel} · ${ing.category}` : dictLabel,
-            action: { kind: 'ingredient', name: ing.name }, score: name.startsWith(terms[0]) ? 2 : 1
-        });
-    });
-
-    // 4) 문제집/기출 파일
-    (registry.exams || []).forEach((/** @type {*} */ exam) => {
-        const s = _matchScore(`${exam.title} ${exam.file}`, exam.title, terms);
-        if (s >= 0) push('exam', {
-            type: 'exam', icon: 'fa-file-lines', title: exam.title,
-            sub: '예상 문제집 열기',
-            action: { kind: 'exam', path: `문제은행/${exam.file}` }, score: s
-        });
-    });
-
-    // 5) 교재 섹션 메모 (TR-30) — 메모 본문+섹션 제목 매칭 → 해당 섹션으로 이동
-    const notes = src.notes || getReaderNotes();
-    for (const n of Object.values(notes)) {
-        if (!n || !n.note) continue;
-        const s = _matchScore(`${n.title || ''} ${n.note}`, n.title || '', terms);
-        if (s >= 0) push('note', {
-            type: 'note', icon: 'fa-note-sticky', title: n.title || '섹션 메모',
-            sub: `메모 · ${n.note.slice(0, 50)}`,
-            action: { kind: 'note', subject: n.subject, title: n.title }, score: s
-        });
-    }
-
-    // 그룹 내 점수 정렬 후 플랫화 — 뷰·섹션·성분·문제집 순
-    const order = ['view', 'section', 'note', 'ingredient', 'exam'];
-    /** @type {PaletteResult[]} */
-    const flat = [];
-    order.forEach(type => {
-        const g = groups[type];
-        if (!g) return;
-        g.sort((a, b) => b.score - a.score);
-        flat.push(...g);
-    });
-    const results = flat.slice(0, MAX_TOTAL);
+    const results = _flattenGroups(groups).slice(0, MAX_TOTAL);
 
     // 본문 전수검색 브리지 — 팔레트는 섹션 "제목"만 인덱스하므로, 본문에서 찾아야 하는
     // 쿼리는 항상 이 항목으로 교재 본문검색(역색인) 뷰에 넘긴다. 결과가 있어도 항상 맨 아래 표시.

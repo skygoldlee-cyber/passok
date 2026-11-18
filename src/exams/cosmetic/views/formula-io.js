@@ -32,24 +32,19 @@ export function formulaPrintWorkOrder() {
   }));
 }
 
-/** 인쇄용 조제 기록지 HTML 생성 */
-/** @param {*} f */
-function buildPrintHtml(f) {
-  const vol = f.targetVolume != null ? `${f.targetVolume}${f.unit || 'g'}` : '—';
-  const cust = f.customer || {};
-  const custParts = [cust.name, cust.age != null ? `${cust.age}세` : '', cust.gender,
+/** @param {*} cust @returns {string} 고객 요약 한 줄 (빈 속성 제외 ' · ' 결합) */
+function _fpCustParts(cust) {
+  return [cust.name, cust.age != null ? `${cust.age}세` : '', cust.gender,
     cust.skinType, cust.formulation ? `제형: ${cust.formulation}` : '',
     cust.concerns && cust.concerns.length ? `고민: ${cust.concerns.join(', ')}` : '',
     cust.pregnancy,
     cust.allergies && cust.allergies.length ? `알레르기: ${cust.allergies.join(', ')}` : '',
     cust.products ? `사용 중: ${cust.products}` : '']
     .filter(Boolean).join(' · ');
+}
 
-  const amounts = calcAmounts(f);
-  const checks = checkFormulaItems(
-    f.ingredients.map((/** @type {*} */ i) => ({ name: i.name, concentration: i.concentration })),
-    getIndex()
-  );
+/** 원료 표 행 HTML + 배합률 합계. @param {*} f @param {*} amounts @param {*} checks @returns {{rowsHtml:string, sumConc:number}} */
+function _fpRows(f, amounts, checks) {
   let sumConc = 0;
   const rowsHtml = f.ingredients.map((/** @type {*} */ item, /** @type {number} */ i) => {
     const conc = item.concentration;
@@ -66,11 +61,11 @@ function buildPrintHtml(f) {
       <td>${badge.label}${esc(limit)}</td>
     </tr>`;
   }).join('');
-  const rounded = Math.round(sumConc * 100) / 100;
+  return { rowsHtml, sumConc };
+}
 
-  const stepsHtml = (f.steps && f.steps.length)
-    ? `<h3>제조 절차</h3><ol class="fp-steps">${f.steps.map((/** @type {string} */ s) => `<li>${esc(s)}</li>`).join('')}</ol>`
-    : '';
+/** 제형 안정성 섹션 — 실험 확인·전성분·자동 경고. @param {*} f @param {*} cust @returns {string} */
+function _fpStabilityHtml(f, cust) {
   const stab = evaluateStability(f.ingredients, getIndex(), {
     formulation: cust.formulation, phTarget: f.phTarget, phActual: f.phActual, steps: f.steps,
   });
@@ -80,9 +75,30 @@ function buildPrintHtml(f) {
   const inciHtml = (f.fullIngredients && f.fullIngredients.length)
     ? `<p class="fp-meta-line fp-inci">전성분 표시: ${esc(f.fullIngredients.join(', '))}</p>`
     : '';
-  const stabHtml = (stab.warnings.length || f.stability || inciHtml)
+  return (stab.warnings.length || f.stability || inciHtml)
     ? `<h3>제형 안정성</h3>${stabConfirm}${inciHtml}${stab.warnings.length ? `<ul class="fp-stab">${stab.warnings.map(w => `<li>${w.level === STAB.WARN ? '[주의] ' : '[참고] '}${esc(w.msg)}</li>`).join('')}</ul>` : ''}`
     : '';
+}
+
+/** 인쇄용 조제 기록지 HTML 생성 */
+/** @param {*} f */
+function buildPrintHtml(f) {
+  const vol = f.targetVolume != null ? `${f.targetVolume}${f.unit || 'g'}` : '—';
+  const cust = f.customer || {};
+  const custParts = _fpCustParts(cust);
+
+  const amounts = calcAmounts(f);
+  const checks = checkFormulaItems(
+    f.ingredients.map((/** @type {*} */ i) => ({ name: i.name, concentration: i.concentration })),
+    getIndex()
+  );
+  const { rowsHtml, sumConc } = _fpRows(f, amounts, checks);
+  const rounded = Math.round(sumConc * 100) / 100;
+
+  const stepsHtml = (f.steps && f.steps.length)
+    ? `<h3>제조 절차</h3><ol class="fp-steps">${f.steps.map((/** @type {string} */ s) => `<li>${esc(s)}</li>`).join('')}</ol>`
+    : '';
+  const stabHtml = _fpStabilityHtml(f, cust);
   const notesHtml = f.notes ? `<h3>메모</h3><p class="fp-notes">${esc(f.notes)}</p>` : '';
   const phLine = (f.phTarget != null || f.phActual != null)
     ? `<p class="fp-meta-line">목표 pH: ${f.phTarget != null ? f.phTarget : '—'} · 실측 pH: ${f.phActual != null ? f.phActual : '—'}</p>`

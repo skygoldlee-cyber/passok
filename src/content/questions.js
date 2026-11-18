@@ -128,6 +128,61 @@ function generateComboOptions(allIds, truthIds, { count = 5, rng = Math.random, 
     .map((x, i) => ({ id: String(i + 1), members: x.o.members }));
 }
 
+/** @param {Question} q @param {string[]} errs */
+function _validateSingle(q, errs) {
+  const correct = (q.options || []).filter(o => o.correct);
+  if (correct.length !== 1) errs.push(`single 정답 개수 ${correct.length} (1이어야 함)`);
+  if (q.answer && q.answer !== (correct[0] && correct[0].id))
+    errs.push('single answer와 correct 옵션 불일치');
+}
+
+/** @param {Question} q @param {string[]} errs */
+function _validateCombo(q, errs) {
+  if (!q.statements || q.statements.length < 2) errs.push('combo 진술 부족');
+  // 저작 규칙: 복수정답형은 출처·인용을 문제 서두에 명기해야 한다
+  if (!q.citation || !String(q.citation).trim()) errs.push('combo citation 없음 — 문제 서두 출처·인용 명기 필수');
+  const ids = new Set();
+  (q.statements || []).forEach(s => {
+    if (ids.has(s.id)) errs.push(`진술 id 중복: ${s.id}`);
+    ids.add(s.id);
+    (['truth'].every(k => k in s)) || errs.push(`진술 ${s.id} truth 누락`);
+  });
+  (q.options || []).forEach(o => (o.members || []).forEach(m => {
+    if (!ids.has(m)) errs.push(`옵션 ${o.id}가 없는 진술 ${m} 참조`);
+  }));
+  const derived = deriveComboAnswer(q);
+  if (!derived) errs.push('combo 정답 조합이 유일하지 않음 (진술 truth ↔ 옵션 members 재검토)');
+  else if (q.answer && q.answer !== derived)
+    errs.push(`combo answer(${q.answer}) ≠ 도출값(${derived})`);
+}
+
+/** @param {Question} q @param {string[]} errs */
+function _validateShortOx(q, errs) {
+  if (q.type === 'short') {
+    if (!q.accept || !q.accept.length) errs.push('short accept 없음');
+  } else {
+    if (typeof q.statement !== 'string' || !q.statement) errs.push('ox statement 없음');
+    if (typeof q.truth !== 'boolean') errs.push('ox truth 없음/비불리언');
+  }
+}
+
+/** @param {Question} q @param {string[]} errs */
+function _validateByType(q, errs) {
+  if (q.type === 'single') _validateSingle(q, errs);
+  else if (q.type === 'combo') _validateCombo(q, errs);
+  else if (q.type === 'short' || q.type === 'ox') _validateShortOx(q, errs);
+  else errs.push(`알 수 없는 type: ${q.type}`);
+}
+
+/** @param {Question} q @param {string[]} errs */
+function _validateTrap(q, errs) {
+  if (q.trap === undefined) return;
+  if (!Array.isArray(q.trap)) { errs.push('trap 필드는 배열이어야 함'); return; }
+  q.trap.forEach(t => {
+    if (!TRAP_TAGS.includes(t)) errs.push(`알 수 없는 함정 유형: ${t} (허용: ${TRAP_TAGS.join('/')})`);
+  });
+}
+
 /**
  * 문항 데이터 무결성 검사. 문제 없으면 [], 있으면 사유 문자열 배열 반환.
  * 출제/임포트 시점에 돌려서 정답 오타·조합 불일치를 잡는 용도.
@@ -140,44 +195,89 @@ function validateQuestion(q, subjectMax = SUBJECT_MAX) {
   if (!q.id) errs.push('id 없음');
   if (!subjectMax[q.subject]) errs.push(`subject 값 이상: ${q.subject}`);
   if (typeof q.points !== 'number') errs.push('points 없음/비수치');
-
-  if (q.type === 'single') {
-    const correct = (q.options || []).filter(o => o.correct);
-    if (correct.length !== 1) errs.push(`single 정답 개수 ${correct.length} (1이어야 함)`);
-    if (q.answer && q.answer !== (correct[0] && correct[0].id))
-      errs.push('single answer와 correct 옵션 불일치');
-  } else if (q.type === 'combo') {
-    if (!q.statements || q.statements.length < 2) errs.push('combo 진술 부족');
-    // 저작 규칙: 복수정답형은 출처·인용을 문제 서두에 명기해야 한다
-    if (!q.citation || !String(q.citation).trim()) errs.push('combo citation 없음 — 문제 서두 출처·인용 명기 필수');
-    const ids = new Set();
-    (q.statements || []).forEach(s => {
-      if (ids.has(s.id)) errs.push(`진술 id 중복: ${s.id}`);
-      ids.add(s.id);
-      (['truth'].every(k => k in s)) || errs.push(`진술 ${s.id} truth 누락`);
-    });
-    (q.options || []).forEach(o => (o.members || []).forEach(m => {
-      if (!ids.has(m)) errs.push(`옵션 ${o.id}가 없는 진술 ${m} 참조`);
-    }));
-    const derived = deriveComboAnswer(q);
-    if (!derived) errs.push('combo 정답 조합이 유일하지 않음 (진술 truth ↔ 옵션 members 재검토)');
-    else if (q.answer && q.answer !== derived)
-      errs.push(`combo answer(${q.answer}) ≠ 도출값(${derived})`);
-  } else if (q.type === 'short') {
-    if (!q.accept || !q.accept.length) errs.push('short accept 없음');
-  } else if (q.type === 'ox') {
-    if (typeof q.statement !== 'string' || !q.statement) errs.push('ox statement 없음');
-    if (typeof q.truth !== 'boolean') errs.push('ox truth 없음/비불리언');
-  } else {
-    errs.push(`알 수 없는 type: ${q.type}`);
-  }
-  if (q.trap !== undefined) {
-    if (!Array.isArray(q.trap)) errs.push('trap 필드는 배열이어야 함');
-    else q.trap.forEach(t => {
-      if (!TRAP_TAGS.includes(t)) errs.push(`알 수 없는 함정 유형: ${t} (허용: ${TRAP_TAGS.join('/')})`);
-    });
-  }
+  _validateByType(q, errs);
+  _validateTrap(q, errs);
   return errs;
+}
+
+/**
+ * @typedef {Object} _GradeResult
+ * @property {boolean} correct
+ * @property {string} correctAnswer
+ * @property {*[]|undefined} [perStatement]
+ */
+
+/**
+ * @param {Question} q @param {*} optId
+ * @returns {_GradeResult}
+ */
+function _gradeSingle(q, optId) {
+  const key = ((q.options || []).find(o => o.correct) || {}).id || '';
+  return { correct: optId === key, correctAnswer: key };
+}
+
+/**
+ * @param {Question} q @param {*} optId @param {Object.<string,boolean>|null} judgments
+ * @returns {_GradeResult}
+ */
+function _gradeCombo(q, optId, judgments) {
+  const correctAnswer = deriveComboAnswer(q) || q.answer || '';
+  // 정오답과 무관하게 진술 단위 피드백 제공(오답노트/해설용).
+  // 사용자가 고른 옵션의 members = "사용자가 참이라 판정한 진술 집합"이므로
+  // 명시 판정(judgments)이 없어도 진술별 오판을 자동 유도할 수 있다.
+  const selected = new Set(
+    ((q.options || []).find(o => o.id === optId) || {}).members || []
+  );
+  const hasJudgmentSource = (optId != null && optId !== '') || judgments;
+  const perStatement = (q.statements || []).map(s => {
+    const userJudged = !hasJudgmentSource ? null
+      : (judgments && s.id in judgments) ? !!judgments[s.id]
+      : selected.has(s.id);
+    return {
+      id: s.id,
+      sid: s.sid,
+      conceptId: s.conceptId,
+      text: s.text,
+      truth: s.truth,
+      userJudged,
+      judgedCorrect: userJudged === null ? null : userJudged === s.truth,
+      explain: s.explain,
+    };
+  });
+  return { correct: optId === correctAnswer, correctAnswer, perStatement };
+}
+
+/**
+ * @param {Question} q @param {*} response
+ * @returns {_GradeResult}
+ */
+function _gradeOx(q, response) {
+  const correctAnswer = q.truth ? 'O' : 'X';
+  const r = typeof response === 'boolean' ? (response ? 'O' : 'X')
+    : String(response || '').trim().toUpperCase();
+  return { correct: r === correctAnswer, correctAnswer };
+}
+
+/**
+ * @param {Question} q @param {*} response
+ * @returns {_GradeResult}
+ */
+function _gradeShort(q, response) {
+  const target = new Set((q.accept || []).map(normalizeText));
+  return { correct: target.has(normalizeText(response)), correctAnswer: (q.accept || [])[0] || '' };
+}
+
+/**
+ * 유형별 채점 디스패치 — 알 수 없는 type은 incorrect 기본값 (기존 동작 보존).
+ * @param {Question} q @param {*} optId @param {Object.<string,boolean>|null} judgments @param {*} response
+ * @returns {_GradeResult}
+ */
+function _gradeByType(q, optId, judgments, response) {
+  if (q.type === 'single') return _gradeSingle(q, optId);
+  if (q.type === 'combo') return _gradeCombo(q, optId, judgments);
+  if (q.type === 'ox') return _gradeOx(q, response);
+  if (q.type === 'short') return _gradeShort(q, response);
+  return { correct: false, correctAnswer: q.answer || '' };
 }
 
 /**
@@ -193,55 +293,14 @@ function validateQuestion(q, subjectMax = SUBJECT_MAX) {
  */
 function gradeAnswer(q, response) {
   const max = q.points || 0;
-  let correct = false;
-  let correctAnswer = q.answer || '';
-  let perStatement;
 
   // 2단계 응시 모드: response가 객체이면 optionId + 진술별 판정(judgments)을 함께 받는다
   const isObj = response !== null && typeof response === 'object';
   const optId = isObj ? response.optionId : response;
   const judgments = isObj ? (response.judgments || null) : null;
 
-  if (q.type === 'single') {
-    const key = ((q.options || []).find(o => o.correct) || {}).id || '';
-    correctAnswer = key;
-    correct = optId === key;
-  } else if (q.type === 'combo') {
-    correctAnswer = deriveComboAnswer(q) || q.answer || '';
-    correct = optId === correctAnswer;
-    // 정오답과 무관하게 진술 단위 피드백 제공(오답노트/해설용).
-    // 사용자가 고른 옵션의 members = "사용자가 참이라 판정한 진술 집합"이므로
-    // 명시 판정(judgments)이 없어도 진술별 오판을 자동 유도할 수 있다.
-    const selected = new Set(
-      ((q.options || []).find(o => o.id === optId) || {}).members || []
-    );
-    const hasJudgmentSource = (optId != null && optId !== '') || judgments;
-    perStatement = (q.statements || []).map(s => {
-      const userJudged = !hasJudgmentSource ? null
-        : (judgments && s.id in judgments) ? !!judgments[s.id]
-        : selected.has(s.id);
-      return {
-        id: s.id,
-        sid: s.sid,
-        conceptId: s.conceptId,
-        text: s.text,
-        truth: s.truth,
-        userJudged,
-        judgedCorrect: userJudged === null ? null : userJudged === s.truth,
-        explain: s.explain,
-      };
-    });
-  } else if (q.type === 'ox') {
-    correctAnswer = q.truth ? 'O' : 'X';
-    const r = typeof response === 'boolean' ? (response ? 'O' : 'X')
-      : String(response || '').trim().toUpperCase();
-    correct = r === correctAnswer;
-  } else if (q.type === 'short') {
-    const target = new Set((q.accept || []).map(normalizeText));
-    correct = target.has(normalizeText(response));
-    correctAnswer = (q.accept || [])[0] || '';
-  }
-  return { correct, earned: correct ? max : 0, max, correctAnswer, perStatement };
+  const g = _gradeByType(q, optId, judgments, response);
+  return { correct: g.correct, earned: g.correct ? max : 0, max, correctAnswer: g.correctAnswer, perStatement: g.perStatement };
 }
 
 /**

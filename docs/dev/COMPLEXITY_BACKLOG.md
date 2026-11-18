@@ -9,7 +9,7 @@
 
 `node tools/check/check_complexity.js` (eslint complexity 임계 10, Δ 비교는 동일 임계 유지 필수).
 
-- 기준선: **303건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
+- 기준선: **299건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
 - 분해 순서: 복잡도 점수 내림차순 — 상위부터 처리해야 곡선이 꺾인다
 - 분해 완료 시 `--update`로 기준선을 축소하고 `--report`로 이 표를 재생성한다
 - 분해 규약: 렌더 분기는 `if` 체인 → early return·테이블 조회·서브함수 추출로 내리고, 동작 변경 없이 구조만 정리한다. 대형 렌더 함수는 섹션별 private 렌더 함수로 분할
@@ -18,33 +18,26 @@
 
 | 복잡도 | 함수 | 위치 |
 |---:|---|---|
-| 33 | `buildTodayQueue` | src/views/dashboard-queue.js:52 |
-| 31 | `(anonymous)#48` | src/views/reader/reader-render.js:364 |
-| 30 | `validateQuestion` | src/content/questions.js:138 |
-| 30 | `gradeAnswer` | src/content/questions.js:194 |
-| 30 | `(anonymous)#38` | src/study/study-tracker-alloc.js:306 |
-| 30 | `(anonymous)#52` | src/views/reader/reader-toolbar.js:283 |
-| 29 | `searchAll` | src/shell/command-palette.js:109 |
-| 29 | `renderQuizQuestion` | src/views/quiz/quiz.js:163 |
-| 29 | `submitComboAnswer` | src/views/trainer-drill-combo.js:166 |
-| 28 | `buildPrintHtml` | src/exams/cosmetic/views/formula-io.js:37 |
-| 28 | `_parseBlock` | src/written/written-practice.js:78 |
+| 30 | `_allocRow` | src/study/study-tracker-alloc.js:267 |
+| 30 | `_onReaderKeydown` | src/views/reader/reader-toolbar.js:284 |
+| 28 | `_sectionCardHtml` | src/views/reader/reader-render.js:372 |
 | 27 | `performTextbookSearch` | src/views/textbook-search.js:170 |
-| 26 | `renderTodayQueue` | src/views/dashboard-queue.js:262 |
-| 26 | `initReaderToolbar` | src/views/reader/reader-toolbar.js:350 |
+| 26 | `renderTodayQueue` | src/views/dashboard-queue.js:349 |
+| 26 | `initReaderToolbar` | src/views/reader/reader-toolbar.js:356 |
 | 25 | `(anonymous)#2` | src/content/pdf-utils.js:341 |
 | 25 | `_matchSnippet` | src/search/search-index.js:111 |
 | 25 | `_listRefDocs` | src/search/search-sources.js:255 |
 | 25 | `createEntityCard` | src/views/dictionary.js:358 |
-| 25 | `(anonymous)#47` | src/views/reader/reader-ref-links.js:148 |
-| 25 | `(anonymous)#50` | src/views/reader/reader-toolbar.js:92 |
+| 25 | `(anonymous)#46` | src/views/reader/reader-ref-links.js:148 |
+| 25 | `(anonymous)#48` | src/views/reader/reader-toolbar.js:92 |
 | 24 | `checkIngredient` | src/exams/cosmetic/formula-check.js:77 |
 | 24 | `batchOpen` | src/exams/cosmetic/views/formula-batch.js:329 |
 | 24 | `productVisionRead` | src/exams/cosmetic/views/formula-prod-vision.js:111 |
 | 24 | `updateGlobalStats` | src/views/dashboard.js:35 |
-| 24 | `(anonymous)#43` | src/views/listeners/listeners-flashcard.js:186 |
-| 24 | `(anonymous)#44` | src/views/listeners/listeners-quiz.js:88 |
-| 24 | `(anonymous)#56` | src/views/trainer-drills.js:648 |
+| 24 | `(anonymous)#42` | src/views/listeners/listeners-flashcard.js:186 |
+| 24 | `(anonymous)#43` | src/views/listeners/listeners-quiz.js:88 |
+| 24 | `renderQuizQuestion` | src/views/quiz/quiz.js:206 |
+| 24 | `(anonymous)#53` | src/views/trainer-drills.js:648 |
 | 23 | `validateGeneratedItem` | src/ai/gen-gate.js:69 |
 | 23 | `custOpen` | src/exams/cosmetic/views/formula-customer.js:239 |
 | 23 | `scoreCard` | src/reader/textbook-core.js:69 |
@@ -93,9 +86,9 @@
 | 18 | `checkIngredientsUpdate` | src/shell/app-shell.js:288 |
 | 18 | `pickConceptQuestions` | src/study/concept-drill.js:68 |
 | 18 | `renderDictionary` | src/views/dictionary.js:239 |
-| 18 | `(anonymous)#49` | src/views/reader/reader-render.js:519 |
+| 18 | `(anonymous)#47` | src/views/reader/reader-render.js:538 |
 | 18 | `parseGradingResponse` | src/written/written-grading.js:182 |
-| 18 | `parseWrittenBank` | src/written/written-practice.js:164 |
+| 18 | `parseWrittenBank` | src/written/written-practice.js:180 |
 | 17 | `careAiDraft` | src/exams/carework/care-ai.js:53 |
 | 17 | `rowCheckInfo` | src/exams/cosmetic/views/formula-calc.js:38 |
 | 17 | `populateCustomerFields` | src/exams/cosmetic/views/formula-fields.js:17 |
@@ -108,7 +101,7 @@
 | 17 | `computePassGap` | src/study/analysis-engine.js:437 |
 | 17 | `computeStudyPattern` | src/study/analysis-engine.js:666 |
 | 17 | `selectExamRiskSession` | src/study/study-tracker-alloc.js:92 |
-| 17 | `requestAiFeedback` | src/views/quiz/quiz.js:554 |
+| 17 | `requestAiFeedback` | src/views/quiz/quiz.js:564 |
 | 17 | `_subjectAllocHtml` | src/views/study-calendar.js:248 |
 | 17 | `weakRow` | src/views/trainer-drills.js:472 |
 | 17 | `checkShortAnswer` | src/views/trainer.js:33 |
@@ -120,17 +113,17 @@
 | 16 | `(anonymous)#14` | src/exams/cosmetic/views/formula-hub.js:38 |
 | 16 | `checkSummaryHtml` | src/exams/cosmetic/views/formula-list.js:18 |
 | 16 | `enter` | src/practice-registry.js:222 |
-| 16 | `executePaletteResult` | src/shell/command-palette.js:376 |
+| 16 | `executePaletteResult` | src/shell/command-palette.js:413 |
 | 16 | `buildFeedbackPayload` | src/shell/feedback.js:112 |
 | 16 | `buildWeakMock` | src/study/personalization.js:68 |
 | 16 | `estimateCompositeScore` | src/study/recommendations.js:348 |
-| 16 | `computeSubjectAllocation` | src/study/study-tracker-alloc.js:285 |
+| 16 | `computeSubjectAllocation` | src/study/study-tracker-alloc.js:326 |
 | 16 | `maybeReportUsageSnapshot` | src/telemetry/usage-telemetry.js:188 |
 | 16 | `updateStreakAndDailyUI` | src/views/daily-challenge.js:36 |
 | 16 | `dictExportCsv` | src/views/dictionary.js:510 |
 | 16 | `loadFlashcards` | src/views/flashcard.js:23 |
 | 16 | `startWeakGenQuiz` | src/views/quiz/quiz-review.js:283 |
-| 16 | `renderChapterContentInternal` | src/views/reader/reader-render.js:618 |
+| 16 | `renderChapterContentInternal` | src/views/reader/reader-render.js:637 |
 | 16 | `_chapterAnchorForTitle` | src/views/textbook-reader.js:81 |
 | 16 | `submitOxDrillAnswer` | src/views/trainer-drills.js:346 |
 | 16 | `generateLimitsOptions` | src/views/trainer.js:181 |
@@ -158,8 +151,8 @@
 | 15 | `exportAnalysisReport` | src/views/analysis-view.js:734 |
 | 15 | `tickSimTimer` | src/views/exam-sim/exam-sim-arena.js:59 |
 | 15 | `startWeakConceptQuiz` | src/views/quiz/quiz-review.js:224 |
-| 15 | `submitQuizAnswer` | src/views/quiz/quiz.js:264 |
-| 15 | `_citationForQuiz` | src/views/quiz/quiz.js:440 |
+| 15 | `submitQuizAnswer` | src/views/quiz/quiz.js:274 |
+| 15 | `_citationForQuiz` | src/views/quiz/quiz.js:450 |
 | 15 | `_renderCalendarDays` | src/views/study-calendar.js:321 |
 | 15 | `renderGlossaryCards` | src/views/textbook-search.js:386 |
 | 15 | `submitCalcAnswer` | src/views/trainer-calc-practice.js:76 |
@@ -191,10 +184,10 @@
 | 14 | `_ensureIndexes` | src/study/weak-items.js:41 |
 | 14 | `buildEventPayload` | src/telemetry/usage-telemetry.js:60 |
 | 14 | `askTextbookQA` | src/views/analysis-view.js:404 |
-| 14 | `(anonymous)#40` | src/views/exam-select.js:120 |
-| 14 | `(anonymous)#45` | src/views/listeners/listeners-simulator.js:34 |
-| 14 | `(anonymous)#46` | src/views/quiz/quiz-review.js:41 |
-| 14 | `submitQuizChoiceAnswer` | src/views/quiz/quiz.js:342 |
+| 14 | `(anonymous)#39` | src/views/exam-select.js:120 |
+| 14 | `(anonymous)#44` | src/views/listeners/listeners-simulator.js:34 |
+| 14 | `(anonymous)#45` | src/views/quiz/quiz-review.js:41 |
+| 14 | `submitQuizChoiceAnswer` | src/views/quiz/quiz.js:352 |
 | 14 | `toggleReaderAudio` | src/views/reader/reader-audio.js:424 |
 | 14 | `_showPreview` | src/views/reader/reader-ref-links.js:51 |
 | 14 | `_studyPlanHtml` | src/views/study-calendar.js:184 |
@@ -212,6 +205,7 @@
 | 13 | `(anonymous)#11` | src/exams/cosmetic/views/formula-batch.js:158 |
 | 13 | `(anonymous)#12` | src/exams/cosmetic/views/formula-calc.js:85 |
 | 13 | `_restoreCalcDraft` | src/exams/cosmetic/views/formula-calc.js:395 |
+| 13 | `buildPrintHtml` | src/exams/cosmetic/views/formula-io.js:85 |
 | 13 | `buildAuditReportHtml` | src/exams/cosmetic/views/formula-print.js:320 |
 | 13 | `getPracticeViewTitles` | src/practice-registry.js:590 |
 | 13 | `setupPWAInstall` | src/pwa/pwa-install.js:11 |
@@ -220,6 +214,7 @@
 | 13 | `(anonymous)#24` | src/reader/zoom-gestures.js:93 |
 | 13 | `(anonymous)#27` | src/shell/app-shell.js:167 |
 | 13 | `_enforce` | src/shell/banner-mgr.js:50 |
+| 13 | `searchAll` | src/shell/command-palette.js:210 |
 | 13 | `(anonymous)#32` | src/shell/shortcuts-help.js:105 |
 | 13 | `migrateSm2Record` | src/study/fsrs.js:149 |
 | 13 | `buildTodayQueue` | src/study/personalization.js:90 |
@@ -233,8 +228,8 @@
 | 13 | `subjectJudgmentSeqs` | src/views/personalization-view.js:66 |
 | 13 | `renderChapterContent` | src/views/textbook-reader.js:487 |
 | 13 | `renderComboQuestion` | src/views/trainer-drill-combo.js:29 |
-| 13 | `_cardHtml` | src/written/written-practice.js:383 |
-| 13 | `(anonymous)#57` | src/written/written-practice.js:498 |
+| 13 | `_cardHtml` | src/written/written-practice.js:399 |
+| 13 | `(anonymous)#54` | src/written/written-practice.js:514 |
 | 12 | `parseCsv` | src/content/csv-utils.js:57 |
 | 12 | `loadDictionary` | src/content/data-loader.js:540 |
 | 12 | `getKnowledgeItems` | src/content/data-loader.js:561 |
@@ -265,15 +260,15 @@
 | 12 | `setReaderNote` | src/study/reader-notes.js:39 |
 | 12 | `_weakClinicHtml` | src/views/analysis-view.js:265 |
 | 12 | `_passGapProbHtml` | src/views/analysis-view.js:545 |
-| 12 | `(anonymous)#39` | src/views/backup.js:68 |
-| 12 | `(anonymous)#41` | src/views/listeners/listeners-delegation.js:74 |
-| 12 | `(anonymous)#42` | src/views/listeners/listeners-flashcard.js:51 |
+| 12 | `(anonymous)#38` | src/views/backup.js:68 |
+| 12 | `(anonymous)#40` | src/views/listeners/listeners-delegation.js:74 |
+| 12 | `(anonymous)#41` | src/views/listeners/listeners-flashcard.js:51 |
 | 12 | `togglePomodoro` | src/views/pomodoro.js:12 |
 | 12 | `_highlightQueryInCard` | src/views/textbook-reader.js:117 |
 | 12 | `openSubjectSection` | src/views/textbook-reader.js:252 |
 | 12 | `renderTextbookSearch` | src/views/textbook-search.js:55 |
-| 12 | `(anonymous)#53` | src/views/textbook-search.js:93 |
-| 12 | `(anonymous)#54` | src/views/textbook-search.js:107 |
+| 12 | `(anonymous)#50` | src/views/textbook-search.js:93 |
+| 12 | `(anonymous)#51` | src/views/textbook-search.js:107 |
 | 12 | `formatSectionContent` | src/views/textbook-search.js:436 |
 | 11 | `_getMd` | src/content/data-loader.js:243 |
 | 11 | `generateComboOptions` | src/content/questions.js:104 |
@@ -283,7 +278,7 @@
 | 11 | `parseLimitText` | src/exams/cosmetic/formula-check.js:35 |
 | 11 | `addCustomCandidate` | src/exams/cosmetic/formula-rules.js:129 |
 | 11 | `(anonymous)#13` | src/exams/cosmetic/views/formula-customer.js:66 |
-| 11 | `(anonymous)#15` | src/exams/cosmetic/views/formula-io.js:54 |
+| 11 | `(anonymous)#15` | src/exams/cosmetic/views/formula-io.js:49 |
 | 11 | `(anonymous)#17` | src/exams/cosmetic/views/formula-material.js:85 |
 | 11 | `(anonymous)#18` | src/exams/cosmetic/views/formula-products.js:95 |
 | 11 | `shouldShowProMoment` | src/pro/pro-upgrade.js:316 |
@@ -315,9 +310,10 @@
 | 11 | `_gradeSimQuestion` | src/views/exam-sim/exam-sim-arena.js:374 |
 | 11 | `chapterForQuestion` | src/views/exam-sim/exam-sim-review.js:92 |
 | 11 | `bindQuizListeners` | src/views/listeners/listeners-quiz.js:9 |
-| 11 | `renderQuizResult` | src/views/quiz/quiz.js:463 |
-| 11 | `_toggleNoteEditor` | src/views/reader/reader-render.js:432 |
-| 11 | `(anonymous)#51` | src/views/reader/reader-toolbar.js:215 |
+| 11 | `renderQuizResult` | src/views/quiz/quiz.js:473 |
+| 11 | `_toggleNoteEditor` | src/views/reader/reader-render.js:451 |
+| 11 | `(anonymous)#49` | src/views/reader/reader-toolbar.js:215 |
 | 11 | `saveGoalSettings` | src/views/study-calendar.js:457 |
 | 11 | `renderSectionResultCard` | src/views/textbook-search.js:330 |
-| 11 | `(anonymous)#55` | src/views/trainer-drills.js:214 |
+| 11 | `submitComboAnswer` | src/views/trainer-drill-combo.js:234 |
+| 11 | `(anonymous)#52` | src/views/trainer-drills.js:214 |

@@ -277,10 +277,11 @@ export function syncActiveTocItem(tocListEl) {
  * b 현재 섹션 북마크 토글 · ESC 모바일 TOC 드로어 닫기.
  * 입력 필드·수정자키 조합·비활성 뷰에서는 동작하지 않는다.
  */
-export function bindReaderKeyboard() {
-    if (_readerKeyboardBound || typeof document === 'undefined') return;
-    _readerKeyboardBound = true;
-    document.addEventListener('keydown', (e) => {
+/**
+ * 리더 keydown 핸들러 — 바인딩은 bindReaderKeyboard가 1회 수행.
+ * @param {KeyboardEvent} e
+ */
+function _onReaderKeydown(e) {
         if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
         const view = document.getElementById('textbook-reader-view');
         const container = document.getElementById('textbook-reader-container');
@@ -344,7 +345,12 @@ export function bindReaderKeyboard() {
                 break;
             }
         }
-    });
+}
+
+export function bindReaderKeyboard() {
+    if (_readerKeyboardBound || typeof document === 'undefined') return;
+    _readerKeyboardBound = true;
+    document.addEventListener('keydown', _onReaderKeydown);
 }
 
 export function initReaderToolbar() {
