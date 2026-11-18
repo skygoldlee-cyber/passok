@@ -32,3 +32,4 @@
 {"ts":"2026-11-16T09:00:19.611Z","draft":"traps_subject1.md","kind":"trap","target":"carework","bank":"subject1","generated":62,"applied":62,"skipped":0,"model":"review"}
 {"ts":"2026-11-16T09:00:19.634Z","draft":"traps_subject2.md","kind":"trap","target":"carework","bank":"subject2","generated":80,"applied":80,"skipped":0,"model":"review"}
 {"ts":"2026-11-18T06:37:55.338Z","draft":"C:\\Project\\PassOK\\tmp\\ai_drafts\\fireelec\\draft_law.md","kind":"draft","target":"fireelec","bank":"과목3_문제은행.md","generated":115,"applied":115,"skipped":0,"model":"gemini-3.8-flash","genDate":"2026-11-18T06:36:54.919Z","edited":true}
+{"ts":"2026-11-18T07:18:29.973Z","draft":"C:\\Project\\PassOK\\tmp\\ai_drafts\\fireelec\\draft_facil.md","kind":"draft","target":"fireelec","bank":"과목4_문제은행.md","generated":71,"applied":71,"skipped":0,"model":"gemini-3.8-flash","genDate":"2026-11-18T07:18:14.531Z","edited":true}

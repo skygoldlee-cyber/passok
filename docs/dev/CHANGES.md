@@ -1,6 +1,12 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-18 content: fireelec 과목4 교재 본문·문제은행 72문 + KOCW 소재 스테이징
+
+- 과목4 교재: KOCW 경보시스템공학 강의노트(PDF 13차시)를 ref 문서로 배치·ai:textbook 본문 생성, 9개 슬롯 키워드 병합 (슬롯1 과대매칭·미매칭 12섹션 검수 대기)
+- 과목4 문제은행 72문 — ai:draft --count 2, ai_apply 편입 후 5→4지선다 변환
+- tmp/materials/fireelec/kocw에 KOCW 소재 45MB 스테이징(미추적) — 과목1 연소공학·소방화학실험 PDF, 과목2 전기공학 YouTube 자막
+
 ## 2026-11-18 content: fireelec 참조자료 32종 + 과목3 교재 본문·문제은행 116문
 
 - 참조자료 ref_md 과목3 법령 5법×3종(15) + 과목4 NFTC/NFPC 고시 11종 + 과목1 법령 6종 배치 — law.go.kr DRF 수집 + hazmat 재사용, 출제기준 ref_md 표 형식 전환

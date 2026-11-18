@@ -44,6 +44,9 @@
   "exams": {
     "subject3": {
       "questions": 116
+    },
+    "subject4": {
+      "questions": 72
     }
   }
 }
