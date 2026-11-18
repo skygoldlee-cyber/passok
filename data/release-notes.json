@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261119-8f77201",
+    "date": "2026-11-19",
+    "notes": [
+      "[정리] sw.js 스탬프 갱신 (build:derived 산출물)",
+      "[수정·fireelec] KEC PDF 외부 호스팅 선언 — CI 신선도 게이트의 gitignore PDF 잔여 오판 해소",
+      "[수정·fireelec] KEC ref_md PUA 글리프 전수 해독 · 과목4 헤딩 번호체계 · ref 레이아웃 등록 — CI 콘텐츠 추적 게이트 3건 해소",
+      "[정리] sw.js 스탬프 갱신 (build:derived 잔여 산출물)",
+      "[정리] cosmetic 임베딩 번들 재생성 (드릴·시험 번들 입력 해시 동기)",
+      "[수정] hazmat 매핑문서 검토 갱신 · KEC 이미지 6종 500KB 미만 재압축 (pre-push 게이트)",
+      "[spec] TR-32 수식 렌더 계약 · CS-14 수식/화학식 표기 규약 신규 부여",
+      "[수정·content] cosmetic·hazmat 평문 화학식 5곳을 팩 관례(유니코드 첨자)로 통일",
+      "[수정·fireelec] 과목2 은행 제어문자 LaTeX 손상 4행 복구 · μᵣ 표기 정정",
+      "[content·fireelec] KOCW 노트 ref 3종 전량 제거(ND계열 라이선스) · 과목4 출처 NFTC로 교체"
+    ]
+  },
+  {
     "version": "v20261118-03939b7",
     "date": "2026-11-18",
     "notes": [
@@ -239,105 +255,6 @@
       "[수정·content] docx 서명 이미지 우측 탭 정지 정렬 + 결재란 담당 서명 좌측 정렬",
       "[수정·content] docx 서명 이미지 추가 우측 보정 — 공백 4→5칸",
       "[기능·content] docx 결재란 담당 서명을 images.approve 전용 키로 — (인) 제외·확대"
-    ]
-  },
-  {
-    "version": "v20261114-e0c1352",
-    "date": "2026-11-14",
-    "notes": [
-      "[수정·carework] docx 워터마크 2쪽 이상 미표시 — 헤더 반복 추가",
-      "[정리] 배포 전 파생물 재생성 [no-test]",
-      "[리팩터링·content] 문서 워터마크 플랫폼 공용화 — 시험팩 재사용",
-      "[기능·carework] 1쪽 보고서 쪽 번호 자동 생략",
-      "[수정·carework] 워터마크 확대·잘림·농도 최종 조정",
-      "[수정·carework] docx 워터마크 투명·기울임 — w14:textFill alpha + italic",
-      "[수정·carework] docx 워터마크 DrawingML 텍스트 상자로 대각선 렌더 확정",
-      "[수정·carework] docx 워터마크 본문 앵커 회전 텍스트 상자로 확정",
-      "[수정·carework] 워터마크 렌더 확정 — 본문 앵커 전면 VML + 캔버스 스탬프",
-      "[수정·carework] 워터마크 셰이프를 Word 네이티브 구조로 재작성"
-    ]
-  },
-  {
-    "version": "v20261114-45cd04b",
-    "date": "2026-11-14",
-    "notes": [
-      "[CI] CI 재실행 트리거 [no-docs]",
-      "[기능·carework] 문서번호 추적·QR·발행 대장 + (인) 위 서명 오버레이",
-      "[정리·release] v20261114-cfd1956 스탬프 확정 [no-docs]",
-      "[정리·release] v20261113-52523f5 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-a1dfc7f",
-    "date": "2026-11-13",
-    "notes": [
-      "[기능·carework] HWPX(아래한글) 양식 추출 + 출력 라벨 한글 호환 표기",
-      "[문서·carework] 전문가 검토 의뢰서 (DOC-BIZ-12) — 법무 0b 검토 패키지",
-      "[기능·ops] 기관 데이터 백업·복원 도구 + 운영 절차 런북 (법무 0b 별지2 잔여 해소)",
-      "[문서·carework] 처리방침 수탁 조항 + 계약서 리전 정정 — 법무 0b A2",
-      "[문서·carework] 개인정보처리 위탁계약서 초안 — DOC-BIZ-11, 법무 0b 산출물",
-      "[문서·carework] 기관 자체 서버DB 상황별 연동 — DSN-51 §6 추가",
-      "[문서·carework] 기관 사이트 라이선스 설계 — DOC-DSN-51",
-      "[정리·release] v20261113-be6ce0d 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-be6ce0d",
-    "date": "2026-11-13",
-    "notes": [
-      "[정리] 배포 전 파생물 재생성 [no-test]",
-      "[수정·content] 실무매뉴얼 보호자 전달 문구 완충 — 정량 주장 → 절차 지시",
-      "[테스트·e2e] 시각 기준선 자동 재생성 — CI 실패 감지 후 복구 (linux) [skip ci]",
-      "[테스트·e2e] 시각 회귀 표면 확장 + 오클루전 공용 검증 + 격리 스펙 근본 수정·해제",
-      "[수정·ui] 라이선스 코드 입력 진입점 단일화 — 설정 패널만 유지",
-      "[정리·release] v20261113-b582e0c 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-b582e0c",
-    "date": "2026-11-13",
-    "notes": [
-      "[수정·capture] manual-07-roster 상단 잘림 — sticky 헤더 캡처 제외",
-      "[정리·release] v20261113-44da6c1 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-44da6c1",
-    "date": "2026-11-13",
-    "notes": [
-      "[문서] entity-store.js 디렉토리 구조 등록 — AGENTS·ARCHITECTURE 트리 정합",
-      "[리팩터링·store] entity-store 팩토리 신설 + carework 스토어 7개 이행",
-      "[리팩터링·practice] registry 피처 디스크립터 팩토리화 — enter 공용 구현 (910→662)",
-      "[리팩터링·pwa] standalone 감지 core/utils 공용화 — 5파일 판정 중복 제거",
-      "[정리] sw 버전 스탬프 + test_stats 실측 갱신 (build:derived) [no-docs] [no-test]",
-      "[리팩터링·complexity] AU-10 잔여 함수 분해 — auth-view·quiz 래칫 복구 (324→323) [no-test]",
-      "[정리·release] v20261113-6c631e2 스탬프 확정 [no-docs]",
-      "[정리·release] v20261112-fb182cb 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-6c631e2",
-    "date": "2026-11-13",
-    "notes": [
-      "[문서·design] AU-10 운영 적용 절차 §7 추가 — 콘솔 접근 경로 명시",
-      "[기능·auth] AU-10 로그인 수단 연결 구현 — linkIdentity·분리 방지·동일인 재활성",
-      "[정리·release] v20261113-e4f4ae9 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261113-e4f4ae9",
-    "date": "2026-11-13",
-    "notes": [
-      "[수정·test+capture] DOM 단언 라벨 정합 + 사이드바 뷰포트 1450 압축",
-      "[기능·tools] DA-26 파이프라인 반영 — snap/shotPng 둘레 여백 자동화 + 전 삽화 재캡처",
-      "[문서] DA-26 신설 — 삽화 캡처 둘레 여백 규약 명문화",
-      "[기능·tools] manual-15-mask 캡처 자동화 — 수동 산출물을 SHOTS에 등록",
-      "[수정·content] 실무매뉴얼 삽화 전면 재캡처 — UX-TXT-01 반영 22장",
-      "[수정·content] manual-14-forms 삽화 재캡처 — UX-TXT-01 중간 분절 해소",
-      "[기능·carework] DOC-BIZ-10 후속 3건 — 🔖빈출 표기 정정·계정 연결 설계·exam-sim 검증",
-      "[문서·carework] DOC-BIZ-10 이용자 관점 평가 등재 — 외부 유료 전환 평가 + 코드 대조",
-      "[문서·carework] DOC-BIZ-07 인터뷰 스크립트 v3 — 판정 로직·질문 설계 정합",
-      "[정리·release] v20261113-9bda05c 스탬프 확정 [no-docs]"
     ]
   }
 ]
