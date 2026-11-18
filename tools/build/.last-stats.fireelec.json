@@ -45,11 +45,14 @@
     "subject1": {
       "questions": 911
     },
+    "subject2": {
+      "questions": 1
+    },
     "subject3": {
       "questions": 116
     },
     "subject4": {
-      "questions": 72
+      "questions": 290
     }
   }
 }
