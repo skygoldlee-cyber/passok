@@ -262,6 +262,9 @@ const _EXAM_LAW_URLS = {
     ["화재의예방및안전관리에관한법률", "https://www.law.go.kr/법령/화재의예방및안전관리에관한법률"],
     ["소방기본법", "https://www.law.go.kr/법령/소방기본법"],
     ["소방기본법", "https://www.law.go.kr/법령/소방기본법"]
+    ],
+    "fireelec": [
+
     ]
 };
 

@@ -1,0 +1,82 @@
+{
+ "schemaVersion": 1,
+ "contentYear": "2027",
+ "textbookEdition": "2027",
+ "_pilot": "draft — 출제기준(2026.1.1~2027.12.31) 기반 과목·챕터 골격만 구성. 교재 본문·문제은행 미작성 (ai:textbook·ai:draft 파이프라인 증산 예정)",
+ "subjects": [
+  {
+   "key": "theory",
+   "order": 1,
+   "name": "소방원론",
+   "shortName": "소방원론",
+   "dir": "교재/theory",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "소방원론 (전체)",
+     "file": "1과목_소방원론_표준형.md"
+    }
+   ]
+  },
+  {
+   "key": "elec",
+   "order": 2,
+   "name": "소방전기일반",
+   "shortName": "소방전기일반",
+   "dir": "교재/elec",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "소방전기일반 (전체)",
+     "file": "2과목_소방전기일반_표준형.md"
+    }
+   ]
+  },
+  {
+   "key": "law",
+   "order": 3,
+   "name": "소방관계법규",
+   "shortName": "소방관계법규",
+   "dir": "교재/law",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "소방관계법규 (전체)",
+     "file": "3과목_소방관계법규_표준형.md"
+    }
+   ]
+  },
+  {
+   "key": "facil",
+   "order": 4,
+   "name": "소방전기시설의 구조 및 원리",
+   "shortName": "소방전기시설",
+   "dir": "교재/facil",
+   "chapters": [
+    {
+     "key": "full",
+     "title": "소방전기시설의 구조 및 원리 (전체)",
+     "file": "4과목_소방전기시설의 구조 및 원리_표준형.md"
+    }
+   ]
+  }
+ ],
+ "exams": [],
+ "integratedExam": {
+  "questionsPerSubject": {
+   "theory": 20,
+   "elec": 20,
+   "law": 20,
+   "facil": 20
+  },
+  "examTimeMin": 120,
+  "passAverage": 60,
+  "subjectFailBelow": 40
+ },
+ "uiText": {
+  "dictionary": {
+   "title": "지식DB 사전",
+   "subtitle": "엔티티 검색 (manifest.knowledge 스키마 필요)"
+  }
+ }
+}

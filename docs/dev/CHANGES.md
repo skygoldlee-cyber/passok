@@ -1,6 +1,11 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-18 content: fireelec 소방설비기사(전기분야) 시험 팩 추가 (draft)
+
+- Q-net 출제기준(2026.1.1~2027.12.31, jmCd=1910) 기반 필기 4과목 구성 — 소방원론·소방전기일반·소방관계법규·소방전기시설의 구조 및 원리 (과목당 20문항·120분, 평균 60점·과락 40점)
+- `comingSoon`+`tier:draft` 등록, 교재 챕터 골격 4종 + 출제기준 ref_md 배치 — eleceng draft 팩과 동일 수준, 본문·문제은행은 후속 AI 제작 파이프라인 증산 예정
+
 ## 2026-11-18 fix: analysis-view 추출 헬퍼 보간 esc-ok 면제 — CI 이스케이프 싱크 게이트 해소
 
 - 복잡도 분해로 추출된 HTML 빌더 헬퍼(`_weakClinicHtml`·`_rhythm*Html`·`_passGap*` 등)의 innerHTML 보간이 ROAD-Q5 미이스케이프 후보로 신규 집계됨
