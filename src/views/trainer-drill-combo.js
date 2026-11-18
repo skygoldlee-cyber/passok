@@ -247,7 +247,7 @@ function submitComboAnswer(selectedBtn, optId, optIdx) {
 
     const correctIdx = q.options.findIndex((/** @type {*} */ o) => o.id === res.correctAnswer);
     _comboMarkOptions(correctIdx, isCorrect, selectedBtn);
-    if (isCorrect || !selectedBtn) st.correctCount++;
+    if (isCorrect) st.correctCount++;
     _lockComboJudgmentUi();
 
     const selectedLabel = _comboSelectedLabel(q, optIdx, optId, judgments);

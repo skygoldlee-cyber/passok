@@ -1,6 +1,11 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-18 fix(trainer): combo 판정 모드 오답이 correctCount에 잘못 집계되던 버그
+
+- `submitComboAnswer`의 `!isCorrect && selectedBtn ... else correctCount++` 구조 — 판정 모드(selectedBtn=null)에서 오답도 else 분기로 떨어져 정답 수가 부풀려짐
+- `if (isCorrect)` 단순 집계로 교정 + 판정 모드 오답 회귀 테스트 추가 (drills DOM 11→12)
+
 ## 2026-11-18 docs(design): hazmat 실무도구 수요·경쟁 판단 반영 — 목표 재정의
 
 - G1 재정의: "매주 쓰는 판정" → 정기점검·일지·소방검사 대비 (일상=일지, 전환=연 1회 점검·제출)
