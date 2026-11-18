@@ -1,6 +1,9 @@
 {
  "theory": {
   "cards": {
+   "theory_card_bc6fe9": "HCN",
+   "theory_card_4e895d": "COCl₂",
+   "theory_card_9faaf1": "NOx",
    "theory_card_edaa43": "A급 화재",
    "theory_card_2da22b": "B급 화재",
    "theory_card_bf2238": "C급 화재",
@@ -31,23 +34,23 @@
    "theory_card_fd1403": "증기 비중",
    "theory_card_ff0eeb": "전기적 성질",
    "theory_card_b0ca74": "용해성",
-   "theory_card_26d83c": "법령상 취급 특례",
+   "theory_card_ca2bc3": "제4류",
    "theory_card_0966cb": "주 소화작용",
    "theory_card_768cb2": "화재 적응성",
    "theory_card_5e406e": "약제 특장점",
    "theory_card_ffe986": "소화 제한",
    "theory_card_7c7d69": "증발잠열",
-   "theory_card_c4d513": "냉각소화",
-   "theory_card_405fb4": "제거소화",
-   "theory_card_33338e": "억제소화",
-   "theory_card_24afa2": "이산화탄소 (CO₂)"
+   "theory_card_24afa2": "이산화탄소 (CO₂)",
+   "theory_card_6be3f5": "제3종",
+   "theory_card_65f108": "단백포",
+   "theory_card_a11680": "수성막포 (AFFF)",
+   "theory_card_df9d20": "내알코올포"
   },
   "quizzes": {
    "theory_quiz_75f8ec": "초기 압력의 약 7 ~ 10배|압력 상승비",
    "theory_quiz_97be44": "비교적 완만, 압력 방출구로 완화 가능|파괴 작용",
    "theory_quiz_e33f6e": "**대부분 1 미만** (물보다 가벼움)|액체 비중",
    "theory_quiz_b11c8a": "**대부분 1 초과** (공기보다 무거움)|증기 비중",
-   "theory_quiz_ca824f": "인화점 **38℃ 이상** 등 기준별 차등 관리|법령상 취급 특례",
    "theory_quiz_fff83f": "질식작용(산소농도를 15% 이하로 저하시킴), 부수적 냉각작용|주 소화작용"
   }
  },

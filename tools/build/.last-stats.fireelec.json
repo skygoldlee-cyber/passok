@@ -1,12 +1,12 @@
 {
   "subjects": {
     "theory": {
-      "cards": 40,
-      "quizzes": 6,
+      "cards": 44,
+      "quizzes": 5,
       "files": {
         "교재/theory/1과목_소방원론_표준형.md": {
-          "cards": 41,
-          "quizzes": 6
+          "cards": 45,
+          "quizzes": 5
         }
       }
     },

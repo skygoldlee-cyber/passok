@@ -182,8 +182,8 @@ Total
 6
 Crude oil and corn prices
 원인?
-1. 석유가인상대체에너지(연료) 개발
-2. 대체연료의원료곡물
+1. 석유가인상→대체에너지(연료) 개발
+2. 대체연료의원료→곡물
 
 
 4
@@ -1653,10 +1653,10 @@ Prof. Byung-Chul Choi
 CHOI
 2
 Rudiments of mass transfer
-Mass transfer molecular + turbulent 
+Mass transfer →molecular + turbulent 
 processes
-(1) Molecular slow, small, spatial space
-(2) Turbulent velocity, eddy size
+(1) Molecular →slow, small, spatial space
+(2) Turbulent →velocity, eddy size
 A
 B(air)
 V
@@ -1676,7 +1676,7 @@ CHOI
 Mass transfer rate laws
 Fick’s Law of Diffusion
 One-dimensional binary diffusion
-(species AdiffusionB)
+(species A→diffusion→B)
 (kg/s-m2)
 Mass flux
 Binary diffusivity
@@ -1740,7 +1740,7 @@ Z’’A=
 Molecular Basis of Diffusion
 A linear concentration distribution,
 a= 2λ/3
-From v’, λ,  PV= nkB T 확산계수의온도와압력변화를결정
+From v’, λ,  PV= nkB T →확산계수의온도와압력변화를결정
 PV=nkBT,   P=nkB/V T=ρT
 ρDAB = (T3/2 P-1) ρ
 = (T3/2 P-1) P/T
@@ -1748,7 +1748,7 @@ x-a        x        x+a
 YA(x-a)
 YA(x)
 YA(x+a)
-The mass flux of AρDAB
+The mass flux of A→ρDAB
 CHOI
 10
 Species Conservation
@@ -1761,7 +1761,7 @@ CHOI
 11
 Species Conservation
 mA,cv = YA mcv = YAρVcv = YAρ A Δx,    since Vcv= A Δx
-양변에Aδx로나누고,   Δx0,   미분형태로변환
+양변에Aδx로나누고,   Δx→0,   미분형태로변환
 Steady flow
 CHOI
 12
@@ -1820,21 +1820,21 @@ N2 flow
 A
 온도변화로
 증기압을변화
-계면질량분율
+→계면질량분율
 조정
 16
 Liquid-Vapor Interface Boundary Conditions
-계면의질량분율Y A,i 측정이곤란예측?
+계면의질량분율Y A,i 측정이곤란→예측?
 계면의기체분압은온도와관련
 PA,i = Psat (Tliq.)
-분압PA,i 몰분율X A,i = Psat /P
+분압PA,i →몰분율X A,i = Psat /P
 YA,i = Psat (Tiiq.)/P {MWA/MWmix,i }
-계면의증기압구하는문제계면온도문제
+계면의증기압구하는문제→계면온도문제
 액체-증기온도연속성유지
 Tliq,i (x=0-) = Tvap,i(X=0+) = T(0)
 Energy balance
 Q.g-i - Q.g-l = m.(hvap-hliq)= m.hfg
-Q.net = m.hfg
+→Q.net = m.hfg
 m.(증발율)알면열전달률(Q.net) 구할수있다.    
 x=0
 interface
@@ -1873,7 +1873,7 @@ C 처리
 CHOI
 19
 Evaporation Rate
-YA= YA,∞    at r∞
+YA= YA,∞    at r→∞
 Transfer number, BY
 ln 안의수이므로ln(0)은없다.
 따라서전체가0이되는경우ln (1)~
@@ -1889,7 +1889,7 @@ Droplet mass
 3D2π ρl/6(dD/dt) = ditto  
 DdD = -4 {2rsρDAB/Dρl ln(1+BY)}dt
 ∫ DdD = -4 ∫{ρDAB/ρl ln(1+BY)}dt
-Do0, time 0td
+Do→0, time 0→td
 ½(-D0
 2)=-4{           }t
 -D0
@@ -1973,22 +1973,22 @@ Choi
 3
 Global vs. Elementary Reaction
 Global reaction mechanism
-F + aOx b Pr
+F + aOx →b Pr
 The fuel consumption rate
 Xi : molar concentration (kmol/m3)
 kG(T) : the global rate of coefficient, T function
 n, m : the reaction order
-Real combustion : involving intermediate species
+→Real combustion : involving intermediate species
 Choi
 4
 Global vs. Elementary Reaction
 Global reaction
-2H2 + O2 2H2O
+2H2 + O2 →2H2O
 Elementary reaction
-H2 + O2 HO2 +H
-H + O2 OH + O
-OH + H2 H2O + H
-H + O2 + M HO2 + M 
+H2 + O2 →HO2 +H
+H + O2 →OH + O
+OH + H2 →H2O + H
+H + O2 + M →HO2 + M 
 where, H, OH, HO2 : radicals
 
 
@@ -1997,7 +1997,7 @@ Choi
 5
 Elementary Reaction Rates
 Bimolecular reactions & collision theory
-A + B C + D
+A + B →C + D
 The reaction rate
 (kmol/m3-s)
 kbimolec : the global rate coefficient (temp. function)
@@ -2102,7 +2102,7 @@ CHEMKIN(Sandia)
 8
 4
 = -1
-H2 + O2 HO2 + H
+H2 + O2 →HO2 + H
 Choi
 14
 Relation between Rate Coefficients and 
@@ -2117,7 +2117,7 @@ Reaction coefficient (Kc)
 Choi
 15
 Relation between Rate Coefficients and Equilibrium Constants
-
+→
 Equilibrium Constants by Chapt.2
 Relation between mole concentration and mol. fraction,
 partial pressure
@@ -2153,16 +2153,16 @@ Combustion ;
 -formation of some radicals
 -Simplify to steady-state
 since radicals are destroyed as rapidly.
-Steady-state concentration of N atoms: d[N]/dt0
+Steady-state concentration of N atoms: d[N]/dt→0
 Steady-state concentration of N
-The time rate-of-change
+→The time rate-of-change
 Choi
 18
 Steady-State Approximation
-O2 kp2O ,          N + OH NO + H 
-N2 + O2 kG2NO
+O2 →kp→2O ,          N + OH →NO + H 
+N2 + O2 →kG→2NO
 d[NO]/dt = kG [N2]m[O2]n
-Determine kG, m and n using the elementary rate coefficient.
+→Determine kG, m and n using the elementary rate coefficient.
 ( report, important )
 Zeldovich mechanism
 slow reaction - 지배적
@@ -2486,12 +2486,12 @@ Choi
 24
 Chain Reactions
 The chain-initiation reaction
-A2 + M k1A + A + M
+A2 + M →k1→A + A + M
 The chain-propagating reactions
-A + B2 k2AB + B
-B + A2 k3AB + A
+A + B2 →k2→AB + B
+B + A2 →k3→AB + A
 The chain-terminating reactions
-A + B + M k4AB + M
+A + B + M →k4→AB + M
 초기안정된화학종
 반응에서는역반응무시
 
@@ -2505,9 +2505,9 @@ d[A]/dt= 2k1[A2][M]-k2[A][B2]+k3[B][A2]-k4[A][B][M]=0
 d[B]/dt= k2 [A][B2]-k2 [B][A2]-k4[A][B][M]=0
 B도같은방법으로구한다.
 그리고[A2], [B2], [M]의초기값을알면,
-d[A2]/dt, d[B2]/dt, d[AB]/dt를구할수있다.
+→d[A2]/dt, d[B2]/dt, d[AB]/dt를구할수있다.
 Chain-branching reactions;
-O + H2O OH + OH
+O + H2O →OH + OH
 Choi
 26
 Chapter 4
