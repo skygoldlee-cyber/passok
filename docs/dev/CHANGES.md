@@ -1,6 +1,12 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-18 fix(reader): 인라인 `$...$` LaTeX 수식 렌더링 지원
+
+- markdown-parser에 인라인 수식 토큰화+변환 추가 — AI 제작 교재의 `$S_L$`, `$\text{H}_2$` 등이 원문 노출되던 문제 해소 (fireelec 2755건, hazmat 132건 잠재 파손 포함)
+- convertMathToHtml 확장: _{}/^{} 첨자·그리스문자·기호(×·≤·→ 등)·\bar\dot\hat 결합자·\sqrt·비수식 $ 오인 차단, 수식 원문 선이스케이프로 주입 차단
+- exams.json fireelec desc 은행 수치 갱신(1,100문) — check_manifest 정합 복구
+
 ## 2026-11-18 content: fireelec 과목1 Ch4 소방안전관리 편입 + 과목2 은행 시드
 
 - Ch4-1 소방안전관리: 화재예방법 초안에서 안전관리 핵심 19조문(제24~42조) 선별 편입

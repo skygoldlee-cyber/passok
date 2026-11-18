@@ -354,3 +354,51 @@ test('정규화: \x00 보호 토큰 경로와 무관 — 일반 변환 불변', 
     assert.ok(html.includes('<strong>굵게</strong>'), '인라인 서식 유지');
     assert.ok(html.includes('<code>코드</code>'), '인라인 코드 유지');
 });
+
+// ==================== 수식 ====================
+
+test('수식: $$...$$ 블록 → math-block + 분수 span', () => {
+    const html = parseMarkdown(String.raw`$$ \frac{a}{b} $$`);
+    assert.ok(html.includes('<div class="math-block">'), '수식 블록 래퍼');
+    assert.ok(html.includes('class="math-frac"'), '분수 span');
+    assert.ok(html.includes('class="math-num">a<'), '분자');
+    assert.ok(html.includes('class="math-den">b<'), '분모');
+});
+
+test('수식: 인라인 $...$ → math-inline span (AI 제작 교재 LaTeX)', () => {
+    const html = parseMarkdown(String.raw`옴의 법칙은 $V = IR$이다`);
+    assert.ok(html.includes('<span class="math-inline">V = IR</span>'), '인라인 수식 span');
+});
+
+test('수식: 아래첨자 _{n}·_n → <sub>', () => {
+    const html = parseMarkdown(String.raw`$H_2$와 $V_{rms}$`);
+    assert.ok(html.includes('H<sub>2</sub>'), '단문자 아래첨자');
+    assert.ok(html.includes('V<sub>rms</sub>'), '그룹 아래첨자');
+});
+
+test('수식: 윗첨자 ^{x}·^x → <sup>', () => {
+    const html = parseMarkdown(String.raw`$x^{2}$과 $10^{-3}$`);
+    assert.ok(html.includes('x<sup>2</sup>'), '그룹 윗첨자');
+    assert.ok(html.includes('10<sup>-3</sup>'), '부호 포함 지수');
+});
+
+test('수식: \text{...} → 내용만 (화학식)', () => {
+    const html = parseMarkdown(String.raw`$\text{H}_2\text{-}\text{O}_2$`);
+    assert.ok(html.includes('H<sub>2</sub>-O<sub>2</sub>'), '화학식 첨자 변환');
+    assert.ok(!html.includes('text{'), 'text 명령 잔재 없음');
+});
+
+test('수식: 그리스문자·기호 치환 (\Phi \omega \Delta \gg \times)', () => {
+    const html = parseMarkdown(String.raw`$\Phi$ $\omega_0$ $\Delta h$ $v \gg w$ $a \times b$`);
+    assert.ok(html.includes('Φ'), '대문자 Phi');
+    assert.ok(html.includes('ω<sub>0</sub>'), '소문자 omega+첨자');
+    assert.ok(html.includes('Δ h'), 'Delta');
+    assert.ok(html.includes('&Gt;'), 'much-greater');
+    assert.ok(html.includes('&times;'), 'times');
+});
+
+test('수식: 인라인 수식 내 < > 는 이스케이프 (주입 차단)', () => {
+    const html = parseMarkdown(String.raw`$a < b$`);
+    assert.ok(!html.includes('< b'), '날 < 잔재 없음');
+    assert.ok(html.includes('&lt;'), '이스케이프 유지');
+});

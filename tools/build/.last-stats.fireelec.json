@@ -42,6 +42,9 @@
     }
   },
   "exams": {
+    "subject1": {
+      "questions": 911
+    },
     "subject3": {
       "questions": 116
     },
