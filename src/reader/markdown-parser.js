@@ -658,6 +658,9 @@ function convertMathToHtml(formula, opts = {}) {
         circ: '°', degree: '°', propto: '∝', cap: '∩', cup: '∪',
         subset: '⊂', supset: '⊃', forall: '∀', exists: '∃', perp: '⊥', parallel: '∥',
         hbar: 'ℏ', ell: 'ℓ', Re: 'ℜ', Im: 'ℑ', prime: '′', ast: '∗', bullet: '•',
+        oplus: '⊕', ominus: '⊖', otimes: '⊗',
+        sin: 'sin ', cos: 'cos ', tan: 'tan ', sec: 'sec ', csc: 'csc ', cot: 'cot ',
+        log: 'log ', ln: 'ln ', exp: 'exp ', lim: 'lim ', max: 'max ', min: 'min ',
         lt: '&lt;', gt: '&gt;', ldots: '…', cdots: '⋯', quad: ' ', qquad: '  '
     };
     /** @type {Record<string, string>} 단문자 이스케이프 (\% \$ \& \{ \} \, \; \! \-) */
@@ -674,15 +677,19 @@ function convertMathToHtml(formula, opts = {}) {
         html = html.replace(/\\(?:text|mathrm|mathbf|textbf|mathit|mathsf|operatorname|mbox|rm|bf|it)\s*\{([^{}]*)\}/g, '{$1}');
         if (html === prev) break;
     }
-    // \frac{A}{B} → HTML 분수 (중첩 최대 3단계)
+    // \frac{A}{B} → HTML 분수 (인자 1단 중괄호 허용 — \frac{\pi}{2\sqrt{2}} 형태, 중첩 최대 3단계, \dfrac·\tfrac 동일 처리)
     for (let depth = 0; depth < 3; depth++) {
         const prev = html;
-        html = html.replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g,
+        html = html.replace(/\\[dt]?frac\{((?:[^{}]|\{[^{}]*\})*)\}\{((?:[^{}]|\{[^{}]*\})*)\}/g,
             '<span class="math-frac"><span class="math-num">$1</span><span class="math-den">$2</span></span>');
         if (html === prev) break;
     }
-    // \sqrt{x} → √(x)
-    html = html.replace(/\\sqrt\{([^{}]*)\}/g, '&radic;($1)');
+    // \sqrt{x} → √(x) — 인자 1단 중괄호 허용(내부 \frac 등), 자체 중첩 대비 반복
+    for (let depth = 0; depth < 3; depth++) {
+        const prev = html;
+        html = html.replace(/\\sqrt\{((?:[^{}]|\{[^{}]*\})*)\}/g, '&radic;($1)');
+        if (html === prev) break;
+    }
     // 문자 악센트 — \bar \dot \hat \vec \tilde → 결합 발음 부호
     html = html.replace(/\\bar\{?([a-zA-Z])\}?/g, '$1&#x0304;');
     html = html.replace(/\\dot\{?([a-zA-Z])\}?/g, '$1&#x0307;');
@@ -690,6 +697,8 @@ function convertMathToHtml(formula, opts = {}) {
     html = html.replace(/\\hat\{?([a-zA-Z])\}?/g, '$1&#x0302;');
     html = html.replace(/\\tilde\{?([a-zA-Z])\}?/g, '$1&#x0303;');
     html = html.replace(/\\vec\{?([a-zA-Z])\}?/g, '$1&#x20D7;');
+    // \overline{...} — 다문자 상단선 (논리식 부정·켤레 표기, 결합 발음부호 대신 CSS overline)
+    html = html.replace(/\\overline\{((?:[^{}]|\{[^{}]*\})*)\}/g, '<span class="math-over">$1</span>');
     // \left( \right) \big 등 크기 명령 → 구분자만 남김 (단, \rightarrow·\bigcap 등 명령어 오인 차단)
     html = html.replace(/\\(?:left|right|bigl|bigr|Bigl|Bigr|big|Big|bigg|Bigg)(?![a-zA-Z])\s*/g, '');
     // 아래·윗첨자 — 중괄호 그룹 우선(1단 중첩 허용, \text 추출 잔여 {{..}} 대응), 단문자·명령어 후순위

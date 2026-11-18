@@ -871,6 +871,10 @@
 .textbook-reader-content .textbook-reader-section-content .math-den {
     padding: 0.1em 0.4em 0;
 }
+/* \overline{...} — 전체 상단선 (NAND·NOR 등 논리식 부정 표기) */
+.textbook-reader-content .textbook-reader-section-content .math-over {
+    text-decoration: overline;
+}
 .textbook-reader-content .textbook-reader-section-content .md-list-item {
     margin-bottom: 0.65rem;
 }

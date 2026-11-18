@@ -402,3 +402,25 @@ test('수식: 인라인 수식 내 < > 는 이스케이프 (주입 차단)', () 
     assert.ok(!html.includes('< b'), '날 < 잔재 없음');
     assert.ok(html.includes('&lt;'), '이스케이프 유지');
 });
+
+test('수식: 명령어 아래첨자 _{\Delta} → <sub>Δ</sub>', () => {
+    const html = parseMarkdown(String.raw`$R_Y = R_{\Delta} / 3$`);
+    assert.ok(html.includes('R<sub>Δ</sub>'), '그리스문자 그룹 아래첨자');
+    assert.ok(html.includes('R<sub>Y</sub>'), '단문자 그룹 아래첨자');
+});
+
+test('수식: \dfrac·중첩 인자 \frac{\pi}{2\sqrt{2}} → 분수 span', () => {
+    const d = parseMarkdown(String.raw`$S_L = \dfrac{v_u}{\sin \alpha}$`);
+    assert.ok(d.includes('class="math-frac"'), 'dfrac 분수 span');
+    const n = parseMarkdown(String.raw`$\frac{\pi}{2\sqrt{2}} \approx 1.11$`);
+    assert.ok(n.includes('class="math-frac"'), '분모 중첩 중괄호 분수');
+    assert.ok(n.includes('&radic;'), '내부 sqrt 변환');
+});
+
+test('수식: \overline{...} → math-over (논리 부정), \oplus·삼각함수', () => {
+    const html = parseMarkdown(String.raw`$Y = \overline{A \cdot B}$와 $A \oplus B$, $P = VI\cos\theta$`);
+    assert.ok(html.includes('<span class="math-over">A'), 'overline span');
+    assert.ok(html.includes('⊕'), 'oplus 기호');
+    assert.ok(html.includes('cos θ'), 'cos 함수명+그리스문자');
+    assert.ok(!html.includes('overline') && !html.includes('oplus'), '명령어 잔재 없음');
+});

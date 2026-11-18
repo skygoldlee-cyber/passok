@@ -1,6 +1,7 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **reader: 수식 렌더 확장 — 첨자·분수·논리기호 미지원 명령 처리** — `R_{\Delta}` 명령어 아래첨자, `\dfrac`/`\tfrac`·`\frac` 인자 중첩 중괄호(`\frac{\pi}{2\sqrt{2}}`), `\overline{...}`→`.math-over`(논리 부정), `\oplus`·`\ominus`·`\otimes`, 삼각함수·로그 함수명(sin/cos/tan/log/ln/exp 등) 지원. fireelec 수식 653개 렌더 감사 잔재 0
 - **fireelec 과목2 교재 오류 정정 + 빈출 충원** — kWh 환산·히스테리시스 1.6승·와전류손 철손 분류·보정률 분모(측정값)·휘트스톤 미지저항 식 정합·오버슈트 정의·오자 5건(가동/소호/만곡/클램프/무부하·벨트금지) 교정, Δ-Y변환·PT/CT·콜라우시 브리지·목표값 분류·제어요소=조절부+조작부·$A+\bar{A}B=A+B$ 추가
 - **tools: slot_insert 공용화 + $치환 회귀 테스트** — merge_draft.js의 `$1` 백레퍼런스 훼손 버그 재발 방지를 위해 슬롯 삽입 로직을 tools/ai/lib/slot_insert.js로 추출(함수 치환자), tests/unit/tools/slot-insert.test.js에 `$1`·`$15`·`$&`·`$\`` 리터럴 보존 회귀 4건
 - **fireelec 과목1 문제은행 재생성 편입** — 재편 교재 기준 draft_theory 4배치(count 12) → Q92~Q213 편입(은행 총 124문), 인용 동기화 전량 일치
