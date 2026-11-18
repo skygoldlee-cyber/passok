@@ -11,12 +11,12 @@
       }
     },
     "elec": {
-      "cards": 0,
-      "quizzes": 0,
+      "cards": 5,
+      "quizzes": 1,
       "files": {
         "교재/elec/2과목_소방전기일반_표준형.md": {
-          "cards": 0,
-          "quizzes": 0
+          "cards": 5,
+          "quizzes": 1
         }
       }
     },

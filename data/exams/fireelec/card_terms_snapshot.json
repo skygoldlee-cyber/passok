@@ -54,8 +54,16 @@
   }
  },
  "elec": {
-  "cards": {},
-  "quizzes": {}
+  "cards": {
+   "elec_card_08b441": "Chapter 01",
+   "elec_card_2e499f": "Chapter 02",
+   "elec_card_62fdff": "Chapter 03",
+   "elec_card_bfefc5": "Chapter 04",
+   "elec_card_928819": "AND"
+  },
+  "quizzes": {
+   "elec_quiz_ca4229": "모든 입력이 1일 때만 1|AND"
+  }
  },
  "law": {
   "cards": {},
