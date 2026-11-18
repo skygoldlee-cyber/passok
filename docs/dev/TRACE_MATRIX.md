@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: d03f06a4defcdc53
+> 입력 해시: d386bfe0a4843390
 > 생성: 2026-11-18 · 원천: SPEC.md(719개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -628,16 +628,16 @@
 | CO-10 | ✅ lite (기록 유무 커버리지) | 테스트 | — | src/exams/carework/care-coverage.js | tests/dom/exams/carework/care-os-modules.test.js<br>tests/unit/exams/carework/care-funnel.test.js | — | — |
 | CO-11 | 미구현 — 조건부(법무 0b + facility 재개통) | — | — | — | — | — | — |
 | CO-12 | ✅ lite (배너·계측) | 테스트 | — | src/exams/carework/care-funnel.js<br>src/exams/carework/views/care-home.js | tests/unit/exams/carework/care-funnel.test.js | — | — |
-| CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42<br>DOC-DSN-55<br>DOC-REF-20 | css/doc-export.css<br>src/content/doc-md.js<br>src/content/doc-wm.js<br>src/content/docx-utils.js<br>…외 4개 | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/doc-md.test.js<br>…외 4개 | — | — |
+| CO-13 | care-share.js·출력 뷰 공유 버튼 | E2E 테스트 | DOC-DSN-42<br>DOC-DSN-55<br>DOC-REF-20 | css/doc-export.css<br>src/content/doc-export.js<br>src/content/doc-md.js<br>src/content/doc-wm.js<br>…외 5개 | tests/dom/exams/carework/care-os-modules.test.js<br>tests/dom/exams/carework/care-share.test.js<br>tests/e2e/exams/carework/care-share.spec.js<br>tests/unit/content/doc-md.test.js<br>…외 4개 | — | — |
 | CO-14 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
 | CO-15 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | — | tests/dom/exams/carework/facility-sync.test.js | — | — |
 | CO-16 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 문서 검토 | DOC-RBK-24 | — | — | — | — |
 | CO-17 | 미구현 — 조건부(법무 0b + facility 재개통, 코드 선구축) | 테스트 | — | src/exams/carework/care-form-pdf.js<br>src/exams/carework/form-template-editor.js<br>src/exams/carework/form-template-store.js<br>src/exams/carework/views/care-custom-form.js | tests/dom/exams/carework/care-views.test.js | — | — |
 | CO-18 | 부분 구현 | 테스트 | — | src/exams/carework/form-seeds.js<br>src/exams/carework/views/care-custom-form.js | tests/dom/exams/carework/care-views.test.js | — | — |
 | CO-19 | 부분 구현 | 테스트 | — | src/content/checklist-import.js<br>src/exams/carework/care-audit.js<br>src/exams/carework/views/care-audit.js | tests/dom/exams/carework/care-views.test.js<br>tests/unit/exams/carework/audit-import.test.js | — | — |
-| CO-20 | ✅ | E2E 테스트 | — | src/content/pdf-utils.js<br>src/exams/carework/care-share.js<br>src/reader/exam-viewer.js<br>src/reader/html-viewer.js<br>…외 1개 | tests/dom/reader/print-pdf.test.js<br>tests/e2e/journeys/j-302-docs-print.spec.js<br>tests/unit/content/pdf-utils.test.js | — | — |
+| CO-20 | ✅ | E2E 테스트 | — | src/content/doc-export.js<br>src/content/pdf-utils.js<br>src/reader/exam-viewer.js<br>src/reader/html-viewer.js<br>…외 1개 | tests/dom/reader/print-pdf.test.js<br>tests/e2e/journeys/j-302-docs-print.spec.js<br>tests/unit/content/pdf-utils.test.js | — | — |
 | CO-21 | ✅ | E2E 테스트 | — | src/content/pdf-utils.js<br>src/reader/exam-viewer.js<br>src/reader/manual-viewer.js | tests/dom/reader/print-pdf.test.js<br>tests/dom/reader/print-prep.test.js<br>tests/e2e/pdf-pagination.spec.js<br>tests/unit/content/pdf-utils.test.js | — | — |
-| CO-22 | ✅ | 테스트 | DOC-DSN-52<br>DOC-REF-20 | src/content/doc-issues.js<br>src/content/doc-stamp.js<br>src/content/docx-utils.js<br>src/content/qr.js<br>…외 4개 | tests/dom/exams/cosmetic/formula-print.dom.test.js<br>tests/unit/content/doc-issues.test.js | — | — |
+| CO-22 | ✅ | 테스트 | DOC-DSN-52<br>DOC-REF-20 | src/content/doc-export.js<br>src/content/doc-issues.js<br>src/content/doc-stamp.js<br>src/content/docx-utils.js<br>…외 5개 | tests/dom/exams/cosmetic/formula-print.dom.test.js<br>tests/unit/content/doc-issues.test.js | — | — |
 
 ## 4.1 PWA & 오프라인
 

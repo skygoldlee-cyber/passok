@@ -83,6 +83,13 @@ export function findNoticeNumber(node) {
   return cands.sort((a, b) => (key(a)[0] || 0) - (key(b)[0] || 0) || (key(a)[1] || 0) - (key(b)[1] || 0)).pop();
 }
 
+/** 고시번호 파싱 — '제2026-19호' 등에서 [연, 번호] 추출 */
+const _noticeNum = (/** @type {*} */ s) => { const m = /20(\d{2})\s*-\s*(\d+)/.exec(s || ''); return m ? [+(m[1] || '0'), +(m[2] || '0')] : null; };
+
+/** 고시번호 쌍 비교 — ln이 bn보다 최신이면 true */
+const _numNewer = (/** @type {number[]} */ ln, /** @type {number[]} */ bn) =>
+  (ln[0] || 0) > (bn[0] || 0) || (ln[0] === bn[0] && (ln[1] || 0) > (bn[1] || 0));
+
 /** baseline보다 최신 고시인지 판정 (순수 함수 — 테스트용) */
 /** @param {*} status */
 export function isNewerNotice(status) {
@@ -93,9 +100,8 @@ export function isNewerNotice(status) {
   const be = base.effectiveDate || '';
   if (le && be) return le > be;
   // 날짜가 없으면 고시번호 비교 (제2026-19호 → [2026,19])
-  const num = (/** @type {*} */ s) => { const m = /20(\d{2})\s*-\s*(\d+)/.exec(s || ''); return m ? [+(m[1] || '0'), +(m[2] || '0')] : null; };
-  const ln = num(latest.notice); const bn = num(base.notice);
-  return !!(ln && bn && ((ln[0] || 0) > (bn[0] || 0) || (ln[0] === bn[0] && (ln[1] || 0) > (bn[1] || 0))));
+  const ln = _noticeNum(latest.notice); const bn = _noticeNum(base.notice);
+  return !!(ln && bn && _numNewer(ln, bn));
 }
 
 /** @param {*} latest @param {*[]} [extraDocs] */
@@ -417,26 +423,35 @@ export async function checkMfdsNoticeNow() {
   }
 }
 
-/** 상태 파일 → 표시용 행 목록 (순수 함수 — 테스트용) */
-/** @param {*} status */
-export function statusRows(status) {
-  if (!status) return [];
+/** 상태 파일 기본 4행 — 기준·최신·확인 시각·신규 여부 */
+function _baseStatusRows(/** @type {*} */ status) {
   const b = status.baseline || {};
   const l = status.latest || {};
-  const rows = [
+  return [
     ['기준(번들 DB)', `${b.notice || '—'} · 시행 ${b.effectiveDate || '—'}`],
     ['최신 확인', `${l.notice || '—'} · 시행 ${l.effectiveDate || '—'}${l.serialNo ? ` · 일련번호 ${l.serialNo}` : ''}`],
     ['마지막 자동 확인', status.checkedAt || '—'],
     ['신규 고시', status.newerFound ? '있음 — 원문 확인 필요' : '없음'],
   ];
-  // 문서별 기준↔최신 비교 — 개정 감지 시 '갱신 필요' 표시
-  if (Array.isArray(status.docs) && status.docs.length) {
-    rows.push(['감시 문서', `${status.docs.length}종 — 기준 고시 ↔ law.go.kr 최신`]);
-    for (const d of status.docs) {
-      const mark = (d.newer ? ' ⚠ 갱신 필요' : (d.error ? ' (조회 실패)' : '')) + (d.pending ? ' ⏳ 시행 예정 개정본' : '');
-      rows.push([`· ${d.name}`, `${d.baselineNotice || '—'}(${d.baselineDate || '—'}) → ${d.latestNotice || '—'}(${d.latestDate || '—'})${mark}`]);
-    }
+}
+
+/** 문서별 기준↔최신 비교 행 — 개정 감지 시 '갱신 필요' 표시 */
+function _docStatusRows(/** @type {*[]} */ docs) {
+  const rows = [['감시 문서', `${docs.length}종 — 기준 고시 ↔ law.go.kr 최신`]];
+  for (const d of docs) {
+    const mark = (d.newer ? ' ⚠ 갱신 필요' : (d.error ? ' (조회 실패)' : '')) + (d.pending ? ' ⏳ 시행 예정 개정본' : '');
+    rows.push([`· ${d.name}`, `${d.baselineNotice || '—'}(${d.baselineDate || '—'}) → ${d.latestNotice || '—'}(${d.latestDate || '—'})${mark}`]);
   }
+  return rows;
+}
+
+/** 상태 파일 → 표시용 행 목록 (순수 함수 — 테스트용) */
+/** @param {*} status */
+export function statusRows(status) {
+  if (!status) return [];
+  const rows = _baseStatusRows(status);
+  // 문서별 기준↔최신 비교 — 개정 감지 시 '갱신 필요' 표시
+  if (Array.isArray(status.docs) && status.docs.length) rows.push(..._docStatusRows(status.docs));
   return rows;
 }
 

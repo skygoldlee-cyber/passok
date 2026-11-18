@@ -91,11 +91,6 @@
       "max": 14,
       "sum": 14
     },
-    "src/exams/carework/care-share.js": {
-      "count": 3,
-      "max": 19,
-      "sum": 46
-    },
     "src/exams/carework/care-trend.js": {
       "count": 1,
       "max": 15,
@@ -372,9 +367,9 @@
       "sum": 27
     },
     "src/shell/notice-check.js": {
-      "count": 9,
-      "max": 21,
-      "sum": 126
+      "count": 8,
+      "max": 15,
+      "sum": 99
     },
     "src/shell/onboarding.js": {
       "count": 1,
@@ -397,9 +392,9 @@
       "sum": 12
     },
     "src/study/analysis-engine.js": {
-      "count": 11,
-      "max": 31,
-      "sum": 186
+      "count": 10,
+      "max": 17,
+      "sum": 129
     },
     "src/study/concept-drill.js": {
       "count": 2,
@@ -488,8 +483,8 @@
     },
     "src/views/analysis-view.js": {
       "count": 7,
-      "max": 33,
-      "sum": 132
+      "max": 15,
+      "sum": 88
     },
     "src/views/backup.js": {
       "count": 1,

@@ -1784,6 +1784,9 @@ npm run deploy
 
 ### D. 새 Formula OS 스토어 추가
 
+> **스토어 패턴 선택**: **신규 스토어는 `src/core/entity-store.js` 팩토리를 우선 사용**한다 (선언형 CRUD·한도·훅).
+> cosmetic 기존 스토어는 팩토리 도입 이전 코드로, append+숫자 타임스탬프(`Date.now()`)+도메인 반환형(`{ok,<item>}`)+도메인 정렬(unshift·문자열 스탬프인 entity-store 계약과 상이)이므로 **억지 이행하지 않고 store-fields 위에 유지**한다 — 실질 중복은 CRUD 꼬리 ~10줄이고 나머지는 도메인 검증·정제라 이행 이득이 적다.
+
 1. `src/core/store-fields.js`의 공통 헬퍼(`loadItems`/`saveItems`/`newId`/`clamp*`) 재사용 (cosmetic은 `store-utils.js` re-export 경유 가능)
 2. `*_LIMIT_FREE` 상수 + `canCreate()` 게이트로 Free 한도 적용
 3. 스키마 정제 함수(`sanitize*`)로 입력 정규화

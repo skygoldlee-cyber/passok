@@ -71,6 +71,7 @@
                 "src/content/doc-wm.js",
                 "src/content/doc-stamp.js",
                 "src/content/doc-issues.js",
+                "src/content/doc-export.js",
                 "src/content/doc-md.js",
                 "src/content/md-tokens.js",
                 "src/content/qr.js",

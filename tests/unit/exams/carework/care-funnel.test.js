@@ -41,11 +41,11 @@ test('공단 검색 링크 — 카드 반복 없이 뷰 상단 단일 위치', (
 test('CO-13 공유 — careShare 핸들러 등록 + 뷰 버튼 존재', () => {
     assert.match(readFileSync('src/practice-registry.js', 'utf8'), /careShare/);
     assert.match(readFileSync('html/exams/carework/care-handover.html', 'utf8'), /data-click="careHandoverExport"/); // 기록 우선 게이트 래퍼
-    assert.match(readFileSync('src/exams/carework/care-share.js', 'utf8'), /navigator\.share/);
+    assert.match(readFileSync('src/content/doc-export.js', 'utf8'), /navigator\.share/);
 });
 
 test('CO-13 프라이버시 — 수급자 데이터 공유는 경고+인명 가림', () => {
-    const src = readFileSync('src/exams/carework/care-share.js', 'utf8');
+    const src = readFileSync('src/content/doc-export.js', 'utf8');
     assert.match(src, /기관 정책을 확인하세요/); // 한 번 클릭 공유 — 경고는 비차단 안내
     assert.match(src, /flag === 'mask'/);
     for (const f of ['care-log', 'care-handover', 'care-incident', 'care-client', 'care-visit', 'care-roster']) {
@@ -54,11 +54,12 @@ test('CO-13 프라이버시 — 수급자 데이터 공유는 경고+인명 가�
 });
 
 test('CO-13 공유 — 미생성 시 자동 생성 + 폼 폴백 (단독 완결)', () => {
-    const src = readFileSync('src/exams/carework/care-share.js', 'utf8');
+    const src = readFileSync('src/content/doc-export.js', 'utf8');
+    const adapterSrc = readFileSync('src/exams/carework/care-share.js', 'utf8');
     assert.match(src, /&& gen && !gen\.endsWith/); // 미생성 시 생성 핸들러 자동 실행
     assert.match(src, /_formText/); // 생성 실패 시 폼 양식 폴백
-    assert.match(src, /f3 === 'mask'/); // mask 생략 시 3번째가 생성 핸들러
-    assert.match(src, /care-calc-err/); // 오류 마커는 양식으로 폴백
+    assert.match(src, /f\[2\] === 'mask'/); // mask 생략 시 3번째가 생성 핸들러
+    assert.match(adapterSrc, /errSel: '\.care-calc-err'/); // 오류 마커는 양식으로 폴백 (어댑터 주입)
     for (const [f, g] of [['care-calc', 'careCalcRun'], ['care-log', 'careLogGenerate'], ['care-handover', 'careHandoverGenerate'], ['care-incident', 'careIncidentGenerate'], ['care-client', 'careClientCsvExport'], ['care-visit', 'careVisitCsvExport'], ['care-roster', 'careRosterCsvExport']]) {
         assert.match(readFileSync(`html/exams/carework/${f}.html`, 'utf8'), new RegExp(`\\|${g}[|"]`));
     }
@@ -112,9 +113,16 @@ test('CO-10 커버리지 배너 — 보간 출력은 esc 적용 (싱크 규약)'
 });
 
 test('CO-13 내보내기 메뉴 — 공유·인쇄·복사·PDF·Excel 통합 진입, 항상 반응 보장', () => {
-    const src = readFileSync('src/exams/carework/care-share.js', 'utf8');
+    // 골격은 content/doc-export.js로 승격 — 구현 계약은 그쪽 소스 검사, 어댑터는 주입·별칭만 검사
+    const src = readFileSync('src/content/doc-export.js', 'utf8');
+    const adapter = readFileSync('src/exams/carework/care-share.js', 'utf8');
+    assert.match(adapter, /createDocExport/); // 공용 팩토리에 carework 프로바이더 주입
+    assert.match(adapter, /docShare/);
+    assert.match(adapter, /shareAudit/);
+    assert.match(adapter, /auditKey: STORAGE_KEYS\.CARE_SHARE_AUDIT/);
+    assert.match(adapter, /sheetCls: 'care-export-sheet'/); // 시트 클래스는 care-tools.css 계약
     assert.match(src, /_openMenu/); // 인쇄 버튼 통합 — 내보내기 메뉴 시트
-    assert.match(src, /care-export-sheet/);
+    assert.match(src, /sheetCls/);
     assert.match(src, /data-pro-feature/); // PRO 배지는 메뉴 항목에 표시
     assert.match(src, /_copyRaw/);
     assert.match(src, /clipboard\?\.writeText|clipboard\.writeText/);
@@ -123,7 +131,7 @@ test('CO-13 내보내기 메뉴 — 공유·인쇄·복사·PDF·Excel 통합 �
     assert.match(src, /top:100vh/);
     assert.match(src, /style\.color = '#000'/);
     assert.match(src, /typeof navigator.canShare !== 'function'/); // canShare 미지원 브라우저도 공유 시도
-    assert.match(src, /CARE_SHARE_AUDIT/);
+    assert.match(src, /auditKey/); // 감사 로그 키는 어댑터 주입
     assert.match(src, /const _shareBtn = /); // 파일 생성 후 탭-제스처로 share() 실행 버튼
     assert.match(src, /const diag = /); // 진단은 닫을 때까지 남는 배너 (토스트는 다운로드 창에 가려짐, alert는 규약 금지)
     assert.match(src, /공유 시트를 열지 못했습니다/); // 거절 사유 진단 표시
