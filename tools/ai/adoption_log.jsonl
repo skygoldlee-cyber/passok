@@ -31,3 +31,4 @@
 {"ts":"2026-11-16T02:49:20.435Z","draft":"C:\\Project\\PassOK\\tmp\\ai_drafts\\carework\\draft_careprac.md","kind":"draft","target":"carework","bank":"과목2_요양보호실기_문제은행.md","generated":30,"applied":30,"skipped":0,"model":"gemini-3.8-flash","genDate":"2026-11-16T02:48:55.667Z","edited":true}
 {"ts":"2026-11-16T09:00:19.611Z","draft":"traps_subject1.md","kind":"trap","target":"carework","bank":"subject1","generated":62,"applied":62,"skipped":0,"model":"review"}
 {"ts":"2026-11-16T09:00:19.634Z","draft":"traps_subject2.md","kind":"trap","target":"carework","bank":"subject2","generated":80,"applied":80,"skipped":0,"model":"review"}
+{"ts":"2026-11-18T06:37:55.338Z","draft":"C:\\Project\\PassOK\\tmp\\ai_drafts\\fireelec\\draft_law.md","kind":"draft","target":"fireelec","bank":"과목3_문제은행.md","generated":115,"applied":115,"skipped":0,"model":"gemini-3.8-flash","genDate":"2026-11-18T06:36:54.919Z","edited":true}

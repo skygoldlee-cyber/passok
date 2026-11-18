@@ -41,5 +41,9 @@
       }
     }
   },
-  "exams": {}
+  "exams": {
+    "subject3": {
+      "questions": 116
+    }
+  }
 }

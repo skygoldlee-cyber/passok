@@ -1408,7 +1408,10 @@ const _EXAM_TABLES = {
     "fireelec": {
         contentRoot: "content/exams/fireelec",
         SUBJECT_DIR_MAP: {
-
+        "theory": "과목1",
+        "elec": "과목2",
+        "law": "과목3",
+        "facil": "과목4"
         },
         REF_MD_SUBJECTS: {
 
