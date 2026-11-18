@@ -2,7 +2,7 @@
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 // 발생경위·조치·가족 통지를 표준 사고보고 문서로 조립 — 기관 평가 증적 서식 기반
 import { toCsv } from '../../content/csv-utils.js';
-import { fmtDocName, fmtDocNames } from './name-fmt.js';
+import { fmtDocName, fmtDocNames } from '../../content/name-fmt.js';
 
 export const INCIDENT_TYPES = [
     { key: 'fall', label: '낙상' },

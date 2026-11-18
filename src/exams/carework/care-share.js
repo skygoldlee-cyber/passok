@@ -9,7 +9,7 @@ import { docWmText, docWmPng } from '../../content/doc-wm.js';
 import { docStamp } from '../../content/doc-stamp.js';
 import { qrPng, qrDataUrl } from '../../content/qr.js';
 import { docHeadHtml, getOrgName, getDocSign, docSignImages } from './facility.js';
-import { maskDocName, maskDocPhone } from './name-fmt.js';
+import { maskDocName, maskDocPhone } from '../../content/name-fmt.js';
 import { pinDocSignBottom } from './doc-md.js';
 import { docPrefix, recordDocIssue, nextDocRev } from './doc-issue-store.js';
 import { getJSON, setJSON } from '../../core/storage.js';

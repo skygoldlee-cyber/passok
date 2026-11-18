@@ -2,7 +2,7 @@
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 // 제공기준 고시 기록 항목 기반 표준 일지 텍스트 자동 조립 (DOC-DSN-42 Phase 3)
 import { toCsv } from '../../content/csv-utils.js';
-import { fmtDocName } from './name-fmt.js';
+import { fmtDocName } from '../../content/name-fmt.js';
 
 export const SERVICE_TYPES = [
     { key: 'visit-care', label: '방문요양' },

@@ -3,7 +3,7 @@
 // 방문예약(scheduled) → 방문결과(done)/취소(canceled) 상태 전이와 면회 기록 문서 생성
 import { toCsv } from '../../content/csv-utils.js';
 import { mdTable } from './doc-md.js';
-import { fmtDocName } from './name-fmt.js';
+import { fmtDocName } from '../../content/name-fmt.js';
 
 export const RELATIONS = [
     { key: 'spouse', label: '배우자' },

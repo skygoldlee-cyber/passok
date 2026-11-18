@@ -9,7 +9,7 @@
 
 `node tools/check/check_complexity.js` (eslint complexity 임계 10, Δ 비교는 동일 임계 유지 필수).
 
-- 기준선: **309건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
+- 기준선: **308건 경고 / 임계 10 초과** — 파일별 {count,max,sum} 비증가 게이트가 신규 진입·악화를 차단
 - 분해 순서: 복잡도 점수 내림차순 — 상위부터 처리해야 곡선이 꺾인다
 - 분해 완료 시 `--update`로 기준선을 축소하고 `--report`로 이 표를 재생성한다
 - 분해 규약: 렌더 분기는 `if` 체인 → early return·테이블 조회·서브함수 추출로 내리고, 동작 변경 없이 구조만 정리한다. 대형 렌더 함수는 섹션별 private 렌더 함수로 분할
@@ -29,7 +29,6 @@
 | 29 | `searchAll` | src/shell/command-palette.js:109 |
 | 29 | `renderQuizQuestion` | src/views/quiz/quiz.js:163 |
 | 29 | `submitComboAnswer` | src/views/trainer-drill-combo.js:166 |
-| 28 | `auditRowsToSections` | src/exams/carework/audit-import.js:25 |
 | 28 | `buildPrintHtml` | src/exams/cosmetic/views/formula-io.js:37 |
 | 28 | `_parseBlock` | src/written/written-practice.js:78 |
 | 27 | `performTextbookSearch` | src/views/textbook-search.js:170 |
@@ -111,7 +110,7 @@
 | 17 | `populateCustomerFields` | src/exams/cosmetic/views/formula-fields.js:17 |
 | 17 | `_scrollToLine` | src/reader/exam-viewer.js:691 |
 | 17 | `_cleanTableTermDesc` | src/reader/textbook-core.js:178 |
-| 17 | `parseTextbookContent` | src/reader/textbook-core.js:495 |
+| 17 | `parseTextbookContent` | src/reader/textbook-core.js:497 |
 | 17 | `_getSearchIndex` | src/search/search-index.js:226 |
 | 17 | `runUnifiedSearch` | src/search/search-index.js:448 |
 | 17 | `isNewerNotice` | src/shell/notice-check.js:88 |
@@ -160,7 +159,7 @@
 | 15 | `formulaCalcSave` | src/exams/cosmetic/views/formula-calc.js:628 |
 | 15 | `writeCustomerInputs` | src/exams/cosmetic/views/formula-fields.js:200 |
 | 15 | `renderRecommend` | src/exams/cosmetic/views/formula-recommend.js:24 |
-| 15 | `renderIngQuestion` | src/exams/cosmetic/views/trainer-ingredients.js:172 |
+| 15 | `renderIngQuestion` | src/exams/cosmetic/views/trainer-ingredients.js:173 |
 | 15 | `mapSourceToRef` | src/pdf-registry.js:1491 |
 | 15 | `checkMfdsNotice` | src/shell/notice-check.js:285 |
 | 15 | `fetchLatestFor` | src/shell/notice-check.js:353 |

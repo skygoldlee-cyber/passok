@@ -71,11 +71,6 @@
       "max": 13,
       "sum": 13
     },
-    "src/exams/carework/audit-import.js": {
-      "count": 1,
-      "max": 28,
-      "sum": 28
-    },
     "src/exams/carework/care-ai.js": {
       "count": 1,
       "max": 17,
