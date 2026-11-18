@@ -90,7 +90,7 @@ describe('carework 첫 진입 3컷 안내', () => {
 
 describe('carework 음성 입력', () => {
     it('Web Speech API 토글·폴백·핸들러 계약', () => {
-        const voice = readFileSync(new URL('../../../src/exams/carework/care-voice.js', import.meta.url), 'utf8');
+        const voice = readFileSync(new URL('../../../src/voice.js', import.meta.url), 'utf8');
         const inc = readFileSync(new URL('../../../src/exams/carework/views/care-incident.js', import.meta.url), 'utf8');
         const vis = readFileSync(new URL('../../../src/exams/carework/views/care-visit.js', import.meta.url), 'utf8');
         const reg = readFileSync(new URL('../../../src/practice-registry.js', import.meta.url), 'utf8');
@@ -99,8 +99,8 @@ describe('carework 음성 입력', () => {
         assert.match(voice, /voiceButtonsInit/);                               // 미지원 숨김
         assert.match(inc, /export \{ careIncidentVoiceToggle \}/);             // 뷰별 별칭 re-export
         assert.match(vis, /export \{ careVisitVoiceToggle \}/);
-        assert.match(voice, /careIncidentVoiceToggle = careVoiceToggle/);      // 별칭 구현
-        assert.match(voice, /careVisitVoiceToggle = careVoiceToggle/);
+        assert.match(voice, /careIncidentVoiceToggle = voiceToggle/);      // 별칭 구현
+        assert.match(voice, /careVisitVoiceToggle = voiceToggle/);
         assert.match(inc, /voiceButtonsInit\(\)/);                             // init에서 숨김 적용
         assert.match(reg, /careIncidentVoiceToggle/);                          // 핸들러 등록
         assert.match(reg, /careVisitVoiceToggle/);

@@ -238,6 +238,19 @@ describe('트레이너 드릴 — O/X·복수정답형·취약 리뷰', () => {
         expect(el('combo-result').textContent).toContain('ㄱㄴㄷ 조합 드릴 완료');
     });
 
+    it('복수정답형 — 판정 모드 오답도 correctCount 미증가', async () => {
+        startComboDrill(1);
+        await flushAsync();
+        // ㄱ=O, ㄴ=O 판정 → 조합 'ㄱㄴ' → 선지 ③ 일치 → 오답 (정답은 ①'ㄱ')
+        el('combo-statements').querySelector('[data-stmt-id="ㄱ"]')
+            .querySelector('[data-v="true"]').click();
+        el('combo-statements').querySelector('[data-stmt-id="ㄴ"]')
+            .querySelector('[data-v="true"]').click();
+        submitComboJudgments();
+        expect(el('combo-feedback-title').textContent).toContain('오답');
+        expect(state.trainer.combo.correctCount).toBe(0);
+    });
+
     it('복수정답형 — 선지 직접 선택 경로 + 오답 피드백', async () => {
         startComboDrill(1);
         await flushAsync();

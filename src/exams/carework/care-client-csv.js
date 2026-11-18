@@ -4,7 +4,7 @@
 // 서류 열은 ADMIT_SECTIONS의 짧은 이름(— 앞부분)으로 매칭; 수납 표시: ○/O/✓/x/1 등
 import { ADMIT_SECTIONS } from './care-admit.js';
 import { mdTable } from './doc-md.js';
-import { fmtDocName, fmtDocNames } from './name-fmt.js';
+import { fmtDocName, fmtDocNames } from '../../content/name-fmt.js';
 
 export const CLIENT_STATUSES = ['입소대기', '입소중', '재가이용'];
 export const ADMIT_ITEMS = ADMIT_SECTIONS.flatMap(s => s.items.map(i => ({

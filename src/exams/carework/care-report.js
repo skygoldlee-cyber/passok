@@ -1,7 +1,7 @@
 // src/exams/carework/care-report.js
 // @spec CO-09 — 보호자 주간 리포트 (대상자 주간 기록 요약 텍스트)
 import { localDateKey } from '../../core/utils.js';
-import { fmtDocName } from './name-fmt.js';
+import { fmtDocName } from '../../content/name-fmt.js';
 /** 최근 7일 기록을 대상자별 요약 텍스트로 — clientId 우선·스냅샷 근사
  * @param {string} name
  * @param {{logs?: any[], visits?: any[], incidents?: any[]}} stores

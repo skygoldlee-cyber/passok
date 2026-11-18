@@ -94,6 +94,22 @@
     ]
   },
   {
+    "version": "v20261117-331fd22",
+    "date": "2026-11-17",
+    "notes": [
+      "[문서·hazmat] 과목3 8~10장 정독 리뷰 — 법령 수치 원문 대조 오류 5건 정정",
+      "hazmat 3과목 6차: 38℃ 특례 문구 정정·8장 소주제 헤딩 재편",
+      "hazmat 3과목 구조 정리: 8장 헤딩 계층 재편·반복 서술 축약",
+      "hazmat 3과목: 옥외저장소 공지 단축 하한 오기 정정",
+      "hazmat 3과목 법령 수치 원문 대조: 별표 세부 문구 보정",
+      "hazmat 3과목 네 번째 재검토: 옥외저장소 공지 구간·옥내저장소 단축 단서 정정",
+      "hazmat 3과목 세 번째 재검토: 옥내저장소 일반 공지 표·특수인화물 저장 기준 정정",
+      "hazmat 3과목 재검토 반영: 할로젠간화합물 복원·등급 정정·8장 수치 보강",
+      "hazmat 3과목: 법정 수치 표 보강·사실 오류 정정·용어 통일",
+      "[content·hazmat] 2과목 반복 서술 정리 + 📌 메타 헤딩 대단원 하위로 강등"
+    ]
+  },
+  {
     "version": "v20261116-a66ca3b",
     "date": "2026-11-16",
     "notes": [
@@ -249,6 +265,79 @@
       "[기능·carework] 문서번호 추적·QR·발행 대장 + (인) 위 서명 오버레이",
       "[정리·release] v20261114-cfd1956 스탬프 확정 [no-docs]",
       "[정리·release] v20261113-52523f5 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-a1dfc7f",
+    "date": "2026-11-13",
+    "notes": [
+      "[기능·carework] HWPX(아래한글) 양식 추출 + 출력 라벨 한글 호환 표기",
+      "[문서·carework] 전문가 검토 의뢰서 (DOC-BIZ-12) — 법무 0b 검토 패키지",
+      "[기능·ops] 기관 데이터 백업·복원 도구 + 운영 절차 런북 (법무 0b 별지2 잔여 해소)",
+      "[문서·carework] 처리방침 수탁 조항 + 계약서 리전 정정 — 법무 0b A2",
+      "[문서·carework] 개인정보처리 위탁계약서 초안 — DOC-BIZ-11, 법무 0b 산출물",
+      "[문서·carework] 기관 자체 서버DB 상황별 연동 — DSN-51 §6 추가",
+      "[문서·carework] 기관 사이트 라이선스 설계 — DOC-DSN-51",
+      "[정리·release] v20261113-be6ce0d 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-be6ce0d",
+    "date": "2026-11-13",
+    "notes": [
+      "[정리] 배포 전 파생물 재생성 [no-test]",
+      "[수정·content] 실무매뉴얼 보호자 전달 문구 완충 — 정량 주장 → 절차 지시",
+      "[테스트·e2e] 시각 기준선 자동 재생성 — CI 실패 감지 후 복구 (linux) [skip ci]",
+      "[테스트·e2e] 시각 회귀 표면 확장 + 오클루전 공용 검증 + 격리 스펙 근본 수정·해제",
+      "[수정·ui] 라이선스 코드 입력 진입점 단일화 — 설정 패널만 유지",
+      "[정리·release] v20261113-b582e0c 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-b582e0c",
+    "date": "2026-11-13",
+    "notes": [
+      "[수정·capture] manual-07-roster 상단 잘림 — sticky 헤더 캡처 제외",
+      "[정리·release] v20261113-44da6c1 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-44da6c1",
+    "date": "2026-11-13",
+    "notes": [
+      "[문서] entity-store.js 디렉토리 구조 등록 — AGENTS·ARCHITECTURE 트리 정합",
+      "[리팩터링·store] entity-store 팩토리 신설 + carework 스토어 7개 이행",
+      "[리팩터링·practice] registry 피처 디스크립터 팩토리화 — enter 공용 구현 (910→662)",
+      "[리팩터링·pwa] standalone 감지 core/utils 공용화 — 5파일 판정 중복 제거",
+      "[정리] sw 버전 스탬프 + test_stats 실측 갱신 (build:derived) [no-docs] [no-test]",
+      "[리팩터링·complexity] AU-10 잔여 함수 분해 — auth-view·quiz 래칫 복구 (324→323) [no-test]",
+      "[정리·release] v20261113-6c631e2 스탬프 확정 [no-docs]",
+      "[정리·release] v20261112-fb182cb 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-6c631e2",
+    "date": "2026-11-13",
+    "notes": [
+      "[문서·design] AU-10 운영 적용 절차 §7 추가 — 콘솔 접근 경로 명시",
+      "[기능·auth] AU-10 로그인 수단 연결 구현 — linkIdentity·분리 방지·동일인 재활성",
+      "[정리·release] v20261113-e4f4ae9 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
+    "version": "v20261113-e4f4ae9",
+    "date": "2026-11-13",
+    "notes": [
+      "[수정·test+capture] DOM 단언 라벨 정합 + 사이드바 뷰포트 1450 압축",
+      "[기능·tools] DA-26 파이프라인 반영 — snap/shotPng 둘레 여백 자동화 + 전 삽화 재캡처",
+      "[문서] DA-26 신설 — 삽화 캡처 둘레 여백 규약 명문화",
+      "[기능·tools] manual-15-mask 캡처 자동화 — 수동 산출물을 SHOTS에 등록",
+      "[수정·content] 실무매뉴얼 삽화 전면 재캡처 — UX-TXT-01 반영 22장",
+      "[수정·content] manual-14-forms 삽화 재캡처 — UX-TXT-01 중간 분절 해소",
+      "[기능·carework] DOC-BIZ-10 후속 3건 — 🔖빈출 표기 정정·계정 연결 설계·exam-sim 검증",
+      "[문서·carework] DOC-BIZ-10 이용자 관점 평가 등재 — 외부 유료 전환 평가 + 코드 대조",
+      "[문서·carework] DOC-BIZ-07 인터뷰 스크립트 v3 — 판정 로직·질문 설계 정합",
+      "[정리·release] v20261113-9bda05c 스탬프 확정 [no-docs]"
     ]
   }
 ]

@@ -186,12 +186,11 @@ export function startIntegratedMockExam() {
     });
 }
 
-function _startIntegratedMockExamImpl(mixCombo = false) {
-    // 과목별 문제들 동적 수집 (registry 기반 — 과목 키별 자동 분류)
-    const registry = getActiveRegistry();
-    const integratedConfig = registry && registry.integratedExam ? registry.integratedExam.questionsPerSubject : null;
-    const subjects = registry && registry.subjects ? registry.subjects : [];
-
+/**
+ * EXAM_DATA → 과목별 문제 버킷 수집 (registry 매핑 우선, 없으면 subjectN 접두사 폴백).
+ * @returns {{subjectQuestions: Object.<string,*[]>, subjectCounts: Object.<string,number>}}
+ */
+function _collectSubjectBuckets(/** @type {*} */ registry, /** @type {*[]} */ subjects, /** @type {*} */ integratedConfig) {
     // 과목별 문제 버킷 (동적 생성)
     /** @type {Object.<string,Array<*>>} */
     const subjectQuestions = {};
@@ -230,32 +229,45 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
             sq.push(...questions);
         }
     });
+    return { subjectQuestions, subjectCounts };
+}
 
-    // 모든 과목에 문제가 있는지 확인
-    const missingSubjects = subjects.filter(s => (subjectQuestions[s.key] || []).length === 0);
-    if (missingSubjects.length > 0) {
-        showToast("모의고사 데이터가 불완전합니다. 모든 과목의 모의고사가 정상 로드되었는지 확인하세요.", "error");
-        return;
-    }
+/** 복수정답형 혼합 풀 수집 — mixCombo 시 COMBO_DRILLS_subjectN 번들을 과목키로 매핑 */
+function _comboPoolsBySubject(/** @type {*[]} */ subjects, /** @type {boolean} */ mixCombo) {
+    /** @type {Object.<string,*[]>} */
+    const pools = {};
+    if (!mixCombo) return pools;
+    subjects.forEach((subj, idx) => {
+        const bundle = (typeof window !== 'undefined') ? /** @type {*} */ (window)[`COMBO_DRILLS_subject${idx + 1}`] : null;
+        if (Array.isArray(bundle)) pools[subj.key] = bundle;
+    });
+    return pools;
+}
 
-    // 과목별 무작위 선택 함수
-    const getRandomSample = (/** @type {*[]} */ arr, /** @type {number} */ count, /** @type {string} */ subjectId) => {
+/** 단일 과목 샘플링 — combo 배정분을 제하고 뽑은 뒤 combo 문항을 채워 셔플 */
+function _sampleSubjectQuestions(/** @type {*} */ subj, /** @type {number} */ count, /** @type {*[]} */ questions, /** @type {*[]} */ pool) {
+    const getRandomSample = (/** @type {*[]} */ arr, /** @type {number} */ cnt, /** @type {string} */ subjectId) => {
         const shuffled = shuffle(arr);
-        return shuffled.slice(0, count).map(q => ({
+        return shuffled.slice(0, cnt).map(q => ({
             ...q,
             subject: subjectId // 과목 정보 태깅
         }));
     };
-
-    // 복수정답형 혼합: 과목별 배정의 약 20%를 combo 문항으로 교체 (선지 다양화, 실전 패턴 훈련)
-    /** @type {Object.<string,*[]>} */
-    const comboPoolBySubject = {};
-    if (mixCombo) {
-        subjects.forEach((subj, idx) => {
-            const bundle = (typeof window !== 'undefined') ? /** @type {*} */ (window)[`COMBO_DRILLS_subject${idx + 1}`] : null;
-            if (Array.isArray(bundle)) comboPoolBySubject[subj.key] = bundle;
-        });
+    const comboCount = Math.min(Math.round(count * 0.2), pool.length);
+    const picked = getRandomSample(questions, count - comboCount, subj.key);
+    if (comboCount > 0) {
+        shuffle(pool).slice(0, comboCount).forEach(q =>
+            picked.push(comboToSimQuestion(q, subj.key)));
     }
+    return shuffle(picked);
+}
+
+/**
+ * 과목별 샘플링 — 복수정답형 혼합 시 배정의 약 20%를 combo 문항으로 교체 (선지 다양화, 실전 패턴 훈련).
+ * @returns {{allSelected:*[], expectedTotal:number, shortageSubjects:string[]}}
+ */
+function _sampleIntegratedQuestions(/** @type {*[]} */ subjects, /** @type {Object.<string,*[]>} */ subjectQuestions, /** @type {Object.<string,number>} */ subjectCounts, /** @type {boolean} */ mixCombo) {
+    const comboPoolBySubject = _comboPoolsBySubject(subjects, mixCombo);
 
     // 과목별 샘플링 (registry에서 동적 조회)
     /** @type {Object.<string,*[]>} */
@@ -264,22 +276,35 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
     const shortageSubjects = [];
     for (const subj of subjects) {
         const count = subjectCounts[subj.key] || 0;
-        if (count > 0) {
-            expectedTotal += count;
-            if ((subjectQuestions[subj.key] || []).length < count) {
-                shortageSubjects.push(`${subj.shortName || subj.name || subj.key} ${(subjectQuestions[subj.key] || []).length}/${count}`);
-            }
-            const pool = comboPoolBySubject[subj.key] || [];
-            const comboCount = Math.min(Math.round(count * 0.2), pool.length);
-            const picked = getRandomSample(subjectQuestions[subj.key] || [], count - comboCount, subj.key);
-            if (comboCount > 0) {
-                shuffle(pool).slice(0, comboCount).forEach(q =>
-                    picked.push(comboToSimQuestion(q, subj.key)));
-            }
-            selectedBySubject[subj.key] = shuffle(picked);
+        if (count <= 0) continue;
+        expectedTotal += count;
+        const questions = subjectQuestions[subj.key] || [];
+        if (questions.length < count) {
+            shortageSubjects.push(`${subj.shortName || subj.name || subj.key} ${questions.length}/${count}`);
         }
+        const pool = comboPoolBySubject[subj.key] || [];
+        selectedBySubject[subj.key] = _sampleSubjectQuestions(subj, count, questions, pool);
     }
     const allSelected = subjects.flatMap(s => selectedBySubject[s.key] || []);
+    return { allSelected, expectedTotal, shortageSubjects };
+}
+
+function _startIntegratedMockExamImpl(mixCombo = false) {
+    // 과목별 문제들 동적 수집 (registry 기반 — 과목 키별 자동 분류)
+    const registry = getActiveRegistry();
+    const integratedConfig = registry && registry.integratedExam ? registry.integratedExam.questionsPerSubject : null;
+    const subjects = registry && registry.subjects ? registry.subjects : [];
+
+    const { subjectQuestions, subjectCounts } = _collectSubjectBuckets(registry, subjects, integratedConfig);
+
+    // 모든 과목에 문제가 있는지 확인
+    const missingSubjects = subjects.filter(s => (subjectQuestions[s.key] || []).length === 0);
+    if (missingSubjects.length > 0) {
+        showToast("모의고사 데이터가 불완전합니다. 모든 과목의 모의고사가 정상 로드되었는지 확인하세요.", "error");
+        return;
+    }
+
+    const { allSelected, expectedTotal, shortageSubjects } = _sampleIntegratedQuestions(subjects, subjectQuestions, subjectCounts, mixCombo);
 
     // 문항 결합
     const combinedQuestions = allSelected;
@@ -293,14 +318,6 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
     const totalQuestions = combinedQuestions.length;
     const subjectCount = subjects.length;
 
-    // 문항 풀이 선언 배정보다 부족하면 안내 + 시간 비례 축소 (실전 문항당 배정 시간 유지)
-    const declaredTimeMin = (registry && registry.integratedExam && registry.integratedExam.examTimeMin) || 120;
-    let timeLimitSec = declaredTimeMin * 60;
-    if (expectedTotal > 0 && totalQuestions < expectedTotal) {
-        showToast(`문제은행 문항 부족 — ${shortageSubjects.join(' · ')} (총 ${totalQuestions}/${expectedTotal}문 출제)`, 'warning', 5000);
-        timeLimitSec = Math.max(60, Math.round(declaredTimeMin * 60 * totalQuestions / expectedTotal));
-    }
-
     const integratedExam = {
         id: 'integrated',
         title: subjects.length > 0
@@ -308,10 +325,29 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
             : `통합 실전 모의고사 (${totalQuestions}제)`,
         questions: combinedQuestions,
         // 실제 시험 시간: manifest integratedExam.examTimeMin (시험별 상이 — cosmetic 120분·carework 90분)
-        timeLimitSec
+        timeLimitSec: _integratedTimeLimitSec(registry, expectedTotal, totalQuestions, shortageSubjects)
     };
 
     // UI 전환
+    _activateExamView();
+
+    // OMR Sheet, Timer 활성화
+    startSimSession(integratedExam);
+}
+
+/** 시간 상한 산출 — 문항 풀이 선언 배정보다 부족하면 안내 + 시간 비례 축소 (실전 문항당 배정 시간 유지) */
+function _integratedTimeLimitSec(/** @type {*} */ registry, /** @type {number} */ expectedTotal, /** @type {number} */ totalQuestions, /** @type {string[]} */ shortageSubjects) {
+    const declaredTimeMin = (registry && registry.integratedExam && registry.integratedExam.examTimeMin) || 120;
+    let timeLimitSec = declaredTimeMin * 60;
+    if (expectedTotal > 0 && totalQuestions < expectedTotal) {
+        showToast(`문제은행 문항 부족 — ${shortageSubjects.join(' · ')} (총 ${totalQuestions}/${expectedTotal}문 출제)`, 'warning', 5000);
+        timeLimitSec = Math.max(60, Math.round(declaredTimeMin * 60 * totalQuestions / expectedTotal));
+    }
+    return timeLimitSec;
+}
+
+/** 대시보드/리뷰 뷰를 닫고 시험 뷰로 전환 */
+function _activateExamView() {
     state.currentView = 'exam-view';
     const dashboardView = document.getElementById('dashboard-view');
     const reviewView = document.getElementById('review-view');
@@ -319,9 +355,6 @@ function _startIntegratedMockExamImpl(mixCombo = false) {
     if (dashboardView) dashboardView.classList.remove('active');
     if (reviewView) reviewView.classList.remove('active');
     if (examView) examView.classList.add('active');
-
-    // OMR Sheet, Timer 활성화
-    startSimSession(integratedExam);
 }
 
 export function resumeSimDraft() {

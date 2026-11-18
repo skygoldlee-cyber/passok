@@ -259,6 +259,8 @@ passok/
 │   ├── pwa/pwa-install-capture.js  #   beforeinstallprompt 조기 캡처 + SW 등록
 │   ├── shell/theme-init.js           #   FOUC 방지 (페인트 전 테마 적용)
 │   ├── core/                   #   플랫폼 코어 — 의존성 리프·기반 계층 (전 모듈이 참조)
+│   │   ├── dom.js              #     널 가드 내장 DOM 헬퍼 (setText/toggleCls/showEl — 복잡도 억제)
+│   │   ├── store-fields.js     #     스토어 공통 부품 (loadItems/saveItems·newId·clamp*/pickEnum — 시험 무관)
 │   │   ├── entity-store.js     #     localStorage 엔티티 스토어 팩토리 — *-store 공통 CRUD·한도·훅 계약
 │   │   ├── exam-context.js     #     활성 시험 해석/전환, scopedKey 네임스페이스, hasFeature (리프 모듈)
 │   │   ├── paths.js            #     파일 경로 상수 중앙 관리
@@ -330,7 +332,7 @@ passok/
 │   │       ├── material-ledger.js  #   원료 입고·기한·재고·차감 (한도 30)
 │   │       ├── adverse-store.js    #   소비자 이상사례 기록 (한도 30, FO-59)
 │   │       ├── usage-guide.js      #   사용 안내문 생성기
-│   │       ├── store-utils.js      #   스토어 공통 헬퍼 (loadItems/newId/clamp…)
+│   │       ├── store-utils.js      #   스토어 헬퍼 (범용부=core/store-fields.js re-export + 고객 필드 정제)
 │   │       └── views/              #   Formula OS 뷰 (practice-registry 지연 로드)
 │   │           ├── formula.js          # 공용 진입점 파사드 (named export 재수출)
 │   │           ├── formula-core.js     # 공용 상태(calc)·패널 전환·서브내비·성분 인덱스
@@ -1073,12 +1075,12 @@ pullSync() (로그인 시 / "지금 동기화" 버튼)
 - **인쇄**: `formula-print.js` + `css/print.css` — `#formula-print-area`(화면 숨김)에 인쇄 전용 DOM 렌더 → `window.print()` → `afterprint` 정리
 - **CSV**: `csv-utils.js` — EUC-KR 폴백 디코딩(엑셀 한글 깨짐 방지) + BOM 직렬화
 
-### 스토어 공통 패턴 (`store-utils.js`)
+### 스토어 공통 패턴 (`core/store-fields.js` + 시험별 `store-utils.js` 어댑터)
 
 모든 스토어 모듈이 동일한 계약을 따른다:
 
 - `STORAGE_KEYS.<X>_ITEMS` 키에 JSON 배열로 영속 (`loadItems`/`saveItems`)
-- `newId()` ID 발급, `clamp()` 입력 클램프, 스키마 정제(`sanitize*`)
+- `newId()` ID 발급, `clamp*()` 입력 클램프, 스키마 정제(`sanitize*`) — 범용 부품은 `src/core/store-fields.js` 정본, 시험 모듈은 re-export + 도메인 정제만 추가
 - `*_LIMIT_FREE` 상수 + `canCreate()` 게이트 — 초과 시 안내 토스트
 - Free 한도: **포뮬러 5 · 고객 20 · 배치 50 · 원료 30**
 
@@ -1782,7 +1784,10 @@ npm run deploy
 
 ### D. 새 Formula OS 스토어 추가
 
-1. `src/exams/cosmetic/store-utils.js`의 공통 헬퍼(`loadItems`/`saveItems`/`newId`/`clamp`) 재사용
+> **스토어 패턴 선택**: **신규 스토어는 `src/core/entity-store.js` 팩토리를 우선 사용**한다 (선언형 CRUD·한도·훅).
+> cosmetic 기존 스토어는 팩토리 도입 이전 코드로, append+숫자 타임스탬프(`Date.now()`)+도메인 반환형(`{ok,<item>}`)+도메인 정렬(unshift·문자열 스탬프인 entity-store 계약과 상이)이므로 **억지 이행하지 않고 store-fields 위에 유지**한다 — 실질 중복은 CRUD 꼬리 ~10줄이고 나머지는 도메인 검증·정제라 이행 이득이 적다.
+
+1. `src/core/store-fields.js`의 공통 헬퍼(`loadItems`/`saveItems`/`newId`/`clamp*`) 재사용 (cosmetic은 `store-utils.js` re-export 경유 가능)
 2. `*_LIMIT_FREE` 상수 + `canCreate()` 게이트로 Free 한도 적용
 3. 스키마 정제 함수(`sanitize*`)로 입력 정규화
 4. `formula-core.js`의 PANELS/`SUBNAV_ITEMS`에 패널 등록 + `html/exams/cosmetic/formula.html`에 패널 섹션 추가

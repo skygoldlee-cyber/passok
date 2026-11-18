@@ -2,7 +2,7 @@
 // @spec CO-19 — 기관 점검표 파일 → 섹션 파서 계약 (순수 로직)
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { auditRowsToSections } from '../../../../src/exams/carework/audit-import.js';
+import { auditRowsToSections } from '../../../../src/content/checklist-import.js';
 
 test('헤더 매핑 — 영역·점검항목·근거 컬럼', () => {
     const s = auditRowsToSections([

@@ -1,7 +1,7 @@
 // src/exams/carework/views/care-audit.js — 평가 체크리스트 뷰
 // @spec CO-19 — 시험 전용 실무 뷰 (DA-13)
 import { loadAuditSections, loadCustomSections, saveCustomSections, clearCustomSections, loadChecks, toggleCheck, clearChecks, auditProgress, pushAuditState, auditEdition } from '../care-audit.js';
-import { auditRowsToSections } from '../audit-import.js';
+import { auditRowsToSections } from '../../../content/checklist-import.js';
 import { docHeadHtml, docSignHtml, refreshOrgName, myMembership, listRecords } from '../facility.js';
 import { proFeatureNotice } from '../../../pro/pro-upgrade.js';
 import { showToast, showConfirm } from '../../../ui-utils.js';

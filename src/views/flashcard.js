@@ -1,6 +1,7 @@
 // src/views/flashcard.js - 플래시카드 뷰 로직
 // @spec F-01~10,A-02
 import { state } from '../core/state.js';
+import { byId, setTextById, setHtml, toggleCls, showEl } from '../core/dom.js';
 import { safeTextWithBreaks } from '../core/sanitize.js';
 import { shuffle } from '../core/utils.js';
 import { getDueCards, previewCardReview } from '../study/spaced-repetition.js';
@@ -82,98 +83,49 @@ export function loadFlashcards() {
     renderFlashcard();
 }
 
-/**
- * 현재 플래시카드를 화면에 렌더링하고 상태를 업데이트합니다.
- */
-export function renderFlashcard() {
-    const fcConfig = state.flashcards;
-    const cardEl = document.getElementById('flashcard-item');
-    if (!cardEl) return;
+/** 카드 데이터 없음 상태 렌더 */
+function renderEmptyCardState() {
+    setTextById('card-front-term', '조건에 맞는 카드가 없습니다.');
+    setTextById('card-back-definition', '과목을 바꾸거나 필터를 조정해 보세요.');
+    setTextById('card-front-category', '공백');
+    setTextById('card-back-category', '공백');
+    setTextById('card-front-type', '');
+    setTextById('card-back-type', '');
+    const starEl = byId('card-front-star');
+    if (starEl) starEl.classList.remove('active');
+    setTextById('fc-current-index', '0');
+    setTextById('fc-total-count', '0');
+    showEl(byId('card-tip-container'), false);
+}
 
-    // 카드 뒤집힌 상태 원복
-    cardEl.classList.remove('flipped');
-
-    const termEl = document.getElementById('card-front-term');
-    const defEl = document.getElementById('card-back-definition');
-    const frontCatEl = document.getElementById('card-front-category');
-    const backCatEl = document.getElementById('card-back-category');
-    const frontTypeEl = document.getElementById('card-front-type');
-    const backTypeEl = document.getElementById('card-back-type');
-    const starEl = document.getElementById('card-front-star');
-    const curIdxEl = document.getElementById('fc-current-index');
-    const totalEl = document.getElementById('fc-total-count');
-    const tipWrapEl = document.getElementById('card-tip-container');
-    const tipEl = document.getElementById('card-back-tip');
-
-    if (fcConfig.data.length === 0) {
-        if (termEl) termEl.textContent = "조건에 맞는 카드가 없습니다.";
-        if (defEl) defEl.textContent = "과목을 바꾸거나 필터를 조정해 보세요.";
-        if (frontCatEl) frontCatEl.textContent = "공백";
-        if (backCatEl) backCatEl.textContent = "공백";
-        if (frontTypeEl) frontTypeEl.textContent = '';
-        if (backTypeEl) backTypeEl.textContent = '';
-        if (starEl) starEl.classList.remove('active');
-        if (curIdxEl) curIdxEl.textContent = '0';
-        if (totalEl) totalEl.textContent = '0';
-        if (tipWrapEl) tipWrapEl.hidden = true;
-        return;
-    }
-
-    const card = fcConfig.data[fcConfig.currentIndex];
-    if (!card) return;
-
-    // 마크업 데이터 주입
-    if (termEl) termEl.textContent = card.term;
-    if (defEl) defEl.innerHTML = safeTextWithBreaks(card.definition);
-    // 카드팁 오버레이 (AI-12) — 리뷰된 암기팁이 있으면 정의 아래 표시
-    if (tipWrapEl && tipEl) {
-        tipEl.textContent = card.tip || '';
-        tipWrapEl.hidden = !card.tip;
-    }
-    if (frontCatEl) frontCatEl.textContent = card.category || '';
-    if (backCatEl) backCatEl.textContent = card.category || '';
-
-    // 카드 타입 배지 표시
+/** 카드 타입 배지 표시 (앞·뒷면 동일) @param {*} card */
+function renderCardTypeBadges(card) {
     const typeLabel = card.cardType ? (CARD_TYPE_LABELS[/** @type {keyof CARD_TYPE_LABELS} */ (card.cardType)] || card.cardType) : '';
-    if (frontTypeEl) {
-        frontTypeEl.textContent = typeLabel;
-        frontTypeEl.setAttribute('data-type', card.cardType || 'definition');
-        frontTypeEl.classList.toggle('is-hidden', !typeLabel);
+    for (const id of ['card-front-type', 'card-back-type']) {
+        const el = byId(id);
+        if (!el) continue;
+        el.textContent = typeLabel;
+        el.setAttribute('data-type', card.cardType || 'definition');
+        el.classList.toggle('is-hidden', !typeLabel);
     }
-    if (backTypeEl) {
-        backTypeEl.textContent = typeLabel;
-        backTypeEl.setAttribute('data-type', card.cardType || 'definition');
-        backTypeEl.classList.toggle('is-hidden', !typeLabel);
-    }
+}
 
-    // 기출 표시 제어
-    if (starEl) {
-        if (card.isKey) {
-            starEl.classList.add('active');
-            starEl.classList.remove('is-hidden');
-        } else {
-            starEl.classList.remove('active');
-            starEl.classList.add('is-hidden');
-        }
-    }
-
-    // 인덱스 상태 갱신
-    if (curIdxEl) curIdxEl.textContent = String(fcConfig.currentIndex + 1);
-    if (totalEl) totalEl.textContent = String(fcConfig.data.length);
+/** @param {*} fcConfig */
+function renderCardCounters(fcConfig) {
+    setTextById('fc-current-index', String(fcConfig.currentIndex + 1));
+    setTextById('fc-total-count', String(fcConfig.data.length));
 
     // 외움/헷갈림 카드 카운트 표시 (현재 필터된 카드 기준)
-    const memorizedCount = fcConfig.data.filter(c => state.memorizedCards.has(c.id)).length;
-    const weakCount = fcConfig.data.filter(c => state.weakCards.has(c.id)).length;
-    const memBadge = document.getElementById('fc-memorized-badge');
-    const memCountEl = document.getElementById('fc-memorized-count');
-    const weakBadge = document.getElementById('fc-weak-badge');
-    const weakCountEl = document.getElementById('fc-weak-count');
-    if (memBadge) { memBadge.classList.toggle('is-hidden', memorizedCount === 0); }
-    if (memCountEl) memCountEl.textContent = String(memorizedCount);
-    if (weakBadge) { weakBadge.classList.toggle('is-hidden', weakCount === 0); }
-    if (weakCountEl) weakCountEl.textContent = String(weakCount);
+    const memorizedCount = fcConfig.data.filter((/** @type {*} */ c) => state.memorizedCards.has(c.id)).length;
+    const weakCount = fcConfig.data.filter((/** @type {*} */ c) => state.weakCards.has(c.id)).length;
+    toggleCls(byId('fc-memorized-badge'), 'is-hidden', memorizedCount === 0);
+    setTextById('fc-memorized-count', String(memorizedCount));
+    toggleCls(byId('fc-weak-badge'), 'is-hidden', weakCount === 0);
+    setTextById('fc-weak-count', String(weakCount));
+}
 
-    // 진도 버튼들 스타일 동적 제어 (ROAD-L7 — 4버튼: 마지막 등급 강조, 레거시 상태는 약점→다시·외움→쉬움에 매핑)
+/** 진도 버튼들 스타일 동적 제어 (ROAD-L7 — 4버튼: 마지막 등급 강조, 레거시 상태는 약점→다시·외움→쉬움에 매핑) @param {*} card */
+function renderRateButtons(card) {
     const RATE_BTNS = ['fc-again-btn', 'fc-hard-btn', 'fc-good-btn', 'fc-easy-btn'];
     const { intervals, lastRating } = previewCardReview(card.id);
     RATE_BTNS.forEach((id, i) => {
@@ -187,4 +139,41 @@ export function renderFlashcard() {
         el.style.opacity = active ? '1' : '0.75';
         el.style.boxShadow = active ? '0 0 10px var(--success-tint-40)' : 'none';
     });
+}
+
+/**
+ * 현재 플래시카드를 화면에 렌더링하고 상태를 업데이트합니다.
+ */
+export function renderFlashcard() {
+    const fcConfig = state.flashcards;
+    const cardEl = document.getElementById('flashcard-item');
+    if (!cardEl) return;
+
+    // 카드 뒤집힌 상태 원복
+    cardEl.classList.remove('flipped');
+
+    if (fcConfig.data.length === 0) { renderEmptyCardState(); return; }
+
+    const card = fcConfig.data[fcConfig.currentIndex];
+    if (!card) return;
+
+    // 마크업 데이터 주입
+    setTextById('card-front-term', card.term);
+    setHtml(byId('card-back-definition'), safeTextWithBreaks(card.definition));
+    // 카드팁 오버레이 (AI-12) — 리뷰된 암기팁이 있으면 정의 아래 표시
+    setTextById('card-back-tip', card.tip || '');
+    showEl(byId('card-tip-container'), !!card.tip);
+    setTextById('card-front-category', card.category || '');
+    setTextById('card-back-category', card.category || '');
+
+    renderCardTypeBadges(card);
+    // 기출 표시 제어
+    const starEl = byId('card-front-star');
+    if (starEl) {
+        starEl.classList.toggle('active', !!card.isKey);
+        starEl.classList.toggle('is-hidden', !card.isKey);
+    }
+
+    renderCardCounters(fcConfig);
+    renderRateButtons(card);
 }

@@ -319,7 +319,7 @@ npm run hooks:install
 | 31 | `common-glossary.dom.test.js` | 5 | 용어집 공용 경로 | 용어집 인덱스·링크 렌더 | 2026-09-24 추가 |
 | 32 | `common-htmlviewer.dom.test.js` | 7 | HTML 뷰어 | 외부 HTML 콘텐츠 로드·렌더 경로 | 2026-09-24 추가 |
 | 33 | `common-navigation.dom.test.js` | 8 | 뷰 전환 공용 | navigation 유틸 경로, 스크롤 복원·scrollTop 옵션, 사이드바↔탭 바 parity | 2026-09-27 scrollTop 추가 |
-| 34 | `study-trainer-drills.dom.test.js` | 11 | O/X·복수정답 드릴 | 드릴 UI·채점 경로 | 2026-09-24 추가 · 2026-10-13 갱신(취약 리뷰·유사 진술→study-review 이관) |
+| 34 | `study-trainer-drills.dom.test.js` | 12 | O/X·복수정답 드릴 | 드릴 UI·채점 경로·판정 모드 오답 집계 회귀 | 2026-09-24 추가 · 2026-10-13 갱신(취약 리뷰·유사 진술→study-review 이관) · 2026-11-18 갱신(판정 모드 correctCount 회귀) |
 | 35 | `common-eventlisteners.dom.test.js` | 21 | 이벤트 위임·리스너 | data-click/data-args/data-input 디스패치·키보드 접근성, 설정 메뉴·진도 초기화, 플래시카드 버튼·시뮬 이동·퀴즈 단축키 | 2026-09-24 추가 |
 | 36 | `study-commandpalette.dom.test.js` | 9 | 통합 검색 팔레트 | 팔레트 열기·검색·키보드 내비·실행 | 2026-09-26 추가 |
 | 37 | `whats-new.dom.test.js` | 7 | 새 버전 변경 이력 알림 | 최초 실행/업데이트/재부팅 분기, 복귀 사용자 판별, 확인→last_seen 기록, 설정 재열람 | 2026-09-26 추가 |
@@ -650,6 +650,8 @@ webServer로 자동 기동(port 3000, CI에서는 재사용 안 함). 워커는 
 시험 도메인 기능의 스펙은 도메인 격리 규약대로 `tests/e2e/exams/<id>/`에 둔다.
 `serve.js`는 vercel.json의 프로덕션 헤더(CSP 포함)를 미러링하므로 E2E는
 배포 환경과 동일한 보안 헤더 하에서 실행된다.
+결과 산출물은 `video:'on'`(전 테스트 webm — 결과화면 검토용) +
+`trace:'retain-on-failure'`(실패 시 디버그 trace) 조합으로 산출된다.
 
 **app.spec.js — 스모크**
 
@@ -953,7 +955,7 @@ function detectDiagramType(textContent) {
 - **`build`** — 생성 번들(`index.html`·`data/`) 1회 빌드 → `generated-bundles` 아티팩트로 공유 (test·e2e의 중복 빌드 제거).
 - **`test`** — 아티팩트 다운로드 후 전 게이트 직렬:
   ```yaml
-  - npm ci / npm audit --audit-level=high / npm run sbom
+  - npm ci / npm audit --audit-level=high --omit=dev / npm run sbom
   - npm run check:secrets · lint · check:types · check:imports · check:supabase
   - check:posind · check:contentind · check:docs · check:domainmap · check:uitext
   - check:mobilesafe · check:escape · check:uistyle
@@ -965,6 +967,7 @@ function detectDiagramType(textContent) {
   ```
 - **`e2e`** (`needs: build, changes` · `if: code=='true'`) — `mcr.microsoft.com/playwright` 컨테이너(버전은 package-lock의 `@playwright/test`와 동기)로 install-deps·브라우저 캐시 제거. 매트릭스: chromium 3샤드 + mobile·tablet 각 2샤드 = 7레그 병렬, `npm run test:e2e -- --project=<p> --shard=N/T`. 실행 스텝 env에 `TEST_SUPABASE_URL/ANON_KEY/SERVICE_ROLE_KEY`·`TEST_E2E_PASSWORD`(GitHub Secrets)를 주입 — J-102 인증·동기화 스펙이 테스트 프로젝트(`passok-e2e`)로 오버라이드 실행되며, 시크릿 미설정 시 스펙 가드가 skip 처리한다 (런북: `docs/dev/runbooks/E2E_TEST_SUPABASE.md`).
 
+- 의존성 감사는 `--omit=dev`로 프로덕션 의존성 한정 — devDeps(vitest·vite 체인)의 unpatched advisory가 배포를 차단하는 것을 방지 (CVE-2026-112366 picomatch ReDoS, upstream 패치 없음 — dev 도구 경로라 실질 공격면 없음).
 - PR에서는 `impact_tests.js --ref origin/main`이 변경 파일의 영향 요구사항·권장 테스트를 출력한다 — 리뷰어가 회귀 범위를 확인하는 용도.
 - 커버리지 리포트(`coverage/`)는 CI 아티팩트로 14일간, E2E 실패 시 `test-results/`가 7일간 보관된다.
 - `concurrency: ci-<ref>` — 연속 푸시 시 구 커밋 실행 자동 취소.

@@ -47,9 +47,9 @@
       "sum": 94
     },
     "src/content/questions.js": {
-      "count": 3,
-      "max": 30,
-      "sum": 71
+      "count": 1,
+      "max": 11,
+      "sum": 11
     },
     "src/core/exam-context.js": {
       "count": 3,
@@ -71,11 +71,6 @@
       "max": 13,
       "sum": 13
     },
-    "src/exams/carework/audit-import.js": {
-      "count": 1,
-      "max": 28,
-      "sum": 28
-    },
     "src/exams/carework/care-ai.js": {
       "count": 1,
       "max": 17,
@@ -95,11 +90,6 @@
       "count": 1,
       "max": 14,
       "sum": 14
-    },
-    "src/exams/carework/care-share.js": {
-      "count": 3,
-      "max": 19,
-      "sum": 46
     },
     "src/exams/carework/care-trend.js": {
       "count": 1,
@@ -162,9 +152,9 @@
       "sum": 96
     },
     "src/exams/cosmetic/formula-rules.js": {
-      "count": 3,
-      "max": 34,
-      "sum": 57
+      "count": 2,
+      "max": 12,
+      "sum": 23
     },
     "src/exams/cosmetic/formula-store.js": {
       "count": 1,
@@ -218,8 +208,8 @@
     },
     "src/exams/cosmetic/views/formula-io.js": {
       "count": 2,
-      "max": 28,
-      "sum": 39
+      "max": 13,
+      "sum": 24
     },
     "src/exams/cosmetic/views/formula-list.js": {
       "count": 2,
@@ -257,9 +247,9 @@
       "sum": 15
     },
     "src/exams/cosmetic/views/trainer-ingredients.js": {
-      "count": 2,
-      "max": 34,
-      "sum": 49
+      "count": 1,
+      "max": 15,
+      "sum": 15
     },
     "src/pdf-registry.js": {
       "count": 1,
@@ -278,13 +268,13 @@
     },
     "src/pwa/pwa-install.js": {
       "count": 3,
-      "max": 40,
-      "sum": 66
+      "max": 14,
+      "sum": 40
     },
     "src/pwa/pwa-manifest.js": {
       "count": 1,
-      "max": 37,
-      "sum": 37
+      "max": 19,
+      "sum": 19
     },
     "src/reader/exam-viewer.js": {
       "count": 7,
@@ -293,8 +283,8 @@
     },
     "src/reader/html-viewer.js": {
       "count": 2,
-      "max": 39,
-      "sum": 57
+      "max": 18,
+      "sum": 32
     },
     "src/reader/manual-viewer.js": {
       "count": 2,
@@ -318,8 +308,8 @@
     },
     "src/reader/textbook-core.js": {
       "count": 4,
-      "max": 42,
-      "sum": 118
+      "max": 23,
+      "sum": 71
     },
     "src/reader/webtoon-render.js": {
       "count": 2,
@@ -333,8 +323,8 @@
     },
     "src/search/search-index.js": {
       "count": 3,
-      "max": 36,
-      "sum": 78
+      "max": 25,
+      "sum": 59
     },
     "src/search/search-morpheme.js": {
       "count": 1,
@@ -363,8 +353,8 @@
     },
     "src/shell/command-palette.js": {
       "count": 2,
-      "max": 29,
-      "sum": 45
+      "max": 16,
+      "sum": 29
     },
     "src/shell/exam-data-boot.js": {
       "count": 1,
@@ -377,9 +367,9 @@
       "sum": 27
     },
     "src/shell/notice-check.js": {
-      "count": 9,
-      "max": 21,
-      "sum": 126
+      "count": 8,
+      "max": 15,
+      "sum": 99
     },
     "src/shell/onboarding.js": {
       "count": 1,
@@ -402,9 +392,9 @@
       "sum": 12
     },
     "src/study/analysis-engine.js": {
-      "count": 11,
-      "max": 31,
-      "sum": 186
+      "count": 10,
+      "max": 17,
+      "sum": 129
     },
     "src/study/concept-drill.js": {
       "count": 2,
@@ -493,8 +483,8 @@
     },
     "src/views/analysis-view.js": {
       "count": 7,
-      "max": 33,
-      "sum": 132
+      "max": 15,
+      "sum": 88
     },
     "src/views/backup.js": {
       "count": 1,
@@ -507,9 +497,9 @@
       "sum": 47
     },
     "src/views/dashboard-queue.js": {
-      "count": 2,
-      "max": 33,
-      "sum": 59
+      "count": 1,
+      "max": 26,
+      "sum": 26
     },
     "src/views/dashboard.js": {
       "count": 1,
@@ -528,28 +518,18 @@
     },
     "src/views/exam-sim/exam-sim-arena.js": {
       "count": 3,
-      "max": 31,
-      "sum": 65
+      "max": 19,
+      "sum": 45
     },
     "src/views/exam-sim/exam-sim-review.js": {
       "count": 1,
       "max": 11,
       "sum": 11
     },
-    "src/views/exam-sim/exam-sim-session.js": {
-      "count": 1,
-      "max": 36,
-      "sum": 36
-    },
-    "src/views/exam-sim/exam-sim-weak.js": {
-      "count": 2,
-      "max": 30,
-      "sum": 55
-    },
     "src/views/flashcard.js": {
-      "count": 2,
-      "max": 37,
-      "sum": 53
+      "count": 1,
+      "max": 16,
+      "sum": 16
     },
     "src/views/listeners/listeners-app.js": {
       "count": 1,
@@ -593,8 +573,8 @@
     },
     "src/views/quiz/quiz.js": {
       "count": 6,
-      "max": 29,
-      "sum": 101
+      "max": 24,
+      "sum": 96
     },
     "src/views/reader/reader-audio.js": {
       "count": 2,
@@ -608,8 +588,8 @@
     },
     "src/views/reader/reader-render.js": {
       "count": 4,
-      "max": 31,
-      "sum": 76
+      "max": 28,
+      "sum": 73
     },
     "src/views/reader/reader-toolbar.js": {
       "count": 4,
@@ -643,8 +623,8 @@
     },
     "src/views/trainer-drill-combo.js": {
       "count": 2,
-      "max": 29,
-      "sum": 42
+      "max": 13,
+      "sum": 24
     },
     "src/views/trainer-drills.js": {
       "count": 6,
@@ -662,9 +642,9 @@
       "sum": 35
     },
     "src/written/written-practice.js": {
-      "count": 4,
-      "max": 28,
-      "sum": 72
+      "count": 3,
+      "max": 18,
+      "sum": 44
     }
   }
 }

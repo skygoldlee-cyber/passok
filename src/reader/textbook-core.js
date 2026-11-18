@@ -152,6 +152,249 @@ function basenameNoMd(filename) {
     return base.endsWith('.md') ? base.slice(0, -3) : base;
 }
 
+const BOLD_MATCH_RE = /\*\*([^*]+)\*\*/g;
+const KEY_MARK_RE = /📌중요|🎯\s*중요|★\s*필수/;
+// 주의: 끝에 \b 를 쓰면 안 된다 — JS \w 에 한글/%·℃ 가 없어 단위 뒤 공백·괄호에서
+// 경계가 성립하지 않아 모든 한글 단위 숫자가 미매칭되던 사장 코드였음.
+// 대신 단위 직후 한글/영숫자 붙음만 제외하는 후방 금지로 대체한다.
+const NUM_UNIT_MATCH_RE = /\b\d+(?:\.\d+)?\s*(?:%|세 이하|세 이상|개월|일|년|배|종|가지|개|시간|g|ml|kg|℃|도|분|초|주|ppm|㎛|회\/hr|개\/hr|개\/㎥)(?![가-힣0-9A-Za-z])/g;
+
+/**
+ * @typedef {object} ParseEnv
+ * @property {string} subjectId
+ * @property {string} chapterKey
+ * @property {*[]} cards
+ * @property {*[]} quizzes
+ * @property {Array<{line:number,text:string}>} warnings
+ * @property {(term:string, answer:string)=>string} makeQuizId
+ * @property {string} section
+ */
+
+/**
+ * 표 행 → 카드 후보 정제 — 스킵 규칙을 한 곳에 모은다. 부적합이면 null.
+ * @param {string} rawTerm @param {string} rawDesc
+ * @returns {{term:string, desc:string, cleanTerm:string, cleanDesc:string, has기출:boolean, isKey:boolean}|null}
+ */
+function _cleanTableTermDesc(rawTerm, rawDesc) {
+    const term = cleanText(rawTerm);
+    const desc = cleanText(rawDesc);
+    if (!term || !desc) return null;
+
+    // 비교표의 체크/대시 마커 등 의미 없는 definition 건너뛰기
+    if (/^[—–\-✔✖×○●□■☆★]$/.test(desc)) return null;
+    // 숫자만 있는 term (표 행 번호, 수치값) 건너뛰기
+    if (/^\d+$/.test(term)) return null;
+
+    // ①②③ 등 원번호 기호 및 (L숫자) 줄번호 참조 제거, 한국어 카테고리 꼴표 괄호 제거
+    const cleanTerm = term.replace(/\*\*/g, '').replace(/\s*\(L\d+\)\s*/g, '').replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/, '').replace(/\s*\(([^a-zA-Z()]*?)\)/g, '').trim();
+    if (!cleanTerm) return null;
+    // 1~2자 키워드는 의미 부족으로 건너뛰기
+    if (cleanTerm.length <= 2) return null;
+    // 50자 초과 키워드는 키워드로 부적합 (긴 문장/설명이 term에 들어간 경우)
+    if (cleanTerm.length > 50) return null;
+    // 범용 표현(예: "기능", "시험 기준", "보관 조건")은 키워드로 부적합
+    if (isGenericTerm(cleanTerm)) return null;
+
+    const has기출 = /🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)/.test(rawTerm) || /🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)/.test(rawDesc);
+    const isKey = has기출 || KEY_MARK_RE.test(rawTerm) || KEY_MARK_RE.test(rawDesc);
+    // definition에서도 (L숫자) 줄번호 참조 제거
+    const cleanDesc = desc.replace(/\s*\(L\d+\)\s*/g, ' ').trim();
+
+    // term과 definition이 동일하면 의미 없는 카드이므로 건너뛰기
+    if (cleanTerm === cleanDesc) return null;
+    // definition이 '별표' 참조만 있거나 마크다운 링크만 있는 경우 건너뛰기
+    if (/^별표\s*\d/.test(cleanDesc)) return null;
+    if (/←.*별표.*참조$/.test(cleanDesc)) return null;
+    if (/^\[.+\]\(.+\)$/.test(cleanDesc)) return null;
+    // definition이 10자 이하면 설명으로서 의미 부족 (수치/단답형)
+    if (cleanDesc.length <= 10) return null;
+
+    return { term, desc, cleanTerm, cleanDesc, has기출, isKey };
+}
+
+/**
+ * 볼드(**)/단위수치 매치 → 빈칸 퀴즈 방출 (볼드 우선, 없으면 수치 fallback).
+ * @param {{boldSrc:string, numSrc:string|null, questionBase:string, context:string, idTerm:string, boldFilter?:(a:string)=>boolean}} spec
+ * @param {ParseEnv} env
+ * @returns {{emitted:number, candidates:number}} candidates = 후보 매치 수 (0이면 term형 fallback 대상)
+ */
+function _emitBlankQuizzes(spec, env) {
+    const boldMatches = [...spec.boldSrc.matchAll(BOLD_MATCH_RE)];
+    const numMatches = spec.numSrc != null ? [...spec.numSrc.matchAll(NUM_UNIT_MATCH_RE)] : [];
+    let emitted = 0;
+    const pushQuiz = (/** @type {string} */ answer, /** @type {boolean} */ stripBold) => {
+        const ans = answer.trim();
+        if (stripBold && spec.boldFilter && !spec.boldFilter(ans)) return;
+        const pattern = stripBold
+            ? `\\*\\*${escapeRegExp(ans)}\\*\\*|${escapeRegExp(ans)}`
+            : escapeRegExp(ans);
+        const quizText = spec.questionBase.replace(new RegExp(pattern, 'g'), ' [ 빈칸 ] ');
+        if (!isValidQuiz('blank', quizText, ans)) return;
+        env.quizzes.push({
+            id: env.makeQuizId(spec.idTerm, ans),
+            category: env.section,
+            context: spec.context,
+            question: quizText,
+            answer: ans,
+            type: 'blank'
+        });
+        emitted++;
+    };
+    if (boldMatches.length > 0) {
+        boldMatches.forEach(m => pushQuiz(m[1] || '', true));
+    } else {
+        numMatches.forEach(m => pushQuiz(m[0], false));
+    }
+    return { emitted, candidates: boldMatches.length + numMatches.length };
+}
+
+/** 용어→정의 term형 퀴즈 방출 @returns {number} 방출 수 (0 또는 1) @param {ParseEnv} env */
+function _emitTermQuiz(/** @type {string} */ cleanTerm, /** @type {string} */ cleanDesc, /** @type {ParseEnv} */ env) {
+    if (!isValidQuiz('term', cleanDesc, cleanTerm)) return 0;
+    env.quizzes.push({
+        id: env.makeQuizId(cleanTerm, cleanTerm),
+        category: env.section,
+        context: `정의에 알맞은 용어를 적으시오.`,
+        question: `${cleanDesc}`,
+        answer: cleanTerm,
+        type: 'term'
+    });
+    return 1;
+}
+
+/** isKey 표 행 → 빈칸/term형 퀴즈 + 기출 미방출 경고 @param {ParseEnv} env */
+function _emitKeyRowQuizzes(/** @type {*} */ cleaned, /** @type {string} */ rawDesc, /** @type {{cells?: string[], line?: number}} */ row, /** @type {ParseEnv} */ env) {
+    const { desc, cleanTerm, cleanDesc, has기출 } = cleaned;
+    const r = _emitBlankQuizzes({
+        boldSrc: rawDesc, numSrc: rawDesc,
+        questionBase: cleanDesc,
+        context: `[용어: ${cleanTerm}]`,
+        idTerm: cleanTerm,
+        boldFilter: a => a.length > 1
+    }, env);
+    let emitted = r.emitted;
+    if (r.candidates === 0) emitted += _emitTermQuiz(cleanTerm, cleanDesc, env);
+    // 🔖기출/빈출 표시가 있는데 이 행에서 퀴즈가 하나도 안 나오면 경고 수집
+    if (has기출 && emitted === 0) {
+        env.warnings.push({ line: row.line || 0, text: cleanTerm || desc.substring(0, 40) });
+    }
+}
+
+/** 표 단일 행 → 카드 + (중요 행이면) 퀴즈·경고 @param {ParseEnv} env */
+function _processTableRow(/** @type {{cells?: string[], line?: number}} */ row, /** @type {number} */ termIdx, /** @type {number} */ descIdx, /** @type {ParseEnv} */ env) {
+    const cells = row.cells || [];
+    if (cells.length < 2) return;
+    const rawTerm = cells[termIdx] || '';
+    const rawDesc = cells[descIdx] || '';
+    const cleaned = _cleanTableTermDesc(rawTerm, rawDesc);
+    if (!cleaned) return;
+    const { cleanTerm, cleanDesc, isKey } = cleaned;
+
+    // 카드 메타데이터 계산
+    const cardType = classifyCardType(cleanTerm, cleanDesc, env.section);
+    const importance = scoreCard(cleanTerm, cleanDesc, isKey, env.section, cardType);
+    const difficulty = determineDifficulty(cleanDesc, cardType);
+    // 중요도 40점 미만은 저품질 카드이므로 제거
+    if (importance < 40) return;
+
+    env.cards.push({
+        id: stableId(env.subjectId, env.chapterKey, 'card', cleanTerm),
+        category: env.section,
+        term: cleanTerm,
+        definition: cleanDesc,
+        isKey: isKey,
+        cardType: cardType,
+        importance: importance,
+        difficulty: difficulty
+    });
+
+    if (isKey) {
+        _emitKeyRowQuizzes(cleaned, rawDesc, row, env);
+    } else if (importance >= 50) {
+        _emitTermQuiz(cleanTerm, cleanDesc, env);
+    }
+}
+
+/** @param {string[]} headers @param {{cells?: string[], line?: number}[]} rows @param {ParseEnv} env */
+function _processTableRows(headers, rows, env) {
+    if (rows.length === 0) return;
+    const termIdx = 0;
+    const descIdx = headers.length > 1 ? 1 : 0;
+    rows.forEach(row => _processTableRow(row, termIdx, descIdx, env));
+}
+
+/** `- **용어** 🔖기출: 설명` 형태 리스트 항목 → 카드 + 볼드 빈칸 퀴즈 @returns {number} 방출 퀴즈 수 @param {ParseEnv} env */
+function _processMarkedListItem(/** @type {RegExpMatchArray} */ listMatch, /** @type {ParseEnv} */ env) {
+    const term = cleanText(listMatch[1] || '').replace(/\s*\(L\d+\)\s*/g, '').replace(/\s*\(([^a-zA-Z()]*?)\)/g, '').trim();
+    if (!(term.length > 2 && term.length <= 50 && !isGenericTerm(term))) return 0;
+    const desc = (listMatch[2] || '').trim();
+    const cleanDesc = cleanText(desc).replace(/\s*\(L\d+\)\s*/g, ' ').trim();
+    if (term === cleanDesc || cleanDesc.length <= 10) return 0;
+    const liCardType = classifyCardType(term, cleanDesc, env.section);
+    const liImportance = scoreCard(term, cleanDesc, true, env.section, liCardType);
+    // 중요도 40점 미만은 저품질 카드이므로 제거
+    if (liImportance < 40) return 0;
+    const liDifficulty = determineDifficulty(cleanDesc, liCardType);
+    env.cards.push({
+        id: stableId(env.subjectId, env.chapterKey, 'card', term),
+        category: env.section,
+        term: term,
+        definition: cleanDesc,
+        isKey: true,
+        cardType: liCardType,
+        importance: liImportance,
+        difficulty: liDifficulty
+    });
+    return _emitBlankQuizzes({
+        boldSrc: desc, numSrc: null,
+        questionBase: cleanDesc,
+        context: `[주제: ${term}]`,
+        idTerm: term
+    }, env).emitted;
+}
+
+/** 마커(🔖기출/📌중요/🎯) 포함 비표 라인 → 리스트 카드 또는 지문 빈칸 퀴즈 @param {ParseEnv} env */
+function _processMarkerLine(/** @type {string} */ line, /** @type {number} */ lineNum, /** @type {ParseEnv} */ env) {
+    // 헤더(###)·볼드 라벨·내용 없는 번호/불릿 항목은 퀴즈 생성 대상이 아니므로
+    // 마커 경고에서 제외 (예: "### 1. 항목 🎯 기출", "> **참고 - X 🎯 기출**", "④ 항목명")
+    const markerStripped = line.replace(/🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)|📌중요|🎯\s*중요|`/g, '').trim();
+    const isLabelLine = /^#{1,6}\s/.test(markerStripped)
+        || /^>?\s*\*\*[^*]+\*\*\s*[:：]?\s*$/.test(markerStripped)
+        || (/^>?\s*(?:[-*]\s+|[①-⑳]\s*)/.test(markerStripped) && !/[0-9:：,，•·*]/.test(markerStripped));
+    if (isLabelLine || !/🔖(?:기출|빈출)|📌중요|🎯\s*(?:기출|빈출)|🎯\s*중요/.test(line)) return;
+
+    const has기출Line = /🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)/.test(line);
+    const cleanedLine = cleanText(line);
+    const listMatch = line.match(/^[-*]\s+\*\*([^*]+)\*\*(?:\s*(?:🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)|📌중요|🎯\s*중요))?\s*[:：-]\s*(.+)$/);
+    const quizzesForLine = listMatch
+        ? _processMarkedListItem(listMatch, env)
+        : _emitBlankQuizzes({
+            boldSrc: line, numSrc: cleanedLine,
+            questionBase: cleanedLine,
+            context: `[빈출 지문 빈칸 채우기]`,
+            idTerm: cleanedLine.substring(0, 15),
+            boldFilter: a => a.length > 1 && !a.includes('기출') && !a.includes('중요')
+        }, env).emitted;
+    // 🔖기출/빈출 지문/리스트인데 퀴즈가 하나도 안 나오면 경고 수집 (조용한 손실 방지)
+    if (has기출Line && quizzesForLine === 0) {
+        env.warnings.push({ line: lineNum, text: cleanedLine.substring(0, 60) });
+    }
+}
+
+/** `## ` 섹션 헤더 라인 → {section, skip}. 헤더가 아니면 null — 지도·별표·데이터구조 섹션은 카드/퀴즈 대상 제외 */
+function _parseSectionHeader(/** @type {string} */ line) {
+    if (!line.startsWith('## ')) return null;
+    const section = line.substring(3).trim();
+    const skip = section.startsWith('🧭')
+        || section.startsWith('🗺️ 과목 지도')
+        || section.startsWith('📋 별표')
+        || section.startsWith('📊')
+        || section.startsWith('🔢')
+        || section.startsWith('🔗')
+        || section.includes('데이터 구조');
+    return { section, skip };
+}
+
 /**
  * MD 본문 → 카드/퀴즈/마커 경고.
  * @param {string} content - 마크다운 텍스트
@@ -164,9 +407,11 @@ function basenameNoMd(filename) {
 export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
     const lines = content.split(/\r?\n/);
 
+    /** @type {*[]} */
     const cards = [];
     /** @type {*[]} */
     const quizzes = [];
+    /** @type {Array<{line:number,text:string}>} */
     const warnings = [];
 
     // 퀴즈 ID 유일화: 한 용어에서 복수 퀴즈(복수 빈칸)가 나올 수 있으므로
@@ -182,7 +427,14 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
         return stableId(subjectId, chapterKey, 'quiz', input);
     };
 
-    let currentSection = basenameNoMd(filename);
+    /** @type {ParseEnv} */
+    const env = {
+        subjectId, chapterKey,
+        cards, quizzes, warnings,
+        makeQuizId,
+        section: basenameNoMd(filename)
+    };
+
     let skipSection = false;
     let inTable = false;
     /** @type {string[]} */
@@ -190,174 +442,13 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
     /** @type {{cells?: string[], line?: number}[]} */
     let tableRows = [];
 
-    /** @param {string[]} headers @param {{cells?: string[], line?: number}[]} rows */
-    const processTable = (headers, rows) => {
-        if (rows.length === 0) return;
-
-        const termIdx = 0;
-        const descIdx = headers.length > 1 ? 1 : 0;
-
-        rows.forEach(row => {
-            const cells = row.cells || [];
-            if (cells.length < 2) return;
-
-            const rawTerm = cells[termIdx] || '';
-            const rawDesc = cells[descIdx] || '';
-
-            const term = cleanText(rawTerm);
-            const desc = cleanText(rawDesc);
-
-            if (!term || !desc) return;
-
-            // 비교표의 체크/대시 마커 등 의미 없는 definition 건너뛰기
-            if (/^[—–\-✔✖×○●□■☆★]$/.test(desc)) return;
-
-            // 숫자만 있는 term (표 행 번호, 수치값) 건너뛰기
-            if (/^\d+$/.test(term)) return;
-
-            // ①②③ 등 원번호 기호 및 (L숫자) 줄번호 참조 제거, 한국어 카테고리 꼴표 괄호 제거
-            const cleanTerm = term.replace(/\*\*/g, '').replace(/\s*\(L\d+\)\s*/g, '').replace(/^[①②③④⑤⑥⑦⑧⑨⑩]\s*/, '').replace(/\s*\(([^a-zA-Z()]*?)\)/g, '').trim();
-            if (!cleanTerm) return;
-
-            // 1~2자 키워드는 의미 부족으로 건너뛰기
-            if (cleanTerm.length <= 2) return;
-
-            // 50자 초과 키워드는 키워드로 부적합 (긴 문장/설명이 term에 들어간 경우)
-            if (cleanTerm.length > 50) return;
-
-            // 범용 표현(예: "기능", "시험 기준", "보관 조건")은 키워드로 부적합
-            if (isGenericTerm(cleanTerm)) return;
-
-            const has기출 = /🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)/.test(rawTerm) || /🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)/.test(rawDesc);
-            const isKey = has기출 || /📌중요|🎯\s*중요/.test(rawTerm) || /📌중요|🎯\s*중요/.test(rawDesc) || /★\s*필수/.test(rawTerm) || /★\s*필수/.test(rawDesc);
-            // definition에서도 (L숫자) 줄번호 참조 제거
-            const cleanDesc = desc.replace(/\s*\(L\d+\)\s*/g, ' ').trim();
-
-            // term과 definition이 동일하면 의미 없는 카드이므로 건너뛰기
-            if (cleanTerm === cleanDesc) return;
-
-            // definition이 '별표' 참조만 있거나 마크다운 링크만 있는 경우 건너뛰기
-            if (/^별표\s*\d/.test(cleanDesc)) return;
-            if (/←.*별표.*참조$/.test(cleanDesc)) return;
-            if (/^\[.+\]\(.+\)$/.test(cleanDesc)) return;
-
-            // definition이 10자 이하면 설명으로서 의미 부족 (수치/단답형)
-            if (cleanDesc.length <= 10) return;
-
-            // 카드 메타데이터 계산
-            const cardType = classifyCardType(cleanTerm, cleanDesc, currentSection);
-            const importance = scoreCard(cleanTerm, cleanDesc, isKey, currentSection, cardType);
-            const difficulty = determineDifficulty(cleanDesc, cardType);
-
-            // 중요도 40점 미만은 저품질 카드이므로 제거
-            if (importance < 40) return;
-
-            cards.push({
-                id: stableId(subjectId, chapterKey, 'card', cleanTerm),
-                category: currentSection,
-                term: cleanTerm,
-                definition: cleanDesc,
-                isKey: isKey,
-                cardType: cardType,
-                importance: importance,
-                difficulty: difficulty
-            });
-
-            if (isKey) {
-                let quizzesForRow = 0;
-                const boldMatches = [];
-                let match;
-                const boldRegex = /\*\*([^*]+)\*\*/g;
-                while ((match = boldRegex.exec(rawDesc)) !== null) {
-                    boldMatches.push(match);
-                }
-
-                const numMatches = [];
-                // 주의: 끝에 \b 를 쓰면 안 된다 — JS \w 에 한글/%·℃ 가 없어 단위 뒤 공백·괄호에서
-                // 경계가 성립하지 않아 모든 한글 단위 숫자가 미매칭되던 사장 코드였음.
-                // 대신 단위 직후 한글/영숫자 붙음만 제외하는 후방 금지로 대체한다.
-                const numRegex = /\b\d+(?:\.\d+)?\s*(?:%|세 이하|세 이상|개월|일|년|배|종|가지|개|시간|g|ml|kg|℃|도|분|초|주|ppm|㎛|회\/hr|개\/hr|개\/㎥)(?![가-힣0-9A-Za-z])/g;
-                while ((match = numRegex.exec(rawDesc)) !== null) {
-                    numMatches.push(match);
-                }
-
-                if (boldMatches.length > 0) {
-                    boldMatches.forEach(match => {
-                        const answer = (match[1] || '').trim();
-                        if (answer.length > 1) {
-                            const quizText = cleanDesc.replace(new RegExp(`\\*\\*${escapeRegExp(answer)}\\*\\*|${escapeRegExp(answer)}`, 'g'), ' [ 빈칸 ] ');
-                            if (isValidQuiz('blank', quizText, answer)) {
-                                quizzes.push({
-                                    id: makeQuizId(cleanTerm, answer),
-                                    category: currentSection,
-                                    context: `[용어: ${cleanTerm}]`,
-                                    question: quizText,
-                                    answer: answer,
-                                    type: 'blank'
-                                });
-                                quizzesForRow++;
-                            }
-                        }
-                    });
-                } else if (numMatches.length > 0) {
-                    numMatches.forEach(match => {
-                        const answer = match[0].trim();
-                        const quizText = cleanDesc.replace(new RegExp(escapeRegExp(answer), 'g'), ' [ 빈칸 ] ');
-                        if (isValidQuiz('blank', quizText, answer)) {
-                            quizzes.push({
-                                id: makeQuizId(cleanTerm, answer),
-                                category: currentSection,
-                                context: `[용어: ${cleanTerm}]`,
-                                question: quizText,
-                                answer: answer,
-                                type: 'blank'
-                            });
-                            quizzesForRow++;
-                        }
-                    });
-                } else {
-                    if (isValidQuiz('term', cleanDesc, cleanTerm)) {
-                        quizzes.push({
-                            id: makeQuizId(cleanTerm, cleanTerm),
-                            category: currentSection,
-                            context: `정의에 알맞은 용어를 적으시오.`,
-                            question: `${cleanDesc}`,
-                            answer: cleanTerm,
-                            type: 'term'
-                        });
-                        quizzesForRow++;
-                    }
-                }
-
-                // 🔖(?:기출|빈출) 표시가 있는데 이 행에서 퀴즈가 하나도 안 나오면 경고 수집
-                if (has기출 && quizzesForRow === 0) {
-                    warnings.push({ line: row.line || 0, text: cleanTerm || desc.substring(0, 40) });
-                }
-            } else if (importance >= 50 && isValidQuiz('term', cleanDesc, cleanTerm)) {
-                quizzes.push({
-                    id: makeQuizId(cleanTerm, cleanTerm),
-                    category: currentSection,
-                    context: `정의에 알맞은 용어를 적으시오.`,
-                    question: `${cleanDesc}`,
-                    answer: cleanTerm,
-                    type: 'term'
-                });
-            }
-        });
-    };
-
     for (let i = 0; i < lines.length; i++) {
         const line = (lines[i] || '').trim();
 
-        if (line.startsWith('## ')) {
-            currentSection = line.substring(3).trim();
-            skipSection = currentSection.startsWith('🧭')
-                || currentSection.startsWith('🗺️ 과목 지도')
-                || currentSection.startsWith('📋 별표')
-                || currentSection.startsWith('📊')
-                || currentSection.startsWith('🔢')
-                || currentSection.startsWith('🔗')
-                || currentSection.includes('데이터 구조');
+        const sec = _parseSectionHeader(line);
+        if (sec) {
+            env.section = sec.section;
+            skipSection = sec.skip;
             continue;
         }
 
@@ -382,130 +473,15 @@ export function parseMarkdownContent(content, subjectId, filename, chapterKey) {
             }
         } else {
             if (inTable) {
-                processTable(tableHeaders, tableRows);
+                _processTableRows(tableHeaders, tableRows, env);
                 inTable = false;
             }
-
-            // 헤더(###)·볼드 라벨·내용 없는 번호/불릿 항목은 퀴즈 생성 대상이 아니므로
-            // 마커 경고에서 제외 (예: "### 1. 항목 🎯 기출", "> **참고 - X 🎯 기출**", "④ 항목명")
-            const markerStripped = line.replace(/🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)|📌중요|🎯\s*중요|`/g, '').trim();
-            const isLabelLine = /^#{1,6}\s/.test(markerStripped)
-                || /^>?\s*\*\*[^*]+\*\*\s*[:：]?\s*$/.test(markerStripped)
-                || (/^>?\s*(?:[-*]\s+|[①-⑳]\s*)/.test(markerStripped) && !/[0-9:：,，•·*]/.test(markerStripped));
-
-            if (!isLabelLine && /🔖(?:기출|빈출)|📌중요|🎯\s*(?:기출|빈출)|🎯\s*중요/.test(line)) {
-                const has기출Line = /🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)/.test(line);
-                let quizzesForLine = 0;
-                const cleanedLine = cleanText(line);
-                const listMatch = line.match(/^[-*]\s+\*\*([^*]+)\*\*(?:\s*(?:🔖(?:기출|빈출)|🎯\s*(?:기출|빈출)|📌중요|🎯\s*중요))?\s*[:：-]\s*(.+)$/);
-                if (listMatch) {
-                    const term = cleanText(listMatch[1] || '').replace(/\s*\(L\d+\)\s*/g, '').replace(/\s*\(([^a-zA-Z()]*?)\)/g, '').trim();
-                    if (term.length > 2 && term.length <= 50 && !isGenericTerm(term)) {
-                    const desc = (listMatch[2] || '').trim();
-                    const cleanDesc = cleanText(desc).replace(/\s*\(L\d+\)\s*/g, ' ').trim();
-                    if (term !== cleanDesc && cleanDesc.length > 10) {
-                    const liCardType = classifyCardType(term, cleanDesc, currentSection);
-                    const liImportance = scoreCard(term, cleanDesc, true, currentSection, liCardType);
-                    const liDifficulty = determineDifficulty(cleanDesc, liCardType);
-                    if (liImportance >= 40) {
-                    cards.push({
-                        id: stableId(subjectId, chapterKey, 'card', term),
-                        category: currentSection,
-                        term: term,
-                        definition: cleanDesc,
-                        isKey: true,
-                        cardType: liCardType,
-                        importance: liImportance,
-                        difficulty: liDifficulty
-                    });
-
-                    const boldMatches = [];
-                    let match;
-                    const boldRegex = /\*\*([^*]+)\*\*/g;
-                    while ((match = boldRegex.exec(desc)) !== null) {
-                        boldMatches.push(match);
-                    }
-
-                    if (boldMatches.length > 0) {
-                    boldMatches.forEach(m => {
-                        const ans = (m[1] || '').trim();
-                        const quizText = cleanDesc.replace(new RegExp(`\\*\\*${escapeRegExp(ans)}\\*\\*|${escapeRegExp(ans)}`, 'g'), ' [ 빈칸 ] ');
-                        if (isValidQuiz('blank', quizText, ans)) {
-                            quizzes.push({
-                                id: makeQuizId(term, ans),
-                                category: currentSection,
-                                context: `[주제: ${term}]`,
-                                question: quizText,
-                                answer: ans,
-                                type: 'blank'
-                            });
-                            quizzesForLine++;
-                        }
-                    });
-                }
-                }
-                }
-                }
-            } else {
-                const numMatches = [];
-                let match;
-                const numRegex = /\b\d+(?:\.\d+)?\s*(?:%|세 이하|세 이상|개월|일|년|배|종|가지|개|시간|g|ml|kg|℃|도|분|초|주|ppm|㎛|회\/hr|개\/hr|개\/㎥)(?![가-힣0-9A-Za-z])/g;
-                while ((match = numRegex.exec(cleanedLine)) !== null) {
-                    numMatches.push(match);
-                }
-
-                const boldMatches = [];
-                const boldRegex = /\*\*([^*]+)\*\*/g;
-                while ((match = boldRegex.exec(line)) !== null) {
-                    boldMatches.push(match);
-                }
-
-                if (boldMatches.length > 0) {
-                    boldMatches.forEach(m => {
-                        const ans = (m[1] || '').trim();
-                        if (ans.length > 1 && !ans.includes('기출') && !ans.includes('중요')) {
-                            const quizText = cleanedLine.replace(new RegExp(`\\*\\*${escapeRegExp(ans)}\\*\\*|${escapeRegExp(ans)}`, 'g'), ' [ 빈칸 ] ');
-                            if (isValidQuiz('blank', quizText, ans)) {
-                                quizzes.push({
-                                    id: makeQuizId(cleanedLine.substring(0, 15), ans),
-                                    category: currentSection,
-                                    context: `[빈출 지문 빈칸 채우기]`,
-                                    question: quizText,
-                                    answer: ans,
-                                    type: 'blank'
-                                });
-                                quizzesForLine++;
-                            }
-                        }
-                    });
-                } else if (numMatches.length > 0) {
-                    numMatches.forEach(m => {
-                        const ans = m[0].trim();
-                        const quizText = cleanedLine.replace(new RegExp(escapeRegExp(ans), 'g'), ' [ 빈칸 ] ');
-                        if (isValidQuiz('blank', quizText, ans)) {
-                            quizzes.push({
-                                id: makeQuizId(cleanedLine.substring(0, 15), ans),
-                                category: currentSection,
-                                context: `[빈출 지문 빈칸 채우기]`,
-                                question: quizText,
-                                answer: ans,
-                                type: 'blank'
-                            });
-                            quizzesForLine++;
-                        }
-                    });
-                }
-                }
-                // 🔖(?:기출|빈출) 지문/리스트인데 퀴즈가 하나도 안 나오면 경고 수집 (조용한 손실 방지)
-                if (has기출Line && quizzesForLine === 0) {
-                    warnings.push({ line: i + 1, text: cleanedLine.substring(0, 60) });
-                }
-            }
+            _processMarkerLine(line, i + 1, env);
         }
     }
 
     if (inTable) {
-        processTable(tableHeaders, tableRows);
+        _processTableRows(tableHeaders, tableRows, env);
     }
 
     return { cards, quizzes, warnings };

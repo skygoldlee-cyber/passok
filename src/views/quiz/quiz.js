@@ -157,6 +157,49 @@ export function _beginQuizRun() {
     renderQuizQuestion();
 }
 
+/** 객관식 선택지 버튼 렌더 — 클릭 시 즉시 채점 제출. @param {*} currentQuiz @param {HTMLElement|null} optionsContainer */
+function _renderQuizChoice(currentQuiz, optionsContainer) {
+    if (!optionsContainer) return;
+    optionsContainer.classList.remove('is-hidden');
+    const optionIndicators = ['①', '②', '③', '④', '⑤'];
+    currentQuiz.options.forEach((/** @type {*} */ opt, /** @type {number} */ idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'limits-opt-btn';
+        btn.style.width = '100%';
+        btn.style.marginBottom = '0.75rem';
+        btn.innerHTML = `<span class="limits-opt-num">${esc(optionIndicators[idx] || String(idx + 1))}</span> <span class="limits-opt-text">${esc(opt)}</span>`;
+        btn.addEventListener('click', () => {
+            submitQuizChoiceAnswer(btn, optionIndicators[idx] || String(idx + 1), currentQuiz.answer);
+        });
+        optionsContainer.appendChild(btn);
+    });
+}
+
+/** OX 진위형 버튼 재바인딩 — 이전 핸들러 제거 후 상태 초기화. @param {*} currentQuiz @param {HTMLElement|null} oxContainer */
+function _renderQuizOx(currentQuiz, oxContainer) {
+    if (!oxContainer) return;
+    oxContainer.classList.remove('is-hidden');
+    oxContainer.querySelectorAll('.quiz-ox-btn').forEach(node => {
+        const btn = /** @type {HTMLButtonElement & {_oxHandler?: EventListener}} */ (node);
+        if (btn._oxHandler) btn.removeEventListener('click', btn._oxHandler);
+        btn.disabled = false;
+        clearChoiceState(btn);
+        btn._oxHandler = () => submitQuizChoiceAnswer(btn, btn.dataset.ox, currentQuiz.answer);
+        btn.addEventListener('click', btn._oxHandler);
+    });
+}
+
+/** 단답형 입력 영역 표시·초기화. @param {HTMLElement|null} inputGroup @param {HTMLElement|null} submitBtn @param {HTMLInputElement|null} inputEl */
+function _renderQuizShort(inputGroup, submitBtn, inputEl) {
+    if (inputGroup) inputGroup.classList.remove('is-hidden');
+    if (submitBtn) submitBtn.classList.remove('is-hidden');
+    if (inputEl) {
+        inputEl.value = '';
+        inputEl.disabled = false;
+        inputEl.focus();
+    }
+}
+
 /**
  * 현재 퀴즈 문제 렌더링 (단답형 / 객관식 / OX 지원)
  */
@@ -212,44 +255,11 @@ export function renderQuizQuestion() {
     }
 
     if (quizType === 'choice' && currentQuiz.options && currentQuiz.options.length > 0) {
-        // 객관식
-        if (optionsContainer) {
-            optionsContainer.classList.remove('is-hidden');
-            const optionIndicators = ['①', '②', '③', '④', '⑤'];
-            currentQuiz.options.forEach((opt, idx) => {
-                const btn = document.createElement('button');
-                btn.className = 'limits-opt-btn';
-                btn.style.width = '100%';
-                btn.style.marginBottom = '0.75rem';
-                btn.innerHTML = `<span class="limits-opt-num">${esc(optionIndicators[idx] || String(idx + 1))}</span> <span class="limits-opt-text">${esc(opt)}</span>`;
-                btn.addEventListener('click', () => {
-                    submitQuizChoiceAnswer(btn, optionIndicators[idx] || String(idx + 1), currentQuiz.answer);
-                });
-                optionsContainer.appendChild(btn);
-            });
-        }
+        _renderQuizChoice(currentQuiz, optionsContainer);
     } else if (quizType === 'ox') {
-        // OX 진위형
-        if (oxContainer) {
-            oxContainer.classList.remove('is-hidden');
-            oxContainer.querySelectorAll('.quiz-ox-btn').forEach(node => {
-                const btn = /** @type {HTMLButtonElement & {_oxHandler?: EventListener}} */ (node);
-                if (btn._oxHandler) btn.removeEventListener('click', btn._oxHandler);
-                btn.disabled = false;
-                clearChoiceState(btn);
-                btn._oxHandler = () => submitQuizChoiceAnswer(btn, btn.dataset.ox, currentQuiz.answer);
-                btn.addEventListener('click', btn._oxHandler);
-            });
-        }
+        _renderQuizOx(currentQuiz, oxContainer);
     } else {
-        // 단답형 (기존 로직)
-        if (inputGroup) inputGroup.classList.remove('is-hidden');
-        if (submitBtn) submitBtn.classList.remove('is-hidden');
-        if (inputEl) {
-            inputEl.value = '';
-            inputEl.disabled = false;
-            inputEl.focus();
-        }
+        _renderQuizShort(inputGroup, submitBtn, inputEl);
     }
 
     // PS-08 — 풀이 시작 시각 + 확신 토글 리셋 (오답 원인 자동 추정 신호)

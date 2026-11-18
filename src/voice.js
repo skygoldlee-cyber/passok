@@ -1,7 +1,7 @@
-// src/exams/carework/care-voice.js — 음성 입력 (Web Speech API)
-// @spec none — 시험 전용 실무 뷰 (DA-13)
+// src/voice.js — 음성 입력 (Web Speech API, 시험 무관 공용)
+// @spec none — 플랫폼 입력 유틸 (carework에서 승격)
 // 기록 텍스트를 말로 입력 — 시니어 타자 부담 감소. Chrome/Android·webkitSpeechRecognition 폴백.
-import { showToast } from '../../ui-utils.js';
+import { showToast } from './ui-utils.js';
 
 const _RECOG = () => /** @type {any} */ (window).SpeechRecognition || /** @type {any} */ (window).webkitSpeechRecognition || null;
 /** @type {*} */
@@ -22,7 +22,7 @@ export function voiceButtonsInit(root = document) {
  * 🎤 토글 — 인식 중이면 종료, 아니면 시작해 결과를 대상 input에 이어 붙임
  * @param {string} inputId 대상 input/textarea id
  */
-export function careVoiceToggle(inputId) {
+export function voiceToggle(inputId) {
     const R = _RECOG();
     if (!R) { showToast('이 브라우저는 음성 입력을 지원하지 않습니다.', 'error'); return; }
     if (_rec) { _rec.stop(); return; }
@@ -54,5 +54,5 @@ function _mark(inputId, on) {
 }
 
 /* 뷰별 핸들러 별칭 — 지연 핸들러 이름은 전체 유니크 계약이라 뷰마다 별도 이름을 둔다 */
-export const careIncidentVoiceToggle = careVoiceToggle;
-export const careVisitVoiceToggle = careVoiceToggle;
+export const careIncidentVoiceToggle = voiceToggle;
+export const careVisitVoiceToggle = voiceToggle;

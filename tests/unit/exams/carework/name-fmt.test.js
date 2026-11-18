@@ -2,7 +2,7 @@
 // @spec none — carework 성명 표기 유틸 (성·이름 사이 한 칸)
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { fmtDocName, fmtDocNames } from '../../../../src/exams/carework/name-fmt.js';
+import { fmtDocName, fmtDocNames } from '../../../../src/content/name-fmt.js';
 
 test('fmtDocName — 단성 성명', () => {
     assert.equal(fmtDocName('김수'), '김 수');

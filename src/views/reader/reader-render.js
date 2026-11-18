@@ -353,59 +353,78 @@ function renderAudioPlayerArea(hasAudio) {
 
 // 섹션 카드 HTML 생성 — ctx: {subjId, chapterIdx, displayTitles, bookmarks,
 //   chapterRefPath, subjRefFiles, subjDirName, glossaryItems, notes}
-/** @param {*} chapter @param {*} ctx */
-export function buildSectionsHtml(chapter, ctx) {
+/**
+ * Chapter 번호 추적 — "📚 Chapter NN." 절 이후 "M." 번호 절은 §N.M 앵커를 갖는다 (DR-11).
+ * 인쇄 QR 칩(DR-09)과 동일 번호 규약 — Chapter 헤더·비번호 절(요약·확인문제·서두)은 링크 없음.
+ * @param {*} section @param {number} prev
+ * @returns {number}
+ */
+function _chapterNumAfter(section, prev) {
+    const m = String(section.title || '').match(/Chapter\s+(\d+)\./i);
+    return m ? parseInt(m[1] || '0', 10) : prev;
+}
+
+/**
+ * 섹션 카드 HTML 조립 — 북마크·메모 버튼, §N.M 개념 문항 딥링크, 절/하위절 본문.
+ * @param {*} section @param {number} idx @param {*} chapter @param {*} ctx @param {number} chapterNum
+ * @returns {string}
+ */
+function _sectionCardHtml(section, idx, chapter, ctx, chapterNum) {
     const { subjId, chapterIdx, displayTitles, bookmarks,
         chapterRefPath, subjRefFiles, subjDirName, glossaryItems, notes } = ctx;
+    const conceptCid = (chapterNum > 0 && getTocLevel(section.title) === 1)
+        ? `${chapterNum}.${parseInt(String(section.title || '').trim(), 10)}` : '';
+    // 북마크 키는 콘텐츠 기반 (TR-27) — 위치 인덱스는 교재 편집 시 오표적
+    const bookmarkKey = bookmarkKeyOf(subjId,
+        chapter.chapterKey || chapter.chapterTitle || chapterIdx, section.title || idx);
+    const isBookmarked = bookmarks.includes(bookmarkKey);
+    // 섹션 메모 (TR-30) — 북마크 키를 공유하므로 위치 이동에도 따라붙는다
+    const noteText = (notes && notes[bookmarkKey] && notes[bookmarkKey].note) || '';
+    const allContent = [section.content || '', ...((section.subsections || []).map((/** @type {*} */ s) => s.content || ''))].join('\n');
+    const secSrcMatch = allContent.match(/📌\s*\*\*출처\*\*[:：]\s*(.+?)(?:\||\n)/);
+    const secRefPath = secSrcMatch ? mapSourceToRef(secSrcMatch[1] || '') : null;
+    const refPath = secRefPath || chapterRefPath;
+    let sectionHtml = formatSectionContentForReader(section.content, chapter.filePath, refPath, subjRefFiles, subjDirName, glossaryItems, section.title);
+    if (section.subsections && section.subsections.length > 0) {
+        for (const sub of section.subsections) {
+            sectionHtml += `<h5 class="reader-subsection-title">${esc(sub.title)}</h5>`;
+            sectionHtml += `<div class="reader-subsection-content">${formatSectionContentForReader(sub.content, chapter.filePath, refPath, subjRefFiles, subjDirName, glossaryItems, sub.title)}</div>`;
+        }
+    }
+    return `
+        <div class="reader-section-card${noteText ? ' has-note' : ''}" id="reader-section-${idx}" data-section-idx="${idx}">
+            <div class="reader-section-header" data-section-idx="${idx}">
+                <i class="fa-solid fa-chevron-down reader-section-toggle"></i>
+                <h4 class="reader-section-title">${esc(displayTitles[idx])}</h4>
+                <button class="reader-note-btn${noteText ? ' has-note' : ''}" data-note-key="${esc(bookmarkKey)}"
+                        data-note-subj="${esc(subjId)}" data-note-title="${esc(section.title || '')}"
+                        title="메모 ${noteText ? '보기·수정' : '추가'}" aria-label="섹션 메모">
+                    <i class="fa-${noteText ? 'solid' : 'regular'} fa-note-sticky"></i>
+                </button>
+                <button class="reader-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" data-bookmark-key="${esc(bookmarkKey)}" title="북마크 ${isBookmarked ? '제거' : '추가'}">
+                    <i class="fa-${isBookmarked ? 'solid' : 'regular'} fa-bookmark"></i>
+                </button>
+            </div>
+            <div class="reader-section-body">
+                ${noteText ? `<div class="reader-note-view"><i class="fa-solid fa-note-sticky" aria-hidden="true"></i> <span class="reader-note-text">${esc(noteText)}</span></div>` : ''}
+                <div class="textbook-reader-section-content">
+                    ${sectionHtml}
+                </div>
+                ${conceptCid ? `<div class="reader-concept-cta"><a class="reader-concept-link" href="#/trainer/concept/${conceptCid}"><i class="fa-solid fa-circle-question" aria-hidden="true"></i> 이 절 문항 풀기 <span class="reader-concept-cid">§${conceptCid}</span></a></div>` : ''}
+            </div>
+        </div>
+    `;
+}
+
+/** @param {*} chapter @param {*} ctx */
+export function buildSectionsHtml(chapter, ctx) {
     let html = '';
     // 절 문항 딥링크 (DR-11) — "📚 Chapter NN." 이후 "M." 번호 절은 §N.M 앵커를 갖는다.
     // 인쇄 QR 칩(DR-09)과 동일 번호 규약 — Chapter 헤더·비번호 절(요약·확인문제·서두)은 링크 없음.
     let chapterNum = 0;
     chapter.sections.forEach((/** @type {*} */ section, /** @type {number} */ idx) => {
-        const chMatch = String(section.title || '').match(/Chapter\s+(\d+)\./i);
-        if (chMatch) chapterNum = parseInt(chMatch[1] || '0', 10);
-        const conceptCid = (chapterNum > 0 && getTocLevel(section.title) === 1)
-            ? `${chapterNum}.${parseInt(String(section.title || '').trim(), 10)}` : '';
-        // 북마크 키는 콘텐츠 기반 (TR-27) — 위치 인덱스는 교재 편집 시 오표적
-        const bookmarkKey = bookmarkKeyOf(subjId,
-            chapter.chapterKey || chapter.chapterTitle || chapterIdx, section.title || idx);
-        const isBookmarked = bookmarks.includes(bookmarkKey);
-        // 섹션 메모 (TR-30) — 북마크 키를 공유하므로 위치 이동에도 따라붙는다
-        const noteText = (notes && notes[bookmarkKey] && notes[bookmarkKey].note) || '';
-        const allContent = [section.content || '', ...((section.subsections || []).map((/** @type {*} */ s) => s.content || ''))].join('\n');
-        const secSrcMatch = allContent.match(/📌\s*\*\*출처\*\*[:：]\s*(.+?)(?:\||\n)/);
-        const secRefPath = secSrcMatch ? mapSourceToRef(secSrcMatch[1] || '') : null;
-        const refPath = secRefPath || chapterRefPath;
-        let sectionHtml = formatSectionContentForReader(section.content, chapter.filePath, refPath, subjRefFiles, subjDirName, glossaryItems, section.title);
-        if (section.subsections && section.subsections.length > 0) {
-            for (const sub of section.subsections) {
-                sectionHtml += `<h5 class="reader-subsection-title">${esc(sub.title)}</h5>`;
-                sectionHtml += `<div class="reader-subsection-content">${formatSectionContentForReader(sub.content, chapter.filePath, refPath, subjRefFiles, subjDirName, glossaryItems, sub.title)}</div>`;
-            }
-        }
-        html += `
-            <div class="reader-section-card${noteText ? ' has-note' : ''}" id="reader-section-${idx}" data-section-idx="${idx}">
-                <div class="reader-section-header" data-section-idx="${idx}">
-                    <i class="fa-solid fa-chevron-down reader-section-toggle"></i>
-                    <h4 class="reader-section-title">${esc(displayTitles[idx])}</h4>
-                    <button class="reader-note-btn${noteText ? ' has-note' : ''}" data-note-key="${esc(bookmarkKey)}"
-                            data-note-subj="${esc(subjId)}" data-note-title="${esc(section.title || '')}"
-                            title="메모 ${noteText ? '보기·수정' : '추가'}" aria-label="섹션 메모">
-                        <i class="fa-${noteText ? 'solid' : 'regular'} fa-note-sticky"></i>
-                    </button>
-                    <button class="reader-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" data-bookmark-key="${esc(bookmarkKey)}" title="북마크 ${isBookmarked ? '제거' : '추가'}">
-                        <i class="fa-${isBookmarked ? 'solid' : 'regular'} fa-bookmark"></i>
-                    </button>
-                </div>
-                <div class="reader-section-body">
-                    ${noteText ? `<div class="reader-note-view"><i class="fa-solid fa-note-sticky" aria-hidden="true"></i> <span class="reader-note-text">${esc(noteText)}</span></div>` : ''}
-                    <div class="textbook-reader-section-content">
-                        ${sectionHtml}
-                    </div>
-                    ${conceptCid ? `<div class="reader-concept-cta"><a class="reader-concept-link" href="#/trainer/concept/${conceptCid}"><i class="fa-solid fa-circle-question" aria-hidden="true"></i> 이 절 문항 풀기 <span class="reader-concept-cid">§${conceptCid}</span></a></div>` : ''}
-                </div>
-            </div>
-        `;
+        chapterNum = _chapterNumAfter(section, chapterNum);
+        html += _sectionCardHtml(section, idx, chapter, ctx, chapterNum);
     });
     return html;
 }

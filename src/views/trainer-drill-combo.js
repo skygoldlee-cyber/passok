@@ -162,6 +162,74 @@ export function submitComboJudgments() {
     submitComboAnswer(null, opt ? opt.id : null, opt ? q.options.indexOf(opt) : -1);
 }
 
+/** 선지 버튼 결과 마킹 — 정답 하이라이트 + 오답 선택 강조. @param {number} correctIdx @param {boolean} isCorrect @param {HTMLButtonElement|null} selectedBtn */
+function _comboMarkOptions(correctIdx, isCorrect, selectedBtn) {
+    const optsEl = document.getElementById('combo-options-container');
+    if (optsEl) {
+        optsEl.querySelectorAll('button').forEach((btn, idx) => {
+            btn.disabled = true;
+            btn.classList.remove('eliminated');
+            if (idx === correctIdx) btn.classList.add('correct');
+        });
+    }
+    if (!isCorrect && selectedBtn) selectedBtn.classList.add('incorrect');
+}
+
+/** 진술 판정 버튼·제출 버튼 잠금 (제출 후 변경 불가). */
+function _lockComboJudgmentUi() {
+    const stmtsArea = document.getElementById('combo-statements');
+    if (stmtsArea) stmtsArea.querySelectorAll('.combo-judge-btn').forEach(b => { /** @type {HTMLButtonElement} */ (b).disabled = true; });
+    const judgeSubmit = /** @type {HTMLButtonElement|null} */ (document.getElementById('combo-judge-submit'));
+    if (judgeSubmit) judgeSubmit.disabled = true;
+}
+
+/**
+ * 선택 라벨 — 판정 모드(선지 미일치)일 때는 판정 조합 자체를 표시.
+ * @param {*} q @param {number} optIdx @param {string|null} optId @param {*} judgments
+ * @returns {string|null|undefined}
+ */
+function _comboSelectedLabel(q, optIdx, optId, judgments) {
+    // 판정 모드(선지 미일치)일 때는 판정 조합 자체를 선택 라벨로 표시
+    const judgedSet = judgments
+        ? q.statements.filter((/** @type {*} */ s) => judgments[s.id]).map((/** @type {*} */ s) => s.id).join(',')
+        : null;
+    return optIdx >= 0
+        ? (OPTION_INDICATORS[optIdx] || optId)
+        : (judgedSet !== null ? `판정(${judgedSet || '없음'})` : '—');
+}
+
+/** 진술별 판정 결과 HTML — 오판 진술은 강조 + 해설. @param {*[]} perStatement @returns {string} */
+function _comboStmtFeedbackHtml(perStatement) {
+    return perStatement.map(s => {
+        const truthLabel = s.truth ? 'O' : 'X';
+        const judgedLabel = s.userJudged === null ? '—' : (s.userJudged ? 'O' : 'X');
+        const misjudged = s.judgedCorrect === false;
+        return `<div class="combo-fb-stmt${misjudged ? ' misjudged' : ''}">
+            <span class="combo-stmt-id">${esc(s.id)}</span>
+            <span class="combo-fb-truth">정답 ${truthLabel}</span>
+            <span class="combo-fb-judged">내 판정 ${judgedLabel}${misjudged ? ' ✗' : ''}</span>
+            ${misjudged && s.explain ? `<p class="combo-fb-explain">${safeTextWithBreaks(s.explain)}</p>` : ''}
+        </div>`;
+    }).join('');
+}
+
+/** 피드백 패널 표시 — 정오답 타이틀 + 진술별 판정 + 해설. @param {*} q @param {*} res @param {boolean} isCorrect @param {*} correctLabel */
+function _comboShowFeedback(q, res, isCorrect, correctLabel) {
+    const feedback = document.getElementById('combo-feedback-panel');
+    if (feedback) {
+        feedback.classList.remove('is-hidden');
+        feedback.classList.toggle('incorrect', !isCorrect);
+    }
+    const title = document.getElementById('combo-feedback-title');
+    if (title) title.textContent = isCorrect ? '정답입니다!' : `오답입니다! (정답: ${correctLabel})`;
+    const stmtsFb = document.getElementById('combo-feedback-statements');
+    if (stmtsFb && Array.isArray(res.perStatement)) {
+        stmtsFb.innerHTML = _comboStmtFeedbackHtml(res.perStatement);
+    }
+    const desc = document.getElementById('combo-feedback-desc');
+    if (desc) desc.innerHTML = safeTextWithBreaks(q.explain || '');
+}
+
 /** @param {HTMLButtonElement|null} selectedBtn @param {string|null} optId @param {number} optIdx */
 function submitComboAnswer(selectedBtn, optId, optIdx) {
     const st = state.trainer.combo;
@@ -177,31 +245,12 @@ function submitComboAnswer(selectedBtn, optId, optIdx) {
     recordStatementJudgments(res.perStatement);
     recordStudyActivity({ quizzes: 1, correct: isCorrect ? 1 : 0 });
 
-    const optsEl = document.getElementById('combo-options-container');
     const correctIdx = q.options.findIndex((/** @type {*} */ o) => o.id === res.correctAnswer);
-    if (optsEl) {
-        optsEl.querySelectorAll('button').forEach((btn, idx) => {
-            btn.disabled = true;
-            btn.classList.remove('eliminated');
-            if (idx === correctIdx) btn.classList.add('correct');
-        });
-    }
-    if (!isCorrect && selectedBtn) selectedBtn.classList.add('incorrect');
-    else st.correctCount++;
+    _comboMarkOptions(correctIdx, isCorrect, selectedBtn);
+    if (isCorrect) st.correctCount++;
+    _lockComboJudgmentUi();
 
-    // 진술 판정 버튼 잠금 (제출 후 변경 불가)
-    const stmtsArea = document.getElementById('combo-statements');
-    if (stmtsArea) stmtsArea.querySelectorAll('.combo-judge-btn').forEach(b => { /** @type {HTMLButtonElement} */ (b).disabled = true; });
-    const judgeSubmit = /** @type {HTMLButtonElement|null} */ (document.getElementById('combo-judge-submit'));
-    if (judgeSubmit) judgeSubmit.disabled = true;
-
-    // 판정 모드(선지 미일치)일 때는 판정 조합 자체를 선택 라벨로 표시
-    const judgedSet = judgments
-        ? q.statements.filter((/** @type {*} */ s) => judgments[s.id]).map((/** @type {*} */ s) => s.id).join(',')
-        : null;
-    const selectedLabel = optIdx >= 0
-        ? (OPTION_INDICATORS[optIdx] || optId)
-        : (judgedSet !== null ? `판정(${judgedSet || '없음'})` : '—');
+    const selectedLabel = _comboSelectedLabel(q, optIdx, optId, judgments);
     const correctLabel = correctIdx >= 0 ? OPTION_INDICATORS[correctIdx] : res.correctAnswer;
     st.solvedList.push({
         question: q.stem,
@@ -211,34 +260,7 @@ function submitComboAnswer(selectedBtn, optId, optIdx) {
         perStatement: res.perStatement
     });
 
-    // 피드백: 정오답 + 진술별 판정 결과 (오판 진술은 강조 + 해설)
-    const feedback = document.getElementById('combo-feedback-panel');
-    const title = document.getElementById('combo-feedback-title');
-    const stmtsFb = document.getElementById('combo-feedback-statements');
-    const desc = document.getElementById('combo-feedback-desc');
-    if (feedback) feedback.classList.remove('is-hidden');
-    if (isCorrect) {
-        if (feedback) feedback.classList.remove('incorrect');
-        if (title) title.textContent = '정답입니다!';
-    } else {
-        if (feedback) feedback.classList.add('incorrect');
-        if (title) title.textContent = `오답입니다! (정답: ${correctLabel})`;
-    }
-
-    if (stmtsFb && Array.isArray(res.perStatement)) {
-        stmtsFb.innerHTML = res.perStatement.map(s => {
-            const truthLabel = s.truth ? 'O' : 'X';
-            const judgedLabel = s.userJudged === null ? '—' : (s.userJudged ? 'O' : 'X');
-            const misjudged = s.judgedCorrect === false;
-            return `<div class="combo-fb-stmt${misjudged ? ' misjudged' : ''}">
-                <span class="combo-stmt-id">${esc(s.id)}</span>
-                <span class="combo-fb-truth">정답 ${truthLabel}</span>
-                <span class="combo-fb-judged">내 판정 ${judgedLabel}${misjudged ? ' ✗' : ''}</span>
-                ${misjudged && s.explain ? `<p class="combo-fb-explain">${safeTextWithBreaks(s.explain)}</p>` : ''}
-            </div>`;
-        }).join('');
-    }
-    if (desc) desc.innerHTML = safeTextWithBreaks(q.explain || '');
+    _comboShowFeedback(q, res, isCorrect, correctLabel);
 
     const nextBtn = document.getElementById('next-combo-btn');
     if (nextBtn) nextBtn.classList.remove('is-hidden');

@@ -1,7 +1,7 @@
 // src/exams/carework/care-handover.js — 인수인계서 생성 로직
 // @spec none — 시험 전용 도메인 로직 (DA-13)
 // 교대근무 인수인계 표준 포맷 자동 조립 (DOC-DSN-42 Phase 5)
-import { fmtDocName, fmtDocNames } from './name-fmt.js';
+import { fmtDocName, fmtDocNames } from '../../content/name-fmt.js';
 import { SERVICE_TYPES } from './care-log.js';
 
 export const SHIFTS = [

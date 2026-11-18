@@ -6,7 +6,7 @@ import { getJSON, setJSON } from '../../core/storage.js';
 import { STORAGE_KEYS } from '../../core/storage-keys.js';
 import { todayKey } from '../../core/utils.js';
 import { DOCX_SIGN_MAX } from '../../content/docx-utils.js';
-import { fmtDocName } from './name-fmt.js';
+import { fmtDocName } from '../../content/name-fmt.js';
 
 export const ROLES = { worker: '요양보호사', manager: '관리책임자' };
 
@@ -106,7 +106,7 @@ export function docHeadHtml(title) {
 
 // — 출력물 서명란 기입 (홈 설정 — 전 문서 공통) —
 
-export { fmtDocName, fmtDocNames } from './name-fmt.js';
+export { fmtDocName, fmtDocNames } from '../../content/name-fmt.js';
 
 /** 홈에서 설정한 서명자 — {author: 작성자(요양보호사), confirmer: 확인자(시설장·기관장), receiver: 인수자, signImage: 서명 이미지 data URI} */
 export function getDocSign() {

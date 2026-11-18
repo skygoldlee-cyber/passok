@@ -333,19 +333,91 @@ function deriveComboJudgments(q, userAns) {
  * 문항의 교재 단원(챕터) 해석 — QUESTION_CHAPTERS(문항id→단원) 우선,
  * combo는 "출처: 과목N 문제은행 Qn"으로 원문항을 거슬러 매핑, 실패 시 citation L번호→라인 경계
  */
-export function submitExam() {
-    if (simState.timerInterval) clearInterval(simState.timerInterval);
-    simState.timerInterval = undefined;
-    clearViewLeaveGuard('exam-view'); // E-09 — 제출 완료, 이탈 가드 해제
-    releaseWakeLock();
+/** 과목 판별 (동적 변환 적용) — q.subject 우선, 없으면 id 접두사, subjectN 형태는 변환 */
+function _resolveSimSubject(/** @type {*} */ q) {
+    let subj = q.subject;
+    if (!subj) {
+        const prefix = q.id.split('_')[0]; // 'subject1' 등
+        subj = examIdToSubjectId(prefix);
+    } else if (subj.startsWith('subject')) {
+        subj = examIdToSubjectId(subj);
+    }
+    return subj;
+}
 
-    // 점수 채점 및 틀린 문항 수집
-    let score = 0;
+/** 과목·단원 집계 버킷 반영 — 교재 인용이 없는 문항은 '기타(참조자료)'로 묶음 */
+function _tallyQuestionStats(/** @type {*} */ q, /** @type {boolean} */ isCorrect, /** @type {string} */ subj, /** @type {Object.<string,{score:number,total:number}>} */ subjectScores, /** @type {Object<string,Object<string,{score:number,total:number}>>} */ chapterStats, /** @type {*} */ qc) {
+    const sBucket = subjectScores[subj];
+    if (!sBucket) return;
+    sBucket.total++;
+    if (isCorrect) {
+        sBucket.score++;
+    }
+    const chTitle = chapterForQuestion(q, subj, qc) || '기타 (법령·참조자료)';
+    const cBucket = chapterStats[subj] || (chapterStats[subj] = {});
+    const c = cBucket[chTitle] || (cBucket[chTitle] = { score: 0, total: 0 });
+    c.total++;
+    if (isCorrect) c.score++;
+}
+
+/** 오답 후처리 — wrongQuestions 수집 + 복습용 오답 카드 자동 등록 (중요 기능 요구사항 구현) */
+function _registerWrongQuestion(/** @type {*} */ q, /** @type {string} */ userAns, /** @type {boolean} */ isCorrect) {
+    if (isCorrect) return;
+    simState.wrongQuestions.push({
+        ...q,
+        userAnswer: userAns
+    });
+    state.weakCards.add(`${WEAK_SIM_PREFIX}${q.id}`);
+}
+
+/** 문항 1개 채점 → 과목·단원 집계 버킷 반영 (오답은 weak 카드 등록 + wrongQuestions 수집) */
+function _gradeSimQuestion(/** @type {*} */ q, /** @type {Object.<string,{score:number,total:number}>} */ subjectScores, /** @type {Object<string,Object<string,{score:number,total:number}>>} */ chapterStats, /** @type {*} */ qc) {
+    const userAns = simState.userAnswers[q.id] || '';
+
+    // 객관식/OX는 선택지 기호(①~⑤, O/X)를 직접 비교, 단답형만 텍스트 정규화 채점
+    const isCorrect = (q.type === 'choice' || q.type === 'ox' || q.type === 'combo')
+        ? (userAns === q.answer)
+        : checkShortAnswer(userAns, q.answer);
+    vibrate(isCorrect ? HAPTIC.correct : HAPTIC.wrong);
+
+    // 복수정답형: 선택 선지의 members로 진술별 판정을 도출해 취약 추적·FSRS에 기록
+    if (q.type === 'combo') {
+        const perStatement = deriveComboJudgments(q, userAns);
+        if (perStatement) recordStatementJudgments(perStatement);
+    }
+    // @spec D-22 — 문항 단위 BKT 시퀀스 로그 + PS-08 선택지 변경 신호
+    recordQuizJudgment(q.id, isCorrect, { chg: (simState.answerChanges && simState.answerChanges[q.id]) ? 1 : 0 });
+
+    _registerWrongQuestion(q, userAns, isCorrect);
+
+    const subj = _resolveSimSubject(q);
+    if (subj) _tallyQuestionStats(q, isCorrect, subj, subjectScores, chapterStats, qc);
+    return isCorrect;
+}
+
+/** 과목별 정답률 계산 @returns {{subjectRates:Object.<string,number|null>, hasSubjectData:boolean}} */
+function _subjectRatesOf(/** @type {Object.<string,{score:number,total:number}>} */ subjectScores) {
+    /** @type {Object.<string,number|null>} */
+    const subjectRates = {};
+    let hasSubjectData = false;
+    Object.keys(subjectScores).forEach(subj => {
+        const ss = subjectScores[subj];
+        if (ss && ss.total > 0) {
+            subjectRates[subj] = Math.round((ss.score / ss.total) * 100);
+            hasSubjectData = true;
+        } else {
+            subjectRates[subj] = null;
+        }
+    });
+    return { subjectRates, hasSubjectData };
+}
+
+/** 전체 문항 채점 루프 — 과목별·단원별 집계 버킷 초기화 후 문항별 채점 @returns {{score:number,total:number,subjectScores:Object.<string,{score:number,total:number}>,chapterStats:Object.<string,Object.<string,{score:number,total:number}>>,subjects:*[]}} */
+function _gradeAllQuestions() {
     const total = simState.data.questions.length;
     simState.wrongQuestions = [];
 
     // 과목별 정답 및 총 문제수 집계용 (레지스트리 기반 동적 초기화)
-    /** @type {Object<string,{score:number,total:number}>} */
     /** @type {Object.<string,{score:number,total:number}>} */
     const subjectScores = {};
     const subjects = (getActiveRegistry() || {}).subjects || [];
@@ -361,77 +433,26 @@ export function submitExam() {
     /** @type {Object<string,Object<string,{score:number,total:number}>>} */
     const chapterStats = {};
 
+    let score = 0;
     for (let i = 0; i < total; i++) {
-        const q = simState.data.questions[i];
-        const userAns = simState.userAnswers[q.id] || '';
-
-        // 객관식/OX는 선택지 기호(①~⑤, O/X)를 직접 비교, 단답형만 텍스트 정규화 채점
-        const isCorrect = (q.type === 'choice' || q.type === 'ox' || q.type === 'combo')
-            ? (userAns === q.answer)
-            : checkShortAnswer(userAns, q.answer);
-        vibrate(isCorrect ? HAPTIC.correct : HAPTIC.wrong);
-
-        // 복수정답형: 선택 선지의 members로 진술별 판정을 도출해 취약 추적·FSRS에 기록
-        if (q.type === 'combo') {
-            const perStatement = deriveComboJudgments(q, userAns);
-            if (perStatement) recordStatementJudgments(perStatement);
-        }
-        // @spec D-22 — 문항 단위 BKT 시퀀스 로그 + PS-08 선택지 변경 신호
-        recordQuizJudgment(q.id, isCorrect, { chg: (simState.answerChanges && simState.answerChanges[q.id]) ? 1 : 0 });
-
-        if (isCorrect) {
-            score++;
-        } else {
-            simState.wrongQuestions.push({
-                ...q,
-                userAnswer: userAns
-            });
-
-            // 틀린 문제는 복습용 오답 카드로 자동으로 등록! (중요 기능 요구사항 구현)
-            const fakeCardId = `${WEAK_SIM_PREFIX}${q.id}`;
-            state.weakCards.add(fakeCardId);
-        }
-
-        // 과목 판별 및 집계 (동적 변환 적용)
-        let subj = q.subject;
-        if (!subj) {
-            const prefix = q.id.split('_')[0]; // 'subject1' 등
-            subj = examIdToSubjectId(prefix);
-        } else if (subj.startsWith('subject')) {
-            subj = examIdToSubjectId(subj);
-        }
-
-        const sBucket = subj ? subjectScores[subj] : null;
-        if (subj && sBucket) {
-            sBucket.total++;
-            if (isCorrect) {
-                sBucket.score++;
-            }
-            // 단원별 집계 — 교재 인용이 없는 문항은 '기타(참조자료)'로 묶음
-            const chTitle = chapterForQuestion(q, subj, qc) || '기타 (법령·참조자료)';
-            const cBucket = chapterStats[subj] || (chapterStats[subj] = {});
-            const c = cBucket[chTitle] || (cBucket[chTitle] = { score: 0, total: 0 });
-            c.total++;
-            if (isCorrect) c.score++;
-        }
+        if (_gradeSimQuestion(simState.data.questions[i], subjectScores, chapterStats, qc)) score++;
     }
+    return { score, total, subjectScores, chapterStats, subjects };
+}
+
+export function submitExam() {
+    if (simState.timerInterval) clearInterval(simState.timerInterval);
+    simState.timerInterval = undefined;
+    clearViewLeaveGuard('exam-view'); // E-09 — 제출 완료, 이탈 가드 해제
+    releaseWakeLock();
+
+    // 점수 채점 및 틀린 문항 수집
+    const { score, total, subjectScores, chapterStats, subjects } = _gradeAllQuestions();
 
     saveProgress();
     clearSimDraft(); // 제출 시 임시 세션 제거
 
-    // 과목별 정답률 계산
-    /** @type {Object.<string,number|null>} */
-    const subjectRates = {};
-    let hasSubjectData = false;
-    Object.keys(subjectScores).forEach(subj => {
-        const ss = subjectScores[subj];
-        if (ss && ss.total > 0) {
-            subjectRates[subj] = Math.round((ss.score / ss.total) * 100);
-            hasSubjectData = true;
-        } else {
-            subjectRates[subj] = null;
-        }
-    });
+    const { subjectRates, hasSubjectData } = _subjectRatesOf(subjectScores);
 
     // 모의고사 결과 성적 이력 저장 및 성적 분석 연동
     if (typeof window !== 'undefined' && typeof window.saveExamResultToHistory === 'function') {

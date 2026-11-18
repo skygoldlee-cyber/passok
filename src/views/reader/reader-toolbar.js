@@ -63,6 +63,15 @@ export function applyReaderThemeClass() {
     if (view) view.classList.toggle('reader-light-theme', isLight);
 }
 
+/** @param {HTMLElement} progressFill @param {number} pct */
+function updateProgressBarA11y(progressFill, pct) {
+    const progressBar = progressFill.parentElement;
+    if (!progressBar) return;
+    const pctRound = Math.round(pct);
+    progressBar.title = `읽기 진도 ${pctRound}%`;
+    progressBar.setAttribute('aria-valuenow', String(pctRound));
+}
+
 export function bindReaderScrollEvents() {
     const container = document.getElementById('textbook-reader-container');
     if (!container || readerScrollBound) return;
@@ -92,12 +101,7 @@ let cachedCards = null; // 카드 목록 캐싱 (단원 전환 시 초기화됨)
                 const max = container.scrollHeight - container.clientHeight;
                 const pct = max > 0 ? (container.scrollTop / max) * 100 : 0;
                 progressFill.style.width = pct + '%';
-                const progressBar = progressFill.parentElement;
-                if (progressBar) {
-                    const pctRound = Math.round(pct);
-                    progressBar.title = `읽기 진도 ${pctRound}%`;
-                    progressBar.setAttribute('aria-valuenow', String(pctRound));
-                }
+                updateProgressBarA11y(progressFill, pct);
             }
             // Chrome auto-hide (TR-22/23): 아래로 스크롤 시 크롬 오버레이를 숨기고
             // 위로 올리면 복귀 — 크롬은 absolute 오버레이라 본문 높이 변동 없이
@@ -273,10 +277,11 @@ export function syncActiveTocItem(tocListEl) {
  * b 현재 섹션 북마크 토글 · ESC 모바일 TOC 드로어 닫기.
  * 입력 필드·수정자키 조합·비활성 뷰에서는 동작하지 않는다.
  */
-export function bindReaderKeyboard() {
-    if (_readerKeyboardBound || typeof document === 'undefined') return;
-    _readerKeyboardBound = true;
-    document.addEventListener('keydown', (e) => {
+/**
+ * 리더 keydown 핸들러 — 바인딩은 bindReaderKeyboard가 1회 수행.
+ * @param {KeyboardEvent} e
+ */
+function _onReaderKeydown(e) {
         if (e.defaultPrevented || e.ctrlKey || e.metaKey || e.altKey) return;
         const view = document.getElementById('textbook-reader-view');
         const container = document.getElementById('textbook-reader-container');
@@ -340,7 +345,12 @@ export function bindReaderKeyboard() {
                 break;
             }
         }
-    });
+}
+
+export function bindReaderKeyboard() {
+    if (_readerKeyboardBound || typeof document === 'undefined') return;
+    _readerKeyboardBound = true;
+    document.addEventListener('keydown', _onReaderKeydown);
 }
 
 export function initReaderToolbar() {

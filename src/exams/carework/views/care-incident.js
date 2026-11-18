@@ -14,8 +14,8 @@ import { STORAGE_KEYS } from '../../../core/storage-keys.js';
 import { showToast, showConfirm, flashSavedBadge, requireFields } from '../../../ui-utils.js';
 import { todayKey } from '../../../core/utils.js';
 export { careShare } from '../care-share.js';
-export { careIncidentVoiceToggle } from '../care-voice.js';
-import { voiceButtonsInit } from '../care-voice.js';
+export { careIncidentVoiceToggle } from '../../../voice.js';
+import { voiceButtonsInit } from '../../../voice.js';
 
 const $ = (/** @type {string} */ id) => document.getElementById(id);
 const esc = (/** @type {*} */ s) => String(s).replace(/[&<>"]/g, (/** @type {string} */ c) => (/** @type {Object.<string,string>} */ ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}))[c] || c);

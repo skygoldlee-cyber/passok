@@ -74,6 +74,77 @@ function _metaFromMetaLine(q, seg) {
     if (!s.includes('**') && s) q.type = s;
 }
 
+/**
+ * ⚖️ 인용 마커 추출 — 라인 내 모든 근거 링크를 q.refs에 적재.
+ * @param {WrittenQuestion} q @param {string} line
+ */
+function _collectRefs(q, line) {
+    for (const m of line.matchAll(/⚖️\s*\[([^\]]+)\]\(<([^>]+)>\)/g)) {
+        const href = m[2] || '';
+        const lm = href.match(/#L(\d+)$/i);
+        q.refs.push({
+            label: m[1] || '',
+            path: lm ? href.slice(0, -lm[0].length) : href,
+            line: lm ? parseInt(lm[1] || '0', 10) : null
+        });
+    }
+}
+
+/**
+ * 헤더 라인 처리 — 유형/문제/모범답안/답/채점기준/흔한 오류/⚖️/`---`.
+ * @param {WrittenQuestion} q @param {*} buf @param {string} line
+ * @returns {string|null|undefined} 새 field 값 (undefined = 본문 라인, null = 필드 해제)
+ */
+function _feedBlockLine(q, buf, line) {
+    if (/^\s*-\s*\*\*유형\*\*/.test(line)) {
+        const rest = line.replace(/^\s*-\s*\*\*유형\*\*\s*[:：]?\s*/, '');
+        rest.split('·').forEach(seg => _metaFromMetaLine(q, seg));
+        return null;
+    }
+    if (/^\*\*문제\*\*\s*[:：]?/.test(line)) {
+        buf.problem.push(line.replace(/^\*\*문제\*\*\s*[:：]?\s*/, ''));
+        return 'problem';
+    }
+    if (/^\*\*모범답안( 요지)?\*\*\s*[:：]?/.test(line)) {
+        buf.model.push(line.replace(/^\*\*모범답안( 요지)?\*\*\s*[:：]?\s*/, ''));
+        return 'model';
+    }
+    if (/^\*\*답\*\*\s*[:：]/.test(line)) {
+        q.finalAnswer = line.replace(/^\*\*답\*\*\s*[:：]\s*/, '').trim();
+        return 'answer';
+    }
+    if (/^\*\*채점기준\*\*\s*[:：]?/.test(line)) {
+        const rest = line.replace(/^\*\*채점기준\*\*\s*[:：]?\s*/, '');
+        if (rest.trim()) buf.rubric.push(rest);
+        return 'rubric';
+    }
+    if (/^\*\*흔한 오류\*\*\s*[:：]?/.test(line)) {
+        buf.errors.push(line.replace(/^\*\*흔한 오류\*\*\s*[:：]?\s*/, ''));
+        return 'errors';
+    }
+    if (line.includes('⚖️')) { _collectRefs(q, line); return null; }
+    if (/^---+\s*$/.test(line)) return null;
+    return undefined;
+}
+
+/** 채점기준 버퍼 → 체크리스트 항목 또는 자유 텍스트. @param {WrittenQuestion} q @param {string[]} rubricLines */
+function _applyRubric(q, rubricLines) {
+    for (const l of rubricLines) {
+        const im = l.match(/^\s*-\s*\[\s*\]\s*(.+)$/);
+        if (im) {
+            const body = im[1] || '';
+            const pm = body.match(/\s*[(（]\s*([\d.]+)\s*점\s*[)）]\s*$/);
+            q.rubricItems.push({
+                text: pm ? body.slice(0, pm.index).trim() : body.trim(),
+                points: pm ? parseFloat(pm[1] || '0') : 0
+            });
+        }
+    }
+    if (!q.rubricItems.length) {
+        q.rubricText = rubricLines.join('\n').replace(/^\s*-\s*/gm, '').trim();
+    }
+}
+
 /** @param {number} num @param {string} title @param {string[]} block @returns {WrittenQuestion} */
 function _parseBlock(num, title, block) {
     /** @type {WrittenQuestion} */
@@ -86,50 +157,8 @@ function _parseBlock(num, title, block) {
     const buf = { problem: [], model: [], rubric: [], errors: [] };
     let field = null;
     for (const line of block) {
-        if (/^\s*-\s*\*\*유형\*\*/.test(line)) {
-            const rest = line.replace(/^\s*-\s*\*\*유형\*\*\s*[:：]?\s*/, '');
-            rest.split('·').forEach(seg => _metaFromMetaLine(q, seg));
-            field = null; continue;
-        }
-        if (/^\*\*문제\*\*\s*[:：]?/.test(line)) {
-            field = 'problem';
-            buf.problem.push(line.replace(/^\*\*문제\*\*\s*[:：]?\s*/, ''));
-            continue;
-        }
-        if (/^\*\*모범답안( 요지)?\*\*\s*[:：]?/.test(line)) {
-            field = 'model';
-            buf.model.push(line.replace(/^\*\*모범답안( 요지)?\*\*\s*[:：]?\s*/, ''));
-            continue;
-        }
-        if (/^\*\*답\*\*\s*[:：]/.test(line)) {
-            field = 'answer';
-            q.finalAnswer = line.replace(/^\*\*답\*\*\s*[:：]\s*/, '').trim();
-            continue;
-        }
-        if (/^\*\*채점기준\*\*\s*[:：]?/.test(line)) {
-            field = 'rubric';
-            const rest = line.replace(/^\*\*채점기준\*\*\s*[:：]?\s*/, '');
-            if (rest.trim()) buf.rubric.push(rest);
-            continue;
-        }
-        if (/^\*\*흔한 오류\*\*\s*[:：]?/.test(line)) {
-            field = 'errors';
-            buf.errors.push(line.replace(/^\*\*흔한 오류\*\*\s*[:：]?\s*/, ''));
-            continue;
-        }
-        if (line.includes('⚖️')) {
-            for (const m of line.matchAll(/⚖️\s*\[([^\]]+)\]\(<([^>]+)>\)/g)) {
-                const href = m[2] || '';
-                const lm = href.match(/#L(\d+)$/i);
-                q.refs.push({
-                    label: m[1] || '',
-                    path: lm ? href.slice(0, -lm[0].length) : href,
-                    line: lm ? parseInt(lm[1] || '0', 10) : null
-                });
-            }
-            field = null; continue;
-        }
-        if (/^---+\s*$/.test(line)) { field = null; continue; }
+        const nf = _feedBlockLine(q, buf, line);
+        if (nf !== undefined) { field = nf; continue; }
         if (field === 'problem') buf.problem.push(line);
         else if (field === 'model') buf.model.push(line);
         else if (field === 'rubric') buf.rubric.push(line);
@@ -137,20 +166,7 @@ function _parseBlock(num, title, block) {
     }
     q.problem = buf.problem.join('\n').trim();
     q.modelAnswer = buf.model.join('\n').trim();
-    for (const l of buf.rubric) {
-        const im = l.match(/^\s*-\s*\[\s*\]\s*(.+)$/);
-        if (im) {
-            const body = im[1] || '';
-            const pm = body.match(/\s*[(（]\s*([\d.]+)\s*점\s*[)）]\s*$/);
-            q.rubricItems.push({
-                text: pm ? body.slice(0, pm.index).trim() : body.trim(),
-                points: pm ? parseFloat(pm[1] || '0') : 0
-            });
-        }
-    }
-    if (!q.rubricItems.length) {
-        q.rubricText = buf.rubric.join('\n').replace(/^\s*-\s*/gm, '').trim();
-    }
+    _applyRubric(q, buf.rubric);
     q.commonErrors = buf.errors.join('\n').trim();
     return q;
 }

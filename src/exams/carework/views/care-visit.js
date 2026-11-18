@@ -13,8 +13,8 @@ import { docMdHead, docMdSign, mdToHtml } from '../doc-md.js';
 import { renderToolBody } from '../form-seeds.js';
 import { careShare } from '../care-share.js';
 export { careShare };
-export { careVisitVoiceToggle } from '../care-voice.js';
-import { voiceButtonsInit } from '../care-voice.js';
+export { careVisitVoiceToggle } from '../../../voice.js';
+import { voiceButtonsInit } from '../../../voice.js';
 
 /** @param {string} id */
 const $ = (id) => document.getElementById(id);

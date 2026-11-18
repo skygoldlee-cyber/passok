@@ -1,6 +1,7 @@
 // src/pwa-install.js — PWA 설치 프롬프트 및 설치 안내 모달 로직 (app.js에서 추출)
 // @spec P-07,P-08,UX-PWA-04,P-09,UX-PWA-02,UX-PWA-04
 import { STORAGE_KEYS } from '../core/storage-keys.js';
+import { toggleCls } from '../core/dom.js';
 import { isStandalonePwa } from '../core/utils.js';
 import { trapFocus } from '../ui-utils.js';
 
@@ -73,120 +74,138 @@ export function setupPWAInstall() {
         return 'generic';
     }
 
+    /** 설치 가능성 진단 수집 — SW·관련앱·manifest 아이콘 비동기 조회 */
+    async function collectInstallDiag() {
+        const secure = (typeof isSecureContext !== 'undefined') ? isSecureContext : (location.protocol === 'https:');
+        const isStandalone = isStandalonePwa();
+        const hasPrompt = !!window.__deferredPrompt;
+
+        // SW 상태(비동기) 수집
+        let swState = '미확인';
+        if ('serviceWorker' in navigator) {
+            try {
+                const reg = await navigator.serviceWorker.getRegistration();
+                swState = reg ? (reg.active ? reg.active.state : '비활성') : '없음';
+            } catch (e) { swState = '조회실패'; }
+        } else {
+            swState = 'API미지원';
+        }
+
+        // 이미 설치된 관련/동일 앱 확인
+        let relatedInstalled = false;
+        if (navigator.getInstalledRelatedApps) {
+            try {
+                const apps = await navigator.getInstalledRelatedApps();
+                relatedInstalled = apps.length > 0;
+            } catch (e) { /* 무시 */ }
+        }
+
+        // "any" 용도 아이콘 존재 여부 (Chrome 설치 요건)
+        let anyIcon = null;
+        const manifestLink = document.querySelector('link[rel="manifest"]');
+        let manifestStatus = '';
+        const manifestHref = manifestLink && manifestLink.getAttribute('href');
+        if (manifestHref) {
+            try {
+                const resp = await fetch(manifestHref, { cache: 'no-cache' });
+                manifestStatus = resp.status + ' ' + resp.statusText;
+                if (resp.ok) {
+                    const json = /** @type {{icons?: Array<{purpose?: string}>}} */ (await resp.json());
+                    anyIcon = (json.icons || []).some(ic => !ic.purpose || /(^|\s)any(\s|$)/.test(ic.purpose));
+                }
+            } catch (e) { manifestStatus = '실패: ' + (e instanceof Error ? e.message : String(e)); }
+        } else {
+            manifestStatus = 'manifest link 없음';
+        }
+
+        return { secure, isStandalone, hasPrompt, swState, relatedInstalled, anyIcon, manifestStatus };
+    }
+
+    /** 진단 결과 → 판정 문구 (순수) @param {*} d @param {string} platform */
+    function verdictForInstallDiag(d, platform) {
+        if (d.isStandalone || d.relatedInstalled) {
+            return '✅ 이미 설치됨 — 홈 화면 아이콘으로 실행하세요. (재설치하려면 먼저 삭제)';
+        }
+        if (platform === 'inapp') {
+            return '⚠️ 인앱 브라우저(카카오톡 등)에서는 설치 불가.\n  → 우측 상단 ⋮ → "다른 브라우저로 열기 / Chrome으로 열기" 후 다시 시도.';
+        }
+        if (!d.secure) {
+            return '❌ HTTPS(보안 컨텍스트)가 아니어서 설치 불가.';
+        }
+        if (d.swState === '없음' || d.swState === 'API미지원' || d.swState === '조회실패') {
+            return '❌ 서비스 워커가 활성 상태가 아님 — 새로고침 후 다시 시도.';
+        }
+        if (d.anyIcon === false) {
+            return '❌ manifest에 "any" 용도 아이콘이 없어 설치가 차단됨.';
+        }
+        if (d.hasPrompt) {
+            return '✅ 설치 가능 — 아래 "지금 설치" 버튼을 누르세요.';
+        }
+        return 'ℹ️ 설치 요건은 충족. 다만 자동 설치 이벤트가 아직 없음.\n  → Chrome 메뉴(⋮) → "앱 설치"로 직접 설치, 또는\n  → 이전에 설치를 취소/삭제했다면: 설정→사이트 설정→(이 사이트) 데이터 삭제 후 재시도, 또는\n  → chrome://apps 에서 기존 설치 여부 확인.';
+    }
+
+    /** 진단 표시 라인 조립 (순수) @param {*} d @param {string} platform @param {string} verdict */
+    function installDiagLines(d, platform, verdict) {
+        return [
+            '▶ 판정: ' + verdict,
+            '────────────',
+            '• beforeinstallprompt: ' + (d.hasPrompt ? '캡처됨(설치 가능)' : '없음'),
+            '• 보안 컨텍스트(HTTPS): ' + d.secure,
+            '• 이미 설치(standalone): ' + d.isStandalone,
+            '• 관련 앱 설치됨: ' + d.relatedInstalled,
+            '• SW 조기 등록: ' + (window.__swRegistered ? '성공' : '미확인'),
+            '• SW 상태: ' + d.swState,
+            '• "any" 용도 아이콘: ' + (d.anyIcon === null ? '확인불가' : (d.anyIcon ? '있음' : '없음')),
+            '• manifest fetch: ' + d.manifestStatus,
+            '• navigator.standalone: ' + window.navigator.standalone,
+            '• 플랫폼 감지: ' + platform,
+            '• UA: ' + (navigator.userAgent || '').substring(0, 90),
+        ];
+    }
+
+    /** 프롬프트가 실제로 잡혀 있으면 모달 안에서 바로 설치할 수 있는 버튼 제공 @param {boolean} hasPrompt @param {HTMLElement} diagEl */
+    function ensureDirectInstallBtn(hasPrompt, diagEl) {
+        const directBtnId = 'pwa-direct-install-btn';
+        let directBtn = document.getElementById(directBtnId);
+        if (hasPrompt) {
+            if (!directBtn) {
+                directBtn = document.createElement('button');
+                directBtn.id = directBtnId;
+                directBtn.className = 'btn btn-primary install-direct-btn';
+                directBtn.innerHTML = '<i class="fa-solid fa-download"></i> 지금 설치';
+                directBtn.addEventListener('click', async () => {
+                    const pr = window.__deferredPrompt;
+                    if (!pr) return;
+                    try { pr.prompt(); await pr.userChoice; } catch (e) { /* 무시 */ }
+                    window.__deferredPrompt = null;
+                    closeInstallModal();
+                });
+                if (diagEl.parentNode) diagEl.parentNode.insertBefore(directBtn, diagEl);
+            }
+            directBtn.classList.remove('is-hidden');
+        } else if (directBtn) {
+            directBtn.classList.add('is-hidden');
+        }
+    }
+
     async function openInstallModal() {
         if (!installModal) return;
         const platform = detectPlatform();
         console.debug('[PWA] 설치 안내 모달 표시 - 플랫폼:', platform);
         const guideInapp = document.getElementById('pwa-guide-inapp');
-        if (guideAndroid) guideAndroid.classList.toggle('is-hidden', platform !== 'android');
-        if (guideIos) guideIos.classList.toggle('is-hidden', platform !== 'ios');
-        if (guideGeneric) guideGeneric.classList.toggle('is-hidden', platform !== 'generic');
-        if (guideInapp) guideInapp.classList.toggle('is-hidden', platform !== 'inapp');
+        toggleCls(guideAndroid, 'is-hidden', platform !== 'android');
+        toggleCls(guideIos, 'is-hidden', platform !== 'ios');
+        toggleCls(guideGeneric, 'is-hidden', platform !== 'generic');
+        toggleCls(guideInapp, 'is-hidden', platform !== 'inapp');
 
         // 진단 정보 수집 및 표시
         const diagEl = document.getElementById('pwa-diagnostics');
         const diagContent = document.getElementById('pwa-diag-content');
         if (diagEl && diagContent) {
-            const lines = [];
-            const secure = (typeof isSecureContext !== 'undefined') ? isSecureContext : (location.protocol === 'https:');
-            const isStandalone = isStandalonePwa();
-            const hasPrompt = !!window.__deferredPrompt;
-
-            // SW 상태(비동기) 수집
-            let swState = '미확인';
-            if ('serviceWorker' in navigator) {
-                try {
-                    const reg = await navigator.serviceWorker.getRegistration();
-                    swState = reg ? (reg.active ? reg.active.state : '비활성') : '없음';
-                } catch (e) { swState = '조회실패'; }
-            } else {
-                swState = 'API미지원';
-            }
-
-            // 이미 설치된 관련/동일 앱 확인
-            let relatedInstalled = false;
-            if (navigator.getInstalledRelatedApps) {
-                try {
-                    const apps = await navigator.getInstalledRelatedApps();
-                    relatedInstalled = apps.length > 0;
-                } catch (e) { /* 무시 */ }
-            }
-
-            // "any" 용도 아이콘 존재 여부 (Chrome 설치 요건)
-            let anyIcon = null;
-            const manifestLink = document.querySelector('link[rel="manifest"]');
-            let manifestStatus = '';
-            const manifestHref = manifestLink && manifestLink.getAttribute('href');
-            if (manifestHref) {
-                try {
-                    const resp = await fetch(manifestHref, { cache: 'no-cache' });
-                    manifestStatus = resp.status + ' ' + resp.statusText;
-                    if (resp.ok) {
-                        const json = /** @type {{icons?: Array<{purpose?: string}>}} */ (await resp.json());
-                        anyIcon = (json.icons || []).some(ic => !ic.purpose || /(^|\s)any(\s|$)/.test(ic.purpose));
-                    }
-                } catch (e) { manifestStatus = '실패: ' + (e instanceof Error ? e.message : String(e)); }
-            } else {
-                manifestStatus = 'manifest link 없음';
-            }
-
-            // ---- 판정 ----
-            let verdict;
-            if (isStandalone || relatedInstalled) {
-                verdict = '✅ 이미 설치됨 — 홈 화면 아이콘으로 실행하세요. (재설치하려면 먼저 삭제)';
-            } else if (platform === 'inapp') {
-                verdict = '⚠️ 인앱 브라우저(카카오톡 등)에서는 설치 불가.\n  → 우측 상단 ⋮ → "다른 브라우저로 열기 / Chrome으로 열기" 후 다시 시도.';
-            } else if (!secure) {
-                verdict = '❌ HTTPS(보안 컨텍스트)가 아니어서 설치 불가.';
-            } else if (swState === '없음' || swState === 'API미지원' || swState === '조회실패') {
-                verdict = '❌ 서비스 워커가 활성 상태가 아님 — 새로고침 후 다시 시도.';
-            } else if (anyIcon === false) {
-                verdict = '❌ manifest에 "any" 용도 아이콘이 없어 설치가 차단됨.';
-            } else if (hasPrompt) {
-                verdict = '✅ 설치 가능 — 아래 "지금 설치" 버튼을 누르세요.';
-            } else {
-                verdict = 'ℹ️ 설치 요건은 충족. 다만 자동 설치 이벤트가 아직 없음.\n  → Chrome 메뉴(⋮) → "앱 설치"로 직접 설치, 또는\n  → 이전에 설치를 취소/삭제했다면: 설정→사이트 설정→(이 사이트) 데이터 삭제 후 재시도, 또는\n  → chrome://apps 에서 기존 설치 여부 확인.';
-            }
-
-            lines.push('▶ 판정: ' + verdict);
-            lines.push('────────────');
-            lines.push('• beforeinstallprompt: ' + (hasPrompt ? '캡처됨(설치 가능)' : '없음'));
-            lines.push('• 보안 컨텍스트(HTTPS): ' + secure);
-            lines.push('• 이미 설치(standalone): ' + isStandalone);
-            lines.push('• 관련 앱 설치됨: ' + relatedInstalled);
-            lines.push('• SW 조기 등록: ' + (window.__swRegistered ? '성공' : '미확인'));
-            lines.push('• SW 상태: ' + swState);
-            lines.push('• "any" 용도 아이콘: ' + (anyIcon === null ? '확인불가' : (anyIcon ? '있음' : '없음')));
-            lines.push('• manifest fetch: ' + manifestStatus);
-            lines.push('• navigator.standalone: ' + window.navigator.standalone);
-            lines.push('• 플랫폼 감지: ' + platform);
-            lines.push('• UA: ' + (navigator.userAgent || '').substring(0, 90));
-
-            diagContent.textContent = lines.join('\n');
+            const d = await collectInstallDiag();
+            diagContent.textContent = installDiagLines(d, platform, verdictForInstallDiag(d, platform)).join('\n');
             diagEl.classList.remove('is-hidden');
-
-            // 프롬프트가 실제로 잡혀 있으면 모달 안에서 바로 설치할 수 있는 버튼 제공
-            const directBtnId = 'pwa-direct-install-btn';
-            let directBtn = document.getElementById(directBtnId);
-            if (hasPrompt) {
-                if (!directBtn) {
-                    directBtn = document.createElement('button');
-                    directBtn.id = directBtnId;
-                    directBtn.className = 'btn btn-primary install-direct-btn';
-                    directBtn.innerHTML = '<i class="fa-solid fa-download"></i> 지금 설치';
-                    directBtn.addEventListener('click', async () => {
-                        const pr = window.__deferredPrompt;
-                        if (!pr) return;
-                        try { pr.prompt(); await pr.userChoice; } catch (e) { /* 무시 */ }
-                        window.__deferredPrompt = null;
-                        closeInstallModal();
-                    });
-                    if (diagEl.parentNode) diagEl.parentNode.insertBefore(directBtn, diagEl);
-                }
-                directBtn.classList.remove('is-hidden');
-            } else if (directBtn) {
-                directBtn.classList.add('is-hidden');
-            }
+            ensureDirectInstallBtn(d.hasPrompt, diagEl);
         }
 
         installModal.classList.remove('is-hidden');

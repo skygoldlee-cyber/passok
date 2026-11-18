@@ -1,6 +1,22 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-18 fix: analysis-view 추출 헬퍼 보간 esc-ok 면제 — CI 이스케이프 싱크 게이트 해소
+
+- 복잡도 분해로 추출된 HTML 빌더 헬퍼(`_weakClinicHtml`·`_rhythm*Html`·`_passGap*` 등)의 innerHTML 보간이 ROAD-Q5 미이스케이프 후보로 신규 집계됨
+- 헬퍼 반환값은 내부에서 esc() 처리된 마크업 — 기존 관례(`/*esc-ok — 사유*/`)로 8개 보간 면제 주석 부착, 동작 변경 없음
+
+## 2026-11-18 ci: dependency audit 프로덕션 의존성 한정 (--omit=dev) + E2E video 산출
+
+- picomatch ReDoS(CVE-2026-112366)가 ≤4.0.7 전 버전 영향 + upstream 패치 없음 — vitest→vite→tinyglobby devDeps 체인만 해당, 프로덕션 감사는 0건
+- `npm audit --audit-level=high --omit=dev`로 조정해 unpatched dev advisory의 배포 차단 해소
+- `playwright.config.js`에 `video:'on'` — 전 테스트 webm 영상으로 시나리오 결과화면 검토 (trace JPEG 프레임 대비 용량 절감)
+
+## 2026-11-18 fix(trainer): combo 판정 모드 오답이 correctCount에 잘못 집계되던 버그
+
+- `submitComboAnswer`의 `!isCorrect && selectedBtn ... else correctCount++` 구조 — 판정 모드(selectedBtn=null)에서 오답도 else 분기로 떨어져 정답 수가 부풀려짐
+- `if (isCorrect)` 단순 집계로 교정 + 판정 모드 오답 회귀 테스트 추가 (drills DOM 11→12)
+
 ## 2026-11-18 docs(design): hazmat 실무도구 수요·경쟁 판단 반영 — 목표 재정의
 
 - G1 재정의: "매주 쓰는 판정" → 정기점검·일지·소방검사 대비 (일상=일지, 전환=연 1회 점검·제출)

@@ -1,8 +1,8 @@
 {
-  "unit": 2015,
-  "dom": 1071,
+  "unit": 2018,
+  "dom": 1074,
   "e2eScenarios": 186,
   "e2eRuns": 660,
   "e2eFiles": 48,
-  "measuredAt": "2026-11-17"
+  "measuredAt": "2026-11-18"
 }

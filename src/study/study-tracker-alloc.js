@@ -259,6 +259,47 @@ function _allocWeek(rows, remNow, total) {
 }
 
 /**
+ * 과목 1행 수요 계산 — 잔여·퀴즈 잔여·약점가중·진단/복습 가산을 조립한다 (SC-09·SC-12·SC-13).
+ * @param {*} s 과목 메타
+ * @param {*} ctx 집계 컨텍스트 — {mem, quiz, recent, weak, diag, due, wBySubj, hasWeights, weightSum}
+ * @returns {*} 배분 행
+ */
+function _allocRow(s, ctx) {
+    const { mem, quiz, recent, weak, diag, due, wBySubj, hasWeights, weightSum } = ctx;
+    const stats = (s && s.stats) || {};
+    const total = stats.targetCards > 0 ? Math.min(stats.cards || 0, stats.targetCards) : (stats.cards || 0);
+    const remaining = Math.max(0, total - (mem[s.key] || 0));
+    // SC-13 퀴즈 잔여 — 은행 문항(targetQuizzes 상한) 대비 미풀이 수
+    const qTotal = stats.targetQuizzes > 0 ? Math.min(stats.quizzes || 0, stats.targetQuizzes) : (stats.quizzes || 0);
+    const quizRemaining = Math.max(0, qTotal - ((quiz[s.key] && quiz[s.key].solved) || 0));
+    // 최근 표본이 임계 이상이면 우선, 아니면 누적 표본 폴백
+    const rq = recent[s.key] || { solved: 0, correct: 0 };
+    const q = (rq.solved >= MIN_ALLOC_SAMPLE) ? rq : (quiz[s.key] || { solved: 0, correct: 0 });
+    const quizW = (q.solved >= MIN_ALLOC_SAMPLE && q.solved > 0)
+        ? Math.max(0.1, 2 - q.correct / q.solved) : 1.0;
+    // 취약 카드 비율 가산 — 헷갈림 표시 카드가 잔여에서 차지하는 비중, 최대 +0.5
+    const weakBoost = remaining > 0 ? Math.min(0.5, (weak[s.key] || 0) / remaining) : 0;
+    // SC-12 진단 신호 가산 — 최근 오답 원인 태그·취약 단원 수 (콜드스타트 과목 반영)
+    const dg = diag[s.key] || { causes: 0, weakChapters: 0 };
+    const diagBoost = Math.min(MAX_DIAG_BOOST, dg.causes * 0.1 + dg.weakChapters * 0.15);
+    // SC-13 복습 대기 가산 — 암기 카드 중 FSRS 기한초과 비율, 최대 +0.5
+    const dueBoost = Math.min(0.5, (due[s.key] || 0) / Math.max(1, mem[s.key] || 0));
+    const weight = hasWeights ? (wBySubj[s.key] || 0) : 1;
+    return {
+        key: s.key,
+        name: s.name || s.key,
+        remaining,
+        quizRemaining,
+        weight,
+        weightPct: (hasWeights && weightSum > 0) ? Math.round(weight / weightSum * 100) : 0,
+        weakW: Math.min(MAX_WEAK_WEIGHT, quizW + weakBoost + diagBoost + dueBoost),
+        diagBoost,
+        dueBoost,
+        weakBadge: quizW > 1.15 || weakBoost >= 0.25 || diagBoost >= 0.15 || dueBoost >= 0.25
+    };
+}
+
+/**
  * 과목별 가중 배분 계획 (SC-08·SC-09) — 주차 총량을
  *   수요_i = 잔여_i × 출제비중_i × 약점가중_i   비례로 배분한다.
  * 약점가중 = 퀴즈 표본 ≥ MIN_ALLOC_SAMPLE 이면 (2 − 정답률) [1.0~2.0], 미만이면 1.0.
@@ -303,39 +344,8 @@ export function computeSubjectAllocation(plan, subjects, opts = {}) {
     const hasWeights = Object.keys(wBySubj).length > 0;
     const weightSum = Object.values(wBySubj).reduce((s, n) => s + (n || 0), 0);
     const dailyQuizzes = (plan.goals && plan.goals.dailyQuizzes) || 0;
-    const rows = list.map(s => {
-        const stats = (s && s.stats) || {};
-        const total = stats.targetCards > 0 ? Math.min(stats.cards || 0, stats.targetCards) : (stats.cards || 0);
-        const remaining = Math.max(0, total - (mem[s.key] || 0));
-        // SC-13 퀴즈 잔여 — 은행 문항(targetQuizzes 상한) 대비 미풀이 수
-        const qTotal = stats.targetQuizzes > 0 ? Math.min(stats.quizzes || 0, stats.targetQuizzes) : (stats.quizzes || 0);
-        const quizRemaining = Math.max(0, qTotal - ((quiz[s.key] && quiz[s.key].solved) || 0));
-        // 최근 표본이 임계 이상이면 우선, 아니면 누적 표본 폴백
-        const rq = recent[s.key] || { solved: 0, correct: 0 };
-        const q = (rq.solved >= MIN_ALLOC_SAMPLE) ? rq : (quiz[s.key] || { solved: 0, correct: 0 });
-        const quizW = (q.solved >= MIN_ALLOC_SAMPLE && q.solved > 0)
-            ? Math.max(0.1, 2 - q.correct / q.solved) : 1.0;
-        // 취약 카드 비율 가산 — 헷갈림 표시 카드가 잔여에서 차지하는 비중, 최대 +0.5
-        const weakBoost = remaining > 0 ? Math.min(0.5, (weak[s.key] || 0) / remaining) : 0;
-        // SC-12 진단 신호 가산 — 최근 오답 원인 태그·취약 단원 수 (콜드스타트 과목 반영)
-        const dg = diag[s.key] || { causes: 0, weakChapters: 0 };
-        const diagBoost = Math.min(MAX_DIAG_BOOST, dg.causes * 0.1 + dg.weakChapters * 0.15);
-        // SC-13 복습 대기 가산 — 암기 카드 중 FSRS 기한초과 비율, 최대 +0.5
-        const dueBoost = Math.min(0.5, (due[s.key] || 0) / Math.max(1, mem[s.key] || 0));
-        const weight = hasWeights ? (wBySubj[s.key] || 0) : 1;
-        return {
-            key: s.key,
-            name: s.name || s.key,
-            remaining,
-            quizRemaining,
-            weight,
-            weightPct: (hasWeights && weightSum > 0) ? Math.round(weight / weightSum * 100) : 0,
-            weakW: Math.min(MAX_WEAK_WEIGHT, quizW + weakBoost + diagBoost + dueBoost),
-            diagBoost,
-            dueBoost,
-            weakBadge: quizW > 1.15 || weakBoost >= 0.25 || diagBoost >= 0.15 || dueBoost >= 0.25
-        };
-    });
+    const rowCtx = { mem, quiz, recent, weak, diag, due, wBySubj, hasWeights, weightSum };
+    const rows = list.map(s => _allocRow(s, rowCtx));
     const remNow = rows.map(r => r.remaining);
     const quizRemNow = rows.map(r => r.quizRemaining);
     const weeks = plan.weeks.map((/** @type {*} */ w) => {
