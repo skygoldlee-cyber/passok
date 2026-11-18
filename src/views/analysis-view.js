@@ -310,7 +310,7 @@ function _renderWeakStatementInsight() {
     const anomalousNoteHtml = anomalous.length > 0
         ? `<p class="analysis-advice">⚠️ 반복 오판 진술 ${anomalous.length}개 — 표현 검수가 필요할 수 있습니다.</p>` : '';
     el.innerHTML = `<h4>🎯 취약 진술 추적 <span class="analysis-meta">오늘 복습 대기 ${esc(dueCount)}개</span></h4>
-        ${rowsHtml}${clusterNoteHtml}${_weakClinicHtml(qc)}${anomalousNoteHtml}
+        ${rowsHtml}${clusterNoteHtml}${_weakClinicHtml(qc) /*esc-ok — 내부 생성 마크업 (esc 처리됨)*/}${anomalousNoteHtml}
         <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="gotoWeakReview"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i> 취약 리뷰 열기</button>`;
 }
 
@@ -376,7 +376,7 @@ function _renderStudyRhythmInsight() {
         <div class="wc-row"><span>오늘 목표 달성</span><strong>${esc(today.overallPercent)}%</strong></div>
         <div class="wc-row"><span>이번 주 학습일</span><strong>${esc(week.studyDays)}/${esc(week.goalDays)}일</strong></div>
         <div class="wc-row"><span>시험일</span><strong>${esc(ddayLabel)}</strong></div>
-        ${_rhythmGrowthRowHtml()}${_rhythmPatternRowsHtml()}${_rhythmPaceNoteHtml(subjectsMeta, dday)}${_rhythmFitNoteHtml()}
+        ${_rhythmGrowthRowHtml() /*esc-ok — 내부 생성 마크업*/}${_rhythmPatternRowsHtml() /*esc-ok — 내부 생성 마크업*/}${_rhythmPaceNoteHtml(subjectsMeta, dday) /*esc-ok — 내부 생성 마크업*/}${_rhythmFitNoteHtml() /*esc-ok — 내부 생성 마크업*/}
         <div class="ai-coach-slot"></div>
         <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="calendar-view"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i> 캘린더 보기</button>
         <button class="btn btn-secondary btn-sm analysis-card-btn ai-coach-btn is-hidden" data-click="requestAiCoach"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> AI 주간 코칭</button>
@@ -619,9 +619,9 @@ function _renderPassGapInsight() {
     }
     const { rows, weakBtnHtml } = _passGapRowHtml(gap);
     el.innerHTML = `<h4>🎓 합격 갭 분석</h4>
-        ${_passGapProbHtml(subjects, rules)}${rows}
+        ${_passGapProbHtml(subjects, rules) /*esc-ok — 내부 생성 마크업*/}${rows /*esc-ok — _passGapRowHtml 내부 생성 마크업*/}
         ${gap.weakest ? `<p class="analysis-advice">${esc(gap.weakest.reason)} — 이 과목이 점수 상승 여력이 가장 큽니다.</p>` : ''}
-        ${weakBtnHtml}${_passGapGoalAdvice(subjects, gap)}`;
+        ${weakBtnHtml}${_passGapGoalAdvice(subjects, gap) /*esc-ok — 내부 생성 마크업*/}`;
 }
 
 /**

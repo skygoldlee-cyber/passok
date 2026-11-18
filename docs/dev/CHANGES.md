@@ -1,6 +1,11 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+## 2026-11-18 fix: analysis-view 추출 헬퍼 보간 esc-ok 면제 — CI 이스케이프 싱크 게이트 해소
+
+- 복잡도 분해로 추출된 HTML 빌더 헬퍼(`_weakClinicHtml`·`_rhythm*Html`·`_passGap*` 등)의 innerHTML 보간이 ROAD-Q5 미이스케이프 후보로 신규 집계됨
+- 헬퍼 반환값은 내부에서 esc() 처리된 마크업 — 기존 관례(`/*esc-ok — 사유*/`)로 8개 보간 면제 주석 부착, 동작 변경 없음
+
 ## 2026-11-18 ci: dependency audit 프로덕션 의존성 한정 (--omit=dev) + E2E video 산출
 
 - picomatch ReDoS(CVE-2026-112366)가 ≤4.0.7 전 버전 영향 + upstream 패치 없음 — vitest→vite→tinyglobby devDeps 체인만 해당, 프로덕션 감사는 0건
