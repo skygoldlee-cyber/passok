@@ -17,9 +17,10 @@ vi.mock('../../../src/ui-utils.js', () => ({
 
 import {
     loadIndexHtml, el,
-    seedStudyData, seedProgress, resetStudyState, flushAsync,
+    seedStudyData, seedProgress, resetStudyState, flushAsync, stubRegistry,
 } from '../helpers.js';
 import { updateGlobalStats, renderDashboard } from '../../../src/views/dashboard.js';
+import { populateSubjectSelects } from '../../../src/shell/app-dashboard.js';
 import { renderAnalysisView, gotoSubjectAnalysis } from '../../../src/views/analysis-view.js';
 import { setExamDate, setStudyGoals } from '../../../src/study/study-tracker.js';
 import { state, safeSetItem } from '../../../src/core/state.js';
@@ -285,6 +286,20 @@ describe('대시보드 — 통계·과목 카드·약점 추천', () => {
         queue.querySelectorAll('button[data-click]').forEach(btn => {
             expect(btn.getAttribute('data-click').length).toBeGreaterThan(0);
         });
+    });
+
+    it('과목 셀렉트 옵션은 `N과목. 이름` 형식 — manifest order 우선', () => {
+        stubRegistry([
+            { key: 'subja', name: '과목A', order: 3 },
+            { key: 'subjb', name: '과목B' }, // order 미선언 → 나열 순번 폴백
+        ]);
+        populateSubjectSelects();
+
+        for (const id of ['fc-subject-select', 'quiz-subject-select']) {
+            const opts = el(id).querySelectorAll('option');
+            expect(opts[0].textContent).toBe('3과목. 과목A');
+            expect(opts[1].textContent).toBe('2과목. 과목B');
+        }
     });
 });
 

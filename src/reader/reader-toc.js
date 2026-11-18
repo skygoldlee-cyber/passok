@@ -1,5 +1,5 @@
 // src/reader-toc.js — 교재 리더 목차(TOC) 추출 순수 헬퍼
-// @spec TR-06
+// @spec TR-15,TR-31
 // textbook-reader.js에서 분리 — 섹션 제목의 계층 판정·메타 섹션 필터·
 // 하위 헤딩 추출·슬러그 ID 생성. DOM 비의존 순수 로직.
 
@@ -89,6 +89,42 @@ export function buildSectionDisplayTitles(sections) {
         }
         return ((counts[t] || 0) > 1 && currentChapter) ? `${t} — ${currentChapter}` : t;
     });
+}
+
+/**
+ * 섹션 배열의 각 항목에 TOC 역할을 부여한다.
+ * - 'chapter': ## 📚 Chapter 헤더
+ * - 'child': 챕터 자식 — 챕터 내부의 모든 절(번호 절, 중간·말미 ## 📌/✅ 카드 등)
+ * - 'top': 챕터 밖 최상위 — 첫 Chapter 이전 항목 및 챕터 없는 문서
+ * - 'skip': 챕터 헤더 직후 첫 번호 절 이전의 인트로 무번호 절 (TOC 생략)
+ *
+ * 판정 기준: 챕터는 다음 Chapter 헤더까지 하나의 단위 — 챕터 말미 📌/✅도
+ * 번호 절과 같은 들여쓰기로 묶어 형제 정렬을 유지한다.
+ * @param {{title: string}[]} sections
+ * @returns {('chapter'|'child'|'top'|'skip')[]}
+ */
+export function computeTocRoles(sections) {
+    const roles = new Array((sections || []).length).fill('top');
+    let inChapter = false;
+    let hasSeenNumbered = false;
+    (sections || []).forEach((section, idx) => {
+        const title = section.title || '';
+        const isChapterHeader = /Chapter\s+\d+/i.test(title);
+        const isNumbered = getTocLevel(title) >= 1;
+        if (isChapterHeader) {
+            roles[idx] = 'chapter';
+            inChapter = true;
+            hasSeenNumbered = false;
+        } else if (inChapter) {
+            if (isNumbered) {
+                roles[idx] = 'child';
+                hasSeenNumbered = true;
+            } else {
+                roles[idx] = hasSeenNumbered ? 'child' : 'skip';
+            }
+        }
+    });
+    return roles;
 }
 
 /**

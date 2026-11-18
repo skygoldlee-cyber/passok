@@ -93,19 +93,19 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (105개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (106개)
 │   ├── 수위 문서 (6개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·COMPLEXITY_BACKLOG·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (20개 — README + ADR 19건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (24개)
-│   ├── design/                ← 설계·계획·평가 문서 (32개)
+│   ├── design/                ← 설계·계획·평가 문서 (33개)
 │   ├── reference/             ← 명세·로직·참조 문서 (18개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (4개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (2개 — 사용자 매뉴얼·개인정보처리방침 + images/ — 런타임 fetch·배포 대상)
-└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (11개) · docs/exams/hazmat/ (1개)
+└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (11개) · docs/exams/hazmat/ (2개)
     ├── README.md              ← 시험별 문서 인덱스
     ├── user/                  ← 학습자 문서 (5개)
     ├── business/              ← 사업 기획·시장 조사·마케팅 문서 (cosmetic 6개 · carework 6개)
-    ├── design/                ← 시험 종속 설계 문서 (cosmetic 5개 — Formula OS 계열 · carework 4개)
+    ├── design/                ← 시험 종속 설계 문서 (cosmetic 5개 — Formula OS 계열 · carework 4개 · hazmat 1개)
     ├── reference/             ← 교재 종속 참조 문서 (2개 — 번호체계·참조매핑)
     ├── report_archive/        ← 시점 스냅샷 보고서 + 대체된 전략 원전 (11개)
     └── ingredients_audit_제2026-19호.md  ← 고시 대조 리포트 (판본: refmat)
@@ -237,6 +237,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [ACCOUNT_LINKING_DESIGN.md](dev/design/ACCOUNT_LINKING_DESIGN.md) | 계정 연결 설계 — 로그인 수단 간 유료 권한 통합 (linkIdentity·충돌 수동 복구 경로, DOC-DSN-50) |
 | [LEARNING_MEDIA_LINK_DESIGN.md](dev/design/LEARNING_MEDIA_LINK_DESIGN.md) | 학습매체 연결 설계 — `#/trainer/concept/<cid>` 개념 문항 딥링크 + 교재 QR + 함정(`trap`) 태그 Phase 1~3 (DOC-DSN-52, DOC-BIZ-13 부록 A 갭 실행 설계) |
 | [TEXTBOOK_IMPROVEMENT_ROADMAP.md](dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md) | 교재 보완 로드맵 — 팩별 볼륨·구조·카드 규약 현황 + 잔여 과제(ai-draft 검수·헤딩 정규화·2차 확장) 추적 (DOC-DSN-53) |
+| [MEMORIZATION_AIDS_DESIGN.md](dev/design/MEMORIZATION_AIDS_DESIGN.md) | 암기 지원 도구 설계안 — 이야기형 확장·두음법 개인화·cloze 자동 생성·서사↔복습 결합 우선순위 (DOC-DSN-54, 제안 검토) |
 | [CHANGES.md](dev/CHANGES.md) | 코드 변경 이력 (Changelog) — 변경의 이유와 맥락 |
 
 ### 제품 전략·기획
@@ -286,10 +287,16 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 
 | 문서 | 설명 |
 |------|------|
-| [CAREWORK_PRACTICE_TOOL_DESIGN.md](exams/carework/design/CAREWORK_PRACTICE_TOOL_DESIGN.md) | 요양보호사 현장도구 설계 — 시험→실무 구독 전환·careCalc/careCard/careLog 3단계 (DOC-DSN-42) |
+| [CAREWORK_PRACTICE_TOOL_DESIGN.md](exams/carework/design/CAREWORK_PRACTICE_TOOL_DESIGN.md) | 요양보호사 현장도구 설계 — 시험→실무 구독 전환·Phase 1~5 + CO-13·CO-18/19 + §11 구현 현황(Phase 6 계열 포함, 정본은 SPEC CO-01~22) (DOC-DSN-42) |
 | [CAREWORK_FACILITY_WORKSPACE.md](exams/carework/design/CAREWORK_FACILITY_WORKSPACE.md) | 기관 워크스페이스 설계 — PassOK가 기관 기록 서버가 되는 구독 확장 (DOC-DSN-43) |
 | [CARE_OS_DATAHUB_DESIGN.md](exams/carework/design/CARE_OS_DATAHUB_DESIGN.md) | Care OS 데이터 허브 — clientId 정규화·360° 카드·인수인계 로컬 다이제스트 (DOC-DSN-44, CO-01~05) |
 | [CAREWORK_SITE_LICENSE_DESIGN.md](exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md) | 기관 사이트 라이선스 — 요양원 단위 월권·기간권, facility_subscriptions + 멤버십 연동 entitlement (DOC-DSN-51) |
+
+## 🔧 설계 문서 (docs/exams/hazmat/design/)
+
+| 문서 | 설명 |
+|------|------|
+| [HAZMAT_PRACTICE_TOOL_DESIGN.md](exams/hazmat/design/HAZMAT_PRACTICE_TOOL_DESIGN.md) | 위험물 실무도구 설계 — 안전관리자 6단계(지정수량·혼재·소화·탱크·점검표·기록부), Pro 게이팅 (DOC-DSN-55) |
 
 ---
 
@@ -441,6 +448,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-51 | `docs/exams/carework/design/CAREWORK_SITE_LICENSE_DESIGN.md` |
 | DOC-DSN-52 | `docs/dev/design/LEARNING_MEDIA_LINK_DESIGN.md` |
 | DOC-DSN-53 | `docs/dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md` |
+| DOC-DSN-54 | `docs/dev/design/MEMORIZATION_AIDS_DESIGN.md` |
+| DOC-DSN-55 | `docs/exams/hazmat/design/HAZMAT_PRACTICE_TOOL_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |
@@ -531,6 +540,8 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-USR-24 | content/exams/carework/docs/4단계 런타임 플로우 설계.md |
 | DOC-USR-25 | `content/exams/carework/docs/학습안내서.md` |
 | DOC-USR-26 | content/exams/carework/docs/웹툰 컷 가이드라인.md |
+| DOC-USR-27 | content/exams/cosmetic/docs/인물 설정표.md |
+| DOC-USR-28 | content/exams/hazmat/docs/인물 설정표.md |
 | DOC-BIZ-01 | `docs/exams/cosmetic/business/FORMULA_OS_경쟁전략.md` |
 | DOC-BIZ-02 | `docs/exams/cosmetic/business/맞춤형화장품_조제관리사_자격증플랫폼_사업기획서.md` |
 | DOC-BIZ-03 | `docs/exams/cosmetic/business/맞춤형화장품판매업소_조사_2026-09.md` |

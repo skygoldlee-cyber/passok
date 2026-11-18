@@ -1,0 +1,12 @@
+#!/bin/sh
+# post-merge — 머지/pull 후 배포 스탬프 정합 자동 복구 (opt-in: npm run hooks:install)
+#
+# merge_stamps 드라이버(tools/merge/merge_stamps.js)는 양쪽 모두 변경된
+# 파일에만 호출된다. data/version.js가 한쪽만 바뀐 머지에서는 드라이버를
+# 거치지 않아 release-notes 병합 결과(같은 날짜 리모트 우선)와 APP_VERSION이
+# 어긋난다 — check_release_notes --fix로 즉시 정합해 check:notes 실패를 예방.
+
+node tools/check/check_release_notes.js --fix --quiet || {
+    echo "⚠ post-merge: 릴리스 스탬프 정합 실패 — npm run check:notes 로 확인하세요" >&2
+}
+exit 0

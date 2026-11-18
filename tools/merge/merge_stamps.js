@@ -18,6 +18,13 @@
  * 안전 규칙: 스탬프 외 내용이 양쪽에서 모두 바뀌었거나 파싱 실패면
  * 표준 충돌 마커를 써서 수동 해결로 넘긴다 (절대 조용히 한쪽을 버리지 않음).
  *
+ * 알려진 한계: git은 양쪽 모두 변경된 파일에만 드라이버를 호출한다.
+ * release-notes가 병합(같은 날짜 리모트 우선 정렬)되는데 version.js가
+ * 한쪽만 바뀐 머지에서는 드라이버를 거치지 않아 APP_VERSION이 노트
+ * 최신 버전과 어긋날 수 있다 — .githooks/post-merge가 check_release_notes
+ * --fix로 자동 정합하고, 훅 미설치 환경에서는 check:notes 실패 메시지의
+ * fix:notes 명령으로 수동 복구한다.
+ *
  * 등록 (clone마다 1회 — hooks:install이 함께 수행):
  *   git config merge.stamps.driver "node tools/merge/merge_stamps.js %O %A %B %P"
  *   .gitattributes가 대상 파일에 merge=stamps를 지정한다.

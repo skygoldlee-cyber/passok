@@ -253,12 +253,13 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run check:terms` | `node tools/check/check_terms.js` | 사용자 표시 용어 정합 게이트 (Pro/Free 잔재 차단) |
 | `npm run check:provenance` | `node tools/check/check_doc_provenance.js` | 문서 '원본' 선언 경로 존재 검증 (콘텐츠 출처 추적) |
 
-### `fix:*` — 3개
+### `fix:*` — 4개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
 | `npm run fix:quotes` | `node tools/sync/fix_answer_quotes.js` | 부실 인용문 자동 보강 |
 | `npm run fix:citations` | `node tools/sync/fix_citation_targets.js` | 정답 미지지 문항의 인용 위치 자동 교정 |
+| `npm run fix:notes` | `node tools/check/check_release_notes.js --fix` | data/release-notes.json ↔ git 이력·버전 스탬프 정합성 |
 | `npm run fix:all` | `npm run build:derived && npm run build:html && node tools/sync/sync_textbook_files.js` | 교재/문제은행 파일 ↔ manifest·sw.js·인용 경로 동기화 |
 
 ### 기타 — 9개
@@ -285,7 +286,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
-| `npm run hooks:install` | `git config core.hooksPath .githooks && git config merge.stamps.driver "node tools/merge/merge_stamps.js %O %A %B %P" && git config merge.stamps.name "PassOK release-stamp merger" && echo 'pre-commit/pre-push 훅 + merge.stamps 드라이버 활성화됨 (.githooks, .gitattributes)'` | 배포 스탬프 파일 전용 git 머지 드라이버 |
+| `npm run hooks:install` | `git config core.hooksPath .githooks && git config merge.stamps.driver "node tools/merge/merge_stamps.js %O %A %B %P" && git config merge.stamps.name "PassOK release-stamp merger" && echo 'pre-commit/pre-push/post-merge 훅 + merge.stamps 드라이버 활성화됨 (.githooks, .gitattributes)'` | 배포 스탬프 파일 전용 git 머지 드라이버 |
 
 ### `convert:*` — 1개
 

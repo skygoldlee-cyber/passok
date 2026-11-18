@@ -240,6 +240,7 @@ export function stubRegistry(subjects = []) {
         subjects: subjects.map(s => ({
             key: s.key,
             name: s.name || s.key,
+            order: s.order,
             stats: {
                 cards: (s.cards || []).length,
                 quizzes: (s.quizzes || []).length,

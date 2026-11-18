@@ -1,5 +1,5 @@
 // tests/e2e/reader-advanced.spec.js — 리더 고급 기능 실브라우저 회귀
-// @spec TR-06,TR-10,TR-15,TR-16,TR-16a,TR-20,TR-26,TR-27
+// @spec TR-06,TR-10,TR-15,TR-16,TR-16a,TR-20,TR-26,TR-27,TR-31
 // 계층 TOC·모바일 드로어 제스처·툴바 자동숨김·Mermaid 렌더·이미지 라이트박스·
 // 줌 핀치 제스처·기출 링크 뷰어 — 레이아웃·제스처·오버레이 상호작용이라 jsdom 불가.
 

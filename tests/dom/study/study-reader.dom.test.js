@@ -63,7 +63,19 @@ describe('교재 리더 — 과목 선택·본문·이어하기·북마크', () 
         const opts = el('reader-subject-select').querySelectorAll('option');
         expect(opts.length).toBe(2); // placeholder + subja
         expect(opts[1].value).toBe('subja');
-        expect(opts[1].textContent).toBe('과목A');
+        expect(opts[1].textContent).toBe('1과목. 과목A');
+    });
+
+    it('과목 셀렉트 옵션은 manifest order를 번호로 사용한다', () => {
+        stubRegistry([
+            { ...SUBJ, key: 'subja', name: '과목A', order: 3 },
+            { ...SUBJ, key: 'subjb', name: '과목B', order: 5 },
+        ]);
+        renderTextbookReader();
+
+        const opts = el('reader-subject-select').querySelectorAll('option');
+        expect(opts[1].textContent).toBe('3과목. 과목A');
+        expect(opts[2].textContent).toBe('5과목. 과목B');
     });
 
     it('과목 선택 → 본문 섹션 카드·TOC·툴바 렌더', async () => {

@@ -99,9 +99,10 @@ test('ST-06: 별표/참조자료 인덱스 앞에 서사→자료 전환 안내�
 // ---------- ST-07: 통합 에필로그 ----------
 
 test('ST-07: 시리즈 설정 문서가 4막 주인공 통합 에필로그(조제대 재회)를 설계한다', () => {
-  const doc = readdirSync(TEXTBOOK).find(f => f.includes('시리즈설정문서'));
+  const docDir = join(TEXTBOOK, 'docs'); // CS-13 정본 위치 — 교재/docs/
+  const doc = readdirSync(docDir).find(f => f.includes('시리즈설정문서'));
   assert.ok(doc, '시리즈 설정 문서 없음');
-  const content = readFileSync(join(TEXTBOOK, doc), 'utf-8');
+  const content = readFileSync(join(docDir, doc), 'utf-8');
   assert.ok(/4막/.test(content), '4막 구조 없음');
   assert.ok(/조제대/.test(content), '조제대 재회 장치 없음');
   assert.ok(/예린/.test(content), '통합 서사 인물(예린) 없음');

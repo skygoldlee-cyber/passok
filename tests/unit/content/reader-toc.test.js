@@ -1,5 +1,5 @@
 // tests/unit/reader-toc.test.js — 리더 목차 추출 헬퍼 검증
-// @spec TR-06
+// @spec TR-15,TR-31
 // textbook-reader.js에서 reader-toc.js로 분리된 순수 함수군의 계약 고정:
 // 메타 섹션 판정·번호 기반 계층·참조 접두사 제거·코드블록 제외 하위 헤딩.
 
@@ -13,7 +13,7 @@ const require = createRequire(import.meta.url);
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..');
 const {
     isStoryMetaSection, filterMetaSections, getTocLevel,
-    cleanRefTitle, extractSubHeadings, buildSectionDisplayTitles,
+    cleanRefTitle, extractSubHeadings, computeTocRoles, buildSectionDisplayTitles,
 } = require(join(ROOT, 'src/reader/reader-toc.js'));
 
 test('isStoryMetaSection — 메타 섹션 제목 판정', () => {
@@ -120,4 +120,32 @@ test('extractSubHeadings — ### / #### 추출, 코드블록 제외', () => {
     ]);
     assert.deepEqual(extractSubHeadings(''), []);
     assert.deepEqual(extractSubHeadings(null), []);
+});
+
+test('computeTocRoles — 절 사이·말미 무번호 카드 모두 챕터 자식 (회귀)', () => {
+    const secs = [
+        { title: '📚 Chapter 01. 제1류' },
+        { title: '1. 성상 및 특성' },
+        { title: '📌 시험 핵심 포인트' },   // 절1·절2 사이 중간 카드
+        { title: '2. 저장 및 취급' },
+        { title: '📌 수험 대비 핵심 포인트' }, // 챕터 말미 카드도 같은 들여쓰기
+        { title: '✅ 확인문제' },
+        { title: '📚 Chapter 02. 제2류' },
+        { title: '1. 성상 및 특성' },
+        { title: '2. 저장 및 취급' },
+    ];
+    assert.deepEqual(computeTocRoles(secs), [
+        'chapter', 'child', 'child', 'child', 'child', 'child', 'chapter', 'child', 'child',
+    ]);
+});
+
+test('computeTocRoles — 챕터 헤더 직후 인트로 무번호 절은 skip', () => {
+    const secs = [
+        { title: '📚 Chapter 01. 제1류' },
+        { title: '학습 안내' },
+        { title: '1. 성상' },
+        { title: '✅ 확인문제' },
+        { title: '부록 표' }, // 챕터 밖이 아니라 챕터 말미 카드로 유지
+    ];
+    assert.deepEqual(computeTocRoles(secs), ['chapter', 'skip', 'child', 'child', 'child']);
 });

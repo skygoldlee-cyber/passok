@@ -44,10 +44,11 @@ export function populateSubjectSelects() {
 function _fillSubjectSelect(select, subjects, stateBag) {
     const prevVal = select.value || stateBag.subject;
     select.innerHTML = '';
-    subjects.forEach(subj => {
+    subjects.forEach((subj, idx) => {
         const option = document.createElement('option');
         option.value = subj.key;
-        option.textContent = subj.name;
+        // 과목 번호 표기 — 대시보드 필터 버튼·리더 셀렉트의 `N과목` 관례와 정합
+        option.textContent = `${subj.order ?? idx + 1}과목. ${subj.name}`;
         select.appendChild(option);
     });
     if (prevVal && select.querySelector(`option[value="${prevVal}"]`)) {
