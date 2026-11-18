@@ -66,8 +66,32 @@
   }
  },
  "law": {
-  "cards": {},
-  "quizzes": {}
+  "cards": {
+   "law_card_dee562": "01. 소방기본법",
+   "law_card_3ffbf3": "04. 소방시설공사업법",
+   "law_card_705bd1": "05. 위험물안전관리법",
+   "law_card_22a022": "소화전 설치간격",
+   "law_card_53c10f": "소화전 호스접결구",
+   "law_card_8f9850": "저수조",
+   "law_card_60a5e8": "소화설비",
+   "law_card_7b4652": "경보설비",
+   "law_card_d3480f": "피난구조설비",
+   "law_card_c578c0": "소화용수설비",
+   "law_card_d2bda5": "소화활동설비",
+   "law_card_7184f0": "옥외저장소",
+   "law_card_27bead": "옥내저장소",
+   "law_card_460d7a": "옥외탱크저장소",
+   "law_card_97afff": "정기점검",
+   "law_card_4120fa": "정기검사",
+   "law_card_59795a": "5년 이하/5천만원",
+   "law_card_3cca75": "벌금형만",
+   "law_card_d32546": "가중·특칙"
+  },
+  "quizzes": {
+   "law_quiz_7455b4": "**100배 이상**|옥외저장소",
+   "law_quiz_fec99a": "**150배 이상**|옥내저장소",
+   "law_quiz_d4613a": "**200배 이상**|옥외탱크저장소"
+  }
  },
  "facil": {
   "cards": {},
