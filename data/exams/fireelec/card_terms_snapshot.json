@@ -107,7 +107,15 @@
   }
  },
  "facil": {
-  "cards": {},
+  "cards": {
+   "facil_card_757c38": "소방전기시설 및 화재안전성능기준·화재안전기술기준",
+   "facil_card_b31444": "4m 이상 ~ 8m 미만",
+   "facil_card_5c258a": "8m 이상 ~ 15m 미만",
+   "facil_card_a03120": "15m 이상 ~ 20m 미만",
+   "facil_card_d0a362": "20m 이상",
+   "facil_card_9b9b31": "내화배선",
+   "facil_card_52d7f0": "내열배선"
+  },
   "quizzes": {}
  }
 }

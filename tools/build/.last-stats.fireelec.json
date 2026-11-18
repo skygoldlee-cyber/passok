@@ -31,11 +31,11 @@
       }
     },
     "facil": {
-      "cards": 0,
+      "cards": 7,
       "quizzes": 0,
       "files": {
         "교재/facil/4과목_소방전기시설의 구조 및 원리_표준형.md": {
-          "cards": 0,
+          "cards": 7,
           "quizzes": 0
         }
       }
@@ -52,7 +52,7 @@
       "questions": 204
     },
     "subject4": {
-      "questions": 290
+      "questions": 244
     }
   }
 }
