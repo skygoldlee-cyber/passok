@@ -165,7 +165,8 @@ test('PF-14: 테이블 래퍼에 전역 가로 스크롤 규칙이 있다', () =
 
 test('PF-15: 화장품법 법령원문이 단일 정본으로 참조된다', () => {
   const pr = read('src/pdf-registry.js');
-  const lawRefs = [...pr.matchAll(/화장품법\(법률\)\(제21525호\)/g)];
+  // 법령 개정으로 고시번호가 바뀌므로 버전 무관 패턴으로 검증
+  const lawRefs = [...pr.matchAll(/화장품법\(법률\)\(제\d+호\)/g)];
   assert.ok(lawRefs.length > 0, '법률 정본 참조');
   // 구버전 '공통' 폴더 분리본이 없어야 함
   const refRoot = join(ROOT, 'content', 'exams', 'cosmetic', '참조자료', 'ref_md');

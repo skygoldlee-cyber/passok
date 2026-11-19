@@ -39,7 +39,8 @@ test('resolveRefPath: 빈 입력 → 빈 문자열', () => {
 });
 
 test('resolveRefPath: 등록된 PDF 파일 → MD 경로', () => {
-    const result = resolveRefPath('화장품법(법률)(제21525호)(20261008).pdf');
+    // 법령 파일명은 개정으로 바뀌므로 레지스트리 실측 키 사용
+    const result = resolveRefPath(REFERENCE_LAW[0].file);
     assert.ok(result.includes('참조자료/ref_md/'), 'ref_md 경로 포함');
     assert.ok(result.endsWith('.md'), '.md 확장자');
     assert.ok(!result.includes('.pdf'), '.pdf 확장자 제거됨');
@@ -153,16 +154,16 @@ test('KEYWORD_REF_MAP: 모든 엔트리에 pattern과 file 존재', () => {
 });
 
 test('REF_FILE_TO_PATH: REF_DIRS의 모든 파일이 경로 매핑됨', () => {
-    // 법령고시의 첫 파일이 매핑되어 있는지 확인
-    const lawFile = '화장품법(법률)(제21525호)(20261008).pdf';
+    // 법령고시의 첫 파일이 매핑되어 있는지 확인 (개정으로 파일명이 바뀌므로 실측 키 사용)
+    const lawFile = REFERENCE_LAW[0].file;
     assert.ok(REF_FILE_TO_PATH[lawFile], '법률 파일 경로 매핑됨');
     assert.ok(REF_FILE_TO_PATH[lawFile].endsWith('.md'), '.md 확장자');
 });
 
 test('REF_REGISTRY: 우선순위 적용 (과목N > 공통 > 법령고시)', () => {
-    // 화장품법은 법령고시, 공통, 과목1 모두에 있음
     // 우선순위: 과목4 > 과목3 > 과목2 > 과목1 > 공통 > 법령고시
-    const lawFile = '화장품법(법률)(제21525호)(20261008).pdf';
+    // 법령 파일명은 개정으로 바뀌므로 레지스트리 실측 키 사용
+    const lawFile = REFERENCE_LAW[0].file;
     assert.ok(REF_REGISTRY[lawFile], '법률 파일 레지스트리 등록됨');
     // 공통 또는 법령고시 중 하나여야 함 (과목1~4에 같은 파일명이 없으면 공통이 우선)
     assert.ok(['공통', '법령고시'].includes(REF_REGISTRY[lawFile]), '우선순위에 따른 폴더 할당');

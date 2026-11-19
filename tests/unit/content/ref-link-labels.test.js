@@ -14,7 +14,7 @@ const _tmpDirs = [];
 after(() => { for (const d of _tmpDirs) rmSync(d, { recursive: true, force: true }); });
 function tmpDir(prefix) { const d = mkdtempSync(join(tmpdir(), prefix)); _tmpDirs.push(d); return d; }
 import { ExamViewer } from '../../../src/reader/exam-viewer.js';
-import { refDocDisplayName } from '../../../src/pdf-registry.js';
+import { refDocDisplayName, getRefTables } from '../../../src/pdf-registry.js';
 import { formatSectionContentForReader } from '../../../src/reader/reader-format.js';
 import { slugifyHeading, scrollToHeadingSlug } from '../../../src/shell/doc-overlay.js';
 
@@ -29,8 +29,11 @@ test('refDocDisplayName: 등록된 과목별 문서 → references.json 표시�
 
 test('refDocDisplayName: 확장자 무시 — md ↔ pdf 동일 문서 매칭', () => {
     // referenceLaw의 file은 .pdf지만 ref_md의 .md 라벨에도 매칭되어야 함
-    const name = refDocDisplayName('화장품법(법률)(제21525호)(20261008).md');
-    assert.equal(name, '화장품법');
+    // 법령 파일명은 개정으로 바뀌므로 레지스트리 실측 키 사용
+    const law = (getRefTables().REFERENCE_LAW || [])[0];
+    assert.ok(law, '법령고시 항목 존재');
+    const name = refDocDisplayName(law.file.replace(/\.pdf$/, '.md'));
+    assert.equal(name, law.name);
 });
 
 test('refDocDisplayName: 미등록 파일 → 빈 문자열', () => {

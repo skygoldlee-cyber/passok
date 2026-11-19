@@ -218,7 +218,7 @@ test('AI-11/AI-13: ai:coverage가 무키로 커버리지 리포트를 생성한�
 
 test('AI-12: ai:stale --file 지정 시 인용 문항 재검증 목록을 만든다', () => {
     const out = runTool('ai_stale_scan.js', ['--exam', 'cosmetic', '--file',
-        'content/exams/cosmetic/참조자료/ref_md/과목1/화장품법(법률)(제21525호)(20261008)/화장품법(법률)(제21525호)(20261008).md']);
+        'content/exams/cosmetic/참조자료/ref_md/과목1/화장품법(법률)(제22113호)(20261020)/화장품법(법률)(제22113호)(20261020).md']);
     assert.match(out, /재검증 대기|ref_md/, '스캔 결과 출력');
 });
 

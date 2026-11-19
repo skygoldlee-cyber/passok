@@ -8,9 +8,10 @@ check_mfds_notice.py가 '신규 고시 발견'까지만 감지한다면, 이 스
 - 행정규칙(고시, target=admrul): lawService.do 상세의 첨부파일 중
   '전문' PDF를 자동 다운로드 → 참조자료/법령고시/에 규약 파일명으로 배치.
   --apply 시 구 PDF를 _archive/로 이동하고 references.json의 파일명 참조를 일괄 치환.
-- 법령(법률·령·규칙, target=law): DRF가 문서 파일을 제공하지 않아
-  (type=PDF/HWP/DOC 모두 HTML 오류 페이지 반환) 수동 다운로드가 필요하다.
-  대신 다운로드 페이지 URL·저장할 파일명·개정문 요지를 출력해 절차를 안내한다.
+- 법령(법률·령·규칙, target=law): DRF 문서 API는 문서 파일을 제공하지 않지만
+  (type=PDF/HWP/DOC 모두 HTML 오류 페이지 반환), 웹 뷰어의 "저장" 플로우가 쓰는
+  lsPdfPrint.do POST 엔드포인트로 공식 PDF를 자동 생성·다운로드할 수 있다.
+  실패 시 다운로드 페이지 URL·저장할 파일명·개정문 요지를 출력해 절차를 안내한다.
 
 출력 파일명 규약은 parse_ref_filename()과 동일:
     {문서명}({발령기관})({제N호})({시행일 YYYYMMDD}).pdf
@@ -224,8 +225,113 @@ def fetch_admrul(doc, latest, apply=False, out_dir=None):
     return result
 
 
+# ---------------------------------------------------------------------------
+# 법령(법률·령·규칙) PDF — 웹 뷰어 "저장" 플로우(lsPdfPrint.do) 재현
+# ---------------------------------------------------------------------------
+def _http_session():
+    import http.cookiejar
+    cj = http.cookiejar.CookieJar()
+    return urllib.request.build_opener(urllib.request.HTTPCookieProcessor(cj))
+
+
+def _info_input(html, name):
+    m = re.search(r'(?:id|name)="%s"[^>]*value="([^"]*)"' % re.escape(name), html)
+    return m.group(1) if m else ''
+
+
+def fetch_law_pdf(serial, ef_yd, opener=None):
+    """law.go.kr 뷰어의 PDF 저장 엔드포인트로 법령 전문 PDF를 생성·수신한다.
+
+    흐름: lsInfoP.do GET(세션 쿠키 + 폼 파라미터 추출)
+        → lsPdfPrint.do?efGubun= POST(저장 폼) → application/pdf 응답.
+    반환: PDF 바이트 (실패 시 예외 또는 비PDF 바이트).
+    """
+    op = opener or _http_session()
+    info = ('https://www.law.go.kr/lsInfoP.do?lsiSeq=%s&efYd=%s'
+            % (serial, ef_yd))
+    req = urllib.request.Request(info, headers={'User-Agent': 'Mozilla/5.0'})
+    html = op.open(req, timeout=60).read().decode('euc-kr', errors='replace')
+    fields = {
+        'lsiSeq': serial,
+        'outPutLsiSeq': serial,
+        'outPutChrClsCd': _info_input(html, 'lsBdyChrCls') or '010202',
+        'chrClsCd': _info_input(html, 'chrClsCd') or '010202',
+        'efYd': ef_yd,
+        'joAllCheck': 'Y', 'mokChaChk': 'N', 'bylChaChk': 'N',
+        'arSeqs': '', 'arIds': '', 'onlyEfYd': 'N', 'efLsGubun': '',
+        'efDvPop': '', 'nwJoYnInfo': '', 'bylAllSeq': '', 'coverDpYn': '1',
+        'saveCase': 'saveCase2', 'fileType': 'pdf',
+        'lsNmFont': 'goThic', 'lsJoFont': 'smyoungjo', 'lsJoSize': '10',
+        'spaceCls': '2',
+        'lsBdyChrCls': _info_input(html, 'lsBdyChrCls') or '010202',
+        'lsId': _info_input(html, 'lsId'),
+        'lsClsCd': 'L',
+        'lsNm': _info_input(html, 'lsNm'),
+        'lsNmTrim': _info_input(html, 'lsNmTrim'),
+        'lsAstMode': '1', 'saveExt': 'pdf',
+    }
+    data = urllib.parse.urlencode(fields).encode('utf-8')
+    req = urllib.request.Request(
+        'https://www.law.go.kr/lsPdfPrint.do?efGubun=', data=data,
+        headers={'User-Agent': 'Mozilla/5.0',
+                 'Content-Type': 'application/x-www-form-urlencoded',
+                 'Referer': info})
+    return op.open(req, timeout=120).read()
+
+
+def fetch_law(doc, latest, apply=False, out_dir=None):
+    """법령 1종: 뷰어 PDF 저장 경로로 신본 PDF 다운로드 → 법령고시/ 배치."""
+    serial = latest.get('serial')
+    if not serial:
+        return {'ok': False, 'reason': 'serial 없음'}
+    agency = filename_agency(doc['file'])
+    date8 = re.sub(r'\D', '', latest.get('effectiveDate') or '')
+    fname = new_filename(doc['name'], agency, latest.get('notice'), date8)
+    if not fname:
+        return {'ok': False, 'reason': '파일명 조립 실패'}
+    try:
+        data = fetch_law_pdf(serial, date8)
+    except Exception as e:  # noqa: BLE001
+        return {'ok': False, 'reason': f'PDF 생성 실패 — {e}'}
+    if not data.startswith(b'%PDF'):
+        return {'ok': False, 'reason': f'PDF가 아닌 응답 ({len(data)}B)'}
+
+    dest_dir = Path(out_dir) if out_dir else REF_BASE / doc.get('dir', '법령고시')
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    dest = dest_dir / fname
+    if dest.exists():
+        return {'ok': False, 'reason': f'이미 존재: {dest.name}'}
+    dest.write_bytes(data)
+    src = {
+        'source': 'law.go.kr lsPdfPrint.do (웹 뷰어 저장)',
+        'serial': serial, 'efYd': date8,
+        'sha256': sha256_bytes(data),
+        'fetchedAt': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'),
+    }
+    (dest_dir / (dest.stem + '.src.json')).write_text(
+        json.dumps(src, ensure_ascii=False, indent=2), encoding='utf-8')
+    result = {'ok': True, 'file': fname, 'dir': dest_dir.name,
+              'bytes': len(data), 'sha256': src['sha256']}
+    if apply:
+        old_base = Path(doc['file']).stem
+        new_base = dest.stem
+        arch = REF_BASE / '_archive'
+        arch.mkdir(exist_ok=True)
+        for stem in (old_base + '.pdf', old_base + '.src.json'):
+            p = REF_BASE / doc.get('dir', '법령고시') / stem
+            if p.exists():
+                p.rename(arch / p.name)
+        text = REFS_FILE.read_text(encoding='utf-8')
+        new_text, count = replace_basename_in_refs(text, old_base, new_base)
+        if count:
+            REFS_FILE.write_text(new_text, encoding='utf-8')
+        result['refsUpdated'] = count
+        result['archived'] = doc['file']
+    return result
+
+
 def law_guidance(doc, latest):
-    """법률류: DRF는 문서 파일 미제공 — 수동 다운로드 안내 + 개정문 요지."""
+    """법률류: 자동 다운로드 실패 시 수동 다운로드 안내 + 개정문 요지."""
     detail = law_detail(latest.get('serial')) if latest.get('serial') else {}
     url = ('https://www.law.go.kr/lsInfoP.do?lsiSeq=' + str(latest.get('serial'))
            if latest.get('serial') else doc.get('url', ''))
@@ -299,10 +405,21 @@ def main():
                 manual.append((d, r))
                 print(f'    ✗ 자동 다운로드 불가 — {r["reason"]}')
         else:
-            r = law_guidance(d, latest)
-            manual.append((d, r))
-            print(f'    → 법률류는 수동 다운로드: {r["url"]}')
-            print(f'      저장 파일명: {r["file"] or "(파일명 조립 실패)"}')
+            r = fetch_law(d, latest, apply=do_apply)
+            if r['ok']:
+                fetched.append((d, r))
+                print(f'    ✓ 다운로드(뷰어 PDF): {r["dir"]}/{r["file"]} '
+                      f'({r["bytes"]:,}B)')
+                if do_apply:
+                    print(f'    ✓ references.json {r.get("refsUpdated", 0)}곳 치환, '
+                          f'구본 _archive 이동')
+            else:
+                g = law_guidance(d, latest)
+                g['reason'] = r.get('reason', '')
+                manual.append((d, g))
+                print(f'    → 자동 다운로드 실패({r.get("reason", "")}) — '
+                      f'수동: {g["url"]}')
+                print(f'      저장 파일명: {g["file"] or "(파일명 조립 실패)"}')
 
     print('\n' + '=' * 60)
     print(f'자동 확보 {len(fetched)}건 / 수동 필요 {len(manual)}건 / 최신 또는 실패 {len(skipped)}건')

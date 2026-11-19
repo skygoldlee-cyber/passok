@@ -50,7 +50,7 @@ flowchart LR
 | `batch_convert.py` | 시험 교재·안내서·문제은행 MD → `html/` 일괄 변환 | **교재 MD 교체 후 HTML 재생성 시** (시나리오 B) |
 | `check_laws.py` | 국가법령정보센터 OPEN API로 시험 대상 법령 현행성 확인 → `report/` | **법령 개정 점검 시** (시나리오 C, `LAW_OC_KEY` 키 필요) |
 | `check_mfds_notice.py` | `referenceLaw` 전체의 최신 고시 감지 → `notice_status.json` (주간 크론 이슈) | **개정 감시** (시나리오 C) — `newer` 감지까지만 |
-| `fetch_revision.py` | 신규본 고시 첨부 PDF 자동 다운로드 + references.json 치환 | 감지된 고시의 원문 확보 시 |
+| `fetch_revision.py` | 신규본 원문 PDF 자동 다운로드 + references.json 치환 — 고시는 첨부파일, 법령은 뷰어 저장 경로(`lsPdfPrint.do`) | 감지된 고시·법령의 원문 확보 시 |
 | `diff_revision.py` | 신규본 조문 단위 대조 — '본문 동일(연혁 갱신)' vs '실질 개정' 판별 → `report/법령개정대조결과.md`. 법령은 연혁 serial끼리 대조(lawSearch lsHistory → 기준 연혁 결정) — ref_md 형식 무관 | **감지 직후 판별** — 유예조항 발효 연혁본을 실질 개정과 구분 |
 | `drf_render.py` | DRF lawService XML → ref_md 렌더러 + 조문 대조 라이브러리 (순수 함수) | diff_revision이 내부 사용 — 직접 실행 불요 |
 | `compare_ingredients_official.py` | 고시 ref_md 별표 원료 ↔ 원료 DB 전수 대조 리포트 | cosmetic 원료 DB 감사 시 (`_exam_root` 해석 — 기본 시험 대상) |

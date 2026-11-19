@@ -6,6 +6,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { formatSectionContentForReader } from '../../../src/reader/reader-format.js';
+import { getRefTables } from '../../../src/pdf-registry.js';
 
 // ==================== 페이지 참조 제거 ====================
 
@@ -121,7 +122,10 @@ test('출처 링크: "출처: `../참조자료/...md`" → data-ref-md', () => {
 });
 
 test('출처 링크: "출처: `xxx.pdf`" → data-ref-html', () => {
-    const md = '출처: `화장품법(법률)(제21525호)(20261008).pdf`';
+    // 법령 개정으로 참조 파일명이 바뀌어도 깨지지 않도록 레지스트리 실측 키 사용
+    const pdfName = Object.keys(getRefTables().REF_MD_SUBJECTS || {}).find(k => k.endsWith('.pdf'));
+    assert.ok(pdfName, '레지스트리에 PDF 참조 존재');
+    const md = `출처: \`${pdfName}\``;
     const html = formatSectionContentForReader(md);
     assert.ok(html.includes('data-ref-html'), 'data-ref-html 속성');
     assert.ok(html.includes('source-link'), 'source-link 클래스');

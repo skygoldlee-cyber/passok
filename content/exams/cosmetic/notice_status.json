@@ -14,10 +14,10 @@
     {
       "name": "화장품법",
       "target": "law",
-      "file": "화장품법(법률)(제21525호)(20261008).pdf",
+      "file": "화장품법(법률)(제22113호)(20261020).pdf",
       "url": "https://www.law.go.kr/법령/화장품법",
-      "baselineNotice": "제21525호",
-      "baselineDate": "2026-10-08",
+      "baselineNotice": "제22113호",
+      "baselineDate": "2026-10-20",
       "_priorDate": "2026-10-20",
       "latestNotice": "제22113호",
       "latestDate": "2026-10-20",
@@ -26,7 +26,7 @@
       "currentDate": "2026-10-20",
       "currentUrl": "https://www.law.go.kr/lsInfoP.do?lsiSeq=291337&efYd=20261020",
       "pending": false,
-      "newer": true
+      "newer": false
     },
     {
       "name": "화장품법 시행령",
@@ -184,10 +184,10 @@
     {
       "name": "개인정보 보호법 시행령",
       "target": "law",
-      "file": "개인정보 보호법 시행령(대통령령)(제36671호)(20260911).pdf",
+      "file": "개인정보 보호법 시행령(대통령령)(제36804호)(20261110).pdf",
       "url": "https://www.law.go.kr/법령/개인정보보호법시행령",
-      "baselineNotice": "제36671호",
-      "baselineDate": "2026-09-11",
+      "baselineNotice": "제36804호",
+      "baselineDate": "2026-11-10",
       "_priorDate": "2026-11-10",
       "latestNotice": "제36804호",
       "latestDate": "2026-11-10",
@@ -196,7 +196,7 @@
       "currentDate": "2026-11-10",
       "currentUrl": "https://www.law.go.kr/lsInfoP.do?lsiSeq=291731&efYd=20261110",
       "pending": false,
-      "newer": true
+      "newer": false
     },
     {
       "name": "맞춤형화장품조제관리사 자격시험 운영에 관한 규정",
@@ -233,6 +233,6 @@
       "newer": false
     }
   ],
-  "checkedAt": "2026-11-19T14:56:54+00:00",
+  "checkedAt": "2026-11-19T15:12:39+00:00",
   "newerFound": false
 }

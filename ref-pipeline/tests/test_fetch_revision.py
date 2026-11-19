@@ -142,3 +142,62 @@ class TestFetchAdmrul:
         monkeypatch.setattr(fr, 'admrul_detail', lambda s: {})
         r = fr.fetch_admrul(_doc(), _latest(), out_dir=tmp_path)
         assert not r['ok']
+
+
+# ---------------------------------------------------------------------------
+# fetch_law — 뷰어 PDF 저장 경로(lsPdfPrint.do) — 네트워크 모킹
+# ---------------------------------------------------------------------------
+def _law_doc():
+    return {'name': '화장품법', 'target': 'law',
+            'file': '화장품법(법률)(제21525호)(20261008).pdf',
+            'dir': '법령고시', 'baselineNotice': '제21525호', 'baselineDate': '2026-10-08'}
+
+
+def _law_latest():
+    return {'notice': '제22113호', 'effectiveDate': '2026-10-20', 'serial': '291337'}
+
+
+class TestFetchLaw:
+    def test_happy_path(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(fr, 'fetch_law_pdf',
+                            lambda s, e, opener=None: b'%PDF-1.4 law')
+        r = fr.fetch_law(_law_doc(), _law_latest(), out_dir=tmp_path)
+        assert r['ok'] and r['file'].endswith('(제22113호)(20261020).pdf')
+        pdf = tmp_path / r['file']
+        assert pdf.read_bytes() == b'%PDF-1.4 law'
+        src = json.loads((tmp_path / (pdf.stem + '.src.json')).read_text(encoding='utf-8'))
+        assert src['serial'] == '291337' and src['efYd'] == '20261020'
+
+    def test_non_pdf_response_rejected(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(fr, 'fetch_law_pdf',
+                            lambda s, e, opener=None: b'<html>err</html>')
+        r = fr.fetch_law(_law_doc(), _law_latest(), out_dir=tmp_path)
+        assert not r['ok'] and 'PDF가 아닌' in r['reason']
+
+    def test_fetch_exception_becomes_reason(self, tmp_path, monkeypatch):
+        def boom(s, e, opener=None):
+            raise RuntimeError('timeout')
+        monkeypatch.setattr(fr, 'fetch_law_pdf', boom)
+        r = fr.fetch_law(_law_doc(), _law_latest(), out_dir=tmp_path)
+        assert not r['ok'] and 'timeout' in r['reason']
+
+    def test_no_serial(self, tmp_path):
+        r = fr.fetch_law(_law_doc(), {'notice': '제1호', 'effectiveDate': '2026-01-01'},
+                         out_dir=tmp_path)
+        assert not r['ok'] and r['reason'] == 'serial 없음'
+
+    def test_apply_renames_and_replaces_refs(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(fr, 'fetch_law_pdf',
+                            lambda s, e, opener=None: b'%PDF-1.4 law')
+        old_dir = tmp_path / '법령고시'
+        old_dir.mkdir(parents=True)
+        (old_dir / _law_doc()['file']).write_bytes(b'%PDF old')
+        refs = tmp_path / 'references.json'
+        refs.write_text(json.dumps({'a': _law_doc()['file']}, ensure_ascii=False),
+                        encoding='utf-8')
+        monkeypatch.setattr(fr, 'REFS_FILE', refs)
+        monkeypatch.setattr(fr, 'REF_BASE', tmp_path)
+        r = fr.fetch_law(_law_doc(), _law_latest(), apply=True)
+        assert r['ok'] and r['refsUpdated'] == 1
+        assert (tmp_path / '_archive' / _law_doc()['file']).exists()
+        assert '제22113호' in refs.read_text(encoding='utf-8')
