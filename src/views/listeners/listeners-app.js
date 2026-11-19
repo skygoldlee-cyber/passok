@@ -124,7 +124,23 @@ export function bindAppListeners() {
             if ((/** @type {Element|null} */ (e.target))?.closest('.settings-item')) closeAllMenus();
         });
     };
-    bindDropMenu('settings-toggle-btn', 'settings-panel');
+    // 설정 패널 열림 시 실측 top으로 max-height 보정 — CSS 상한(100dvh-5rem)이
+    // 패널 실제 top을 반영 못해 콘텐츠 증가 시 하단 항목이 뷰포트 밖으로 잘리는 결함 방지.
+    // 하단 가시 경계는 뷰포트 바닥과 모바일 탭 바 상단 중 높은 쪽 — 탭 바 아래로 항목이
+    // 깔리면 클릭 불가다. CSS 상한보다 작게만 줄인다.
+    const fitSettingsPanel = () => {
+        const panel = document.getElementById('settings-panel');
+        if (!panel) return;
+        const tabBar = document.getElementById('mobile-tab-bar');
+        const tabTop = tabBar && getComputedStyle(tabBar).display !== 'none'
+            ? tabBar.getBoundingClientRect().top : Infinity;
+        const floor = Math.min(window.innerHeight, tabTop);
+        const fit = Math.floor(floor - panel.getBoundingClientRect().top - 8);
+        const cssCap = parseFloat(getComputedStyle(panel).maxHeight);
+        const cap = Number.isFinite(cssCap) ? Math.min(cssCap, fit) : fit;
+        if (cap > 0) panel.style.maxHeight = `${cap}px`;
+    };
+    bindDropMenu('settings-toggle-btn', 'settings-panel', fitSettingsPanel);
     bindDropMenu('help-toggle-btn', 'help-panel', dismissFeedbackDot); // 패널 첫 오픈 → 점 제거
     document.addEventListener('click', (e) => {
         if (!(/** @type {Element|null} */ (e.target))?.closest('.settings-menu')) closeAllMenus();

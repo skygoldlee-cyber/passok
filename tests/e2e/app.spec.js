@@ -132,20 +132,30 @@ test.describe('UI 골격', () => {
         const m = await page.evaluate(() => {
             const el = document.getElementById('settings-panel');
             const cs = getComputedStyle(el);
+            const r = el.getBoundingClientRect();
+            const tabBar = document.getElementById('mobile-tab-bar');
+            const tabTop = tabBar && getComputedStyle(tabBar).display !== 'none'
+                ? tabBar.getBoundingClientRect().top : Infinity;
             return {
                 overflowY: cs.overflowY,
                 maxH: parseFloat(cs.maxHeight),
-                h: el.getBoundingClientRect().height,
+                top: r.top,
+                bottom: r.bottom,
+                h: r.height,
                 vh: window.innerHeight,
                 vw: window.innerWidth,
+                floor: Math.min(window.innerHeight, tabTop),
             };
         });
         expect(m.overflowY).toBe('auto');
-        // 데스크톱: max-height: calc(100dvh - 5rem) — 뷰포트를 넘지 않는 상한.
-        // 모바일(≤768px): 하단 탭 바 차지분 76px를 추가로 차감한다 (app-responsive.css —
-        // calc(var(--app-height) - 5rem - 76px - safe-area)).
-        const expectedMaxH = m.vw <= 768 ? m.vh - 80 - 76 : m.vh - 80;
-        expect(Math.abs(m.maxH - expectedMaxH)).toBeLessThanOrEqual(2);
+        // 열림 시 실측 top으로 max-height 보정 (fitSettingsPanel — listeners-app.js) —
+        // CSS 상한(데스크톱 100dvh-5rem, 모바일 탭 바 76px 추가 차감)과 가시 여백 중 작은 값.
+        const cssCap = m.vw <= 768 ? m.vh - 80 - 76 : m.vh - 80;
+        const fit = m.floor - m.top - 8;
+        expect(m.maxH).toBeLessThanOrEqual(Math.min(cssCap, fit) + 2);
+        // 계약의 실질 불변: 패널 하단이 뷰포트·모바일 탭 바 상단을 넘지 않는다
+        // (하단 항목 클리핑·탭 바 가림 회귀 방지)
+        expect(m.bottom).toBeLessThanOrEqual(m.floor + 1);
         expect(m.h).toBeLessThanOrEqual(m.maxH);
     });
 
