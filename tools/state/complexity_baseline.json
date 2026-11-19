@@ -294,7 +294,7 @@
     "src/reader/markdown-parser.js": {
       "count": 3,
       "max": 22,
-      "sum": 50
+      "sum": 47
     },
     "src/reader/mermaid-render.js": {
       "count": 1,
@@ -622,9 +622,9 @@
       "sum": 29
     },
     "src/views/trainer-drill-combo.js": {
-      "count": 2,
+      "count": 1,
       "max": 13,
-      "sum": 24
+      "sum": 13
     },
     "src/views/trainer-drills.js": {
       "count": 6,

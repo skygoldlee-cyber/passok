@@ -55,21 +55,29 @@ function _jwSep(prev, cur) {
     if (_JW_LEADSPACE.test(cur)) return ' ';
     const p = _jwLastChar(prev);
     if (p === '') return ' ';
+    return _jwCharSep(p, prev, cur);
+}
+
+// 경계 문자 기준 구분자 판정
+/** @param {string} p @param {string} prev @param {string} cur */
+function _jwCharSep(p, prev, cur) {
     if (_JW_ENDSYL.test(p)) return ' ';
     if (/[,，、;；]/.test(p)) return ' ';
     if (/[-–—\/·ㆍ([{〈「『]/.test(p)) return '';
     const n = cur.charAt(0);
-    if (/[A-Za-z]/.test(p) || /[A-Za-z]/.test(n)) return ' ';
+    if (/[A-Za-z]/.test(p + n)) return ' ';
     if (/\d/.test(n) && /[가-힣]/.test(p)) return ' ';
-    // 매우 짧은 prev 줄(<16자)은 고정폭 wrap이 아닌 독립 라벨/필드일 가능성이
-    // 높다 (서식의 "전화번호"+"지방식품…" 류) — 기본은 공백이 안전한 실패 모드.
-    // 단, cur이 짧은 문장부호 종료 꼬리("한다.", "니다.")면 어형 절단이므로 무공백.
-    if (prev.length < 16) {
-        const tail = cur.replace(/&gt;$/, '>').replace(/<[^>]+>/g, '').trim();
-        if (tail.length <= 8 && /[.。,，、!?)\]〉》」』】>]$/.test(tail)) return '';
-        return ' ';
-    }
+    if (prev.length < 16) return _jwShortTail(cur) ? '' : ' ';
     return '';
+}
+
+// cur이 짧은 문장부호 종료 꼬리("한다.", "니다.")면 어형 절단이므로 무공백 대상.
+// 매우 짧은 prev 줄(<16자)은 고정폭 wrap이 아닌 독립 라벨/필드일 가능성이 높다
+// (서식의 "전화번호"+"지방식품…" 류) — 기본은 공백이 안전한 실패 모드.
+/** @param {string} cur */
+function _jwShortTail(cur) {
+    const tail = cur.replace(/&gt;$/, '>').replace(/<[^>]+>/g, '').trim();
+    return tail.length <= 8 && /[.。,，、!?)\]〉》」』】>]$/.test(tail);
 }
 
 // output 마지막 요소가 <p>…</p> 또는 …</li></ol|ul>이면 연속줄을 병합한다.
