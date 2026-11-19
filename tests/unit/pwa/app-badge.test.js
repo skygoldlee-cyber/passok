@@ -4,14 +4,14 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { applyAppBadge, shouldNotifyUpdate, notifyUpdateAvailable } from '../../../src/pwa/app-badge.js';
 
-test('미적용 업데이트 — standalone + API 존재 시 setAppBadge(1) 부착', () => {
+test('미적용 업데이트 — standalone + API 존재 시 setAppBadge() 플래그 배지 부착', () => {
     const calls = [];
     const nav = {
         setAppBadge: (n) => calls.push(['set', n]),
         clearAppBadge: () => calls.push(['clear']),
     };
     assert.equal(applyAppBadge(true, nav, true), 'set');
-    assert.deepEqual(calls, [['set', 1]]);
+    assert.deepEqual(calls, [['set', undefined]]);
 });
 
 test('버전 일치·적용 완료 — clearAppBadge로 배지 해제', () => {

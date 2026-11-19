@@ -1,6 +1,9 @@
-// src/pwa/app-badge.js — 설치된 PWA 아이콘 "미적용 업데이트" 숫자 배지 (Badging API)
+// src/pwa/app-badge.js — 설치된 PWA 아이콘 "미적용 업데이트" 플래그 배지 (Badging API)
 // @spec P-15
-// navigator.setAppBadge(1)/clearAppBadge()로 설치형 아이콘에 배지를 부착·해제한다.
+// navigator.setAppBadge()/clearAppBadge()로 설치형 아이콘에 배지를 부착·해제한다.
+// 숫자가 아닌 플래그(점/글리프)를 쓰는 이유: 배지 색·글자는 OS가 그리므로 숫자 '1'이
+// 렌더링되지 않는 플랫폼(Windows 네이티브 배지 등)에서 빈 원으로 보이는 결함 방지 —
+// "업데이트 있음" 신호에는 숫자 정보가 필요 없다.
 // 지원: 데스크톱 Chrome·Edge(작업표시줄/독), iOS 16.4+ 홈화면 웹앱(알림 권한 전제).
 // Android는 API 미지원으로 조용히 무시 — 알림 기반 점(dot) 표시는 별도 SPEC 검토.
 // 배지는 OS 소유 지속 상태라 앱 종료 후에도 남는다 — 배너를 닫고 종료한 사용자에게
@@ -10,8 +13,6 @@
 import { isStandalonePwa } from '../core/utils.js';
 import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { safeGetItem, safeSetItem } from '../core/state.js';
-
-const UPDATE_BADGE_COUNT = 1;
 
 /** standalone 안전 판정 — window/navigator 부재·접근 예외 환경에서도 false로 실패 */
 function defaultStandalone() {
@@ -26,7 +27,7 @@ function defaultStandalone() {
  * 배지 적용 핵심 — nav·standalone 주입형 (테스트 가능).
  * standalone 게이트는 UX-PWA-02 규약 — 미설치(브라우저 탭)에서 의미 없는 호출 차단.
  * @param {boolean} pending - true=배지 부착(1), false=해제
- * @param {{ setAppBadge?: (n: number) => void, clearAppBadge?: () => void } | null} [nav] - navigator 호환 객체
+ * @param {{ setAppBadge?: (n?: number) => void, clearAppBadge?: () => void } | null} [nav] - navigator 호환 객체
  * @param {boolean} [standalone] - 설치형 PWA 여부
  * @returns {'set'|'clear'|'skip'}
  */
@@ -34,7 +35,7 @@ export function applyAppBadge(pending, nav = globalThis.navigator, standalone = 
     if (!nav || typeof nav.setAppBadge !== 'function' || typeof nav.clearAppBadge !== 'function' || standalone !== true) return 'skip';
     try {
         if (pending) {
-            nav.setAppBadge(UPDATE_BADGE_COUNT);
+            nav.setAppBadge();
             return 'set';
         }
         nav.clearAppBadge();
@@ -44,7 +45,7 @@ export function applyAppBadge(pending, nav = globalThis.navigator, standalone = 
     }
 }
 
-/** 미적용 업데이트 감지 — 아이콘에 숫자 배지 부착 */
+/** 미적용 업데이트 감지 — 아이콘에 플래그 배지 부착 */
 export function setUpdateBadge() {
     return applyAppBadge(true);
 }

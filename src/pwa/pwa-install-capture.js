@@ -20,7 +20,7 @@
     try {
       const standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
         || window.navigator.standalone === true;
-      if (standalone && 'setAppBadge' in navigator) navigator.setAppBadge(1);
+      if (standalone && 'setAppBadge' in navigator) navigator.setAppBadge();
     } catch (e) { /* 무시 */ }
   }
   function clearUpdateBadge() {
