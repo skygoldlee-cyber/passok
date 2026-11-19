@@ -1,12 +1,12 @@
 {
   "subjects": {
     "law": {
-      "cards": 222,
-      "quizzes": 99,
+      "cards": 224,
+      "quizzes": 101,
       "files": {
         "교재/law/1과목_화장품법의이해_표준형.md": {
-          "cards": 238,
-          "quizzes": 99
+          "cards": 241,
+          "quizzes": 101
         }
       }
     },

@@ -14,12 +14,15 @@
    "disaster_card_d0e053": "제30조제1항",
    "disaster_card_8bb36c": "제30조제2항",
    "disaster_card_a753b9": "제30조제3항",
-   "disaster_card_bc7a6f": "제32조"
+   "disaster_card_bc7a6f": "제32조",
+   "disaster_card_bff35f": "기한 기준",
+   "disaster_card_11048b": "금액 기준"
   },
   "quizzes": {
    "disaster_quiz_d34b4b": "무자격 모집·거짓 손해평가·명의대여 등|제30조제2항",
    "disaster_quiz_872171": "회계 구분 위반(제15조)|제30조제3항",
-   "disaster_quiz_a6aa50": "보고·서류 미제출·거짓 제출 등|제32조"
+   "disaster_quiz_a6aa50": "보고·서류 미제출·거짓 제출 등|제32조",
+   "disaster_quiz_9df6bd": "4시간 → 12시간(단일성 작물 생육) → 14시간(장일성 작물) → 7일(재평) → 10일 → 14일(수량요소) → 15일(전두 가입 의무) → 30일(손해평가반)|기한 기준"
   }
  },
  "agronomy": {

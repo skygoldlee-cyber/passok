@@ -1,12 +1,12 @@
 {
   "subjects": {
     "safetyMgmt": {
-      "cards": 9,
-      "quizzes": 0,
+      "cards": 11,
+      "quizzes": 2,
       "files": {
         "교재/safetyMgmt/산업재해예방_안전보건교육_표준형.md": {
-          "cards": 10,
-          "quizzes": 0
+          "cards": 12,
+          "quizzes": 2
         }
       }
     },

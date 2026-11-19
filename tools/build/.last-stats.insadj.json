@@ -11,12 +11,12 @@
       }
     },
     "act": {
-      "cards": 21,
-      "quizzes": 10,
+      "cards": 23,
+      "quizzes": 12,
       "files": {
         "교재/act/보험업법_표준형.md": {
-          "cards": 21,
-          "quizzes": 10
+          "cards": 23,
+          "quizzes": 12
         }
       }
     },

@@ -1,12 +1,12 @@
 {
   "subjects": {
     "labor_law1": {
-      "cards": 165,
-      "quizzes": 0,
+      "cards": 167,
+      "quizzes": 1,
       "files": {
         "교재/labor_law1/1과목_노동법(1)개별관계_표준형.md": {
-          "cards": 173,
-          "quizzes": 0
+          "cards": 175,
+          "quizzes": 1
         }
       }
     },

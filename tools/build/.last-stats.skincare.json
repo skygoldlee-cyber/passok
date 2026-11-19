@@ -41,12 +41,12 @@
       }
     },
     "hygiene": {
-      "cards": 0,
-      "quizzes": 0,
+      "cards": 2,
+      "quizzes": 1,
       "files": {
         "교재/hygiene/공중위생관리학_표준형.md": {
-          "cards": 0,
-          "quizzes": 0
+          "cards": 2,
+          "quizzes": 1
         }
       }
     },

@@ -165,9 +165,13 @@
    "labor_law1_card_71beb4": "제5조 관련 근로자파견 대상업무 및 요건",
    "labor_law1_card_e8a9ed": "근로자파견기간의 제한",
    "labor_law1_card_1aefd6": "제6조의2",
-   "labor_law1_card_a6d677": "제8조 및 제9조 관련 허가요건 및 유효기간"
+   "labor_law1_card_a6d677": "제8조 및 제9조 관련 허가요건 및 유효기간",
+   "labor_law1_card_1e2f0a": "시간 기준",
+   "labor_law1_card_0f1cf3": "벌칙·과태료"
   },
-  "quizzes": {}
+  "quizzes": {
+   "labor_law1_quiz_57f245": "1시간 → 2시간 → 4시간(휴게 산정) → 6시간 → 8시간(법정근로) → 10시간 → 11시간 → 12시간(연장 한도) → 15시간|시간 기준"
+  }
  },
  "labor_law2": {
   "cards": {

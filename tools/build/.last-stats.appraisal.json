@@ -35,12 +35,12 @@
       }
     },
     "law": {
-      "cards": 0,
-      "quizzes": 0,
+      "cards": 2,
+      "quizzes": 2,
       "files": {
         "교재/law/감정평가관련법규_표준형.md": {
-          "cards": 0,
-          "quizzes": 0
+          "cards": 2,
+          "quizzes": 2
         }
       }
     },

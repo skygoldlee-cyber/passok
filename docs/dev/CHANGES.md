@@ -1,6 +1,7 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **feat(study): 전 법령 팩 숫자 사다리 편입 + conssafe card_tip 91건 적용** — 교재 수치 자동 추출(tmp/extract_ladders.js)·사람 선별 후 11개 팩 교재에 '암기 정리' 사다리 편입(broker 3·hazmat 4·cosmetic 3·appraisal/insadj/indsafe/labor/lossadj/admagent/skincare 2·carework 1, hairdresser 라벨 불량 보류). conssafe AI 카드팁 초안 93건 중 근거 충실 91건 전수 검수 후 피드백/card_tip.json 적용 — 비교쌍·순서함정·미니사다리·경계값 주의 형식
 - **feat(ref-pipeline): diff_revision 연혁본 대조 — ref_md 형식 무관한 정본 판정** — lawSearch `target=lsHistory`(HTML)로 연혁 serial 목록 조회, baseline 시행일 이하 최근 연혁을 기준본으로 선택해 양쪽을 같은 DRF 렌더러로 대조. PDF 변환본 ref_md 팩(규약 불일치)도 진짜 개정 판정 가능 — 검증: 공중위생관리법 시행령 제8조 통합특별시장·특별자치시·도지사 추가 정확 포착, broker 11종 실질 개정 정량 판정. 파일 대조는 폴백으로 유지
 - **feat(study): 법령 암기 기법 반영 — 전 법령 팩 오답원인 4유형 + conssafe 암기 정리 블록** — referenceLaw 보유 13개 팩 manifest `analysis.wrongCauses`에 함정 유형(경계값/주체 바꿔치기/수식어 누락/단위·기간 혼동) 선언 + 팩별 행위주체 autoPattern (cosmetic 기존 2종에 병합). conssafe 4개 교재에 '## 🧠 암기 정리' 섹션 — 숫자 사다리(공사금액·주기)·비교표(중대재해·컷셋/패스셋·OR/AND)·앞글자(손원예대·차잠방검접·조극평·중빈기순)·조문묶음(15~19·52/54/55·84/89/93) → number/comparison/procedure 카드 +8 자동 생성. 타 팩용 숫자 사다리는 교재 수치 자동 재배열 초안(tmp/ladders/)으로 검수 대기
 - **fix(notice): 첫 실전 실행 피드백 3건 — baseline 폴백·규약불일치 판정·push 경합** — check_mfds_notice: (제N호)(날짜) 규약 없는 파일명은 이전 notice_status의 latestDate를 baseline 대용으로(첫 실행 시딩만·허위 newer 해소). diff_revision: ref_md가 PDF 변환본(조문키 <3)이면 'format-mismatch' 판정 — DRF 렌더와 대조 시 전량 '신설'로 뜨는 허위 실질개정 방지 + .pdf→.md 대응본 탐색. 워크플로: 커밋 단계 push 전 `git pull --rebase` — 실행 중 수동 push와 경합해 상태 커밋이 유실되던 실제 장애 수정

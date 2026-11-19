@@ -51,12 +51,12 @@
       }
     },
     "estate_tax": {
-      "cards": 0,
-      "quizzes": 0,
+      "cards": 3,
+      "quizzes": 3,
       "files": {
         "교재/estate_tax/6과목_부동산세법_표준형.md": {
-          "cards": 0,
-          "quizzes": 0
+          "cards": 3,
+          "quizzes": 3
         }
       }
     },

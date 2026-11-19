@@ -16,8 +16,13 @@
   "quizzes": {}
  },
  "hygiene": {
-  "cards": {},
-  "quizzes": {}
+  "cards": {
+   "hygiene_card_3b4d5b": "기한 기준",
+   "hygiene_card_c8713c": "벌칙·과태료"
+  },
+  "quizzes": {
+   "hygiene_quiz_bc5dea": "20일(폐업신고) → 1개월(승계 신고) → 3개월(폐업신고 예외) → 1년(면허 경로) → 2년(평가 주기)|기한 기준"
+  }
  },
  "practical": {
   "cards": {},

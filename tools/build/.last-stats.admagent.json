@@ -41,12 +41,12 @@
       }
     },
     "admProc": {
-      "cards": 0,
-      "quizzes": 0,
+      "cards": 2,
+      "quizzes": 2,
       "files": {
         "교재/admProc/행정절차론_표준형.md": {
-          "cards": 0,
-          "quizzes": 0
+          "cards": 2,
+          "quizzes": 2
         }
       }
     },

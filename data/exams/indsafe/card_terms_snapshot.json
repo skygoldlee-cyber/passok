@@ -9,9 +9,14 @@
    "safetyMgmt_card_3013d4": "하인리히 법칙",
    "safetyMgmt_card_fde01f": "안전보건위원회",
    "safetyMgmt_card_d27c6b": "중대산업재해",
-   "safetyMgmt_card_e62dab": "KOSHA-MS"
+   "safetyMgmt_card_e62dab": "KOSHA-MS",
+   "safetyMgmt_card_329abf": "공사금액 기준",
+   "safetyMgmt_card_586833": "중대재해 인원 기준"
   },
-  "quizzes": {}
+  "quizzes": {
+   "safetyMgmt_quiz_7e4025": "10억원 → 50억원(안전관리자) → 120억원(위원회·협의체)|공사금액 기준",
+   "safetyMgmt_quiz_3f53a2": "사망 1명 이상 → 부상 2명 이상(6개월 이상 치료) → 질병 3명 이상(1년 이내 동일 유해요인)|중대재해 인원 기준"
+  }
  },
  "ergonomics": {
   "cards": {
