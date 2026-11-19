@@ -196,3 +196,57 @@ jobs:
           4. 과목·배점 구조 변경이면 \`manifest.json\`의 syllabus·integratedExam 갱신
           ISSUE
           )"
+
+      - name: Discord 결과 알림
+        # 성공·실패·스킵 무관 항상 실행 — 잡 실패도 알림 대상.
+        # env 컨텍스트는 steps.if에서 쓸 수 없어 스크립트 안에서 웹훅 부재를 처리한다.
+        if: always()
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          RUN_NEWER: ${{ steps.check.outputs.newer }}
+          RUN_BROKEN: ${{ steps.urls.outputs.broken }}
+          RUN_STATUS: ${{ job.status }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+            echo "DISCORD_WEBHOOK_URL 미설정 — 알림 생략"; exit 0
+          fi
+          node <<'NODE'
+          const fs = require('fs');
+          const rd = f => { try { return fs.readFileSync(f, 'utf8').trim(); } catch { return ''; } };
+          const status = process.env.RUN_STATUS;
+          const newer = process.env.RUN_NEWER === '1';
+          const broken = process.env.RUN_BROKEN !== '0' && process.env.RUN_BROKEN !== '';
+          let color = 0x2ecc71;
+          let title = '🟢 법령·고시 주간 체크 — 전 문서 최신';
+          const fields = [];
+          if (status !== 'success') {
+            color = 0xe74c3c;
+            title = `🔴 법령·고시 주간 체크 — 잡 ${status}`;
+          } else if (newer) {
+            color = 0xe67e22;
+            title = '🟠 법령·고시 주간 체크 — 개정 감지';
+            const changed = rd('/tmp/changed_docs.txt');
+            if (changed) fields.push({ name: '감지된 문서', value: changed.slice(0, 1000) });
+            const verdicts = [...rd('/tmp/diff_summary.txt')
+              .matchAll(/^## (.+)$([\s\S]*?)- 판정: (.+)$/gm)]
+              .map(m => `**${m[1]}** — ${m[3]}`).join('\n');
+            if (verdicts) fields.push({ name: '조문 대조 판정', value: verdicts.slice(0, 1000) });
+          }
+          if (broken) {
+            color = 0xe67e22;
+            if (!newer) title = '🟠 법령·고시 주간 체크 — 한글주소 링크 깨짐';
+            fields.push({ name: '한글주소', value: '깨진 링크 감지 — 워크플로 로그 확인', inline: true });
+          }
+          const embed = { title, color, url: process.env.RUN_URL,
+            footer: { text: 'PassOK notice-check' }, timestamp: new Date().toISOString() };
+          if (status === 'success' && !newer && !broken) {
+            embed.description = '감시 문서 전체가 최신 상태입니다.';
+          }
+          if (fields.length) embed.fields = fields;
+          fs.writeFileSync('/tmp/discord_payload.json',
+            JSON.stringify({ embeds: [embed] }));
+          NODE
+          curl -sS -X POST -H 'Content-Type: application/json' \
+            -d @/tmp/discord_payload.json "$DISCORD_WEBHOOK_URL" | head -c 200
+          echo
