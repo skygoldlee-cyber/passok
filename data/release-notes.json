@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261120-9951be2",
+    "date": "2026-11-20",
+    "notes": [
+      "[수정·refs] CI 콘텐츠 게이트 복구 — pdf_hashes 매니페스트 복원 + ref_md 정제 [no-test]",
+      "[테스트·e2e] 시각 기준선 자동 재생성 — CI 실패 감지 후 복구 (linux) [skip ci]",
+      "[수정·refs] 법령 신본 승격 후속 — LAW_DOCS·sourceRefMap 구 파일명 잔재 정리 [no-test]",
+      "[기능·ref-pipeline] 법령 PDF 자동 다운로드 + cosmetic 화장품법·개인정보보호법 시행령 신본 승격",
+      "[문서] cosmetic 잔여 문서 스탬프 + 문서 번들 재생성",
+      "[문서] cosmetic 참조 승격 후 문서 검토 스탬프 갱신",
+      "[기능·refs] cosmetic 기능성화장품 심사 규정 제2026-75호 재변환 + 법령 링크 인코딩 잔재 복구",
+      "[테스트·e2e] 시각 기준선 자동 재생성 — CI 실패 감지 후 복구 (linux) [skip ci]",
+      "[기능·refs] flagged 법령 20종 ref_md → 최신 DRF 정본 전환",
+      "[기능·content] 공중위생관리법 시행령 ref_md 최신본 갱신 + hairdresser 사다리"
+    ]
+  },
+  {
     "version": "v20261119-2646863",
     "date": "2026-11-19",
     "notes": [
@@ -232,22 +248,6 @@
       "[문서·biz] DOC-BIZ-13 팩 공통 서술로 일반화 — 범위 통합·§3 플랫폼 표기",
       "[문서·biz] DOC-BIZ-13 학습 매체 경쟁 분석 — 전 팩 공통 docs/dev/business 등재",
       "[정리·release] v20261116-fe4de8d 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261116-fe4de8d",
-    "date": "2026-11-16",
-    "notes": [
-      "[정리·content] cosmetic 레퍼런스 문서 최종확인 갱신 + 임베딩 재생성",
-      "[정리·content] 리네임 후속 — labor 드릴 번들 재생성 + cosmetic 문서 최종확인 갱신",
-      "[리팩터링·content] 표준형 교재 *_표준형.md 전 팩 통일 + 번호 정합화",
-      "[수정·content] 심화 보강 구식 헤딩 번호 제거 — CS-12 게이트 복구",
-      "[기능·ai] 심화 보강 CE-06 리라이트 — carework 61절 LLM 재작성",
-      "[기능·audit] CE-06 규약 보정 + audit:ce06 도구 + 심화 보강 구조 정련",
-      "[문서·spec] CE-06 가독성·정보 밀도 규약 — 교재 제작 가이드 반영",
-      "[기능·carework] 표준교재 심화 보강 + 문제은행 3회분 충족 + 수치 정정",
-      "[기능·hazmat] 문제은행 권장 6회분 도달 — 과목당 120문(총 362문)",
-      "[기능·check] 모의고사 권장 6회분 계층 추가"
     ]
   }
 ]
