@@ -1,6 +1,7 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **fix(notice): 첫 실전 실행 피드백 3건 — baseline 폴백·규약불일치 판정·push 경합** — check_mfds_notice: (제N호)(날짜) 규약 없는 파일명은 이전 notice_status의 latestDate를 baseline 대용으로(첫 실행 시딩만·허위 newer 해소). diff_revision: ref_md가 PDF 변환본(조문키 <3)이면 'format-mismatch' 판정 — DRF 렌더와 대조 시 전량 '신설'로 뜨는 허위 실질개정 방지 + .pdf→.md 대응본 탐색. 워크플로: 커밋 단계 push 전 `git pull --rebase` — 실행 중 수동 push와 경합해 상태 커밋이 유실되던 실제 장애 수정
 - **feat(notice): supabase-keepalive 결과 Discord 알림 확장 — 성공·취소도 통지** — AD-10 단계를 if:failure→always()로 확장해 매일 핑 결과(정상 녹·취소 회·실패 적) 전송, DISCORD_WEBHOOK_URL 미설정 시 생략 유지
 - **feat(notice): 주간 법령·고시 체크 결과 Discord 웹훅 알림** — notice-check.yml 말미에 if:always() 알림 단계 추가: 전 문서 최신(녹)·개정 감지(주황 — 감지 문서+조문 대조 판정 필드)·잡 실패(적) embed를 DISCORD_WEBHOOK_URL 시크릿으로 POST, 미설정 시 생략
 - **feat(refs): diff_revision.py 신설 — 감지 개정의 실질 변경 여부 조문 대조 자동화** — drf_render.py(DRF XML→ref_md 렌더러·조문 대조 라이브러리) 승격: 복수 CDATA 분할·항번호 중복·목 중첩·가지번호 키 정규화 + §헤더 개명(본문 동일 added/removed 쌍) 접기. diff_revision은 newer 감지 문서를 DRF에서 재수집·대조해 '본문 동일(연혁/유예조항 발효 — 파일명만 갱신)'과 '실질 개정(조문 diff 리포트)'을 판별, report/법령개정대조결과.md 생성. notice-check.yml에 대조 단계 추가 — 이슈 본문에 판정 포함. api_get raw 옵션 추가(XML 응답), pytest 12건

@@ -102,6 +102,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "chore(notice): 법령·고시 감시 상태 갱신 $(date -u +%F)"
+            git pull --rebase origin main   # 실행 중 수동 push와 경합해도 살아남게
             git push
           fi
 

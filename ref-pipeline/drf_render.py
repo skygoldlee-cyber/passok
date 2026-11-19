@@ -181,6 +181,13 @@ def compare_articles(old_md, new_md):
     return {'changed': changed, 'added': added, 'removed': removed, 'renamed': renamed}
 
 
+def uncomparable(old_map, new_map):
+    """구본이 DRF 렌더 규약이 아니면 대조 무의미 — PDF 변환본은 '## 제조'처럼
+    조문번호가 깨져 조문 키가 거의 없다 → 대조하면 전량 '신설' 허위 판정."""
+    old_arts = sum(1 for k in old_map if k.startswith('제'))
+    return old_arts < 3 and len(new_map) >= 10
+
+
 def article_diff(old_body, new_body, key):
     """변경 조문의 unified diff (리포트용, 최대 60줄)."""
     diff = difflib.unified_diff(

@@ -61,9 +61,15 @@ def _notice_api():
 
 
 def find_ref_md(filename):
-    """ref_md 하위 어디든 규약 파일명을 탐색 — 과목 귀속 폴더/평탄형 모두 대응."""
-    hits = sorted(REF_MD.rglob(filename)) if REF_MD.exists() else []
-    return hits[0] if hits else None
+    """ref_md 하위 어디든 규약 파일명을 탐색 — 과목 귀속 폴더/평탄형 모두 대응.
+    references.json이 원본 PDF명을 가리키는 시험도 있으므로 .md 대응본도 찾는다."""
+    if not REF_MD.exists():
+        return None
+    for cand in (filename, Path(filename).with_suffix('.md').name):
+        hits = sorted(REF_MD.rglob(cand))
+        if hits:
+            return hits[0]
+    return None
 
 
 def fetch_latest_meta(doc):
@@ -122,9 +128,18 @@ def compare_doc(doc, latest):
 
     new_md = drf_render.render_law(doc['name'], xml)
     old_md = cur.read_text(encoding='utf-8')
-    cmp = drf_render.compare_articles(old_md, new_md)
 
     old_map, new_map = drf_render.article_map(old_md), drf_render.article_map(new_md)
+    # 구본이 DRF 렌더 규약이 아니면(PDF 변환본) 조문 대조 무의미 — 허위 판정 방지
+    if drf_render.uncomparable(old_map, new_map):
+        old_arts = sum(1 for k in old_map if k.startswith('제'))
+        base['verdict'] = 'format-mismatch'
+        base['counts'] = {'old': len(old_map), 'new': len(new_map)}
+        base['detail'] = (f'ref_md가 DRF 렌더 규약이 아님 (조문 키 {old_arts}개 — '
+                          'PDF 변환본 추정) — 수동 대조 또는 convert:refs 재변환 후 비교')
+        return base
+
+    cmp = drf_render.compare_articles(old_md, new_md)
     base['counts'] = {'old': len(old_map), 'new': len(new_map),
                       'changed': len(cmp['changed']),
                       'added': len(cmp['added']), 'removed': len(cmp['removed'])}
@@ -166,6 +181,7 @@ def write_report(rows, out_path=None):
         verdict_label = {
             'identical': '**본문 동일** — 연혁/유예조항 발효 갱신',
             'revised': '**실질 개정** — 조문 변경 있음',
+            'format-mismatch': '규약 불일치 — 수동 대조 필요',
             'no-text': '본문 미제공 — 첨부파일 비교 필요',
             'no-file': 'ref_md 파일 없음',
             'error': '대조 실패',
@@ -240,6 +256,7 @@ def main():
         r = compare_doc(doc, latest)
         rows.append(r)
         mark = {'identical': '✓ 동일', 'revised': '⚠ 실질 개정',
+                'format-mismatch': '… 규약 불일치',
                 'no-text': '… 본문 미제공', 'no-file': '✗ 파일 없음',
                 'error': '✗ 실패'}.get(r['verdict'], r['verdict'])
         print(f'    {mark} — {r["detail"]}')
@@ -253,7 +270,8 @@ def main():
 
     print('\n' + '=' * 60)
     n_id = sum(1 for r in rows if r['verdict'] == 'identical')
-    n_nt = sum(1 for r in rows if r['verdict'] in ('no-text', 'no-file', 'error'))
+    n_nt = sum(1 for r in rows
+               if r['verdict'] in ('no-text', 'no-file', 'error', 'format-mismatch'))
     print(f'대조 {len(rows)}종 — 본문 동일 {n_id} · 실질 개정 {revised} · 기타 {n_nt}'
           + (f' · 최신 스킵 {skipped_fresh}' if skipped_fresh else ''))
     if rows:

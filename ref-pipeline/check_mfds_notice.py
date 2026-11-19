@@ -223,13 +223,18 @@ def search_admrul(name):
 
 
 def check_doc(doc):
-    """문서 1종의 최신 고시 조회 → docs[] 항목."""
+    """문서 1종의 최신 고시 조회 → docs[] 항목.
+
+    baseline은 파일명 (제N호)(시행일)이 정본이지만, 규약 없는 파일명은
+    baseline이 비어 매 실행마다 '신규'로 뜬다 — 그 경우 이전 notice_status의
+    latestDate를 baseline 대용으로 쓴다 (첫 실행은 시딩만 하고 조용)."""
     res = search_law(doc['name']) if doc['target'] == 'law' else search_admrul(doc['name'])
     if res is None:
         return {**doc, 'error': 'not-found', 'newer': False}
     latest, current = res['latest'], res['current'] or res['latest']
-    base = doc.get('baselineDate') or ''
-    newer = bool(latest['effectiveDate']) and latest['effectiveDate'] > base
+    base = doc.get('baselineDate') or doc.get('_priorDate') or ''
+    # baseline 자체가 없으면(파일명 규약도 이전 상태도 없음) 이번 실행은 시딩 — 최신값만 기록
+    newer = bool(base) and bool(latest['effectiveDate']) and latest['effectiveDate'] > base
     serial_url = current_url(doc['target'], current['serial'], current['effectiveDate'])
     return {**doc,
             'latestNotice': latest['notice'],
@@ -262,6 +267,11 @@ def main():
     if not docs:
         print('!! 감시 대상이 없습니다 — referenceLaw 확인')
         sys.exit(1)
+    # baseline 없는 파일명용 — 이전 상태 파일의 latestDate를 대용 baseline으로 주입
+    prev_latest = {d['name']: d.get('latestDate')
+                   for d in status.get('docs', []) if isinstance(d, dict)}
+    for d in docs:
+        d['_priorDate'] = prev_latest.get(d['name'])
     print(f'감시 문서 {len(docs)}종 — law.go.kr 조회 중…')
 
     results = [check_doc(d) for d in docs]
