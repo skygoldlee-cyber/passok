@@ -96,6 +96,20 @@ describe('statusRows', () => {
         assert.equal(adm.target, 'admrul');
         assert.equal(adm.baselineNotice, '제2026-19호');
     });
+    it('parseRefDoc — (…부령) 시행규칙·기준규칙은 law로 분류', () => {
+        // 부처령은 law.go.kr target=law — 이전엔 (고용노동부령)이 admrul로 오분류됨
+        for (const f of [
+            '공중위생관리법 시행규칙(부령)(제01186호)(20260714).md',
+            '산업안전보건법 시행규칙(고용노동부령)(제00477호)(20260801).md',
+            '산업안전보건기준에 관한 규칙(고용노동부령)(제00450호)(20250901).md',
+            '건설기술 진흥법 시행규칙(국토교통부령)(제01597호)(20260611).md',
+        ]) {
+            assert.equal(parseRefDoc(f).target, 'law', f);
+        }
+        // 고시·예규는 admrul 유지
+        assert.equal(parseRefDoc('사업장 위험성평가에 관한 지침(고용노동부고시)(제2026-73호)(20261104).md').target, 'admrul');
+        assert.equal(parseRefDoc('안전·보건관리전문기관 관리규정(고용노동부예규)(제231호)(20250101).md').target, 'admrul');
+    });
     it('status 누락 시 빈 배열', () => {
         assert.deepEqual(statusRows(null), []);
         assert.deepEqual(statusRows(undefined), []);

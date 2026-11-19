@@ -340,7 +340,7 @@ function fmtDate(d) {
 export function parseRefDoc(file) {
   const name = (String(file).split('(')[0] || '').trim();
   const m = /\(제([\d]+(?:-\d+)?)호\)\s*\((\d{8})\)/.exec(file);
-  const target = /\((법률|대통령령|총리령|부령)\)/.test(file) ? 'law' : 'admrul';
+  const target = /\((법률|대통령령|총리령|[^()]*부령)\)/.test(file) ? 'law' : 'admrul';
   return {
     name, target, file, url: lawUrlFor(file),
     baselineNotice: m ? `제${m[1]}호` : null,

@@ -144,7 +144,7 @@ def load_refs_cfg(exam_dir: Path = None) -> dict:
         return {}
 
 
-_LAW_AGENCY_RE = re.compile(r'\((법률|대통령령|총리령|부령)\)')
+_LAW_AGENCY_RE = re.compile(r'\((법률|대통령령|총리령|[^()]*부령)\)')
 _NOTICE_RE = re.compile(r'\(제([\d]+(?:-\d+)?)호\)\s*\((\d{8})\)')
 
 

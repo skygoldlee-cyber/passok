@@ -204,8 +204,8 @@ function checkLawUrlJoin(refs, lawdb, examId) {
       console.warn(`[${examId}] "${f}"이(가) lawdb(${matched.map(l => l.id).join(', ')})와 매칭되지만 이 시험 lawRefs에 없습니다 — data-law-url 미적용`);
       continue;
     }
-    // 파이프라인 유도 URL: (법률|대통령령|총리령|부령) 꼬리 → 법령, 그 외 → 행정규칙
-    const targetSeg = /\((법률|대통령령|총리령|부령)\)/.test(f) ? '법령' : '행정규칙';
+    // 파이프라인 유도 URL: (법률|대통령령|총리령|…부령) 꼬리 → 법령, 그 외 → 행정규칙
+    const targetSeg = /\((법률|대통령령|총리령|[^()]*부령)\)/.test(f) ? '법령' : '행정규칙';
     const derivedUrl = `https://www.law.go.kr/${targetSeg}/${docName.replace(/\s+/g, '')}`;
     if (lawUrl(chosen) !== derivedUrl) {
       console.warn(`[${examId}] markStaleRefLinks 조인 불일치 — "${f}"은(는) ${lawUrl(chosen)}로 매칭되지만 ref-pipeline은 ${derivedUrl}를 기록합니다 (lawdb slug 또는 파일명 확인)`);

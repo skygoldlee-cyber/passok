@@ -1,12 +1,18 @@
-name: MFDS Notice Check
+name: Law·Notice Check
 
-# 매주 월요일 09:00 KST(UTC 00:00) — 식약처 「화장품 안전기준 등에 관한 규정」
-# 최신 고시를 law.go.kr 오픈API로 조회해 notice_status.json을 갱신하고,
-# 신규 고시 발견 시 이슈를 자동 생성한다. 앱(Formula OS)은 raw JSON을 읽어 배너로 표시.
+# 매주 월요일 09:00 KST(UTC 00:00) — 전 시험 팩의 참조 법령·고시를
+# law.go.kr 오픈API로 조회해 notice_status.json을 갱신하고,
+# 신규 고시 발견 시 이슈를 자동 생성한다. 앱은 raw JSON을 읽어 배너로 표시.
+#
+# 감시 대상: 각 시험 references.json의 referenceLaw (ref_md 파일 추가 시 자동 반영).
+# 파일명 '{문서명}({발령기관})({제N호})({시행일})'이 baseline이다.
+#
+# 매년 11/1 09:00 KST — 차년도 Q-Net 출제기준·시행계획 공고 확인 리마인더 이슈.
 
 on:
   schedule:
-    - cron: '0 0 * * 1'
+    - cron: '0 0 * * 1'    # 주간 법령·고시 개정 감시
+    - cron: '0 0 1 11 *'   # 연간 출제기준 확인 리마인더 (11/1)
   workflow_dispatch:
 
 permissions:
@@ -29,17 +35,34 @@ jobs:
         with:
           node-version: '24'
 
-      - name: 최신 고시 조회 + 상태 파일 갱신
+      - name: 전 시험 법령·고시 조회 + 상태 파일 갱신
         id: check
         env:
           LAW_OC_KEY: ${{ secrets.LAW_OC_KEY }}
         run: |
           set +e
-          python ref-pipeline/check_mfds_notice.py --update
-          code=$?
+          : > /tmp/changed_docs.txt
+          any=0
+          for refs in content/exams/*/references.json; do
+            exam=$(basename "$(dirname "$refs")")
+            node -e "process.exit((require('./$refs').referenceLaw||[]).length?0:1)" || {
+              echo "── $exam — referenceLaw 없음, 건너뜀"; continue; }
+            echo "── $exam — 감시 시작"
+            python ref-pipeline/check_mfds_notice.py --exam "$exam" --update
+            code=$?
+            if [ "$code" -eq 2 ]; then
+              any=1
+              node -e "
+                const d=require('./content/exams/$exam/notice_status.json');
+                for (const x of d.docs||[]) if (x.newer)
+                  console.log(\`- [$exam] \${x.name}: \${x.baselineNotice||''}(\${x.baselineDate||''}) → \${x.latestNotice||''}(\${x.latestDate||''})\`);
+              " >> /tmp/changed_docs.txt
+            elif [ "$code" -ne 0 ]; then
+              echo "::warning::$exam — 조회 스크립트 실패 (exit $code)"
+            fi
+          done
           set -e
-          echo "newer=$code" >> "$GITHUB_OUTPUT"
-          if [ "$code" -eq 1 ]; then exit 1; fi
+          echo "newer=$any" >> "$GITHUB_OUTPUT"
 
       - name: law.go.kr 한글주소 유효성 검증
         id: urls
@@ -52,13 +75,13 @@ jobs:
 
       - name: 결과 커밋 (notice_status.json 변경 시)
         run: |
-          if git diff --quiet content/exams/cosmetic/notice_status.json; then
+          git add 'content/exams/*/notice_status.json'
+          if git diff --cached --quiet; then
             echo "상태 변경 없음"
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add content/exams/cosmetic/notice_status.json
-            git commit -m "chore(notice): 식약처 고시 상태 갱신 $(date -u +%F)"
+            git commit -m "chore(notice): 법령·고시 감시 상태 갱신 $(date -u +%F)"
             git push
           fi
 
@@ -67,6 +90,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          if [ -n "$(gh issue list --state open --search 'in:title 한글주소 링크 깨짐' --limit 1)" ]; then
+            echo "동일 이슈 이미 열려 있음 — 생성 생략"; exit 0
+          fi
           gh issue create \
             --title "🔗 law.go.kr 한글주소 링크 깨짐 — law-links.js 매핑 갱신 필요" \
             --label "bug" \
@@ -81,24 +107,64 @@ jobs:
           ISSUE
           )"
 
-      - name: 신규 고시 이슈 생성
-        if: steps.check.outputs.newer == '2'
+      - name: 신규 법령·고시 이슈 생성
+        if: steps.check.outputs.newer == '1'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          CHANGED=$(python -c "import json;d=json.load(open('content/exams/cosmetic/notice_status.json'));print(', '.join(f\"{x['name']} {x.get('latestNotice') or ''}({x.get('latestDate') or ''})\" for x in d.get('docs',[]) if x.get('newer')) or '상세는 notice_status.json 참조')")
+          if [ -n "$(gh issue list --state open --search 'in:title 법령·고시 개정 감지' --limit 1)" ]; then
+            echo "개정 감지 이슈 이미 열려 있음 — 생성 생략"; exit 0
+          fi
+          CHANGED=$(cat /tmp/changed_docs.txt)
           gh issue create \
-            --title "🔔 법령·고시 개정 감지: $CHANGED — 참조 문서 갱신 필요" \
-            --label "ingredients" \
-            --body "$(cat <<'ISSUE'
+            --title "🔔 법령·고시 개정 감지 — 참조 문서 갱신 필요" \
+            --label "content" \
+            --body "$(cat <<ISSUE
           law.go.kr 오픈API 주간 체크에서 참조 법령·고시의 개정을 감지했습니다.
 
+          ## 감지된 문서
+          $CHANGED
+
           ## 갱신 절차
-          1. `notice_status.json`의 `docs[]`에서 `newer: true` 문서 확인
-          2. 식약처/법령정보센터에서 최신 문서 PDF 확보 → `content/exams/cosmetic/참조자료/` 해당 폴더에 교체
-          3. `npm.cmd run convert:refs` → ref_md 변환 후 해당 과목 폴더에 승격
-          4. 안전기준 규정 변경이면 `python ref-pipeline/compare_ingredients_official.py` → 원료 DB 대조
+          1. 해당 시험의 \`notice_status.json\`에서 \`newer: true\` 문서 확인
+          2. \`python ref-pipeline/fetch_revision.py --exam <id>\` — 신판 원문 자동 확보(행정규칙은 첨부 PDF까지)
+             또는 법령정보센터에서 최신 문서 확보 → \`content/exams/<id>/참조자료/\` 교체
+          3. \`npm.cmd run convert:refs\` → ref_md 변환 후 해당 과목 폴더에 승격
+          4. \`node tools/sync/sync_citation_lines.js\` — 교재·문제은행 인용 재해석,
+             미발견 인용 = 개정으로 내용이 바뀐 지점 → 교재·해설 정정
           5. 파일명의 (제N호)(시행일)을 새 고시로 바꾸면 baseline이 자동 갱신됨
-          6. 선례: `docs/exams/cosmetic/ingredients_audit_제2026-19호.md` (DOC-DEV-05)
+          ISSUE
+          )"
+
+      - name: 연간 출제기준 확인 리마인더 (11/1)
+        if: github.event_name == 'schedule' && github.event.schedule == '0 0 1 11 *'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          NEXT_YEAR=$(($(date -u +%Y) + 1))
+          if [ -n "$(gh issue list --state open --search 'in:title 출제기준 확인' --limit 1)" ]; then
+            echo "출제기준 확인 이슈 이미 열려 있음 — 생성 생략"; exit 0
+          fi
+          EXAMS=$(node -e "
+            const d=require('./content/exams.json');
+            for (const e of d.exams||[]) {
+              if (e.comingSoon || e.tier==='draft') continue;
+              console.log(\`- [ ] \${e.id} — \${e.title||e.name||''} (\${e.tier||'active'})\`);
+            }")
+          gh issue create \
+            --title "📋 ${NEXT_YEAR}년도 출제기준·시행계획 확인 — 전 시험 팩" \
+            --label "content" \
+            --body "$(cat <<ISSUE
+          Q-Net 등 시행기관이 차년도 출제기준·시행계획을 연말에 공고합니다.
+          팩별로 아래를 확인하세요 (법령·고시 개정은 주간 체크가 별도 감시).
+
+          ## 대상 시험 (pilot·active)
+          $EXAMS
+
+          ## 확인 절차 (시험별)
+          1. Q-Net(또는 시행기관) ${NEXT_YEAR}년도 출제기준 공고 확인
+          2. 변경 시 신판 출제기준 PDF → \`content/exams/<id>/참조자료/\` 교체
+          3. \`npm.cmd run convert:refs\` → ref_md 승격 → 출제 범위·과목 구성 대조
+          4. 과목·배점 구조 변경이면 \`manifest.json\`의 syllabus·integratedExam 갱신
           ISSUE
           )"
