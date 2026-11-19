@@ -18,7 +18,7 @@
       "url": "https://www.law.go.kr/법령/화장품법",
       "baselineNotice": "제21525호",
       "baselineDate": "2026-10-08",
-      "_priorDate": "2026-10-08",
+      "_priorDate": "2026-10-20",
       "latestNotice": "제22113호",
       "latestDate": "2026-10-20",
       "serial": "291337",
@@ -35,7 +35,7 @@
       "url": "https://www.law.go.kr/법령/화장품법시행령",
       "baselineNotice": "제36176호",
       "baselineDate": "2026-04-02",
-      "_priorDate": null,
+      "_priorDate": "2026-04-02",
       "latestNotice": "제36176호",
       "latestDate": "2026-04-02",
       "serial": "283963",
@@ -116,11 +116,11 @@
     {
       "name": "기능성화장품 심사에 관한 규정",
       "target": "admrul",
-      "file": "기능성화장품 심사에 관한 규정(식품의약품안전처고시)(제2025-88호)(20251216).pdf",
+      "file": "기능성화장품 심사에 관한 규정(식품의약품안전처고시)(제2026-75호)(20271111).pdf",
       "url": "https://www.law.go.kr/행정규칙/기능성화장품심사에관한규정",
-      "baselineNotice": "제2025-88호",
-      "baselineDate": "2025-12-16",
-      "_priorDate": "2025-12-16",
+      "baselineNotice": "제2026-75호",
+      "baselineDate": "2027-11-11",
+      "_priorDate": "2027-11-11",
       "latestNotice": "제2026-75호",
       "latestDate": "2027-11-11",
       "serial": "2100000288072",
@@ -128,7 +128,7 @@
       "currentDate": "2027-11-11",
       "currentUrl": "https://www.law.go.kr/admRulInfoP.do?admRulSeq=2100000288072",
       "pending": false,
-      "newer": true
+      "newer": false
     },
     {
       "name": "화장품 사용할 때의 주의사항 및 알레르기 유발성분 표시에 관한 규정",
@@ -171,7 +171,7 @@
       "url": "https://www.law.go.kr/법령/개인정보보호법",
       "baselineNotice": "제21445호",
       "baselineDate": "2026-09-11",
-      "_priorDate": null,
+      "_priorDate": "2026-09-11",
       "latestNotice": "제21445호",
       "latestDate": "2026-09-11",
       "serial": "283839",
@@ -188,7 +188,7 @@
       "url": "https://www.law.go.kr/법령/개인정보보호법시행령",
       "baselineNotice": "제36671호",
       "baselineDate": "2026-09-11",
-      "_priorDate": null,
+      "_priorDate": "2026-11-10",
       "latestNotice": "제36804호",
       "latestDate": "2026-11-10",
       "serial": "291731",
@@ -205,7 +205,7 @@
       "url": "https://www.law.go.kr/행정규칙/맞춤형화장품조제관리사자격시험운영에관한규정",
       "baselineNotice": "제2024-15호",
       "baselineDate": "2024-03-19",
-      "_priorDate": null,
+      "_priorDate": "2024-03-19",
       "latestNotice": "제2024-15호",
       "latestDate": "2024-03-19",
       "serial": "2100000237716",
@@ -222,7 +222,7 @@
       "url": "https://www.law.go.kr/행정규칙/맞춤형화장품판매업자의준수사항에관한규정",
       "baselineNotice": "제2022-3호",
       "baselineDate": "2022-01-14",
-      "_priorDate": null,
+      "_priorDate": "2022-01-14",
       "latestNotice": "제2022-3호",
       "latestDate": "2022-01-14",
       "serial": "2100000208414",
@@ -233,6 +233,6 @@
       "newer": false
     }
   ],
-  "checkedAt": "2026-11-19T13:48:58+00:00",
+  "checkedAt": "2026-11-19T14:56:54+00:00",
   "newerFound": false
 }

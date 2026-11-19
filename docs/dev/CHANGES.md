@@ -1,6 +1,7 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **feat(refs): cosmetic 기능성화장품 심사 규정 제2026-75호 PDF 재변환 승격(이슈 #31) + 법령 링크 인코딩 잔재 복구** — DRF 전환 예외 팩의 정석 파이프라인 실행: 신본 PDF 자동 확보(식약처고시 제2026-75호, 자외선차단 심사자료 요건 강화) → convert:refs → verify:refs(누락 0) → ref_md/과목2 승격·구본 _archive 보존 → references.json·교재·문제은행 링크·표시 라벨 동기화. 부수 수정: DRF 전환 치환 스크립트가 URL 인코딩(%28..%29) 형태의 href를 놓쳐 broker 29·hairdresser 3·indsafe 4건의 깨진 링크가 audit:cards에서 검출 — 전수 복구 + indsafe subjectDefaultRefdoc 스테일 정정. 임베딩 번들 재생성(SEM-05). 잔여 수동 예외: cosmetic 화장품법·개인정보보호법 시행령(법령류는 DRF PDF 미제공 — 수동 PDF 확보 필요)
 - **feat(refs): flagged 법령 20종 ref_md → 최신 DRF 정본 일괄 전환(이슈 #31)** — appraisal 4·broker 11·hairdresser·skincare 화장품법·indsafe 산업안전보건법을 최신 연혁본으로 교체, references.json 정본 경로(dir/file) 해석으로 정확 매칭·일련번호 태그 동기화. cosmetic 2종은 PDF-우선 파이프라인(법령고시/*.pdf 참조)이라 별도 결정 필요
 - **feat(content): 공중위생관리법 시행령 ref_md 최신본 갱신(이슈 #31) + hairdresser 사다리 편입** — 실질 개정 확정(제8조① 감시원 임명 주체에 통합특별시장·특별자치시장·특별자치도지사 추가)에 따라 hairdresser·skincare의 ref_md를 제36779호(20261112) DRF 정본으로 교체·references.json 동기화. hairdresser 교재에 신고·기한·행정처분 사다리 수작업 편입으로 전 법령 팩 완결
 - **feat(study): 전 법령 팩 숫자 사다리 편입 + conssafe card_tip 91건 적용** — 교재 수치 자동 추출(tmp/extract_ladders.js)·사람 선별 후 11개 팩 교재에 '암기 정리' 사다리 편입(broker 3·hazmat 4·cosmetic 3·appraisal/insadj/indsafe/labor/lossadj/admagent/skincare 2·carework 1, hairdresser 라벨 불량 보류). conssafe AI 카드팁 초안 93건 중 근거 충실 91건 전수 검수 후 피드백/card_tip.json 적용 — 비교쌍·순서함정·미니사다리·경계값 주의 형식
