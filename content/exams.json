@@ -686,6 +686,32 @@
         "primary": "소방원론, 소방전기일반, 소방관계법규, 소방전기시설의 구조 및 원리",
         "secondary": "소방전기시설 설계 및 시공실무 (필답형)"
       }
+    },
+    {
+      "id": "conssafe",
+      "name": "건설안전기사",
+      "shortName": "건설안전기사",
+      "appName": "건설안전기사",
+      "title": "건설안전기사",
+      "logoMain": "건설안전기사",
+      "logoSub": "",
+      "desc": "건설안전기사 — 출제기준(2026~2030) 기반 콘텐츠 수집·작성 중",
+      "icon": "fa-solid fa-tower-crane",
+      "year": "2026",
+      "theme": {},
+      "contentRoot": "content/exams/conssafe",
+      "dataRoot": "data/exams/conssafe",
+      "manifestPath": "content/exams/conssafe/manifest.json",
+      "registryBundle": "data/exams/conssafe/registry.js",
+      "registryGlobal": "DATA_REGISTRY_CONSSAFE",
+      "features": {},
+      "group": "산업안전",
+      "comingSoon": true,
+      "tier": "draft",
+      "syllabus": {
+        "primary": "산업재해 예방 및 안전보건교육, 인간공학 및 위험성평가·관리, 건설재료, 건설시공, 건설공사 안전 관리",
+        "secondary": "건설안전 실무 (필답형+작업형)"
+      }
     }
   ]
 }

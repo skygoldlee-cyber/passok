@@ -1,0 +1,55 @@
+{
+ "edu": {
+  "cards": {
+   "edu_card_44422c": "안전보건관리책임자",
+   "edu_card_f2af5f": "안전관리자",
+   "edu_card_fe6556": "산업보건의",
+   "edu_card_3cab37": "관리감독자",
+   "edu_card_5f28db": "특별교육",
+   "edu_card_2bdd65": "하인리히 법칙",
+   "edu_card_8196fc": "안전보건위원회",
+   "edu_card_31593d": "중대산업재해",
+   "edu_card_019eb7": "건설업 기초안전보건교육"
+  },
+  "quizzes": {}
+ },
+ "ergo": {
+  "cards": {
+   "ergo_card_8dff5b": "위험성평가",
+   "ergo_card_bd455a": "FTA",
+   "ergo_card_469c82": "통제계층",
+   "ergo_card_2fc2a1": "RULA/REBA",
+   "ergo_card_6cac87": "NIOSH 들기식"
+  },
+  "quizzes": {}
+ },
+ "mat": {
+  "cards": {
+   "mat_card_295ed8": "불연재료",
+   "mat_card_ad34cf": "물결합재비",
+   "mat_card_4bbc7e": "조강 시멘트",
+   "mat_card_cf88d9": "MSDS"
+  },
+  "quizzes": {}
+ },
+ "work": {
+  "cards": {
+   "work_card_751754": "LOTO",
+   "work_card_72773c": "벽이음",
+   "work_card_cc1fcf": "흙막이",
+   "work_card_51fafd": "계측관리",
+   "work_card_618ef1": "동바리"
+  },
+  "quizzes": {}
+ },
+ "mgmt": {
+  "cards": {
+   "mgmt_card_62874d": "유해·위험방지계획서",
+   "mgmt_card_20b845": "산업안전보건관리비",
+   "mgmt_card_97bf62": "안전보건 협의체",
+   "mgmt_card_bcaab0": "안전보건대장",
+   "mgmt_card_dc3993": "안전방망"
+  },
+  "quizzes": {}
+ }
+}

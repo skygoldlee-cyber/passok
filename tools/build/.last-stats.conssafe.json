@@ -1,0 +1,71 @@
+{
+  "subjects": {
+    "edu": {
+      "cards": 9,
+      "quizzes": 0,
+      "files": {
+        "교재/edu/과목1_산업재해예방_안전보건교육_표준형.md": {
+          "cards": 10,
+          "quizzes": 0
+        }
+      }
+    },
+    "ergo": {
+      "cards": 5,
+      "quizzes": 0,
+      "files": {
+        "교재/ergo/과목2_인간공학_위험성평가_표준형.md": {
+          "cards": 5,
+          "quizzes": 0
+        }
+      }
+    },
+    "mat": {
+      "cards": 4,
+      "quizzes": 0,
+      "files": {
+        "교재/mat/과목3_건설재료_표준형.md": {
+          "cards": 5,
+          "quizzes": 0
+        }
+      }
+    },
+    "work": {
+      "cards": 5,
+      "quizzes": 0,
+      "files": {
+        "교재/work/과목4_건설시공_표준형.md": {
+          "cards": 5,
+          "quizzes": 0
+        }
+      }
+    },
+    "mgmt": {
+      "cards": 5,
+      "quizzes": 0,
+      "files": {
+        "교재/mgmt/과목5_건설공사안전관리_표준형.md": {
+          "cards": 5,
+          "quizzes": 0
+        }
+      }
+    }
+  },
+  "exams": {
+    "subject1": {
+      "questions": 8
+    },
+    "subject2": {
+      "questions": 8
+    },
+    "subject3": {
+      "questions": 8
+    },
+    "subject4": {
+      "questions": 8
+    },
+    "subject5": {
+      "questions": 8
+    }
+  }
+}

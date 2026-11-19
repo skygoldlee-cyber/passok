@@ -39,6 +39,10 @@ const GENERATED_HEADER_RE = /자동 생성|직접 수정하지 마시고/;
  */
 const ALLOWED = [
     {
+        file: 'src/views/pomodoro.js', contains: "'work'",
+        reason: "포모도로 타이머 상태값('work'/'break') — 집중 세션 구분자로 과목 키와 무관"
+    },
+    {
         file: 'tools/supabase/seed_test_accounts.js', contains: "'carework'",
         reason: "J-102 시드 계약 — e2e-active/sync 계정의 sync_snapshots.exam_id가 J-102 스펙과 약속된 고정 값 (carework 팩 전용 픽스처, 플랫폼 코드 아님)"
     },

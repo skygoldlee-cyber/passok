@@ -14,6 +14,7 @@
   "tools/build/.last-stats.carework.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.carework)",
   "tools/build/.last-stats.compapp1.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.compapp1)",
   "tools/build/.last-stats.compapp2.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.compapp2)",
+  "tools/build/.last-stats.conssafe.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.conssafe)",
   "tools/build/.last-stats.distmgr2.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.distmgr2)",
   "tools/build/.last-stats.distmgr3.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.distmgr3)",
   "tools/build/.last-stats.eleceng.json — json 파일명은 snake 또는 kebab 단일 패턴 (.last-stats.eleceng)",
