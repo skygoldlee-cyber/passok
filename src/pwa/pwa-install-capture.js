@@ -12,6 +12,23 @@
   window.__pwaInstallReady = false;
   window.__swRegistered = false;
 
+  // --- P-15: 업데이트 아이콘 배지 (Badging API) ---
+  // classic 스크립트라 app-badge.js를 import할 수 없어 동일 규약
+  // (standalone 게이트 UX-PWA-02 + API 존재 감지)을 인라인으로 복제한다.
+  // 미지원 환경(Android·브라우저 탭)에서는 무해한 no-op.
+  function setUpdateBadge() {
+    try {
+      const standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
+        || window.navigator.standalone === true;
+      if (standalone && 'setAppBadge' in navigator) navigator.setAppBadge(1);
+    } catch (e) { /* 무시 */ }
+  }
+  function clearUpdateBadge() {
+    try {
+      if ('clearAppBadge' in navigator) navigator.clearAppBadge();
+    } catch (e) { /* 무시 */ }
+  }
+
   // 1) SW 조기 등록 — Chrome이 PWA 설치 가능 여부를 판단하려면
   //    활성 SW(activate + clients.claim)가 필요. module 스크립트 대기 없이 즉시 등록.
   if ('serviceWorker' in navigator) {
@@ -47,7 +64,10 @@
         reg.addEventListener('updatefound', function () {
           const newWorker = reg.installing;
           if (!newWorker) return;
-          if (hadController) window.__SW_UPDATE_INBOUND = true;
+          if (hadController) {
+            window.__SW_UPDATE_INBOUND = true;
+            setUpdateBadge();
+          }
           showSWUpdateToast('새 버전 확인 중...');
           trackWorkerState(newWorker);
         });
@@ -56,10 +76,16 @@
         // reg.waiting = 설치 완료·대기 중 (skipWaiting으로 곧 activate)
         // reg.installing = 다운로드/설치 진행 중
         if (reg.waiting) {
-          if (hadController) window.__SW_UPDATE_INBOUND = true;
+          if (hadController) {
+            window.__SW_UPDATE_INBOUND = true;
+            setUpdateBadge();
+          }
           showSWUpdateToast('새 버전 적용 준비 중...');
         } else if (reg.installing) {
-          if (hadController) window.__SW_UPDATE_INBOUND = true;
+          if (hadController) {
+            window.__SW_UPDATE_INBOUND = true;
+            setUpdateBadge();
+          }
           showSWUpdateToast('새 버전 확인 중...');
           trackWorkerState(reg.installing);
         }
@@ -78,6 +104,7 @@
           if (!hadController) return;  // 최초 등록이면 리로드 불필요
           refreshing = true;
           window.__SW_UPDATE_INBOUND = true;
+          clearUpdateBadge();
           // 새로운 소식 모달이 이 구버전 페이지에서 이미 표시됐으면 리로드 후
           // 신버전이 같은 모달을 재표시하지 않도록 1회 스킵 플래그를 남긴다.
           if (window.__WHATS_NEW_SHOWN) {

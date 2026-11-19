@@ -53,6 +53,7 @@ const SHELL_ASSETS = [
   './src/shell/theme-init.js',
   './src/pwa/pwa-install-capture.js',
   './src/pwa/pwa-install.js',
+  './src/pwa/app-badge.js',
   './src/pwa/version-watch.js',
   './src/shell/theme-toggle.js',
   './src/shell/ui-mode.js',

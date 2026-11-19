@@ -864,6 +864,7 @@
 | P-12 | CI 검증 (`verify_shell_assets.js`, 배포 전 프리캐시 파일 존재 확인) | ✅ |
 | P-13 | **새 버전 변경 이력 알림** (`src/shell/whats-new.js`) — `APP_VERSION`(data/version.js, 배포 스탬프) vs `last_seen_version` 비교 → 업데이트 후 첫 부팅에 변경 이력 모달 + 설정 메뉴 "변경 이력" 재열람. 전용 `whats-new-overlay`로 다른 모달과 공존, 복귀 사용자는 학습 데이터 키로 판별, 노트 소스는 `data/release-notes.json`(진실 소스, 커밋 subject 자동 초안 → 수동 편집, 파싱 오류 시 배포 차단) → `release-notes.js` 래퍼 자동 생성 | ✅ |
 | P-14 | **교재 개정 안내 배너** (`src/reader/textbook-edition.js`) — `manifest.textbookEdition`(check:manifest 필수 선언)이 `registry.textbookEdition`으로 전파, 기기 로컬 `textbook_edition_seen`(scopedKey 시험별 격리·백업 제외)과 비교 → 개정 후 첫 부팅에 대시보드 배너 표시, '확인' 시 현 판본 기록으로 억제 | ✅ |
+| P-15 | **업데이트 아이콘 배지** (`src/pwa/app-badge.js`) — 미적용 업데이트 감지(version-watch 폴링 불일치·SW updatefound/waiting) 시 설치된 PWA 아이콘에 숫자 배지 `navigator.setAppBadge(1)` 부착. standalone + API 존재 이중 게이트(UX-PWA-02)로 미지원 환경 무해 처리, 해제는 적용 완료(controllerchange)·버전 일치 확인·hardReload 경로에서 `clearAppBadge()`로 수행. 배지는 OS 소유 지속 상태라 앱 종료 후에도 남아 "미적용 업데이트"의 유일한 잔존 표시가 된다. Android는 API 미지원으로 무시(알림 기반 점 표시는 별도 검토), iOS는 16.4+·알림 권한 전제 | ✅ |
 
 ### 4.2 오프라인 감지
 

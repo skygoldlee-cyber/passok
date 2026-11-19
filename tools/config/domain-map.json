@@ -100,6 +100,7 @@
                 "src/pro/pro-expiry.js",
                 "src/pro/pro-redeem.js",
                 "src/pro/pro-upgrade.js",
+                "src/pwa/app-badge.js",
                 "src/pwa/pwa-install-capture.js",
                 "src/pwa/pwa-install.js",
                 "src/pwa/pwa-manifest.js",

@@ -7,6 +7,7 @@
 
 import { appVersion } from '../shell/app-version.js';
 import { esc } from '../core/sanitize.js';
+import { setUpdateBadge, clearUpdateBadge } from './app-badge.js';
 
 const POLL_INTERVAL_MS = 5 * 60 * 1000; // 5분
 /** @type {ReturnType<typeof setInterval>|null} */
@@ -36,6 +37,7 @@ async function fetchDeployedVersion() {
 
 /** SW 캐시 + 등록 해제 후 리로드 — exam-select.js의 hardReloadApp와 동일 동작 */
 export async function hardReload() {
+    clearUpdateBadge();
     try {
         if ('caches' in window) {
             const keys = await caches.keys();
@@ -90,15 +92,19 @@ export async function checkForNewVersion() {
     const current = appVersion();
     const deployed = await fetchDeployedVersion();
     if (current && deployed && deployed !== current) {
+        setUpdateBadge();
         showNewVersionPrompt(deployed);
         return true;
     }
+    // 버전 일치 확인 시 스테일 배지 해제 — OS 소유 지속 상태라 명시 해제 필수 (P-15)
+    if (deployed && deployed === current) clearUpdateBadge();
     return false;
 }
 
-/** 감시 시작 — 주기 폴링 + 탭 복귀(visibilitychange) 시 즉시 검사 */
+/** 감시 시작 — 부팅 즉시 1회 + 주기 폴링 + 탭 복귀(visibilitychange) 시 즉시 검사 */
 export function startVersionWatch() {
     if (typeof window === 'undefined' || _timer) return;
+    checkForNewVersion();
     _timer = setInterval(() => { checkForNewVersion(); }, POLL_INTERVAL_MS);
     document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') checkForNewVersion();
