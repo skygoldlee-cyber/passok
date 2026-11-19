@@ -211,9 +211,32 @@
         -webkit-overflow-scrolling: touch;
     }
 
-    /* 설정 드롭다운 — 패널 하단이 하단 탭 바(70px+safe, z-drawer) 아래로 가려지지 않도록 상한 축소 */
+    /* 설정·도움말 드롭다운 — 패널 하단이 하단 탭 바(70px+safe, z-drawer) 아래로
+       가려지지 않도록 상한 축소. 항목 증가(화면 꺼짐 방지·학습 알림 등)로
+       1열로는 뷰포트를 넘치므로 2열 그리드로 압축 — 라벨·구분선·메타는 전폭 차지.
+       항목 min-height(--control-h-md, 44px) 유지로 터치 타겟(A-04) 훼손 없음 */
     .settings-panel {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        /* 톱니가 헤더 우측 끝에 있어 right:0 앵커 2열 폭이 좌측 뷰포트 밖으로 넘침
+           → 뷰포트(실제는 backdrop-filter가 만든 헤더 컨테이닝 블록) 기준 중앙 배치.
+           top 미지정 시 정적 위치(톱니 바로 아래) 유지 */
+        position: fixed;
+        top: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: var(--space-2);
+        width: min(92vw, 22rem);
         max-height: calc(var(--app-height, 100dvh) - 5rem - 76px - env(safe-area-inset-bottom, 0px));
+    }
+    .settings-panel > .settings-group-label,
+    .settings-panel > .settings-divider,
+    .settings-panel > .settings-meta {
+        grid-column: 1 / -1;
+    }
+    /* 라벨 높이(~19px×4) 회수 — 구분선만으로 그룹 구분이 유지되어 전 항목 표시 목적 */
+    .settings-panel > .settings-group-label {
+        display: none;
     }
 
     /* 헤더 간소화 + sticky */
