@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261120-bec67f7",
+    "date": "2026-11-20",
+    "notes": [
+      "[수정·conssafe] 시험선택 카드 아이콘 미표시 — fa-tower-crane → fa-person-digging [no-test]",
+      "[정리·release] v20261120-9951be2 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261120-9951be2",
     "date": "2026-11-20",
     "notes": [
@@ -233,21 +241,6 @@
       "[content·refs] hazmat 과목별 참조자료 8종 추가 — law.go.kr DRF 원문 ref_md",
       "[review·content] hazmat 문제은행 362문 전량 검수 — 사실 오류 0, 헤더 검수 완료 표기",
       "[review·content] hazmat 확인문제 80문 전량 검수 — ai-draft 마커 제거"
-    ]
-  },
-  {
-    "version": "v20261116-277666b",
-    "date": "2026-11-16",
-    "notes": [
-      "[수정·gates] domain-map에 concept-drill.js 등록 — 신규 study 모듈 미분류 해소",
-      "[수정·refpipe] DOCX 이미지 포맷 대응 — SVG 래스터·WebP PIL 변환·%20 경로",
-      "[문서·design] DOC-DSN-52 §4-1 교재 인쇄 파일럿 결과 기록",
-      "[기능·study] DR-08 개념 문항 딥링크 — #/trainer/concept/<cid> 세션",
-      "[문서·design] DOC-DSN-52 학습매체 연결 설계 — 개념 딥링크 + QR + 함정 태그",
-      "[문서·biz] DOC-BIZ-13 원문 v2 반영 — §4 학습매체 확장 14종 + 구현 대조",
-      "[문서·biz] DOC-BIZ-13 팩 공통 서술로 일반화 — 범위 통합·§3 플랫폼 표기",
-      "[문서·biz] DOC-BIZ-13 학습 매체 경쟁 분석 — 전 팩 공통 docs/dev/business 등재",
-      "[정리·release] v20261116-fe4de8d 스탬프 확정 [no-docs]"
     ]
   }
 ]
