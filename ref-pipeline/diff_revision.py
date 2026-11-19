@@ -87,6 +87,40 @@ def fetch_text(doc, serial):
     return n.api_get('lawService.do', {'ID': serial, 'type': 'XML'}, target='admrul', raw=True)
 
 
+def hst_serials(name):
+    """법령 연혁 목록 → [{'serial','efYd','name'}] 시행일 내림차순.
+
+    lawSearch target=lsHistory는 HTML 전용 API — 상세 링크의 MST/efYd와
+    링크 텍스트(법령명)를 파싱한다. admrul에는 연혁 API가 없어 law 전용."""
+    n = _notice_api()
+    html = n.api_get('lawSearch.do',
+                     {'query': name, 'display': '100', 'sort': 'efdes', 'type': 'HTML'},
+                     target='lsHistory', raw=True)
+    rows = []
+    for m in re.finditer(
+            r'MST=(\d+)&(?:amp;)?type=HTML&(?:amp;)?mobileYn=&(?:amp;)?efYd=(\d+)"\s*>(.*?)</a>',
+            html):
+        nm = re.sub(r'<[^>]+>', '', m.group(3)).strip()
+        rows.append({'serial': m.group(1), 'efYd': m.group(2), 'name': nm})
+    return rows
+
+
+def baseline_serial(doc, rows, latest_serial):
+    """연혁 대조의 기준 serial — baseline 시행일 이하 최근 연혁, 없으면 최신 직전.
+
+    파일명 날짜가 공포일인 경우(공중위생관리법 시행령 20261020) 어떤 시행
+    연혁에도 안 걸리지만, '그 날짜에 시행 중이던 버전'이 진짜 기준본이다."""
+    rows = [r for r in rows if r['name'] == doc['name'] and r['serial'] != str(latest_serial)]
+    if not rows:
+        return None
+    bd = (doc.get('baselineDate') or '').replace('-', '')
+    if bd:
+        past = [r for r in rows if r['efYd'] <= bd]
+        if past:
+            return past[0]['serial']  # efdes 정렬 — 시행일 ≤ baseline 중 최근
+    return rows[0]['serial']
+
+
 def staged_filename(doc, latest):
     """신본 규약 파일명 — fetch_revision의 파일명 조립 함수 재사용."""
     import fetch_revision as f
@@ -96,23 +130,62 @@ def staged_filename(doc, latest):
     return Path(stem).stem + '.md' if stem else None
 
 
+def _verdict(base, cmp, old_map, new_map, base_label):
+    """cmp 결과로 판정 필드 채우기 — 연혁본 대조·ref_md 대조 공용."""
+    base['counts'] = {'old': len(old_map), 'new': len(new_map),
+                      'changed': len(cmp['changed']),
+                      'added': len(cmp['added']), 'removed': len(cmp['removed'])}
+    if not cmp['changed'] and not cmp['added'] and not cmp['removed']:
+        base['verdict'] = 'identical'
+        base['detail'] = f'본문 동일 — 조문 {len(old_map)}/{len(new_map)} 대조 차이 없음 ({base_label})'
+        if cmp.get('renamed'):
+            base['detail'] += f' (헤더 개명 {len(cmp["renamed"])}건 — 표기 차이)'
+        return base
+
+    base['verdict'] = 'revised'
+    base['changed'] = [(k, drf_render.article_diff(ob, nb, k)) for k, ob, nb in cmp['changed']]
+    base['added'] = cmp['added']
+    base['removed'] = cmp['removed']
+    base['renamed'] = cmp.get('renamed', [])
+    c = base['counts']
+    base['detail'] = f"조문 변경 {c['changed']} · 신설 {c['added']} · 삭제 {c['removed']} ({base_label})"
+    return base
+
+
+def compare_hst(doc, new_md, latest, base):
+    """연혁본 대조 (법령 전용) — baseline 시행일 이하 최근 연혁본 vs 최신본.
+
+    ref_md 형식과 무관하게 같은 렌더러로 정본끼리 대조 — PDF 변환본 팩도
+    진짜 개정 여부를 자동 판정한다. 실패 시 None → ref_md 대조로 폴백."""
+    try:
+        bser = baseline_serial(doc, hst_serials(doc['name']), latest.get('serial'))
+    except Exception:
+        return None
+    if not bser:
+        return None
+    try:
+        old_xml = fetch_text(doc, bser)
+    except Exception:
+        return None
+    if '<조문단위' not in old_xml:
+        return None
+    old_md = drf_render.render_law(doc['name'], old_xml)
+    base['baselineSerial'] = bser
+    return _verdict(base, drf_render.compare_articles(old_md, new_md),
+                    drf_render.article_map(old_md), drf_render.article_map(new_md),
+                    f'연혁 {bser} 대조')
+
+
 def compare_doc(doc, latest):
     """문서 1종 대조 → 판정 dict.
 
-    판정값: identical | revised | no-text | no-file | error
+    판정값: identical | revised | format-mismatch | no-text | no-file | error
     """
     base = {'name': doc['name'], 'target': doc['target'],
             'baselineNotice': doc.get('baselineNotice'), 'baselineDate': doc.get('baselineDate'),
             'latestNotice': latest.get('notice'), 'latestDate': latest.get('effectiveDate'),
             'serial': latest.get('serial'), 'verdict': 'error', 'detail': '',
             'new_md': None, 'new_file': None}
-
-    cur = find_ref_md(doc['file'])
-    if not cur:
-        base['verdict'] = 'no-file'
-        base['detail'] = f'ref_md에 {doc["file"]} 없음'
-        return base
-    base['file'] = str(cur.relative_to(EXAM_DIR))
 
     try:
         xml = fetch_text(doc, latest['serial'])
@@ -127,6 +200,22 @@ def compare_doc(doc, latest):
         return base
 
     new_md = drf_render.render_law(doc['name'], xml)
+    base['new_md'] = new_md
+    base['new_file'] = staged_filename(doc, latest)
+
+    # 연혁본 대조 우선 (법령) — ref_md 형식·파일 존재와 무관한 정본 대조
+    if doc['target'] == 'law':
+        r = compare_hst(doc, new_md, latest, base)
+        if r is not None:
+            return r
+
+    # 폴백: ref_md 파일 대조 — 연혁 조회 실패·admrul
+    cur = find_ref_md(doc['file'])
+    if not cur:
+        base['verdict'] = 'no-file'
+        base['detail'] = f'ref_md에 {doc["file"]} 없음'
+        return base
+    base['file'] = str(cur.relative_to(EXAM_DIR))
     old_md = cur.read_text(encoding='utf-8')
 
     old_map, new_map = drf_render.article_map(old_md), drf_render.article_map(new_md)
@@ -139,28 +228,8 @@ def compare_doc(doc, latest):
                           'PDF 변환본 추정) — 수동 대조 또는 convert:refs 재변환 후 비교')
         return base
 
-    cmp = drf_render.compare_articles(old_md, new_md)
-    base['counts'] = {'old': len(old_map), 'new': len(new_map),
-                      'changed': len(cmp['changed']),
-                      'added': len(cmp['added']), 'removed': len(cmp['removed'])}
-    base['new_md'] = new_md
-    base['new_file'] = staged_filename(doc, latest)
-
-    if not cmp['changed'] and not cmp['added'] and not cmp['removed']:
-        base['verdict'] = 'identical'
-        base['detail'] = f'본문 동일 — 조문 {len(old_map)}/{len(new_map)} 대조 차이 없음'
-        if cmp.get('renamed'):
-            base['detail'] += f' (헤더 개명 {len(cmp["renamed"])}건 — 표기 차이)'
-        return base
-
-    base['verdict'] = 'revised'
-    base['changed'] = [(k, drf_render.article_diff(ob, nb, k)) for k, ob, nb in cmp['changed']]
-    base['added'] = cmp['added']
-    base['removed'] = cmp['removed']
-    base['renamed'] = cmp.get('renamed', [])
-    c = base['counts']
-    base['detail'] = f"조문 변경 {c['changed']} · 신설 {c['added']} · 삭제 {c['removed']}"
-    return base
+    return _verdict(base, drf_render.compare_articles(old_md, new_md),
+                    old_map, new_map, 'ref_md 대조')
 
 
 def write_report(rows, out_path=None):
@@ -175,7 +244,8 @@ def write_report(rows, out_path=None):
     for r in rows:
         L.append(f"\n## {r['name']}\n")
         L.append(f"- 기준본: {r.get('baselineNotice') or '?'} ({r.get('baselineDate') or '?'})"
-                 + (f" — `{r.get('file')}`" if r.get('file') else ""))
+                 + (f" — `{r.get('file')}`" if r.get('file') else "")
+                 + (f" · 연혁 serial {r['baselineSerial']} 대조" if r.get('baselineSerial') else ""))
         L.append(f"- 최신본: {r.get('latestNotice') or '?'} ({r.get('latestDate') or '?'},"
                  f" 일련 {r.get('serial') or '?'})")
         verdict_label = {

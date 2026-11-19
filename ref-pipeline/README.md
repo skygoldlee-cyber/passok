@@ -51,7 +51,7 @@ flowchart LR
 | `check_laws.py` | 국가법령정보센터 OPEN API로 시험 대상 법령 현행성 확인 → `report/` | **법령 개정 점검 시** (시나리오 C, `LAW_OC_KEY` 키 필요) |
 | `check_mfds_notice.py` | `referenceLaw` 전체의 최신 고시 감지 → `notice_status.json` (주간 크론 이슈) | **개정 감시** (시나리오 C) — `newer` 감지까지만 |
 | `fetch_revision.py` | 신규본 고시 첨부 PDF 자동 다운로드 + references.json 치환 | 감지된 고시의 원문 확보 시 |
-| `diff_revision.py` | 신규본 조문 단위 대조 — '본문 동일(연혁 갱신)' vs '실질 개정' 판별 → `report/법령개정대조결과.md` | **감지 직후 판별** — 유예조항 발효 연혁본을 실질 개정과 구분 |
+| `diff_revision.py` | 신규본 조문 단위 대조 — '본문 동일(연혁 갱신)' vs '실질 개정' 판별 → `report/법령개정대조결과.md`. 법령은 연혁 serial끼리 대조(lawSearch lsHistory → 기준 연혁 결정) — ref_md 형식 무관 | **감지 직후 판별** — 유예조항 발효 연혁본을 실질 개정과 구분 |
 | `drf_render.py` | DRF lawService XML → ref_md 렌더러 + 조문 대조 라이브러리 (순수 함수) | diff_revision이 내부 사용 — 직접 실행 불요 |
 | `compare_ingredients_official.py` | 고시 ref_md 별표 원료 ↔ 원료 DB 전수 대조 리포트 | cosmetic 원료 DB 감사 시 (`_exam_root` 해석 — 기본 시험 대상) |
 | `apply_audit_2026_19.py` | 제2026-19호 대조 결과의 원료 DB 일괄 반영 (1회성) | cosmetic 전용 마이그레이션 — 재실행 불필요 |
@@ -201,7 +201,7 @@ python ref-pipeline/check_laws.py your_oc_id      # 인자로 전달해도 됨
 
 #### C-2 — 신규본 감지 → 실질 개정 여부 조문 대조
 
-`check_mfds_notice.py`(주간 크론)가 `newer`를 감지하면 시행일 갱신이 곧 내용 개정은 아니다 — 유예조항 발효로 연혁 시행본이 새 일련번호를 받아도 본문은 동일할 수 있다. `diff_revision.py`가 신규본을 DRF에서 재수집해 현재 ref_md와 조문 단위로 대조한다:
+`check_mfds_notice.py`(주간 크론)가 `newer`를 감지하면 시행일 갱신이 곧 내용 개정은 아니다 — 유예조항 발효로 연혁 시행본이 새 일련번호를 받아도 본문은 동일할 수 있다. `diff_revision.py`가 신규본을 DRF에서 재수집해 조문 단위로 대조한다. **법령은 연혁 serial끼리 대조** — `lawSearch target=lsHistory`로 baseline 시행일 이하 최근 연혁본을 찾아 같은 렌더러로 비교하므로 ref_md가 PDF 변환본이어도 진짜 개정을 판정한다(파일 대조는 폴백):
 
 ```powershell
 python ref-pipeline/diff_revision.py --exam <id>            # newer 감지 문서만 대조

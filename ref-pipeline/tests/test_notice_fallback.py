@@ -72,3 +72,49 @@ class TestFindRefMd:
         assert D.find_ref_md('법(제1호)(20260101).pdf') == f
         assert D.find_ref_md('법(제1호)(20260101).md') == f
         assert D.find_ref_md('없는법(제1호)(20260101).pdf') is None
+
+
+class TestBaselineSerial:
+    """연혁 대조 기준 serial — baseline 시행일 이하 최근 연혁 선택."""
+    ROWS = [  # efdes 정렬 — 공중위생관리법 시행령 실제 연혁 형태
+        {'serial': '291365', 'efYd': '20261112', 'name': '공중위생관리법 시행령'},
+        {'serial': '266301', 'efYd': '20260101', 'name': '공중위생관리법 시행령'},
+        {'serial': '262791', 'efYd': '20240528', 'name': '공중위생관리법 시행령'},
+        {'serial': '999999', 'efYd': '20250101', 'name': '다른법 시행령'},
+    ]
+
+    def _doc(self, **kw):
+        return {'name': '공중위생관리법 시행령', 'target': 'law', 'file': 'x.md', **kw}
+
+    def test_promulgation_date_resolves_effective_serial(self):
+        """파일명 날짜가 공포일(연혁 시행일과 불일치)이면 그 날짜에 시행 중이던 연혁."""
+        r = D.baseline_serial(self._doc(baselineDate='2026-10-20'), self.ROWS, '291365')
+        assert r == '266301'  # 2026-10-20 시점 시행본 = 2026-01-01 연혁
+
+    def test_effective_date_picks_exact_row(self):
+        r = D.baseline_serial(self._doc(baselineDate='2024-05-28'), self.ROWS, '291365')
+        assert r == '262791'
+
+    def test_no_baseline_falls_back_to_previous(self):
+        r = D.baseline_serial(self._doc(), self.ROWS, '291365')
+        assert r == '266301'  # 최신 직전 연혁
+
+    def test_excludes_latest_and_other_laws(self):
+        only = [{'serial': '291365', 'efYd': '20261112', 'name': '공중위생관리법 시행령'}]
+        assert D.baseline_serial(self._doc(), only, '291365') is None
+
+
+class TestHstSerialsParse:
+    """lsHistory HTML → 연혁 행 파싱 (네트워크 없이 fixture로)."""
+    HTML = ('<a href="/DRF/lawService.do?OC=k&amp;target=lsHistory&amp;MST=291365'
+            '&amp;type=HTML&amp;mobileYn=&amp;efYd=20261112" ><strong>공중위생</strong>관리법 시행령</a>'
+            '<a href="/DRF/lawService.do?OC=k&amp;target=lsHistory&amp;MST=266301'
+            '&amp;type=HTML&amp;mobileYn=&amp;efYd=20260101" >공중위생관리법 시행령</a>')
+
+    def test_rows_parsed(self, monkeypatch):
+        monkeypatch.setattr(D, '_notice_api',
+                            lambda: type('N', (), {'api_get': staticmethod(lambda *a, **k: self.HTML)}))
+        rows = D.hst_serials('공중위생관리법 시행령')
+        assert [(r['serial'], r['efYd'], r['name']) for r in rows] == [
+            ('291365', '20261112', '공중위생관리법 시행령'),
+            ('266301', '20260101', '공중위생관리법 시행령')]
