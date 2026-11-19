@@ -1,22 +1,22 @@
 {
   "subjects": {
     "edu": {
-      "cards": 48,
-      "quizzes": 11,
+      "cards": 51,
+      "quizzes": 16,
       "files": {
         "교재/edu/과목1_산업재해예방_안전보건교육_표준형.md": {
-          "cards": 52,
-          "quizzes": 11
+          "cards": 55,
+          "quizzes": 16
         }
       }
     },
     "ergo": {
-      "cards": 20,
-      "quizzes": 5,
+      "cards": 24,
+      "quizzes": 13,
       "files": {
         "교재/ergo/과목2_인간공학_위험성평가_표준형.md": {
-          "cards": 20,
-          "quizzes": 5
+          "cards": 24,
+          "quizzes": 13
         }
       }
     },
@@ -31,22 +31,22 @@
       }
     },
     "work": {
-      "cards": 6,
-      "quizzes": 0,
+      "cards": 11,
+      "quizzes": 5,
       "files": {
         "교재/work/과목4_건설시공_표준형.md": {
-          "cards": 6,
-          "quizzes": 0
+          "cards": 11,
+          "quizzes": 5
         }
       }
     },
     "mgmt": {
-      "cards": 5,
-      "quizzes": 0,
+      "cards": 9,
+      "quizzes": 2,
       "files": {
         "교재/mgmt/과목5_건설공사안전관리_표준형.md": {
-          "cards": 5,
-          "quizzes": 0
+          "cards": 9,
+          "quizzes": 2
         }
       }
     }
