@@ -38,6 +38,36 @@ test('API 미지원(Android·구형 브라우저)·nav 부재 — 무해 skip', 
     assert.equal(applyAppBadge(true, null, true), 'skip');
 });
 
+test('Windows — 배지 렌더러 결함 플랫폼: set 생략하고 clear만 수행 (스테일 자가 치유)', () => {
+    const calls = [];
+    const nav = {
+        platform: 'Win32',
+        setAppBadge: (n) => calls.push(['set', n]),
+        clearAppBadge: () => calls.push(['clear']),
+    };
+    assert.equal(applyAppBadge(true, nav, true), 'clear');
+    assert.deepEqual(calls, [['clear']]); // setAppBadge 미호출
+    calls.length = 0;
+    assert.equal(applyAppBadge(false, nav, true), 'clear');
+    assert.deepEqual(calls, [['clear']]);
+});
+
+test('Windows userAgentData.platform 판정 — navigator.platform 폴백 불필요 경로', () => {
+    const calls = [];
+    const nav = {
+        userAgentData: { platform: 'Windows' },
+        setAppBadge: (n) => calls.push(['set', n]),
+        clearAppBadge: () => calls.push(['clear']),
+    };
+    assert.equal(applyAppBadge(true, nav, true), 'clear');
+    const mac = {
+        userAgentData: { platform: 'macOS' },
+        setAppBadge: (n) => calls.push(['set', n]),
+        clearAppBadge: () => calls.push(['clear']),
+    };
+    assert.equal(applyAppBadge(true, mac, true), 'set'); // 비Windows는 배지 유지
+});
+
 test('setAppBadge가 예외를 던져도 무해 skip — 배지 실패가 앱을 깨지 않음', () => {
     const nav = { setAppBadge: () => { throw new Error('denied'); }, clearAppBadge: () => { throw new Error('denied'); } };
     assert.equal(applyAppBadge(true, nav, true), 'skip');

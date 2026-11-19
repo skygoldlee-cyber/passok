@@ -2,8 +2,11 @@
 // @spec P-15
 // navigator.setAppBadge()/clearAppBadge()로 설치형 아이콘에 배지를 부착·해제한다.
 // 숫자가 아닌 플래그(점/글리프)를 쓰는 이유: 배지 색·글자는 OS가 그리므로 숫자 '1'이
-// 렌더링되지 않는 플랫폼(Windows 네이티브 배지 등)에서 빈 원으로 보이는 결함 방지 —
+// 렌더링되지 않는 플랫폼에서 빈 원으로 보이는 결함 방지 —
 // "업데이트 있음" 신호에는 숫자 정보가 필요 없다.
+// Windows 비활성: 해당 플랫폼 배지 렌더러는 숫자·글리프를 전혀 그리지 못해
+// 빈 원만 남고(플래그도 동일), clearAppBadge로 지워지지 않는 스테일 배지도
+// 확인됨 — 의미 없는 상시 빈 원이 되므로 set은 건너뛰고 clear만 수행한다.
 // 지원: 데스크톱 Chrome·Edge(작업표시줄/독), iOS 16.4+ 홈화면 웹앱(알림 권한 전제).
 // Android는 API 미지원으로 조용히 무시 — 알림 기반 점(dot) 표시는 별도 SPEC 검토.
 // 배지는 OS 소유 지속 상태라 앱 종료 후에도 남는다 — 배너를 닫고 종료한 사용자에게
@@ -24,17 +27,30 @@ function defaultStandalone() {
 }
 
 /**
+ * 배지 렌더러가 내용물을 그리지 못하는 플랫폼 — Windows.
+ * 숫자·플래그 모두 빈 원으로만 렌더되고 스테일 배지가 clear에도 잔존하는
+ * 결함이 확인되어 set은 무의미 — applyAppBadge가 이 플랫폼에서는 항상
+ * clear 경로만 택하도록 한다(스테일 배지 자가 치유 겸용).
+ * @param {{ userAgentData?: {platform?:string}, platform?:string } | null} [nav]
+ * @returns {boolean}
+ */
+export function isBrokenBadgePlatform(nav = globalThis.navigator) {
+    const pf = (nav && nav.userAgentData && nav.userAgentData.platform) || (nav && nav.platform) || '';
+    return /win/i.test(pf);
+}
+
+/**
  * 배지 적용 핵심 — nav·standalone 주입형 (테스트 가능).
  * standalone 게이트는 UX-PWA-02 규약 — 미설치(브라우저 탭)에서 의미 없는 호출 차단.
- * @param {boolean} pending - true=배지 부착(1), false=해제
- * @param {{ setAppBadge?: (n?: number) => void, clearAppBadge?: () => void } | null} [nav] - navigator 호환 객체
+ * @param {boolean} pending - true=배지 부착(플래그), false=해제
+ * @param {{ setAppBadge?: (n?: number) => void, clearAppBadge?: () => void, userAgentData?: {platform?:string}, platform?:string } | null} [nav] - navigator 호환 객체
  * @param {boolean} [standalone] - 설치형 PWA 여부
  * @returns {'set'|'clear'|'skip'}
  */
 export function applyAppBadge(pending, nav = globalThis.navigator, standalone = defaultStandalone()) {
     if (!nav || typeof nav.setAppBadge !== 'function' || typeof nav.clearAppBadge !== 'function' || standalone !== true) return 'skip';
     try {
-        if (pending) {
+        if (pending && !isBrokenBadgePlatform(nav)) {
             nav.setAppBadge();
             return 'set';
         }

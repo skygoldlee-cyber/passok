@@ -16,11 +16,21 @@
   // classic 스크립트라 app-badge.js를 import할 수 없어 동일 규약
   // (standalone 게이트 UX-PWA-02 + API 존재 감지)을 인라인으로 복제한다.
   // 미지원 환경(Android·브라우저 탭)에서는 무해한 no-op.
+  // Windows 비활성: 해당 렌더러는 숫자·글리프를 그리지 못해 빈 원만 남고
+  // clear로도 안 지워지는 스테일 배지가 확인됨 — set은 건너뛰고 부팅 시
+  // clear만 수행해 잔존 배지를 지운다 (app-badge.js isBrokenBadgePlatform 동기).
+  function isBrokenBadgePlatform() {
+    try {
+      const nav = /** @type {{userAgentData?: {platform?: string}, platform?: string}} */ (navigator);
+      const pf = (nav.userAgentData && nav.userAgentData.platform) || nav.platform || '';
+      return /win/i.test(pf);
+    } catch (e) { return false; }
+  }
   function setUpdateBadge() {
     try {
       const standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
         || window.navigator.standalone === true;
-      if (standalone && 'setAppBadge' in navigator) navigator.setAppBadge();
+      if (standalone && 'setAppBadge' in navigator && !isBrokenBadgePlatform()) navigator.setAppBadge();
     } catch (e) { /* 무시 */ }
   }
   function clearUpdateBadge() {
@@ -28,6 +38,9 @@
       if ('clearAppBadge' in navigator) navigator.clearAppBadge();
     } catch (e) { /* 무시 */ }
   }
+  // Windows 스테일 배지 자가 치유 — 모듈 경로(version-watch)가 실패해도
+  // 매 부팅 시 한 번은 해제를 시도한다 (OS 소유 지속 상태 잔존 방지).
+  if (isBrokenBadgePlatform()) clearUpdateBadge();
 
   // 1) SW 조기 등록 — Chrome이 PWA 설치 가능 여부를 판단하려면
   //    활성 SW(activate + clients.claim)가 필요. module 스크립트 대기 없이 즉시 등록.
