@@ -1,12 +1,12 @@
 {
   "subjects": {
     "edu": {
-      "cards": 30,
-      "quizzes": 7,
+      "cards": 48,
+      "quizzes": 11,
       "files": {
         "교재/edu/과목1_산업재해예방_안전보건교육_표준형.md": {
-          "cards": 34,
-          "quizzes": 7
+          "cards": 52,
+          "quizzes": 11
         }
       }
     },
