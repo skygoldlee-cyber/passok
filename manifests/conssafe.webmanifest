@@ -2,7 +2,7 @@
   "id": "passok",
   "name": "PassOK",
   "short_name": "PassOK",
-  "description": "건설안전기사 — 출제기준(2026~2030) 기반 콘텐츠 수집·작성 중",
+  "description": "건설안전기사 — 필기 5과목(산업재해예방·인간공학·위험성평가·건설재료·건설시공·안전관리) 과목당 모의고사 6회분 · 문제은행 600문 · 출제기준 2026~2030 기준 자체 제작 (실기 콘텐츠 제공 예정)",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
