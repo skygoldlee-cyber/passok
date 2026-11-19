@@ -27,7 +27,7 @@ function lawExtLink(name, anchorCls = 'ref-law-ext', label = '원문', titleSuff
 }
 
 // 파일명 → 읽기용 표시명: 확장자·(발령기관)(제N호)(시행일) 꼬리 제거, 언더스코어→공백
-// 예: '화장품법(법률)(제21525호)(20261008).md' → '화장품법'
+// 예: '화장품법(법률)(제22113호)(20261020).md' → '화장품법'
 /** @param {*} fileName */
 function prettyRefName(fileName) {
     const pretty = decodeURIComponent(String(fileName || ''))
