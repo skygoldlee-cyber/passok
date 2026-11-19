@@ -46,6 +46,18 @@
   "cards": {
    "ergo_card_bd455a": "FTA",
    "ergo_card_c0c675": "FMEA/FMECA",
+   "ergo_card_2b83b9": "정보량",
+   "ergo_card_5b1902": "Fitts 법칙",
+   "ergo_card_457631": "병렬 MTBF",
+   "ergo_card_9bfc1b": "WBGT 옥외",
+   "ergo_card_9ad5a0": "WBGT 옥내",
+   "ergo_card_eb570c": "Oxford 지수",
+   "ergo_card_664052": "조도 기준",
+   "ergo_card_8f272a": "소음 노출기준",
+   "ergo_card_e10c6c": "거리 감쇠",
+   "ergo_card_8b503e": "sone",
+   "ergo_card_eaf74a": "NIOSH RWL",
+   "ergo_card_a75387": "유해요인 조사",
    "ergo_card_570638": "SRK 모델",
    "ergo_card_b5d7ab": "Slip/Mistake",
    "ergo_card_8dff5b": "위험성평가",
@@ -53,7 +65,13 @@
    "ergo_card_485c21": "WBGT",
    "ergo_card_6cac87": "NIOSH 들기식"
   },
-  "quizzes": {}
+  "quizzes": {
+   "ergo_quiz_31a7da": "750/300/150/75 lux|조도 기준",
+   "ergo_quiz_3f139b": "90dB·8h, 5dB 교환율, 115dB 금지, 충격 140dB|소음 노출기준",
+   "ergo_quiz_73ed97": "20·log(d₁/d₂), 거리 2배 = −6dB|거리 감쇠",
+   "ergo_quiz_ca38c2": "LC(23kg)×HM×VM×DM×AM×FM×CM, HM=25/H|NIOSH RWL",
+   "ergo_quiz_1a2f7b": "3년마다·신설 1년 이내|유해요인 조사"
+  }
  },
  "mat": {
   "cards": {

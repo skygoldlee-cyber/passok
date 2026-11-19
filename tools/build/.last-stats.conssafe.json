@@ -11,12 +11,12 @@
       }
     },
     "ergo": {
-      "cards": 8,
-      "quizzes": 0,
+      "cards": 20,
+      "quizzes": 5,
       "files": {
         "교재/ergo/과목2_인간공학_위험성평가_표준형.md": {
-          "cards": 8,
-          "quizzes": 0
+          "cards": 20,
+          "quizzes": 5
         }
       }
     },
