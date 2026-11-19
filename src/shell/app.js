@@ -199,6 +199,9 @@ import { getViewTitles, navigateToView, initViewHashRouting } from './router.js'
 import { getCurrentExamId, getActiveExamId, getExamList, purgeLegacyStorage, getActiveRegistry } from '../core/exam-context.js';
 import { renderExamSelect, showExamSelect, selectExamAction, resetExamSelection, hardReloadApp } from '../views/exam-select.js';
 import { startVersionWatch } from '../pwa/version-watch.js';
+import { initWakeLock, toggleWakeLock } from '../pwa/wake-lock.js';
+import { initStudyReminder, toggleStudyReminder } from '../pwa/study-reminder.js';
+import { consumeShareTarget } from '../pwa/share-target.js';
 import { initUiMode, toggleUiMode, toggleFontSize } from './ui-mode.js';
 import { initAuthView, openAuthModal, closeAuthModal, authSignIn, authSignUp, authEmailLogin, authMagicLink, authSignOut, authSetPassword, authSendOtp, authVerifyOtp, authForgotPassword, authOAuth, authLinkIdentity, authUnlinkIdentity } from '../auth-sync/auth-view.js';
 import { showRedeemDialog, initPlanSync } from '../pro/pro-redeem.js';
@@ -284,6 +287,11 @@ function initApp() {
     step('setupPWAInstall', setupPWAInstall);
     // 배포 버전 감시 — 새 버전이 올라가면 프롬프트 배너로 새로고침 유도 (장시간 열린 탭 대응)
     step('startVersionWatch', startVersionWatch);
+    // P-16 화면 꺼짐 방지·P-19 학습 알림 — 저장된 기기 설정을 부팅 시 반영·라벨 동기화
+    step('initWakeLock', initWakeLock);
+    step('initStudyReminder', initStudyReminder);
+    // P-18 share_target — 다른 앱의 텍스트 공유를 검색 팔레트로 수신
+    step('consumeShareTarget', consumeShareTarget);
     // 앱 종료 버튼은 설치형 PWA(standalone)에서만 노출 — 브라우저 탭에서는 무의미
     step('setupAppQuit', () => {
         const quitBtn = document.getElementById('app-quit-btn');
@@ -678,6 +686,8 @@ const DELEGATED_HANDLERS = {
         if (label) label.textContent = nowAllowed ? '켜짐' : '꺼짐';
         showToast(nowAllowed ? '사용 통계 전송이 켜졌습니다' : '사용 통계 전송이 꺼졌습니다 — 앞으로 이 기기에서 수집하지 않습니다', 'info');
     },
+    toggleWakeLock,
+    toggleStudyReminder,
     syncNow,
     /** 모의고사 문항 수 선택 행 토글 — 다른 과목의 열린 행은 닫는다 */
     /** @param {string} rowId */

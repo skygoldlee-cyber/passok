@@ -384,7 +384,8 @@ function _moveActive(delta) {
     if (active && active.scrollIntoView) active.scrollIntoView({ block: 'nearest' });
 }
 
-export function openCommandPalette() {
+/** @param {string} [initialQuery] - 공유 받기 등 외부 진입 시 초기 검색어 (P-18) */
+export function openCommandPalette(initialQuery = '') {
     _buildDom();
     const overlay = document.getElementById('cmdk-overlay');
     if (!overlay) return;
@@ -392,9 +393,9 @@ export function openCommandPalette() {
     overlay.classList.remove('is-hidden');
     const input = /** @type {HTMLInputElement|null} */ (document.getElementById('cmdk-input'));
     if (!input) return;
-    input.value = '';
+    input.value = initialQuery;
     trackAction('command_palette');
-    _renderResults('');
+    _renderResults(initialQuery);
     input.focus();
 }
 

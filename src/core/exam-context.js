@@ -323,7 +323,11 @@ const GLOBAL_KEYS = new Set([
     'pending_feedback',        // 오프라인 의견 제출 큐 — 시험 무관
     'feedback_hint_seen',      // "의견 보내기" NEW 배지 확인 — 시험 무관
     'feedback_dot_seen',       // 설정 버튼 점 확인 — 시험 무관
-    'exam_stamp_seen'          // 시험별 콘텐츠 스탬프 확인 맵 {examId:stamp} (ES-07) — 시험 무관
+    'exam_stamp_seen',         // 시험별 콘텐츠 스탬프 확인 맵 {examId:stamp} (ES-07) — 시험 무관
+    'wake_lock',               // 화면 꺼짐 방지 설정 — 기기 단위 (P-16)
+    'study_reminder',          // 학습 알림 설정 — 기기 단위 (P-19)
+    'reminder_last_sent',      // 리마인더 발송일 — 기기 단위 (P-19)
+    'update_notified'          // 업데이트 알림 발송 버전 — 기기 단위 (P-17)
 ]);
 
 // @spec DA-06~08,ES-03

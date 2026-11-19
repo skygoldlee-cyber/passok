@@ -7,7 +7,7 @@
 
 import { appVersion } from '../shell/app-version.js';
 import { esc } from '../core/sanitize.js';
-import { setUpdateBadge, clearUpdateBadge } from './app-badge.js';
+import { clearUpdateBadge, surfaceUpdateAvailable } from './app-badge.js';
 
 const POLL_INTERVAL_MS = 5 * 60 * 1000; // 5분
 /** @type {ReturnType<typeof setInterval>|null} */
@@ -92,7 +92,7 @@ export async function checkForNewVersion() {
     const current = appVersion();
     const deployed = await fetchDeployedVersion();
     if (current && deployed && deployed !== current) {
-        setUpdateBadge();
+        surfaceUpdateAvailable(deployed); // 배지 가능이면 배지, Android는 권한 부여 시 알림 (P-15/P-17)
         showNewVersionPrompt(deployed);
         return true;
     }

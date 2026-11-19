@@ -186,6 +186,21 @@
         border: 1px solid var(--print-fg) !important;
     }
 
+    /* P-20: 퀴즈·훈련 결과의 오답 리뷰 카드 — 인라인 background:var(--bg-card)
+       (다크 테마)가 인쇄물에 그대로 어둡게 찍히는 결함 수정. 인라인 스타일은
+       속성 선택자로만 선택 가능해 문자열 매칭으로 오버라이드한다 (wrongReviewHtml) */
+    [style*="var(--bg-card)"] {
+        background: var(--print-bg) !important;
+        border-color: var(--print-border-strong) !important;
+        break-inside: avoid;
+    }
+
+    /* 결과 패널의 액션 버튼 묶음 — 버튼은 .btn 규칙으로 숨겨지지만 빈 컨테이너의
+       여백이 남으므로 묶음 단위로 제거 */
+    .result-actions {
+        display: none !important;
+    }
+
     /* 다이어그램·그림·인용 절단 방지 — 활성 뷰(리더·검색 등) 인쇄 시 페이지 중간에서 쪼개지 않음 */
     pre.mermaid,
     .reader-img,

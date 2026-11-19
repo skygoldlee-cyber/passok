@@ -21,7 +21,7 @@
 
 // @spec P-01~06,O-04,UX-PWA-03,LP-07
 
-const CACHE_VERSION = 'v20261119-09854a7';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
+const CACHE_VERSION = 'v20261119-382b096';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
 const DATA_CACHE_VERSION = 'v1';           // 데이터: 안정(해시 파일명이 변경 감지 담당) — 캐시 포맷이 바뀔 때만 수동 증가
 // 캐시 접두사는 플랫폼 브랜드(passok) — 시험 무관 공유 캐시.
 // 구 접두사(passory-*·cosmetic-pass-*)는 activate의 비현재 캐시 전수 삭제로 자동 정리된다.
@@ -55,6 +55,9 @@ const SHELL_ASSETS = [
   './src/pwa/pwa-install.js',
   './src/pwa/app-badge.js',
   './src/pwa/version-watch.js',
+  './src/pwa/wake-lock.js',
+  './src/pwa/share-target.js',
+  './src/pwa/study-reminder.js',
   './src/shell/theme-toggle.js',
   './src/shell/ui-mode.js',
   './src/practice-registry.js',
@@ -640,6 +643,21 @@ self.addEventListener('message', (event) => {
           failed: failed.length
         });
       }
+    })
+  );
+});
+
+/* ------------------------------------------------------------
+ * 알림 클릭 — 열린 창이 있으면 포커스, 없으면 앱을 연다 (P-17/P-19)
+ * ---------------------------------------------------------- */
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((wins) => {
+      for (const w of wins) {
+        if ('focus' in w) return w.focus();
+      }
+      return clients.openWindow('./index.html');
     })
   );
 });

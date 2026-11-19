@@ -242,6 +242,14 @@
                             <button type="button" id="orientation-toggle-btn" class="settings-item" title="가로/세로 보기 전환">
                                 <i class="fa-solid fa-rotate" aria-hidden="true"></i> 가로/세로 보기
                             </button>
+                            <!-- P-16 화면 꺼짐 방지 — 학습 중 절전 진입 차단 (시니어 장시간 읽기 대응) -->
+                            <button type="button" class="settings-item" data-click="toggleWakeLock" title="공부하는 동안 화면이 저절로 꺼지지 않게 합니다 — 배터리를 더 씁니다">
+                                <i class="fa-solid fa-lightbulb" aria-hidden="true"></i> 화면 꺼짐 방지: <span id="wake-lock-label">꺼짐</span>
+                            </button>
+                            <!-- P-19 학습 알림 — 복습할 카드가 있으면 하루 1회 로컬 알림 (알림 권한 요청) -->
+                            <button type="button" class="settings-item" data-click="toggleStudyReminder" title="복습할 카드가 있으면 하루 한 번 알림을 보냅니다 — 알림 권한이 필요합니다">
+                                <i class="fa-solid fa-bell" aria-hidden="true"></i> 학습 알림: <span id="reminder-label">꺼짐</span>
+                            </button>
                             <div class="settings-divider"></div>
                             <p class="settings-group-label">앱</p>
                             <!-- 앱 종료: 설치형 PWA(standalone)에서만 표시 — 모바일은 OS가 종료를 막아 안내 다이얼로그 표시 -->

@@ -216,8 +216,11 @@ src/                    # ES Modules
     pwa-install.js        # PWA 설치 프롬프트 설정
     pwa-install-capture.js # beforeinstallprompt 조기 캡처 + SW 조기 등록 (<head> 즉시 실행, 클래식 스크립트)
     pwa-manifest.js       # 시험별 동적 PWA 매니페스트 (클래식 스크립트 — 빌드 산출물 manifests/<id>.webmanifest 실제 파일로 링크 교체 + 문서 제목·설명·apple-mobile-web-app-title 갱신, blob: 금지)
-    app-badge.js          # 설치 PWA 아이콘 "미적용 업데이트" 숫자 배지 — setAppBadge(1)/clearAppBadge, standalone·API 존재 게이트 (P-15)
-    version-watch.js       # 배포 버전 감시 — data/version.js 무캐시 폴링(부팅 즉시+5분+탭 복귀)으로 APP_VERSION 불일치 시 새 버전 프롬프트 배너+아이콘 배지 → 확인 시 SW 캐시 우회 리로드
+    app-badge.js          # 설치 PWA 아이콘 "미적용 업데이트" 숫자 배지 — setAppBadge(1)/clearAppBadge, standalone·API 존재 게이트 (P-15) + Android 대체 경로 showNotification 업데이트 알림 (P-17)
+    version-watch.js       # 배포 버전 감시 — data/version.js 무캐시 폴링(부팅 즉시+5분+탭 복귀)으로 APP_VERSION 불일치 시 새 버전 프롬프트 배너+아이콘 배지/알림 → 확인 시 SW 캐시 우회 리로드
+    wake-lock.js          # 화면 꺼짐 방지 — Wake Lock sentinel 획득·visibilitychange 재획득·설정 토글 (P-16)
+    share-target.js       # 공유 받기 — manifest share_target으로 수신한 텍스트/URL을 통합검색 진입어로 해석 (P-18)
+    study-reminder.js     # 학습 리마인더 — SW showNotification 로컬 알림, 백로그 카드 기준 하루 1회·설정 토글 (P-19)
   shell/app-version.js        # 앱 버전 접근·표시 포맷터 (window.APP_VERSION → formatAppVersion)
   shell/whats-new.js          # 새 버전 변경 이력 알림 (APP_VERSION 비교 → 모달, 설정 "변경 이력" 재열람)
   shell/onboarding.js         # 첫 방문 시작 안내 모달 (학습 데이터 없는 최초 방문 1회, 설정에서 재열람)

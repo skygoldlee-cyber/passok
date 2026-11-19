@@ -206,6 +206,10 @@ export const STORAGE_KEYS = {
   UI_MODE: 'ui_mode',                      // 'study' | 'practice' (합격 후 실무 모드)
   UI_FONT_SCALE: 'ui_font_scale',          // '' | 'lg' | 'xl' (시니어 글자 크게 보기)
   // ui_study_tools_open — UM-03 폐기로 삭제됨 (기존 키 잔존 시 무시)
+  WAKE_LOCK: 'wake_lock',                  // 화면 꺼짐 방지 토글 'on' (GLOBAL_KEYS — P-16, 기기 설정)
+  STUDY_REMINDER: 'study_reminder',        // 학습 알림 토글 'on' (GLOBAL_KEYS — P-19, 기기 설정)
+  REMINDER_LAST_SENT: 'reminder_last_sent',// 리마인더 마지막 발송일 'YYYY-MM-DD' (GLOBAL_KEYS — P-19)
+  UPDATE_NOTIFIED: 'update_notified',      // 업데이트 알림 발송 완료 배포 버전 (GLOBAL_KEYS — P-17 중복 억제)
 
   // 클라우드 동기화 (sync.js — Phase 2)
   SYNC_DIRTY: 'sync_dirty',        // 미동기화 로컬 변경 존재 ('1'/'0')

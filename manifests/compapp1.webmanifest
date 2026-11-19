@@ -13,6 +13,15 @@
   "categories": [
     "education"
   ],
+  "share_target": {
+    "action": "./index.html",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
   "prefer_related_applications": false,
   "icons": [
     {
