@@ -1,6 +1,7 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **fix(refs): conssafe 기준규칙 연혁 버전 반영 — 첫 감지→검증→갱신 전주기 실행** — 감시 체계가 잡은 산업안전보건기준에 관한 규칙 제450호 시행본(20260302)을 DRF로 재수집·조문 단위 대조: 본문 동일(제241조②4호 용접방화포 성능인증 유예조항 발효 연혁이므로 텍스트 변화 없음)을 확인하고 baseline 20250901→20260302 갱신(파일·디렉터리명 + references.json 6곳 + 과목4 교재 링크). 부산물 개선: 신판 DRF 다중 CDATA·목 중첩·가지번호 키 정규화 적용해 구본에 없던 별표 부록 23종 보강 — notice_status newer 해소, 인용·레이아웃·법령링크 게이트 통과
 - **feat(notice): 법령·고시 개정 감시 전 시험 일반화 — conssafe 33종 등록** — notice-check.yml을 cosmetic 전용→referenceLaw 보유 시험 전체 순회로 확장(시험별 notice_status.json 갱신·개정 감지 이슈 자동 생성·중복 이슈 방지)·매년 11/1 차년도 출제기준 확인 리마인더 이슈 신설·conssafe referenceLaw 5→33종 확장+noticeCore 지정·(…부령) 파일명 분류 정규식 수정(_exam_root.py·notice-check.js·build_pdf_registry.js — 시행규칙 등 부령이 admrul로 오분류되던 버그, 수정 즉시 기준규칙 제450호 2026-03-02 개정 감지)
 - **feat(exams): fireelec 소방설비기사(전기) pilot 오픈 승격** — comingSoon 해제·tier draft→pilot·desc 실측 정합(802→713문·실기 제공예정)·manifest._pilot 갱신·README 등록 추가. 과목1 은행 범위외 잔재 정리: 미답안 스캐폴드 Q3~91 89문 삭제(717b708a75의 KOCW 연소공학 삭제 의도와 정합)·Q92~213을 Q3~124로 재번호화 — 파서가 미답 문항도 번들에 포함시켜 모의고사 채점 불가로 나오던 것 해소
 - **feat(exams): conssafe 건설안전기사 pilot 오픈 승격** — comingSoon 해제·tier draft→pilot·desc 실측(필기 5과목·과목당 6회분·600문·실기 제공예정 표기)·manifest._pilot 파일럿 근거 갱신·README 등록 목록 추가. check:onboard 구조오류 0·승격기준 충족(600문), J-500 팩 적합성 E2E 3프로젝트 통과
