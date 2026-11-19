@@ -12,8 +12,13 @@
   "quizzes": {}
  },
  "hygiene": {
-  "cards": {},
-  "quizzes": {}
+  "cards": {
+   "hygiene_card_3879d8": "신고·기한 기준",
+   "hygiene_card_bfa420": "벌칙·행정처분"
+  },
+  "quizzes": {
+   "hygiene_quiz_56054e": "1일 1회(영업소 청소) → 48시간(염색 패치테스트) → 20일(폐업신고) → 3개월(상속인 폐업신고) → 6개월 이내(면허정지 기간) → 매년(위생교육) → 1년(면허취소 후 재취득 제한)|신고·기한 기준"
+  }
  },
  "disinfection": {
   "cards": {},
