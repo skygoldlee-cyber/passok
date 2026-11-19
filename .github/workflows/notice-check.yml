@@ -42,6 +42,7 @@ jobs:
         run: |
           set +e
           : > /tmp/changed_docs.txt
+          : > /tmp/newer_exams.txt
           any=0
           for refs in content/exams/*/references.json; do
             exam=$(basename "$(dirname "$refs")")
@@ -52,6 +53,7 @@ jobs:
             code=$?
             if [ "$code" -eq 2 ]; then
               any=1
+              echo "$exam" >> /tmp/newer_exams.txt
               node -e "
                 const d=require('./content/exams/$exam/notice_status.json');
                 for (const x of d.docs||[]) if (x.newer)
@@ -63,6 +65,24 @@ jobs:
           done
           set -e
           echo "newer=$any" >> "$GITHUB_OUTPUT"
+
+      - name: 개정 조문 대조 — 실질 변경 여부 판별
+        # 시행일 갱신 ≠ 내용 개정 — 유예조항 발효 연혁본은 본문이 동일할 수 있다.
+        # diff_revision.py가 신규본을 DRF에서 재수집해 조문 단위로 대조한다.
+        if: steps.check.outputs.newer == '1'
+        env:
+          LAW_OC_KEY: ${{ secrets.LAW_OC_KEY }}
+        run: |
+          set +e
+          : > /tmp/diff_summary.txt
+          while read -r exam; do
+            [ -n "$exam" ] || continue
+            echo "── $exam — 조문 대조"
+            python ref-pipeline/diff_revision.py --exam "$exam"
+            rep="content/exams/$exam/report/법령개정대조결과.md"
+            if [ -f "$rep" ]; then cat "$rep" >> /tmp/diff_summary.txt; fi
+          done < /tmp/newer_exams.txt
+          exit 0
 
       - name: law.go.kr 한글주소 유효성 검증
         id: urls
@@ -116,6 +136,7 @@ jobs:
             echo "개정 감지 이슈 이미 열려 있음 — 생성 생략"; exit 0
           fi
           CHANGED=$(cat /tmp/changed_docs.txt)
+          DIFFS=$(head -c 40000 /tmp/diff_summary.txt 2>/dev/null || echo "(대조 리포트 없음)")
           gh issue create \
             --title "🔔 법령·고시 개정 감지 — 참조 문서 갱신 필요" \
             --label "content" \
@@ -125,9 +146,16 @@ jobs:
           ## 감지된 문서
           $CHANGED
 
+          ## 조문 대조 판정
+          시행일 갱신이 곧 내용 개정은 아닙니다 — 유예조항 발효 등으로
+          본문이 동일한 연혁본일 수 있습니다 (판정 '본문 동일'이면
+          파일명 시행일만 갱신하면 됩니다).
+
+          $DIFFS
+
           ## 갱신 절차
-          1. 해당 시험의 \`notice_status.json\`에서 \`newer: true\` 문서 확인
-          2. \`python ref-pipeline/fetch_revision.py --exam <id>\` — 신판 원문 자동 확보(행정규칙은 첨부 PDF까지)
+          1. \`python ref-pipeline/diff_revision.py --exam <id>\` — 조문 대조 재확인
+          2. 실질 개정이면 \`python ref-pipeline/fetch_revision.py --exam <id>\` — 신판 원문 자동 확보(행정규칙은 첨부 PDF까지)
              또는 법령정보센터에서 최신 문서 확보 → \`content/exams/<id>/참조자료/\` 교체
           3. \`npm.cmd run convert:refs\` → ref_md 변환 후 해당 과목 폴더에 승격
           4. \`node tools/sync/sync_citation_lines.js\` — 교재·문제은행 인용 재해석,

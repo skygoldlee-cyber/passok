@@ -49,6 +49,10 @@ flowchart LR
 | `callout_rules.json` | md2doc 콜아웃 패턴 규칙 (스크립트 옆 자동 인식) | 자동 |
 | `batch_convert.py` | 시험 교재·안내서·문제은행 MD → `html/` 일괄 변환 | **교재 MD 교체 후 HTML 재생성 시** (시나리오 B) |
 | `check_laws.py` | 국가법령정보센터 OPEN API로 시험 대상 법령 현행성 확인 → `report/` | **법령 개정 점검 시** (시나리오 C, `LAW_OC_KEY` 키 필요) |
+| `check_mfds_notice.py` | `referenceLaw` 전체의 최신 고시 감지 → `notice_status.json` (주간 크론 이슈) | **개정 감시** (시나리오 C) — `newer` 감지까지만 |
+| `fetch_revision.py` | 신규본 고시 첨부 PDF 자동 다운로드 + references.json 치환 | 감지된 고시의 원문 확보 시 |
+| `diff_revision.py` | 신규본 조문 단위 대조 — '본문 동일(연혁 갱신)' vs '실질 개정' 판별 → `report/법령개정대조결과.md` | **감지 직후 판별** — 유예조항 발효 연혁본을 실질 개정과 구분 |
+| `drf_render.py` | DRF lawService XML → ref_md 렌더러 + 조문 대조 라이브러리 (순수 함수) | diff_revision이 내부 사용 — 직접 실행 불요 |
 | `compare_ingredients_official.py` | 고시 ref_md 별표 원료 ↔ 원료 DB 전수 대조 리포트 | cosmetic 원료 DB 감사 시 (`_exam_root` 해석 — 기본 시험 대상) |
 | `apply_audit_2026_19.py` | 제2026-19호 대조 결과의 원료 DB 일괄 반영 (1회성) | cosmetic 전용 마이그레이션 — 재실행 불필요 |
 | `audiobook/` | 교재 MD → 청취용 원고 → TTS MP3 파이프라인 | **교재 교체 후 오디오북 재생성 시** (시나리오 B, `audiobook/README.md` 상세) |
@@ -74,7 +78,7 @@ winget install ffmpeg        # MP3 병합 품질 향상 (없으면 바이너리 
 |---|---|---|
 | `EXAM_CONTENT_ROOT` | 대상 시험 콘텐츠 루트 (기본: `content/exams/cosmetic`) | 다른 시험 대상으로 실행할 때 |
 | `EXAM_ID` | `EXAM_CONTENT_ROOT` 미설정 시 exams.json에서 루트 해석 | 시험 지정 대안 |
-| `LAW_OC_KEY` | 국가법령정보센터 OPEN API 인증키 (구 `LAW_OC` env도 인식) | `check_laws.py`·`check_mfds_notice.py`·`fetch_revision.py` 자동 조회 시 |
+| `LAW_OC_KEY` | 국가법령정보센터 OPEN API 인증키 (구 `LAW_OC` env도 인식) | `check_laws.py`·`check_mfds_notice.py`·`fetch_revision.py`·`diff_revision.py` 자동 조회 시 |
 | `ELEVENLABS_API_KEY` | ElevenLabs TTS | 오디오북 `--tts` 실행 시 |
 
 **경로 우선순위**: CLI 인자 > `EXAM_CONTENT_ROOT` > `EXAM_ID` > `content/exams.json` default
@@ -194,6 +198,21 @@ python ref-pipeline/check_laws.py your_oc_id      # 인자로 전달해도 됨
 - 출력: 콘솔 요약 + `{EXAM}/report/법령최신확인결과.md`
 - **원칙**: 조회 실패 시 값을 지어내지 않음 — `확인실패`는 "개정됨"이 아니라 "정보 없음"
 - `업데이트 필요` 판정이 나오면 → 시나리오 A(참조자료 갱신) + 교재 인용 개정 검토로 이어짐
+
+#### C-2 — 신규본 감지 → 실질 개정 여부 조문 대조
+
+`check_mfds_notice.py`(주간 크론)가 `newer`를 감지하면 시행일 갱신이 곧 내용 개정은 아니다 — 유예조항 발효로 연혁 시행본이 새 일련번호를 받아도 본문은 동일할 수 있다. `diff_revision.py`가 신규본을 DRF에서 재수집해 현재 ref_md와 조문 단위로 대조한다:
+
+```powershell
+python ref-pipeline/diff_revision.py --exam <id>            # newer 감지 문서만 대조
+python ref-pipeline/diff_revision.py --exam <id> --doc <명> # 특정 문서 강제 대조
+python ref-pipeline/diff_revision.py --exam <id> --all      # 전 감시 문서 검증
+python ref-pipeline/diff_revision.py --exam <id> --stage tmp/newrefs  # 신본 렌더 스테이징
+```
+
+- 판정 `본문 동일`이면 파일명 (제N호)(시행일)만 신본으로 갱신해 baseline을 이동한다 (내용 교체 불요)
+- 판정 `실질 개정`이면 `report/법령개정대조결과.md`의 조문 diff를 검토 → `fetch_revision.py` → ref_md 교체 → `sync_citation_lines --check`(미발견 인용 = 개정 영향 지점) → 교재·문제은행 정정
+- 주간 크론 워크플로는 감지 시 이 대조를 자동 실행해 이슈 본문에 판정을 포함한다
 
 ### 시나리오 D — 개별 파일 변환
 

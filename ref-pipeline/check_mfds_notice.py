@@ -71,7 +71,8 @@ def load_oc_key():
     return os.environ.get('LAW_OC_KEY', '').strip()
 
 
-def api_get(path, params, target='admrul'):
+def api_get(path, params, target='admrul', raw=False):
+    """DRF API 호출. params의 'type'을 'XML'로 넘기고 raw=True면 본문 텍스트를 반환한다."""
     oc = load_oc_key()
     if not oc:
         print('!! LAW_OC_KEY가 없습니다. 둘 중 하나로 설정하세요:')
@@ -104,6 +105,8 @@ def api_get(path, params, target='admrul'):
                 last_err = e
         if body is None:
             continue  # 다음 scheme
+        if raw:
+            return body
         try:
             return json.loads(body)
         except ValueError:
