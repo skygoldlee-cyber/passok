@@ -2,7 +2,7 @@
   "id": "passok",
   "name": "PassOK",
   "short_name": "PassOK",
-  "description": "건설안전기사 — 필기 5과목 100문항 + 실기 건설안전 실무 (출제기준 2026~2030) · 자료수집 완료, 콘텐츠 제작 대기",
+  "description": "건설안전기사 — 출제기준(2026~2030) 기반 콘텐츠 수집·작성 중",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
