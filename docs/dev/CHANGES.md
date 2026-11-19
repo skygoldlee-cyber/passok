@@ -1,6 +1,7 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **feat(notice): supabase-keepalive 결과 Discord 알림 확장 — 성공·취소도 통지** — AD-10 단계를 if:failure→always()로 확장해 매일 핑 결과(정상 녹·취소 회·실패 적) 전송, DISCORD_WEBHOOK_URL 미설정 시 생략 유지
 - **feat(notice): 주간 법령·고시 체크 결과 Discord 웹훅 알림** — notice-check.yml 말미에 if:always() 알림 단계 추가: 전 문서 최신(녹)·개정 감지(주황 — 감지 문서+조문 대조 판정 필드)·잡 실패(적) embed를 DISCORD_WEBHOOK_URL 시크릿으로 POST, 미설정 시 생략
 - **feat(refs): diff_revision.py 신설 — 감지 개정의 실질 변경 여부 조문 대조 자동화** — drf_render.py(DRF XML→ref_md 렌더러·조문 대조 라이브러리) 승격: 복수 CDATA 분할·항번호 중복·목 중첩·가지번호 키 정규화 + §헤더 개명(본문 동일 added/removed 쌍) 접기. diff_revision은 newer 감지 문서를 DRF에서 재수집·대조해 '본문 동일(연혁/유예조항 발효 — 파일명만 갱신)'과 '실질 개정(조문 diff 리포트)'을 판별, report/법령개정대조결과.md 생성. notice-check.yml에 대조 단계 추가 — 이슈 본문에 판정 포함. api_get raw 옵션 추가(XML 응답), pytest 12건
 - **fix(refs): conssafe 기준규칙 연혁 버전 반영 — 첫 감지→검증→갱신 전주기 실행** — 감시 체계가 잡은 산업안전보건기준에 관한 규칙 제450호 시행본(20260302)을 DRF로 재수집·조문 단위 대조: 본문 동일(제241조②4호 용접방화포 성능인증 유예조항 발효 연혁이므로 텍스트 변화 없음)을 확인하고 baseline 20250901→20260302 갱신(파일·디렉터리명 + references.json 6곳 + 과목4 교재 링크). 부산물 개선: 신판 DRF 다중 CDATA·목 중첩·가지번호 키 정규화 적용해 구본에 없던 별표 부록 23종 보강 — notice_status newer 해소, 인용·레이아웃·법령링크 게이트 통과

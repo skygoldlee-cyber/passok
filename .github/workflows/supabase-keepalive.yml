@@ -94,15 +94,27 @@ jobs:
             exit 1
           fi
 
-      - name: 핑 실패 시 Discord 알림 (AD-10)
-        if: failure()
+      - name: Discord 결과 알림 (AD-10)
+        # 성공·실패 무관 실행 — 매일 핑 결과를 Discord로 받는다.
+        # 시크릿 미설정이면 조용히 skip — 이슈 생성 단계는 그대로 동작.
+        if: always()
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          RUN_STATUS: ${{ job.status }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          # 시크릿 미설정이면 조용히 skip — 이슈 생성 단계는 그대로 동작
           if [ -z "$DISCORD_WEBHOOK_URL" ]; then exit 0; fi
-          RUN_URL="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          PAYLOAD="{\"allowed_mentions\":{\"parse\":[]},\"embeds\":[{\"title\":\"🚨 Supabase keep-alive 실패\",\"description\":\"프로젝트 일시정지 또는 장애 가능 — 대시보드에서 Resume 확인\",\"color\":16711680,\"fields\":[{\"name\":\"run\",\"value\":\"${RUN_URL}\"}]}]}"
+          case "$RUN_STATUS" in
+            success)
+              PAYLOAD="{\"allowed_mentions\":{\"parse\":[]},\"embeds\":[{\"title\":\"🟢 Supabase keep-alive 정상\",\"description\":\"운영·테스트 프로젝트 REST/Auth 핑 통과\",\"color\":3066993,\"footer\":{\"text\":\"PassOK keep-alive\"}}]}"
+              ;;
+            cancelled)
+              PAYLOAD="{\"allowed_mentions\":{\"parse\":[]},\"embeds\":[{\"title\":\"⏹ Supabase keep-alive 취소됨\",\"color\":9807270,\"fields\":[{\"name\":\"run\",\"value\":\"${RUN_URL}\"}]}]}"
+              ;;
+            *)
+              PAYLOAD="{\"allowed_mentions\":{\"parse\":[]},\"embeds\":[{\"title\":\"🚨 Supabase keep-alive 실패\",\"description\":\"프로젝트 일시정지 또는 장애 가능 — 대시보드에서 Resume 확인\",\"color\":16711680,\"fields\":[{\"name\":\"run\",\"value\":\"${RUN_URL}\"}]}]}"
+              ;;
+          esac
           curl -sS --max-time 15 -X POST -H 'content-type: application/json' \
             "$DISCORD_WEBHOOK_URL" -d "$PAYLOAD" || true   # 알림 실패가 이슈 생성 단계를 막으면 안 됨
 
