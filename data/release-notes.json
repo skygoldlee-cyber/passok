@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261119-2646863",
+    "date": "2026-11-19",
+    "notes": [
+      "fireelec 소방설비기사(전기분야) pilot 오픈 승격",
+      "conssafe 건설안전기사 pilot 오픈 승격",
+      "conssafe 문제은행 과목당 모의고사 6회차(120문항)로 확충",
+      "[수정·exams] conssafe 과목간 교차 정합 — 수치 통일 + 통합 수치표 신설",
+      "[수정·exams] conssafe 과목5 교재 2차 검수 — 잔여 정정 + 6-3절 복원",
+      "[수정·exams] conssafe 과목5 교재 라인검수 정정 + Ch15 시험범위 압축",
+      "[수정·exams] conssafe 과목4 교재 2차 검수 — 잔여 정정",
+      "[수정·exams] conssafe 과목4 교재 라인검수 정정 + 빈출 보강",
+      "[수정·exams] conssafe 과목3 교재 4차 검수 — 잔여 불일치 정정",
+      "[수정·exams] conssafe 과목3 교재 라인검수 정정 + 기출 보강"
+    ]
+  },
+  {
     "version": "v20261119-cf93d00",
     "date": "2026-11-19",
     "notes": [
@@ -232,18 +248,6 @@
       "[기능·carework] 표준교재 심화 보강 + 문제은행 3회분 충족 + 수치 정정",
       "[기능·hazmat] 문제은행 권장 6회분 도달 — 과목당 120문(총 362문)",
       "[기능·check] 모의고사 권장 6회분 계층 추가"
-    ]
-  },
-  {
-    "version": "v20261115-4f3df7b",
-    "date": "2026-11-15",
-    "notes": [
-      "[수정·check] webp 게이트 vercelignore 매칭 결함 2건 — CRLF trim·** 이중 변환",
-      "[테스트·refpipe] probe 픽스처 문서ID 콜아웃 반영 — 표 수·인덱스 갱신",
-      "[정리·docs] probe.md 픽스처 문서 ID 부여 + .vercelignore 오염 라인 정리",
-      "[정리·docs] md-tokens 목록 등록·테스트 픽스처 배포 예외·COMMANDS 카탈로그 재생성",
-      "[기능·doc-md] 문서 파이프라인 공용화·인라인 확장·ref-pipeline 정합 일괄 개선",
-      "[정리·release] v20261115-2eb20ac 스탬프 확정 [no-docs]"
     ]
   }
 ]
