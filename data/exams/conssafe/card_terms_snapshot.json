@@ -1,24 +1,55 @@
 {
  "edu": {
   "cards": {
-   "edu_card_44422c": "안전보건관리책임자",
-   "edu_card_f2af5f": "안전관리자",
-   "edu_card_fe6556": "산업보건의",
-   "edu_card_3cab37": "관리감독자",
+   "edu_card_4eba46": "안전모",
+   "edu_card_6fbc1a": "안전화",
+   "edu_card_98a31e": "안전대",
+   "edu_card_c93ce2": "방진마스크",
+   "edu_card_917f5f": "방독마스크",
+   "edu_card_927127": "송기마스크",
+   "edu_card_20ac54": "공기호흡기",
+   "edu_card_bbf368": "보안경·보안면",
+   "edu_card_d99f31": "방음 보호구",
+   "edu_card_246a2b": "보호장갑",
+   "edu_card_bef8c0": "강의법",
+   "edu_card_b1783f": "토의법",
+   "edu_card_e061b2": "실연법",
+   "edu_card_6b15c6": "프로그램학습법",
+   "edu_card_5a063d": "모의법",
+   "edu_card_e97fc0": "시청각교육법",
    "edu_card_5f28db": "특별교육",
-   "edu_card_2bdd65": "하인리히 법칙",
-   "edu_card_8196fc": "안전보건위원회",
+   "edu_card_62e468": "건설업 안전관리자 선임",
+   "edu_card_a4c3bd": "위원회 구성",
+   "edu_card_fcda1e": "채용 시 교육",
+   "edu_card_66fcb5": "작업변경 시 교육",
    "edu_card_31593d": "중대산업재해",
-   "edu_card_019eb7": "건설업 기초안전보건교육"
+   "edu_card_2f6590": "중처법 적용",
+   "edu_card_165c7c": "경영책임자 벌칙",
+   "edu_card_2bdd65": "하인리히 법칙",
+   "edu_card_673640": "재해 빈발성",
+   "edu_card_8196fc": "안전보건위원회",
+   "edu_card_019eb7": "건설업 기초안전보건교육",
+   "edu_card_591158": "플리커치"
   },
-  "quizzes": {}
+  "quizzes": {
+   "edu_quiz_261e52": "세분 단계·즉시 응답·개별 진도|프로그램학습법",
+   "edu_quiz_80bdf1": "노사 동수 5~15명|위원회 구성",
+   "edu_quiz_db1958": "8시간(일용 1시간)|채용 시 교육",
+   "edu_quiz_2e0ca3": "사무 1시간·그 밖 2시간|작업변경 시 교육",
+   "edu_quiz_1fab12": "16시간(사전 4시간)|특별교육",
+   "edu_quiz_82c9be": "사망1·부상2(6월)·질병3(1년)|중대산업재해",
+   "edu_quiz_47b206": "1년 이상 징역 또는 10억 이하|경영책임자 벌칙"
+  }
  },
  "ergo": {
   "cards": {
-   "ergo_card_8dff5b": "위험성평가",
    "ergo_card_bd455a": "FTA",
-   "ergo_card_469c82": "통제계층",
-   "ergo_card_2fc2a1": "RULA/REBA",
+   "ergo_card_c0c675": "FMEA/FMECA",
+   "ergo_card_570638": "SRK 모델",
+   "ergo_card_b5d7ab": "Slip/Mistake",
+   "ergo_card_8dff5b": "위험성평가",
+   "ergo_card_bd4790": "통제표시비",
+   "ergo_card_485c21": "WBGT",
    "ergo_card_6cac87": "NIOSH 들기식"
   },
   "quizzes": {}
@@ -28,7 +59,9 @@
    "mat_card_295ed8": "불연재료",
    "mat_card_ad34cf": "물결합재비",
    "mat_card_4bbc7e": "조강 시멘트",
-   "mat_card_cf88d9": "MSDS"
+   "mat_card_0039e1": "이형철근 SD400",
+   "mat_card_cf88d9": "MSDS",
+   "mat_card_be42c2": "열가소성·열경화성"
   },
   "quizzes": {}
  },
@@ -38,7 +71,8 @@
    "work_card_72773c": "벽이음",
    "work_card_cc1fcf": "흙막이",
    "work_card_51fafd": "계측관리",
-   "work_card_618ef1": "동바리"
+   "work_card_618ef1": "동바리",
+   "work_card_21b9d0": "가공도"
   },
   "quizzes": {}
  },
