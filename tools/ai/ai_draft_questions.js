@@ -4,7 +4,8 @@
  * @spec AI-05,AI-02,AI-03
  *
  * 사용법:
- *   node tools/ai/ai_draft_questions.js --subject law [--lines 200-400] [--count 5] [--type choice] [--dry-run]
+ *   node tools/ai/ai_draft_questions.js --subject law [--lines 200-400] [--count 5] [--choices 4] [--type choice] [--dry-run]
+ *   - --choices N: 선지 개수(2~5, 기본 5) — 4지선다 은행은 --choices 4로 생성해 후변환 불요
  *   node tools/ai/ai_draft_questions.js --file <md>  임의 MD(생성 초안·ref 원문 등)를 청킹 대상으로
  *
  * - 지정 교재 파일·라인 범위를 섹션 청크로 분할해 청크별 초안 생성
@@ -21,17 +22,14 @@ const { listTextbooks, chunkTextbook } = require('./lib/textbook.js');
 const { citationValid } = require('./lib/citations.js');
 const llm = require('./llm_client.js');
 
-const SYSTEM = `당신은 자격시험 출제 보조입니다. 제공된 교재 청크만을 근거로 문제 초안을 만든다.
+const CIRCLED = '①②③④⑤';
+const systemPrompt = (choices) => `당신은 자격시험 출제 보조입니다. 제공된 교재 청크만을 근거로 문제 초안을 만든다.
 출력 형식(각 문항):
 ### Q{n}. <발문>
-① <선지1>
-② <선지2>
-③ <선지3>
-④ <선지4>
-⑤ <선지5>
+${[...CIRCLED.slice(0, choices)].map((c, i) => `${c} <선지${i + 1}>`).join('\n')}
 
 **Q{n}답**
-> **정답: <①~⑤ 또는 단답 텍스트>**
+> **정답: <${CIRCLED[0]}~${CIRCLED[choices - 1]} 또는 단답 텍스트>**
 > **근거 라인: L<청크 내 실제 라인 번호>**
 > **해설**: <1~3문장>
 규칙:
@@ -46,6 +44,8 @@ async function main() {
     const { flags, opts } = parseArgs();
     const dryRun = flags.has('dry-run') || !llm.isAvailable();
     const count = Number(opts.count || 5);
+    const choices = Math.max(2, Math.min(5, Number(opts.choices || 5)));
+    const SYSTEM = systemPrompt(choices);
 
     const target = getTargets(opts)[0];
     if (!target) { console.error('대상 시험을 찾을 수 없음 (--exam 지정)'); process.exit(1); }

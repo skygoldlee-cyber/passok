@@ -1404,6 +1404,47 @@ const _EXAM_TABLES = {
         NOTICE_INGREDIENT_DOCS: [
 
         ]
+    },
+    "fireelec": {
+        contentRoot: "content/exams/fireelec",
+        SUBJECT_DIR_MAP: {
+        "theory": "과목1",
+        "elec": "과목2",
+        "law": "과목3",
+        "facil": "과목4"
+        },
+        REF_MD_SUBJECTS: {
+
+        },
+        REF_MD_FLAT: [
+
+        ],
+        REF_DIRS: {
+        "과목2": [
+            "한국전기설비규정(기후에너지환경부공고).pdf"
+        ]
+        },
+        SOURCE_REF_MAP: [
+
+        ],
+        KEYWORD_REF_MAP: [
+
+        ],
+        REFERENCE_FILES: {
+
+        },
+        REFERENCE_COMMON: [
+
+        ],
+        REFERENCE_INGREDIENTS: [
+
+        ],
+        REFERENCE_LAW: [
+
+        ],
+        NOTICE_INGREDIENT_DOCS: [
+
+        ]
     }
 };
 

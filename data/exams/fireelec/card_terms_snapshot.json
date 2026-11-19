@@ -1,0 +1,123 @@
+{
+ "theory": {
+  "cards": {
+   "theory_card_bc6fe9": "HCN",
+   "theory_card_4e895d": "COCl₂",
+   "theory_card_9faaf1": "NOx",
+   "theory_card_edaa43": "A급 화재",
+   "theory_card_2da22b": "B급 화재",
+   "theory_card_bf2238": "C급 화재",
+   "theory_card_0f9c22": "D급 화재",
+   "theory_card_2a6b53": "K급 화재",
+   "theory_card_84e6bd": "물리적 폭발",
+   "theory_card_d9ef44": "화학적 폭발",
+   "theory_card_71bb6d": "화염 전파속도",
+   "theory_card_bc219a": "에너지 전달 기구",
+   "theory_card_a28448": "압력 상승비",
+   "theory_card_30217b": "파면의 형태",
+   "theory_card_abf57e": "파괴 작용",
+   "theory_card_f7fc2a": "그 밖에 행정안전부령으로 정하는 것·함유물",
+   "theory_card_55db00": "가열·마찰·충격",
+   "theory_card_e52e64": "물 접촉",
+   "theory_card_eaad68": "강산 접촉",
+   "theory_card_f32728": "가연물 혼합",
+   "theory_card_f3fc12": "유독가스 발생",
+   "theory_card_418f7f": "특수인화물",
+   "theory_card_a90f84": "제1석유류",
+   "theory_card_ef3c5a": "알코올류",
+   "theory_card_70ee61": "제2석유류",
+   "theory_card_164bc7": "제3석유류",
+   "theory_card_ba1209": "제4석유류",
+   "theory_card_11bd57": "동식물유류",
+   "theory_card_7c242f": "연소 형태",
+   "theory_card_2febf9": "액체 비중",
+   "theory_card_fd1403": "증기 비중",
+   "theory_card_ff0eeb": "전기적 성질",
+   "theory_card_b0ca74": "용해성",
+   "theory_card_0966cb": "주 소화작용",
+   "theory_card_768cb2": "화재 적응성",
+   "theory_card_5e406e": "약제 특장점",
+   "theory_card_ffe986": "소화 제한",
+   "theory_card_7c7d69": "증발잠열",
+   "theory_card_24afa2": "이산화탄소 (CO₂)",
+   "theory_card_6be3f5": "제3종",
+   "theory_card_65f108": "단백포",
+   "theory_card_a11680": "수성막포 (AFFF)",
+   "theory_card_df9d20": "내알코올포"
+  },
+  "quizzes": {
+   "theory_quiz_75f8ec": "초기 압력의 약 7 ~ 10배|압력 상승비",
+   "theory_quiz_97be44": "비교적 완만, 압력 방출구로 완화 가능|파괴 작용",
+   "theory_quiz_e33f6e": "**대부분 1 미만** (물보다 가벼움)|액체 비중",
+   "theory_quiz_b11c8a": "**대부분 1 초과** (공기보다 무거움)|증기 비중",
+   "theory_quiz_fff83f": "질식작용(산소농도를 15% 이하로 저하시킴), 부수적 냉각작용|주 소화작용"
+  }
+ },
+ "elec": {
+  "cards": {
+   "elec_card_08b441": "Chapter 01",
+   "elec_card_2e499f": "Chapter 02",
+   "elec_card_62fdff": "Chapter 03",
+   "elec_card_bfefc5": "Chapter 04",
+   "elec_card_928819": "AND"
+  },
+  "quizzes": {
+   "elec_quiz_ca4229": "모든 입력이 1일 때만 1|AND"
+  }
+ },
+ "law": {
+  "cards": {
+   "law_card_dee562": "01. 소방기본법",
+   "law_card_3ffbf3": "04. 소방시설공사업법",
+   "law_card_705bd1": "05. 위험물안전관리법",
+   "law_card_22a022": "소화전 설치간격",
+   "law_card_53c10f": "소화전 호스접결구",
+   "law_card_8f9850": "저수조",
+   "law_card_60a5e8": "소화설비",
+   "law_card_7b4652": "경보설비",
+   "law_card_d3480f": "피난구조설비",
+   "law_card_c578c0": "소화용수설비",
+   "law_card_d2bda5": "소화활동설비",
+   "law_card_9d011d": "자동화재탐지설비",
+   "law_card_32583f": "비상경보설비",
+   "law_card_a32b0e": "비상방송설비",
+   "law_card_4c9b73": "자동화재속보설비",
+   "law_card_9dd64d": "누전경보기",
+   "law_card_4cd149": "비상콘센트설비",
+   "law_card_7c2d78": "무선통신보조설비",
+   "law_card_cd4880": "연결송수관설비",
+   "law_card_66b563": "연결살수설비",
+   "law_card_5ce1fa": "특고압 가공전선",
+   "law_card_7184f0": "옥외저장소",
+   "law_card_27bead": "옥내저장소",
+   "law_card_460d7a": "옥외탱크저장소",
+   "law_card_97afff": "정기점검",
+   "law_card_4120fa": "정기검사",
+   "law_card_59795a": "5년 이하/5천만원",
+   "law_card_3cca75": "벌금형만",
+   "law_card_d32546": "가중·특칙"
+  },
+  "quizzes": {
+   "law_quiz_c4c296": "근린생활·의료·위락·장례·복합건축물 **연면적 600㎡ 이상** / 공장·창고·판매·업무시설 등 **1,000㎡ 이상** / 교육연구·수련시설 등 **2,000㎡ 이상** / **6층 이상**이면 모든 층 / 아파트등·기숙사·숙박시설은 모든 층 / 노유자 생활시설·조산원·산후조리원·전통시장·**터널 1,000m 이상**·**지하구**·전기저장시설·요양병원·정신의료기관·의료재활시설(정신의료기관·의료재활은 **300㎡ 이상 또는 창살 설치** 조건, 요양병원은 면적 무관) 등|자동화재탐지설비",
+   "law_quiz_60e473": "연면적 **400㎡ 이상** / 지하층·무창층 바닥면적 **150㎡ 이상**(공연장 100㎡) / **터널 500m 이상** / 50명 이상 근로자의 옥내작업장 / 지하 차고·주차장(200㎡ 미만)이 있는 건축물 모든 층 등. ⚠ 자동화재탐지설비나 **화재알림설비**를 설치한 대상물은 그 유효범위에서 비상경보설비가 **면제**된다 — 면제 방향 함정|비상경보설비",
+   "law_quiz_db1321": "노유자 생활시설 / 병원급 의료시설 / 조산원·산후조리원 / 보물·국보인 목조건축물 / 전통시장 등 용도별 대상|자동화재속보설비",
+   "law_quiz_7455b4": "**100배 이상**|옥외저장소",
+   "law_quiz_fec99a": "**150배 이상**|옥내저장소",
+   "law_quiz_d4613a": "**200배 이상**|옥외탱크저장소"
+  }
+ },
+ "facil": {
+  "cards": {
+   "facil_card_757c38": "소방전기시설 및 화재안전성능기준·화재안전기술기준",
+   "facil_card_b31444": "4m 이상 ~ 8m 미만",
+   "facil_card_5c258a": "8m 이상 ~ 15m 미만",
+   "facil_card_a03120": "15m 이상 ~ 20m 미만",
+   "facil_card_d0a362": "20m 이상",
+   "facil_card_9b9b31": "내화배선",
+   "facil_card_e4c00d": "그 밖의 장소"
+  },
+  "quizzes": {
+   "facil_quiz_21bb4c": "화재안전기준에 적합한 전선·케이블(저독성 난연 폴리올레핀 계열·0.6/1kV 가교폴리에틸렌 절연 등 — 내화·내열 두 배선에 쓰는 전선 종류는 동일)|내화배선"
+  }
+ }
+}

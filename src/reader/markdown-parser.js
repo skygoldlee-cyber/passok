@@ -145,6 +145,20 @@ export function parseMarkdown(mdText, options = {}) {
         return `\x00MBLOCK${i}\x00`;
     });
 
+    // 1-2. 인라인 $...$ 수식도 플레이스홀더로 보호 — $$ 추출 이후 남은 단일 $ 쌍.
+    //      (AI 제작 교재가 $S_L$, $\text{H}_2$ 같은 인라인 LaTeX를 다량 포함)
+    //      비수식 오인 차단: \명령·_·^ 마커가 없고 한글 등 비ASCII가 섞인 쌍은 원문 유지
+    /** @type {string[]} */
+    const _mathInline = [];
+    html = html.replace(/\$([^$\n]+)\$/g, (m, formula) => {
+        const body = formula.trim();
+        const mathy = /[\\_^{}]/.test(body) || /^[\x20-\x7e]*$/.test(body);
+        if (!mathy) return m;
+        const i = _mathInline.length;
+        _mathInline.push(body);
+        return `\x00MINL${i}\x00`;
+    });
+
     // 2. HTML 이스케이프
     html = escapeHTML(html);
 
@@ -158,6 +172,12 @@ export function parseMarkdown(mdText, options = {}) {
     html = html.replace(/\x00MBLOCK(\d+)\x00/g, (m, i) => {
         const formula = _mathBlocks[parseInt(i)] || '';
         return convertMathToHtml(formula);
+    });
+
+    // 3-2. 인라인 $...$ 수식 복원 — 첨자·그리스문자 등은 convertMathToHtml이 변환
+    html = html.replace(/\x00MINL(\d+)\x00/g, (m, i) => {
+        const formula = _mathInline[parseInt(i)] || '';
+        return convertMathToHtml(formula, { inline: true });
     });
 
     // 4. 펜스 라인 토큰 치환 (```언어)
@@ -610,29 +630,97 @@ export function stripQaStamps(html) {
 }
 
 /**
- * 간단한 LaTeX 수식을 HTML로 변환 (KaTeX 없이 \frac 분수만 지원)
- * @param {string} formula - $$ ... $$ 내부의 LaTeX 수식 문자열
+ * 간단한 LaTeX 수식을 HTML로 변환 (KaTeX 없이 자체 변환)
+ * @spec TR-32 — 지원 명령어 부분집합 계약 (콘텐츠 표기 규약은 CS-14)
+ * 지원: \frac 분수 · _{}/^{} 아래·윗첨자 · 그리스문자 · 기본 기호(\times\cdot\leq 등)
+ * @param {string} formula - $$ ... $$ 또는 $ ... $ 내부의 LaTeX 수식 문자열
+ * @param {{inline?: boolean}} [opts] - inline이면 <span class="math-inline"> (문단 내 표시)
  * @returns {string} HTML 문자열
  */
-function convertMathToHtml(formula) {
-    // 이미 HTML 이스케이프된 상태이므로 < > 등 복원 불필요
-    // \frac{분자}{분모} → HTML 분수 구조로 변환
-    let html = formula;
-    // \times → × 기호
-    html = html.replace(/\\times/g, '&times;');
-    // \frac{A}{B} → <span class="math-frac"><span class="math-num">A</span><span class="math-den">B</span></span>
-    // 중첩 분수 지원 (최대 3단계)
+function convertMathToHtml(formula, opts = {}) {
+    /** @type {Record<string, string>} 그리스 문자 */
+    const GREEK = {
+        alpha: 'α', beta: 'β', gamma: 'γ', delta: 'δ', epsilon: 'ε', varepsilon: 'ε',
+        zeta: 'ζ', eta: 'η', theta: 'θ', vartheta: 'ϑ', iota: 'ι', kappa: 'κ',
+        lambda: 'λ', mu: 'μ', nu: 'ν', xi: 'ξ', pi: 'π', rho: 'ρ', varrho: 'ϱ',
+        sigma: 'σ', tau: 'τ', phi: 'φ', varphi: 'φ', chi: 'χ', psi: 'ψ', omega: 'ω',
+        Phi: 'Φ', Delta: 'Δ', Gamma: 'Γ', Lambda: 'Λ', Pi: 'Π', Sigma: 'Σ',
+        Omega: 'Ω', Theta: 'Θ', Xi: 'Ξ', Psi: 'Ψ', Upsilon: 'Υ'
+    };
+    /** @type {Record<string, string>} 기호 명령어 */
+    const SYMBOL = {
+        times: '&times;', cdot: '&middot;', div: '&divide;', pm: '&plusmn;', mp: '∓',
+        leq: '&le;', le: '&le;', geq: '&ge;', ge: '&ge;', neq: '&ne;', ne: '&ne;',
+        approx: '&asymp;', sim: '~', simeq: '&sime;', equiv: '&equiv;',
+        infty: '&infin;', gg: '&Gt;', ll: '&Lt;',
+        rightarrow: '&rarr;', to: '&rarr;', leftarrow: '&larr;', Rightarrow: '&rArr;',
+        Leftrightarrow: '&hArr;', uparrow: '&uarr;', downarrow: '&darr;',
+        sum: 'Σ', prod: 'Π', int: '∫', oint: '∮', partial: '∂', nabla: '∇',
+        circ: '°', degree: '°', propto: '∝', cap: '∩', cup: '∪',
+        subset: '⊂', supset: '⊃', forall: '∀', exists: '∃', perp: '⊥', parallel: '∥',
+        hbar: 'ℏ', ell: 'ℓ', Re: 'ℜ', Im: 'ℑ', prime: '′', ast: '∗', bullet: '•',
+        oplus: '⊕', ominus: '⊖', otimes: '⊗',
+        sin: 'sin ', cos: 'cos ', tan: 'tan ', sec: 'sec ', csc: 'csc ', cot: 'cot ',
+        log: 'log ', ln: 'ln ', exp: 'exp ', lim: 'lim ', max: 'max ', min: 'min ',
+        lt: '&lt;', gt: '&gt;', ldots: '…', cdots: '⋯', quad: ' ', qquad: '  '
+    };
+    /** @type {Record<string, string>} 단문자 이스케이프 (\% \$ \& \{ \} \, \; \! \-) */
+    const CHAR_ESC = {
+        '%': '%', '$': '$', '&': '&amp;', '_': '_', '#': '#',
+        '{': '{', '}': '}', ',': ' ', ';': ' ', ':': ' ', '!': '', ' ': ' ', '-': '‑'
+    };
+
+    // 수식 원문은 토큰 추출 시점(이스케이프 전)의 날것 — 변환 산출물만 신뢰되므로 선이스케이프
+    let html = escapeHTML(formula);
+    // \text{...} \mathrm{...} 등 → {내용} — 중괄호를 남겨 인접 명령어와의 접합(\cdotK 오인) 방지
+    for (let d = 0; d < 3; d++) {
+        const prev = html;
+        html = html.replace(/\\(?:text|mathrm|mathbf|textbf|mathit|mathsf|operatorname|mbox|rm|bf|it)\s*\{([^{}]*)\}/g, '{$1}');
+        if (html === prev) break;
+    }
+    // \frac{A}{B} → HTML 분수 (인자 1단 중괄호 허용 — \frac{\pi}{2\sqrt{2}} 형태, 중첩 최대 3단계, \dfrac·\tfrac 동일 처리)
     for (let depth = 0; depth < 3; depth++) {
         const prev = html;
-        html = html.replace(/\\frac\{([^{}]*)\}\{([^{}]*)\}/g,
+        html = html.replace(/\\[dt]?frac\{((?:[^{}]|\{[^{}]*\})*)\}\{((?:[^{}]|\{[^{}]*\})*)\}/g,
             '<span class="math-frac"><span class="math-num">$1</span><span class="math-den">$2</span></span>');
         if (html === prev) break;
     }
-    // 남은 역슬래시 제거 (미지원 명령)
-    html = html.replace(/\\([a-zA-Z]+)/g, '$1');
-    // 남은 $ 기호 제거
-    html = html.replace(/\$/g, '');
+    // \sqrt{x} → √(x) — 인자 1단 중괄호 허용(내부 \frac 등), 자체 중첩 대비 반복
+    for (let depth = 0; depth < 3; depth++) {
+        const prev = html;
+        html = html.replace(/\\sqrt\{((?:[^{}]|\{[^{}]*\})*)\}/g, '&radic;($1)');
+        if (html === prev) break;
+    }
+    // 문자 악센트 — \bar \dot \hat \vec \tilde → 결합 발음 부호
+    html = html.replace(/\\bar\{?([a-zA-Z])\}?/g, '$1&#x0304;');
+    html = html.replace(/\\dot\{?([a-zA-Z])\}?/g, '$1&#x0307;');
+    html = html.replace(/\\ddot\{?([a-zA-Z])\}?/g, '$1&#x0308;');
+    html = html.replace(/\\hat\{?([a-zA-Z])\}?/g, '$1&#x0302;');
+    html = html.replace(/\\tilde\{?([a-zA-Z])\}?/g, '$1&#x0303;');
+    html = html.replace(/\\vec\{?([a-zA-Z])\}?/g, '$1&#x20D7;');
+    // \overline{...} — 다문자 상단선 (논리식 부정·켤레 표기, 결합 발음부호 대신 CSS overline)
+    html = html.replace(/\\overline\{((?:[^{}]|\{[^{}]*\})*)\}/g, '<span class="math-over">$1</span>');
+    // \left( \right) \big 등 크기 명령 → 구분자만 남김 (단, \rightarrow·\bigcap 등 명령어 오인 차단)
+    html = html.replace(/\\(?:left|right|bigl|bigr|Bigl|Bigr|big|Big|bigg|Bigg)(?![a-zA-Z])\s*/g, '');
+    // 아래·윗첨자 — 중괄호 그룹 우선(1단 중첩 허용, \text 추출 잔여 {{..}} 대응), 단문자·명령어 후순위
+    for (let d = 0; d < 3; d++) {
+        const prev = html;
+        html = html.replace(/_\{((?:[^{}]|\{[^{}]*\})*)\}/g, '<sub>$1</sub>');
+        html = html.replace(/\^\{((?:[^{}]|\{[^{}]*\})*)\}/g, '<sup>$1</sup>');
+        if (html === prev) break;
+    }
+    html = html.replace(/_([A-Za-z0-9])/g, '<sub>$1</sub>');
+    html = html.replace(/\^\s*(\\[a-zA-Z]+)/g, '<sup>$1</sup>');
+    html = html.replace(/\^([A-Za-z0-9+\-()])/g, '<sup>$1</sup>');
+    // 그리스 문자·기호 명령어
+    html = html.replace(/\\([a-zA-Z]+)/g, (m, name) => GREEK[name] || SYMBOL[name] || name);
+    // 단문자 이스케이프
+    html = html.replace(/\\(.)/g, (m, c) => CHAR_ESC[c] ?? c);
+    // LaTeX 무시 구문 정리: ~ → 공백, 중괄호·$ 제거
+    html = html.replace(/~/g, ' ').replace(/[{}]/g, '').replace(/\$/g, '');
     // 공백 정리
-    html = html.replace(/\\\s/g, ' ').replace(/\s+/g, ' ').trim();
-    return `<div class="math-block">${html}</div>`;
+    html = html.replace(/\s+/g, ' ').trim();
+    return opts.inline
+        ? `<span class="math-inline">${html}</span>`
+        : `<div class="math-block">${html}</div>`;
 }

@@ -59,7 +59,55 @@ const GLYPH_MAP = {
     0xe0ed: 'i', 0xe0ef: 'k', 0xe0f1: 'm', 0xe0f2: 'n', 0xe0f7: 'S',
 };
 
+// 파일명 부분일치 → 해당 파일 전용 매핑 (내장폰트 배정이 문서마다 다름 — GLYPH_MAP보다 우선)
+// 한국전기설비규정(KEC) — 수식 템플릿 폰트 전수 해독:
+//   e000–e012 = A–S 알파벳열 (e013은 예외적으로 N — N·m 단위·N_h 수평력 실측),
+//   e034–e03d = 평문 숫자 1,2,3,4,5,6,7,8,9,0 (R≤120V·50V·1.2 계수 실측 — 아래첨자 아님),
+//   e0f7 = 소문자 s (Z_s·m³/s — 대문자 S 아님), e0f9 = u (S_u 인장강도)
+const FILE_GLYPH_MAP = {
+    '한국전기설비규정': {
+        // 알파벳 블록 (이탤릭 대문자)
+        0xe000: 'A', 0xe001: 'B', 0xe002: 'C', 0xe003: 'D', 0xe004: 'E',
+        0xe005: 'F', 0xe006: 'G', 0xe007: 'H', 0xe008: 'I', 0xe009: 'J',
+        0xe00a: 'K', 0xe00b: 'L', 0xe00c: 'M', 0xe00d: 'N', 0xe00e: 'O',
+        0xe00f: 'P', 0xe010: 'Q', 0xe011: 'R', 0xe012: 'S', 0xe013: 'N',
+        0xe014: 'U', 0xe015: 'V', 0xe016: 'W', 0xe017: 'X', 0xe018: 'Y',
+        0xe019: 'Z', 0xe021: 'h', 0xe02d: '′',
+        // 평문 숫자 블록 (첨자 아님 — R≤120V 실측)
+        0xe034: '1', 0xe035: '2', 0xe036: '3', 0xe037: '4', 0xe038: '5',
+        0xe039: '6', 0xe03a: '7', 0xe03b: '8', 0xe03c: '9', 0xe03d: '0',
+        // 연산자·괄호·기호
+        0xe042: '%', 0xe043: 's', 0xe044: '(', 0xe045: ')', 0xe046: '−',
+        0xe047: '=', 0xe048: '+', 0xe049: '[', 0xe04a: ']', 0xe04b: '(',
+        0xe04c: ')', 0xe050: '′', 0xe052: '+', 0xe053: '.', 0xe054: '/',
+        0xe055: '<', 0xe056: '≤', 0xe05c: '√', 0xe067: 'Σ', 0xe06d: '/',
+        // 계수열 (645.16 볼트하중 표)
+        0xe07c: 'C', 0xe07d: 'C', 0xe07e: 'C', 0xe07f: 'C', 0xe080: 'C', 0xe081: 'C',
+        // 그리스·특수기호
+        0xe088: 'Δ', 0xe08e: 's', 0xe08f: 'Λ', 0xe096: 'Σ', 0xe09d: 'α',
+        0xe09e: 'ρ', 0xe09f: 'i', 0xe0a1: ',', 0xe0a3: 'η', 0xe0a4: 'θ',
+        0xe0a7: 'λ', 0xe0a8: '±', 0xe0a9: 'p', 0xe0aa: ',', 0xe0ac: 'π',
+        0xe0ae: 'σ', 0xe0af: 'τ', 0xe0b1: 'β', 0xe0b2: 'l', 0xe0b3: ')',
+        0xe0ba: 'λ', 0xe0bc: 'y', 0xe0c1: ',', 0xe0c8: '°',
+        // 이탤릭 소문자 변수·공백
+        0xe0e5: 'x', 0xe0e6: ' ', 0xe0e7: ' ', 0xe0e8: 'a', 0xe0e9: 'e',
+        0xe0ea: 'σ', 0xe0eb: 'g', 0xe0ec: 'd', 0xe0ed: 'i', 0xe0ee: 'n',
+        0xe0ef: 'k', 0xe0f0: 'l', 0xe0f1: 'm', 0xe0f2: 'n', 0xe0f3: '·',
+        0xe0f4: 'm', 0xe0f5: 'h', 0xe0f6: 'r', 0xe0f7: 's', 0xe0f8: 't',
+        0xe0f9: 'u', 0xe0fa: '·', 0xe0fb: 'E', 0xe0fc: ' ', 0xe0fd: ' ',
+        // 높은 괄호·분수선 조각
+        0xe100: '(', 0xe101: ' ', 0xe102: ' ', 0xe103: '/', 0xe104: ' ',
+        0xe105: ')',
+    },
+};
+
 const PUA_RE = /[\u{e000}-\u{f8ff}\u{f0000}-\u{ffffd}]/gu;
+
+function fileGlyphMap(f) {
+    for (const [key, map] of Object.entries(FILE_GLYPH_MAP))
+        if (f.includes(key)) return map;
+    return null;
+}
 
 function* walk(dir) {
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -80,9 +128,11 @@ function main() {
         for (const f of walk(refMd)) {
             files++;
             const src = fs.readFileSync(f, 'utf8');
+            const fmap = fileGlyphMap(f);
             let count = 0;
             const out = src.replace(PUA_RE, ch => {
                 const cp = ch.codePointAt(0);
+                if (fmap && cp in fmap) { count++; return fmap[cp]; }
                 if (cp in GLYPH_MAP) { count++; return GLYPH_MAP[cp]; }
                 unmapped.set(cp, (unmapped.get(cp) || 0) + 1);
                 return ch;

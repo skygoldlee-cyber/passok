@@ -1,0 +1,58 @@
+{
+  "subjects": {
+    "theory": {
+      "cards": 43,
+      "quizzes": 5,
+      "files": {
+        "교재/theory/1과목_소방원론_표준형.md": {
+          "cards": 44,
+          "quizzes": 5
+        }
+      }
+    },
+    "elec": {
+      "cards": 5,
+      "quizzes": 1,
+      "files": {
+        "교재/elec/2과목_소방전기일반_표준형.md": {
+          "cards": 5,
+          "quizzes": 1
+        }
+      }
+    },
+    "law": {
+      "cards": 29,
+      "quizzes": 6,
+      "files": {
+        "교재/law/3과목_소방관계법규_표준형.md": {
+          "cards": 29,
+          "quizzes": 6
+        }
+      }
+    },
+    "facil": {
+      "cards": 7,
+      "quizzes": 1,
+      "files": {
+        "교재/facil/4과목_소방전기시설의 구조 및 원리_표준형.md": {
+          "cards": 7,
+          "quizzes": 1
+        }
+      }
+    }
+  },
+  "exams": {
+    "subject1": {
+      "questions": 213
+    },
+    "subject2": {
+      "questions": 149
+    },
+    "subject3": {
+      "questions": 204
+    },
+    "subject4": {
+      "questions": 236
+    }
+  }
+}
