@@ -207,7 +207,13 @@ const _EXAM_LAW_URLS = {
     ["산업재해보상보험법", "https://www.law.go.kr/법령/산업재해보상보험법"]
     ],
     "indsafeind": [
-
+    ["산업재해보상보험법", "https://www.law.go.kr/법령/산업재해보상보험법"],
+    ["위험물안전관리법", "https://www.law.go.kr/법령/위험물안전관리법"],
+    ["위험물안전관리법", "https://www.law.go.kr/법령/위험물안전관리법"],
+    ["위험물안전관리법시행령", "https://www.law.go.kr/법령/위험물안전관리법시행령"],
+    ["위험물안전관리법시행령", "https://www.law.go.kr/법령/위험물안전관리법시행령"],
+    ["위험물안전관리법시행규칙", "https://www.law.go.kr/법령/위험물안전관리법시행규칙"],
+    ["위험물안전관리법시행규칙", "https://www.law.go.kr/법령/위험물안전관리법시행규칙"]
     ],
     "iteng": [
 

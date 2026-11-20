@@ -39,9 +39,14 @@
    "dir": "교재/mach",
    "chapters": [
     {
-     "key": "full",
-     "title": "기계·기구 및 건설공사 안전관리 (전체)",
-     "file": "3과목_기계·기구 및 건설공사 안전관리_표준형.md"
+     "key": "machinery",
+     "title": "기계·기구 및 설비 안전",
+     "file": "3과목_기계·기구 및 설비 안전_표준형.md"
+    },
+    {
+     "key": "construction",
+     "title": "건설공사 안전",
+     "file": "3과목_건설공사 안전_표준형.md"
     }
    ]
   },
@@ -53,9 +58,14 @@
    "dir": "교재/elec",
    "chapters": [
     {
-     "key": "full",
-     "title": "전기 및 화학설비 안전관리 (전체)",
-     "file": "4과목_전기 및 화학설비 안전관리_표준형.md"
+     "key": "electric",
+     "title": "전기설비 안전",
+     "file": "4과목_전기설비 안전_표준형.md"
+    },
+    {
+     "key": "chemical",
+     "title": "화학설비 안전",
+     "file": "4과목_화학설비 안전_표준형.md"
     }
    ]
   }
