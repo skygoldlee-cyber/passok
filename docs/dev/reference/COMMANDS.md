@@ -19,10 +19,10 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 
 | 프리셋 | 단계 수 | 용도 |
 |---|---|---|
-| `content` | 34 | 콘텐츠 통합 검증 — 교재 교체 등 대규모 콘텐츠 변경 후 (--quick, --content-only, --build 옵션) |
+| `content` | 35 | 콘텐츠 통합 검증 — 교재 교체 등 대규모 콘텐츠 변경 후 (--quick, --content-only, --build 옵션) |
 | `docs` | 21 | 문서 정합 묶음 — 경로 참조·문서 ID·트리·명령 정합 등 |
 | `ci` | 32 | CI 게이트 로컬 재현 — ci.yml과 토큰 1:1 대응 |
-| `all` | 68 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
+| `all` | 69 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
 | `refs` | 6 | 참조자료 검증 묶음 — 레이아웃·귀속·신선도·인용 라인·병합 품질 |
 | `freshness` | 10 | 생성물 신선도 묶음 — 파생물 미재생성 감지 |
 | `audit` | 15 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |
@@ -42,6 +42,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `content:reflayout` | P1 | 레이아웃 | `node tools/check/check_reflayout.js` | 참조자료 폴더/레지스트리 정합성 |
 | `content:reffresh` | P1 | 신선도 | `node tools/check/check_ref_freshness.js` | 참조자료 PDF 해시 ↔ ref_md 변환본 (PDF 교체 감지) |
 | `content:size` | P1 | 자산 | `node tools/check/check_content_size.js` | 시험 팩 콘텐츠 크기 예산 — 팩 성장은 budget_mb 수동 상향 필요 (content_size_baseline.json) |
+| `content:refimg` | P1 | 자산 | `node tools/check/check_refimg.js` | ref_md 이미지 ↔ refimg_hashes 매니페스트·gitignore 선언 정합 (DOC-RBK-25 — 선언 시험만) |
 | `content:reflines` | P1 | 참조라인 | `node tools/check/check_ref_lines.js` | 교재/문제은행 (LNN) 참조 라인 ↔ ref_md 실제 내용 |
 | `content:refformat` | P1 | 형식 | `node tools/check/check_refmd_format.js` | ref_md 추출 잔재·평탄화 형식 — lone CR·제어문자·PUA 글리프·초장문 줄 차단 |
 | `content:drillfresh` | P1 | 드릴신선도 | `node tools/check/check_drill_freshness.js` | 드릴 번들 ↔ 문제은행 번들 (build:drills 필요 감지) |
@@ -130,7 +131,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 
 ## 3. npm 스크립트 전체 (package.json)
 
-### `build:*` — 23개
+### `build:*` — 24개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -149,6 +150,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run build:html` | `node tools/build/build_html.js` | content/exams.json의 default(또는 첫) 시험의 |
 | `npm run build:landing` | `node tools/build/build_landing.js` | 시험 id 리터럴 없이 contentRoot에서 유도): |
 | `npm run build:trace` | `node tools/build/build_trace_matrix.js` | TRACE MATRIX 자동 생성 |
+| `npm run build:refimg` | `node tools/sync/build_refimg_manifest.js` | ref_md 이미지 → sha256 매니페스트 생성 (DOC-RBK-25) |
 | `npm run build:drills` | `node tools/build/build_ox_drills.js && node tools/build/build_combo_drills.js` | "이 보기의 내용이 옳은가?"  명제형 선지(문장형) |
 | `npm run build:study-md` | `node tools/build/build_study_md_bundle.js` | manifest JSON (~3KB) |
 | `npm run build:story` | `node tools/build/build_story_textbooks.js` | 표준형 + 서사 패치 → _이야기형.md 생성 |
@@ -171,7 +173,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 |---|---|---|
 | `npm run postbuild:data` | `npm run check:parser` | 체인: check:parser |
 
-### `check:*` — 79개
+### `check:*` — 80개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -229,6 +231,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run check:any` | `node tools/check/check_noimplicitany.js` | noImplicitAny 잔여 래칫 (TS 점진 전환 Phase 1, ADR-0015) |
 | `npm run check:uia` | `node tools/check/check_nouncheckedindex.js` | noUncheckedIndexedAccess 잔여 래칫 (TS 점진 전환 Phase 2, ADR-0015) |
 | `npm run check:cplx` | `node tools/check/check_complexity.js` | 순환복잡도 래칫 (타입 래칫과 동형 단조 감소 계약) |
+| `npm run check:refimg` | `node tools/check/check_refimg.js` | ref_md 이미지 ↔ refimg_hashes 매니페스트 정합 게이트 (DOC-RBK-25) |
 | `npm run check:adlint` | `node tools/check/check_adlint_coverage.js` | 광고 점검 사전 커버리지 감사 (FO-68) |
 | `npm run check:binary` | `node tools/check/check_binary.js` | 대형·외부화 대상 바이너리 신규 유입 게이트 |
 | `npm run check:manifest` | `node tools/check/check_manifest.js` | manifest 선언 ↔ 실제 파일/자산 정합성 검증 |
@@ -301,6 +304,12 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
 | `npm run fetch:refpdfs` | `node tools/sync/fetch_ref_pdfs.js` | 외부 호스팅 참조자료 PDF 복원 (DOC-RBK-12) |
+
+### `upload:*` — 1개
+
+| 스크립트 | 실행 내용 | 설명 |
+|---|---|---|
+| `npm run upload:refimgs` | `node tools/sync/upload_ref_images.js` | ref_md 이미지 → GitHub Releases 에셋 업로드 (DOC-RBK-25) |
 
 ### `pack:*` — 1개
 

@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 804f2344bfe7449c
+> 입력 해시: 468b2239a7447830
 > 생성: 2026-11-20 · 원천: SPEC.md(727개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -194,7 +194,7 @@
 | RR-10 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>DOC-REF-21 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
 | RR-11 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>DOC-REF-21 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
 | RR-12 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>DOC-REF-21 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
-| RR-13 | ✅ | 테스트 | DOC-DSN-10<br>DOC-RBK-12<br>DOC-REF-04<br>DOC-REF-07<br>…외 1개 | src/pdf-registry.js<br>src/reader/html-viewer.js<br>tools/build/build_pdf_registry.js<br>tools/check/check_link_lint.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/unit/content/ref-link-labels.test.js<br>tests/unit/gates/link-lint.test.js<br>tests/unit/gates/markdown-links.test.js<br>…외 1개 | — | — |
+| RR-13 | ✅ | 테스트 | DOC-DSN-10<br>DOC-RBK-12<br>DOC-RBK-25<br>DOC-REF-04<br>…외 2개 | src/pdf-registry.js<br>src/reader/html-viewer.js<br>tools/build/build_pdf_registry.js<br>tools/check/check_link_lint.js | tests/dom/common/common-htmlviewer.dom.test.js<br>tests/unit/content/ref-link-labels.test.js<br>tests/unit/gates/link-lint.test.js<br>tests/unit/gates/markdown-links.test.js<br>…외 1개 | — | — |
 | RR-14 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>DOC-REF-21 | css/print.css<br>src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
 | RR-15 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>DOC-REF-21 | css/html-viewer.css<br>src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
 | RR-16 | ✅ | 테스트 | DOC-REF-04<br>DOC-REF-07<br>DOC-REF-21 | src/reader/html-viewer.js | tests/dom/common/common-htmlviewer.dom.test.js | — | — |
@@ -645,7 +645,7 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | P-01 | ✅ | E2E 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 2개 | sw.js | tests/e2e/app.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
-| P-02 | ✅ | E2E 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 3개 | src/config/cache.js<br>sw.js | tests/e2e/app.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
+| P-02 | ✅ | E2E 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 4개 | src/config/cache.js<br>sw.js | tests/e2e/app.spec.js<br>tests/unit/app/pwa-sw.test.js | — | — |
 | P-03 | ✅ | 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 2개 | sw.js | tests/unit/app/pwa-sw.test.js | — | — |
 | P-04 | ✅ | 테스트 | DOC-ADR-01<br>DOC-ADR-02<br>DOC-ADR-05<br>DOC-DSN-39<br>…외 2개 | sw.js | tests/unit/app/pwa-sw.test.js | — | — |
 | P-04a | ✅ | 테스트 | DOC-RBK-01 | css/app-responsive.css | tests/unit/app/pwa-sw.test.js | — | — |
@@ -905,7 +905,7 @@
 |----|------|-----------|------|------|--------|--------|------|
 | CS-01 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | ref-pipeline/batch_convert.py<br>ref-pipeline/md2doc.py<br>src/reader/textbook-core.js<br>tools/build/build_study_md_bundle.js<br>…외 3개 | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-02 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | tools/build/index.js<br>tools/build/plugins/exams.plugin.js<br>tools/sync/sync_textbook_files.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
-| CS-03 | ✅ | 테스트 | DOC-ADR-12<br>DOC-DSN-48<br>DOC-PPL-01<br>DOC-RBK-03<br>…외 5개 | ref-pipeline/check_laws.py<br>ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py<br>tools/check/check_ref_freshness.js<br>…외 2개 | tests/unit/gates/content-structure.test.js<br>tests/unit/refmd-syllabus-flat.test.js | DOC-ARC-08 | — |
+| CS-03 | ✅ | 테스트 | DOC-ADR-12<br>DOC-DSN-48<br>DOC-PPL-01<br>DOC-RBK-03<br>…외 6개 | ref-pipeline/check_laws.py<br>ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py<br>tools/check/check_ref_freshness.js<br>…외 2개 | tests/unit/gates/content-structure.test.js<br>tests/unit/refmd-syllabus-flat.test.js | DOC-ARC-08 | — |
 | CS-04 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | tools/build/index.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-05 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | ref-pipeline/batch_convert.py<br>ref-pipeline/md2doc.py | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-06 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | tools/build/build_keyword_index.js | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
@@ -1136,6 +1136,7 @@
 | DOC-RBK-22 | docs/dev/runbooks/STORY_TYPE_DESIGN_GUIDE.md | BP-10, BP-11, BP-12, ST-01, ST-02, ST-03, ST-04, ST-05, ST-06, ST-07 |
 | DOC-RBK-23 | docs/dev/runbooks/E2E_TEST_SUPABASE.md | — |
 | DOC-RBK-24 | docs/dev/runbooks/FACILITY_DATA_OPS.md | AD-06, CO-16 |
+| DOC-RBK-25 | docs/dev/runbooks/REF_IMG_EXTERNALIZATION.md | CS-03, P-02, RR-13 |
 | DOC-REF-01 | docs/dev/reference/COMBO_STUDY_STRATEGY.md | DR-02, DR-03, DR-04, DR-05, DR-06, DR-07, Q-01, Q-02, Q-03, Q-04, Q-05, Q-06, Q-07, Q-08, Q-09, Q-10, Q-11, Q-12 |
 | DOC-REF-02 | docs/dev/reference/DEV_ENVIRONMENT.md | — |
 | DOC-REF-03 | docs/dev/reference/FLASHCARD_LOGIC.md | F-01, F-02, F-03, F-04, F-05, F-06, F-07, F-08, F-09, F-10, ID-01, ID-02, ID-03, ID-04, TR-01 |

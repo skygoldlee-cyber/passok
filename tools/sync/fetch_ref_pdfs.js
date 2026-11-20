@@ -5,9 +5,12 @@
  * {contentRoot}/참조자료/pdf_hosting.json을 선언한 시험만 대상:
  *   { "assetBase": "<릴리스 에셋 베이스 URL>", "mirrors": ["<폴백 베이스 URL>", ...],
  *     "manifests": ["pdf_hashes.json", ...],
- *     "masterManifests": ["img_masters.json", ...] }
+ *     "masterManifests": ["img_masters.json", ...],
+ *     "imageManifests": ["refimg_hashes.json", ...] }
  *
  * manifests — 참조자료/ 상대 '<dir>/<file>.pdf' → sha256 항목.
+ * imageManifests — 참조자료/ 상대 'ref_md/.../images/<file>' → sha256 항목
+ *   (DOC-RBK-25 — ref_md 이미지 외부화. 릴리스 에셋명 = sha + 원본 확장자).
  * masterManifests — contentRoot 상대 경로 → sha256 항목 (교재 images 아래 .png
  *   원본 마스터 — webp 재인코딩용 원본, 런타임은 .webp만 참조).
  * 로컬에 없거나 해시가 다른 파일만 `<assetBase>/<sha256>.<원본 확장자>`에서 받아
@@ -70,10 +73,14 @@ async function main() {
       const mp = path.join(refBase, m);
       if (!fs.existsSync(mp)) return;
       const hashes = JSON.parse(fs.readFileSync(mp, 'utf8'));
-      for (const [rel, sha] of Object.entries(hashes)) wanted.push([path.join(base, rel), rel, sha]);
+      // refimg 매니페스트는 {assetBase,mirrors,files} 래퍼 (DOC-RBK-25) — files가 항목 맵
+      const entries = hashes.files || hashes;
+      for (const [rel, sha] of Object.entries(entries)) wanted.push([path.join(base, rel), rel, sha]);
     };
     // manifests: 참조자료/ 상대 경로 → PDF 에셋 (<sha>.pdf)
     for (const m of hosting.manifests || ['pdf_hashes.json']) collect(m, refBase);
+    // imageManifests: 참조자료/ 상대 경로 → ref_md 이미지 에셋 (<sha>.webp) — DOC-RBK-25
+    for (const m of hosting.imageManifests || []) collect(m, refBase);
     // masterManifests: contentRoot 상대 경로 → 교재 원본 마스터 에셋 (<sha>.<원본 확장자>)
     const examBase = path.join(ROOT, t.contentRoot);
     for (const m of hosting.masterManifests || []) collect(m, examBase);

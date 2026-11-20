@@ -2,7 +2,7 @@
   "exams": {
     "cosmetic": {
       "budget_mb": 30,
-      "stamped_bytes": 19159762
+      "stamped_bytes": 19109337
     },
     "skincare": {
       "budget_mb": 120,
@@ -10,15 +10,15 @@
     },
     "hairdresser": {
       "budget_mb": 110,
-      "stamped_bytes": 91956459
+      "stamped_bytes": 91956350
     },
     "insadj": {
       "budget_mb": 160,
-      "stamped_bytes": 133229692
+      "stamped_bytes": 133229296
     },
     "lossadj": {
       "budget_mb": 520,
-      "stamped_bytes": 433275353
+      "stamped_bytes": 433275207
     },
     "admagent": {
       "budget_mb": 60,
@@ -34,7 +34,7 @@
     },
     "labor": {
       "budget_mb": 120,
-      "stamped_bytes": 95110009
+      "stamped_bytes": 95063715
     },
     "indsafe": {
       "budget_mb": 60,
@@ -42,55 +42,55 @@
     },
     "indsafeind": {
       "budget_mb": 60,
-      "stamped_bytes": 43455419
+      "stamped_bytes": 43454267
     },
     "iteng": {
       "budget_mb": 140,
-      "stamped_bytes": 111671325
+      "stamped_bytes": 111648116
     },
     "itindeng": {
       "budget_mb": 90,
-      "stamped_bytes": 70905298
+      "stamped_bytes": 70904573
     },
     "eleceng": {
       "budget_mb": 50,
-      "stamped_bytes": 36892673
+      "stamped_bytes": 36889691
     },
     "elecindeng": {
       "budget_mb": 50,
-      "stamped_bytes": 36895708
+      "stamped_bytes": 36892443
     },
     "compapp1": {
       "budget_mb": 10,
-      "stamped_bytes": 88456
+      "stamped_bytes": 86748
     },
     "compapp2": {
       "budget_mb": 10,
-      "stamped_bytes": 187432
+      "stamped_bytes": 186352
     },
     "distmgr2": {
       "budget_mb": 120,
-      "stamped_bytes": 99768059
+      "stamped_bytes": 99757929
     },
     "distmgr3": {
       "budget_mb": 50,
-      "stamped_bytes": 38017713
+      "stamped_bytes": 38008046
     },
     "carework": {
       "budget_mb": 50,
-      "stamped_bytes": 39032273
+      "stamped_bytes": 39010604
     },
     "hazmat": {
       "budget_mb": 10,
-      "stamped_bytes": 2898718
+      "stamped_bytes": 2898374
     },
     "fireelec": {
-      "budget_mb": 40,
-      "stamped_bytes": 25286111
+      "budget_mb": 20,
+      "stamped_bytes": 13168556
     },
     "conssafe": {
       "budget_mb": 10,
-      "stamped_bytes": 4173520
+      "stamped_bytes": 4126500
     }
   }
 }

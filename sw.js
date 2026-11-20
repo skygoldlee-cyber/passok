@@ -834,6 +834,15 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // 5-3b) ref_md 이미지 → 외부 호스팅 해석 (DOC-RBK-25)
+  //      imageManifests 선언 팩은 배포에 이미지가 없으므로 refimg_hashes.json으로
+  //      sha256 에셋을 해석해 DATA_CACHE에 보존. 미선언 팩은 동일 오리진 폴백 —
+  //      캐시 저장도 DATA_CACHE(배포 간 유지)로 분리해 재다운로드를 줄인다.
+  if (url.pathname.includes('/ref_md/') && /\.(?:webp|png|jpe?g|gif|svg)$/i.test(url.pathname)) {
+    event.respondWith(refimgAsset(request, url));
+    return;
+  }
+
   // 5-4) 그 외 JS → Network First
   //      (온라인이면 항상 최신 배포본, 오프라인이면 캐시 폴백.
   //       버전 bump을 깜빡해도 폰에서 구버전이 남지 않도록 함)
@@ -920,4 +929,86 @@ async function offlineFallback(request) {
   const cachedMatch = await caches.match(request);
   if (cachedMatch) return cachedMatch;
   return Response.error();
+}
+
+/* ------------------------------------------------------------
+ * ref_md 이미지 외부 호스팅 해석 (DOC-RBK-25)
+ * ---------------------------------------------------------- */
+
+/** refBase URL → refimg_hashes.json 로드 메모이즈 (미선언 팩 404도 기억해 재시도 억제) */
+const REFIMG_MANIFESTS = new Map();
+function refimgManifest(refBase) {
+  if (!REFIMG_MANIFESTS.has(refBase)) {
+    REFIMG_MANIFESTS.set(refBase, (async () => {
+      try {
+        const res = await fetch(`${refBase}/refimg_hashes.json`, { cache: 'no-store' });
+        return res.ok ? await res.json() : null;
+      } catch { return null; }
+    })());
+  }
+  return REFIMG_MANIFESTS.get(refBase);
+}
+
+/** ArrayBuffer → sha256 hex */
+async function shaHex(buf) {
+  const d = await crypto.subtle.digest('SHA-256', buf);
+  return [...new Uint8Array(d)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+/** sha256 에셋 fetch — assetBase → mirrors 폴백, 수신본 해시 검증.
+ *  GitHub Releases 에셋은 ACAO 헤더를 주지 않아 CORS fetch가 실패한다.
+ *  이 경우 no-cors로 opaque 응답을 받아 그대로 돌려준다(해시 검증 불가 —
+ *  에셋명 자체가 sha256이고 CI가 업로드 정합을 보장하는 점에 의존). */
+async function fetchRefimgAsset(manifest, sha, ext) {
+  const bases = [manifest.assetBase, ...(manifest.mirrors || [])].filter(Boolean);
+  for (const base of bases) {
+    const assetUrl = `${base}/${sha}${ext}`;
+    let res = null;
+    try { res = await fetch(assetUrl); } catch { /* CORS 차단·네트워크 실패 */ }
+    if (res) {
+      if (!res.ok) continue;                    // 에셋 부재 — 다음 미러
+      const buf = await res.arrayBuffer();
+      if ((await shaHex(buf)) !== sha) continue; // 변조·트림 — 다음 미러
+      return new Response(buf, {
+        headers: {
+          'Content-Type': res.headers.get('Content-Type') || 'image/webp',
+          'Cache-Control': 'public, max-age=31536000, immutable',
+        },
+      });
+    }
+    try {
+      const opaque = await fetch(assetUrl, { mode: 'no-cors' });
+      if (opaque && opaque.type === 'opaque') return opaque;
+    } catch { /* 다음 미러 시도 */ }
+  }
+  return null;
+}
+
+/** ref_md 이미지 요청 해석 — 캐시 → 에셋(선언 팩) → 동일 오리진 폴백 → 오프라인 폴리백 */
+async function refimgAsset(request, url) {
+  const cached = await caches.match(request);
+  if (cached) return cached;
+
+  let response = null;
+  const idx = url.pathname.indexOf('/ref_md/');
+  if (idx >= 0) {
+    try {
+      const refBase = url.origin + url.pathname.slice(0, idx);
+      const manifest = await refimgManifest(refBase);
+      let key = url.pathname.slice(idx + 1);
+      try { key = decodeURIComponent(key); } catch { /* 인코딩 그대로 조회 */ }
+      const sha = manifest && manifest.files && manifest.files[key];
+      if (sha) response = await fetchRefimgAsset(manifest, sha, key.slice(key.lastIndexOf('.')));
+    } catch { /* 매니페스트/해석 실패 — 오리진 폴백 */ }
+  }
+  if (!response) {
+    try { response = await fetch(request); } catch { response = null; }
+  }
+  // opaque(no-cors 에셋) 응답은 ok=false지만 본문은 유효 — <img> 렌더·오프라인 재사용을 위해 캐시
+  if (response && (response.ok || response.type === 'opaque')) {
+    const cache = await caches.open(DATA_CACHE);
+    await cache.put(request, response.clone());
+    return response;
+  }
+  return response || offlineFallback(request);
 }

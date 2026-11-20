@@ -61,6 +61,12 @@ content/exams/cosmetic/교재/understanding/images/*.png
 # HTML 변환본(~35MB)만 배포에 포함.
 content/exams/*/참조자료/**/*.pdf
 
+# ---------- 🖼️ ref_md 페이지 이미지 (GitHub Releases 외부 호스팅 — DOC-RBK-25) ----------
+# imageManifests 선언 시험만 — SW가 refimg_hashes.json으로 sha256 에셋을 해석해 DATA_CACHE에 캐시.
+# (Vercel ignore 매처의 중첩 ** 회피 — 깊이별 명시)
+content/exams/fireelec/참조자료/ref_md/*/images/
+content/exams/fireelec/참조자료/ref_md/*/*/images/
+
 # ---------- 🔧 개발 도구 및 파이프라인 ----------
 content/exams/*/audiobook/
 tools/

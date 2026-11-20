@@ -407,5 +407,15 @@
     "file": "docs/dev/runbooks/E2E_TEST_SUPABASE.md",
     "ref": "tests/.auth/",
     "reason": "Playwright storageState 저장 경로 — gitignore 대상이라 파일 미존재가 정상 (DSN-46 §3-3)"
+  },
+  {
+    "file": "docs/dev/runbooks/REF_IMG_EXTERNALIZATION.md",
+    "ref": "pdf_hashes.json",
+    "reason": "매니페스트 스키마 예시 — PDF 외부화 계약 파일명 참조 (다수 시험 공용 이름이라 단일 실물 경로로 해석 불가)"
+  },
+  {
+    "file": "docs/dev/runbooks/REF_IMG_EXTERNALIZATION.md",
+    "ref": "{contentRoot}/참조자료/refimg_hashes.json",
+    "reason": "스키마 플레이스홀더 경로 — imageManifests 선언 시험에서 생성되는 매니페스트"
   }
 ]
