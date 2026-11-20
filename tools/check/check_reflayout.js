@@ -153,7 +153,10 @@ function checkExam(t) {
         err(`${tag} ref_md 폴더 과목 불일치: ${doc} — 폴더=과목${info2.subject}, 규칙=과목${ruleSubj}`);
     }
   } else {
-    const externalized = fs.existsSync(path.join(REF_BASE, 'pdf_hosting.json'));
+    // PDF 외부화 여부는 manifests 선언으로 판정 — imageManifests만 있는 팩은 PDF가 git 추적 (DOC-RBK-25)
+    const hostingPath = path.join(REF_BASE, 'pdf_hosting.json');
+    const hosting = fs.existsSync(hostingPath) ? JSON.parse(fs.readFileSync(hostingPath, 'utf8')) : null;
+    const externalized = !!hosting && (hosting.manifests || ['pdf_hashes.json']).length > 0;
     const declared = Object.values(refs.refDirs || {}).flat().length;
     if (declared) warn(`${tag} PDF 원본 미수록 — refDirs 선언 ${declared}건의 출처 정합 검증 불가`);
     if (externalized) info(`${tag} PDF는 외부 호스팅 자산 (DOC-RBK-12) — 복원: node tools/sync/fetch_ref_pdfs.js`);

@@ -34,3 +34,15 @@ def test_no_pdfs_externalized_shows_fetch_hint(tmp_path):
     out = r.stderr + r.stdout
     assert "fetch_ref_pdfs.js" in out
     assert "외부 호스팅" in out
+
+
+def test_no_pdfs_image_only_hosting_no_hint(tmp_path):
+    """manifests가 빈(imageManifests만 선언) 팩은 PDF가 git 추적이므로 복원 안내를 하지 않는다 (DOC-RBK-25)."""
+    (tmp_path / "pdf_hosting.json").write_text(
+        json.dumps({"assetBase": "https://example.com/x", "manifests": [],
+                    "imageManifests": ["refimg_hashes.json"]}), encoding="utf-8")
+    r = run_convert(tmp_path)
+    assert r.returncode == 1
+    out = r.stderr + r.stdout
+    assert "fetch_ref_pdfs.js" not in out
+    assert "변환할 PDF가 없습니다" in out

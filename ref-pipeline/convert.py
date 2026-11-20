@@ -75,8 +75,17 @@ def main():
     if args.only:
         pdfs = [(l, p) for l, p in pdfs if args.only in os.path.basename(p)]
     if not pdfs:
-        # 외부 호스팅 선언(pdf_hosting.json)이 있으면 미복원이 원인 — 복원 절차 안내 (DOC-RBK-12)
-        if os.path.exists(os.path.join(paths['pdf_root'], 'pdf_hosting.json')):
+        # 외부 호스팅 선언(pdf_hosting.json manifests)이 있으면 미복원이 원인 — 복원 절차 안내 (DOC-RBK-12)
+        # imageManifests만 선언된 팩은 PDF가 git 추적이라 이 안내는 무의미 (DOC-RBK-25)
+        hp = os.path.join(paths['pdf_root'], 'pdf_hosting.json')
+        pdf_externalized = False
+        if os.path.exists(hp):
+            try:
+                hosting = json.load(open(hp, encoding='utf-8'))
+                pdf_externalized = len(hosting.get('manifests', ['pdf_hashes.json'])) > 0
+            except Exception:
+                pdf_externalized = True
+        if pdf_externalized:
             logger.error('PDF가 외부 호스팅으로 이전됐고 로컬에 복원되지 않았습니다.\n'
                          '  먼저 실행: node tools/sync/fetch_ref_pdfs.js  (npm run fetch:refpdfs)')
         else:

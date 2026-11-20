@@ -66,6 +66,8 @@ content/exams/*/참조자료/**/*.pdf
 # (Vercel ignore 매처의 중첩 ** 회피 — 깊이별 명시)
 content/exams/fireelec/참조자료/ref_md/*/images/
 content/exams/fireelec/참조자료/ref_md/*/*/images/
+content/exams/lossadj/참조자료/ref_md/*/images/
+content/exams/lossadj/참조자료/ref_md/*/*/images/
 
 # ---------- 🔧 개발 도구 및 파이프라인 ----------
 content/exams/*/audiobook/

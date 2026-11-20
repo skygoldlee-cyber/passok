@@ -40,12 +40,14 @@ async function download(url) {
   return Buffer.from(await res.arrayBuffer());
 }
 
-/** assetBase 우선, 실패 시 mirrors 순서로 폴백 — 단일 릴리스 삭제·장애 대비 */
-async function downloadWithMirrors(bases, assetName) {
+/** assetBase 우선, 실패 시 mirrors 순서로 폴백 — 단일 릴리스 삭제·장애 대비.
+ *  베이스의 {hh}는 sha256 앞 2자리로 치환 (릴리스당 1,000 에셋 상한 샤딩 — DOC-RBK-25) */
+async function downloadWithMirrors(bases, assetName, sha) {
   let lastErr;
   for (const base of bases) {
     try {
-      return { buf: await download(`${base}/${assetName}`), base };
+      const url = `${base.replace('{hh}', sha.slice(0, 2))}/${assetName}`;
+      return { buf: await download(url), base };
     } catch (e) { lastErr = e; }
   }
   throw lastErr;
@@ -105,7 +107,7 @@ async function main() {
     const bases = [hosting.assetBase, ...(hosting.mirrors || [])];
     for (const [fp, rel, sha] of [...missing, ...mismatch]) {
       try {
-        const { buf, base } = await downloadWithMirrors(bases, `${sha}${path.extname(rel)}`);
+        const { buf, base } = await downloadWithMirrors(bases, `${sha}${path.extname(rel)}`, sha);
         if (base !== hosting.assetBase) console.log(`      (미러 사용: ${base.split('/').pop()})`);
         const got = crypto.createHash('sha256').update(buf).digest('hex');
         if (got !== sha) throw new Error(`sha256 불일치 (${got.slice(0, 12)}…)`);

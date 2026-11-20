@@ -1,0 +1,7 @@
+{
+  "_comment": "참조자료 외부 호스팅 선언 (DOC-RBK-12/-25). imageManifests만 선언 — 이 시험의 PDF는 git 추적 유지(fetch 대상 아님). ref_md 이미지는 GitHub Releases 에셋(파일명=sha256)에서 복원: node tools/sync/fetch_ref_pdfs.js (npm run fetch:refpdfs)",
+  "assetBase": "https://github.com/skygoldlee-cyber/passok/releases/download/ref-assets-{hh}",
+  "mirrors": ["https://github.com/skygoldlee-cyber/passok/releases/download/ref-assets-mirror-{hh}", "https://github.com/skygoldlee-cyber/passok/releases/download/ref-img-lossadj"],
+  "manifests": [],
+  "imageManifests": ["refimg_hashes.json"]
+}

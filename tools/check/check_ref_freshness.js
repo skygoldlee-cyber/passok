@@ -76,7 +76,10 @@ for (const t of getExamTargets(ROOT)) {
   const manifest = fs.existsSync(manifestPath)
     ? JSON.parse(fs.readFileSync(manifestPath, 'utf8'))
     : {};
-  const externalized = fs.existsSync(path.join(refBase, 'pdf_hosting.json'));
+  // PDF 외부화 여부는 manifests 선언으로 판정 — imageManifests만 있는 팩은 PDF가 git 추적 (DOC-RBK-25)
+  const hostingPath = path.join(refBase, 'pdf_hosting.json');
+  const hosting = fs.existsSync(hostingPath) ? JSON.parse(fs.readFileSync(hostingPath, 'utf8')) : null;
+  const externalized = !!hosting && (hosting.manifests || ['pdf_hashes.json']).length > 0;
   const pdfs = collectPdfs(refBase);
 
   if (UPDATE) {

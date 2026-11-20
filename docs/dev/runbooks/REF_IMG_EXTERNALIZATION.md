@@ -35,13 +35,19 @@
 ### 2.1 매니페스트·호스팅 선언
 
 - **`{contentRoot}/참조자료/refimg_hashes.json`** (신규, 추적) — `ref_md/<과목>/<문서>/images/<파일>` 상대경로 → sha256. `build:refimg`가 스캔 생성.
-- **`pdf_hosting.json` 확장** — `imageManifests` 필드 추가:
+- **`pdf_hosting.json` 확장** — `imageManifests` 필드 추가 (기존 파일 없으면 신설). **PDF가 git 추적인 팩은 `"manifests": []`를 명시** — 생략하면 fetch가 `pdf_hashes.json` 기본값으로 존재하지 않는 PDF 에셋을 찾는다. `check:reffresh`·`check_reflayout`·convert.py도 manifests 선언 유무로 "PDF 외부화"를 판정:
   ```json
   { "assetBase": ".../ref-img-<exam>", "mirrors": [".../ref-assets-mirror"],
     "manifests": ["pdf_hashes.json"], "imageManifests": ["refimg_hashes.json"] }
   ```
   에셋 네이밍 = `<sha256>.webp` (PDF와 동일 계약 → 같은 릴리스 네임스페이스 공존 가능). `imageManifests` 선언 시험만 외부화 대상 — **팩별 옵트인 단계 이전**.
-- **릴리스 태그**: `ref-img-<exam>` (팩별 신설) 또는 기존 `ref-pdf-<exam>` 릴리스 재사용 — 에셋명이 sha256 기반이라 PDF·이미지 에셋이 충돌 없이 공존 (fireelec 파일럿은 `ref-pdf-fireelec` 재사용). 미러는 `ref-assets-mirror` 이중화 — 기존 PDF 에셋 규약과 동일.
+- **릴리스 태그**: 소형 팩(<1,000 에셋)은 `ref-img-<exam>` 또는 기존 `ref-pdf-<exam>` 재사용 가능 — 에셋명이 sha256 기반이라 PDF·이미지 에셋이 충돌 없이 공존 (fireelec 파일럿은 `ref-pdf-fireelec` 재사용).
+- **샤딩 (1,000 에셋 상한)** — GitHub Releases는 **릴리스당 에셋 1,000개 하드 리밋** (API `file_count limited to 1000 assets per release`). 대형 팩은 assetBase를 샤드 템플릿으로 선언: `…/download/ref-assets-{hh}` — `{hh}`는 에셋 sha256 앞 2자리로 치환되어 256개 릴리스에 분산 (전 시험 공용 풀, 용량 ~25.6만). 미러는 `ref-assets-mirror-{hh}`. `{hh}` 없는 flat 베이스는 읽기 전용 폴백(레거시·기존 릴리스)으로만 쓴다.
+  ```json
+  { "assetBase": ".../download/ref-assets-{hh}",
+    "mirrors": [".../download/ref-assets-mirror-{hh}", ".../download/ref-img-lossadj"],
+    "manifests": [], "imageManifests": ["refimg_hashes.json"] }
+  ```
 
 ### 2.2 도구
 
@@ -85,7 +91,7 @@ SW 기동 전 최초 방문(또는 SW 비지원) 환경은 동일 오리진 요�
 ## 3. 주의 사항
 
 - **git 이력 잔존** — 추적 해제 후에도 과거 커밋·LFS 객체는 남는다 (DOC-RBK-12 §3와 동일). 즉시 효과는 작업트리·신규 클론·배포 크기; 이력 재작성(`filter-repo`)은 강제 푸시 동반 파괴 작업 — 별도 합의 없이 금지.
-- **업로드 규모** — ~4만 에셋(팩 전체 일괄 시). `gh release upload`는 파일당 1요청 — 재개 가능 설계(기존 에셋 skip)·병렬 4~8이 필수. 팩 단위 이전이면 팩당 수백~수천 에셋으로 현실적.
+- **업로드 규모·rate limit** — 에셋 업로드는 파일당 API 1요청이며 **GitHub REST rate limit(인증 5,000/시간)을 소비한다** — 검증됨(2026-11-20). 추가로 **secondary rate limit**(동시성·분당 콘텐츠 생성 한도, /rate_limit에는 안 잡힘)이 병렬 업로드에 걸린다 — jobs 4 이하·쿨다운 후 재개 권장. lossadj 규모(고유 에셋 ~10,058개)는 1차만으로도 한도 수 회분 — `upload:refimgs --auto`가 리셋을 기다렸다 자동 재개하므로 대형 팩 이전은 수 시간 단위로 계획. `--no-mirror`로 미러 동기화를 뒤로 미룰 수 있다.
 - **오프라인** — 열람한 문서 이미지는 DATA_CACHE에 남아 오프라인 유지. 미열람 문서는 오프라인에서 이미지 없음 (현재도 동일 — 미캐시 리소스는 어차피 오프라인 불가).
 - **opaque 캐시 한계** — no-cors 응답은 상태코드를 읽을 수 없어 부재 에셋(404)도 캐시될 수 있다. 매니페스트↔릴리스 에셋 정합(업로드 후 `gh release view` 확인)과 check:refimg 게이트가 예방선. 부재 캐시가 생기면 DATA_CACHE 항목 삭제로 복구.
 - **에셋 삭제 금지** — sha256 명명은 불변 콘텐츠 주소. 문서 교체 시 구 sha 에셋은 잔존시켜야 구버전 캐시·롤백이 유효. 릴리스 정리는 매니페스트 미참조 에셋 감사 후 수행.

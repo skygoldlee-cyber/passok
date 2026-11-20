@@ -962,7 +962,7 @@ async function shaHex(buf) {
 async function fetchRefimgAsset(manifest, sha, ext) {
   const bases = [manifest.assetBase, ...(manifest.mirrors || [])].filter(Boolean);
   for (const base of bases) {
-    const assetUrl = `${base}/${sha}${ext}`;
+    const assetUrl = `${base.replace('{hh}', sha.slice(0, 2))}/${sha}${ext}`;
     let res = null;
     try { res = await fetch(assetUrl); } catch { /* CORS 차단·네트워크 실패 */ }
     if (res) {

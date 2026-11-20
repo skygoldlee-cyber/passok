@@ -22,7 +22,7 @@ const { getExamTargets } = require('../build/exam_targets.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const CHECK = process.argv.includes('--check');
-const IMG_RE = /\.(?:webp|png|jpe?g)$/i;
+const IMG_RE = /\.(?:webp|png|jpe?g|gif|svg)$/i;
 
 const sha256File = (f) =>
   crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex');
