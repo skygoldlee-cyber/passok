@@ -25,3 +25,32 @@
 ## 주의
 
 - eleceng(자매팩)와 ref_md 동일 세트 공유 — 한쪽 갱신 시 다른 쪽도 반영 필요
+
+## 2026-11-20 공학 과목 오픈라이선스 소스 수집 (웹 심층조사 2차)
+
+과목1~4 공학 교재의 합법적 재사용 가능 소스를 확보 — 오픈라이선스(OER) 영문 교재 + 공공기관 한국어 자료 (eleceng과 동일 세트 공유):
+
+### 편입 완료 (ref_md)
+
+| 과목 | 문서 | 출처·라이선스 |
+|---|---|---|
+| 과목1 | University Physics Vol.2 전기장·전위·커패시턴스 (ch5~8) | OpenStax — CC BY-NC-SA 4.0 |
+| 과목1 | University Physics Vol.2 자기장·전자유도·인덕턴스·전자파 (ch11~14·16) | OpenStax — CC BY-NC-SA 4.0 |
+| 과목2 | MIT 6.061 전력계통·조류해석 (Kirtley ch1~5) | MIT OpenCourseWare — CC BY-NC-SA 4.0 |
+| 과목2 | 전력거래사 학습가이드 제3과목 전력계통 | KPX교육원 공개 자료 (2026년 개정판) — 한국어 |
+| 과목3 | MIT 6.061 전기기기 (Kirtley ch6~12 — 자기회로·동기기·유도기·직류기·BLDC) | MIT OpenCourseWare — CC BY-NC-SA 4.0 |
+| 과목4 | University Physics Vol.2 직류·교류회로 (ch9~10·15) | OpenStax — CC BY-NC-SA 4.0 |
+| 과목4 | MIT 6.002 회로·전자 강의노트 (L1-3·6-8·12·14-22 병합) | MIT OpenCourseWare — CC BY-NC-SA 4.0 |
+| 과목4 | Introduction to Control Systems (전권) | Zywno, Toronto Metropolitan Univ. Pressbooks — CC BY-NC |
+
+### 라이선스·활용 주의
+
+- **CC BY-NC-SA / CC BY-NC**: 비영리 조건 — PassOK 무료 서비스 범위 내 사용 가능. 귀속 표기는 각 md 상단에 삽입. 파생(번역·편집)은 동일 라이선스(SA) 적용 필요
+- **KPX 학습가이드**: 공공기관 게시 학습자료 — ref_md 편입분은 제3과목만
+- **영문 교재의 위치**: **교재 저작(ai:*)·문항 제작의 근거 소스** — 한국어 수험서 제공 시 우선 적용
+
+### 잔여 갭
+
+- **한국어 표준 수험서**: 사용자 제공 또는 ai:* 저작(위 소스를 근거 자료로 활용 가능)
+- **필기 기출**: 공식 비공개 — 자체 문항 제작 필요
+- 참고 불편입: K-MOOC(수강제한 동영상)·KOCW(저작권)·KOSHA E시리즈(과목5 보강 여지)
