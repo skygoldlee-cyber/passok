@@ -21,7 +21,7 @@
 
 // @spec P-01~06,O-04,UX-PWA-03,LP-07
 
-const CACHE_VERSION = 'v20261120-bec67f7';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
+const CACHE_VERSION = 'v20261120-2bf07d2';   // 배포 시 stamp_sw_version.js가 자동 갱신 (v<커밋날짜>-<해시>)
 const DATA_CACHE_VERSION = 'v1';           // 데이터: 안정(해시 파일명이 변경 감지 담당) — 캐시 포맷이 바뀔 때만 수동 증가
 // 캐시 접두사는 플랫폼 브랜드(passok) — 시험 무관 공유 캐시.
 // 구 접두사(passory-*·cosmetic-pass-*)는 activate의 비현재 캐시 전수 삭제로 자동 정리된다.
@@ -389,8 +389,10 @@ const MD_ASSETS = [
   './content/exams/indsafe/문제은행/과목6_문제은행.md',
   './content/exams/indsafeind/교재/prevedu/1과목_산업재해 예방 및 안전보건교육_표준형.md',
   './content/exams/indsafeind/교재/human/2과목_인간공학 및 위험성 평가·관리_표준형.md',
-  './content/exams/indsafeind/교재/mach/3과목_기계·기구 및 건설공사 안전관리_표준형.md',
-  './content/exams/indsafeind/교재/elec/4과목_전기 및 화학설비 안전관리_표준형.md',
+  './content/exams/indsafeind/교재/mach/3과목_기계·기구 및 설비 안전_표준형.md',
+  './content/exams/indsafeind/교재/mach/3과목_건설공사 안전_표준형.md',
+  './content/exams/indsafeind/교재/elec/4과목_전기설비 안전_표준형.md',
+  './content/exams/indsafeind/교재/elec/4과목_화학설비 안전_표준형.md',
   './content/exams/iteng/교재/swdev/1과목_소프트웨어 개발_표준형.md',
   './content/exams/iteng/교재/db/2과목_데이터베이스 구축_표준형.md',
   './content/exams/iteng/교재/proglang/3과목_프로그래밍 언어 활용_표준형.md',

@@ -1,20 +1,40 @@
 {
  "schemaVersion": 1,
- "_comment": "참조자료 매핑 설정. lawRefs: content/lawdb.json의 법령 id 목록 (나열 순서 = 매칭 우선순위). noticeCore: 고시 감시 배너의 기준 문서명. 자세한 구조는 design/MULTI_EXAM_DB_DESIGN.md §4",
+ "_comment": "참조자료 매핑 설정. ref_md 문서 = NCS 학습모듈(능력단위별) + 출제기준 — iteng(정보처리기사) 자매팩 이식. 과목1은 산업기사 출제범위(응용SW기초·설계·테스트배포)로 재매핑(2026-11-20). 참조자료/SOURCE_COLLECT.md 참조.",
  "lawRefs": [],
  "noticeCore": null,
+ "subjectDirMap": {
+  "sysbase": "과목1",
+  "proglang": "과목2",
+  "db": "과목3"
+ },
  "subjectDefaultRefdoc": {},
- "subjectDirMap": {},
  "docSubjectRules": [
   [
    "출제기준|시험제도|시행계획",
    1,
    "출제기준·시행제도 문서 → 과목1 귀속 (multiSubjectDocs 공동 인용)"
+  ],
+  [
+   "SQL|데이터 ?(베이스|품질|표준화|전환|구현)|개념데이터|논리 데이터|물리 데이터",
+   3,
+   "DB엔지니어링 모듈 → 과목3 (데이터베이스 활용)"
+  ],
+  [
+   "서버 프로그램|프로그래밍 언어|개발자 환경|개발 환경|자료구조|SW개발 보안",
+   2,
+   "프로그래밍 언어 계열 모듈 + SW개발 보안(보안 취약성 항목) → 과목2"
+  ],
+  [
+   "모델링|설계|테스트|배포|리팩토링|요구사항|방법론|소프트웨어공학|인터페이스|응용SW 기초",
+   1,
+   "설계·기초기술·테스트배포 모듈 → 과목1 (정보시스템 기반 기술)"
   ]
  ],
  "multiSubjectDocs": [
   "정보처리산업기사 출제기준(한국산업인력공단)(2027)"
  ],
  "refDirs": [],
+ "refDirsComment": "물리 PDF 미확보 — NCS 학습모듈 md만 존재 (iteng 이식).",
  "referenceLaw": []
 }

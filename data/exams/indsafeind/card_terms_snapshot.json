@@ -1,18 +1,73 @@
 {
  "prevedu": {
-  "cards": {},
-  "quizzes": {}
+  "cards": {
+   "prevedu_card_42e119": "안전보건관리책임자",
+   "prevedu_card_d4d656": "안전관리자",
+   "prevedu_card_71445d": "산업보건의",
+   "prevedu_card_d8e12a": "관리감독자",
+   "prevedu_card_e73706": "특별교육",
+   "prevedu_card_b4882c": "하인리히 법칙",
+   "prevedu_card_d76bd6": "안전보건위원회",
+   "prevedu_card_4da7b9": "중대산업재해",
+   "prevedu_card_1513ed": "KOSHA-MS",
+   "prevedu_card_ac9770": "공사금액 기준",
+   "prevedu_card_affb6f": "중대재해 인원 기준"
+  },
+  "quizzes": {
+   "prevedu_quiz_ac05c3": "10억원 → 50억원(안전관리자) → 120억원(위원회·협의체)|공사금액 기준",
+   "prevedu_quiz_ee4137": "사망 1명 이상 → 부상 2명 이상(6개월 이상 치료) → 질병 3명 이상(1년 이내 동일 유해요인)|중대재해 인원 기준"
+  }
  },
  "human": {
-  "cards": {},
+  "cards": {
+   "human_card_25749a": "위험성평가",
+   "human_card_3bd555": "FTA/ETA",
+   "human_card_9f70fb": "근골격계 부담작업",
+   "human_card_7851c5": "WBGT",
+   "human_card_346b82": "수박 진동"
+  },
   "quizzes": {}
  },
  "mach": {
-  "cards": {},
+  "cards": {
+   "mach_card_5223ed": "인터록(interlock)",
+   "mach_card_99bd59": "양수조작식",
+   "mach_card_daec1e": "감응형",
+   "mach_card_265ab8": "수동식·조정식",
+   "mach_card_553943": "방호장치",
+   "mach_card_bc8458": "안전인증 vs 자율안전확인",
+   "mach_card_5e0e85": "도수율/강도율",
+   "mach_card_1402e7": "비파괴검사",
+   "mach_card_a460d2": "양중기 방호",
+   "mach_card_50229b": "안전보건조정자",
+   "mach_card_300023": "산업안전보건관리비",
+   "mach_card_db5555": "유해위험방지계획서",
+   "mach_card_993c6f": "추락 방지 계층",
+   "mach_card_29f7e6": "흙막이 지보공"
+  },
   "quizzes": {}
  },
  "elec": {
-  "cards": {},
+  "cards": {
+   "elec_card_351b55": "약 1mA",
+   "elec_card_528948": "약 10~15mA",
+   "elec_card_4d5356": "약 50~100mA",
+   "elec_card_050722": "특별제3종",
+   "elec_card_e40adf": "제3종",
+   "elec_card_a17845": "제1종",
+   "elec_card_ae0443": "제2종",
+   "elec_card_be215e": "이완전류",
+   "elec_card_9bcf60": "심실세동",
+   "elec_card_4c9151": "방폭구조 d·e·i·p",
+   "elec_card_ee7dfa": "접지공사",
+   "elec_card_b5d28c": "정전기 대책",
+   "elec_card_fcd48b": "제3류",
+   "elec_card_bbcd3b": "지정수량",
+   "elec_card_3a2f64": "인화점 vs 발화점",
+   "elec_card_8eef27": "화재 분류 A~K",
+   "elec_card_c77b7e": "MSDS",
+   "elec_card_b4be1f": "공정안전보고서(PSM)"
+  },
   "quizzes": {}
  }
 }

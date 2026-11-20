@@ -1,41 +1,49 @@
 {
   "subjects": {
     "prevedu": {
-      "cards": 0,
-      "quizzes": 0,
+      "cards": 11,
+      "quizzes": 2,
       "files": {
         "교재/prevedu/1과목_산업재해 예방 및 안전보건교육_표준형.md": {
-          "cards": 0,
-          "quizzes": 0
+          "cards": 12,
+          "quizzes": 2
         }
       }
     },
     "human": {
-      "cards": 0,
+      "cards": 5,
       "quizzes": 0,
       "files": {
         "교재/human/2과목_인간공학 및 위험성 평가·관리_표준형.md": {
-          "cards": 0,
+          "cards": 5,
           "quizzes": 0
         }
       }
     },
     "mach": {
-      "cards": 0,
+      "cards": 14,
       "quizzes": 0,
       "files": {
-        "교재/mach/3과목_기계·기구 및 건설공사 안전관리_표준형.md": {
-          "cards": 0,
+        "교재/mach/3과목_기계·기구 및 설비 안전_표준형.md": {
+          "cards": 9,
+          "quizzes": 0
+        },
+        "교재/mach/3과목_건설공사 안전_표준형.md": {
+          "cards": 5,
           "quizzes": 0
         }
       }
     },
     "elec": {
-      "cards": 0,
+      "cards": 18,
       "quizzes": 0,
       "files": {
-        "교재/elec/4과목_전기 및 화학설비 안전관리_표준형.md": {
-          "cards": 0,
+        "교재/elec/4과목_전기설비 안전_표준형.md": {
+          "cards": 12,
+          "quizzes": 0
+        },
+        "교재/elec/4과목_화학설비 안전_표준형.md": {
+          "cards": 6,
           "quizzes": 0
         }
       }
