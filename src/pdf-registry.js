@@ -1164,7 +1164,15 @@ const _EXAM_TABLES = {
         "power": "과목2",
         "mach": "과목3",
         "circuit": "과목4",
-        "regs": "과목5"
+        "regs": "과목5",
+        "University Physics Vol.2 전기장·전위·커패시턴스(OpenStax)(CC BY-NC-SA)": "과목1",
+        "University Physics Vol.2 자기장·전자유도·인덕턴스·전자파(OpenStax)(CC BY-NC-SA)": "과목1",
+        "MIT 6.061 전력계통·조류해석(MIT OCW)(CC BY-NC-SA)": "과목2",
+        "전력거래사 학습가이드 제3과목 전력계통(KPX)(2026)": "과목2",
+        "MIT 6.061 전기기기(MIT OCW)(CC BY-NC-SA)": "과목3",
+        "University Physics Vol.2 직류·교류회로(OpenStax)(CC BY-NC-SA)": "과목4",
+        "MIT 6.002 회로·전자 강의노트(MIT OCW)(CC BY-NC-SA)": "과목4",
+        "Introduction to Control Systems(Toronto Metropolitan)(CC BY-NC)": "과목4"
         },
         REF_MD_SUBJECTS: {
 
@@ -1206,7 +1214,15 @@ const _EXAM_TABLES = {
         "power": "과목2",
         "mach": "과목3",
         "circuit": "과목4",
-        "regs": "과목5"
+        "regs": "과목5",
+        "University Physics Vol.2 전기장·전위·커패시턴스(OpenStax)(CC BY-NC-SA)": "과목1",
+        "University Physics Vol.2 자기장·전자유도·인덕턴스·전자파(OpenStax)(CC BY-NC-SA)": "과목1",
+        "MIT 6.061 전력계통·조류해석(MIT OCW)(CC BY-NC-SA)": "과목2",
+        "전력거래사 학습가이드 제3과목 전력계통(KPX)(2026)": "과목2",
+        "MIT 6.061 전기기기(MIT OCW)(CC BY-NC-SA)": "과목3",
+        "University Physics Vol.2 직류·교류회로(OpenStax)(CC BY-NC-SA)": "과목4",
+        "MIT 6.002 회로·전자 강의노트(MIT OCW)(CC BY-NC-SA)": "과목4",
+        "Introduction to Control Systems(Toronto Metropolitan)(CC BY-NC)": "과목4"
         },
         REF_MD_SUBJECTS: {
 
