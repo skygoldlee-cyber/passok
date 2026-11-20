@@ -89,6 +89,7 @@ const CONTENT_STEPS = [
   nodeStep('content:refsubjects', 'tools/check/check_ref_subjects.js', '귀속', 'ref_md 문서의 과목 귀속 vs 실제 인용 득표 (정보 단계 — 불일치는 참고 보고)', { content: true, prio: 'p2' }),
   nodeStep('content:reflayout', 'tools/check/check_reflayout.js', '레이아웃', '참조자료 폴더/레지스트리 정합성', { content: true }),
   nodeStep('content:reffresh', 'tools/check/check_ref_freshness.js', '신선도', '참조자료 PDF 해시 ↔ ref_md 변환본 (PDF 교체 감지)', { content: true }),
+  nodeStep('content:size', 'tools/check/check_content_size.js', '자산', '시험 팩 콘텐츠 크기 예산 — 팩 성장은 budget_mb 수동 상향 필요 (content_size_baseline.json)', { content: true }),
   nodeStep('content:reflines', 'tools/check/check_ref_lines.js', '참조라인', '교재/문제은행 (LNN) 참조 라인 ↔ ref_md 실제 내용', { content: true }),
   nodeStep('content:refformat', 'tools/check/check_refmd_format.js', '형식', 'ref_md 추출 잔재·평탄화 형식 — lone CR·제어문자·PUA 글리프·초장문 줄 차단', { content: true }),
   nodeStep('content:drillfresh', 'tools/check/check_drill_freshness.js', '드릴신선도', '드릴 번들 ↔ 문제은행 번들 (build:drills 필요 감지)', { content: true }),
@@ -203,6 +204,7 @@ const AUDIT_STEPS = [
   nodeStep('audit:ce06', 'tools/audit/audit_ce06.js', '감사', 'CE-06 가독성·정보 밀도 감사 — 문장·문단·표·목록·도식 규약 위반 지표 (원문 인용 섹션 면제, 비차단)', { prio: 'p2' }),
   nodeStep('audit:tools', 'tools/audit/audit_tool_usage.js', '감사', 'tools/ 도달성·죽은 단계 감사 — 진입점→import 그래프 도달 불가 파일·프리셋 미소속 단계', { prio: 'p2' }),
   nodeStep('audit:gateutil', 'tools/audit/audit_gate_utility.js', '감사', 'P2 단계 효용 감사 — 실행 텔레메트리·기준선 갱신 이력으로 미발화/고빈도 게이트 식별', { prio: 'p2' }),
+  nodeStep('audit:size', 'tools/audit/audit_exam_size.js', '감사', '시험 팩 콘텐츠 규모 리포트 — 팩별 추적 MB·예산 사용률·구성 (외부화·퇴역 판단 자료)', { prio: 'p2' }),
 ];
 
 // ── 실패 복구 안내 (run.js 요약의 근본원인 그룹핑) ─────────────────────
@@ -217,6 +219,7 @@ const DERIVED_IDS = new Set([
 const REMEDIES = {
   'content:embfresh': 'npm.cmd run build:embeddings — Node-only (최초 실행 시 ONNX 모델 ~470MB 다운로드, build:derived 미포함 — 임베딩은 build:derived:full)',
   'content:reffresh': 'npm.cmd run convert:refs — ref-pipeline Python으로 PDF→ref_md 재변환',
+  'content:size': 'npm.cmd run check:size -- --update — 신규 시험 예산 책정·스탬프 (성장 상향은 budget_mb 수동 편집)',
   'refs:fresh': 'npm.cmd run convert:refs — ref-pipeline Python으로 PDF→ref_md 재변환',
   'content:textbookdocs': '교재 종속 문서(판본: textbook)를 최신 교재에 맞춰 갱신',
   'docs:textbook': '교재 종속 문서(판본: textbook)를 최신 교재에 맞춰 갱신',

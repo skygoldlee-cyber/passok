@@ -62,7 +62,10 @@ npm.cmd run check:ci                  # CI 게이트 로컬 재현 (preset ci ·
 npm.cmd run check -- --preset <all|ci|content|docs|refs|freshness|audit> [--quick|--content-only|--build]  # 통합 실행기
 npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회 — 출력 [P0|P1|P2]는 우선순위 티어)
 npm.cmd run check:audit               # 감시·감사 묶음 (preset audit — P2 advisory, 실패해도 종료 0·차단 없음)
-npm.cmd run check:onboard             # 시험 팩 온보딩·승격 진단 + 성숙도 티어 게이트 (exams.json tier: draft/pilot/active — 미달 시 차단)
+npm.cmd run check:onboard             # 시험 팩 온보딩·승격 진단 + 성숙도 티어 게이트 (exams.json tier: draft/pilot/active/retired — 미달 시 차단, retired=요건 면제 퇴역)
+npm.cmd run check:size                # 시험 팩 콘텐츠 크기 예산 게이트 (content_size_baseline.json budget_mb — 초과 시 차단, --update=신규 책정·스탬프)
+npm.cmd run audit:size                # 시험 팩별 콘텐츠 규모 리포트 — 추적 MB·예산 사용률·구성 (외부화·퇴역 판단 자료)
+npm.cmd run pack:use -- <id>…|--all|--status  # 시험 팩 sparse 선택 체크아웃 — 작업 팩만 작업트리+LFS 실체화 (DEV_ENVIRONMENT §4)
 npm.cmd run fix:all                    # 복구 트리아지 — build:derived + build:html + sync 일괄 (게이트 실패 1차 복구 명령)
 npm.cmd run check:terms                # 사용자 표시 용어 정합 — Pro/Free 잔재 차단 (PLAN_TERMS=uitext-defaults.js 정본)
 npm.cmd run check:provenance           # 문서 원본 선언 경로 존재 검증 — 콘텐츠 출처 추적

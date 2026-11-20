@@ -59,6 +59,8 @@ const TEXTBOOK_VOLUME_GRANDFATHERED = new Set(['broker', 'indsafe', 'compapp2'])
 
 /** 성숙도 티어 — draft(선언) < pilot(출제기준+표준형 챕터) < active(pilot+과목당 ≥최소 문항) */
 const TIERS = ['draft', 'pilot', 'active'];
+/** retired — 퇴역 팩: 성숙도 요건 면제. 빌드·기존 사용자 접근은 유지하고 승격/신규 요건 검사 대상에서만 제외 */
+const VALID_TIERS = [...TIERS, 'retired'];
 const tierOf = (entry) => entry.tier || (entry.comingSoon ? 'pilot' : 'active');
 
 /** 참조자료/ref_md 하위의 출제기준 문서 경로 (파일명 매칭, 깊이 제한) */
@@ -182,8 +184,10 @@ for (const t of targets) {
 
     // ── 성숙도 티어 요건 (tier 전이 시점 차단 게이트) ──
     const tier = tierOf(entry);
-    if (!TIERS.includes(tier)) {
-        err(t.id, `tier 값이 유효하지 않습니다: ${entry.tier} (draft|pilot|active)`);
+    if (!VALID_TIERS.includes(tier)) {
+        err(t.id, `tier 값이 유효하지 않습니다: ${entry.tier} (draft|pilot|active|retired)`);
+    } else if (tier === 'retired') {
+        info(t.id, 'tier retired — 성숙도 요건 면제 (퇴역 팩 — 콘텐츠 요건 검사 대상 아님)');
     } else {
         if (!entry.tier) info(t.id, `tier 미선언 — 추정 "${tier}" (exams.json에 명시 권장)`);
         const lvl = TIERS.indexOf(tier);

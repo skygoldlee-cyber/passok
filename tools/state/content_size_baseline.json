@@ -1,0 +1,96 @@
+{
+  "exams": {
+    "cosmetic": {
+      "budget_mb": 30,
+      "stamped_bytes": 19159762
+    },
+    "skincare": {
+      "budget_mb": 120,
+      "stamped_bytes": 93038879
+    },
+    "hairdresser": {
+      "budget_mb": 110,
+      "stamped_bytes": 91956459
+    },
+    "insadj": {
+      "budget_mb": 160,
+      "stamped_bytes": 133229692
+    },
+    "lossadj": {
+      "budget_mb": 520,
+      "stamped_bytes": 433275353
+    },
+    "admagent": {
+      "budget_mb": 60,
+      "stamped_bytes": 49940071
+    },
+    "appraisal": {
+      "budget_mb": 60,
+      "stamped_bytes": 46317431
+    },
+    "broker": {
+      "budget_mb": 30,
+      "stamped_bytes": 24855284
+    },
+    "labor": {
+      "budget_mb": 120,
+      "stamped_bytes": 95110009
+    },
+    "indsafe": {
+      "budget_mb": 60,
+      "stamped_bytes": 44851749
+    },
+    "indsafeind": {
+      "budget_mb": 60,
+      "stamped_bytes": 43455419
+    },
+    "iteng": {
+      "budget_mb": 140,
+      "stamped_bytes": 111671325
+    },
+    "itindeng": {
+      "budget_mb": 90,
+      "stamped_bytes": 70905298
+    },
+    "eleceng": {
+      "budget_mb": 50,
+      "stamped_bytes": 36892673
+    },
+    "elecindeng": {
+      "budget_mb": 50,
+      "stamped_bytes": 36895708
+    },
+    "compapp1": {
+      "budget_mb": 10,
+      "stamped_bytes": 88456
+    },
+    "compapp2": {
+      "budget_mb": 10,
+      "stamped_bytes": 187432
+    },
+    "distmgr2": {
+      "budget_mb": 120,
+      "stamped_bytes": 99768059
+    },
+    "distmgr3": {
+      "budget_mb": 50,
+      "stamped_bytes": 38017713
+    },
+    "carework": {
+      "budget_mb": 50,
+      "stamped_bytes": 39032273
+    },
+    "hazmat": {
+      "budget_mb": 10,
+      "stamped_bytes": 2898718
+    },
+    "fireelec": {
+      "budget_mb": 40,
+      "stamped_bytes": 25286111
+    },
+    "conssafe": {
+      "budget_mb": 10,
+      "stamped_bytes": 4173520
+    }
+  }
+}

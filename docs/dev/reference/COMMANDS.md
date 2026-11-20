@@ -19,13 +19,13 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 
 | 프리셋 | 단계 수 | 용도 |
 |---|---|---|
-| `content` | 33 | 콘텐츠 통합 검증 — 교재 교체 등 대규모 콘텐츠 변경 후 (--quick, --content-only, --build 옵션) |
+| `content` | 34 | 콘텐츠 통합 검증 — 교재 교체 등 대규모 콘텐츠 변경 후 (--quick, --content-only, --build 옵션) |
 | `docs` | 21 | 문서 정합 묶음 — 경로 참조·문서 ID·트리·명령 정합 등 |
 | `ci` | 32 | CI 게이트 로컬 재현 — ci.yml과 토큰 1:1 대응 |
-| `all` | 67 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
+| `all` | 68 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
 | `refs` | 6 | 참조자료 검증 묶음 — 레이아웃·귀속·신선도·인용 라인·병합 품질 |
 | `freshness` | 10 | 생성물 신선도 묶음 — 파생물 미재생성 감지 |
-| `audit` | 14 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |
+| `audit` | 15 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |
 
 ## 2. 검증 단계 카탈로그 (steps.js 레지스트리)
 
@@ -41,6 +41,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `content:refsubjects` | P2 | 귀속 | `node tools/check/check_ref_subjects.js` | ref_md 문서의 과목 귀속 vs 실제 인용 득표 (정보 단계 — 불일치는 참고 보고) |
 | `content:reflayout` | P1 | 레이아웃 | `node tools/check/check_reflayout.js` | 참조자료 폴더/레지스트리 정합성 |
 | `content:reffresh` | P1 | 신선도 | `node tools/check/check_ref_freshness.js` | 참조자료 PDF 해시 ↔ ref_md 변환본 (PDF 교체 감지) |
+| `content:size` | P1 | 자산 | `node tools/check/check_content_size.js` | 시험 팩 콘텐츠 크기 예산 — 팩 성장은 budget_mb 수동 상향 필요 (content_size_baseline.json) |
 | `content:reflines` | P1 | 참조라인 | `node tools/check/check_ref_lines.js` | 교재/문제은행 (LNN) 참조 라인 ↔ ref_md 실제 내용 |
 | `content:refformat` | P1 | 형식 | `node tools/check/check_refmd_format.js` | ref_md 추출 잔재·평탄화 형식 — lone CR·제어문자·PUA 글리프·초장문 줄 차단 |
 | `content:drillfresh` | P1 | 드릴신선도 | `node tools/check/check_drill_freshness.js` | 드릴 번들 ↔ 문제은행 번들 (build:drills 필요 감지) |
@@ -170,7 +171,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 |---|---|---|
 | `npm run postbuild:data` | `npm run check:parser` | 체인: check:parser |
 
-### `check:*` — 78개
+### `check:*` — 79개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -185,6 +186,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run check:fresh` | `node tools/check/run.js --preset freshness` | 통합 검증 실행기 (모든 check 프리셋의 단일 진입점) |
 | `npm run check:reflayout` | `node tools/check/check_reflayout.js` | 참조자료 4계층 정합성 검증 (전 시험 순회) |
 | `npm run check:reffresh` | `node tools/check/check_ref_freshness.js` | 참조자료 PDF ↔ ref_md 변환본 신선도 검증 |
+| `npm run check:size` | `node tools/check/check_content_size.js` | 시험 팩 콘텐츠 크기 예산 게이트 |
 | `npm run check:reflines` | `node tools/check/check_ref_lines.js` | 교재/문제은행 본문의 (LNN) 참조 라인 검증 |
 | `npm run check:numbering` | `node tools/check/check_numbering.js` | 교재 번호체계 정합성 게이트 |
 | `npm run check:drillfresh` | `node tools/check/check_drill_freshness.js` | 드릴 번들 ↔ 문제은행 번들 신선도 검증 |
@@ -300,6 +302,12 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 |---|---|---|
 | `npm run fetch:refpdfs` | `node tools/sync/fetch_ref_pdfs.js` | 외부 호스팅 참조자료 PDF 복원 (DOC-RBK-12) |
 
+### `pack:*` — 1개
+
+| 스크립트 | 실행 내용 | 설명 |
+|---|---|---|
+| `npm run pack:use` | `node tools/sync/pack_checkout.js` | 시험 팩 선택 체크아웃 (sparse-checkout + LFS 부분 실체화) |
+
 ### `verify:*` — 2개
 
 | 스크립트 | 실행 내용 | 설명 |
@@ -342,7 +350,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 |---|---|---|
 | `npm run ratchet:coverage` | `node tools/check/coverage_merge.js --ratchet` | 유닛(node:test + c8)과 DOM(vitest) 커버리지 병합 |
 
-### `audit:*` — 9개
+### `audit:*` — 10개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -355,6 +363,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run audit:syllabus` | `node tools/audit/audit_syllabus_alignment.js` | 교재 과목·챕터 구조 ↔ 출제기준 문서 정합성 감사 |
 | `npm run audit:specfresh` | `node tools/audit/audit_spec_fresh.js` | SPEC 활성(✅) 행 중 코드 @spec 참조 0건 나열 (노후 요구사항 후보) |
 | `npm run audit:doclinks` | `node tools/audit/audit_doc_links.js` | docs/dev/ 문서 중 어디서도 미참조 파일 나열 (노후 문서 후보) |
+| `npm run audit:size` | `node tools/audit/audit_exam_size.js` | 시험 팩 콘텐츠 규모 리포트 (advisory) |
 
 ### `ci:*` — 3개
 

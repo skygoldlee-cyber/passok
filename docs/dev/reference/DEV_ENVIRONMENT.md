@@ -86,6 +86,22 @@ npm.cmd run doctor
 
 > `serve.js`는 `vercel.json`의 프로덕션 헤더(CSP·캐시 정책)를 응답에 미러링합니다 — CSP 변경 등 헤더 수정은 로컬과 `test:e2e`에서 배포 환경과 동일하게 검증됩니다.
 
+### (선택) 시험 팩 선택 체크아웃 — 대용량 팩 환경에서 클론·pull 가속
+
+`content/exams/`는 팩당 수십~수백 MB(LFS 참조자료 이미지)라 전체 체크아웃이 무겁습니다. 작업 중인 팩만 작업트리에 두는 sparse checkout으로 클론·pull·검색을 가볍게 할 수 있습니다 — git 객체·LFS 캐시는 로컬에 남아 복원(`--all`)은 네트워크 없이 즉시 완료됩니다.
+
+```powershell
+# 가벼운 클론 — LFS 객체 다운로드 없이 포인터만 받기
+$env:GIT_LFS_SKIP_SMUDGE=1; git clone <repo-url> && cd passok
+
+# 작업할 팩만 체크아웃 (선택 팩의 LFS 파일만 실체화)
+npm.cmd run pack:use -- cosmetic            # 복수 지정 가능: -- cosmetic insadj
+npm.cmd run pack:use -- --status            # 현재 선택 상태 확인
+npm.cmd run pack:use -- --all               # 전체 복원
+```
+
+주의: 미선택 팩은 `manifest.json` 부재로 `build:data` 등에서 자동 건너뜁니다. 미선택 팩의 미추적 파일(참조자료 PDF)은 작업트리에 남으며, 미커밋 변경이 있는 팩은 git이 제외를 거부하니 먼저 정리하세요. 기존 전체 체크아웃에서도 `pack:use` 적용 시 선택 팩만 남기고 추적 파일이 정리됩니다 (LFS는 로컬 캐시에서 복원됨).
+
 ## 5. 검증 명령어 (환경 정상 여부 확인)
 
 ```powershell

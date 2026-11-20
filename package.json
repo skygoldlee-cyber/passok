@@ -31,6 +31,7 @@
     "check:fresh": "node tools/check/run.js --preset freshness",
     "check:reflayout": "node tools/check/check_reflayout.js",
     "check:reffresh": "node tools/check/check_ref_freshness.js",
+    "check:size": "node tools/check/check_content_size.js",
     "check:reflines": "node tools/check/check_ref_lines.js",
     "check:numbering": "node tools/check/check_numbering.js",
     "check:drillfresh": "node tools/check/check_drill_freshness.js",
@@ -87,6 +88,7 @@
     "hooks:install": "git config core.hooksPath .githooks && git config merge.stamps.driver \"node tools/merge/merge_stamps.js %O %A %B %P\" && git config merge.stamps.name \"PassOK release-stamp merger\" && echo 'pre-commit/pre-push/post-merge 훅 + merge.stamps 드라이버 활성화됨 (.githooks, .gitattributes)'",
     "convert:refs": "python ref-pipeline/convert.py",
     "fetch:refpdfs": "node tools/sync/fetch_ref_pdfs.js",
+    "pack:use": "node tools/sync/pack_checkout.js",
     "verify:refs": "python ref-pipeline/convert.py --verify",
     "build:drills": "node tools/build/build_ox_drills.js && node tools/build/build_combo_drills.js",
     "stamp:sw": "node tools/build/stamp_sw_version.js",
@@ -185,6 +187,7 @@
     "check:terms": "node tools/check/check_terms.js",
     "audit:specfresh": "node tools/audit/audit_spec_fresh.js",
     "audit:doclinks": "node tools/audit/audit_doc_links.js",
+    "audit:size": "node tools/audit/audit_exam_size.js",
     "check:provenance": "node tools/check/check_doc_provenance.js",
     "build:textbook-print": "node tools/build/build_textbook_print.js"
   },
