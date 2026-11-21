@@ -5,8 +5,8 @@
       "stamped_bytes": 19109337
     },
     "skincare": {
-      "budget_mb": 120,
-      "stamped_bytes": 93038879
+      "budget_mb": 10,
+      "stamped_bytes": 1952469
     },
     "hairdresser": {
       "budget_mb": 110,
@@ -34,7 +34,7 @@
     },
     "labor": {
       "budget_mb": 40,
-      "stamped_bytes": 27037249
+      "stamped_bytes": 27424001
     },
     "indsafe": {
       "budget_mb": 60,
