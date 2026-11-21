@@ -57,7 +57,8 @@ function inScope(p) {
 }
 
 function git(args) {
-    return execFileSync('git', args, { cwd: ROOT, encoding: 'utf8' });
+    // 대량 변경(ref_md 이미지 추적 해제 1만+ 파일) 시 기본 1MB 버퍼 초과 — 넉넉히 확보
+    return execFileSync('git', args, { cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
 }
 
 /** 추적 파일의 작업트리 변경 목록 (수정·삭제) — NUL 구분으로 비ASCII 경로 안전 */

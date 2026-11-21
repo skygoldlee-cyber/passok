@@ -67,6 +67,7 @@ function knownReleases(repo) {
         RELEASE_TAGS.set(tag, Number(id));
       }
     } catch (e) {
+      RELEASE_TAGS = null;   // 실패 시 빈 Map 잔존 방지 — 다음 사이클에 재조회
       if (isRateLimit(e)) { RATE_LIMITED = true; throw new RateLimitError(e.message); }
       throw e;
     }
@@ -83,6 +84,12 @@ function releaseInfo(repo, tag) {
       try {
         gh(['release', 'create', tag, '--repo', repo, '--title', tag,
           '--notes', 'ref_md 이미지 sha256 에셋 샤드 (DOC-RBK-25). 에셋명=<sha256>.<ext> — 릴리스당 에셋 1,000개 상한으로 sha256 앞 2자리 샤딩'], false);
+      } catch (e) {
+        if (isRateLimit(e)) { RATE_LIMITED = true; throw new RateLimitError(e.message); }
+        // 422 already exists — 목록 갱신 사이에 다른 실행이 생성(경합)·stale prefetch. 조회로 복구
+        if (!/already exists|422/.test(e.message || '')) throw e;
+      }
+      try {
         const rel = gh(['api', `repos/${repo}/releases/tags/${tag}`]);
         id = rel.id;
         RELEASE_TAGS.set(tag, id);
@@ -90,8 +97,6 @@ function releaseInfo(repo, tag) {
         if (isRateLimit(e)) { RATE_LIMITED = true; throw new RateLimitError(e.message); }
         throw e;
       }
-      REL_INFO.set(tag, { id, names: new Set() });
-      return REL_INFO.get(tag);
     }
     try {
       const out = execFileSync('gh', ['api', `repos/${repo}/releases/${id}/assets?per_page=100`, '--paginate', '--jq', '.[].name'],
@@ -118,6 +123,7 @@ async function pool(items, n, fn) {
   async function worker() {
     while (!rateLimited && !RATE_LIMITED && i < items.length) {
       const item = items[i++];
+      await sleep(600);   // secondary limit(분당 콘텐츠 생성) 완화 — 워커당 ~1.7req/s 상한
       try { await fn(item); done++; }
       catch (e) {
         failed++;
@@ -159,10 +165,13 @@ async function uploadOne(repo, releaseId, fp, assetName) {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-/** rate limit 리셋까지 폴링 대기 — core 한도 외에 secondary(동시성) 제한도 있어 최소 3분 쿨다운 */
+/** rate limit 리셋까지 폴링 대기 — secondary(콘텐츠 생성) 제한은 /rate_limit에 안 잡히므로
+ *  연속 감지 시 쿨다운을 지수 증가 (3→6→12→20분 상한). 계속 두드리면 제한이 연장된다 */
+let cooldownMs = 180000;
 async function waitForReset() {
-  console.log('    ⏳ rate limit 쿨다운 — secondary 제한 대비 최소 3분 대기');
-  await sleep(180000);
+  console.log(`    ⏳ rate limit 쿨다운 — ${(cooldownMs / 60000).toFixed(0)}분 대기 (secondary 제한 완화)`);
+  await sleep(cooldownMs);
+  cooldownMs = Math.min(cooldownMs * 2, 20 * 60000);
   for (;;) {
     try {
       const rl = gh(['api', 'rate_limit']);
@@ -230,8 +239,11 @@ async function runOnce(repo) {
         catch (e) { if (e instanceof RateLimitError) break; throw e; }
         const todo = tasks.filter(([, , a]) => !info.names.has(a));
         if (!todo.length) continue;
-        const { done, failed } = await pool(todo, JOBS, async ([fp, , assetName]) =>
-          uploadOne(repo, info.id, fp, assetName));
+        const { done, failed } = await pool(todo, JOBS, async ([fp, , assetName]) => {
+          const r = await uploadOne(repo, info.id, fp, assetName);
+          info.names.add(assetName);   // 재사이클 시 422 재시도 폭주 방지 — 성공분은 즉시 반영
+          return r;
+        });
         console.log(`    [${tag}] 업로드 ${done}개${failed ? ` · 실패 ${failed}` : ''}`);
         totalMissing += failed;
         if (RATE_LIMITED) { console.log('    ⏸ rate limit — 잔여는 다음 실행으로'); break; }
@@ -255,7 +267,11 @@ async function runOnce(repo) {
             const mi = releaseInfo(repo, tag);
             const todo = tasks.filter(([, , a]) => !mi.names.has(a));
             if (!todo.length) continue;
-            const r = await pool(todo, JOBS, async ([fp, , a]) => uploadOne(repo, mi.id, fp, a));
+            const r = await pool(todo, JOBS, async ([fp, , a]) => {
+              const s = await uploadOne(repo, mi.id, fp, a);
+              mi.names.add(a);
+              return s;
+            });
             console.log(`    미러(${tag}) +${r.done}개${r.failed ? ` · 실패 ${r.failed}` : ''}`);
           } catch (e) {
             if (e instanceof RateLimitError) break;

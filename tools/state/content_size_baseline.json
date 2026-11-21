@@ -17,8 +17,8 @@
       "stamped_bytes": 133229296
     },
     "lossadj": {
-      "budget_mb": 520,
-      "stamped_bytes": 433275207
+      "budget_mb": 40,
+      "stamped_bytes": 21242801
     },
     "admagent": {
       "budget_mb": 60,
@@ -86,7 +86,7 @@
     },
     "fireelec": {
       "budget_mb": 20,
-      "stamped_bytes": 13168556
+      "stamped_bytes": 13232351
     },
     "conssafe": {
       "budget_mb": 10,
