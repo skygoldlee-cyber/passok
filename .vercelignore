@@ -201,3 +201,5 @@ content/exams/*/문제은행/**/*.md
 content/exams/*/docs/*.md
 content/exams/distmgr2/참조자료/ref_md/*/images/
 content/exams/distmgr2/참조자료/ref_md/*/*/images/
+content/exams/labor/참조자료/ref_md/*/images/
+content/exams/labor/참조자료/ref_md/*/*/images/

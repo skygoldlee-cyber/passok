@@ -33,8 +33,8 @@
       "stamped_bytes": 24855284
     },
     "labor": {
-      "budget_mb": 120,
-      "stamped_bytes": 95063715
+      "budget_mb": 40,
+      "stamped_bytes": 27037249
     },
     "indsafe": {
       "budget_mb": 60,
@@ -70,7 +70,7 @@
     },
     "distmgr2": {
       "budget_mb": 10,
-      "stamped_bytes": 4961085
+      "stamped_bytes": 5487380
     },
     "distmgr3": {
       "budget_mb": 50,

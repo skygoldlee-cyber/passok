@@ -1,6 +1,7 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **feat(ops): labor ref_md 이미지 외부화 — 2,362파일(고유 1,165 에셋) 추적 해제 (DOC-RBK-25)** — 추적량 90.7→25.8MB·예산 120→40MB
 - **feat(ops): distmgr2 ref_md 이미지 외부화 — 3,121파일(고유 1,672 에셋) 추적 해제 (DOC-RBK-25)** — 추적량 95.1→4.7MB·예산 120→10MB. 1.5s 페이싱으로 primary·미러 전 구간 rate limit 무발생 완주
 - **chore(env): .env.example 스키마 확장 — 실사용 미선언 키 11건 등록** — Supabase Auth 프로바이더(GOOGLE/KAKAO)·SMTP 자격증명, Discord 공지 채널(DISCORD_ANNOUNCE·DISCORD_ANNOUNCE_<EXAM> 패턴·NOTIFY_MENTION), 공공데이터(DATA_GO_KR·KOSIS·HRD_OC 선택) — check:env 경고 11→0
 - **feat(ops): iteng ref_md 이미지 외부화 — 3,902파일(고유 2,437 에셋) 추적 해제 (DOC-RBK-25)** — 추적량 106.5→8.7MB·예산 140→20MB. 업로드 페이싱 600→1,500ms(GitHub 콘텐츠 생성 ~80/min 가이드 이내) — secondary rate limit 무발생으로 미러 전 구간 무중단 통과
