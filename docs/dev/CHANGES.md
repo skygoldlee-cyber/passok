@@ -1,6 +1,7 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **feat(ops): itindeng ref_md 이미지 외부화 — 2,847파일(고유 1,746 에셋) 추적 해제 (DOC-RBK-25)** — 추적량 67.6→5.7MB·예산 90→10MB. iteng과 동일 NCS 모듈 공유로 공용 샤드 풀이 전량 dedupe — 신규 업로드 0건으로 즉시 완료 (CAS 팩 간 공유 효과)
 - **feat(ops): skincare ref_md 이미지 외부화 — 5,867파일(고유 4,122 에셋) 추적 해제 (DOC-RBK-25)** — 추적량 88.7→1.9MB·예산 120→10MB. primary·미러 총 ~8,200콜로 core 쿼터 윈도우 2회 소진 — --auto 쿨다운 자동 재개로 완주
 - **feat(ops): labor ref_md 이미지 외부화 — 2,362파일(고유 1,165 에셋) 추적 해제 (DOC-RBK-25)** — 추적량 90.7→25.8MB·예산 120→40MB
 - **feat(ops): distmgr2 ref_md 이미지 외부화 — 3,121파일(고유 1,672 에셋) 추적 해제 (DOC-RBK-25)** — 추적량 95.1→4.7MB·예산 120→10MB. 1.5s 페이싱으로 primary·미러 전 구간 rate limit 무발생 완주
