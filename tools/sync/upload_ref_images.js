@@ -55,16 +55,18 @@ class RateLimitError extends Error {}
 let RATE_LIMITED = false;
 const isRateLimit = (e) => /rate limit/i.test(e.message || '');
 
-/** 릴리스 목록 프리페치 — 태그→id 맵 (목록 1~3회 요청으로 샤드별 태그 조회 생략) */
+/** 릴리스 목록 프리페치 — 태그→id 맵 (목록 1~3회 요청으로 샤드별 태그 조회 생략)
+ *  --jq 문자열 보간은 execFileSync 경유 시 Windows 인수 맹글링으로 깨짐 — 페이지별 JSON 조회 */
 let RELEASE_TAGS = null;
 function knownReleases(repo) {
   if (!RELEASE_TAGS) {
     RELEASE_TAGS = new Map();
     try {
-      const rels = gh(['api', `repos/${repo}/releases?per_page=100`, '--paginate', '--jq', '.[] | "\(.tag_name)\t\(.id)"'], false);
-      for (const line of rels.split('\n').filter(Boolean)) {
-        const [tag, id] = line.split('\t');
-        RELEASE_TAGS.set(tag, Number(id));
+      for (let page = 1; ; page++) {
+        const rels = gh(['api', `repos/${repo}/releases?per_page=100&page=${page}`]);
+        if (!Array.isArray(rels) || !rels.length) break;
+        for (const r of rels) RELEASE_TAGS.set(r.tag_name, r.id);
+        if (rels.length < 100) break;
       }
     } catch (e) {
       RELEASE_TAGS = null;   // 실패 시 빈 Map 잔존 방지 — 다음 사이클에 재조회

@@ -1,6 +1,7 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **feat(ops): insadj ref_md 이미지 외부화 — 2,262파일(고유 1,460 에셋) 추적 해제 (DOC-RBK-25)** — 공용 샤드 풀(ref-assets-{hh}·mirror-{hh}) 재사용으로 별도 릴리스 설계 없이 전환, 추적량 127.1→12.2MB·예산 160→20MB. prefetch --jq를 Windows execFileSync 인수 맹글링으로 페이지별 JSON 조회로 교체 — 샤드 태그 miss→create 422 남발 버그 수정
 - **feat(ops): lossadj ref_md 이미지 외부화 — sha256 샤드 호스팅 + 12,457파일 추적 해제 (DOC-RBK-25)** — GitHub Releases 릴리스당 에셋 1,000 하드 리밋 발견으로 assetBase `{hh}` 샤드 템플릿 도입(sha256 앞 2자리 → ref-assets-{hh}·ref-assets-mirror-{hh} 256샤드 공용 풀 + 기존 ref-img-lossadj flat 폴백 읽기 전용). 고유 에셋 10,058개 업로드·미러 동기화 완료, 추적 해제로 팩 추적량 413.2→20.3MB(-95%)·예산 520→40MB. 업로더 안정화: 요청 페이싱·secondary 제한 지수 쿨다운·create 422→태그 조회 복구·names 즉시 반영·prefetch 실패 복원. check_data_freshness git maxBuffer 64MB(1만+ 파일 변경 ENOBUFFER). convert·reffresh·reflayout의 "PDF 외부화" 판정을 manifests 선언 기준으로 수정 — PDF git 추적+이미지만 외부화하는 혼합 팩 지원. 복원 검증: 샘플 삭제 4건 sha256 복원·check:all 69단계
 - **feat(ops): ref_md 이미지 외부 호스팅 파이프라인 + fireelec 파일럿 (DOC-RBK-25)** — sha256 매니페스트(build:refimg)→GitHub Releases 에셋 업로드(upload:refimgs)→SW 해석·fetch 복원(fetch:refpdfs)·정합 게이트(check:refimg) 체계. fireelec 379파일(고유 364 에셋) 전환으로 25.3→12.6MB. 실전 수정: uploads.github.com 엔드포인트·릴리스 ACAO 부재 대응 SW no-cors opaque 폴백·미러 동기화 스킵 조건
 - **feat(ops): 시험 팩 규모 관리 도구 — sparse 선택 체크아웃·크기 예산·규모 감사·retired 티어** — pack:use(작업 팩만 체크아웃), check:size(팩별 budget_mb 래칫 + content_size_baseline.json 스탬프), audit:size(팩별 MB·티어 리포트), exams.json retired 티어(온보딩 요건 면제 퇴역 경로)
