@@ -14,7 +14,7 @@
     },
     "insadj": {
       "budget_mb": 20,
-      "stamped_bytes": 12835482
+      "stamped_bytes": 13214918
     },
     "lossadj": {
       "budget_mb": 40,
@@ -45,8 +45,8 @@
       "stamped_bytes": 43454267
     },
     "iteng": {
-      "budget_mb": 140,
-      "stamped_bytes": 111648116
+      "budget_mb": 20,
+      "stamped_bytes": 9173618
     },
     "itindeng": {
       "budget_mb": 90,

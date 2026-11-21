@@ -125,7 +125,7 @@ async function pool(items, n, fn) {
   async function worker() {
     while (!rateLimited && !RATE_LIMITED && i < items.length) {
       const item = items[i++];
-      await sleep(600);   // secondary limit(분당 콘텐츠 생성) 완화 — 워커당 ~1.7req/s 상한
+      await sleep(1500);  // secondary limit(콘텐츠 생성 ~80/min 가이드) 완화 — jobs2 시 ~80req/min 이하
       try { await fn(item); done++; }
       catch (e) {
         failed++;
