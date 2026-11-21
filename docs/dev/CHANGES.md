@@ -1,6 +1,7 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **feat(ops): distmgr2 ref_md 이미지 외부화 — 3,121파일(고유 1,672 에셋) 추적 해제 (DOC-RBK-25)** — 추적량 95.1→4.7MB·예산 120→10MB. 1.5s 페이싱으로 primary·미러 전 구간 rate limit 무발생 완주
 - **chore(env): .env.example 스키마 확장 — 실사용 미선언 키 11건 등록** — Supabase Auth 프로바이더(GOOGLE/KAKAO)·SMTP 자격증명, Discord 공지 채널(DISCORD_ANNOUNCE·DISCORD_ANNOUNCE_<EXAM> 패턴·NOTIFY_MENTION), 공공데이터(DATA_GO_KR·KOSIS·HRD_OC 선택) — check:env 경고 11→0
 - **feat(ops): iteng ref_md 이미지 외부화 — 3,902파일(고유 2,437 에셋) 추적 해제 (DOC-RBK-25)** — 추적량 106.5→8.7MB·예산 140→20MB. 업로드 페이싱 600→1,500ms(GitHub 콘텐츠 생성 ~80/min 가이드 이내) — secondary rate limit 무발생으로 미러 전 구간 무중단 통과
 - **feat(ops): insadj ref_md 이미지 외부화 — 2,262파일(고유 1,460 에셋) 추적 해제 (DOC-RBK-25)** — 공용 샤드 풀(ref-assets-{hh}·mirror-{hh}) 재사용으로 별도 릴리스 설계 없이 전환, 추적량 127.1→12.2MB·예산 160→20MB. prefetch --jq를 Windows execFileSync 인수 맹글링으로 페이지별 JSON 조회로 교체 — 샤드 태그 miss→create 422 남발 버그 수정

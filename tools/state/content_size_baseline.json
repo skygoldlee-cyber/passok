@@ -46,7 +46,7 @@
     },
     "iteng": {
       "budget_mb": 20,
-      "stamped_bytes": 9173618
+      "stamped_bytes": 9815730
     },
     "itindeng": {
       "budget_mb": 90,
@@ -69,8 +69,8 @@
       "stamped_bytes": 186352
     },
     "distmgr2": {
-      "budget_mb": 120,
-      "stamped_bytes": 99757929
+      "budget_mb": 10,
+      "stamped_bytes": 4961085
     },
     "distmgr3": {
       "budget_mb": 50,
