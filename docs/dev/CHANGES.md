@@ -1,6 +1,7 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **docs(biz): BeautyOS_MVP v1.2 — docs/exams/skincare/business/ 이동 + DOC-BIZ-14 채번** — content 참조자료에서 사업 문서 규약 위치로 이관. 리뷰 반영 9건: ① 모집 채널 계획(Sprint 0 통과 조건화) ② D-2 재방문 안내+체크 스트릭 훅(P1) ③ 링크 첫 진입 고객 동의 화면(recorded_by=client) ④ CSV 내보내기 1종(P1) ⑤ 인터뷰 질문에 CRM 내보내기 확인·스노우볼 경로 ⑥ AI 단가 추정 ⑦ 토큰 레이트리밋 ⑧ input_redacted 회귀 테스트(Sprint 2 조건) ⑨ 문서 배치 정정. docs/exams/skincare/README.md 신설(DOC-IDX-05)
 - **feat(ops): hairdresser ref_md 이미지 외부화 — 36,926파일(고유 36,119 에셋) 추적 해제 (DOC-RBK-25)** — 추적량 87.7→10.0MB·예산 110→15MB. 단일 최대 팩(전 에셋의 절반 규모) — primary 전용 업로드(--no-mirror)로 콜 절감, core 쿼터 윈도우 7회 소진·--auto 자동 재개 완주. 미러 동기화는 후속 백그라운드 보강 예정 (로컬 파일 보존되어 이중 실패 시나리오만 미커버)
 - **feat(ops): itindeng ref_md 이미지 외부화 — 2,847파일(고유 1,746 에셋) 추적 해제 (DOC-RBK-25)** — 추적량 67.6→5.7MB·예산 90→10MB. iteng과 동일 NCS 모듈 공유로 공용 샤드 풀이 전량 dedupe — 신규 업로드 0건으로 즉시 완료 (CAS 팩 간 공유 효과)
 - **feat(ops): skincare ref_md 이미지 외부화 — 5,867파일(고유 4,122 에셋) 추적 해제 (DOC-RBK-25)** — 추적량 88.7→1.9MB·예산 120→10MB. primary·미러 총 ~8,200콜로 core 쿼터 윈도우 2회 소진 — --auto 쿨다운 자동 재개로 완주

@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 468b2239a7447830
-> 생성: 2026-11-20 · 원천: SPEC.md(727개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: 71d8b76a41ebb787
+> 생성: 2026-11-22 · 원천: SPEC.md(727개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -1048,6 +1048,7 @@
 | DOC-BIZ-11 | docs/exams/carework/business/개인정보처리_위탁계약서_초안.md | — |
 | DOC-BIZ-12 | docs/exams/carework/business/전문가검토_의뢰서.md | — |
 | DOC-BIZ-13 | docs/dev/business/자격시험_학습매체_경쟁분석.md | — |
+| DOC-BIZ-14 | docs/exams/skincare/business/BeautyOS_MVP.md | — |
 | DOC-DEV-01 | docs/dev/SPEC.md | — |
 | DOC-DEV-02 | docs/dev/ARCHITECTURE.md | — |
 | DOC-DEV-03 | docs/dev/CHANGES.md | — |
@@ -1108,6 +1109,7 @@
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |
 | DOC-IDX-04 | docs/exams/carework/README.md | — |
+| DOC-IDX-05 | docs/exams/skincare/README.md | — |
 | DOC-PPL-01 | ref-pipeline/README.md | AO-01, AO-02, AO-03, AO-04, AO-05, BP-01, BP-02, BP-03, BP-04, BP-05, BP-06, BP-07, BP-08, CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10 |
 | DOC-PPL-02 | ref-pipeline/audiobook/README.md | AO-01, AO-02, AO-03, AO-04, AO-05 |
 | DOC-PPL-03 | ref-pipeline/audiobook/AUDIOBOOK_SUMMARY.md | AO-01, AO-02, AO-03, AO-04, AO-05 |

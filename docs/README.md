@@ -101,10 +101,10 @@ docs/
 │   ├── reference/             ← 명세·로직·참조 문서 (18개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (4개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (2개 — 사용자 매뉴얼·개인정보처리방침 + images/ — 런타임 fetch·배포 대상)
-└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (11개) · docs/exams/hazmat/ (2개)
+└── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (11개) · docs/exams/hazmat/ (2개) · docs/exams/skincare/ (2개)
     ├── README.md              ← 시험별 문서 인덱스
     ├── user/                  ← 학습자 문서 (5개)
-    ├── business/              ← 사업 기획·시장 조사·마케팅 문서 (cosmetic 6개 · carework 6개)
+    ├── business/              ← 사업 기획·시장 조사·마케팅 문서 (cosmetic 6개 · carework 6개 · skincare 1개)
     ├── design/                ← 시험 종속 설계 문서 (cosmetic 5개 — Formula OS 계열 · carework 4개 · hazmat 1개)
     ├── reference/             ← 교재 종속 참조 문서 (2개 — 번호체계·참조매핑)
     ├── report_archive/        ← 시점 스냅샷 보고서 + 대체된 전략 원전 (11개)
@@ -284,6 +284,12 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [개인정보처리_위탁계약서_초안.md](exams/carework/business/개인정보처리_위탁계약서_초안.md) | 기관 워크스페이스 수탁계약서 초안 — 표준양식 기반 + 별지 3종(처리항목·안전조치·재수탁자) (DOC-BIZ-11, 법무 0b 산출물) |
 | [전문가검토_의뢰서.md](exams/carework/business/전문가검토_의뢰서.md) | 위탁계약 전문가 검토 의뢰 패키지 — 서비스·사실관계 브리프 + 검토 질문 8건 + 첨부 문서 목록 (DOC-BIZ-12, 법무 0b) |
 
+## 💼 사업 문서 (docs/exams/skincare/business/)
+
+| 문서 | 설명 |
+|------|------|
+| [BeautyOS_MVP.md](exams/skincare/business/BeautyOS_MVP.md) | BeautyOS 피부샵 케어 연속성 MVP v1.2 — AI 케어 계획·고객 공유 링크·타임라인 + 검증 게이트·규제 점검 (DOC-BIZ-14) |
+
 ## 🔧 설계 문서 (docs/exams/carework/design/)
 
 | 문서 | 설명 |
@@ -383,6 +389,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-IDX-02 | `docs/exams/cosmetic/README.md` |
 | DOC-IDX-03 | `docs/assets/README.md` |
 | DOC-IDX-04 | `docs/exams/carework/README.md` |
+| DOC-IDX-05 | `docs/exams/skincare/README.md` |
 | DOC-DEV-01 | `docs/dev/SPEC.md` |
 | DOC-DEV-02 | `docs/dev/ARCHITECTURE.md` |
 | DOC-DEV-03 | `docs/dev/CHANGES.md` |
@@ -557,6 +564,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-BIZ-11 | `docs/exams/carework/business/개인정보처리_위탁계약서_초안.md` |
 | DOC-BIZ-12 | `docs/exams/carework/business/전문가검토_의뢰서.md` |
 | DOC-BIZ-13 | `docs/dev/business/자격시험_학습매체_경쟁분석.md` |
+| DOC-BIZ-14 | `docs/exams/skincare/business/BeautyOS_MVP.md` |
 | DOC-ARC-01 | docs/exams/cosmetic/report_archive/Cosmetic Master Business Plan.md |
 | DOC-ARC-02 | `docs/exams/cosmetic/report_archive/EXTERNAL_REVIEW_LEARNING_PRO.md` |
 | DOC-ARC-03 | `docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md` |
