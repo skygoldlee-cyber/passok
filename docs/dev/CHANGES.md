@@ -1,6 +1,7 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **fix(ci): check_refimg — 외부화 완료 팩의 스테일 검사 생략 (DOC-RBK-25)** — 선언+gitignore+추적 없음 팩은 로컬 파일 부재가 정상(매니페스트=원격 에셋 정본)인데 클린 클론 CI에서 상시 실패. 스테일(항목O·파일X) 검사를 추적 잔존 팩으로 한정 — 미등록 검사·ignore 정합은 유지
 - **docs(biz): BeautyOS_MVP v1.4 — 리뷰 반영 13건 (DOC-BIZ-14)** — ① QR 동의↔카드 귀속 규칙(자동 생성·pending·원장 지정) ② 동의 철회 파급 범위(공유 안내문 숨김·과거 로그 보존) ③ 수기 계획 승인 경로(ai_draft_json NULL) ④ 일반 테이블 RLS delete 분리(원장 전용 서버 API) ⑤ Phase 용어 통일(제품=MVP/MVP 이후, 진입=Phase) ⑥ 데이터 보관 기간 가설 ⑦ 토큰 만료 후 재활성·잠금 해제 CRM 확인 ⑧ 열람률 KPI 판정 하한 40% 병기 ⑨ OG 샵명 비노출 옵션 ⑩ Sprint 0.5 동의서 Google Form 고지 ⑪ 인프라 무료 티어 전제 명시 ⑫ 지속률 분모 병기 ⑬ 동명이인·체크 항목 위치·직원 로그인 명세
 - **docs(biz): BeautyOS_MVP v1.3 — 리뷰 반영 16건 (DOC-BIZ-14)** — ① 동의 시점 이동(매장 QR 고객 본인 동의 주경로, 링크는 확인·철회용) ② 고객용 안내문 초안 단계 동시 생성·승인 ③ 재방문 훅 재설계(D-2 자동 카톡→리마인드 문구 복사+체크 스트릭) ④ 고객당 1토큰·동적 범위·방문 기준 만료 ⑤ AI 원가 1%→7~10% 정정 ⑥ Sprint 0/0.5 판정 분리(공백 확인 vs 실현 확인) ⑦ 비지인 모집 경로 조건 ⑧ 열람 정의 크롤러 제외·OG 메타 고객 정보 금지 ⑨ 재방문 KPI 건수+정성 전환 ⑩ 음성 입력 국외 이전 명시 ⑪ 피부 관찰 기록 건강정보 여부 검토 추가 ⑫ CSV 열 필터링 ⑬ 링크 뒤 4자리 본인 확인 ⑭ RLS 동의·감사로그 insert-only ⑮ 범위 메타 정정 ⑯ 수작업 파일럿 전 위탁 합의·동의서
 - **docs(biz): BeautyOS_MVP v1.2 — docs/exams/skincare/business/ 이동 + DOC-BIZ-14 채번** — content 참조자료에서 사업 문서 규약 위치로 이관. 리뷰 반영 9건: ① 모집 채널 계획(Sprint 0 통과 조건화) ② D-2 재방문 안내+체크 스트릭 훅(P1) ③ 링크 첫 진입 고객 동의 화면(recorded_by=client) ④ CSV 내보내기 1종(P1) ⑤ 인터뷰 질문에 CRM 내보내기 확인·스노우볼 경로 ⑥ AI 단가 추정 ⑦ 토큰 레이트리밋 ⑧ input_redacted 회귀 테스트(Sprint 2 조건) ⑨ 문서 배치 정정. docs/exams/skincare/README.md 신설(DOC-IDX-05)

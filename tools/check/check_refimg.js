@@ -5,9 +5,12 @@
  * ref_md 이미지 외부화는 pdf_hosting.json의 imageManifests 선언 시험 단위로
  * 진행한다. 이 게이트는 이전 과정의 드리프트를 차단한다:
  *
- *   - 선언 시험의 작업트리 ref_md 이미지 ↔ 매니페스트 키 집합 동일 (양방향)
+ *   - 선언 시험의 작업트리 ref_md 이미지 ↔ 매니페스트 키 집합 정합
  *     · 파일 있고 항목 없음 → build:refimg 누락 (신규 이미지 미등록)
  *     · 항목 있고 파일 없음 → 매니페스트 스테일 (삭제 후 미재생성)
+ *       단, 외부화 완료(선언+ignore+추적 없음) 팩은 로컬 파일 부재가 정상 —
+ *       매니페스트가 원격 에셋 정본이라 스테일 검사를 적용하지 않는다
+ *       (CI는 fetch 없이 클린 클론이라 항목 잔존이 필수 조건이다)
  *     ※ 집합 정합만 검사 — 내용 해시는 fetch 시 sha256으로 검증 (게이트 속도)
  *   - .gitignore에 ref_md 이미지 제외 라인이 있는데 호스팅 미선언 → 차단
  *     (무선언 ignore는 추적 유실 → 다른 머신에서 파일 소실)
@@ -86,17 +89,21 @@ function main() {
       const manifest = JSON.parse(fs.readFileSync(mp, 'utf8'));
       const mKeys = new Set(Object.keys(manifest.files || manifest));
       const missing = Object.keys(files).filter((k) => !mKeys.has(k));
-      const stale = [...mKeys].filter((k) => !(k in files));
+      // 외부화 완료(선언+ignore+추적 없음) 팩은 로컬 파일 부재가 정상 — 매니페스트는
+      // 원격 에셋 정본이며 배포 SW가 그대로 사용한다. 파일이 추적되는 전환 준비
+      // 상태에서만 스테일(엔트리 O·파일 X)을 드리프트로 본다.
+      const tracked = trackedUnder(path.join(t.contentRoot, '참조자료', 'ref_md'))
+        .filter((f) => f.includes('/images/'));
+      const externalized = ignored && !tracked.length;
+      const stale = externalized ? [] : [...mKeys].filter((k) => !(k in files));
       if (missing.length) errors.push(`[${t.id}] ${m}: 미등록 이미지 ${missing.length}건 — npm run build:refimg (예: ${missing[0]})`);
       if (stale.length) errors.push(`[${t.id}] ${m}: 스테일 항목 ${stale.length}건 — 파일 삭제 후 미재생성 (예: ${stale[0]})`);
       if (!missing.length && !stale.length) {
-        const tracked = trackedUnder(path.join(t.contentRoot, '참조자료', 'ref_md'))
-          .filter((f) => f.includes('/images/'));
-        if (ignored && !tracked.length && !vIgnored) {
+        if (externalized && !vIgnored) {
           errors.push(`[${t.id}] git 추적 해제됐는데 .vercelignore 미제외 — 배포본만 이미지 서빙 불가`);
           continue;
         }
-        const state = ignored && !tracked.length ? '외부화 완료' : tracked.length ? `전환 준비 (추적 ${tracked.length}파일)` : '외부화 완료';
+        const state = externalized ? '외부화 완료' : `전환 준비 (추적 ${tracked.length}파일)`;
         infos.push(`[${t.id}] ${m} — ${mKeys.size}개 정합 · ${state}`);
       }
     }
