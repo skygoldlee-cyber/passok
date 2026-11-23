@@ -288,7 +288,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 
 | 문서 | 설명 |
 |------|------|
-| [BeautyOS_MVP.md](exams/skincare/business/BeautyOS_MVP.md) | BeautyOS 피부샵 케어 연속성 MVP v1.2 — AI 케어 계획·고객 공유 링크·타임라인 + 검증 게이트·규제 점검 (DOC-BIZ-14) |
+| [BeautyOS_MVP.md](exams/skincare/business/BeautyOS_MVP.md) | BeautyOS 피부샵 케어 연속성 MVP v1.4 — AI 케어 계획·고객 공유 링크·타임라인 + 검증 게이트·규제 점검 (DOC-BIZ-14) |
 
 ## 🔧 설계 문서 (docs/exams/carework/design/)
 

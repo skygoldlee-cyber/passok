@@ -11,7 +11,7 @@
 
 | 디렉터리 | 내용 | 판본 의존 |
 |------|------|------|
-| `business/` | 사업 기획·시장 조사 — `BeautyOS_MVP.md`(피부샵 케어 연속성 MVP v1.2, DOC-BIZ-14) | none |
+| `business/` | 사업 기획·시장 조사 — `BeautyOS_MVP.md`(피부샵 케어 연속성 MVP v1.4, DOC-BIZ-14) | none |
 
 ## 관련 플랫폼 문서 (docs/dev/)
 
