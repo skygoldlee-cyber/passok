@@ -28,11 +28,40 @@ const SYSTEM = '당신은 법령 개정 영향 분석 보조입니다. 변경된
 /** 변경된 ref_md 파일 목록 (git diff 기반) */
 function changedRefFiles(opts, flags) {
     if (opts.file) return [opts.file];
-    const args = flags.has('staged') ? ['diff', '--name-only', '--cached']
-        : opts.ref ? ['diff', '--name-only', `${opts.ref}..HEAD`]
-        : ['diff', '--name-only'];
+    const args = ['-c', 'core.quotepath=false', 'diff', '--name-only',
+        ...(flags.has('staged') ? ['--cached'] : opts.ref ? [`${opts.ref}..HEAD`] : [])];
     const out = execFileSync('git', args, { cwd: ROOT, encoding: 'utf-8' });
     return out.split(/\r?\n/).filter(f => f && /참조자료[/\\]ref_md[/\\].*\.md$/.test(f));
+}
+
+/** 파일별 변경 라인 범위(신본 기준) — git diff -U0 hunk 파싱 */
+function changedLineRanges(opts, flags) {
+    if (opts.file) return new Map(); // 범위 정보 없음 → 파일 전체 영향으로 간주
+    const args = ['-c', 'core.quotepath=false', 'diff', '-U0',
+        ...(flags.has('staged') ? ['--cached'] : opts.ref ? [`${opts.ref}..HEAD`] : []), '--', '*.md'];
+    let out;
+    try { out = execFileSync('git', args, { cwd: ROOT, encoding: 'utf-8', maxBuffer: 64 * 1024 * 1024 }); }
+    catch { return new Map(); }
+    const ranges = new Map();
+    let cur = null;
+    for (const line of out.split(/\r?\n/)) {
+        const df = line.match(/^\+\+\+ b\/(.+)$/);
+        if (df) { cur = df[1].trim(); continue; }
+        const h = line.match(/^@@ -\d+(?:,\d+)? \+(\d+)(?:,(\d+))? @@/);
+        if (h && cur) {
+            const start = +h[1], count = +(h[2] ?? 1);
+            if (!ranges.has(cur)) ranges.set(cur, []);
+            ranges.get(cur).push([start, Math.max(start, start + count - 1)]);
+        }
+    }
+    return ranges;
+}
+
+/** 인용 라인이 변경 범위에 닿는지 (전후 여유 MARGIN행 — 재변환 라인 이동 흡수) */
+const MARGIN = 10;
+function lineHit(lineNo, fileRanges) {
+    if (!fileRanges) return true; // 범위 정보 없으면 보수적으로 플래그
+    return fileRanges.some(([a, b]) => lineNo >= a - MARGIN && lineNo <= b + MARGIN);
 }
 
 function main0() {
@@ -46,8 +75,12 @@ function main0() {
     changed.forEach(f => console.log(`  ${f}`));
 
     // 변경 파일을 인용하는 문항 수집 — 인용 링크의 파일명 매칭(경로 정규화 후 endsWith)
+    // 라인 범위가 파악되면 인용 L번호가 변경 hunk ±MARGIN 안인 문항만 플래그
     const norm = s => s.replace(/\\/g, '/');
+    const ranges = changedLineRanges(opts, flags);
     const hits = [];
+    const seen = new Set(); // 파일|문항숫자 중복 방지 (파서 num↔로우 라벨 정규화)
+    const qk = n => String(n).replace(/\D/g, '');
     for (const target of getTargets(opts)) {
         for (const { exam, absPath } of listQbanks(target)) {
             const { questions, answers } = parseQuestionBank(absPath);
@@ -56,9 +89,28 @@ function main0() {
                 if (!ans) continue;
                 for (const cit of ans.citations) {
                     const rel = norm(path.relative(ROOT, path.resolve(path.dirname(absPath), cit.file)));
-                    if (changed.some(cf => norm(cf) === rel)) {
+                    if (changed.some(cf => norm(cf) === rel) && (!cit.lineNo || lineHit(cit.lineNo, ranges.get(rel)))) {
                         hits.push({ exam: exam.key, q, ans, cit, file: rel });
+                        seen.add(`${absPath}|${qk(q.num)}`);
                         break;
+                    }
+                }
+            }
+            // 로우 스캔 폴백 — ### S 등 파서 미인식 포맷의 인용도 포착
+            const fs = require('fs');
+            const lines = fs.readFileSync(absPath, 'utf-8').split('\n');
+            let cur = null, stem = '';
+            for (const line of lines) {
+                const hm = line.match(/^#{1,4}\s*([QS]\d+)\./) || line.match(/^\*\*([QS]\d+)\./);
+                if (hm) { cur = hm[1]; stem = line.replace(/^#+\s*|\*\*/g, '').slice(0, 60); continue; }
+                if (!cur) continue;
+                const cm = line.matchAll(/\[([^\]]*L(\d+)[^\]]*)\]\(<([^>]+?)(?:#L(\d+))?>\)/g);
+                for (const m of cm) {
+                    const rel = norm(path.relative(ROOT, path.resolve(path.dirname(absPath), m[3])));
+                    const ln = m[4] ? +m[4] : +m[2];
+                    if (changed.some(cf => norm(cf) === rel) && (!ln || lineHit(ln, ranges.get(rel))) && !seen.has(`${absPath}|${qk(cur)}`)) {
+                        hits.push({ exam: exam.key, q: { num: cur, stem }, ans: { answer: '?' }, cit: { label: m[1], lineNo: ln }, file: rel });
+                        seen.add(`${absPath}|${qk(cur)}`);
                     }
                 }
             }

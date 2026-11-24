@@ -207,6 +207,7 @@ const AUDIT_STEPS = [
   nodeStep('audit:gateutil', 'tools/audit/audit_gate_utility.js', '감사', 'P2 단계 효용 감사 — 실행 텔레메트리·기준선 갱신 이력으로 미발화/고빈도 게이트 식별', { prio: 'p2' }),
   nodeStep('audit:size', 'tools/audit/audit_exam_size.js', '감사', '시험 팩 콘텐츠 규모 리포트 — 팩별 추적 MB·예산 사용률·구성 (외부화·퇴역 판단 자료)', { prio: 'p2' }),
   nodeStep('audit:scorecard', 'tools/audit/audit_content_scorecard.js', '감사', '콘텐츠 검수 스코어카드 — 팩별 문항·해설·인용·정답누락·교재 본문량 + 보강 우선순위 (--exam=과목 상세)', { prio: 'p2' }),
+  nodeStep('audit:stale', 'tools/ai/ai_stale_scan.js', '감사', '법령 개정 영향 — 미커밋 ref_md 변경 hunk 범위 인용 문항 재검증 대기 목록 (AI-12)', { prio: 'p2' }),
 ];
 
 // ── 실패 복구 안내 (run.js 요약의 근본원인 그룹핑) ─────────────────────
@@ -262,7 +263,7 @@ function resolveSteps(preset, opts = {}) {
 /** --step 조회용 통합 레지스트리 (프리셋 간 id 중복은 같은 명령이므로 첫 등록 유지) */
 function allSteps() {
   const map = new Map();
-  for (const s of [STEP_HTML, STEP_LANDING, ...contentSteps({}), BUILD_STEP, ...DOCS_STEPS, ...CI_STEPS, ...REFS_STEPS]) {
+  for (const s of [STEP_HTML, STEP_LANDING, ...contentSteps({}), BUILD_STEP, ...DOCS_STEPS, ...CI_STEPS, ...REFS_STEPS, ...AUDIT_STEPS]) {
     if (!map.has(s.id)) map.set(s.id, s);
   }
   return [...map.values()];

@@ -52,12 +52,14 @@ function getTargets(opts = {}) {
         t.manifest && (!opts.exam || t.id === opts.exam));
 }
 
-/** 시험 대상의 manifest 등록 문제은행 파일 목록 → [{target, exam, absPath}] */
+/** 시험 대상의 manifest 등록 문제은행 파일 목록 → [{target, exam, absPath}] (객관식 exams[] + 주관식 written[]) */
 function listQbanks(target) {
-    return (target.manifest.exams || []).map(exam => ({
+    const all = [...(target.manifest.exams || []), ...(target.manifest.written || [])];
+    const seen = new Set();
+    return all.map(exam => ({
         target, exam,
         absPath: path.join(ROOT, target.contentRoot, '문제은행', exam.file),
-    })).filter(e => fs.existsSync(e.absPath));
+    })).filter(e => e.exam.file && fs.existsSync(e.absPath) && !seen.has(e.absPath) && seen.add(e.absPath));
 }
 
 /** 초안 출력 경로 (생성 보장) */
