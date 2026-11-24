@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: becf2c506c52af35
+> 입력 해시: da77a37a08c4525d
 > 생성: 2026-11-24 · 원천: SPEC.md(728개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -457,7 +457,7 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| ES-01 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-36<br>DOC-DSN-38<br>DOC-DSN-53<br>…외 2개 | html/views/exam-select.html<br>index.html<br>src/core/exam-context.js<br>src/shell/app-dashboard.js<br>…외 3개 | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-context.test.js<br>tests/unit/app/exam-select-group.test.js<br>…외 1개 | DOC-ARC-07 | — |
+| ES-01 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-36<br>DOC-DSN-38<br>DOC-DSN-53<br>…외 2개 | html/views/exam-select.html<br>index.html<br>src/core/exam-context.js<br>src/shell/app-dashboard.js<br>…외 4개 | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-context.test.js<br>tests/unit/app/exam-select-group.test.js<br>…외 1개 | DOC-ARC-07 | — |
 | ES-02 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-25<br>DOC-DSN-36<br>DOC-DSN-38<br>…외 1개 | src/core/exam-context.js<br>src/shell/app-shell.js<br>src/views/exam-select.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
 | ES-03 | ✅ | E2E 테스트 | DOC-DSN-10<br>DOC-DSN-36<br>DOC-DSN-38<br>DOC-RBK-16 | src/core/exam-context.js<br>src/shell/app-shell.js<br>src/views/exam-select.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/dom/study/study-examselect.dom.test.js<br>tests/e2e/exam-switch.spec.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
 | ES-04 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-36<br>DOC-DSN-38<br>DOC-RBK-16 | src/core/exam-context.js | tests/dom/exam/exam-switching.dom.test.js<br>tests/unit/app/exam-context.test.js | DOC-ARC-07 | — |
@@ -847,7 +847,7 @@
 | DA-03 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | src/content/data-loader.js | tests/unit/app/data-loader.test.js | — | — |
 | DA-04 | ✅ | 테스트 | DOC-RBK-03<br>DOC-REF-08 | tools/build/build_study_md_bundle.js | tests/unit/app/data-architecture.test.js | — | — |
 | DA-05 | ✅ | 테스트 | DOC-DEV-09<br>DOC-DSN-18<br>DOC-RBK-03<br>DOC-REF-08 | src/core/state.js<br>src/core/storage.js | tests/unit/app/state.test.js | — | — |
-| DA-06 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-18<br>DOC-DSN-53<br>DOC-RBK-03<br>…외 1개 | src/core/exam-context.js<br>src/core/paths.js<br>src/pwa/pwa-manifest.js<br>tools/build/exam_targets.js<br>…외 2개 | tests/unit/app/data-architecture.test.js<br>tests/unit/gates/exam-onboard.test.js | — | — |
+| DA-06 | ✅ | 테스트 | DOC-DSN-10<br>DOC-DSN-18<br>DOC-DSN-53<br>DOC-RBK-03<br>…외 1개 | src/core/exam-context.js<br>src/core/paths.js<br>src/pwa/pwa-manifest.js<br>tools/build/exam_targets.js<br>…외 3개 | tests/unit/app/data-architecture.test.js<br>tests/unit/gates/exam-onboard.test.js | — | — |
 | DA-07 | ✅ | 테스트 | DOC-DEV-09<br>DOC-DSN-10<br>DOC-RBK-03<br>DOC-REF-08 | src/core/exam-context.js<br>src/core/storage-keys.js<br>src/core/storage.js<br>tools/check/check_seed_keys.js | tests/unit/gates/storage-key-sync.test.js | — | — |
 | DA-08 | ✅ | 테스트 | DOC-ADR-16<br>DOC-DSN-08<br>DOC-DSN-10<br>DOC-DSN-18<br>…외 2개 | src/core/exam-context.js<br>tools/check/check_feature_flags.js | tests/unit/app/data-architecture.test.js | — | — |
 | DA-09 | ✅ | 테스트 | DOC-ADR-06<br>DOC-DEV-09<br>DOC-RBK-03<br>DOC-REF-08 | src/core/storage.js<br>tools/check/check_storage_access.js | tests/unit/app/storage.test.js | — | — |

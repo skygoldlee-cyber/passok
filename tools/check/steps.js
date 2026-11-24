@@ -206,6 +206,7 @@ const AUDIT_STEPS = [
   nodeStep('audit:tools', 'tools/audit/audit_tool_usage.js', '감사', 'tools/ 도달성·죽은 단계 감사 — 진입점→import 그래프 도달 불가 파일·프리셋 미소속 단계', { prio: 'p2' }),
   nodeStep('audit:gateutil', 'tools/audit/audit_gate_utility.js', '감사', 'P2 단계 효용 감사 — 실행 텔레메트리·기준선 갱신 이력으로 미발화/고빈도 게이트 식별', { prio: 'p2' }),
   nodeStep('audit:size', 'tools/audit/audit_exam_size.js', '감사', '시험 팩 콘텐츠 규모 리포트 — 팩별 추적 MB·예산 사용률·구성 (외부화·퇴역 판단 자료)', { prio: 'p2' }),
+  nodeStep('audit:scorecard', 'tools/audit/audit_content_scorecard.js', '감사', '콘텐츠 검수 스코어카드 — 팩별 문항·해설·인용·정답누락·교재 본문량 + 보강 우선순위 (--exam=과목 상세)', { prio: 'p2' }),
 ];
 
 // ── 실패 복구 안내 (run.js 요약의 근본원인 그룹핑) ─────────────────────

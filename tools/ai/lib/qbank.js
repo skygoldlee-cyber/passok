@@ -45,7 +45,7 @@ function parseQuestionBank(mdPath) {
             continue;
         }
         if (!cur) continue;
-        if (line.startsWith('**Q')) { questions.push(cur); cur = null; break; } // 정답 섹션 진입
+        if (line.startsWith('**Q')) { questions.push(cur); cur = null; continue; } // 정답 블록 진입 — 인라인 포맷(교배)은 이후 ### Q가 계속됨
         const om = line.match(OPTION_RE);
         if (om) cur.options.push({ n: CIRCLED[om[1]], text: om[2].trim() });
         else if (line.trim() && !line.startsWith('---') && !line.startsWith('##')) cur.stem += ' ' + line.trim();

@@ -25,7 +25,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `all` | 69 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
 | `refs` | 6 | 참조자료 검증 묶음 — 레이아웃·귀속·신선도·인용 라인·병합 품질 |
 | `freshness` | 10 | 생성물 신선도 묶음 — 파생물 미재생성 감지 |
-| `audit` | 15 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |
+| `audit` | 16 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |
 
 ## 2. 검증 단계 카탈로그 (steps.js 레지스트리)
 
@@ -359,7 +359,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 |---|---|---|
 | `npm run ratchet:coverage` | `node tools/check/coverage_merge.js --ratchet` | 유닛(node:test + c8)과 DOM(vitest) 커버리지 병합 |
 
-### `audit:*` — 10개
+### `audit:*` — 11개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -373,6 +373,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run audit:specfresh` | `node tools/audit/audit_spec_fresh.js` | SPEC 활성(✅) 행 중 코드 @spec 참조 0건 나열 (노후 요구사항 후보) |
 | `npm run audit:doclinks` | `node tools/audit/audit_doc_links.js` | docs/dev/ 문서 중 어디서도 미참조 파일 나열 (노후 문서 후보) |
 | `npm run audit:size` | `node tools/audit/audit_exam_size.js` | 시험 팩 콘텐츠 규모 리포트 (advisory) |
+| `npm run audit:scorecard` | `node tools/audit/audit_content_scorecard.js` | 콘텐츠 검수 스코어카드 (advisory) |
 
 ### `ci:*` — 3개
 

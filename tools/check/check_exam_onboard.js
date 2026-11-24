@@ -26,67 +26,19 @@
 const fs = require('fs');
 const path = require('path');
 const { getExamTargets } = require('../build/exam_targets.js');
+const {
+    MOCK_ROUNDS_REQUIRED, MOCK_ROUNDS_RECOMMENDED, MIN_TEXTBOOK_CHARS_PER_SUBJECT,
+    TIERS, VALID_TIERS, tierOf, perSubjectQ, requiredFor, recommendedFor, floorFor,
+    findSyllabusDoc, hasSyllabusTable, isStandardChapter, questionCount, writtenCount, textbookChars,
+} = require('../lib/exam_readiness.js');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const QUIET = process.argv.includes('--quiet');
-
-/** 정식 승격 정량 기준 — 과목당 모의고사 N회분 문항 (manifest exams 파일 ###Q 실측).
- *  과목당 출제 문항 수는 manifest.integratedExam.questionsPerSubject 선언 우선,
- *  미선언 시 DEFAULT_Q_PER_SUBJECT로 간주한다. */
-const MOCK_ROUNDS_REQUIRED = 3;
-const MOCK_ROUNDS_RECOMMENDED = 6;
-const DEFAULT_Q_PER_SUBJECT = 20;
-/** 정식 승격 팩 과목별 표준형 교재 최소 본문량 — 비공백 문자 기준.
- *  ~A4 13쪽 분량. 시중 수험서 절당 4쪽·최소 5절 구성을 하한으로 삼는다. */
-const MIN_TEXTBOOK_CHARS_PER_SUBJECT = 20000;
-/** 과목 1회 출제 문항 수 — questionsPerSubject 선언 우선, 미선언 20 간주 */
-const perSubjectQ = (manifest, subjKey) =>
-    ((manifest.integratedExam || {}).questionsPerSubject || {})[subjKey] || DEFAULT_Q_PER_SUBJECT;
-
-/** 과목별 요구 문항 수 — 모의고사 MOCK_ROUNDS_REQUIRED회 비반복 구성 가능량 (active 승격 기준) */
-const requiredFor = (manifest, subjKey) => MOCK_ROUNDS_REQUIRED * perSubjectQ(manifest, subjKey);
-
-/** 과목별 권장 문항 수 — 모의고사 MOCK_ROUNDS_RECOMMENDED회 비반복 구성량 (품질 권장, 비차단) */
-const recommendedFor = (manifest, subjKey) => MOCK_ROUNDS_RECOMMENDED * perSubjectQ(manifest, subjKey);
-
-/** 정식 팩 최소 sanity 바닥 — 과목당 1회분 미만이면 모의고사 1회도 비반복 구성 불가 */
-const floorFor = (manifest, subjKey) => perSubjectQ(manifest, subjKey);
 
 /** 기준 상향(모의고사 3회분) 이전 정식 승격 팩 — 신기준 미달은 오류가 아닌 보강 권장(warn)으로 보고 */
 const MOCK3X_GRANDFATHERED = new Set(['broker', 'indsafe', 'compapp2', 'carework']);
 /** 교재 볼륨 하한 신설 이전 active 팩 — 스텁 볼륨도 차단이 아닌 보강 권장(warn)으로 보고 */
 const TEXTBOOK_VOLUME_GRANDFATHERED = new Set(['broker', 'indsafe', 'compapp2']);
-
-/** 성숙도 티어 — draft(선언) < pilot(출제기준+표준형 챕터) < active(pilot+과목당 ≥최소 문항) */
-const TIERS = ['draft', 'pilot', 'active'];
-/** retired — 퇴역 팩: 성숙도 요건 면제. 빌드·기존 사용자 접근은 유지하고 승격/신규 요건 검사 대상에서만 제외 */
-const VALID_TIERS = [...TIERS, 'retired'];
-const tierOf = (entry) => entry.tier || (entry.comingSoon ? 'pilot' : 'active');
-
-/** 참조자료/ref_md 하위의 출제기준 문서 경로 (파일명 매칭, 깊이 제한) */
-function findSyllabusDoc(dir, depth = 0) {
-    if (depth > 5 || !fs.existsSync(dir)) return null;
-    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-        if (e.isDirectory()) {
-            const found = findSyllabusDoc(path.join(dir, e.name), depth + 1);
-            if (found) return found;
-        } else if (e.isFile() && e.name.endsWith('.md') && e.name.includes('출제기준')) {
-            return path.join(dir, e.name);
-        }
-    }
-    return null;
-}
-
-/** 출제기준 문서가 과목|주요항목|세부내용 표 형식을 포함하는지 (감사 파싱 가능 형식) */
-function hasSyllabusTable(file) {
-    return /\|\s*과목\s*\|/m.test(fs.readFileSync(file, 'utf8'));
-}
-
-/** 챕터 파일 존재 + 번호 챕터 헤딩 (## N. 또는 ## Chapter NN. — 표준 규약은 Chapter NN., 이모지 접두 허용) */
-function isStandardChapter(file) {
-    if (!fs.existsSync(file)) return false;
-    return /^##\s+(?:\S+\s+)*(?:Chapter\s+)?\d+\./m.test(fs.readFileSync(file, 'utf8').slice(0, 20000));
-}
 
 const errors = [];
 const warns = [];
@@ -98,30 +50,6 @@ const info = (s, m) => infos.push(`[${s}] ${m}`);
 const EXAMS_JSON = path.join(ROOT, 'content', 'exams.json');
 const examsEntry = JSON.parse(fs.readFileSync(EXAMS_JSON, 'utf-8')).exams || [];
 const entryOf = (id) => examsEntry.find((e) => e.id === id) || {};
-
-/** 문제은행 파일의 ###Q 문항 수 (check_manifest.js와 동일 규칙) */
-function questionCount(contentRoot, file) {
-    const p = path.join(ROOT, contentRoot, '문제은행', file);
-    if (!fs.existsSync(p)) return null;
-    return (fs.readFileSync(p, 'utf-8').match(/^###\s*Q\d+/gm) || []).length;
-}
-
-/** 과목별 표준형 교재 본문량 — manifest chapters[] 선언 파일의 비공백 문자 합계 */
-function textbookChars(contentRoot, subject) {
-    let total = 0;
-    for (const c of subject.chapters || []) {
-        const f = typeof c === 'string' ? c : c.file;
-        if (!f) continue;
-        const p = path.join(ROOT, contentRoot, subject.dir || '', f);
-        if (fs.existsSync(p)) {
-            total += fs.readFileSync(p, 'utf-8')
-                .replace(/```[\s\S]*?```/g, '')
-                .replace(/[#>*`\-\[\]()|]/g, '')
-                .replace(/\s/g, '').length;
-        }
-    }
-    return total;
-}
 
 const targets = getExamTargets(ROOT);
 const rows = [];
@@ -150,7 +78,7 @@ for (const t of targets) {
     let totalQ = 0;
     const qBySubject = {};
     for (const ex of t.manifest.exams || []) {
-        const n = ex.file ? questionCount(t.contentRoot, ex.file) : null;
+        const n = ex.file ? questionCount(ROOT, t.contentRoot, ex.file) : null;
         if (n === null) { err(t.id, `문제은행 파일 부재: ${ex.file}`); continue; }
         totalQ += n;
         if (ex.subject) qBySubject[ex.subject] = (qBySubject[ex.subject] || 0) + n;
@@ -159,9 +87,7 @@ for (const t of targets) {
     for (const w of t.manifest.written || []) {
         if (!w.key || !w.file) continue;
         const wPath = path.join(ROOT, t.contentRoot, '문제은행', w.file);
-        if (!fs.existsSync(wPath)) continue;
-        const sN = (fs.readFileSync(wPath, 'utf8').match(/^###\s*S\d+/gm) || []).length;
-        qBySubject[w.key] = (qBySubject[w.key] || 0) + sN;
+        qBySubject[w.key] = (qBySubject[w.key] || 0) + writtenCount(wPath);
     }
 
     // ── 등급 정합 ──
@@ -210,7 +136,7 @@ for (const t of targets) {
                 if (MOCK3X_GRANDFATHERED.has(t.id)) warn(t.id, `${msg} (기준 상향 전 승격 팩 — 보강 권장)`);
                 else err(t.id, msg);
             }
-            const tbBySubject = Object.fromEntries(subjects.map((s) => [s.key, textbookChars(t.contentRoot, s)]));
+            const tbBySubject = Object.fromEntries(subjects.map((s) => [s.key, textbookChars(ROOT, t.contentRoot, s)]));
             const thinVol = subjects.filter((s) => (tbBySubject[s.key] || 0) < MIN_TEXTBOOK_CHARS_PER_SUBJECT);
             if (thinVol.length) {
                 const msg = `tier active 요건: 과목당 표준형 교재 ${MIN_TEXTBOOK_CHARS_PER_SUBJECT}자 미충족 — ${thinVol.map((s) => `${s.key}:${tbBySubject[s.key] || 0}자`).join(', ')}`;
@@ -242,7 +168,7 @@ for (const t of targets) {
     rows.push({
         id: t.id, soon, tier, subjects: subjects.length,
         textbookFiles: subjects.reduce((n, s) => n + (s.chapters || []).length, 0),
-        textbookKChars: Math.round(subjects.reduce((n, s) => n + textbookChars(t.contentRoot, s), 0) / 1000),
+        textbookKChars: Math.round(subjects.reduce((n, s) => n + textbookChars(ROOT, t.contentRoot, s), 0) / 1000),
         totalQ, features: Object.keys(entry.features || {}).length,
         minRounds, optional: optional.join('+') || '-',
     });

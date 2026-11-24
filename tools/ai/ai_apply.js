@@ -211,7 +211,8 @@ function syncQuestionCounts(target, exam, newTitle, perBankCount) {
         const c = fs.existsSync(p) ? (fs.readFileSync(p, 'utf-8').match(/^###\s*Q\d+\./gm) || []).length : 0;
         return s + (e === exam ? perBankCount : c);
     }, 0);
-    const blockRe = new RegExp(`("id":\\s*"${target.id}"[\\s\\S]*?문제은행\\s*)[\\d,]+(문)`, '');
+    // 엔트리 경계를 넘지 않도록 다음 "id" 직전까지만 탐색 — desc에 문항수 패턴이 없으면 무치환
+    const blockRe = new RegExp(`("id":\\s*"${target.id}"(?:(?!"id":)[\\s\\S])*?문제은행\\s*)[\\d,]+(문)`, '');
     fs.writeFileSync(exJson, exSrc.replace(blockRe, `$1${total.toLocaleString('en-US')}$2`), 'utf-8');
 }
 

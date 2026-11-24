@@ -191,6 +191,7 @@
     "audit:specfresh": "node tools/audit/audit_spec_fresh.js",
     "audit:doclinks": "node tools/audit/audit_doc_links.js",
     "audit:size": "node tools/audit/audit_exam_size.js",
+    "audit:scorecard": "node tools/audit/audit_content_scorecard.js",
     "check:provenance": "node tools/check/check_doc_provenance.js",
     "build:textbook-print": "node tools/build/build_textbook_print.js"
   },
