@@ -4928,6 +4928,8 @@ DOCX 본문 종결 부동 표(`tblpYSpec=bottom`) 안 `wp:inline` QR 이미지�
 > 검증: 모든 `src/*.js` `node --check` 통과 · `node tools/build/index.js` 재빌드 성공 ·
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+- **feat(lossadj): 문항 보강 완료 — 승격가능 상태 도달 (pilot 첫 충족)** — ①1차 객관식 ai:draft 63문 편입(과목당 20→40~44문, 필수 24문 충족) 후 메타 문항 3건(과목2 Q25·과목3 Q23·Q25 — 목차 구성·학습 특성 발문) 제거 ②2차 주관식 ai_draft_written 초안 2과목 생성 → 메타·중복 필터로 이론 +22·손해평가 +26문 편입(각 60문·3회분) + cite_backfill 인용 전량 부착 → 5과목 전부 해설·인용 100%. 사후 정정: 수동 삭제가 syncQuestionCounts를 우회해 manifest 제수(43→42제·42→40제)·desc(129→126문) 드리프트 발생 — 수동 정정, WP-05 인용 베이스 테스트는 뷰어가 상대경로 범용 해석함을 확인하고 ../교재/ 허용으로 확장
+
 ## 2026-10-23 테스트 임시 디렉터리 누수 차단 — mkdtemp 픽스처 after 정리 훅
 
 - **배경**: `mkdtempSync` 후 정리 없이 종료하는 테스트가 %TEMP%에 픽스처 디렉터리를 누적 — 잔재 ~3,800개 관측(manifest-·anchor-·gloss-·sw-·metasec-·glosssig-·exam-plugin-·syn-·passok-*)

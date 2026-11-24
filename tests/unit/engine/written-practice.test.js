@@ -104,7 +104,7 @@ test('parseWrittenBank: 실제 2차 파일 파싱 (lossadj 팩)', () => {
     const md = readFileSync(
         join(ROOT, 'content/exams/lossadj/문제은행/2차_손해평가_주관식.md'), 'utf8');
     const bank = parseWrittenBank(md);
-    assert.equal(bank.questions.length, 34);
+    assert.equal(bank.questions.length, 60);
     // 전 문항에 문제·모범답안·배점·인용이 존재해야 한다
     for (const q of bank.questions) {
         assert.ok(q.problem.length > 0, `${q.id} 문제 누락`);
@@ -176,7 +176,7 @@ test('WP-05: 인용 refs는 뷰어가 필요로 하는 path+line을 제공', () 
     for (const q of bank.questions) {
         for (const r of q.refs) {
             assert.ok(r.path.endsWith('.md'), `${q.id} 인용 경로 이상: ${r.path}`);
-            assert.ok(r.path.startsWith('../참조자료/'), `${q.id} 인용 베이스 이상: ${r.path}`);
+            assert.ok(r.path.startsWith('../참조자료/') || r.path.startsWith('../교재/'), `${q.id} 인용 베이스 이상: ${r.path}`);
             assert.ok(typeof r.line === 'number' && r.line > 0, `${q.id} #LNN 누락`);
         }
     }
