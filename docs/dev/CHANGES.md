@@ -1,6 +1,7 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **feat(indsafe): practical 주관식 인용 앵커 백필 — 인용 0→100% + 스코어카드 집계 갭 수정** — 실기_주관식_연습.md 26문에 기계 인용 부착: S2~S26 구조형 문항은 답안 키워드↔교재 섹션 매칭으로 `⚖️ [교재 Lnn](<…#Lnn>)` 블록 말미 삽입(25건), S1 블록 모범답안 **S1.~S6.**의 기존 ⚖️ 파일링크 10건에 #L 앵커 부착 — 답안 내용 검증으로 시행규칙 별표4 L49·중처법 제6조 L12·기준규칙 제50조 L54·산안법 제36조 L418로 조문 정밀화(초기 기계매칭이 '## 제조' 평탄 헤더로 오매칭된 3건+제164조 오매칭 1건 교정). scorecard는 정답 인정 문항(has)에서 인용 블록 스캔을 생략해 S1~S6의 인용을 미집계하던 갭을 `!has \|\| !ci`로 수정
 - **feat(indsafe): 문제은행 AI 초안 279문 편입 — 객관식 6과목 전부 60문+** — 표준형 교재 청크 기반 ai:draft 배치(count 2~3, gemini-3.8-flash) → 은행·초안 간 어휘 유사도 dupcheck(≥0.55 제거 3건) + 메타 문항 필터(Chapter 매칭·출제기준·빈출 표시·학습 구성 등 교재 자체 발문 33건 제거) → ai:apply --drafts 편입. 과목당 22→64~77문으로 승격 기준(60문·3회분) 객관식 6과목 충족. practical(주관식 실기)·교재 본문량(전 과목 2만자 미달)은 잔여 백로그 — ref_md 8문서 ai:textbook 확장 초안 tmp/ai_drafts/indsafe/ 생성 완료·리뷰 대기
 - **feat(broker): 문제은행 AI 초안 430문 편입 + hazmat 이형 정답마커 수정** — ai:coverage로 미출제 구간(과목당 인용 커버 2~8%) 식별 후 표준형 교재 청크 기반 ai:draft 배치 생성(7과목 430건, gemini-3.8-flash) → 어휘 유사도 dupcheck 0건(최대 0.35, 임계 0.55) → ai:apply --drafts 편입. 과목당 20→49~108문으로 승격 기준(과목 60문·3회분) 전 과목 충족. hazmat 과목2는 `****Qn**.**` 이형 마커 10건(Q2·Q57·Q81~88)을 `**Qn.**` 표준으로 수정 — 파서 미인식으로 정답이 빠져 있던 실제 결함 복구. ai_apply 실행 중 발견한 syncQuestionCounts 정규식 엔트리 경계 버그(desc 오염)는 선행 커밋에서 수정
 - **fix(ci): broker 콘텐츠 크기 예산 30→45MB 상향 + indsafe SOURCE_COLLECT 링크린트 해소** — 하위법령 19종·조례 15종 편입으로 broker 37.5MB 초과 발생, 의도적 성장으로 budget_mb 상향. SOURCE_COLLECT.md의 'ref_md/_archive' 원시 경로 표기를 일반 명사로 정정(LL-05). src/pdf-registry.js 재생성 커밋 누락분도 반영

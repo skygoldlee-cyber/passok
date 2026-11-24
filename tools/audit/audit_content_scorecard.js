@@ -60,7 +60,7 @@ function fileCoverage(absPath) {
     qAt.forEach((q, i) => {
         const ans = answers.get(q.num);
         let has = !!ans || modelAns.has(q.num), ex = !!(ans && ans.explain) || modelAns.has(q.num), ci = !!(ans && ans.citations.length);
-        if (!has) {
+        if (!has || !ci) {
             const end = i + 1 < qAt.length ? qAt[i + 1].line : lines.length;
             for (let j = q.line; j < end; j++) {
                 const l = lines[j];
