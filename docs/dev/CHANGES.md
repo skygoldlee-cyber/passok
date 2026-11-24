@@ -4928,6 +4928,8 @@ DOCX 본문 종결 부동 표(`tblpYSpec=bottom`) 안 `wp:inline` QR 이미지�
 > 검증: 모든 `src/*.js` `node --check` 통과 · `node tools/build/index.js` 재빌드 성공 ·
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+- **feat(admagent): 승격가능 — 7과목 전부 기준 충족 (488문)** — 1차 객관식 3과목 ai:draft 편입(civGen 80·admLaw 84·admSci 84, 필요 75) + 2차 주관식 4과목 ai_draft_written 6패스 → 필터 편입(civContract·admProc·officeMgmt·admPractice 각 60문) + 인용 전량 부착
+
 - **feat(insadj): 승격가능 — 2차 주관식 3과목 보강 완료** — prop·vehicle·bodily는 객관식이 아닌 2차 주관식 과목(manifest written[])이어서 ai_draft_written 파이프라인 적용: 8패스 초안 → 메타·중복 필터로 재물 +38·차량 +40·신체 +36문 편입(각 60문) + 인용 전량 부착 → 6과목 전부 기준 충족(1차 76·60·76 + 2차 60×3)
 
 - **feat(skincare·insadj): 문항 보강 — skincare 승격가능 + insadj 3과목 충족** — ①skincare: 객관식 ai:draft 2과목 편입(skinTheory 186·hygiene 72, 권장 상한 절단) + 실기 주관식 11패스 초안 120건 중 중복 필터 55문 편입(발문·답안 분리형 포맷 변환, 5→60문) + 인용 전량 부착 → 승격가능. 사고 복구: ai_apply가 지정 외 잔존 초안 817건을 일괄 편입 → 은행 되돌리고 의도분만 재적용(파일명=과목키 규약·draft_ 접두 스캔 확인) ②insadj: 1차 객관식 3과목 초안 편입(contract 76·act 60·theory 76) — prop·vehicle·bodily는 2차 주관식 과목으로 주관식 초안 파이프라인 별도 진행 중

@@ -91,28 +91,28 @@
   },
   "exams": {
     "s_civil": {
-      "questions": 20
+      "questions": 69
     },
     "s_econ": {
-      "questions": 20
+      "questions": 69
     },
     "s_law": {
-      "questions": 20
+      "questions": 65
     },
     "s_realestate": {
-      "questions": 20
+      "questions": 39
     },
     "s_accounting": {
-      "questions": 20
+      "questions": 69
     },
     "s2_theory": {
-      "questions": 10
+      "questions": 60
     },
     "s2_law": {
-      "questions": 10
+      "questions": 60
     },
     "s2_work": {
-      "questions": 10
+      "questions": 60
     }
   }
 }
