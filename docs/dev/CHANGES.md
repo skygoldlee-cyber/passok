@@ -4928,6 +4928,8 @@ DOCX 본문 종결 부동 표(`tblpYSpec=bottom`) 안 `wp:inline` QR 이미지�
 > 검증: 모든 `src/*.js` `node --check` 통과 · `node tools/build/index.js` 재빌드 성공 ·
 > **관련 SPEC ID**: 해당 없음 (변경 이력 — 개별 항목이 관련 ID 인용)
 
+- **feat(labor): 선택과목 은행 신설 + 노동법 과목 보강 (진행 중)** — 과목5_문제은행.md 신규(기출 33~35회 경제60+경영60=120문, 원문 #L 인용)·manifest exams[] 등록 → elective 120문·인용100% · labor_law1 구 초안 140문 편입(200제)·labor_law2 204문 편입(264제) — civil·social_ins 초안 생성 중
+
 - **feat(hairdresser·appraisal): 승격가능 — 전 과목 기준 충족** — hairdresser 실기 주관식 60문(27패스 풀 679→필터 편입+인용) · appraisal realestate +22문(원론 참조 16 apply+개론 참조 수동 편입, 메타·중복 제거 후 재번호) → 8과목 전부 60문+ 
 
 - **feat(admagent): 승격가능 — 7과목 전부 기준 충족 (488문)** — 1차 객관식 3과목 ai:draft 편입(civGen 80·admLaw 84·admSci 84, 필요 75) + 2차 주관식 4과목 ai_draft_written 6패스 → 필터 편입(civContract·admProc·officeMgmt·admPractice 각 60문) + 인용 전량 부착
