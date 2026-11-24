@@ -52,3 +52,5 @@
 {"ts":"2026-11-24T12:18:03.660Z","draft":"C:\\Project\\PassOK\\tmp\\ai_drafts\\indsafe\\draft_construction.md","kind":"draft","target":"indsafe","bank":"과목6_문제은행.md","generated":48,"applied":48,"skipped":0}
 {"ts":"2026-11-24T12:18:03.671Z","draft":"C:\\Project\\PassOK\\tmp\\ai_drafts\\indsafe\\draft_electric.md","kind":"draft","target":"indsafe","bank":"과목4_문제은행.md","generated":47,"applied":47,"skipped":0}
 {"ts":"2026-11-24T12:18:03.681Z","draft":"C:\\Project\\PassOK\\tmp\\ai_drafts\\indsafe\\draft_safetyMgmt.md","kind":"draft","target":"indsafe","bank":"과목1_문제은행.md","generated":55,"applied":55,"skipped":0}
+{"ts":"2026-11-24T12:51:38.306Z","draft":"C:\\Project\\PassOK\\tmp\\ai_drafts\\compapp2\\draft_computer.md","kind":"draft","target":"compapp2","bank":"과목1_문제은행.md","generated":41,"applied":41,"skipped":0,"model":"gemini-3.8-flash","edited":true}
+{"ts":"2026-11-24T12:51:38.316Z","draft":"C:\\Project\\PassOK\\tmp\\ai_drafts\\compapp2\\draft_spreadsheet.md","kind":"draft","target":"compapp2","bank":"과목2_문제은행.md","generated":42,"applied":42,"skipped":0,"model":"gemini-3.8-flash","genDate":"2026-11-24T12:43:18.864Z","edited":true}
