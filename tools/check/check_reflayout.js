@@ -26,7 +26,7 @@
  * 의존성 없음 (Node 내장 모듈만 사용).
  */
 
-// @spec CS-03,CS-09
+// @spec CS-03,CS-09,CS-15
 const fs = require('fs');
 const path = require('path');
 
@@ -177,6 +177,24 @@ function checkExam(t) {
     for (const e of arr) checkEntry(e, subj);
   for (const e of refs.referenceCommon || []) checkEntry(e, '공통');
   for (const e of refs.referenceLaw || []) checkEntry(e, '법령고시');
+
+  // ---------- ⑤ 법령형 ref_md → referenceLaw 등록 (CS-15) ----------
+  // 미등록 법령 문서는 개정 감시(lawRefs→notice-check) 대상에서 빠진다.
+  // 등록 매칭은 파일 기본명 기준 — pdf 타입(법령고시/원본 PDF 모델)·ref_md 타입 모두 허용.
+  const LAW_DOC = /\((법률|대통령령|부령|총리령|조례|고시|훈령|예규)\)/;
+  const regLawFiles = new Set(
+    (refs.referenceLaw || []).map(e => (e.file || '').replace(/\.(pdf|md)$/i, ''))
+  );
+  const regLawBase = new Set(
+    [...regLawFiles].map(f => f.replace(/\([^)]*\)/g, '').trim())
+  );
+  for (const doc of Object.keys(refMdDocs)) {
+    if (!LAW_DOC.test(doc)) continue;
+    if (regLawFiles.has(doc)) continue;
+    const base = doc.replace(/\([^)]*\)/g, '').trim();
+    if (regLawBase.has(base)) warn(`${tag} 미등록 구버전 법령 ref_md 잔존: ${doc} (동명 최신본 등록됨 — _archive 검토)`);
+    else err(`${tag} 법령 ref_md가 referenceLaw 미등록 — 개정 감시 공백: ${doc} (CS-15)`);
+  }
 
   // ---------- ④ ref_md 링크 해석 ----------
   let linkOk = 0, linkBad = 0;

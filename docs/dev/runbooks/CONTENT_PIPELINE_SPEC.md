@@ -35,6 +35,17 @@ manifest.json · sw.js · data/ 번들 · 게이트 통과
 - 구 `tmp/sources/`는 폐기 — 전 자산이 `materials/` 하위로 통합됨 (NEW_EXAM_RUNBOOK의 `tmp/sources` 언급은 구식 표기)
 - 수집 도구·중간 산출물은 `tmp/materials/<id>/tools/`·`_sources/`에 둔다
 
+### 법령 중심 팩의 수집 완결 기준 (CS-15)
+
+법령을 출제 소재로 하는 팩은 다음을 완결 조건으로 추적한다 — `tmp/materials/<id>/NEEDS.md`에 미수집 목록을 유지하고 전부 해소한다.
+
+| 항목 | 완결 기준 |
+|---|---|
+| 하위법령 전수 | 출제범위 각 법의 **법률+시행령+시행규칙** 3종 — DRF `lawSearch`로 실존 여부 확인 후 미존재는 NEEDS에 사유 기록 (fetch 도구는 `tmp/materials/*/tools/fetch_*.py` 선례 재사용) |
+| 부속 법규 | 출제범위에 해당하는 고시·자치법규(`target=ordin`)·약관·공제규정까지 NEEDS 목록화 — 수동 수집 필요분도 명시 |
+| referenceLaw 등록 | ref_md 법령형 문서는 `referenceLaw`에 `{name,file,type,dir}` 등록 — **미등록은 개정 감시 공백** (CS-15, `check:reflayout` 차단) |
+| 감시 연결 | `lawRefs`(lawdb 슬러그) + `notice_status.json` 등록으로 주간 개정 체크(`notice-check.yml`) 순회 대상 편입 |
+
 ### 소재 선별 기준
 
 | 소재 | 편입 판단 |

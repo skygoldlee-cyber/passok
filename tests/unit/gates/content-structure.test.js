@@ -1,5 +1,5 @@
 // tests/unit/content-structure.test.js — 콘텐츠 소스 레이아웃 검증
-// @spec CS-01,CS-02,CS-03,CS-04,CS-05,CS-06,CS-07,CS-08,CS-09,CS-10,CS-13
+// @spec CS-01,CS-02,CS-03,CS-04,CS-05,CS-06,CS-07,CS-08,CS-09,CS-10,CS-13,CS-15
 // manifest 선언 ↔ 실제 파일 구조 정합성, ref_md 귀속 계층,
 // ASCII 슬러그 산출물, 큐레이션/원료/오디오 경로를 고정한다.
 
@@ -213,4 +213,32 @@ test('CS-13: 이야기형을 제공하는 팩은 Series Bible + 인물 설정표
       `${exam}: docs/인물 설정표.md 없음 (이야기형 팩의 인물 정본)`);
   }
   assert.ok(checked >= 2, `이야기형 팩 탐지 실패 (현재 ${checked}개)`);
+});
+
+// ---------- CS-15: 법령 ref_md → referenceLaw 등록 (개정 감시 연결) ----------
+
+test('CS-15: 법령형 ref_md 문서는 전 팩에서 referenceLaw에 등록된다', () => {
+  const LAW_DOC = /\((법률|대통령령|부령|총리령|조례|고시|훈령|예규)\)/;
+  const examsRoot = join(ROOT, 'content', 'exams');
+  const missing = [];
+  for (const exam of list(examsRoot)) {
+    const examRoot = join(examsRoot, exam);
+    if (!statSync(examRoot).isDirectory()) continue;
+    const refRoot = join(examRoot, '참조자료', 'ref_md');
+    const refsPath = join(examRoot, 'references.json');
+    if (!existsSync(refRoot) || !existsSync(refsPath)) continue;
+    const refs = JSON.parse(readFileSync(refsPath, 'utf-8'));
+    const regFiles = new Set(
+      (refs.referenceLaw || []).map(e => (e.file || '').replace(/\.(pdf|md)$/i, '')));
+    const regBase = new Set(
+      [...regFiles].map(f => f.replace(/\([^)]*\)/g, '').trim()));
+    for (const sd of list(refRoot).filter(d => /^과목\d$/.test(d))) {
+      for (const doc of list(join(refRoot, sd))) {
+        if (!LAW_DOC.test(doc)) continue;
+        const base = doc.replace(/\([^)]*\)/g, '').trim();
+        if (!regFiles.has(doc) && !regBase.has(base)) missing.push(`${exam}/${doc}`);
+      }
+    }
+  }
+  assert.deepEqual(missing, [], `referenceLaw 미등록 법령 ref_md (개정 감시 공백):\n  ${missing.join('\n  ')}`);
 });

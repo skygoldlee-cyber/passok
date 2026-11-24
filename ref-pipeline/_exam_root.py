@@ -163,6 +163,9 @@ def parse_ref_filename(file_name: str):
     check_mfds_notice.py·check_laws.py가 공용으로 사용한다.
     """
     name = re.split(r'\(', file_name)[0].strip()
+    nfc = re.search(r'\((NF[TP]C\s*[^()]*)\)', file_name)
+    if nfc:  # 화재안전기술·성능기준 공식명 접미는 검색명의 일부 (첫 괄호 분리로 유실 방지)
+        name = f'{name}({nfc.group(1)})'
     m = _NOTICE_RE.search(file_name)
     target = 'law' if _LAW_AGENCY_RE.search(file_name) else 'admrul'
     url = 'https://www.law.go.kr/' + ('법령' if target == 'law' else '행정규칙') \

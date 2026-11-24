@@ -85,3 +85,23 @@ class TestParseRefFilename:
         ]:
             d = _exam_root.parse_ref_filename(fn)
             assert d['target'] == 'admrul', f'{fn} → {d["target"]}'
+
+    def test_nftc_suffix_kept_in_name(self):
+        """화재안전기술·성능기준 공식명의 (NFTC·NFPC NNN) 접미는 검색명의 일부 —
+        첫 괄호 분리로 유실되면 admrul 정확 일치가 실패한다."""
+        for fn, name in [
+            ('누전경보기의 화재안전기술기준(NFTC 205)(소방청고시).md',
+             '누전경보기의 화재안전기술기준(NFTC 205)'),
+            ('자동화재탐지설비 및 시각경보장치의 화재안전성능기준(NFPC 203)(소방청고시).md',
+             '자동화재탐지설비 및 시각경보장치의 화재안전성능기준(NFPC 203)'),
+        ]:
+            d = _exam_root.parse_ref_filename(fn)
+            assert d['name'] == name, f'{fn} → {d["name"]}'
+            assert d['target'] == 'admrul'
+            assert d['baselineNotice'] is None  # (제N호)(날짜) 규약 없음
+
+    def test_plain_law_name_unchanged(self):
+        """법종 괄호가 첫 괄호인 일반 법령명은 기존 파싱 그대로."""
+        d = _exam_root.parse_ref_filename('소방기본법(법률).md')
+        assert d['name'] == '소방기본법'
+        assert d['target'] == 'law'

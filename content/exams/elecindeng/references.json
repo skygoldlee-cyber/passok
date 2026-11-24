@@ -1,61 +1,109 @@
 {
-  "schemaVersion": 1,
-  "_comment": "참조자료 매핑 설정. ref_md = 한국전기설비규정(KEC)·전기사업법·전기설비기술기준 — fireelec/indsafe 이식 + DRF admrul 렌더. SOURCE_COLLECT.md 참조.",
-  "lawRefs": [],
-  "noticeCore": null,
-  "subjectDefaultRefdoc": {
-    "과목5": "전기설비기술기준(기후에너지환경부고시)(제2025-87호)(20251001).md"
+ "schemaVersion": 1,
+ "_comment": "참조자료 매핑 설정. ref_md = 한국전기설비규정(KEC)·전기사업법·전기설비기술기준 — fireelec/indsafe 이식 + DRF admrul 렌더. SOURCE_COLLECT.md 참조.",
+ "lawRefs": [],
+ "noticeCore": null,
+ "subjectDefaultRefdoc": {
+  "과목5": "전기설비기술기준(기후에너지환경부고시)(제2025-87호)(20251001).md"
+ },
+ "subjectDirMap": {
+  "em": "과목1",
+  "power": "과목2",
+  "mach": "과목3",
+  "circuit": "과목4",
+  "regs": "과목5",
+  "University Physics Vol.2 전기장·전위·커패시턴스(OpenStax)(CC BY-NC-SA)": "과목1",
+  "University Physics Vol.2 자기장·전자유도·인덕턴스·전자파(OpenStax)(CC BY-NC-SA)": "과목1",
+  "MIT 6.061 전력계통·조류해석(MIT OCW)(CC BY-NC-SA)": "과목2",
+  "전력거래사 학습가이드 제3과목 전력계통(KPX)(2026)": "과목2",
+  "MIT 6.061 전기기기(MIT OCW)(CC BY-NC-SA)": "과목3",
+  "University Physics Vol.2 직류·교류회로(OpenStax)(CC BY-NC-SA)": "과목4",
+  "MIT 6.002 회로·전자 강의노트(MIT OCW)(CC BY-NC-SA)": "과목4",
+  "Introduction to Control Systems(Toronto Metropolitan)(CC BY-NC)": "과목4"
+ },
+ "docSubjectRules": [
+  [
+   "출제기준|시험제도|시행계획",
+   1,
+   "출제기준·시행제도 문서 → 과목1 귀속 (multiSubjectDocs 공동 인용)"
+  ],
+  [
+   "전기설비기술기준|한국전기설비규정|KEC|전기사업법|전기공사업법|전기안전관리법",
+   5,
+   "전기설비 기술기준·KEC·전기 법령(전기사업·공사업·안전관리) → 과목5"
+  ]
+ ],
+ "multiSubjectDocs": [
+  "전기산업기사 출제기준(한국산업인력공단)(2027)"
+ ],
+ "refDirs": [],
+ "referenceLaw": [
+  {
+   "name": "한국전기설비규정 (KEC)",
+   "file": "한국전기설비규정(기후에너지환경부공고).md",
+   "type": "ref_md",
+   "dir": "ref_md/과목5/한국전기설비규정(기후에너지환경부공고)"
   },
-  "subjectDirMap": {
-    "em": "과목1",
-    "power": "과목2",
-    "mach": "과목3",
-    "circuit": "과목4",
-    "regs": "과목5",
-    "University Physics Vol.2 전기장·전위·커패시턴스(OpenStax)(CC BY-NC-SA)": "과목1",
-    "University Physics Vol.2 자기장·전자유도·인덕턴스·전자파(OpenStax)(CC BY-NC-SA)": "과목1",
-    "MIT 6.061 전력계통·조류해석(MIT OCW)(CC BY-NC-SA)": "과목2",
-    "전력거래사 학습가이드 제3과목 전력계통(KPX)(2026)": "과목2",
-    "MIT 6.061 전기기기(MIT OCW)(CC BY-NC-SA)": "과목3",
-    "University Physics Vol.2 직류·교류회로(OpenStax)(CC BY-NC-SA)": "과목4",
-    "MIT 6.002 회로·전자 강의노트(MIT OCW)(CC BY-NC-SA)": "과목4",
-    "Introduction to Control Systems(Toronto Metropolitan)(CC BY-NC)": "과목4"
+  {
+   "name": "전기설비기술기준",
+   "file": "전기설비기술기준(기후에너지환경부고시)(제2025-87호)(20251001).md",
+   "type": "ref_md",
+   "dir": "ref_md/과목5/전기설비기술기준(기후에너지환경부고시)(제2025-87호)(20251001)"
   },
-  "docSubjectRules": [
-    [
-      "출제기준|시험제도|시행계획",
-      1,
-      "출제기준·시행제도 문서 → 과목1 귀속 (multiSubjectDocs 공동 인용)"
-    ],
-    [
-      "전기설비기술기준|한국전기설비규정|KEC|전기사업법",
-      5,
-      "전기설비 기술기준·KEC·전기사업법 → 과목5"
-    ]
-  ],
-  "multiSubjectDocs": [
-    "전기산업기사 출제기준(한국산업인력공단)(2027)"
-  ],
-  "refDirs": [],
-  "referenceLaw": [
-    {
-      "name": "한국전기설비규정 (KEC)",
-      "file": "한국전기설비규정(기후에너지환경부공고).md",
-      "type": "ref_md",
-      "dir": "ref_md/과목5/한국전기설비규정(기후에너지환경부공고)"
-    },
-    {
-      "name": "전기설비기술기준",
-      "file": "전기설비기술기준(기후에너지환경부고시)(제2025-87호)(20251001).md",
-      "type": "ref_md",
-      "dir": "ref_md/과목5/전기설비기술기준(기후에너지환경부고시)(제2025-87호)(20251001)"
-    },
-    {
-      "name": "전기사업법",
-      "file": "전기사업법(법률)(제21467호)(20260918).md",
-      "type": "ref_md",
-      "dir": "ref_md/과목5/전기사업법(법률)(제21467호)(20260918)"
-    }
-  ],
-  "refDirsComment": "물리 PDF 미확보 — ref_md만 (KEC PDF는 fireelec 팩의 ref-pdf-fireelec 릴리스에 원본 존재)."
+  {
+   "name": "전기사업법",
+   "file": "전기사업법(법률)(제21467호)(20260918).md",
+   "type": "ref_md",
+   "dir": "ref_md/과목5/전기사업법(법률)(제21467호)(20260918)"
+  },
+  {
+   "name": "전기사업법 시행령",
+   "file": "전기사업법 시행령(대통령령)(제36804호)(20261110).md",
+   "type": "ref_md",
+   "dir": "ref_md/과목5/전기사업법 시행령(대통령령)(제36804호)(20261110)"
+  },
+  {
+   "name": "전기사업법 시행규칙",
+   "file": "전기사업법 시행규칙(부령)(제00063호)(20261016).md",
+   "type": "ref_md",
+   "dir": "ref_md/과목5/전기사업법 시행규칙(부령)(제00063호)(20261016)"
+  },
+  {
+   "name": "전기공사업법",
+   "file": "전기공사업법(법률)(제21467호)(20260918).md",
+   "type": "ref_md",
+   "dir": "ref_md/과목5/전기공사업법(법률)(제21467호)(20260918)"
+  },
+  {
+   "name": "전기공사업법 시행령",
+   "file": "전기공사업법 시행령(대통령령)(제36586호)(20260918).md",
+   "type": "ref_md",
+   "dir": "ref_md/과목5/전기공사업법 시행령(대통령령)(제36586호)(20260918)"
+  },
+  {
+   "name": "전기공사업법 시행규칙",
+   "file": "전기공사업법 시행규칙(부령)(제00001호)(20251001).md",
+   "type": "ref_md",
+   "dir": "ref_md/과목5/전기공사업법 시행규칙(부령)(제00001호)(20251001)"
+  },
+  {
+   "name": "전기안전관리법",
+   "file": "전기안전관리법(법률)(제21467호)(20260918).md",
+   "type": "ref_md",
+   "dir": "ref_md/과목5/전기안전관리법(법률)(제21467호)(20260918)"
+  },
+  {
+   "name": "전기안전관리법 시행령",
+   "file": "전기안전관리법 시행령(대통령령)(제35998호)(20260102).md",
+   "type": "ref_md",
+   "dir": "ref_md/과목5/전기안전관리법 시행령(대통령령)(제35998호)(20260102)"
+  },
+  {
+   "name": "전기안전관리법 시행규칙",
+   "file": "전기안전관리법 시행규칙(부령)(제00056호)(20260918).md",
+   "type": "ref_md",
+   "dir": "ref_md/과목5/전기안전관리법 시행규칙(부령)(제00056호)(20260918)"
+  }
+ ],
+ "refDirsComment": "물리 PDF 미확보 — ref_md만 (KEC PDF는 fireelec 팩의 ref-pdf-fireelec 릴리스에 원본 존재)."
 }
