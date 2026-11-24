@@ -1,5 +1,18 @@
 [
   {
+    "version": "v20261124-dc3c52f",
+    "date": "2026-11-24",
+    "notes": [
+      "[수정·ci] broker 콘텐츠 예산 45MB 상향 + indsafe SOURCE_COLLECT 링크린트 해소",
+      "[정리·build] pdf-registry 재생성 — 전 팩 신규 referenceLaw 반영",
+      "[정리·refs] 구버전 법령 ref_md 13종 _archive 이동 + hazmat referenceFiles.law 정정",
+      "[기능·refs] CS-15 법령 참조자료 등록 계약 + 전 팩 미수집 하위법령 일괄 해소",
+      "[기능·broker] 하위법령 19종 + 시·도 중개보수 조례 15종 ref_md 편입",
+      "[정리·notice] 법령·고시 감시 상태 갱신 2026-11-23",
+      "[정리·release] v20261123-aca2779 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261123-aca2779",
     "date": "2026-11-23",
     "notes": [
@@ -233,14 +246,6 @@
       "hazmat 3과목 재검토 반영: 할로젠간화합물 복원·등급 정정·8장 수치 보강",
       "hazmat 3과목: 법정 수치 표 보강·사실 오류 정정·용어 통일",
       "[content·hazmat] 2과목 반복 서술 정리 + 📌 메타 헤딩 대단원 하위로 강등"
-    ]
-  },
-  {
-    "version": "v20261116-a66ca3b",
-    "date": "2026-11-16",
-    "notes": [
-      "[기능·exam] hazmat 서브브랜드 Passzard·practiceName Danger OS 등록",
-      "[정리·release] v20261116-20bf8e5 스탬프 확정 [no-docs]"
     ]
   }
 ]
