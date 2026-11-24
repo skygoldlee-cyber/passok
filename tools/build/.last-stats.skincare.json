@@ -63,7 +63,7 @@
   },
   "exams": {
     "subject1": {
-      "questions": 20
+      "questions": 186
     },
     "subject2": {
       "questions": 20
@@ -75,7 +75,7 @@
       "questions": 20
     },
     "subject5": {
-      "questions": 20
+      "questions": 72
     }
   }
 }
