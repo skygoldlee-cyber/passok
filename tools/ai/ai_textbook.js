@@ -43,6 +43,15 @@ function findRefDocs(target) {
     if (!fs.existsSync(base)) return [];
     const docs = [];
     for (const sdir of fs.readdirSync(base, { withFileTypes: true })) {
+        // 평탄형: ref_md/{문서}.md — 과목 공통 문서 (출제기준 등)
+        if (sdir.isFile() && sdir.name.endsWith('.md')) {
+            const absPath = path.join(base, sdir.name);
+            docs.push({
+                docName: sdir.name.replace(/\.md$/, ''), subjectDir: '', absPath,
+                mdRel: path.relative(path.join(ROOT, target.contentRoot), absPath).replace(/\\/g, '/'),
+            });
+            continue;
+        }
         if (!sdir.isDirectory() || !/^과목\d+$/.test(sdir.name)) continue;
         const sdirAbs = path.join(base, sdir.name);
         for (const d of fs.readdirSync(sdirAbs, { withFileTypes: true })) {

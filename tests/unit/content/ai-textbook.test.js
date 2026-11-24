@@ -132,6 +132,6 @@ test('findRefDocs: 실제 저장소의 ref 문서 해석', () => {
     const lossadj = getExamTargets(ROOT).find(t => t.id === 'lossadj');
     const docs = findRefDocs(lossadj);
     assert.ok(docs.length >= 1, 'lossadj ref 문서 존재');
-    assert.ok(docs.every(d => /^과목\d+$/.test(d.subjectDir)));
+    assert.ok(docs.every(d => /^과목\d+$/.test(d.subjectDir) || d.subjectDir === ''));
     assert.ok(docs.every(d => d.mdRel.startsWith('참조자료/ref_md/')));
 });

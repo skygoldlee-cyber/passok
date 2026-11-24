@@ -25,7 +25,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `all` | 69 | 저장소 전체 검증 — lint·types·docs·콘텐츠·테스트 일괄 |
 | `refs` | 6 | 참조자료 검증 묶음 — 레이아웃·귀속·신선도·인용 라인·병합 품질 |
 | `freshness` | 10 | 생성물 신선도 묶음 — 파생물 미재생성 감지 |
-| `audit` | 16 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |
+| `audit` | 17 | 감시·감사 묶음 — P2 advisory (실패해도 종료 0·차단 없음) |
 
 ## 2. 검증 단계 카탈로그 (steps.js 레지스트리)
 
@@ -128,6 +128,18 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `refs:lines` | P1 | 참조 | `node tools/check/check_ref_lines.js` | 교재 (LNN)/📌출처 조문 ↔ ref_md 실제 내용 |
 | `refs:format` | P1 | 참조 | `node tools/check/check_refmd_format.js` | ref_md 추출 잔재·평탄화 형식 — lone CR·제어문자·PUA·초장문 줄 차단 |
 | `refs:merge` | P2 | 참조 | `node tools/check/check_refmerge.js` | ref_md joinWraps 병합 품질 감사 |
+| `studyq` | P2 | 품질 | `node tools/audit/audit_study_quality.js --check` | 학습 품질 감사 — 스마트학습 배분·맞춤학습 추천 규칙 정합 (기준선 회귀 게이트) |
+| `audit:combo` | P2 | 감사 | `npm.cmd run audit:combo` | 복수정답형 품질 감사 (정답 유일성·중복 진술집합·모순쌍·위치편향) |
+| `audit:syllabus` | P2 | 감사 | `npm.cmd run audit:syllabus` | 출제기준 정합 감사 — 교재 과목·챕터 ↔ 출제기준 문서 대조 (문서부재·미반영 리포트) |
+| `audit:adlint` | P2 | 감사 | `npm.cmd run check:adlint` | 광고 문구 사전 커버리지 감사 (FO-68) |
+| `audit:lawurls` | P2 | 감사 | `npm.cmd run check:lawurls` | law.go.kr 라이브 링크 검증 (외부 드리프트 — 네트워크 필요) |
+| `audit:onboard` | P2 | 감사 | `node tools/check/check_exam_onboard.js` | 시험 팩 온보딩·승격 진단 (comingSoon↔콘텐츠 정합·필수 선언·선택 자산) |
+| `audit:ce06` | P2 | 감사 | `node tools/audit/audit_ce06.js` | CE-06 가독성·정보 밀도 감사 — 문장·문단·표·목록·도식 규약 위반 지표 (원문 인용 섹션 면제, 비차단) |
+| `audit:tools` | P2 | 감사 | `node tools/audit/audit_tool_usage.js` | tools/ 도달성·죽은 단계 감사 — 진입점→import 그래프 도달 불가 파일·프리셋 미소속 단계 |
+| `audit:gateutil` | P2 | 감사 | `node tools/audit/audit_gate_utility.js` | P2 단계 효용 감사 — 실행 텔레메트리·기준선 갱신 이력으로 미발화/고빈도 게이트 식별 |
+| `audit:size` | P2 | 감사 | `node tools/audit/audit_exam_size.js` | 시험 팩 콘텐츠 규모 리포트 — 팩별 추적 MB·예산 사용률·구성 (외부화·퇴역 판단 자료) |
+| `audit:scorecard` | P2 | 감사 | `node tools/audit/audit_content_scorecard.js` | 콘텐츠 검수 스코어카드 — 팩별 문항·해설·인용·정답누락·교재 본문량 + 보강 우선순위 (--exam=과목 상세) |
+| `audit:stale` | P2 | 감사 | `node tools/ai/ai_stale_scan.js` | 법령 개정 영향 — 미커밋 ref_md 변경 hunk 범위 인용 문항 재검증 대기 목록 (AI-12) |
 
 ## 3. npm 스크립트 전체 (package.json)
 
@@ -198,7 +210,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run check:docbundles` | `node tools/build/build_doc_bundles.js --check` | 앱 공용), content/exams/<id>/docs/*.md (디렉터리 스캔 — 시험별) |
 | `npm run check:datafresh` | `node tools/check/check_data_freshness.js` | 생성물(data/ 번들·keyword-index·sw.js 자산 목록 등)과 |
 | `npm run check:hooks` | `node tools/check/check_hooks.js` | Git 훅 설치 여부 (미설치 시 로컬 게이트 우회 경고) |
-| `npm run check:lawurls` | `node tools/check/check_law_urls.js` | law.go.kr 한글주소 유효성 전수 검증 |
+| `npm run check:lawurls` | `node tools/check/check_law_urls.js` | law.go.kr 라이브 링크 검증 (외부 드리프트 — 네트워크 필요) |
 | `npm run check:linklint` | `node tools/check/check_link_lint.js` | 렌더 출력 기준 사용자 노출 링크 린트 |
 | `npm run check:docs` | `node tools/check/run.js --preset docs` | 문서 정합 묶음 (docs 프리셋 위임) |
 | `npm run check:textbookdocs` | `node tools/check/check_textbook_docs.js` | 교재 갱신 ↔ `판본: textbook` 문서 신선도 |
@@ -232,7 +244,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run check:uia` | `node tools/check/check_nouncheckedindex.js` | noUncheckedIndexedAccess 잔여 래칫 (TS 점진 전환 Phase 2, ADR-0015) |
 | `npm run check:cplx` | `node tools/check/check_complexity.js` | 순환복잡도 래칫 (타입 래칫과 동형 단조 감소 계약) |
 | `npm run check:refimg` | `node tools/check/check_refimg.js` | ref_md 이미지 ↔ refimg_hashes 매니페스트 정합 게이트 (DOC-RBK-25) |
-| `npm run check:adlint` | `node tools/check/check_adlint_coverage.js` | 광고 점검 사전 커버리지 감사 (FO-68) |
+| `npm run check:adlint` | `node tools/check/check_adlint_coverage.js` | 광고 문구 사전 커버리지 감사 (FO-68) |
 | `npm run check:binary` | `node tools/check/check_binary.js` | 대형·외부화 대상 바이너리 신규 유입 게이트 |
 | `npm run check:manifest` | `node tools/check/check_manifest.js` | manifest 선언 ↔ 실제 파일/자산 정합성 검증 |
 | `npm run check:content` | `node tools/check/run.js --preset content` | 통합 검증 실행기 (모든 check 프리셋의 단일 진입점) |
@@ -365,11 +377,11 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 |---|---|---|
 | `npm run audit:cards` | `node tools/audit/audit_card_quality.js` | 콘텐츠 품질 자동 감사 도구 |
 | `npm run audit:ce06` | `node tools/audit/audit_ce06.js` | CE-06 가독성·정보 밀도 규약 감사 (advisory) |
-| `npm run audit:combo` | `node tools/audit/audit_combo.js` | 복수정답형 생성 번들 품질 감사 |
+| `npm run audit:combo` | `node tools/audit/audit_combo.js` | 복수정답형 품질 감사 (정답 유일성·중복 진술집합·모순쌍·위치편향) |
 | `npm run audit:study` | `node tools/audit/audit_study_quality.js` | 스마트학습·맞춤학습 품질 감사 |
 | `npm run audit:tools` | `node tools/audit/audit_tool_usage.js` | tools/ 도달성·단계 생존 감사 (advisory 전용, 종료 0) |
 | `npm run audit:gates` | `node tools/audit/audit_gate_utility.js` | P2(감시·감사) 단계 효용 감사 (advisory 전용, 종료 0) |
-| `npm run audit:syllabus` | `node tools/audit/audit_syllabus_alignment.js` | 교재 과목·챕터 구조 ↔ 출제기준 문서 정합성 감사 |
+| `npm run audit:syllabus` | `node tools/audit/audit_syllabus_alignment.js` | 출제기준 정합 감사 — 교재 과목·챕터 ↔ 출제기준 문서 대조 (문서부재·미반영 리포트) |
 | `npm run audit:specfresh` | `node tools/audit/audit_spec_fresh.js` | SPEC 활성(✅) 행 중 코드 @spec 참조 0건 나열 (노후 요구사항 후보) |
 | `npm run audit:doclinks` | `node tools/audit/audit_doc_links.js` | docs/dev/ 문서 중 어디서도 미참조 파일 나열 (노후 문서 후보) |
 | `npm run audit:size` | `node tools/audit/audit_exam_size.js` | 시험 팩 콘텐츠 규모 리포트 (advisory) |
