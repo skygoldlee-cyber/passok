@@ -45,12 +45,23 @@ function fileCoverage(absPath) {
     const lines = fs.readFileSync(absPath, 'utf-8').split(/\r?\n/);
     const qAt = [];
     const modelAns = new Set();
+    const modelMarks = []; // 모범답안 섹션 내 **Sn.** 마커 위치 — 인용을 문항별 범위로 귀속
     let inModel = false;
     lines.forEach((l, i) => {
         const qm = l.match(/^###\s*[QS](\d+)/);
         if (qm) qAt.push({ num: +qm[1], line: i });
         if (/^##\s/.test(l)) inModel = /정답|모범답안|답안|해설|근거/.test(l); // 정답·근거/모범답안 요지 섹션
-        if (inModel) { const mm = l.match(/\*\*[QS](\d+)\.?\*\*/); if (mm) modelAns.add(+mm[1]); }
+        if (inModel) {
+            const mm = l.match(/\*\*[QS](\d+)\.?\*\*/);
+            if (mm) { modelAns.add(+mm[1]); modelMarks.push({ num: +mm[1], line: i }); }
+        }
+    });
+    const modelRange = new Map(); // num → [start, end) 라인 범위
+    modelMarks.forEach((mk, i) => {
+        const next = modelMarks[i + 1];
+        let end = next ? next.line : lines.length;
+        for (let j = mk.line + 1; j < end; j++) if (/^##\s/.test(lines[j])) { end = j; break; }
+        modelRange.set(mk.num, [mk.line, end]);
     });
     const out = { q: qAt.length, answered: 0, explained: 0, cited: 0, malformed: 0 };
     lines.forEach((l) => {
@@ -68,6 +79,10 @@ function fileCoverage(absPath) {
                 if (/\*\*모범답안[^*]*\*\*/.test(l)) { has = true; ex = true; } // 주관식 교배형(요지 변형 포함) — 모범답안이 정답+해설 겸용
                 if (/\*\*해설\*\*\s*[:：]/.test(l)) ex = true;
                 if (INLINE_CITATION.test(l)) ci = true;
+            }
+            if (!ci && modelRange.has(q.num)) { // 공유 모범답안 섹션의 **Sn.** 블록 인용 귀속 (발문·답안 분리형)
+                const [ms, me] = modelRange.get(q.num);
+                for (let j = ms; j < me; j++) if (INLINE_CITATION.test(lines[j])) { ci = true; break; }
             }
         }
         if (has) out.answered++;
