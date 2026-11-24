@@ -1,0 +1,64 @@
+{
+  "baseline": {},
+  "latest": {
+    "notice": null,
+    "ruleName": "화장품 안전기준 등에 관한 규정",
+    "effectiveDate": null,
+    "serialNo": null
+  },
+  "docs": [
+    {
+      "name": "한국전기설비규정",
+      "target": "admrul",
+      "file": "한국전기설비규정(기후에너지환경부공고).md",
+      "url": "https://www.law.go.kr/행정규칙/한국전기설비규정",
+      "baselineNotice": null,
+      "baselineDate": null,
+      "_priorDate": null,
+      "latestNotice": "제2025-227호",
+      "latestDate": "2026-01-05",
+      "serial": "2100000270772",
+      "currentSerial": "2100000270772",
+      "currentDate": "2026-01-05",
+      "currentUrl": "https://www.law.go.kr/admRulInfoP.do?admRulSeq=2100000270772",
+      "pending": false,
+      "newer": false
+    },
+    {
+      "name": "전기설비기술기준",
+      "target": "admrul",
+      "file": "전기설비기술기준(기후에너지환경부고시)(제2025-87호)(20251001).md",
+      "url": "https://www.law.go.kr/행정규칙/전기설비기술기준",
+      "baselineNotice": "제2025-87호",
+      "baselineDate": "2025-10-01",
+      "_priorDate": null,
+      "latestNotice": "제2025-87호",
+      "latestDate": "2025-10-01",
+      "serial": "2100000267908",
+      "currentSerial": "2100000267908",
+      "currentDate": "2025-10-01",
+      "currentUrl": "https://www.law.go.kr/admRulInfoP.do?admRulSeq=2100000267908",
+      "pending": false,
+      "newer": false
+    },
+    {
+      "name": "전기사업법",
+      "target": "law",
+      "file": "전기사업법(법률)(제21467호)(20260918).md",
+      "url": "https://www.law.go.kr/법령/전기사업법",
+      "baselineNotice": "제21467호",
+      "baselineDate": "2026-09-18",
+      "_priorDate": null,
+      "latestNotice": "제21467호",
+      "latestDate": "2026-09-18",
+      "serial": "284383",
+      "currentSerial": "284383",
+      "currentDate": "2026-09-18",
+      "currentUrl": "https://www.law.go.kr/lsInfoP.do?lsiSeq=284383&efYd=20260918",
+      "pending": false,
+      "newer": false
+    }
+  ],
+  "checkedAt": "2026-11-23T06:49:33+00:00",
+  "newerFound": false
+}

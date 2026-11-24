@@ -14,7 +14,7 @@
       "url": "https://www.law.go.kr/법령/상법",
       "baselineNotice": "제21044호",
       "baselineDate": "2026-09-10",
-      "_priorDate": null,
+      "_priorDate": "2026-09-10",
       "latestNotice": "제21044호",
       "latestDate": "2026-09-10",
       "serial": "273629",
@@ -31,7 +31,7 @@
       "url": "https://www.law.go.kr/법령/농어업재해보험법",
       "baselineNotice": "제21023호",
       "baselineDate": "2026-08-15",
-      "_priorDate": null,
+      "_priorDate": "2026-08-15",
       "latestNotice": "제21023호",
       "latestDate": "2026-08-15",
       "serial": "273371",
@@ -48,7 +48,7 @@
       "url": "https://www.law.go.kr/법령/농어업재해보험법시행령",
       "baselineNotice": "제36555호",
       "baselineDate": "2026-08-15",
-      "_priorDate": null,
+      "_priorDate": "2026-08-15",
       "latestNotice": "제36555호",
       "latestDate": "2026-08-15",
       "serial": "288463",
@@ -65,7 +65,7 @@
       "url": "https://www.law.go.kr/행정규칙/농업재해보험손해평가요령",
       "baselineNotice": "제2026-66호",
       "baselineDate": "2026-06-10",
-      "_priorDate": null,
+      "_priorDate": "2026-06-10",
       "latestNotice": "제2026-66호",
       "latestDate": "2026-06-10",
       "serial": "2100000280664",
@@ -109,6 +109,6 @@
       "newer": false
     }
   ],
-  "checkedAt": "2026-11-19T13:51:01+00:00",
+  "checkedAt": "2026-11-23T06:51:49+00:00",
   "newerFound": false
 }
