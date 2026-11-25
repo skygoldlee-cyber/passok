@@ -112,38 +112,28 @@ npm.cmd run check:all            # 전체 게이트
 
 ## 잔여 작업 스냅샷 (2026-11-25, `audit:scorecard` 실측)
 
-> **이번 갱신 시점 상태**: pilot 10팩 + active 6팩 전부 문항·해설·인용 승격가능. 잔여는 **교재자(비공백 20k) 미달**과 **draft 팩 미착수** 두 축이다.
+> **이번 갱신 시점 상태**: pilot 10팩 + active 6팩 전부 문항·해설·인용·**교재자(20k)** 승격가능 — 42과목 교재 미달 백로그 완결 (`87338104`, `b6f0ce12`). 잔여는 **draft 팩 미착수**와 소소한 개선 축이다.
 
-### 교재자 미달 백로그 — 42과목 (Gemini 쿼터 소진으로 중단, 재개 절차 아래)
+### ~~교재자 미달 백로그 — 42과목~~ ✅ 완결 (2026-11-25)
 
-| 팩 | 미달 과목 (현재자수) | 부족 규모 |
-|---|---|---|
-| appraisal (8) | civil 3.6k · econ 2.3k · realestate 2.5k · law 2.0k · accounting 1.9k · appraisalthy 2.8k · appraisallaw 1.5k · appraisalwork 1.2k | 전 과목 거의 스텁 |
-| admagent (7) | civGen 4.8k · admLaw 5.2k · admSci 4.9k · civContract 4.3k · admProc 4.1k · officeMgmt 4.0k · admPractice 5.3k | 과목당 ~15k |
-| skincare (6) | skinTheory 3.3k · anatomy 2.1k · devices 2.0k · cosmetics 1.8k · hygiene 3.3k · practical 2.0k | 과목당 ~17k |
-| hairdresser (6) | skin 1.1k · hair 2.0k · cosmetics 2.5k · hygiene 3.4k · disinfection 2.2k · practical 3.0k | 과목당 ~17k |
-| insadj (6) | contract 8.7k · act 7.8k · theory 8.3k · prop 3.3k · vehicle 4.8k · bodily 5.0k | 과목당 ~12~17k |
-| lossadj (5) | insurance 4.6k · disaster 6.0k · agronomy 4.2k · secondTheory 7.7k · secondAssessment 10.7k | 과목당 ~9~16k |
-| compapp1 (3) | computer 0.8k · spreadsheet 1.0k · database 1.1k | 거의 스텁 |
-| fireelec (1) | elec 14.3k | -5.7k |
-| ~~broker (1)~~ | ~~broker_practice~~ | ✅ 해소 2026-11-25 (`0c911ea`) |
+- 1차: `tmp/_tb_appendix.js` + 팩별 잡 큐 — ref_md 기반 ai:textbook 초안 📚 부록 병합으로 36과목 해소 (`87338104`)
+- 2차: ref_md 부재 6과목은 KOCW 문서형 강좌 신규 수집 → pdf2md → `tmp/_draft_kocw.js` 초안 → 부록 병합 (`b6f0ce12`): compapp1 3과목(경영정보학개론·엑셀마이크로러닝·DB시스템)·appraisal econ(경제학원론)·accounting(회계학원론)·hairdresser disinfection(안전위생 NCS 모듈)
+- **리뷰 잔여**: 부록은 전부 AI 요약본 — 특히 compapp1 computer(MIS·IoT 강의 조합이라 출제범위 커버리지 부분적)·KOCW 요약 인용부는 사실관계 사람 검수 권장. KOCW 부록은 ref_md 미편입·저작권 유보 표기 (labor 선례)
 
-- **소스 부재 과목 주의**: appraisal econ·realestate·accounting, skincare anatomy, hairdresser skin, compapp1 3과목은 ref_md 소스가 출제기준뿐 — 출제기준 기반 초안은 품질이 낮아 리뷰 우선
-- **차단 사유**: 2026-11-25 Gemini 일일 쿼터 소진(429 — 3.8-flash·2.5-flash 모두). 리셋 후 재개
-
-### 재개 절차 — `tmp/_tb_appendix.js` + 잡 큐
+### 재사용 파이프라인 (draft 팩 보강 시)
 
 ```powershell
-node tmp/_tb_appendix.js tmp/_jobs_insadj.json   # 팩별 순차 — 초안 생성→정제→부록 병합 자동
-# 대체 모델: $env:AI_MODEL="gemini-2.5-flash" · 대용량 문서는 잡 "lines" 필드
+node tmp/_tb_appendix.js tmp/_jobs_<pack>.json      # ref_md → ai:textbook → 부록 병합
+node tmp/_draft_kocw.js src_md/<src> <exam> <subject> <suffix> "<라벨>"  # KOCW/자체 md → 초안
 ```
 
-- 잡 파일: `tmp/_jobs_{fireelec,insadj,lossadj,admagent,appraisal,skincare,hairdresser,compapp1}.json` (총 42과목)
-- 상세: `tmp/_jobs_README.md` — dry-run 산출물 구별법·번호체계 게이트(`### N.N` → `### <약칭> N.N`) 주의 포함
+- 잡 큐·상세: `tmp/_jobs_*.json` + `tmp/_jobs_README.md` (git 미추적 — dry-run 산출물 구별·번호체계 게이트 `### N.N` → `### <약칭> N.N`·메타 의심 헤딩 `## > 출처:` → `## 📋` 주의)
+- ai_textbook chunkRefDoc 초대형 청크 상한은 `b6f0ce12` 선행 커밋에 포함(재발 방지됨)
 
 ### 그 외 잔여
 
+- **draft 팩 6종 미착수 — 교재 21과목 전부 골격 스텁(0.2~1.8k)** — eleceng 5(em·power·mach·circuit·regs)·elecindeng 5(동)·distmgr2 4·iteng 3·itindeng 2·distmgr3 2: 문항 0 + ref_md 소스도 대부분 부재 → KOCW/NCS 소싱부터 착수 필요 (추정 AI 호출 300회+). indsafeind 파이프라인(은행 스켈레톤→ai:draft→필터→apply) + 상기 부록 파이프라인 재사용 가능
 - **문항 필요선 부근**: lossadj(필요 -56)·hairdresser(-20)·indsafe(-9) — 권장 6회분 대비 여유가 얇음
-- **appraisal 인용 94%** — 경제학·회계학 문항은 교재 소스 부재로 인용 불가 구조, 교재 보강 후 재시도
-- **draft 팩 6종 미착수** — eleceng(300)·elecindeng(300)·distmgr2(270)·iteng(240)·itindeng(225)·distmgr3(135): 문항 0 + 교재 미달. indsafeind 파이프라인(은행 스켈레톤→ai:draft→필터→apply) 재사용 가능
+- **appraisal 인용 94% → 재시도 가능** — 교재 보강 완료로 econ·accounting 문항의 교재 인용 백필 재시도 가능 (`cite_backfill`)
 - **insadj written 게이트** — 주관식 과목 ≥20문 요건 설계 결정 미해결 (상기 시험별 항목 참조)
+- **tmp/ 작업물** — KOCW 신규 수집 ~500MB+(`tmp/materials/compapp1`, `tmp/materials/appraisal`)·`tmp/src_md`·`tmp/ai_drafts` 보존 중 — 후속 보강 재사용 가능, 디스크 정리는 선택
