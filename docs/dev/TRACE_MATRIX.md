@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: a53115e2e7deda04
+> 입력 해시: b9c3e7a843119fdb
 > 생성: 2026-11-25 · 원천: SPEC.md(728개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -1161,6 +1161,7 @@
 | DOC-REF-19 | docs/dev/reference/COMMANDS.md | — |
 | DOC-REF-20 | docs/dev/reference/DOCX_GENERATION.md | CO-13, CO-22, DA-24 |
 | DOC-REF-21 | docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md | CS-01, CS-02, CS-03, CS-04, CS-05, CS-06, CS-07, CS-08, CS-09, CS-10, CS-11, CS-12, CS-13, CS-14, CS-15, RR-01, RR-02, RR-03, RR-04, RR-05, RR-06, RR-07, RR-08, RR-09, RR-10, RR-11, RR-12, RR-13, RR-14, RR-15, RR-16 |
+| DOC-REF-22 | docs/dev/reference/QNET_2027_EXAM_CHANGES.md | — |
 | DOC-ROOT-01 | README.md | — |
 | DOC-ROOT-02 | AGENTS.md | — |
 | DOC-USR-01 | docs/exams/cosmetic/user/exam_strategy.md | — |

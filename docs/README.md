@@ -93,12 +93,12 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (107개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (108개)
 │   ├── 수위 문서 (6개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·COMPLEXITY_BACKLOG·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (20개 — README + ADR 19건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (25개)
 │   ├── design/                ← 설계·계획·평가 문서 (33개)
-│   ├── reference/             ← 명세·로직·참조 문서 (18개 + images/)
+│   ├── reference/             ← 명세·로직·참조 문서 (19개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (4개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (2개 — 사용자 매뉴얼·개인정보처리방침 + images/ — 런타임 fetch·배포 대상)
 └── exams/<id>/                  ← 시험 종속 문서 — docs/exams/cosmetic/ (31개) · docs/exams/carework/ (11개) · docs/exams/hazmat/ (2개) · docs/exams/skincare/ (2개)
@@ -178,6 +178,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [STORY_PATCH_GUIDE.md](dev/runbooks/STORY_PATCH_GUIDE.md) | 이야기형 교재 서사 패치 작성 — 슬롯 마커·지시어 문법 (`*_이야기형.md`는 `build:story` 생성물, 직접 편집 금지) |
 | [STORY_TYPE_DESIGN_GUIDE.md](dev/runbooks/STORY_TYPE_DESIGN_GUIDE.md) | 이야기형 교재 서사 유형 설계 — 시험 유형별 서사 선정·캐릭터·구조 (DOC-RBK-22) |
 | [CONTENT_PIPELINE_SPEC.md](dev/runbooks/CONTENT_PIPELINE_SPEC.md) | 콘텐츠 파이프라인 규약 — 자료수집 → 참조자료 → 문제은행·교재 전체 경로·단계별 파일·선언·게이트 (DOC-RBK-19) |
+| [QNET_2027_EXAM_CHANGES.md](dev/reference/QNET_2027_EXAM_CHANGES.md) | Q-Net 2027년 공지 정리 — 검정시행계획 일정표·2027.1.1 종목 개편·팩별 영향 (DOC-REF-22) |
 | [NUMBERING_SYSTEM.md](exams/cosmetic/reference/NUMBERING_SYSTEM.md) | 교재 챕터/섹션 십진 번호체계 |
 | [QUESTION_SCHEMA_DESIGN.md](dev/design/QUESTION_SCHEMA_DESIGN.md) | 문항 데이터 스키마 — 복수정답형의 "진술 단위 O/X → 조합 도출" 구조 |
 | [COMBO_GENERATION_GUIDE.md](dev/runbooks/COMBO_GENERATION_GUIDE.md) | 복수정답형 드릴 생성 도구 — `build_combo_drills.js` + `ref_statements.js` |
@@ -479,6 +480,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-REF-19 | `docs/dev/reference/COMMANDS.md` |
 | DOC-REF-20 | `docs/dev/reference/DOCX_GENERATION.md` |
 | DOC-REF-21 | `docs/exams/hazmat/reference/TEXTBOOK_REFERENCE_MAPPING.md` |
+| DOC-REF-22 | `docs/dev/reference/QNET_2027_EXAM_CHANGES.md` |
 | DOC-RBK-01 | `docs/dev/runbooks/AUDIO_HOSTING_GUIDE.md` |
 | DOC-RBK-02 | `docs/dev/runbooks/COMBO_GENERATION_GUIDE.md` |
 | DOC-RBK-03 | `docs/dev/runbooks/CONTENT_WORKFLOW.md` |
