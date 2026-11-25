@@ -109,3 +109,41 @@ npm.cmd run check:all            # 전체 게이트
 - 등록: 2026-10-26, `comingSoon`, 6과목(필기 5 + 실기 1), 문제은행 과목당 8문(총 40문) + 실기 서술 5문
 - ref: 공중위생관리법 3종·소독기준 고시·화장품법·안전기준 (skincare와 동일 원본 복사 편입)
 - 잔여: 과목당 ≥20문 증산, synonyms/uiText·docs, 🔖기출/📌중요 마커·용어집·number-drills, 승격 리뷰
+
+## 잔여 작업 스냅샷 (2026-11-25, `audit:scorecard` 실측)
+
+> **이번 갱신 시점 상태**: pilot 10팩 + active 6팩 전부 문항·해설·인용 승격가능. 잔여는 **교재자(비공백 20k) 미달**과 **draft 팩 미착수** 두 축이다.
+
+### 교재자 미달 백로그 — 42과목 (Gemini 쿼터 소진으로 중단, 재개 절차 아래)
+
+| 팩 | 미달 과목 (현재자수) | 부족 규모 |
+|---|---|---|
+| appraisal (8) | civil 3.6k · econ 2.3k · realestate 2.5k · law 2.0k · accounting 1.9k · appraisalthy 2.8k · appraisallaw 1.5k · appraisalwork 1.2k | 전 과목 거의 스텁 |
+| admagent (7) | civGen 4.8k · admLaw 5.2k · admSci 4.9k · civContract 4.3k · admProc 4.1k · officeMgmt 4.0k · admPractice 5.3k | 과목당 ~15k |
+| skincare (6) | skinTheory 3.3k · anatomy 2.1k · devices 2.0k · cosmetics 1.8k · hygiene 3.3k · practical 2.0k | 과목당 ~17k |
+| hairdresser (6) | skin 1.1k · hair 2.0k · cosmetics 2.5k · hygiene 3.4k · disinfection 2.2k · practical 3.0k | 과목당 ~17k |
+| insadj (6) | contract 8.7k · act 7.8k · theory 8.3k · prop 3.3k · vehicle 4.8k · bodily 5.0k | 과목당 ~12~17k |
+| lossadj (5) | insurance 4.6k · disaster 6.0k · agronomy 4.2k · secondTheory 7.7k · secondAssessment 10.7k | 과목당 ~9~16k |
+| compapp1 (3) | computer 0.8k · spreadsheet 1.0k · database 1.1k | 거의 스텁 |
+| fireelec (1) | elec 14.3k | -5.7k |
+| ~~broker (1)~~ | ~~broker_practice~~ | ✅ 해소 2026-11-25 (`0c911ea`) |
+
+- **소스 부재 과목 주의**: appraisal econ·realestate·accounting, skincare anatomy, hairdresser skin, compapp1 3과목은 ref_md 소스가 출제기준뿐 — 출제기준 기반 초안은 품질이 낮아 리뷰 우선
+- **차단 사유**: 2026-11-25 Gemini 일일 쿼터 소진(429 — 3.8-flash·2.5-flash 모두). 리셋 후 재개
+
+### 재개 절차 — `tmp/_tb_appendix.js` + 잡 큐
+
+```powershell
+node tmp/_tb_appendix.js tmp/_jobs_insadj.json   # 팩별 순차 — 초안 생성→정제→부록 병합 자동
+# 대체 모델: $env:AI_MODEL="gemini-2.5-flash" · 대용량 문서는 잡 "lines" 필드
+```
+
+- 잡 파일: `tmp/_jobs_{fireelec,insadj,lossadj,admagent,appraisal,skincare,hairdresser,compapp1}.json` (총 42과목)
+- 상세: `tmp/_jobs_README.md` — dry-run 산출물 구별법·번호체계 게이트(`### N.N` → `### <약칭> N.N`) 주의 포함
+
+### 그 외 잔여
+
+- **문항 필요선 부근**: lossadj(필요 -56)·hairdresser(-20)·indsafe(-9) — 권장 6회분 대비 여유가 얇음
+- **appraisal 인용 94%** — 경제학·회계학 문항은 교재 소스 부재로 인용 불가 구조, 교재 보강 후 재시도
+- **draft 팩 6종 미착수** — eleceng(300)·elecindeng(300)·distmgr2(270)·iteng(240)·itindeng(225)·distmgr3(135): 문항 0 + 교재 미달. indsafeind 파이프라인(은행 스켈레톤→ai:draft→필터→apply) 재사용 가능
+- **insadj written 게이트** — 주관식 과목 ≥20문 요건 설계 결정 미해결 (상기 시험별 항목 참조)
