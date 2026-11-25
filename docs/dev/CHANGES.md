@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **feat(content): pilot 팩 교재 미달 42과목 일괄 보강 — AI 초안 부록 병합으로 36과목 해소, 6과목 소스한계 잔여** — Gemini(gemini-3.8-flash) ai:textbook 초안을 과목 첫 챕터 파일에 `## 📚 부록 — <제목>` 섹션으로 병합(tmp/_tb_appendix.js 드라이버 + 팩별 잡 큐 + topup 4라운드, NCS 학습모듈·법령·공고 ref_md 소스). 해소 36과목: skincare 6·hairdresser 5·insadj 6·lossadj 5·admagent 7·appraisal 6·fireelec 1 (+11k줄). 잔여 미달 6과목은 ref_md가 출제기준·단문 공고뿐인 소스한계 스텁: compapp1 3과목(5.7~8.2k)·appraisal econ(3.2k)·accounting(2.8k)·hairdresser disinfection(15.6k) — 실소스 ref_md 확보 후 재보강 필요. 부수 수정: ①ai_textbook chunkRefDoc에 초대형 청크 고정폭 재분할 상한 추가(KEC 1.39M자 단일청크→HTTP 400 해소), ②병합 정제 — 베어 번호 헤딩(`## N.`·`### N.M`) 17건 약칭·이모지 접두 정정 + 청크 창 헤더 잔재 메타 의심 헤딩(`## > 출처:`/`## > 자동 추출`) 30여 건 `## 📋` 제목 교체로 numbering·metasections(TS-17) 게이트 통과. 검증: check:content 35단계 전량 통과
+
 - **docs(refs): Q-Net 2027년 시험 공지 정리 문서 신설 (DOC-REF-22)** — 검정시행계획(공고 제2026-518호) 일정표 + 2027.1.1 종목 개편(35과목개편·2폐지·2개명) 요약 + 팩별 영향 매핑. `indsafe` 6→5과목·`indsafeind` 5→4과목·`iteng` 5→4과목 개편 확인 — indsafe는 active 팩이라 2027 1회(필기 2.12~) 대비 과목 재편 과제 도출
 
 - **fix(broker): broker_practice 교재자 미달 해소 (19,991→20,082자) + 📌출처 플레이스홀더 4건 실값 치환** — 마지막 active 팩 교재 미달 해소. 시행일 20240301·최종확인 2026-11-25 기입

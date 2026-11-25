@@ -101,7 +101,23 @@ function chunkRefDoc(absPath, maxLines = 100) {
             });
         }
     }
-    return chunks.filter(c => c.text.trim().length > 0);
+    // 하드 상한 — 조문 병합으로 maxLines를 넘은 청크는 고정폭 창으로 재분할
+    // (조문이 희소·없는 대용량 문서의 단일 초대형 청크 → API 페이로드 초과 방지)
+    const capped = [];
+    for (const c of chunks) {
+        const ls = c.text.split('\n');
+        if (ls.length <= maxLines) { capped.push(c); continue; }
+        for (let s = 0; s < ls.length; s += maxLines) {
+            const w = ls.slice(s, s + maxLines);
+            capped.push({
+                heading: s ? `${c.heading} (계속 ${Math.floor(s / maxLines) + 1})` : c.heading,
+                startLine: c.startLine + s,
+                endLine: c.startLine + s + w.length - 1,
+                text: w.join('\n'),
+            });
+        }
+    }
+    return capped.filter(c => c.text.trim().length > 0);
 
     function fin(c) {
         return {
