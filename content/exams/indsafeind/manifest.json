@@ -70,7 +70,36 @@
    ]
   }
  ],
- "exams": [],
+ "exams": [
+  {
+   "key": "subject1",
+   "subject": "prevedu",
+   "part": 1,
+   "title": "산업재해 예방 및 안전보건교육",
+   "file": "과목1_문제은행.md"
+  },
+  {
+   "key": "subject2",
+   "subject": "human",
+   "part": 2,
+   "title": "인간공학 및 위험성 평가·관리",
+   "file": "과목2_문제은행.md"
+  },
+  {
+   "key": "subject3",
+   "subject": "mach",
+   "part": 3,
+   "title": "기계·기구 및 건설공사 안전관리",
+   "file": "과목3_문제은행.md"
+  },
+  {
+   "key": "subject4",
+   "subject": "elec",
+   "part": 4,
+   "title": "전기 및 화학설비 안전관리",
+   "file": "과목4_문제은행.md"
+  }
+ ],
  "integratedExam": {
   "questionsPerSubject": {
    "prevedu": 20,
