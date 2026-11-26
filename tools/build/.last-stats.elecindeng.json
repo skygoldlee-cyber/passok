@@ -51,5 +51,21 @@
       }
     }
   },
-  "exams": {}
+  "exams": {
+    "subject1": {
+      "questions": 30
+    },
+    "subject2": {
+      "questions": 30
+    },
+    "subject3": {
+      "questions": 30
+    },
+    "subject4": {
+      "questions": 30
+    },
+    "subject5": {
+      "questions": 30
+    }
+  }
 }
