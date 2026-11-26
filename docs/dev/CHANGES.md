@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **fix(css): 퀵체크 `.qc-actions` flex-wrap 누락 — 모바일 안전 규약 위반 해소** — CI 'Mobile safety convention' 실패 수정. 액션 행 버튼이 모바일에서 넘치지 않도록 `flex-wrap: wrap` 추가
+
 - **feat(content): draft 팩 문항 전수검수 완료 — 1,531문 LLM 팩트체크** — `tmp/_qreview.js` --all로 잔여 20과목 1,087문 검수(기 검수 437+신규 → 전량 커버). 1차 플래그 59건은 인용 창 500자 절단 오탐이 다수 — `_qreview2.js`(인용 1,500자 확대)로 57건 오탐 소거, 실 결함 2건 확인: eleceng/circuit Q26 발문 수식 누락(스칼라 상태방정식 3식+출력식 삽입으로 보수), iteng/db Q24는 양차 리뷰 모두 오탐(발문 정상). 검수 산출물: `tmp/qreview_*.json` 23과목 + `tmp/qreview2_verdicts.json`. 잔여: draft→pilot 전환(comingSoon 해제) 결정 — 문항·교재 전량 기계검증+LLM 표본·전수 검수 통과 상태
 
 - **fix(content): AI 거절 텍스트 교재 유입분 제거 + 오염 문항 7건 삭제** — 부록 생성 파이프라인에서 이미지 전용 청크에 대한 LLM 거절 문단("제공된 참조자료…본문 초안을 작성할 수 없습니다")이 교재 본문에 유입된 결함 정리. 교재 8파일 정리(iteng db·itindeng db 각 -117줄, indsafe practical -67, skincare 2·hairdresser 2·distmgr3 salesmgmt·iteng swdev·itindeng sysbase) — 거절 문단 + 공벌어진 `### 참조자료 확인`·`## (고정폭 창) (LNN~LNN)` 정크 헤딩·빈 섹션 일괄 제거(하위 레벨 헤딩은 콘텐츠로 인정하는 계층 규칙 적용). 문항: 거절 인용 기반 메타 문항 itindeng/과목3 Q34~39 6건 삭제 + distmgr2/과목4 크로스도킹 유사중복 Q47 삭제(후속 재번호, exams.json desc 233→227·285→284). eleceng/과목4 Q53 발문에 누락된 상태·출력방정식 행렬 식 삽입(교재 근거 [2 1] 정답 유지). 후속: 교재 `### N.` 시퀀스 재번호 4블록(numbering 게이트), sync_citation_lines 전량 재동기(19,724링크 미발견 0). 잔여: 미검수 문항 ~1,090건(표본 437건 검수 완료·실 결함 전부 정리됨)
