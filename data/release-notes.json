@@ -1,5 +1,19 @@
 [
   {
+    "version": "v20261126-d1dfceb",
+    "date": "2026-11-26",
+    "notes": [
+      "[문서·compapp1] 학습안내서 최종 확인 갱신 — 교재 오배치 정정 검토 완료 표기",
+      "[수정·content] compapp1 교재 과목 간 콘텐츠 오배치 정정 — 스프레드시트 부록 중복 이식 제거",
+      "[수정·e2e] 사전 신규 활성 팩의 'DB 갱신' 부팅 모달이 CI 차단 — '이미 확인' 시드로 억제",
+      "[수정·features] 두음법 총정리 진입점 게이트 해소 — appendixDocs 전 시험 활성",
+      "[기능·content] cosmetic 기준선 패리티 — 학습안내서·사전·두음법 전 팩 이식 + 시맨틱 임베딩 전 시험 확장",
+      "[수정·features] 비cosmetic 피처 게이트 점검 — hairdresser studyGuide·carework story_textbook 선언 누락 해소",
+      "[수정·pomodoro] 비cosmetic 팩 뽀모도로 미노출 — features.pomodoro 전 시험 활성",
+      "[정리·release] v20261126-ca68488 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261126-ca68488",
     "date": "2026-11-26",
     "notes": [
@@ -233,22 +247,6 @@
       "[content·hazmat] 과목1 Ch01 결합에너지 수치·승화/응결 용어 정정 [no-test]",
       "[수정·reader] 목차 챕터 그룹이 중간 📌 카드에서 끊기는 버그 수정",
       "[정리·release] v20261117-4bbc870 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261117-4bbc870",
-    "date": "2026-11-17",
-    "notes": [
-      "[content·hazmat] 과목3 6차 리뷰 반영 — 탱크 내용적 고시 공식 정정·절 위치 이동",
-      "[content·hazmat] 과목3 5차 리뷰 반영 — 참조 실제 절명 통일·탱크 용적 절 신설·소화약제 복원",
-      "[content·hazmat] 과목3 주제 반복 dedup — 행정 수치 단일화 + 제10장 §3 압축",
-      "[content·hazmat] 과목3 3차 리뷰 정정 — 별표2 황 범위·특례 근거·안전거리 대상",
-      "[content·hazmat] 과목3 2차 리뷰 정정 — 별표2·특례 품명·측면틀·방화문 용어 등 오류 6건",
-      "[content·hazmat] 과목3 교재 AI 중복통합 초안 리뷰 편입 (1~6류 ## 블록 12개)",
-      "[문서·hazmat] 과목3 교재 중복 절 병합 — 동일 제목 #### 클러스터 통합 + 고유 내용 보존",
-      "[문서·hazmat] 과목3 리뷰 반영 — 특례·시설 기준 보강, 법정 수치 확충, 절 체계 계층화",
-      "[수정·gates] version.js 한쪽 변경 머지의 스탬프 어긋남 복구 경로 신설",
-      "[문서·hazmat] 과목3 8~10장 정독 리뷰 — 법령 수치 원문 대조 오류 5건 정정"
     ]
   }
 ]
