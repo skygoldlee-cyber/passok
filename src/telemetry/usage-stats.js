@@ -40,6 +40,7 @@ const ACTION_LABELS = {
     trainer_menu: '훈련소 메뉴 진입',
     pro_badge_click: '유료 배지 → 플랜 비교',
     pro_moment: 'Pro 모멘트 카드 표시 (ROAD-P6)', // 'pro_moment:<moment>' 접두사 키
+    ai_textbook_qa: '교재 질의응답 (AI-36 — 다턴 튜터 착수 판정의 사용률 실측)',
 };
 
 /** 액션 키 → 표시 라벨 — `:` 접미 키는 접두사(버킷) 라벨로 해석 (UX-MET-04) @param {string} key */

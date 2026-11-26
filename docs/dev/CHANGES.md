@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **chore(ai): AI-42 선행 — 사용률 계측 + 방침 개정** — `ai_textbook_qa` 로컬 사용 카운터 계측(AI-36 사용률 실측 경로 확보 — 기존엔 서버 ai_usage 외 측정 수단 없음) + `PRIVACY_POLICY.md` §1.2 AI 행에 교재 질의(질문 문장·근거·이전 문답 컨텍스트 최대 4턴)·취약 개념 라벨 수집 명시, §2 "검색어" 표현 정합
+
 - **feat(passloop): AI-44 통합 학습 노트 카드** — 분석 뷰 "내 노트": `reader_notes`를 최신순 교차 나열(최대 8건·제목·미리보기·수정시각) + `openSubjectSection` 섹션 회귀 링크. 메모 부재 시 리더 유도 온보딩. DOM 테스트 3건
 
 - **feat(passloop): AI-43 챕터 퀵체크** — `tools/ai/ai_quickcheck.js`(`ai:quickcheck` — 표준형 교재 `## M.` 섹션을 `<subj>:§N.M` 키로 순회, 섹션 본문 근거 한정 OX·단답 초안, evidence 미검출·lint 위반은 [폐기 후보], `--apply`로 `피드백/quickcheck.json` 병합) + 런타임: `_getQuickchecks` 지연 로드 → `data.quickcheck` 병합 → `src/reader/quickcheck.js`(OX 즉시 채점·단답 정답 공개+자가 채점·오답 시 §N.M 개념 드릴 링크) + 섹션 카드 말미 토글. 정본 없으면 무표시·비용 0. DOM 테스트 3건

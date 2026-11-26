@@ -426,6 +426,7 @@ export async function askTextbookQA() {
     }
 
     slot.innerHTML = '<p class="ai-feedback-loading"><i class="fa-solid fa-spinner fa-spin"></i> AI가 근거 스니펫을 검토하고 있습니다…</p>';
+    trackAction('ai_textbook_qa'); // AI-42 착수 판정용 사용률 실측 (로컬 카운터, UX-MET)
     const res = await requestTextbookQA({ question, evidence });
     if (res.ok) {
         const cites = (res.citations || [])
