@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **feat(content): draft 팩 3팩 소량 증산 — iteng·itindeng·distmgr2 각 +8문 (전 6팩 승격가능)** — audit:scorecard 기준 잔여 6문씩 보충 → iteng 251·itindeng 233·distmgr2 285로 3/3 충족. draft 팩 6종 전량 승격 정량 요건 충족(교재 20k+·문항 3회분·인용 근거) — 잔여는 AI 초안 사실관계 검수 + comingSoon 해제 결정뿐
+
 - **feat(content): draft 팩 6종 문제은행 3회분 증산 — 23과목 +823문 (총 1,507문)** — 승격 게이트(모의고사 3회분) 기준 2차 증산: tmp/_qgen.js에 offset 샘플링 추가(1차와 비겹침 청크) 후 과목당 +30~48문 생성·편입. 최종 은행 총량 eleceng·elecindeng 312·iteng 243·itindeng 225·distmgr2 277·distmgr3 138 — 전량 요구치 이상. regs는 사용 가능 청크 6개라 청크당 5문으로 보충. ai_dupcheck 임계 초과 0건. exams.json desc 4팩을 "문제은행 N문 수록 · 시험 소개" 컨벤션으로 신규 작성(eleceng·elecindeng·iteng·itindeng — 기존 scaffold 골격 문구 교체)
 
 - **feat(content): draft 팩 6종 문제은행 신설 — 23과목 684문 AI 초안 편입 + 부록 감사 정정** — manifest.exams[] 등록 + 과목N_문제은행.md 신설(eleceng·elecindeng 5과목씩·iteng 4·itindeng 3·distmgr2 4·distmgr3 2). 생성: tmp/_qgen.js(신규 — ai_draft_questions 계약 준수, 실질 청크 균등 샘플링으로 과목당 ~10청크×3문 → 호출 절감)로 초안 30문/과목 생성 후 ai_apply --drafts --write 편입(684문, 스킵 0 — 전량 교재 LNN 인용 근거 첨부). regs 2과목은 사용 가능 청크 6개뿐이라 청크당 5문으로 보충. lint: 신규 은행 지적은 전량 정보성(L1 부정발문 다수). 부록 감사: 2중글리프 실물 0(전기기계기구·지지물 등 오탐 전량), [폐기 후보] 마커 2건 정리(distlog 디자인 물품 분류 조호 걷어냄·salesmgmt NCS 보일러플레이트 섹션 제거), 모듈 메타 보일러플레이트 3건 제거(distlog·distinfo·salesmgmt). 게이트 정정: exams.json desc "문제은행 N문" 컨벤션 선두 추가(distmgr2 120·distmgr3 60). 잔여: 신규 문항 AI 초안 미검수 상태(은행 헤더 검수 진행 중 표기) — 사실관계 리뷰는 승격 전 필수
