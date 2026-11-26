@@ -455,9 +455,20 @@ export function statusRows(status) {
   return rows;
 }
 
-/** '고시 정보 보기' 버튼 (data-click 위임) — notice_status.json 내용을 패널로 표시/숨김 */
+/** '고시 정보 보기' 버튼 (data-click 위임) — notice_status.json 내용을 패널로 표시/숨김.
+ *  개정 배너는 전역 마운트라 formula 뷰 밖에서는 #notice-status-view가 없음 — 배너 직하 폴백 패널로 대응 */
 export async function viewMfdsNoticeStatus() {
-  const panel = document.getElementById('notice-status-view');
+  let panel = document.getElementById('notice-status-view');
+  if (!panel) {
+    panel = document.getElementById('notice-status-float');
+    if (!panel) {
+      const banner = document.getElementById('formula-notice-banner');
+      if (!banner) return;
+      banner.insertAdjacentHTML('afterend',
+        '<div id="notice-status-float" class="notice-status-view is-hidden"></div>');
+      panel = document.getElementById('notice-status-float');
+    }
+  }
   if (!panel) return;
   if (!panel.classList.contains('is-hidden')) { panel.classList.add('is-hidden'); return; }
   panel.innerHTML = '<div class="notice-status-loading">상태 파일 불러오는 중…</div>';

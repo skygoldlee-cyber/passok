@@ -19,6 +19,7 @@ import { openCustomerPanel } from '../../../../src/exams/cosmetic/views/formula-
 import { openMaterialPanel } from '../../../../src/exams/cosmetic/views/formula-material.js';
 import { openCompliancePanel } from '../../../../src/exams/cosmetic/views/formula-compliance.js';
 import { openProductPanel } from '../../../../src/exams/cosmetic/views/formula-products.js';
+import { viewMfdsNoticeStatus } from '../../../../src/shell/notice-check.js';
 
 const ALL_PANELS = [
     'formula-menu-panel', 'formula-list-panel', 'formula-calc-panel',
@@ -91,6 +92,16 @@ describe('Formula OS — 패널 전환·서브내비', () => {
         openCustomerPanel();
         exitFormulaSubView();
         onlyVisible('formula-menu-panel');
+    });
+
+    it('FO-24: viewMfdsNoticeStatus — 상태 패널 부재 뷰에서는 배너 하단 폴백 패널 생성', async () => {
+        initFormulaView();
+        document.getElementById('notice-status-view')?.remove(); // formula 외 뷰 시뮬레이션
+        await viewMfdsNoticeStatus();
+        const float = document.getElementById('notice-status-float');
+        expect(float).toBeTruthy();
+        expect(float.classList.contains('is-hidden')).toBe(false);
+        expect(document.getElementById('formula-notice-banner').nextElementSibling).toBe(float);
     });
 
     it('FO-24: 고시 감시 UI — 배너·확인 버튼·상태 패널이 허브에 존재', () => {

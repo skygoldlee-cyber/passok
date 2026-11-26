@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **fix(notice): 개정 배너 '변경 내역 보기' 무반응 — `#notice-status-view` 패널 전역 부재 폴백 추가** — 배너(`#formula-notice-banner`)는 index.template 전역 마운트인데 상태 패널은 cosmetic formula 뷰 파셜에만 존재해, 다른 뷰에서 클릭 시 getElementById null 조용 return이 원인. `viewMfdsNoticeStatus`가 패널 부재 시 배너 직하에 `#notice-status-float` 폴백 생성(formula 뷰 인컨텍스트 동작 유지). DOM 테스트 1건
+
 - **fix(analysis): innerHTML 보간 `esc-ok` 면제 누락 — 이스케이프 싱크 규약 위반 해소** — CI 'HTML escape sink check' 실패 수정. `snap.evidenced`(정수)·`gradeRow`(고정 라벨 조립)·`rows`(esc() 처리 내부 마크업) 3곳에 검토 면제 주석 명시
 
 - **fix(css): 퀵체크 `.qc-actions` flex-wrap 누락 — 모바일 안전 규약 위반 해소** — CI 'Mobile safety convention' 실패 수정. 액션 행 버튼이 모바일에서 넘치지 않도록 `flex-wrap: wrap` 추가
