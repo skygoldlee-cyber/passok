@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **fix(analysis): innerHTML 보간 `esc-ok` 면제 누락 — 이스케이프 싱크 규약 위반 해소** — CI 'HTML escape sink check' 실패 수정. `snap.evidenced`(정수)·`gradeRow`(고정 라벨 조립)·`rows`(esc() 처리 내부 마크업) 3곳에 검토 면제 주석 명시
+
 - **fix(css): 퀵체크 `.qc-actions` flex-wrap 누락 — 모바일 안전 규약 위반 해소** — CI 'Mobile safety convention' 실패 수정. 액션 행 버튼이 모바일에서 넘치지 않도록 `flex-wrap: wrap` 추가
 
 - **feat(content): draft 팩 문항 전수검수 완료 — 1,531문 LLM 팩트체크** — `tmp/_qreview.js` --all로 잔여 20과목 1,087문 검수(기 검수 437+신규 → 전량 커버). 1차 플래그 59건은 인용 창 500자 절단 오탐이 다수 — `_qreview2.js`(인용 1,500자 확대)로 57건 오탐 소거, 실 결함 2건 확인: eleceng/circuit Q26 발문 수식 누락(스칼라 상태방정식 3식+출력식 삽입으로 보수), iteng/db Q24는 양차 리뷰 모두 오탐(발문 정상). 검수 산출물: `tmp/qreview_*.json` 23과목 + `tmp/qreview2_verdicts.json`. 잔여: draft→pilot 전환(comingSoon 해제) 결정 — 문항·교재 전량 기계검증+LLM 표본·전수 검수 통과 상태

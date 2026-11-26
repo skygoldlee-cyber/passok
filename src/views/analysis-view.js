@@ -575,8 +575,8 @@ function _renderMasteryInsight() {
         return `<div class="wc-row"><span class="analysis-sid">${label}</span><strong>${a.score}점 · ${esc(a.grade)} · 커버 ${Math.round(a.cov * 100)}%</strong></div>
             <div class="clinic-actions">${drillBtn}${bookBtn}</div>`;
     }).join('');
-    el.innerHTML = `<h4>🧭 개념 숙련도 <span class="analysis-meta">PassLoop · 신호 ${snap.evidenced}개 개념</span></h4>
-        <div class="mastery-grade-row">${gradeRow}</div>
+    el.innerHTML = `<h4>🧭 개념 숙련도 <span class="analysis-meta">PassLoop · 신호 ${snap.evidenced /*esc-ok — 집계 정수*/}개 개념</span></h4>
+        <div class="mastery-grade-row">${gradeRow /*esc-ok — 고정 라벨+카운트로 조립한 마크업*/}</div>
         ${actionsHtml ? `<div class="wc-subhead">다음 학습 추천 (숙련도 최하)</div>${actionsHtml}` : '<p class="analysis-advice">측정된 개념은 아직 부족합니다 — 더 풀면 약점 추천이 나타납니다.</p>'}`;
 }
 
@@ -601,7 +601,7 @@ function _renderNotesCard() {
             <div class="wc-subrow analysis-note-text">${esc(n.note.slice(0, 80))}${n.note.length > 80 ? '…' : ''}</div>
             ${openBtn ? `<div class="clinic-actions">${openBtn}</div>` : ''}`;
     }).join('');
-    el.innerHTML = `<h4>📝 내 노트 <span class="analysis-meta">PassLoop · ${entries.length}개</span></h4>${rows}
+    el.innerHTML = `<h4>📝 내 노트 <span class="analysis-meta">PassLoop · ${entries.length}개</span></h4>${rows /*esc-ok — esc() 처리된 내부 생성 마크업*/}
         ${entries.length > 8 ? `<p class="analysis-meta">최근 8건 표시 — 전체 검색은 커맨드 팔레트(Ctrl+K)에서 가능합니다.</p>` : ''}`;
 }
 
