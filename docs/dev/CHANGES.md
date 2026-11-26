@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **fix(features): 비cosmetic 팩 피처 게이트 전수 점검 — studyGuide·story_textbook 선언 누락 2건 해소** — data-feature 28키×23팩 교차 대조 + hasFeature JS 체크 + 팩별 파셜 전용 ID의 전역 참조 스캔. 발견: hairdresser는 학습안내서.md 보유+docs_md 번들 존재에도 studyGuide 미선언으로 학습 안내서 카드 미노출, carework는 이야기형 교재 2권+manifest storyFile 선언에도 story_textbook 미선언으로 통합검색 서사 블록 제외 — 각각 플래그 추가 + build:exams-list 재생성. 정상 확인: dictionary·formula·limitsTrainer·ingredients·calcPractice·appendixDocs는 cosmetic 전용 콘텐츠, care*는 carework 전용, writtenPractice는 written[] 보유 팩과 일치, examSwitch·practiceMode·data-needs·nav-study-only는 동적 판정, 매뉴얼은 공용 user_manual
+
 - **fix(pomodoro): 비cosmetic 팩 집중 도구 뽀모도로 미노출 — features.pomodoro 전 시험 활성** — 대시보드 집중 도구 접힘 내 타이머 카드가 data-feature="pomodoro" 게이트 대상인데 해당 플래그가 cosmetic에만 선언돼 있어 다른 팩에선 접힘을 열어도 빈 섹션만 표시. 뽀모도로는 시험 무관 범용 학습 도구(pomodoro.js·POMO_* 저장 키 모두 팩 스코프 범용)라 exams.json 22팩에 pomodoro:true 일괄 추가 + build:exams-list 재생성. check:onboard 구조 오류 0
 
 - **fix(notice): 법령 개정 배너·개정 내역 전 시험 공용화 — cosmetic 전용 CSS 글로벌 이관 + ruleName 누출 정정** — 배너(`#formula-notice-banner`)는 index.template 전역 마운트·status/diff URL·watchDocs·저장 키 전부 시험 스코프로 이미 다중 시험 대응이었으나, `.notice-banner`·`.notice-status-view`·`.notice-diff-*` 스타일이 `css/exams/cosmetic/formula.css`(시험별 지연 로딩)에만 있어 다른 팩에선 무스타일로 렌더됐음. notice 블록 153줄을 `css/ui-overlay.css`(전역 로드)로 이관 — cosmetic 동작 동일, 나머지 팩에서 배너·폴백 패널·diff 정상 표시. 함께 `check_mfds_notice.py` `_DEFAULT_CORE` 폴백 제거 — noticeCore 미설정 팩의 `latest.ruleName`에 화장품 규정명이 쓰이던 누출 정정(status 13개 파일 null로 정정, cosmetic·conssafe·insadj·lossadj는 자체 noticeCore 유지). 참고: referenceLaw 빈 6팩(compapp1·2·iteng·itindeng·distmgr2·3)은 ref_md에 법령 문서 없어 감시 대상 자체 없음 — 정상 제외

@@ -115,7 +115,8 @@
       "registryGlobal": "DATA_REGISTRY_HAIRDRESSER",
       "features": {
         "writtenPractice": true,
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true
       },
       "appNameEn": "Passhair",
       "practiceName": "Hair OS",
@@ -662,7 +663,8 @@
         "careFlow": true,
         "studyGuide": true,
         "careCustomForm": true,
-        "pomodoro": true
+        "pomodoro": true,
+        "story_textbook": true
       },
       "group": "보건·복지",
       "tier": "active"
