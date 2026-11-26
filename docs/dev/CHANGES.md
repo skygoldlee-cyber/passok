@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **feat(content): draft 팩 6종 교재 21과목 전량 해소 — KOCW·ref_md 소스 기반 AI 부록 병합** — 골격 스텁(0.2~1.8k)이던 eleceng·elecindeng·iteng·itindeng·distmgr2·distmgr3 미달 과목에 `## 📚 부록` 병합. 소스: ①KOCW 강의록 src_md(tmp/_batch_pdf2md.py 변환 — eleceng 271·iteng 205·distmgr 신규수집 109건 실PDF)를 `tmp/_sel_src.js`로 과목당 ~120k자 큐레이션 → `_draft_kocw.js` 초안, ②ref_md ref 문서는 `_tb_appendix.js` 잡으로 ai_textbook 초안 직결(eleceng regs 전기설비기술기준+KEC 1-1500·distmgr2 유통물류관리/유통정보운영관리/보관하역/상권관리·distmgr3 고객 분석/매장 판매촉진). elecindeng·itindeng proglang은 eleceng·iteng 초안 재사용(ref_md 동일 — 호출 절감). cap 컷 미달분은 잔여 초안 2라운드(`tmp/_split_draft.js`) + 별도 ref 잡 3라운드로 해소. 결과: 21과목 20.2~26.3k 전량 해소 — **draft 팩 교재 미달 0건** (문항 은행은 별도 잔여). 규약 정정: KEC 챕터 헤딩 `### 3.` 약칭 접두 + `## > 출처:` 잔재 2건 `## 📋` 교체로 numbering·metasections 게이트 통과. 검증: check:content 35단계 전량 통과
+
 - **feat(passloop): PassLoop 노출 개선** — ① 오늘 할 일 큐에 개념 숙련도 최하 추천 항목 주입(`_pushMasteryItem` — "취약 개념 보강" → 개념 드릴 직행, 우선순위 62) ② 숙련도·노트 카드를 주간 배분 다음으로 상향 (행동 카드 위계) ③ 노트 빈 상태에 메모 아이콘 위치 힌트. 유닛 2건 + DOM 갱신
 
 - **refactor(passloop): 순수 모듈 엔진 코어 이전** — `study/{fsrs,knowledge-tracing,personalization,concept-drill}.js` → `passloop/core/` (무import 모듈 — 경계 게이트로 물리 이전 가능해짐). 임포터 전수 갱신(src 9·테스트 6·audit 1), domain-map은 `src/passloop/**` glob 커버로 stale 엔트리 제거, 복잡도 베이스라인 키 갱신, SPEC·설계·경쟁분석 문서 경로 정합. `weak-items.js`는 exam-context 결합으로 어댑터 잔류
