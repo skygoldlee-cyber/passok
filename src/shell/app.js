@@ -171,6 +171,9 @@ import {
     openSubjectSection
 } from '../views/textbook-reader.js';
 import {
+    toggleQuickCheck, answerQuickCheck, revealQuickCheck, selfGradeQuickCheck
+} from '../reader/quickcheck.js';
+import {
     showGlobalLoading,
     hideGlobalLoading,
     showToast,
@@ -604,6 +607,8 @@ const DELEGATED_HANDLERS = {
     clearTextbookSearch, setTextbookFilter, toggleTextbookCard, setTextbookSearchQuery,
     toggleReaderAudio, stopReaderAudio, toggleReaderPlayPause,
     seekReaderAudio, cycleReaderAudioRate, toggleReaderAutoScroll,
+    // 리더 퀵체크 (AI-43)
+    toggleQuickCheck, answerQuickCheck, revealQuickCheck, selfGradeQuickCheck,
     // 학습 캘린더/목표
     renderStudyCalendar, prevCalendarMonth, nextCalendarMonth,
     openGoalSettings, closeGoalSettings, saveGoalSettings, recordStudyActivity,

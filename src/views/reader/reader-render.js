@@ -28,6 +28,7 @@ import {
     bindReaderScrollEvents
 } from './reader-toolbar.js';
 import { getReaderNotes, getReaderNote, setReaderNote } from '../../study/reader-notes.js';
+import { quickcheckHtml } from '../../reader/quickcheck.js';
 import { bindReferenceLinks, refreshRefLinkNotices } from './reader-ref-links.js';
 
 // ── 렌더 보조 UI ─────────────────────────────────────────────
@@ -371,9 +372,11 @@ function _chapterNumAfter(section, prev) {
  */
 function _sectionCardHtml(section, idx, chapter, ctx, chapterNum) {
     const { subjId, chapterIdx, displayTitles, bookmarks,
-        chapterRefPath, subjRefFiles, subjDirName, glossaryItems, notes } = ctx;
+        chapterRefPath, subjRefFiles, subjDirName, glossaryItems, notes, quickchecks } = ctx;
     const conceptCid = (chapterNum > 0 && getTocLevel(section.title) === 1)
         ? `${chapterNum}.${parseInt(String(section.title || '').trim(), 10)}` : '';
+    const qcItems = (conceptCid && quickchecks)
+        ? quickchecks[`${subjId}:§${conceptCid}`] : null;  // AI-43
     // 북마크 키는 콘텐츠 기반 (TR-27) — 위치 인덱스는 교재 편집 시 오표적
     const bookmarkKey = bookmarkKeyOf(subjId,
         chapter.chapterKey || chapter.chapterTitle || chapterIdx, section.title || idx);
@@ -411,6 +414,7 @@ function _sectionCardHtml(section, idx, chapter, ctx, chapterNum) {
                     ${sectionHtml}
                 </div>
                 ${conceptCid ? `<div class="reader-concept-cta"><a class="reader-concept-link" href="#/trainer/concept/${conceptCid}"><i class="fa-solid fa-circle-question" aria-hidden="true"></i> 이 절 문항 풀기 <span class="reader-concept-cid">§${conceptCid}</span></a></div>` : ''}
+                ${(qcItems && qcItems.length) ? quickcheckHtml(qcItems, `${subjId}:§${conceptCid}`, conceptCid) : ''}
             </div>
         </div>
     `;
@@ -691,6 +695,7 @@ export async function renderChapterContentInternal(subjId, chapterIdx, subj, cha
         subjId, chapterIdx, displayTitles, bookmarks,
         chapterRefPath, subjRefFiles, subjDirName, glossaryItems,
         notes: getReaderNotes(),
+        quickchecks: subj && subj.quickcheck,   // AI-43 퀵체크 오버레이 (정본 없으면 undefined — 무표시)
     });
 
     // --- 과목별 용어집 테이블 (glossary-renderer 모듈 위임) ---

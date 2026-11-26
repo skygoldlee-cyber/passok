@@ -47,6 +47,8 @@ export const DataLoader = {
     _cardTips: undefined,
     /** @type {*|undefined} 카드 제외 맵 캐시 — undefined=미로드 */
     _cardExcludes: undefined,
+    /** @type {*|undefined} 퀵체크 오버레이 캐시 — undefined=미로드 (AI-43) */
+    _quickchecks: undefined,
     /** @type {Object.<string, *>|undefined} 지식DB 키별 캐시 */
     _knowledge: undefined,
 
@@ -293,6 +295,19 @@ export const DataLoader = {
         return this._cardExcludes;
     },
 
+    /** 퀵체크 오버레이 피드백 파일 지연 로드 — {`<subj>:§N.M` → [{q,a,type}]} 맵, 없으면 null (AI-43) */
+    async _getQuickchecks() {
+        if (this._quickchecks !== undefined) return this._quickchecks;
+        this._quickchecks = null;
+        if (!IS_FILE) {
+            try {
+                const res = await fetch('./' + contentPath('피드백/quickcheck.json'), { cache: 'no-cache' });
+                if (res.ok) this._quickchecks = await res.json();
+            } catch (e) { /* 오버레이 부재는 정상 — 미적용으로 진행 */ }
+        }
+        return this._quickchecks;
+    },
+
     /**
      * 과목 학습 데이터를 content/*.md 에서 런타임 파싱하여 로드
      * @param {string} key - 과목 키
@@ -327,6 +342,10 @@ export const DataLoader = {
                 if (tips[c.id]) c.tip = tips[c.id];
             }
         }
+
+        // 퀵체크 오버레이 (AI-43) — `<subj>:§N.M` 키의 이해도 점검 항목을 병합
+        const quickchecks = await this._getQuickchecks();
+        if (quickchecks) /** @type {*} */ (data).quickcheck = quickchecks;
 
         // 문제은행 보충 카드/퀴즈 병합 (레지스트리가 제공하는 경우 — 출제 비중 보정용)
         const regSubj = (this.registry && Array.isArray(this.registry.subjects))

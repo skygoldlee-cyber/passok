@@ -932,3 +932,16 @@ a.glossary-ref-link i {
 /* 형식 셀렉트 — 헤더에서 TOC 버튼을 가리지 않게 콤팩트 */
 #reader-format-select { max-width: 110px; min-height: var(--control-h-md); padding: 2px 6px; font-size: .82rem; flex-shrink: 1; min-width: 0; }
 .reader-mode-checkbox { min-width: 0; flex-shrink: 1; }
+
+/* 챕터 퀵체크 (AI-43) — 섹션 말미 이해도 점검 토글 + OX/단답 채점 */
+.quickcheck { margin-top: var(--gap-ctl); border-top: 1px dashed var(--border); padding-top: var(--gap-ctl); }
+.qc-body { display: flex; flex-direction: column; gap: var(--gap-ctl); margin-top: var(--gap-ctl); }
+.qc-item { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; }
+.qc-q { margin: 0 0 8px; font-weight: 600; font-size: .95rem; }
+.qc-actions { display: flex; gap: 8px; }
+.qc-result { margin: 8px 0 0; font-size: .9rem; font-weight: 600; }
+.qc-result.qc-ok { color: var(--color-success); }
+.qc-result.qc-wrong { color: var(--color-danger, #c62828); }
+.qc-answer { margin-top: 8px; }
+.qc-sa-answer { margin: 0 0 8px; }
+.qc-drill { margin: 8px 0 0; }

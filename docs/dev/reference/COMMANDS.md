@@ -430,7 +430,7 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run admin:discord` | `node tools/deploy/register_admin_bot.js` | Discord 슬래시 명령 일괄 등록 (AD-11) |
 | `npm run admin:facility-backup` | `node tools/supabase/dump_facility.js` | 기관(facility) 테이블 백업·복원 (DOC-RBK-24 §2~§3 절차 도구) |
 
-### `ai:*` — 20개
+### `ai:*` — 22개
 
 | 스크립트 | 실행 내용 | 설명 |
 |---|---|---|
@@ -447,6 +447,8 @@ npm.cmd run check -- --step <id>      # 단일 단계만 (--list로 id 조회)
 | `npm run ai:apply` | `node tools/ai/ai_apply.js` | 리뷰된 해설 초안을 문제은행 정답 블록에 편입 |
 | `npm run ai:stmtfb` | `node tools/ai/ai_stmt_feedback.js` | 진술 단위 오답 피드백 초안 생성 + 편입 |
 | `npm run ai:seedcheck` | `node tools/ai/ai_seed_eval.js` | 콜드스타트 난이도 시딩 오프라인 검증 (AI-32) |
+| `npm run ai:masteryeval` | `node tools/ai/mastery_eval.js` | PassLoop 개념 숙련도 오프라인 실측 (AI-40 단계 1) |
+| `npm run ai:quickcheck` | `node tools/ai/ai_quickcheck.js` | 챕터 퀵체크(이해도 점검) 초안 생성 + 편입 |
 | `npm run ai:textbook` | `node tools/ai/ai_textbook.js` | ref_md 청크 → 교재 본문 초안 생성 (CS-11 도출 계약의 AI 단계) |
 | `npm run ai:story` | `node tools/ai/ai_story.js` | 표준형 story:slot 미작성분 스캔 → 서사 패치(@insert) 초안 생성 |
 | `npm run ai:cards` | `node tools/ai/ai_cards.js` | 플래시카드 암기팁 초안 생성 → 피드백/card_tip.json 오버레이 반영 |
