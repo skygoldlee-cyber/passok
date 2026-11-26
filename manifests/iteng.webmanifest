@@ -2,7 +2,7 @@
   "id": "passok",
   "name": "PassOK",
   "short_name": "PassOK",
-  "description": "정보처리기사 — scaffold 생성 골격 (콘텐츠 교체 필요)",
+  "description": "문제은행 243문 수록 · 정보처리기사 — 필기 4과목(소프트웨어 설계·개발·데이터베이스 구축·시스템운영관리) 객관식 · 산업인력공단 · 교재 근거 기반 자체 제작",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

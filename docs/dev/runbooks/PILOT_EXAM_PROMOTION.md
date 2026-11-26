@@ -132,7 +132,7 @@ node tmp/_draft_kocw.js src_md/<src> <exam> <subject> <suffix> "<라벨>"  # KOC
 
 ### 그 외 잔여
 
-- **draft 팩 6종 — 교재 21과목 전량 해소 ✅ (2026-11-26, `54a30a28`)** — eleceng 5·elecindeng 5·distmgr2 4·iteng 3·itindeng 2·distmgr3 2 골격 스텁(0.2~1.8k)에 KOCW 큐레이션 초안(`_draft_kocw.js`)+ref_md ai_textbook 초안(`_tb_appendix.js`) 📚 부록 병합 — 20.2~26.3k 전량 해소. elecindeng·itindeng proglang은 eleceng·iteng 초안 재사용(0호출). 잔여: ①부록 AI 요약본 사실관계 리뷰 ②문항 은행(과목당 ≥20문 — 승격 필수) ③draft→pilot 승격 리뷰. 소스 맵·도구는 `tmp/_jobs_README.md`
+- **draft 팩 6종 — 교재 21과목 전량 해소 ✅ (2026-11-26, `54a30a28`)** — eleceng 5·elecindeng 5·distmgr2 4·iteng 3·itindeng 2·distmgr3 2 골격 스텁(0.2~1.8k)에 KOCW 큐레이션 초안(`_draft_kocw.js`)+ref_md ai_textbook 초안(`_tb_appendix.js`) 📚 부록 병합 — 20.2~26.3k 전량 해소. elecindeng·itindeng proglang은 eleceng·iteng 초안 재사용(0호출). 문항 은행 신설 ✅ (2026-11-26, `2b4037f8`) — manifest.exams+과목N_문제은행.md 23과목 684문 편입(`tmp/_qgen.js` 균등샘플 생성→ai_apply --drafts, 전량 LNN 인용). 승격 게이트는 모의고사 3회분: 잔여 필요량 eleceng·elecindeng +150·iteng +123·itindeng +138·distmgr2 +150·distmgr3 +75 (2차 증산 진행 방식: `_qgen.js` offset 샘플링 + ai_dupcheck 검증). 리뷰 잔여: ①부록·문항 AI 초안 사실관계 검수(은행 헤더 검수 진행 중 표기) ②draft→pilot 전환 결정. 소스 맵·도구는 `tmp/_jobs_README.md`
 - **문항 필요선 부근**: lossadj(필요 -56)·hairdresser(-20)·indsafe(-9) — 권장 6회분 대비 여유가 얇음
 - **appraisal 인용 94% → 재시도 가능** — 교재 보강 완료로 econ·accounting 문항의 교재 인용 백필 재시도 가능 (`cite_backfill`)
 - **insadj written 게이트** — 주관식 과목 ≥20문 요건 설계 결정 미해결 (상기 시험별 항목 참조)
