@@ -84,7 +84,8 @@
       "features": {
         "writtenPractice": true,
         "studyGuide": true,
-        "pomodoro": true
+        "pomodoro": true,
+        "semantic": true
       },
       "comingSoon": true,
       "appNameEn": "Passkin",
@@ -116,7 +117,9 @@
       "features": {
         "writtenPractice": true,
         "pomodoro": true,
-        "studyGuide": true
+        "studyGuide": true,
+        "dictionary": true,
+        "semantic": true
       },
       "appNameEn": "Passhair",
       "practiceName": "Hair OS",
@@ -150,7 +153,10 @@
       "registryGlobal": "DATA_REGISTRY_INSADJ",
       "features": {
         "writtenPractice": true,
-        "pomodoro": true
+        "pomodoro": true,
+        "dictionary": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "appNameEn": "Passure",
       "practiceName": "Adjust OS",
@@ -184,7 +190,10 @@
       "registryGlobal": "DATA_REGISTRY_LOSSADJ",
       "features": {
         "writtenPractice": true,
-        "pomodoro": true
+        "pomodoro": true,
+        "dictionary": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "appNameEn": "Passess",
       "practiceName": "Assess OS",
@@ -214,7 +223,9 @@
       "registryGlobal": "DATA_REGISTRY_ADMAGENT",
       "features": {
         "writtenPractice": true,
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "comingSoon": true,
       "appNameEn": "Passmin",
@@ -253,7 +264,9 @@
         "secondary": "감정평가실무, 감정평가이론, 감정평가 및 보상법규"
       },
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       }
     },
     {
@@ -280,7 +293,9 @@
         "secondary": "공인중개사법령 및 중개실무, 부동산공법, 부동산공시법령 및 세법 (객관식)"
       },
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       }
     },
     {
@@ -301,7 +316,9 @@
       "registryBundle": "data/exams/labor/registry.js",
       "registryGlobal": "DATA_REGISTRY_LABOR",
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "comingSoon": true,
       "group": "법무·노무",
@@ -330,7 +347,9 @@
       "registryGlobal": "DATA_REGISTRY_INDSAFE",
       "features": {
         "writtenPractice": true,
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "appNameEn": "Passafe",
       "practiceName": "Safety OS",
@@ -359,7 +378,9 @@
       "registryBundle": "data/exams/indsafeind/registry.js",
       "registryGlobal": "DATA_REGISTRY_INDSAFEIND",
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "group": "산업안전",
       "comingSoon": true,
@@ -387,7 +408,9 @@
       "registryBundle": "data/exams/iteng/registry.js",
       "registryGlobal": "DATA_REGISTRY_ITENG",
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "group": "정보처리",
       "comingSoon": true,
@@ -415,7 +438,9 @@
       "registryBundle": "data/exams/itindeng/registry.js",
       "registryGlobal": "DATA_REGISTRY_ITINDENG",
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "group": "정보처리",
       "comingSoon": true,
@@ -443,7 +468,9 @@
       "registryBundle": "data/exams/eleceng/registry.js",
       "registryGlobal": "DATA_REGISTRY_ELECENG",
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "group": "전기",
       "comingSoon": true,
@@ -471,7 +498,9 @@
       "registryBundle": "data/exams/elecindeng/registry.js",
       "registryGlobal": "DATA_REGISTRY_ELECINDENG",
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "group": "전기",
       "comingSoon": true,
@@ -502,7 +531,9 @@
       "registryBundle": "data/exams/compapp1/registry.js",
       "registryGlobal": "DATA_REGISTRY_COMPAPP1",
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "comingSoon": true,
       "appNameEn": "Passcomp",
@@ -535,7 +566,9 @@
       "registryBundle": "data/exams/compapp2/registry.js",
       "registryGlobal": "DATA_REGISTRY_COMPAPP2",
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "appNameEn": "Passcomp",
       "practiceName": "Sheet OS",
@@ -567,7 +600,9 @@
       "registryBundle": "data/exams/distmgr2/registry.js",
       "registryGlobal": "DATA_REGISTRY_DISTMGR2",
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "comingSoon": true,
       "group": "유통·물류",
@@ -597,7 +632,9 @@
       "registryBundle": "data/exams/distmgr3/registry.js",
       "registryGlobal": "DATA_REGISTRY_DISTMGR3",
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "comingSoon": true,
       "group": "유통·물류",
@@ -664,7 +701,9 @@
         "studyGuide": true,
         "careCustomForm": true,
         "pomodoro": true,
-        "story_textbook": true
+        "story_textbook": true,
+        "dictionary": true,
+        "semantic": true
       },
       "group": "보건·복지",
       "tier": "active"
@@ -687,7 +726,9 @@
       "registryBundle": "data/exams/hazmat/registry.js",
       "registryGlobal": "DATA_REGISTRY_HAZMAT",
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "appNameEn": "Passzard",
       "practiceName": "Danger OS",
@@ -716,7 +757,9 @@
       "registryBundle": "data/exams/fireelec/registry.js",
       "registryGlobal": "DATA_REGISTRY_FIREELEC",
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "group": "소방",
       "tier": "pilot",
@@ -743,7 +786,9 @@
       "registryBundle": "data/exams/conssafe/registry.js",
       "registryGlobal": "DATA_REGISTRY_CONSSAFE",
       "features": {
-        "pomodoro": true
+        "pomodoro": true,
+        "studyGuide": true,
+        "semantic": true
       },
       "group": "산업안전",
       "tier": "pilot",

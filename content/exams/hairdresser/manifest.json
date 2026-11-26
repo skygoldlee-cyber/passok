@@ -1,277 +1,362 @@
 {
- "schemaVersion": 1,
- "contentYear": "2027",
- "textbookEdition": "2027",
- "_pilot": {
-  "added": "2026-10-26",
-  "basis": "2027 출제기준(2027.1.1~2031.12.31) 자체 제작",
-  "status": "과목당 20문 확보 — 승격 기준 충족, 리뷰 대기"
- },
- "subjects": [
-  {
-   "key": "skin",
-   "order": 1,
-   "name": "피부학",
-   "shortName": "피부학",
-   "dir": "교재/skin",
-   "chapters": [
-    {
-     "key": "full",
-     "title": "피부학 (전체)",
-     "file": "피부학_표준형.md"
-    }
-   ]
+  "schemaVersion": 1,
+  "contentYear": "2027",
+  "textbookEdition": "2027",
+  "_pilot": {
+    "added": "2026-10-26",
+    "basis": "2027 출제기준(2027.1.1~2031.12.31) 자체 제작",
+    "status": "과목당 20문 확보 — 승격 기준 충족, 리뷰 대기"
   },
-  {
-   "key": "hair",
-   "order": 2,
-   "name": "모발학",
-   "shortName": "모발학",
-   "dir": "교재/hair",
-   "chapters": [
-    {
-     "key": "full",
-     "title": "모발학 (전체)",
-     "file": "모발학_표준형.md"
-    }
-   ]
-  },
-  {
-   "key": "cosmetics",
-   "order": 3,
-   "name": "화장품학",
-   "shortName": "화장품학",
-   "dir": "교재/cosmetics",
-   "chapters": [
-    {
-     "key": "full",
-     "title": "화장품학 (전체)",
-     "file": "화장품학_표준형.md"
-    }
-   ]
-  },
-  {
-   "key": "hygiene",
-   "order": 4,
-   "name": "공중위생관리학",
-   "shortName": "위생관리",
-   "dir": "교재/hygiene",
-   "chapters": [
-    {
-     "key": "full",
-     "title": "공중위생관리학 (전체)",
-     "file": "공중위생관리학_표준형.md"
-    }
-   ]
-  },
-  {
-   "key": "disinfection",
-   "order": 5,
-   "name": "소독학",
-   "shortName": "소독학",
-   "dir": "교재/disinfection",
-   "chapters": [
-    {
-     "key": "full",
-     "title": "소독학 (전체)",
-     "file": "소독학_표준형.md"
-    }
-   ]
-  },
-  {
-   "key": "practical",
-   "order": 6,
-   "name": "미용실무",
-   "shortName": "실무",
-   "dir": "교재/practical",
-   "chapters": [
-    {
-     "key": "full",
-     "title": "미용실무 (전체)",
-     "file": "미용실무_표준형.md"
-    }
-   ]
-  }
- ],
- "exams": [
-  {
-   "key": "skin",
-   "subject": "skin",
-   "part": 1,
-   "title": "피부학",
-   "file": "과목1_피부학_문제은행.md"
-  },
-  {
-   "key": "hair",
-   "subject": "hair",
-   "part": 1,
-   "title": "모발학",
-   "file": "과목2_모발학_문제은행.md"
-  },
-  {
-   "key": "cosmetics",
-   "subject": "cosmetics",
-   "part": 1,
-   "title": "화장품학",
-   "file": "과목3_화장품학_문제은행.md"
-  },
-  {
-   "key": "hygiene",
-   "subject": "hygiene",
-   "part": 1,
-   "title": "공중위생관리학",
-   "file": "과목4_공중위생관리학_문제은행.md"
-  },
-  {
-   "key": "disinfection",
-   "subject": "disinfection",
-   "part": 1,
-   "title": "소독학",
-   "file": "과목5_소독학_문제은행.md"
-  }
- ],
- "integratedExam": {
-  "name": "통합 모의고사",
-  "minutes": 60,
-  "total": 60,
-  "passAverage": 60,
   "subjects": [
-   {
-    "key": "skin",
-    "count": 14
-   },
-   {
-    "key": "hair",
-    "count": 18
-   },
-   {
-    "key": "cosmetics",
-    "count": 8
-   },
-   {
-    "key": "hygiene",
-    "count": 10
-   },
-   {
-    "key": "disinfection",
-    "count": 10
-   }
-  ]
- },
- "integratedExamComment": "모발학·피부학 비중 최대 — 출제기준 추정 배분, 과락 없음",
- "analysis": {
-  "wrongCauses": [
-   {
-     "key": "boundary",
-     "label": "경계값 착각",
-     "advice": "이상·초과·미만·이하의 포함 여부가 함정입니다 — 기준 숫자를 사다리로 묶어 인접 칸과 같이 외우세요.",
-     "autoPattern": "\\d+\\s*(억원|만원|원|%|명|시간|m|미터|일|개월|년|점)\\s*(이상|초과|미만|이하|넘는|넘지)"
-   },
-   {
-     "key": "actor",
-     "label": "주체 바꿔치기",
-     "advice": "누가 행위 주체인지(사업주/발주자/행정청 등) 문제에서 먼저 확인하세요.",
-     "autoPattern": "영업자|시장|군수|구청장|이용사|미용사|공중위생영업"
-   },
-   {
-     "key": "modifier",
-     "label": "수식어 누락",
-     "advice": "'동일한 사고로', '1년 이내' 같은 조건 수식어가 빠진 오답지가 많습니다 — 조건을 먼저 표시하고 지문을 읽으세요.",
-     "autoPattern": "동일한|이내에|직접|정기적|수시|즉시|지체 없이|반드시|단,|다만"
-   },
-   {
-     "key": "unit",
-     "label": "단위·기간 혼동",
-     "advice": "반기↔연, 통상임금↔평균임금 같은 단위·기간 바꾸기가 단골입니다 — 주기 사다리로 정리하세요.",
-     "autoPattern": "반기|분기|매월|매년|격월|통상임금|평균임금|연간|상시|매s?d+년"
-   }
-  ]
- },
- "uiText": {
-  "dashboard": {
-   "title": "학습 대시보드",
-   "subtitle": "헤어미용사 학습 현황"
+    {
+      "key": "skin",
+      "order": 1,
+      "name": "피부학",
+      "shortName": "피부학",
+      "dir": "교재/skin",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "피부학 (전체)",
+          "file": "피부학_표준형.md"
+        }
+      ]
+    },
+    {
+      "key": "hair",
+      "order": 2,
+      "name": "모발학",
+      "shortName": "모발학",
+      "dir": "교재/hair",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "모발학 (전체)",
+          "file": "모발학_표준형.md"
+        }
+      ]
+    },
+    {
+      "key": "cosmetics",
+      "order": 3,
+      "name": "화장품학",
+      "shortName": "화장품학",
+      "dir": "교재/cosmetics",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "화장품학 (전체)",
+          "file": "화장품학_표준형.md"
+        }
+      ]
+    },
+    {
+      "key": "hygiene",
+      "order": 4,
+      "name": "공중위생관리학",
+      "shortName": "위생관리",
+      "dir": "교재/hygiene",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "공중위생관리학 (전체)",
+          "file": "공중위생관리학_표준형.md"
+        }
+      ]
+    },
+    {
+      "key": "disinfection",
+      "order": 5,
+      "name": "소독학",
+      "shortName": "소독학",
+      "dir": "교재/disinfection",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "소독학 (전체)",
+          "file": "소독학_표준형.md"
+        }
+      ]
+    },
+    {
+      "key": "practical",
+      "order": 6,
+      "name": "미용실무",
+      "shortName": "실무",
+      "dir": "교재/practical",
+      "chapters": [
+        {
+          "key": "full",
+          "title": "미용실무 (전체)",
+          "file": "미용실무_표준형.md"
+        }
+      ]
+    }
+  ],
+  "exams": [
+    {
+      "key": "skin",
+      "subject": "skin",
+      "part": 1,
+      "title": "피부학",
+      "file": "과목1_피부학_문제은행.md"
+    },
+    {
+      "key": "hair",
+      "subject": "hair",
+      "part": 1,
+      "title": "모발학",
+      "file": "과목2_모발학_문제은행.md"
+    },
+    {
+      "key": "cosmetics",
+      "subject": "cosmetics",
+      "part": 1,
+      "title": "화장품학",
+      "file": "과목3_화장품학_문제은행.md"
+    },
+    {
+      "key": "hygiene",
+      "subject": "hygiene",
+      "part": 1,
+      "title": "공중위생관리학",
+      "file": "과목4_공중위생관리학_문제은행.md"
+    },
+    {
+      "key": "disinfection",
+      "subject": "disinfection",
+      "part": 1,
+      "title": "소독학",
+      "file": "과목5_소독학_문제은행.md"
+    }
+  ],
+  "integratedExam": {
+    "name": "통합 모의고사",
+    "minutes": 60,
+    "total": 60,
+    "passAverage": 60,
+    "subjects": [
+      {
+        "key": "skin",
+        "count": 14
+      },
+      {
+        "key": "hair",
+        "count": 18
+      },
+      {
+        "key": "cosmetics",
+        "count": 8
+      },
+      {
+        "key": "hygiene",
+        "count": 10
+      },
+      {
+        "key": "disinfection",
+        "count": 10
+      }
+    ]
   },
+  "integratedExamComment": "모발학·피부학 비중 최대 — 출제기준 추정 배분, 과락 없음",
   "analysis": {
-   "title": "학습 분석",
-   "subtitle": "과목별 이해 분석"
+    "wrongCauses": [
+      {
+        "key": "boundary",
+        "label": "경계값 착각",
+        "advice": "이상·초과·미만·이하의 포함 여부가 함정입니다 — 기준 숫자를 사다리로 묶어 인접 칸과 같이 외우세요.",
+        "autoPattern": "\\d+\\s*(억원|만원|원|%|명|시간|m|미터|일|개월|년|점)\\s*(이상|초과|미만|이하|넘는|넘지)"
+      },
+      {
+        "key": "actor",
+        "label": "주체 바꿔치기",
+        "advice": "누가 행위 주체인지(사업주/발주자/행정청 등) 문제에서 먼저 확인하세요.",
+        "autoPattern": "영업자|시장|군수|구청장|이용사|미용사|공중위생영업"
+      },
+      {
+        "key": "modifier",
+        "label": "수식어 누락",
+        "advice": "'동일한 사고로', '1년 이내' 같은 조건 수식어가 빠진 오답지가 많습니다 — 조건을 먼저 표시하고 지문을 읽으세요.",
+        "autoPattern": "동일한|이내에|직접|정기적|수시|즉시|지체 없이|반드시|단,|다만"
+      },
+      {
+        "key": "unit",
+        "label": "단위·기간 혼동",
+        "advice": "반기↔연, 통상임금↔평균임금 같은 단위·기간 바꾸기가 단골입니다 — 주기 사다리로 정리하세요.",
+        "autoPattern": "반기|분기|매월|매년|격월|통상임금|평균임금|연간|상시|매s?d+년"
+      }
+    ]
   },
-  "flashcard": {
-   "title": "카드",
-   "subtitle": "핵심 개념 카드 암기"
+  "uiText": {
+    "dashboard": {
+      "title": "학습 대시보드",
+      "subtitle": "헤어미용사 학습 현황"
+    },
+    "analysis": {
+      "title": "학습 분석",
+      "subtitle": "과목별 이해 분석"
+    },
+    "flashcard": {
+      "title": "카드",
+      "subtitle": "핵심 개념 카드 암기"
+    },
+    "quiz": {
+      "title": "퀴즈",
+      "subtitle": "객관식 4지선다 문제 풀이"
+    },
+    "trainer": {
+      "title": "숫자 연습",
+      "subtitle": "법정 수치·기온·농도 암기"
+    },
+    "review": {
+      "title": "복습",
+      "subtitle": "틀린 문제·북마크 복습"
+    },
+    "exam": {
+      "title": "통합 모의고사",
+      "subtitle": "60문항/60분 실전 연습"
+    },
+    "textbook": {
+      "title": "교재",
+      "subtitle": "5개 필기 영역 + 실기"
+    },
+    "textbook-reader": {
+      "title": "교재리더",
+      "subtitle": "본문 읽기"
+    },
+    "calendar": {
+      "title": "캘린더",
+      "subtitle": "학습 계획·D-day"
+    },
+    "manual": {
+      "title": "학습안내서",
+      "subtitle": "시험 구조·학습 경로"
+    },
+    "study-tools": {
+      "title": "학습 도구",
+      "subtitle": "검색·사전·수치"
+    },
+    "formula-manual": {
+      "title": "필답 매뉴얼",
+      "subtitle": "실기 서술 정리"
+    },
+    "dictionary": {
+      "title": "용어 사전",
+      "subtitle": "미용 용어 검색"
+    },
+    "search": {
+      "title": "교재 검색",
+      "subtitle": "본문·참조자료 통합 검색",
+      "placeholder": "검색 (예: 모발, 소독, 면허)"
+    }
   },
-  "quiz": {
-   "title": "퀴즈",
-   "subtitle": "객관식 4지선다 문제 풀이"
+  "synonyms": {
+    "헤어": "모발",
+    "커트": "커트|컷",
+    "파마": "파마|펌",
+    "염색약": "염색약|염색제|컬러제",
+    "소독": "소독|소독제|살균",
+    "면허": "면허|면허증",
+    "영업정지": "영업정지|영업장폐쇄|행정처분",
+    "과태료": "과태료|벌칙",
+    "두피": "두피|스킨헤드",
+    "각질": "각질|케라틴",
+    "비듬": "비듬|피티로스포룸",
+    "샴푸": "샴푸|세정",
+    "컬": "컬|곱슬"
   },
-  "trainer": {
-   "title": "숫자 연습",
-   "subtitle": "법정 수치·기온·농도 암기"
-  },
-  "review": {
-   "title": "복습",
-   "subtitle": "틀린 문제·북마크 복습"
-  },
-  "exam": {
-   "title": "통합 모의고사",
-   "subtitle": "60문항/60분 실전 연습"
-  },
-  "textbook": {
-   "title": "교재",
-   "subtitle": "5개 필기 영역 + 실기"
-  },
-  "textbook-reader": {
-   "title": "교재리더",
-   "subtitle": "본문 읽기"
-  },
-  "calendar": {
-   "title": "캘린더",
-   "subtitle": "학습 계획·D-day"
-  },
-  "manual": {
-   "title": "학습안내서",
-   "subtitle": "시험 구조·학습 경로"
-  },
-  "study-tools": {
-   "title": "학습 도구",
-   "subtitle": "검색·사전·수치"
-  },
-  "formula-manual": {
-   "title": "필답 매뉴얼",
-   "subtitle": "실기 서술 정리"
-  },
-  "dictionary": {
-   "title": "용어 사전",
-   "subtitle": "미용 용어 검색"
-  },
-  "search": {
-   "title": "교재 검색",
-   "subtitle": "본문·참조자료 통합 검색",
-   "placeholder": "검색 (예: 모발, 소독, 면허)"
+  "written": [
+    {
+      "key": "practical",
+      "title": "실기 주관식 연습 (필답·작업형)",
+      "desc": "수기 순서·도구 선택·관리계획 서술 — 모범답안 대비 자가채점",
+      "file": "실기_주관식_연습.md",
+      "kind": "supplement"
+    }
+  ],
+  "knowledge": {
+    "registryKey": "glossary",
+    "global": "GLOSSARY_DATA",
+    "entityUnit": "용어",
+    "filterField": "subject",
+    "header": {
+      "title": "용어 검색 사전",
+      "subtitle": "과목별 핵심 용어와 정의를 실시간 검색해 확인하세요.",
+      "searchPlaceholder": "용어명 또는 초성을 입력하여 실시간 검색"
+    },
+    "fields": {
+      "title": "name",
+      "subtitle": "subject",
+      "subtitleEmpty": "공통",
+      "search": [
+        "name",
+        "definition",
+        "subject"
+      ],
+      "chosungField": "name"
+    },
+    "badge": {
+      "field": "subject",
+      "defaultLabel": "공통",
+      "labels": {
+        "피부학": "피부학",
+        "모발학": "모발학",
+        "화장품학": "화장품학",
+        "위생관리": "위생관리",
+        "소독학": "소독학",
+        "실무": "실무"
+      }
+    },
+    "filters": [
+      {
+        "key": "all",
+        "label": "전체 용어"
+      },
+      {
+        "key": "피부학",
+        "label": "피부학"
+      },
+      {
+        "key": "모발학",
+        "label": "모발학"
+      },
+      {
+        "key": "화장품학",
+        "label": "화장품학"
+      },
+      {
+        "key": "위생관리",
+        "label": "위생관리"
+      },
+      {
+        "key": "소독학",
+        "label": "소독학"
+      },
+      {
+        "key": "실무",
+        "label": "실무"
+      }
+    ],
+    "details": [
+      {
+        "key": "definition",
+        "label": "정의",
+        "empty": "-",
+        "wide": true
+      }
+    ],
+    "csv": {
+      "filename": "glossary",
+      "headers": [
+        "용어",
+        "과목",
+        "정의"
+      ],
+      "fields": [
+        "name",
+        "subject",
+        "definition"
+      ]
+    }
   }
- },
- "synonyms": {
-  "헤어": "모발",
-  "커트": "커트|컷",
-  "파마": "파마|펌",
-  "염색약": "염색약|염색제|컬러제",
-  "소독": "소독|소독제|살균",
-  "면허": "면허|면허증",
-  "영업정지": "영업정지|영업장폐쇄|행정처분",
-  "과태료": "과태료|벌칙",
-  "두피": "두피|스킨헤드",
-  "각질": "각질|케라틴",
-  "비듬": "비듬|피티로스포룸",
-  "샴푸": "샴푸|세정",
-  "컬": "컬|곱슬"
- },
- "written": [
-  {
-   "key": "practical",
-   "title": "실기 주관식 연습 (필답·작업형)",
-   "desc": "수기 순서·도구 선택·관리계획 서술 — 모범답안 대비 자가채점",
-   "file": "실기_주관식_연습.md",
-   "kind": "supplement"
-  }
- ]
 }

@@ -1,6 +1,10 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **feat(content): cosmetic 기준선 콘텐츠 3종 전 팩 이식 — 학습안내서 19팩·사전 4팩·두음법 22팩** — "모든 시험팩의 UI/UX 기준은 cosmetic" 정책에 따른 패리티 작업. ① 학습안내서: 내용 ~90%가 팩 특화(시험 구조·과목 비중)라 팩별 생성(`tmp/_gen_guide.js` — 출제기준 ref_md+exams.json+manifest 과목 구성 소스 LLM 초안) → 19팩 `docs/학습안내서.md` 생성 + `features.studyGuide` 선언. ② 사전: glossary→knowledge 이식(`tmp/_port_glossary.js`) — `교재/glossary/subjectN.json`을 knowledge 계약(`knowledge/glossary.json` items + `manifest.knowledge` 스키마 + `features.dictionary`)으로 변환, carework 30·hairdresser 30·insadj 105·lossadj 47 항목. ③ 두음법·암기 총정리: `tmp/_gen_mnemonic.js` LLM 팩별 생성(교재 청크 샘플 소스, 과목별 두음법 표 + 숫자 표) → 22팩 생성, 빈 표 정리. docs_md 번들 재생성(63개 문서)
+
+- **feat(semantic): 임베딩 번들 전 시험 확장 — features.semantic 22팩 추가 + 벡터 빌드** — 시맨틱 검색 인프라(e5-small ONNX 사전계산, 앱에 모델 미배포)를 cosmetic 전용에서 전 팩으로 확장. exams.json 전 팩 semantic:true + build:exams-list 재생성 후 `build_embeddings --exam all`로 팩별 `data/exams/<id>/embeddings/` 산출
+
 - **fix(features): 비cosmetic 팩 피처 게이트 전수 점검 — studyGuide·story_textbook 선언 누락 2건 해소** — data-feature 28키×23팩 교차 대조 + hasFeature JS 체크 + 팩별 파셜 전용 ID의 전역 참조 스캔. 발견: hairdresser는 학습안내서.md 보유+docs_md 번들 존재에도 studyGuide 미선언으로 학습 안내서 카드 미노출, carework는 이야기형 교재 2권+manifest storyFile 선언에도 story_textbook 미선언으로 통합검색 서사 블록 제외 — 각각 플래그 추가 + build:exams-list 재생성. 정상 확인: dictionary·formula·limitsTrainer·ingredients·calcPractice·appendixDocs는 cosmetic 전용 콘텐츠, care*는 carework 전용, writtenPractice는 written[] 보유 팩과 일치, examSwitch·practiceMode·data-needs·nav-study-only는 동적 판정, 매뉴얼은 공용 user_manual
 
 - **fix(pomodoro): 비cosmetic 팩 집중 도구 뽀모도로 미노출 — features.pomodoro 전 시험 활성** — 대시보드 집중 도구 접힘 내 타이머 카드가 data-feature="pomodoro" 게이트 대상인데 해당 플래그가 cosmetic에만 선언돼 있어 다른 팩에선 접힘을 열어도 빈 섹션만 표시. 뽀모도로는 시험 무관 범용 학습 도구(pomodoro.js·POMO_* 저장 키 모두 팩 스코프 범용)라 exams.json 22팩에 pomodoro:true 일괄 추가 + build:exams-list 재생성. check:onboard 구조 오류 0

@@ -555,6 +555,47 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-USR-26 | content/exams/carework/docs/웹툰 컷 가이드라인.md |
 | DOC-USR-27 | content/exams/cosmetic/docs/인물 설정표.md |
 | DOC-USR-28 | content/exams/hazmat/docs/인물 설정표.md |
+| DOC-USR-29 | `content/exams/admagent/docs/두음법_암기_총정리.md` |
+| DOC-USR-30 | `content/exams/admagent/docs/학습안내서.md` |
+| DOC-USR-31 | `content/exams/appraisal/docs/두음법_암기_총정리.md` |
+| DOC-USR-32 | `content/exams/appraisal/docs/학습안내서.md` |
+| DOC-USR-33 | `content/exams/broker/docs/두음법_암기_총정리.md` |
+| DOC-USR-34 | `content/exams/broker/docs/학습안내서.md` |
+| DOC-USR-35 | `content/exams/carework/docs/두음법_암기_총정리.md` |
+| DOC-USR-36 | `content/exams/compapp1/docs/두음법_암기_총정리.md` |
+| DOC-USR-37 | `content/exams/compapp1/docs/학습안내서.md` |
+| DOC-USR-38 | `content/exams/compapp2/docs/두음법_암기_총정리.md` |
+| DOC-USR-39 | `content/exams/compapp2/docs/학습안내서.md` |
+| DOC-USR-40 | `content/exams/conssafe/docs/두음법_암기_총정리.md` |
+| DOC-USR-41 | `content/exams/conssafe/docs/학습안내서.md` |
+| DOC-USR-42 | `content/exams/distmgr2/docs/두음법_암기_총정리.md` |
+| DOC-USR-43 | `content/exams/distmgr2/docs/학습안내서.md` |
+| DOC-USR-44 | `content/exams/distmgr3/docs/두음법_암기_총정리.md` |
+| DOC-USR-45 | `content/exams/distmgr3/docs/학습안내서.md` |
+| DOC-USR-46 | `content/exams/eleceng/docs/두음법_암기_총정리.md` |
+| DOC-USR-47 | `content/exams/eleceng/docs/학습안내서.md` |
+| DOC-USR-48 | `content/exams/elecindeng/docs/두음법_암기_총정리.md` |
+| DOC-USR-49 | `content/exams/elecindeng/docs/학습안내서.md` |
+| DOC-USR-50 | `content/exams/fireelec/docs/두음법_암기_총정리.md` |
+| DOC-USR-51 | `content/exams/fireelec/docs/학습안내서.md` |
+| DOC-USR-52 | `content/exams/hairdresser/docs/두음법_암기_총정리.md` |
+| DOC-USR-53 | `content/exams/hazmat/docs/두음법_암기_총정리.md` |
+| DOC-USR-54 | `content/exams/hazmat/docs/학습안내서.md` |
+| DOC-USR-55 | `content/exams/indsafe/docs/두음법_암기_총정리.md` |
+| DOC-USR-56 | `content/exams/indsafe/docs/학습안내서.md` |
+| DOC-USR-57 | `content/exams/indsafeind/docs/두음법_암기_총정리.md` |
+| DOC-USR-58 | `content/exams/indsafeind/docs/학습안내서.md` |
+| DOC-USR-59 | `content/exams/insadj/docs/두음법_암기_총정리.md` |
+| DOC-USR-60 | `content/exams/insadj/docs/학습안내서.md` |
+| DOC-USR-61 | `content/exams/iteng/docs/두음법_암기_총정리.md` |
+| DOC-USR-62 | `content/exams/iteng/docs/학습안내서.md` |
+| DOC-USR-63 | `content/exams/itindeng/docs/두음법_암기_총정리.md` |
+| DOC-USR-64 | `content/exams/itindeng/docs/학습안내서.md` |
+| DOC-USR-65 | `content/exams/labor/docs/두음법_암기_총정리.md` |
+| DOC-USR-66 | `content/exams/labor/docs/학습안내서.md` |
+| DOC-USR-67 | `content/exams/lossadj/docs/두음법_암기_총정리.md` |
+| DOC-USR-68 | `content/exams/lossadj/docs/학습안내서.md` |
+| DOC-USR-69 | `content/exams/skincare/docs/두음법_암기_총정리.md` |
 | DOC-BIZ-01 | `docs/exams/cosmetic/business/FORMULA_OS_경쟁전략.md` |
 | DOC-BIZ-02 | `docs/exams/cosmetic/business/맞춤형화장품_조제관리사_자격증플랫폼_사업기획서.md` |
 | DOC-BIZ-03 | `docs/exams/cosmetic/business/맞춤형화장품판매업소_조사_2026-09.md` |

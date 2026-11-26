@@ -116,10 +116,11 @@ function collectItems(dataRootAbs) {
             if (!/^ox_.*\.js$/.test(f)) continue;
             const p = path.join(drills, f);
             consume(p);
-            const subject = parseInt(f.match(/subject(\d+)/)[1], 10);
+            const fm = /subject(\d+)/.exec(f);
+            const fileSubject = fm ? parseInt(fm[1], 10) : 0;
             for (const q of loadVarBundle(p).data) {
                 if (q.sid) {
-                    add(`stmt:${q.sid}`, q.statement || '', 'stmt', subject, null,
+                    add(`stmt:${q.sid}`, q.statement || '', 'stmt', q.subject ?? fileSubject, null,
                         { context: cleanText(q.context || ''), truth: q.truth });
                 }
             }
@@ -151,7 +152,7 @@ function collectItems(dataRootAbs) {
             const subject = m ? parseInt(m[1], 10) : 0;
             for (const q of data.questions || []) {
                 const ans = answerText(q.answer ?? '', q.options || []);
-                add(`q:${q.id}`, `${q.question || ''} ${ans}`, 'question', subject);
+                add(`q:${q.id}`, `${q.question || ''} ${ans}`, 'question', q.subject ?? subject);
             }
         }
     }
