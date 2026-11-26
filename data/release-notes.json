@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261127-4e3beb8",
+    "date": "2026-11-27",
+    "notes": [
+      "[수정·exams] 배지 연도 2027 통일 — lossadj·hazmat·conssafe",
+      "[정리·release] v20261127-a8997b7 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261127-a8997b7",
     "date": "2026-11-27",
     "notes": [
@@ -240,15 +248,6 @@
       "[수정·dashboard] 퀴즈·암기카드 과목 셀렉트에도 과목 번호 표기",
       "[수정·reader] 과목 선택 셀렉트에 과목 번호 표기",
       "[정리·release] v20261117-adc2d96 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261117-adc2d96",
-    "date": "2026-11-17",
-    "notes": [
-      "[문서·spec] TOC 챕터 그룹핑 규약을 TR-31로 규약화",
-      "[수정·reader] 목차 챕터 말미 📌/✅ 카드 들여쓰기 통일",
-      "[정리·release] v20261117-0740aaf 스탬프 확정 [no-docs]"
     ]
   }
 ]
