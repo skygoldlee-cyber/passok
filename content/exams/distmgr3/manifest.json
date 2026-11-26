@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "contentYear": "2027",
   "textbookEdition": "2027",
-  "_pilot": "유통관리사 3급 파일럿 — 대한상공회의소 국가자격. 필기 2과목 객관식 45문/45분(과목당 40점·평균 60점). 출제기준 2024~2026 적용(license.korcham.net 공개 PDF 확보). 기출은 CBT 비공개 — 출제기준+법령 근거의 ai:draft 자체 제작으로 증산 (승격 기준 과목당 ≥20문).",
+  "_pilot": "유통관리사 3급 pilot 오픈 — 대한상공회의소 국가자격. 필기 2과목 객관식 45문/45분(과목당 40점·평균 60점). 출제기준 2024~2026 적용(license.korcham.net 공개 PDF 확보). 기출은 CBT 비공개 — 출제기준+법령 근거의 ai:draft 자체 제작, 과목당 모의고사 3회분 총 138문.",
   "subjects": [
     {
       "key": "distsense",
