@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **fix(content): AI 거절 텍스트 교재 유입분 제거 + 오염 문항 7건 삭제** — 부록 생성 파이프라인에서 이미지 전용 청크에 대한 LLM 거절 문단("제공된 참조자료…본문 초안을 작성할 수 없습니다")이 교재 본문에 유입된 결함 정리. 교재 8파일 정리(iteng db·itindeng db 각 -117줄, indsafe practical -67, skincare 2·hairdresser 2·distmgr3 salesmgmt·iteng swdev·itindeng sysbase) — 거절 문단 + 공벌어진 `### 참조자료 확인`·`## (고정폭 창) (LNN~LNN)` 정크 헤딩·빈 섹션 일괄 제거(하위 레벨 헤딩은 콘텐츠로 인정하는 계층 규칙 적용). 문항: 거절 인용 기반 메타 문항 itindeng/과목3 Q34~39 6건 삭제 + distmgr2/과목4 크로스도킹 유사중복 Q47 삭제(후속 재번호, exams.json desc 233→227·285→284). eleceng/과목4 Q53 발문에 누락된 상태·출력방정식 행렬 식 삽입(교재 근거 [2 1] 정답 유지). 후속: 교재 `### N.` 시퀀스 재번호 4블록(numbering 게이트), sync_citation_lines 전량 재동기(19,724링크 미발견 0). 잔여: 미검수 문항 ~1,090건(표본 437건 검수 완료·실 결함 전부 정리됨)
+
 - **feat(content): draft 팩 3팩 소량 증산 — iteng·itindeng·distmgr2 각 +8문 (전 6팩 승격가능)** — audit:scorecard 기준 잔여 6문씩 보충 → iteng 251·itindeng 233·distmgr2 285로 3/3 충족. draft 팩 6종 전량 승격 정량 요건 충족(교재 20k+·문항 3회분·인용 근거) — 잔여는 AI 초안 사실관계 검수 + comingSoon 해제 결정뿐
 
 - **feat(content): draft 팩 6종 문제은행 3회분 증산 — 23과목 +823문 (총 1,507문)** — 승격 게이트(모의고사 3회분) 기준 2차 증산: tmp/_qgen.js에 offset 샘플링 추가(1차와 비겹침 청크) 후 과목당 +30~48문 생성·편입. 최종 은행 총량 eleceng·elecindeng 312·iteng 243·itindeng 225·distmgr2 277·distmgr3 138 — 전량 요구치 이상. regs는 사용 가능 청크 6개라 청크당 5문으로 보충. ai_dupcheck 임계 초과 0건. exams.json desc 4팩을 "문제은행 N문 수록 · 시험 소개" 컨벤션으로 신규 작성(eleceng·elecindeng·iteng·itindeng — 기존 scaffold 골격 문구 교체)
