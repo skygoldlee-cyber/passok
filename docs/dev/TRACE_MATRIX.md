@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 00cb8ef44216f59a
+> 입력 해시: 77aad444af951ea5
 > 생성: 2026-11-26 · 원천: SPEC.md(733개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -564,7 +564,7 @@
 | AI-37 | ✅ | 테스트 | — | src/ai/gen-gate.js | tests/unit/engine/gen-gate.test.js | — | — |
 | AI-38 | ✅ | 테스트 | — | — | tests/unit/engine/ai-client.test.js | — | — |
 | AI-39 | ✅ | 테스트 | — | tools/ai/ai_trap.js<br>tools/ai/lib/traps.js<br>tools/build/plugins/exams.plugin.js | tests/unit/ai/traps.test.js | — | — |
-| AI-40 | 🟡 부분 (단계 2 — 실제 백업 데이터 valid 판정 후 계수 확정) | 테스트 | DOC-DSN-56 | src/passloop/core/mastery.js<br>src/passloop/index.js<br>src/passloop/ports.js<br>src/study/passloop-adapter.js<br>…외 1개 | tests/dom/study/study-mastery.dom.test.js<br>tests/unit/passloop/mastery.test.js | — | — |
+| AI-40 | 🟡 부분 (단계 2 — 실제 백업 데이터 valid 판정 후 계수 확정) | 테스트 | DOC-DSN-56 | src/passloop/core/mastery.js<br>src/passloop/index.js<br>src/passloop/ports.js<br>src/study/passloop-adapter.js<br>…외 2개 | tests/dom/study/study-mastery.dom.test.js<br>tests/unit/passloop/mastery.test.js | — | — |
 | AI-41 | 🟡 부분 (수집·주입 완료 — 라벨 품질 실측 후 조정) | 테스트 | DOC-DSN-56 | src/passloop/core/learner-profile.js<br>src/passloop/index.js<br>src/study/learner-profile-store.js | tests/unit/passloop/learner-profile.test.js | — | — |
 | AI-42 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-56 | — | — | — | — |
 | AI-43 | 🟡 부분 (도구·런타임 완료 — 정본 편입 후 노출 검증) | 테스트 | DOC-DSN-56 | src/reader/quickcheck.js<br>tools/ai/ai_quickcheck.js | tests/dom/reader/quickcheck.dom.test.js | — | — |

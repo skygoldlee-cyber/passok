@@ -1,5 +1,5 @@
 // src/views/dashboard-queue.js — "오늘 할 일" 단일 큐 (TQ-01~05, DOC-DSN-21)
-// @spec TQ-01,TQ-02,TQ-03,TQ-05,D-23,UX-FB-08,PS-01,PS-03,PS-10
+// @spec TQ-01,TQ-02,TQ-03,TQ-05,D-23,UX-FB-08,PS-01,PS-03,PS-10,AI-40
 //
 // 모든 추천 소스의 출력을 하나의 우선순위 큐로 병합한다.
 // 큐 빌드(buildTodayQueue)는 DOM 비의존 순수 로직 — 렌더는 renderTodayQueue가 담당.
@@ -21,6 +21,7 @@ import {
 import { computeRecommendations, snapshotRecommendations, evaluateRecommendationEffect } from '../study/recommendations.js';
 import { buildTodayQueue as buildPersonalQueue } from '../passloop/core/personalization.js';
 import { weakClusters } from './personalization-view.js';
+import { masterySnapshot, describeConcept } from '../study/passloop-adapter.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';
 import { subjectKeyFromItemId } from '../study/weak-items.js';
 import { todayKey } from '../core/utils.js';
@@ -176,6 +177,26 @@ function _pushClinicItem(p, push) {
 }
 
 /**
+ * 큐 항목 ⑤## — 개념 숙련도 최하 추천 (PassLoop AI-40). 학습진단 카드까지
+ * 들어가지 않아도 "다음에 풀 것"을 큐에서 바로 개념 드릴로 착지시킨다.
+ * @param {*} p
+ * @param {(item:*) => void} push
+ */
+function _pushMasteryItem(p, push) {
+    const a = p.masteryAction;
+    if (!a || !a.cid) return;
+    const d = describeConcept(a.cid);
+    const label = a.title || (d && d.title) || a.cid;
+    push({
+        kind: 'mastery',
+        icon: 'fa-compass', color: 'var(--color-primary)',
+        title: `취약 개념 보강: ${label}`,
+        reason: `개념 숙련도 ${a.score}점(${a.grade}) — 지금 드릴로 끌어올리기`,
+        actions: [{ click: 'gotoOxDrill', arg: `concept:${d ? d.anchor : a.cid}`, label: '개념 드릴', icon: 'fa-bullseye', cls: 'btn-primary' }]
+    });
+}
+
+/**
  * 큐 항목 ⑤+ — 시험일 목표 R 최종 인출. 다음 복습이 시험일 이후인 스케줄 사각지대 카드 (D-19).
  * @param {*} p
  * @param {(item:*) => void} push
@@ -272,7 +293,7 @@ function _sortQueue(items, p, dueCount) {
     });
     // PS-03 미관할 항목의 고정 우선순위 — 기존 상대 순서(due>danger>review>weak>examr>rec>start/daily) 보존
     const FIXED_PRIO = {
-        goal: 1000, danger: 79, review: 70, clinic: 65, examr: 55, rec: 50, daily: 10, start: 5, flow: 75
+        goal: 1000, danger: 79, review: 70, clinic: 65, mastery: 62, examr: 55, rec: 50, daily: 10, start: 5, flow: 75
     };
     const prioMap = new Map();
     items.forEach(it => {
@@ -301,6 +322,7 @@ function _sortQueue(items, p, dueCount) {
  * @param {Array<*>} [p.behindSubjects] 계획 밀림 과목 [{key,name,daysBehind}] — PS-03 우선순위 입력
  * @param {number} [p.unlearnedCount] 미학습 카드 수 — PS-03 우선순위 입력
  * @param {*} [p.topCluster] 최다 오개념 클러스터 (weakClusters()[0] — PS-01·PS-10 클리닉 항목)
+ * @param {*} [p.masteryAction] 개념 숙련도 최하 추천 (masterySnapshot().actions[0] — AI-40 큐 항목)
  * @param {*} [p.flowResume] 개념 학습 이어하기 대상 {id,title,weak} — careFlow 시험 전용
  * @param {boolean} [p.flowCapable] 활성 시험의 개념 학습 플로우 보유 여부 — 첫 학습 제안 분기용
  * @returns {Array<{icon:string, color:string, title:string, reason:string,
@@ -329,6 +351,7 @@ export function buildTodayQueue(p = {}) {
     _pushReviewItem(p, push);                      // ④ 오답·헷갈림 재채점
     _pushWeakItem(p, push);                        // ⑤ 취약 진술 드릴
     _pushClinicItem(p, push);                      // ⑤# 오개념 클리닉
+    _pushMasteryItem(p, push);                     // ⑤## 개념 숙련도 최하 추천 (AI-40)
     _pushExamRiskItem(p, push);                    // ⑤+ 시험 전 최종 인출
     _pushRestRecs(p, push);                        // ⑥ 잔여 추천
     _pushStartItem(p, items);                      // TQ-05 빈 큐 시작 안내
@@ -425,8 +448,11 @@ export function renderTodayQueue(subjects) {
         } catch { /* 진행 기록 손상 시 큐 항목 생략 */ }
     }
 
+    let masteryAction = null;
+    try { masteryAction = (masterySnapshot() || { actions: [] }).actions[0] || null; } catch { /* 어댑터 실패는 큐 항목 생략으로 수렴 */ }
+
     const items = buildTodayQueue({
-        dueCardIds, subjects, recs, allocRemaining,
+        dueCardIds, subjects, recs, allocRemaining, masteryAction,
         reviewCount: state.weakCards.size,
         weakStatementCount: getWeakStatements().length,
         dailyDone: !!safeGetItem(dailyCompletedKey(todayKey())),

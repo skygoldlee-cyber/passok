@@ -51,7 +51,7 @@ describe('PassLoop 내 노트 카드 (AI-44)', () => {
         renderAnalysisView();
         const card = el('analysis-notes');
         expect(card.textContent).toContain('내 노트');
-        expect(card.textContent).toContain('섹션 메모를 남기면');
+        expect(card.textContent).toContain('메모를 남기면');
         expect(card.querySelector('[data-click="switchView"][data-arg="textbook-reader-view"]')).not.toBeNull();
     });
 

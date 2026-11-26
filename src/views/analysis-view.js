@@ -589,7 +589,7 @@ function _renderNotesCard() {
         .sort((a, b) => String(b.updated || '').localeCompare(String(a.updated || '')));
     if (!entries.length) {
         el.innerHTML = `<h4>📝 내 노트 <span class="analysis-meta">PassLoop</span></h4>
-            <p class="analysis-empty">교재 리더에서 섹션 메모를 남기면 여기에 모아보여줍니다.</p>
+            <p class="analysis-empty">교재 리더의 섹션 카드 헤더 <i class="fa-regular fa-note-sticky" aria-hidden="true"></i> 메모 아이콘으로 메모를 남기면 여기에 모아보여줍니다.</p>
             <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="textbook-reader-view"><i class="fa-solid fa-book-open" aria-hidden="true"></i> 리더로</button>`;
         return;
     }

@@ -204,3 +204,22 @@ test('PS-10 topCluster가 있으면 오개념 클리닉 항목이 큐에 포함�
     assert.equal(clinic.actions[0].click, 'switchView');
     assert.equal(clinic.actions[0].args[0], 'analysis-view');
 });
+
+// AI-40 — 개념 숙련도 최하 추천이 있으면 큐에 mastery 항목으로 들어간다
+test('AI-40 masteryAction이 있으면 취약 개념 보강 항목이 큐에 포함된다', () => {
+    const items = buildTodayQueue(baseInput({
+        masteryAction: { cid: 'sub1:§1.2', title: '주제A-1', score: 34, grade: '도입', cov: 0.4 },
+    }));
+    const m = items.find((i) => i.kind === 'mastery');
+    assert.ok(m, 'mastery 항목 존재');
+    assert.match(m.title, /취약 개념 보강/);
+    assert.match(m.reason, /34점\(도입\)/);
+    assert.equal(m.actions[0].click, 'gotoOxDrill');
+    assert.equal(m.actions[0].arg, 'concept:§1.2');
+});
+
+// AI-40 — masteryAction 부재 시 mastery 항목은 나타나지 않는다
+test('AI-40 masteryAction이 없으면 mastery 항목 미표시', () => {
+    const items = buildTodayQueue(baseInput());
+    assert.ok(!items.some((i) => i.kind === 'mastery'));
+});
