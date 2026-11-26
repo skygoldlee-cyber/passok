@@ -85,7 +85,8 @@
         "writtenPractice": true,
         "studyGuide": true,
         "pomodoro": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "comingSoon": true,
       "appNameEn": "Passkin",
@@ -119,7 +120,8 @@
         "pomodoro": true,
         "studyGuide": true,
         "dictionary": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "appNameEn": "Passhair",
       "practiceName": "Hair OS",
@@ -156,7 +158,8 @@
         "pomodoro": true,
         "dictionary": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "appNameEn": "Passure",
       "practiceName": "Adjust OS",
@@ -193,7 +196,8 @@
         "pomodoro": true,
         "dictionary": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "appNameEn": "Passess",
       "practiceName": "Assess OS",
@@ -225,7 +229,8 @@
         "writtenPractice": true,
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "comingSoon": true,
       "appNameEn": "Passmin",
@@ -266,7 +271,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       }
     },
     {
@@ -295,7 +301,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       }
     },
     {
@@ -318,7 +325,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "comingSoon": true,
       "group": "법무·노무",
@@ -349,7 +357,8 @@
         "writtenPractice": true,
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "appNameEn": "Passafe",
       "practiceName": "Safety OS",
@@ -380,7 +389,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "group": "산업안전",
       "comingSoon": true,
@@ -410,7 +420,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "group": "정보처리",
       "comingSoon": true,
@@ -440,7 +451,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "group": "정보처리",
       "comingSoon": true,
@@ -470,7 +482,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "group": "전기",
       "comingSoon": true,
@@ -500,7 +513,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "group": "전기",
       "comingSoon": true,
@@ -533,7 +547,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "comingSoon": true,
       "appNameEn": "Passcomp",
@@ -568,7 +583,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "appNameEn": "Passcomp",
       "practiceName": "Sheet OS",
@@ -602,7 +618,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "comingSoon": true,
       "group": "유통·물류",
@@ -634,7 +651,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "comingSoon": true,
       "group": "유통·물류",
@@ -703,7 +721,8 @@
         "pomodoro": true,
         "story_textbook": true,
         "dictionary": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "group": "보건·복지",
       "tier": "active"
@@ -728,7 +747,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "appNameEn": "Passzard",
       "practiceName": "Danger OS",
@@ -759,7 +779,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "group": "소방",
       "tier": "pilot",
@@ -788,7 +809,8 @@
       "features": {
         "pomodoro": true,
         "studyGuide": true,
-        "semantic": true
+        "semantic": true,
+        "appendixDocs": true
       },
       "group": "산업안전",
       "tier": "pilot",
