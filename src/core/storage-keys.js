@@ -229,6 +229,9 @@ export const STORAGE_KEYS = {
 
   // 런타임 AI 응답 캐시 접두사 (ai-client.js) — 콘텐츠 해시별 캐시, 백업·동기 제외
   AI_CACHE_PREFIX: 'ai_cache_',
+
+  // PassLoop 학습자 취약 개념 프로필 (learner-profile-store.js, AI-41) — 라벨만, 민감 정보 아님
+  AI_LEARNER_PROFILE: 'ai_learner_profile',
 };
 
 // 백업/복원 대상 정적 키 목록 (동적 키는 DAILY_COMPLETED_PREFIX로 별도 처리)
@@ -258,6 +261,7 @@ export const BACKUP_KEYS = [
   STORAGE_KEYS.READ_THROUGH_DONE,   // 일독 완료 통지 플래그 — 진척과 함께 복원·초기화 (TR-28)
   STORAGE_KEYS.FC_SPACED_REPETITION,  // FSRS 카드별 스케줄 — 복원 누락 시 복습 일정 리셋
   STORAGE_KEYS.FC_REVIEW_LOG,         // FSRS 리뷰 이력 — 피팅·효능 실측 원천 (D-18)
+  STORAGE_KEYS.AI_LEARNER_PROFILE,    // 취약 개념 프로필 — 기기 간 개인화 일관 (AI-41, 라벨만)
   STORAGE_KEYS.FORMULA_ITEMS,
   STORAGE_KEYS.FORMULA_RULES,
   STORAGE_KEYS.BATCH_ITEMS,

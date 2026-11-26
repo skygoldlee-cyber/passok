@@ -365,6 +365,7 @@ const _diagNum = (v, lo, hi) => {
  * @property {string} [topCluster]
  * @property {string} [weakestSubject]
  * @property {string} [bandwidth] plan_adjust 여유 선택지 ('부족'|'보통'|'넉넉')
+ * @property {string[]} [weakConcepts] AI-41 프로필 취약 라벨 (≤5×60자)
  */
 /**
  * weekly_diagnosis 프롬프트 조립 (서버 미러) — 집계 수치+라벨 → 고정 템플릿.
@@ -395,6 +396,8 @@ function _diagValues(input) {
         needed: _diagNum(inp.neededPerDay, 0, 999),
         cluster: _clip(inp.topCluster, 60),
         weakSubj: _clip(inp.weakestSubject, 60),
+        concepts: (Array.isArray(inp.weakConcepts) ? inp.weakConcepts : [])
+            .slice(0, 5).map(/** @param {*} x */ x => _clip(x, 60)).filter(Boolean),  // AI-41
     };
 }
 
@@ -408,6 +411,7 @@ const _DIAG_LINES = [
     (v) => v.cover !== null ? `- 현재 페이스 커버 예상: ${v.cover}%${v.needed !== null ? ` (필요 페이스 학습일당 ${v.needed}장)` : ''}` : null,
     (v) => v.cluster ? `- 최다 오개념: ${v.cluster}` : null,
     (v) => v.weakSubj ? `- 취약 과목: ${v.weakSubj}` : null,
+    (v) => v.concepts.length ? `- 누적 취약 개념: ${v.concepts.join(', ')}` : null,
 ];
 
 /**
@@ -474,7 +478,7 @@ const BYOK_QUIZ_SYSTEM = `당신은 자격시험 출제자입니다. 주어진 �
 
 /**
  * quiz_gen 프롬프트 조립 (서버 미러) — 취약 개념+교재 근거 → 문항 생성.
- * @param {{cluster?: string, evidence?: string, existing?: string[], count?: number}} input {cluster?, evidence?, existing?[], count?}
+ * @param {{cluster?: string, evidence?: string, existing?: string[], count?: number, weakConcepts?: string[]}} input {cluster?, evidence?, existing?[], count?, weakConcepts?[]}
  * @returns {string|null}
  */
 export function buildQuizGenPrompt(input) {
@@ -484,9 +488,11 @@ export function buildQuizGenPrompt(input) {
     if (!cluster && !evidence) return null;
     const existing = (Array.isArray(inp.existing) ? inp.existing : [])
         .slice(0, 8).map(q => _clip(q, 300)).filter(Boolean);
+    const concepts = (Array.isArray(inp.weakConcepts) ? inp.weakConcepts : [])
+        .slice(0, 5).map(x => _clip(x, 60)).filter(Boolean);  // AI-41
     const n = _diagNum(inp.count, 1, 3) ?? 2;
     return `## 출제 대상 개념\n${cluster ?? '약점 복습'}
-${evidence ? `\n## 교재 근거 (반드시 이 범위에서 출제)\n${evidence}\n` : ''}
+${concepts.length ? `- 반복 취약 라벨: ${concepts.join(', ')}\n` : ''}${evidence ? `\n## 교재 근거 (반드시 이 범위에서 출제)\n${evidence}\n` : ''}
 ${existing.length ? `\n## 기존 문항 (중복 금지)\n${existing.map((q, i) => `${i + 1}. ${q}`).join('\n')}\n` : ''}
 위 근거로 객관식 문항 ${n}개 생성 — 각 문항은 인용 근거(citation)와 4개 선지 필수.
 응답 형식(JSON만): {"items":[{"question":"...","options":["...","...","...","..."],"answer":"선지 중 하나와 동일","citation":"근거 조문·구절","explain":"1문장 해설"}]}`;
@@ -516,7 +522,7 @@ export function parseItemsResponse(rawText) {
 
 /**
  * 약점 생성형 미니퀴즈 요청 (AI-38) — 결과는 반드시 gen-gate로 걸러 출제.
- * @param {{cluster?: string, evidence?: string, existing?: string[], count?: number}} input - buildQuizGenPrompt 인자 계약
+ * @param {{cluster?: string, evidence?: string, existing?: string[], count?: number, weakConcepts?: string[]}} input - buildQuizGenPrompt 인자 계약
  * @param {AiDeps} [deps]
  */
 export function requestWeakQuizGen(input, deps = {}) {

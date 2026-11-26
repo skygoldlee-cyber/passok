@@ -117,6 +117,7 @@ type DiagnosisInput = {
     weekRate?: unknown; rateDelta?: unknown; dday?: unknown;
     projectedCoverage?: unknown; neededPerDay?: unknown;
     topCluster?: unknown; weakestSubject?: unknown;
+    weakConcepts?: unknown;  // AI-41 취약 라벨 배열 (≤5×60자)
 };
 
 const diagNum = (v: unknown, lo: number, hi: number): number | null => {
@@ -137,6 +138,8 @@ function buildWeeklyDiagnosisPrompt(input: DiagnosisInput): string | null {
     const needed = diagNum(input?.neededPerDay, 0, 999);
     const cluster = clip(input?.topCluster, 60);
     const weakSubj = clip(input?.weakestSubject, 60);
+    const concepts = (Array.isArray(input?.weakConcepts) ? input.weakConcepts : [])
+        .slice(0, 5).map((x) => clip(x, 60)).filter(Boolean);  // AI-41
     const hasNum = [solved, plan, wrong, rate, dday, cover, needed].some((v) => v !== null);
     if (solved !== null) lines.push(`- 이번 주 풀이: ${solved}문${plan !== null ? ` (계획 ${plan}문)` : ""}`);
     else if (plan !== null) lines.push(`- 주간 계획: ${plan}문`);
@@ -146,6 +149,7 @@ function buildWeeklyDiagnosisPrompt(input: DiagnosisInput): string | null {
     if (cover !== null) lines.push(`- 현재 페이스 커버 예상: ${cover}%${needed !== null ? ` (필요 페이스 학습일당 ${needed}장)` : ""}`);
     if (cluster) lines.push(`- 최다 오개념: ${cluster}`);
     if (weakSubj) lines.push(`- 취약 과목: ${weakSubj}`);
+    if (concepts.length) lines.push(`- 누적 취약 개념: ${concepts.join(", ")}`);
     if (!hasNum) return null;  // 라벨만으로는 진단 불가 — 수치가 최소 1개 필요
     return `## 이번 주 학습 수치\n${lines.join("\n")}
 응답 형식(JSON만): {"explain":"평가+다음 주 행동 제안 2~3문장","confused_concept":"핵심 키워드 1어절"}`;
@@ -157,7 +161,7 @@ const QUIZ_GEN_SYSTEM_PROMPT = `당신은 자격시험 출제자입니다. 주�
 - 정답은 선지 중 하나와 완전히 동일해야 합니다.
 - 출력은 지정된 JSON 스키마만 따릅니다.`;
 
-type QuizGenInput = { cluster?: unknown; evidence?: unknown; existing?: unknown; count?: unknown };
+type QuizGenInput = { cluster?: unknown; evidence?: unknown; existing?: unknown; count?: unknown; weakConcepts?: unknown };
 
 /** 취약 개념 + 교재 근거 → 생성형 미니퀴즈 프롬프트 (AI-38 — AI-30 고정 템플릿 계약) */
 function buildQuizGenPrompt(input: QuizGenInput): string | null {
@@ -165,10 +169,12 @@ function buildQuizGenPrompt(input: QuizGenInput): string | null {
     const evidence = clip(input?.evidence, 1200);
     if (!cluster && !evidence) return null;
     const existing = clipList(input?.existing).slice(0, 8);
+    const concepts = (Array.isArray(input?.weakConcepts) ? input.weakConcepts : [])
+        .slice(0, 5).map((x) => clip(x, 60)).filter(Boolean);  // AI-41
     const count = diagNum(input?.count, 1, 3) ?? 2;
     return `## 출제 대상 개념
 ${cluster ?? "약점 복습"}
-${evidence ? `\n## 교재 근거 (반드시 이 범위에서 출제)\n${evidence}\n` : ""}
+${concepts.length ? `- 반복 취약 라벨: ${concepts.join(", ")}\n` : ""}${evidence ? `\n## 교재 근거 (반드시 이 범위에서 출제)\n${evidence}\n` : ""}
 ${existing.length ? `\n## 기존 문항 (중복 금지)\n${existing.map((q, i) => `${i + 1}. ${q}`).join("\n")}\n` : ""}
 위 근거로 객관식 문항 ${count}개 생성 — 각 문항은 인용 근거(citation)와 4개 선지 필수.
 응답 형식(JSON만): {"items":[{"question":"...","options":["...","...","...","..."],"answer":"선지 중 하나와 동일","citation":"근거 조문·구절","explain":"1문장 해설"}]}`;

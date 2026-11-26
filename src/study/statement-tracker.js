@@ -11,6 +11,7 @@
 import { safeGetItem, safeSetItem } from '../core/state.js';
 import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { updateCardSchedule } from './spaced-repetition.js';
+import { recordWeakConcept } from './learner-profile-store.js';
 import { todayKey } from '../core/utils.js';
 
 const STATS_KEY = STORAGE_KEYS.STATEMENT_STATS;
@@ -41,6 +42,8 @@ export function recordStatementJudgments(perStatement) {
         if (!s.judgedCorrect) {
             cur.w += 1;
             cur.lw = today;
+            // AI-41 — 오판 진술 라벨을 취약 개념 프로필에 누적
+            recordWeakConcept({ label: s.text || s.conceptId || '', cid: s.conceptId || null, src: 'stmt' });
         }
         stats[s.sid] = cur;
         recorded++;

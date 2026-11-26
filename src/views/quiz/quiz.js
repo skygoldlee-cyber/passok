@@ -21,6 +21,7 @@ import { shuffle } from '../../core/utils.js';
 import { showToast, vibrate, HAPTIC, markChoiceState, clearChoiceState } from '../../ui-utils.js';
 import { suggestWrongCauseKey, recordDiagnosticP0 } from '../personalization-view.js';
 import { aiFeedbackAvailable, requestWrongFeedback } from '../../ai/ai-client.js';
+import { recordWeakConcept } from '../../study/learner-profile-store.js';
 
 /**
  * 퀴즈 오답 후 피드백 패널에 "틀린 이유" 자가 태깅 버튼을 표시한다.
@@ -582,6 +583,7 @@ export async function requestAiFeedback(quizId) {
     slot.innerHTML = '<p class="ai-feedback-loading"><i class="fa-solid fa-spinner fa-spin"></i> AI가 오답을 분석하고 있습니다…</p>';
     const res = await requestWrongFeedback(input);
     if (res.ok) {
+        if (res.confused) recordWeakConcept({ label: res.confused, cid: (/** @type {*} */ (q))?.conceptId || null, src: 'feedback' }); // AI-41
         slot.innerHTML = `<div class="ai-feedback">
             <p class="ai-feedback-text">${safeTextWithBreaks(res.explain)}</p>
             ${res.confused ? `<p class="ai-feedback-confused">혼동 개념: <strong>${esc(res.confused)}</strong></p>` : ''}

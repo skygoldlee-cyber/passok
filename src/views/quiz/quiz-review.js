@@ -12,6 +12,7 @@ import { getAllStatementStats } from '../../study/statement-tracker.js';
 import { showToast } from '../../ui-utils.js';
 import { hasProEntitlement, proFeatureNotice } from '../../pro/pro-upgrade.js';
 import { requestWeakQuizGen } from '../../ai/ai-client.js';
+import { getWeakConcepts } from '../../study/learner-profile-store.js';
 import { filterGeneratedItems } from '../../ai/gen-gate.js';
 import { computeWrongCauseSummary, getWrongCauseLabels } from '../../study/recommendations.js';
 import { normalizeConceptCid, pickConceptQuestions } from '../../study/concept-drill.js';
@@ -302,6 +303,7 @@ export async function startWeakGenQuiz() {
     showToast('AI가 약점 문항을 생성하고 있습니다…', 'info');
     const res = await requestWeakQuizGen({
         cluster: '약점 개념 복습', existing: wrongTexts.slice(0, 8), count: 3,
+        weakConcepts: getWeakConcepts(),  // AI-41 누적 취약 라벨
     });
     if (!res.ok) {
         showToast(res.error || 'AI 미니퀴즈 생성에 실패했습니다.', 'error');
