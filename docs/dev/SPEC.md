@@ -199,7 +199,7 @@
 | 3.24 | **학습 품질 감사** | 주간 배분·학습 진단 추천의 규칙 정합 자동 감사 | SQ-01~SQ-04 (4) |
 | 3.25 | **의미 유사도** | 빌드타임 문장 임베딩 → 정적 번들 — 유사 진술·이웃 인덱스 | SEM-01~SEM-08 (8) |
 | 3.26 | **관리자** | 관리자 권한 모델·피드백 인박스·오류 대시보드·사용자 관리·운영 CLI·로컬 대시보드·Pro 현황 리포트·Discord 운영 알림·조회 봇·커뮤니티 공지·기관 활동 | AD-01~AD-13 (13) |
-| 3.27 | **AI 제작 지원** | author-time AI 초안 생성·검토 파이프라인 — `tmp/ai_drafts/` → 사람 리뷰 → content/ 편입 | AI-01~AI-39 (38) |
+| 3.27 | **AI 제작 지원** | author-time AI 초안 생성·검토 파이프라인 — `tmp/ai_drafts/` → 사람 리뷰 → content/ 편입 + PassLoop 런타임 계열 | AI-01~AI-44 (43) |
 | 3.28 | **주관식 연습** | 서술형 답안 작성·자기채점 루브릭·자동저장 | WP-01~WP-08 (8) |
 | 3.29 | **서비스 소개 (랜딩)** | `/landing.html` 정적 소개 페이지 — 시험 카드·체험 데모(퀴즈·학습계획)·설치 CTA·SEO/OG·프로모션 진입점 | LP-01~LP-14 (14) |
 | 3.30 | **개인 맞춤 고도화** | 개념 단위 약점 진단·개인화 스케줄·합격 예측 — 기존 자산(FSRS·BKT·진술 추적·임베딩)의 조합 계층 `src/study/personalization.js` | PS-01~PS-11 (11) |
@@ -756,6 +756,11 @@
 | AI-35 | 주간 플랜 조정 — `plan_adjust` kind: 주간 수치(weekly_diagnosis와 동일 구조화 인자) + 여유 선택지(부족/보통/넉넉 — 자유 텍스트 없음, AI-30 준수) → 다음 주 배분·우선순위 조언 2~3문장. 학습 리듬 카드 여유 select + "AI 플랜 조정" 버튼, 조언만 표시(실제 배분 변경 없음) | ✅ |
 | AI-36 | 교재 질의응답 — `textbook_qa` kind: 자유 질문(≤200자, AI-30 개정 경계형) + SemanticIndex 임베딩 검색 근거 스니펫(top-k 진술/문항 텍스트) → 근거 범위 답변 + 인용 스니펫 목록. 학습 리듬 카드 "교재에 물어보기" 입력, 답변+인용+`AI 생성` 배지 인라인 표시 | ✅ |
 | AI-39 | **함정 유형(trap) 태그** — 문항 오지의 함정 방식을 닫힌 어휘 `TRAP_TAGS`(유사용어혼동·수치바꿔치기·절대표현·주어치환·예외조항, `src/content/questions.js` 정본)로 기술. STANDARD_TAGS와 별도 축. 문제은행 정답 블록 `> **함정:** 유형1, 유형2` 메타 행 → `exams.plugin.js`가 번들 `q.trap`으로 편입(어휘 밖 값은 빌드 실패 = 화이트리스트 게이트, `validateQuestion`도 동일 검증). `ai:trap`이 규칙 후보(lib/traps.js — 수치마스크·절대 화행·예외 표현·선지 bigram 유사도) + LLM 보완으로 초안 생성 → 사람 리뷰 후 `--write` 편입. 파일럿: carework 142문 태깅 (DOC-DSN-52 Phase 3) | ✅ |
+| AI-40 | **개념 숙련도 맵 (Mastery Path)** — PassLoop 엔진 `src/passloop/` + 런타임 어댑터 `src/study/passloop-adapter.js`: 진술 통계(j/w)·퀴즈 판정·FSRS 리뷰 로그를 `subj:§N.M` 개념으로 환산 집계(`collectConceptStats` — 과목별 Chapter 번호 충돌 방지) → 사전 보정 정답률×망각 반감 최근성으로 점수·등급(미학습/도입/진행/숙련/유지)·커버리지 산출(`computeMastery`), 최하 숙련 개념 추천(`nextActions`). 분석 뷰 "개념 숙련도" 카드(`analysis-mastery`)가 등급 분포 + 추천 행(개념 드릴 `concept:§N.M`·교재 단원 딥링크) 표시. 순수 로직 — LLM·네트워크·저장소 비의존, `ContentIndex` 포트 주입으로 플랫폼 해석 분리 (엔진 경계: 코어 외부 import 금지, DOC-DSN-56 §3.7). `ai:masteryeval`이 백업 데이터로 분포 실측 | 🟡 부분 (단계 2 — 실제 백업 데이터 valid 판정 후 계수 확정) |
+| AI-41 | 학습자 취약 개념 프로필 — `ai_learner_profile`(시험 스코프·백업·동기 대상)에 ①`wrong_feedback`의 `confused_concept`(src:feedback) ②오판 진술 라벨(src:stmt)을 누적. 순수부 `src/passloop/core/learner-profile.js`(n·lastTs·cid·src, LRU 200·만료 90일·라벨 60자) + 어댑터 `src/study/learner-profile-store.js`. 상위 5개 라벨을 `weakConcepts` 구조화 인자로 `weekly_diagnosis`·`plan_adjust`·`quiz_gen`에 주입 — 프록시 템플릿 미러 동기 갱신, 라벨 문자열만 전송 (AI-30 정합, DOC-DSN-56 §3.3) | 🟡 부분 (수집·주입 완료 — 라벨 품질 실측 후 조정) |
+| AI-42 | 다턴 교재 튜터 — `textbook_qa`에 `history`(직전 문답 최대 4턴, q≤200자·a≤600자) 구조화 인자 추가, 매 턴 근거 재검색·인용 강제 — 자유 대화 아닌 "이력 첨부 경계형 질의"로 AI-30 범위 내 (DOC-DSN-56 §3.4) | 미구현 (로드맵) |
+| AI-43 | 챕터 퀵체크 — `ai:quickcheck` 저작 파이프라인: 표준형 교재 `## M.` 섹션(`<subj>:§N.M` 키, §N.0·비번호 절 제외)을 섹션 본문 근거 한정으로 순회해 OX·단답 초안 생성 — evidence 미검출·ai:lint 위반은 `[폐기 후보]` 표시 → 사람 리뷰 → `--apply`로 `피드백/quickcheck.json` 오버레이 병합(AI-15/19/22 동형) → 리더 섹션 말미 "이해도 점검" 토글 (OX 즉시 채점·단답 정답 공개+자가 채점·오답 시 `#/trainer/concept/<N.M>` 드릴 링크). 정본 없으면 기능 무표시, 런타임 비용 0 (DOC-DSN-56 §3.5) | 🟡 부분 (도구·런타임 완료 — 정본 편입 후 노출 검증) |
+| AI-44 | 통합 학습 노트 — 분석 뷰 "내 노트" 카드: `reader_notes`(TR-30) 섹션 메모를 최신순 교차 나열(최대 8건, 제목·미리보기·수정시각) + "섹션으로" 버튼으로 `openSubjectSection` 회귀 링크. 메모 부재 시 온보딩 안내, 로컬 전용 (DOC-DSN-56 §3.6) | 🟡 부분 (목록 뷰 완료 — 노트→드릴 진입 훅은 후속) |
 
 ### 3.28 주관식 연습 자기채점 (Written Practice)
 

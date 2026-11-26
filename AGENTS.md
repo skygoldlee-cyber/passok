@@ -177,6 +177,12 @@ src/                    # ES Modules
   shell/shortcuts-help.js     # 키보드 단축키 도움말 — SHORTCUT_GROUPS 정본 + `?` 키 오버레이 (UX-HELP-01)
   study/recommendations.js    # 합격 전략 추천 엔진 + 예상 점수 추정 + 실제 결과 보고 (순수 로직)
   study/analysis-engine.js    # 학습 진단 심층 분석 순수 로직 (AN-01~09 — 예측 점수·취약 단원·주간 리포트)
+  study/passloop-adapter.js   # PassLoop 엔진 런타임 어댑터 — 신호 수집·ContentIndex 포트 구현 (subj:§N.M 정규화, AI-40)
+  study/learner-profile-store.js # PassLoop 취약 개념 프로필 영속화 어댑터 — ai_learner_profile LRU 맵 (AI-41)
+  passloop/                   # PassLoop 학습엔진 — 개념 숙련도 맵 코어 (코어 외부 import 금지, 포트 주입 — DOC-DSN-56 §3.7)
+    ports.js                  # 엔진 포트 계약 타입 정의 (ContentIndex·신호·설정 JSDoc — 런타임 코드 없음)
+    core/mastery.js           # 개념 숙련도 산출 순수 로직 (신호 집계·점수·등급·추천 — AI-40)
+    index.js                  # 엔진 공개 API (재export — 어댑터·뷰는 여기만 소비)
   shell/command-palette.js    # 통합 검색 팔레트 (Ctrl+K) — 뷰/교재/카드/퀴즈/성분/문제집 검색·실행
   study/weak-items.js         # 약점(오답) 항목 ID 문법·해석 공용 모듈 (weak_quiz_/weak_sim_ 접두사, 퀴즈·카드 인덱스 캐시, DOM 비의존)
   content/questions.js          # 문항 스키마 (single/combo/short/ox), deriveComboAnswer, validateQuestion (샘플 문항은 tests/fixtures/sample-questions.js)
@@ -204,6 +210,7 @@ src/                    # ES Modules
     mermaid-render.js      # Mermaid 지연 로딩 + 컨테이너 렌더링 + 다이어그램 확대 모달 (reader/search/manual 공용, 모바일은 모달 내 핀치 제스처 — TR-26)
     image-zoom.js          # 교재 본문 이미지(.reader-img) 라이트박스 확대 모달 — 모바일도 바인딩, 모달 내 핀치 제스처 (TR-26)
     webtoon-render.js      # 웹툰 버블 렌더 공용 모듈 — story:start 씬 파싱·화자 추정·말풍선 렌더
+    quickcheck.js          # 리더 "이해도 점검" 퀵체크 — 섹션 말미 OX/단답 채점 + 개념 드릴 연결 (AI-43)
     zoom-gestures.js       # 줌 모달 공용 핀치·패닝·더블탭 제스처 (Pointer Events, touch-action:none 표면, 이미지·머메이드 모달 공용 — TR-26)
   keyword-index.js      # 교재 셀→참조자료 키워드 매핑 (시험별 — 자동 생성)
   telemetry/web-vitals.js         # Core Web Vitals 모니터링

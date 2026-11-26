@@ -93,11 +93,11 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (108개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (109개)
 │   ├── 수위 문서 (6개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·COMPLEXITY_BACKLOG·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (20개 — README + ADR 19건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (25개)
-│   ├── design/                ← 설계·계획·평가 문서 (33개)
+│   ├── design/                ← 설계·계획·평가 문서 (34개)
 │   ├── reference/             ← 명세·로직·참조 문서 (19개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (4개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (2개 — 사용자 매뉴얼·개인정보처리방침 + images/ — 런타임 fetch·배포 대상)
@@ -240,6 +240,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [LEARNING_MEDIA_LINK_DESIGN.md](dev/design/LEARNING_MEDIA_LINK_DESIGN.md) | 학습매체 연결 설계 — `#/trainer/concept/<cid>` 개념 문항 딥링크 + 교재 QR + 함정(`trap`) 태그 Phase 1~3 (DOC-DSN-52, DOC-BIZ-13 부록 A 갭 실행 설계) |
 | [TEXTBOOK_IMPROVEMENT_ROADMAP.md](dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md) | 교재 보완 로드맵 — 팩별 볼륨·구조·카드 규약 현황 + 잔여 과제(ai-draft 검수·헤딩 정규화·2차 확장) 추적 (DOC-DSN-53) |
 | [MEMORIZATION_AIDS_DESIGN.md](dev/design/MEMORIZATION_AIDS_DESIGN.md) | 암기 지원 도구 설계안 — 이야기형 확장·두음법 개인화·cloze 자동 생성·서사↔복습 결합 우선순위 (DOC-DSN-54, 제안 검토) |
+| [AI_PERSONALIZATION_DESIGN.md](dev/design/AI_PERSONALIZATION_DESIGN.md) | PassLoop 학습엔진 설계 — 개념 숙련도 맵·취약 개념 프로필·다턴 교재 튜터·챕터 퀵체크·통합 노트 (DOC-DSN-56, DeepTutor 벤치마크 이식 제안) |
 | [CHANGES.md](dev/CHANGES.md) | 코드 변경 이력 (Changelog) — 변경의 이유와 맥락 |
 
 ### 제품 전략·기획
@@ -459,6 +460,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-53 | `docs/dev/design/TEXTBOOK_IMPROVEMENT_ROADMAP.md` |
 | DOC-DSN-54 | `docs/dev/design/MEMORIZATION_AIDS_DESIGN.md` |
 | DOC-DSN-55 | `docs/exams/hazmat/design/HAZMAT_PRACTICE_TOOL_DESIGN.md` |
+| DOC-DSN-56 | `docs/dev/design/AI_PERSONALIZATION_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |

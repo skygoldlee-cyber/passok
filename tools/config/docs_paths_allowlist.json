@@ -417,5 +417,15 @@
     "file": "docs/dev/runbooks/REF_IMG_EXTERNALIZATION.md",
     "ref": "{contentRoot}/참조자료/refimg_hashes.json",
     "reason": "스키마 플레이스홀더 경로 — imageManifests 선언 시험에서 생성되는 매니페스트"
+  },
+  {
+    "file": "docs/dev/design/AI_PERSONALIZATION_DESIGN.md",
+    "ref": "src/passloop/**",
+    "reason": "설계안 제안 glob — domain-map layer 패턴 예시 (§3.7, 부분 구현)"
+  },
+  {
+    "file": "docs/dev/design/AI_PERSONALIZATION_DESIGN.md",
+    "ref": "content/exams/<id>/피드백/quickcheck.json",
+    "reason": "설계안 제안 경로 — 퀵체크 오버레이 정본 스키마 (AI-43, 정본 미편입)"
   }
 ]
