@@ -1,5 +1,18 @@
 [
   {
+    "version": "v20261127-a8997b7",
+    "date": "2026-11-27",
+    "notes": [
+      "[기능·exams] indsafeind 산업안전산업기사 pilot 오픈 승격",
+      "[기능·exams] distmgr3 유통관리사 3급 pilot 오픈 승격",
+      "[기능·exams] distmgr2 유통관리사 2급 pilot 오픈 승격",
+      "[기능·exams] iteng 정보처리기사 pilot 오픈 승격",
+      "[기능·exams] elecindeng 전기산업기사 pilot 오픈 승격",
+      "[기능·exams] eleceng 전기기사 pilot 오픈 승격",
+      "[정리·release] v20261126-d1dfceb 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261126-d1dfceb",
     "date": "2026-11-26",
     "notes": [
@@ -236,17 +249,6 @@
       "[문서·spec] TOC 챕터 그룹핑 규약을 TR-31로 규약화",
       "[수정·reader] 목차 챕터 말미 📌/✅ 카드 들여쓰기 통일",
       "[정리·release] v20261117-0740aaf 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261117-0740aaf",
-    "date": "2026-11-17",
-    "notes": [
-      "[문서·hazmat] 과목1 Ch01 정정분 매핑 문서 갱신 [no-test]",
-      "[content·hazmat] 과목1 Ch01 출처 선언에 OpenStax 검증 참조 명기 [no-test]",
-      "[content·hazmat] 과목1 Ch01 결합에너지 수치·승화/응결 용어 정정 [no-test]",
-      "[수정·reader] 목차 챕터 그룹이 중간 📌 카드에서 끊기는 버그 수정",
-      "[정리·release] v20261117-4bbc870 스탬프 확정 [no-docs]"
     ]
   }
 ]
