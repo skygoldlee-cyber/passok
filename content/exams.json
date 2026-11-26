@@ -393,8 +393,7 @@
         "appendixDocs": true
       },
       "group": "산업안전",
-      "comingSoon": true,
-      "tier": "draft",
+      "tier": "pilot",
       "syllabus": {
         "primary": "산업재해 예방, 인간공학, 기계·전기·화학·건설 안전관리",
         "secondary": "산업안전 실무 (필답형+작업형)"
