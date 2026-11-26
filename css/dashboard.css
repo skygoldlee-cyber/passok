@@ -237,6 +237,44 @@
     color: var(--color-text-secondary);
 }
 
+/* PassLoop 개념 숙련도 (AI-40) — 등급 배지 행 */
+.mastery-grade-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-2);
+}
+.mastery-grade {
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 0.05rem 0.35rem;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border-color);
+    color: var(--color-text-muted);
+}
+.mastery-grade.g-keep,
+.mastery-grade.g-master {
+    color: var(--color-success);
+    border-color: var(--success-tint-20, var(--color-success));
+    background: var(--success-tint-10);
+}
+.mastery-grade.g-progress {
+    border-color: var(--primary-tint-20, var(--border-color));
+    background: var(--primary-tint-10);
+}
+.mastery-grade.g-intro {
+    color: var(--color-warning);
+    border-color: var(--warning-tint-20, #fbbf24);
+    background: var(--warning-tint-10);
+}
+
+/* PassLoop 내 노트 (AI-44) — 메모 미리보기 본문 */
+.analysis-note-text {
+    display: block;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
 /* PS-10 — 오개념 클리닉 처방 블록 (약점 개념 클러스터 복습 지시) */
 .clinic-block {
     margin-top: var(--space-3);

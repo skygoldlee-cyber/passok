@@ -40,6 +40,10 @@ import { getSubjCounts, displayCounts } from './subject-stats.js';
 import { compositeEstimate } from './score-estimate.js';
 import { mountProMoment } from '../pro/pro-upgrade.js';
 import { aiFeedbackAvailable, requestWeeklyDiagnosis, requestPlanAdjust, requestTextbookQA } from '../ai/ai-client.js';
+import { masterySnapshot, describeConcept } from '../study/passloop-adapter.js';
+import { getWeakConcepts } from '../study/learner-profile-store.js';
+import { getReaderNotes } from '../study/reader-notes.js';
+import { fmtLocalDateTime } from '../core/utils.js';
 
 /**
  * 학습 진단 뷰 렌더링 — renderDashboard()가 과목 카드·히트맵·차트를
@@ -53,6 +57,8 @@ export function renderAnalysisView() {
     _renderWeakStatementInsight();
     _renderStudyRhythmInsight();
     _renderChapterWeakness();
+    _renderMasteryInsight();
+    _renderNotesCard();
     _renderPassGapInsight();
     // PS-01 — 의미 이웃 자산 미로드 시 지연 로드 후 취약 진술 카드만 재렌더
     // (첫 렌더는 cid 단독 클러스터, 로드 완료 시 이웃 결합 클러스터로 승격)
@@ -469,6 +475,7 @@ function _weeklyMetrics() {
         neededPerDay: pace ? pace.neededPerDay : null,
         topCluster: (weakClusters()[0] || {}).label || null,
         weakestSubject: (gap && gap.weakest && gap.weakest.name) || null,
+        weakConcepts: getWeakConcepts(),  // AI-41 누적 취약 라벨
     };
 }
 
@@ -539,6 +546,62 @@ function _renderChapterWeakness() {
     el.innerHTML = `<h4>📖 단원별 취약 분석 <span class="analysis-meta">과목별 오답 집중 단원 — 클릭 시 해당 교재 단원으로 이동</span></h4>
         ${sectionsHtml}
         <p class="analysis-advice">과락은 과목 단위 평가 — 각 과목의 최약 단원부터 재학습하면 과락 방어에 효과적입니다.</p>`;
+}
+
+/** PassLoop 개념 숙련도 카드 (AI-40) — `subj:§N.M` 개념별 점수·등급 분포 + 최하 숙련 추천 딥링크 */
+const _MASTERY_GRADE_CLS = { '유지': 'g-keep', '숙련': 'g-master', '진행': 'g-progress', '도입': 'g-intro', '미학습': 'g-none' };
+function _renderMasteryInsight() {
+    const el = document.getElementById('analysis-mastery');
+    if (!el) return;
+    let snap = null;
+    try { snap = masterySnapshot(); } catch (e) { /* 어댑터 실패가 진단 렌더를 막지 않도록 격리 */ }
+    if (!snap || snap.evidenced === 0) {
+        el.innerHTML = `<h4>🧭 개념 숙련도 <span class="analysis-meta">PassLoop</span></h4>
+            <p class="analysis-empty">퀴즈·드릴·카드 복습이 쌓이면 개념(§)별 숙련도 지도와 다음 학습 추천을 보여줍니다.</p>
+            <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="trainer-view"><i class="fa-solid fa-dumbbell" aria-hidden="true"></i> 훈련소로</button>`;
+        return;
+    }
+    const /** @type {Object.<string, number>} */ counts = {};
+    for (const m of /** @type {Array.<*>} */ (Object.values(snap.mastery))) counts[m.grade] = (counts[m.grade] || 0) + 1;
+    const gradeRow = ['유지', '숙련', '진행', '도입', '미학습']
+        .map(g => counts[g] ? `<span class="mastery-grade ${/** @type {Object.<string,string>} */ (_MASTERY_GRADE_CLS)[g]}">${g} ${counts[g]}</span>` : '')
+        .join('');
+    const actionsHtml = snap.actions.map(a => {
+        const d = describeConcept(a.cid);
+        const label = esc(a.title || a.cid);
+        const drillBtn = d ? `<button class="btn btn-secondary btn-sm" data-click="gotoOxDrill" data-arg="concept:${esc(d.anchor)}"><i class="fa-solid fa-bullseye" aria-hidden="true"></i> 개념 드릴</button>` : '';
+        const bookBtn = (d && d.title) ? `<button class="btn btn-secondary btn-sm" data-click="openSubjectSection" data-args='${esc(JSON.stringify([d.subj, d.title, d.chapterAnchor]))}'><i class="fa-solid fa-book-open" aria-hidden="true"></i> 교재</button>` : '';
+        return `<div class="wc-row"><span class="analysis-sid">${label}</span><strong>${a.score}점 · ${esc(a.grade)} · 커버 ${Math.round(a.cov * 100)}%</strong></div>
+            <div class="clinic-actions">${drillBtn}${bookBtn}</div>`;
+    }).join('');
+    el.innerHTML = `<h4>🧭 개념 숙련도 <span class="analysis-meta">PassLoop · 신호 ${snap.evidenced}개 개념</span></h4>
+        <div class="mastery-grade-row">${gradeRow}</div>
+        ${actionsHtml ? `<div class="wc-subhead">다음 학습 추천 (숙련도 최하)</div>${actionsHtml}` : '<p class="analysis-advice">측정된 개념은 아직 부족합니다 — 더 풀면 약점 추천이 나타납니다.</p>'}`;
+}
+
+/** PassLoop 통합 학습 노트 카드 (AI-44) — 리더 섹션 메모를 최신순으로 모아 섹션 회귀 링크 제공 */
+function _renderNotesCard() {
+    const el = document.getElementById('analysis-notes');
+    if (!el) return;
+    const entries = Object.values(getReaderNotes())
+        .filter(n => n && n.note)
+        .sort((a, b) => String(b.updated || '').localeCompare(String(a.updated || '')));
+    if (!entries.length) {
+        el.innerHTML = `<h4>📝 내 노트 <span class="analysis-meta">PassLoop</span></h4>
+            <p class="analysis-empty">교재 리더에서 섹션 메모를 남기면 여기에 모아보여줍니다.</p>
+            <button class="btn btn-secondary btn-sm analysis-card-btn" data-click="switchView" data-arg="textbook-reader-view"><i class="fa-solid fa-book-open" aria-hidden="true"></i> 리더로</button>`;
+        return;
+    }
+    const rows = entries.slice(0, 8).map(n => {
+        const openBtn = (n.subject && n.title)
+            ? `<button class="btn btn-secondary btn-sm" data-click="openSubjectSection" data-args='${esc(JSON.stringify([n.subject, n.title, '']))}'><i class="fa-solid fa-book-open" aria-hidden="true"></i> 섹션으로</button>`
+            : '';
+        return `<div class="wc-row"><span class="analysis-sid">${esc(n.title || '섹션 메모')}</span><strong>${esc(fmtLocalDateTime(n.updated))}</strong></div>
+            <div class="wc-subrow analysis-note-text">${esc(n.note.slice(0, 80))}${n.note.length > 80 ? '…' : ''}</div>
+            ${openBtn ? `<div class="clinic-actions">${openBtn}</div>` : ''}`;
+    }).join('');
+    el.innerHTML = `<h4>📝 내 노트 <span class="analysis-meta">PassLoop · ${entries.length}개</span></h4>${rows}
+        ${entries.length > 8 ? `<p class="analysis-meta">최근 8건 표시 — 전체 검색은 커맨드 팔레트(Ctrl+K)에서 가능합니다.</p>` : ''}`;
 }
 
 /** 합격 확률 추정 행 — PS-04: 과목 숙달(0.5)+모의고사 추세(0.3)+기억률(0.2) 로지스틱 혼합 */
