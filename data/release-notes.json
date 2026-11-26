@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261126-78bb39a",
+    "date": "2026-11-26",
+    "notes": [
+      "[수정·analysis] innerHTML 보간 esc-ok 면제 누락 — 이스케이프 싱크 규약 위반 해소",
+      "[수정·css] 퀵체크 액션 행 flex-wrap 누락 — 모바일 안전 규약 위반 해소",
+      "[수정·content] draft 팩 문항 전수검수 — 1,531문 LLM 팩트체크 완료",
+      "[수정·content] AI 거절 텍스트 교재 유입분 제거 + 오염 문항 7건 삭제",
+      "[기능·content] draft 팩 3팩 소량 증산 — 전 6팩 승격 정량 요건 충족",
+      "[기능·content] draft 팩 6종 문제은행 3회분 증산 — 23과목 +823문",
+      "[기능·content] draft 팩 6종 문제은행 신설 — 23과목 684문 AI 초안 편입",
+      "[문서] draft 팩 21과목 교재 해소 완료 기록",
+      "[기능·content] draft 팩 6종 교재 21과목 전량 해소 — KOCW·ref_md AI 부록 병합",
+      "[문서·cosmetic] 학습안내서 PassLoop 기능 반영 — 숙련도 지도·내 노트·큐 항목"
+    ]
+  },
+  {
     "version": "v20261125-c07452f",
     "date": "2026-11-25",
     "notes": [
@@ -231,21 +247,6 @@
     "notes": [
       "[리팩터링·refs] 출제기준 저장 위치 통일 — 전 21팩 ref_md/ 직하 평탄형",
       "[정리·release] v20261116-a66ca3b 스탬프 확정 [no-docs]"
-    ]
-  },
-  {
-    "version": "v20261117-caa65fa",
-    "date": "2026-11-17",
-    "notes": [
-      "[수정·lossadj] ref_md 정본 역전 정리 — DRF 전문을 꼬리명 정본 위치로 승격",
-      "[문서·hazmat] 매핑 문서 갱신일 스탬프 (교재 갱신 신선도)",
-      "[수정·hazmat] 교재 출처 표기 역할 명확화 — 출제기준은 범위 명세",
-      "[문서·hazmat] 매핑 문서 ID·README 레지스트리 등록 (DOC-REF-21)",
-      "[content·hazmat] 교재 챕터별 📌출처 블록 추가 + 참조자료 매핑 문서 신설",
-      "[수정·hazmat] physchem 교재 3차 출판 검수 — 수식 표기·참조 제목·용어 마무리",
-      "[수정·hazmat] physchem 교재 2차 출판 검수 — 분류 정정·중복 잔재·표기 마무리",
-      "[수정·hazmat] physchem 교재 출판 검수 — 내용 오류·표기 통일·중복 압축·확인문제 보강",
-      "[정리·release] v20261117-0d38dc9 스탬프 확정 [no-docs]"
     ]
   }
 ]
