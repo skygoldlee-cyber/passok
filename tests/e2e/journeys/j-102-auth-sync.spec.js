@@ -9,6 +9,7 @@
 // 선행: TEST_SUPABASE_* 4키 (.env 로컬·GitHub Secrets CI) — 미설정 시 전체 스킵
 import { test, expect } from '@playwright/test';
 import { installSupabaseOverride, requireSupabaseOverride } from '../support/supabase-override.js';
+import { dbNotifiedSeed } from '../support/seed-helpers.js';
 
 const TEST_URL = (process.env.TEST_SUPABASE_URL || '').replace(/\/$/, '');
 const SERVICE_KEY = process.env.TEST_SUPABASE_SERVICE_ROLE_KEY || '';
@@ -28,6 +29,8 @@ const seedScript = (extra = '') => `(() => {
     L.setItem('pro_expires_at', new Date(Date.now() + 30 * 86400000).toISOString());
     const d = new Date(Date.now() + 45 * 86400000).toISOString().slice(0, 10);
     L.setItem('exam_date', d);
+    // 진도 키 시드 → 기존 사용자 판정 → 지식DB 갱신 모달이 충돌 오버레이를 선점하는 것을 차단
+    ${dbNotifiedSeed('carework')}
     ${extra}
 })()`;
 const SEED = seedScript();

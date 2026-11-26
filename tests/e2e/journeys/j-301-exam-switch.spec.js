@@ -3,11 +3,13 @@
 // carework↔cosmetic 전환 시 브랜딩·활성 시험 교체와 `<exam>:` 네임스페이스 진도 보존을
 // 검증 — 전환은 selectExam의 location.reload() 경로를 그대로 탄다 (DSN-46 §4, P2).
 import { test, expect } from '@playwright/test';
+import { dbNotifiedSeed } from '../support/seed-helpers.js';
 
 // initScript는 전환 리로드마다 재실행 — current_exam은 최초 1회만 시드해야 전환이 유지된다
 const SEED = `(() => {
     const L = localStorage;
     if (!L.getItem('current_exam')) L.setItem('current_exam', 'carework');
+    ${dbNotifiedSeed('carework')}
     L.setItem('onboarding_seen_v1', '1');
     L.setItem('carework:onboarding_seen_v1', '1');
     L.setItem('cosmetic:onboarding_seen_v1', '1');

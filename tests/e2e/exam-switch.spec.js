@@ -40,11 +40,11 @@ test.describe('비기본 시험(lossadj) 부팅 — 도메인 격리', () => {
     test('기능 플래그 게이팅 — cosmetic 전용 실무 메뉴가 노출되지 않는다', async ({ page }) => {
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
-        // lossadj.features = { writtenPractice } — formula·ingredients·dictionary·practiceMode는 is-hidden
+        // lossadj.features = { writtenPractice, dictionary } — formula·ingredients·practiceMode는 is-hidden
         await expect(page.locator('[data-target="formula-view"]').first()).toHaveClass(/is-hidden/);
         await expect(page.locator('#ui-mode-toggle')).toHaveClass(/is-hidden/);
-        // dictionary는 lossadj에 미선언 → 네비 항목도 숨김
-        await expect(page.locator('[data-target="dictionary-view"]').first()).toHaveClass(/is-hidden/);
+        // dictionary는 lossadj에 선언(용어집 knowledge 보유) → 네비 항목 노출
+        await expect(page.locator('[data-target="dictionary-view"]').first()).not.toHaveClass(/is-hidden/);
         // 시험 전환 버튼은 등록 시험 2개(comingSoon 포함)라 multiExam=true로 유지
         await expect(page.locator('[data-feature="examSwitch"]').first()).not.toHaveClass(/is-hidden/);
     });
