@@ -935,6 +935,7 @@ const state = {
 | 뷰 계층 | `src/views/` · `src/exams/<id>/views/` | 코어 라이브러리·다른 뷰를 import 가능. 뷰 계층 내부 상호 참조 허용 |
 | 코어 라이브러리 | `src/core/` · `src/` 루트 · `src/config/` 등 뷰 계층 외 | **`src/views/` import 금지** — 위반 시 check:imports 오류 |
 | 앱 셸 | `src/shell/app.js` · `src/shell/router.js` · `command-palette.js` · `manual-viewer.js` · `ui-mode.js` | 뷰 합성(뷰 모듈 import·화면 전환)이 허용되는 유일한 비-뷰 계층 |
+| PassLoop 엔진 | `src/passloop/` | **외부 의존 0** — `src/passloop/` 밖 모듈·외부 패키지의 정적·동적 import 전면 금지. 입력은 `ports.js` 계약으로 주입, 어댑터(`src/study/` 등)→엔진 단방향만 허용 (DOC-DSN-56 §3.7) |
 
 - 코어가 뷰를 역참조하면 뷰→코어→뷰 순환이 생겨 초기화 순서·테스트 격리가 깨진다 — 의존 역전(이벤트·콜백·해시 라우팅)으로 우회할 것
 - 셸 명단은 `check_imports.js`의 `SHELL_MODULES` — 신규 셸 모듈 추가 시 이 표와 함께 갱신

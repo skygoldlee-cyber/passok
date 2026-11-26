@@ -249,6 +249,26 @@ function resolveModuleMulti(importerDir, modulePath) {
     return results;
 }
 
+// --- PassLoop 엔진 경계 규칙 (DOC-DSN-56 §3.7) ---
+// src/passloop/는 외부 의존 0의 순수 코어 — 입력 데이터는 ports.js 계약으로
+// 주입받고 영속화·플랫폼 결합은 어댑터(src/study/ 등)가 담당한다.
+// 정적·동적 import·외부 패키지 모두 경계 대상 — 위반 시 오류 문자열, 정상은 null.
+function passloopBoundaryError(relFile, modulePath, relResolved) {
+    if (!relFile.startsWith('src/passloop/')) return null;
+    if (!relResolved) {
+        // bare specifier — 외부 패키지 의존 금지 (상대경로 미해석은 기존 '모듈 없음' 오류가 담당)
+        if (!modulePath.startsWith('.')) {
+            return `${relFile}: 외부 패키지 import — '${modulePath}' (PassLoop 경계: src/passloop/는 의존 0)`;
+        }
+        return null;
+    }
+    if (!relResolved.startsWith('src/passloop/')) {
+        return `${relFile}: 엔진 경계 위반 — PassLoop 코어가 외부 모듈을 import '${modulePath}' ` +
+            `(규약: src/passloop/는 외부 의존 0 — 어댑터→엔진 단방향, DOC-DSN-56 §3.7)`;
+    }
+    return null;
+}
+
 // --- 메인 검증 ---
 function main() {
     const files = collectJsFiles(SRC_DIR);
@@ -290,6 +310,8 @@ function main() {
             const resolved = resolveModule(importerDir, imp.modulePath);
             if (!resolved) {
                 // 외부 패키지이거나 파일이 존재하지 않음
+                const plErr = passloopBoundaryError(relFile, imp.modulePath, null);
+                if (plErr) errors.push(plErr);
                 if (imp.modulePath.startsWith('.')) {
                     errors.push(`${relFile}: 모듈을 찾을 수 없음 — '${imp.modulePath}'`);
                 }
@@ -297,6 +319,9 @@ function main() {
             }
 
             const relResolved = path.relative(ROOT, resolved).replace(/\\/g, '/');
+
+            const plErr = passloopBoundaryError(relFile, imp.modulePath, relResolved);
+            if (plErr) { errors.push(plErr); continue; }
 
             // --- 도메인 경계 규칙 ---
             // platform(src/exams/ 외부) 파일은 도메인 모듈을 정적 import할 수 없다 —
@@ -379,6 +404,23 @@ function main() {
                             `${relFile}: '${name}'을(를) import하지만 사용하지 않음 (unused import)`
                         );
                     }
+                }
+            }
+        }
+
+        // PassLoop 동적 import 경계 — import()로 외부 모듈을 열어도 동일 규칙
+        if (relFile.startsWith('src/passloop/')) {
+            for (const dm of src.matchAll(/\bimport\(\s*['"]([^'"]+)['"]\s*\)/g)) {
+                const targets = resolveModuleMulti(importerDir, dm[1]);
+                if (!targets.length) {
+                    const plErr = passloopBoundaryError(relFile, dm[1], null);
+                    if (plErr) errors.push(plErr);
+                    continue;
+                }
+                for (const t of targets) {
+                    const relT = path.relative(ROOT, t).replace(/\\/g, '/');
+                    const plErr = passloopBoundaryError(relFile, dm[1], relT);
+                    if (plErr) errors.push(plErr);
                 }
             }
         }
@@ -696,4 +738,5 @@ function main() {
     }
 }
 
-main();
+if (require.main === module) main();
+module.exports = { passloopBoundaryError };

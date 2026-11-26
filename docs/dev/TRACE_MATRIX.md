@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: a15ed52f1096a93a
+> 입력 해시: 2fbf5bc1d381fd74
 > 생성: 2026-11-26 · 원천: SPEC.md(733개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -889,7 +889,7 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | BP-01 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-02<br>DOC-RBK-03<br>…외 3개 | src/reader/textbook-core.js<br>tools/build/build_all_data.js<br>tools/build/build_audio_manifest.js<br>tools/build/build_combo_drills.js<br>…외 20개 | tests/unit/gates/build-pipeline.test.js | — | — |
-| BP-02 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-02<br>DOC-RBK-03<br>…외 3개 | tools/build/index.js<br>tools/build/schema.js<br>tools/check/check_imports.js | tests/unit/gates/build-pipeline.test.js | — | — |
+| BP-02 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-02<br>DOC-RBK-03<br>…외 3개 | tools/build/index.js<br>tools/build/schema.js<br>tools/check/check_imports.js | tests/unit/gates/build-pipeline.test.js<br>tests/unit/gates/check-imports-passloop.test.js | — | — |
 | BP-03 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-02<br>DOC-RBK-03<br>…외 3개 | tools/build/index.js<br>tools/build/manifest_loader.js<br>tools/check/check_manifest.js | tests/unit/gates/build-pipeline.test.js | — | — |
 | BP-04 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-02<br>DOC-RBK-03<br>…외 3개 | tools/build/build_exam_bundles.js<br>tools/build/index.js | tests/unit/gates/build-pipeline.test.js | — | — |
 | BP-05 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-02<br>DOC-RBK-03<br>…외 3개 | tools/check/check_parser_parity.js | tests/unit/gates/build-pipeline.test.js | — | — |

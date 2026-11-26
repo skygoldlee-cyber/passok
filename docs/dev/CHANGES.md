@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **feat(gates): PassLoop 엔진 경계 게이트화** — `check_imports.js`에 `src/passloop/**` 외부 의존 0 규칙 추가(정적·동적 import·외부 패키지 전면 차단, 어댑터→엔진 단방향). 판정 함수 분리 export + 유닛 6건, 위반 프로브 스모크 확인. ARCHITECTURE 모듈 방향 규칙 표 등록
+
 - **chore(ai): AI-42 선행 — 사용률 계측 + 방침 개정** — `ai_textbook_qa` 로컬 사용 카운터 계측(AI-36 사용률 실측 경로 확보 — 기존엔 서버 ai_usage 외 측정 수단 없음) + `PRIVACY_POLICY.md` §1.2 AI 행에 교재 질의(질문 문장·근거·이전 문답 컨텍스트 최대 4턴)·취약 개념 라벨 수집 명시, §2 "검색어" 표현 정합
 
 - **feat(passloop): AI-44 통합 학습 노트 카드** — 분석 뷰 "내 노트": `reader_notes`를 최신순 교차 나열(최대 8건·제목·미리보기·수정시각) + `openSubjectSection` 섹션 회귀 링크. 메모 부재 시 리더 유도 온보딩. DOM 테스트 3건
