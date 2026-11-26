@@ -83,7 +83,8 @@
       "registryGlobal": "DATA_REGISTRY_SKINCARE",
       "features": {
         "writtenPractice": true,
-        "studyGuide": true
+        "studyGuide": true,
+        "pomodoro": true
       },
       "comingSoon": true,
       "appNameEn": "Passkin",
@@ -113,7 +114,8 @@
       "registryBundle": "data/exams/hairdresser/registry.js",
       "registryGlobal": "DATA_REGISTRY_HAIRDRESSER",
       "features": {
-        "writtenPractice": true
+        "writtenPractice": true,
+        "pomodoro": true
       },
       "appNameEn": "Passhair",
       "practiceName": "Hair OS",
@@ -146,7 +148,8 @@
       "registryBundle": "data/exams/insadj/registry.js",
       "registryGlobal": "DATA_REGISTRY_INSADJ",
       "features": {
-        "writtenPractice": true
+        "writtenPractice": true,
+        "pomodoro": true
       },
       "appNameEn": "Passure",
       "practiceName": "Adjust OS",
@@ -179,7 +182,8 @@
       "registryBundle": "data/exams/lossadj/registry.js",
       "registryGlobal": "DATA_REGISTRY_LOSSADJ",
       "features": {
-        "writtenPractice": true
+        "writtenPractice": true,
+        "pomodoro": true
       },
       "appNameEn": "Passess",
       "practiceName": "Assess OS",
@@ -208,7 +212,8 @@
       "registryBundle": "data/exams/admagent/registry.js",
       "registryGlobal": "DATA_REGISTRY_ADMAGENT",
       "features": {
-        "writtenPractice": true
+        "writtenPractice": true,
+        "pomodoro": true
       },
       "comingSoon": true,
       "appNameEn": "Passmin",
@@ -245,6 +250,9 @@
       "syllabus": {
         "primary": "민법, 경제학원론, 부동산학원론, 감정평가관계법규, 회계학",
         "secondary": "감정평가실무, 감정평가이론, 감정평가 및 보상법규"
+      },
+      "features": {
+        "pomodoro": true
       }
     },
     {
@@ -269,6 +277,9 @@
       "syllabus": {
         "primary": "부동산학개론, 민법 및 민사특별법",
         "secondary": "공인중개사법령 및 중개실무, 부동산공법, 부동산공시법령 및 세법 (객관식)"
+      },
+      "features": {
+        "pomodoro": true
       }
     },
     {
@@ -288,7 +299,9 @@
       "manifestPath": "content/exams/labor/manifest.json",
       "registryBundle": "data/exams/labor/registry.js",
       "registryGlobal": "DATA_REGISTRY_LABOR",
-      "features": {},
+      "features": {
+        "pomodoro": true
+      },
       "comingSoon": true,
       "group": "법무·노무",
       "tier": "pilot",
@@ -315,7 +328,8 @@
       "registryBundle": "data/exams/indsafe/registry.js",
       "registryGlobal": "DATA_REGISTRY_INDSAFE",
       "features": {
-        "writtenPractice": true
+        "writtenPractice": true,
+        "pomodoro": true
       },
       "appNameEn": "Passafe",
       "practiceName": "Safety OS",
@@ -343,7 +357,9 @@
       "manifestPath": "content/exams/indsafeind/manifest.json",
       "registryBundle": "data/exams/indsafeind/registry.js",
       "registryGlobal": "DATA_REGISTRY_INDSAFEIND",
-      "features": {},
+      "features": {
+        "pomodoro": true
+      },
       "group": "산업안전",
       "comingSoon": true,
       "tier": "draft",
@@ -369,7 +385,9 @@
       "manifestPath": "content/exams/iteng/manifest.json",
       "registryBundle": "data/exams/iteng/registry.js",
       "registryGlobal": "DATA_REGISTRY_ITENG",
-      "features": {},
+      "features": {
+        "pomodoro": true
+      },
       "group": "정보처리",
       "comingSoon": true,
       "tier": "draft",
@@ -395,7 +413,9 @@
       "manifestPath": "content/exams/itindeng/manifest.json",
       "registryBundle": "data/exams/itindeng/registry.js",
       "registryGlobal": "DATA_REGISTRY_ITINDENG",
-      "features": {},
+      "features": {
+        "pomodoro": true
+      },
       "group": "정보처리",
       "comingSoon": true,
       "tier": "draft",
@@ -421,7 +441,9 @@
       "manifestPath": "content/exams/eleceng/manifest.json",
       "registryBundle": "data/exams/eleceng/registry.js",
       "registryGlobal": "DATA_REGISTRY_ELECENG",
-      "features": {},
+      "features": {
+        "pomodoro": true
+      },
       "group": "전기",
       "comingSoon": true,
       "tier": "draft",
@@ -447,7 +469,9 @@
       "manifestPath": "content/exams/elecindeng/manifest.json",
       "registryBundle": "data/exams/elecindeng/registry.js",
       "registryGlobal": "DATA_REGISTRY_ELECINDENG",
-      "features": {},
+      "features": {
+        "pomodoro": true
+      },
       "group": "전기",
       "comingSoon": true,
       "tier": "draft",
@@ -476,7 +500,9 @@
       "manifestPath": "content/exams/compapp1/manifest.json",
       "registryBundle": "data/exams/compapp1/registry.js",
       "registryGlobal": "DATA_REGISTRY_COMPAPP1",
-      "features": {},
+      "features": {
+        "pomodoro": true
+      },
       "comingSoon": true,
       "appNameEn": "Passcomp",
       "practiceName": "Sheet OS",
@@ -507,7 +533,9 @@
       "manifestPath": "content/exams/compapp2/manifest.json",
       "registryBundle": "data/exams/compapp2/registry.js",
       "registryGlobal": "DATA_REGISTRY_COMPAPP2",
-      "features": {},
+      "features": {
+        "pomodoro": true
+      },
       "appNameEn": "Passcomp",
       "practiceName": "Sheet OS",
       "group": "정보처리",
@@ -537,7 +565,9 @@
       "manifestPath": "content/exams/distmgr2/manifest.json",
       "registryBundle": "data/exams/distmgr2/registry.js",
       "registryGlobal": "DATA_REGISTRY_DISTMGR2",
-      "features": {},
+      "features": {
+        "pomodoro": true
+      },
       "comingSoon": true,
       "group": "유통·물류",
       "tier": "draft",
@@ -565,7 +595,9 @@
       "manifestPath": "content/exams/distmgr3/manifest.json",
       "registryBundle": "data/exams/distmgr3/registry.js",
       "registryGlobal": "DATA_REGISTRY_DISTMGR3",
-      "features": {},
+      "features": {
+        "pomodoro": true
+      },
       "comingSoon": true,
       "group": "유통·물류",
       "tier": "draft",
@@ -629,7 +661,8 @@
         "careWebtoon": true,
         "careFlow": true,
         "studyGuide": true,
-        "careCustomForm": true
+        "careCustomForm": true,
+        "pomodoro": true
       },
       "group": "보건·복지",
       "tier": "active"
@@ -651,7 +684,9 @@
       "manifestPath": "content/exams/hazmat/manifest.json",
       "registryBundle": "data/exams/hazmat/registry.js",
       "registryGlobal": "DATA_REGISTRY_HAZMAT",
-      "features": {},
+      "features": {
+        "pomodoro": true
+      },
       "appNameEn": "Passzard",
       "practiceName": "Danger OS",
       "group": "산업안전",
@@ -678,7 +713,9 @@
       "manifestPath": "content/exams/fireelec/manifest.json",
       "registryBundle": "data/exams/fireelec/registry.js",
       "registryGlobal": "DATA_REGISTRY_FIREELEC",
-      "features": {},
+      "features": {
+        "pomodoro": true
+      },
       "group": "소방",
       "tier": "pilot",
       "syllabus": {
@@ -703,7 +740,9 @@
       "manifestPath": "content/exams/conssafe/manifest.json",
       "registryBundle": "data/exams/conssafe/registry.js",
       "registryGlobal": "DATA_REGISTRY_CONSSAFE",
-      "features": {},
+      "features": {
+        "pomodoro": true
+      },
       "group": "산업안전",
       "tier": "pilot",
       "syllabus": {
