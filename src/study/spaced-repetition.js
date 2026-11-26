@@ -9,7 +9,7 @@
 import { safeGetItem, safeSetItem } from '../core/state.js';
 import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { todayKey } from '../core/utils.js';
-import { Rating, fsrsReview, migrateSm2Record, nextInterval, retrievability } from './fsrs.js';
+import { Rating, fsrsReview, migrateSm2Record, nextInterval, retrievability } from '../passloop/core/fsrs.js';
 
 const SR_KEY = STORAGE_KEYS.FC_SPACED_REPETITION;
 const LOG_KEY = STORAGE_KEYS.FC_REVIEW_LOG;

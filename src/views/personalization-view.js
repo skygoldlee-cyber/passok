@@ -11,9 +11,9 @@ import { safeGetItem, safeSetItem } from '../core/state.js';
 import { STORAGE_KEYS } from '../core/storage-keys.js';
 import { DataLoader } from '../content/data-loader.js';
 import { getReviewLog } from '../study/spaced-repetition.js';
-import { setPersonalDecay } from '../study/fsrs.js';
+import { setPersonalDecay } from '../passloop/core/fsrs.js';
 import { getAllStatementStats } from '../study/statement-tracker.js';
-import { resolveKtParams } from '../study/knowledge-tracing.js';
+import { resolveKtParams } from '../passloop/core/knowledge-tracing.js';
 import {
     normalizeCidAnchor, chapterFromCid
 } from '../study/analysis-engine.js';
@@ -22,7 +22,7 @@ import { examIdToSubjectId } from '../core/exam-context.js';
 import { getWrongCauseLabels } from '../study/recommendations.js';
 import {
     clusterWeakConcepts, fitFsrsParams, fitKT, inferP0, inferCause
-} from '../study/personalization.js';
+} from '../passloop/core/personalization.js';
 
 /** 피팅 재계산 최소 간격 — 로그 한 건으로 매번 재피팅하지 않도록 12시간 스로틀 */
 const FIT_THROTTLE_MS = 12 * 3600 * 1000;

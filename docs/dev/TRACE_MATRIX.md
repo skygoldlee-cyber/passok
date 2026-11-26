@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 2fbf5bc1d381fd74
+> 입력 해시: 00cb8ef44216f59a
 > 생성: 2026-11-26 · 원천: SPEC.md(733개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -46,7 +46,7 @@
 | D-19 | ✅ | E2E 테스트 | DOC-DSN-32 | src/study/spaced-repetition.js | tests/dom/study/study-spacedrep.dom.test.js<br>tests/e2e/exam-risk.spec.js<br>tests/unit/engine/fsrs.test.js<br>tests/unit/engine/today-queue.test.js | — | — |
 | D-20 | ✅ | E2E 테스트 | DOC-DSN-32 | src/study/spaced-repetition.js | tests/dom/study/study-spacedrep.dom.test.js<br>tests/e2e/exam-risk.spec.js<br>tests/unit/engine/fsrs.test.js | — | — |
 | D-21 | ✅ | 테스트 | DOC-DSN-32 | src/study/analysis-engine.js | tests/unit/engine/analysis-engine.test.js | — | — |
-| D-22 | ✅ | E2E 테스트 | DOC-ADR-18<br>DOC-DSN-32<br>DOC-DSN-54 | src/study/analysis-engine.js<br>src/study/knowledge-tracing.js<br>src/study/spaced-repetition.js<br>src/views/exam-sim/exam-sim-arena.js<br>…외 1개 | tests/e2e/analysis-view.spec.js<br>tests/unit/engine/analysis-engine.test.js<br>tests/unit/engine/fsrs.test.js<br>tests/unit/engine/knowledge-tracing.test.js | — | — |
+| D-22 | ✅ | E2E 테스트 | DOC-ADR-18<br>DOC-DSN-32<br>DOC-DSN-54 | src/passloop/core/knowledge-tracing.js<br>src/study/analysis-engine.js<br>src/study/spaced-repetition.js<br>src/views/exam-sim/exam-sim-arena.js<br>…외 1개 | tests/e2e/analysis-view.spec.js<br>tests/unit/engine/analysis-engine.test.js<br>tests/unit/engine/fsrs.test.js<br>tests/unit/engine/knowledge-tracing.test.js | — | — |
 | D-23 | ✅ | 테스트 | — | src/study/study-tracker-alloc.js<br>src/study/study-tracker.js<br>src/views/analysis-view.js<br>src/views/dashboard-queue.js | tests/unit/engine/study-tracker.test.js | — | — |
 | TQ-01 | ✅ | 테스트 | DOC-DSN-32 | src/views/dashboard-queue.js<br>src/views/dashboard.js | tests/dom/study/study-dashboard.dom.test.js<br>tests/unit/engine/today-queue.test.js | — | — |
 | TQ-02 | ✅ | 테스트 | DOC-DSN-52 | src/views/dashboard-queue.js | tests/unit/engine/today-queue.test.js | — | — |
@@ -80,11 +80,11 @@
 | F-04 | ✅ | 테스트 | DOC-REF-03 | src/views/flashcard.js<br>src/views/listeners/listeners-flashcard.js | tests/dom/study/study-flashcard.dom.test.js | DOC-ARC-05 | — |
 | F-05 | ✅ | 테스트 | DOC-REF-03 | src/core/utils.js<br>src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js | DOC-ARC-05 | — |
 | F-06 | ✅ | 테스트 | DOC-REF-03 | src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js | DOC-ARC-05 | — |
-| F-07 | ✅ | 테스트 | DOC-ADR-18<br>DOC-DSN-32<br>DOC-REF-03 | src/study/fsrs.js<br>src/study/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js<br>tests/dom/study/study-spacedrep.dom.test.js<br>tests/unit/app/property-based.test.js<br>tests/unit/engine/fsrs.test.js | DOC-ARC-05 | — |
-| F-08 | ✅ | 테스트 | DOC-ADR-18<br>DOC-DSN-32<br>DOC-REF-03 | src/study/fsrs.js<br>src/study/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js<br>tests/dom/study/study-spacedrep.dom.test.js<br>tests/unit/app/property-based.test.js<br>tests/unit/engine/fsrs.test.js | DOC-ARC-05 | — |
+| F-07 | ✅ | 테스트 | DOC-ADR-18<br>DOC-DSN-32<br>DOC-REF-03 | src/passloop/core/fsrs.js<br>src/study/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js<br>tests/dom/study/study-spacedrep.dom.test.js<br>tests/unit/app/property-based.test.js<br>tests/unit/engine/fsrs.test.js | DOC-ARC-05 | — |
+| F-08 | ✅ | 테스트 | DOC-ADR-18<br>DOC-DSN-32<br>DOC-REF-03 | src/passloop/core/fsrs.js<br>src/study/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js<br>tests/dom/study/study-spacedrep.dom.test.js<br>tests/unit/app/property-based.test.js<br>tests/unit/engine/fsrs.test.js | DOC-ARC-05 | — |
 | F-09 | ✅ | 테스트 | DOC-DSN-32<br>DOC-REF-03 | src/study/spaced-repetition.js<br>src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js<br>tests/dom/study/study-spacedrep.dom.test.js<br>tests/unit/app/property-based.test.js<br>tests/unit/engine/fsrs.test.js | DOC-ARC-05 | — |
 | F-10 | ✅ | 테스트 | DOC-REF-03 | src/views/flashcard.js | tests/dom/study/study-flashcard.dom.test.js | DOC-ARC-05 | — |
-| F-11 | ✅ | 테스트 | DOC-ADR-18<br>DOC-DSN-32 | src/study/fsrs.js | tests/unit/engine/fsrs.test.js | — | — |
+| F-11 | ✅ | 테스트 | DOC-ADR-18<br>DOC-DSN-32 | src/passloop/core/fsrs.js | tests/unit/engine/fsrs.test.js | — | — |
 
 ## 3.3 퀴즈
 
@@ -416,7 +416,7 @@
 | DR-05 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-21<br>DOC-RBK-02<br>DOC-REF-01 | src/study/statement-tracker.js<br>src/views/trainer-drills.js | tests/dom/study/study-trainer-drills.dom.test.js<br>tests/unit/engine/statement-tracker.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-06 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/views/exam-sim/exam-sim-arena.js<br>src/views/exam-sim/exam-simulator.js<br>src/views/trainer-drills.js | tests/dom/study/study-trainer-drills.dom.test.js | DOC-ARC-05<br>DOC-ARC-09 | — |
 | DR-07 | ✅ | 테스트 | DOC-RBK-02<br>DOC-REF-01 | src/content/questions.js<br>src/views/trainer-drills.js | tests/dom/study/study-trainer-drills.dom.test.js<br>tests/fixtures/sample-questions.js<br>tests/unit/app/property-based.test.js<br>tests/unit/content/questions.test.js<br>…외 1개 | DOC-ARC-05<br>DOC-ARC-09 | — |
-| DR-08 | ✅ | 테스트 | DOC-DSN-56 | src/study/concept-drill.js | tests/dom/reader/reader-concept-link.dom.test.js<br>tests/unit/concept-drill.test.js | — | — |
+| DR-08 | ✅ | 테스트 | DOC-DSN-56 | src/passloop/core/concept-drill.js | tests/dom/reader/reader-concept-link.dom.test.js<br>tests/unit/concept-drill.test.js | — | — |
 | DR-09 | ✅ | 테스트 | DOC-DSN-53 | tools/build/build_textbook_print.js | tests/unit/content/textbook-print.test.js | — | — |
 | DR-10 | ✅ | 테스트 | DOC-DSN-53 | ref-pipeline/tests/test_textbook_pdf.py<br>ref-pipeline/textbook_pdf.py | tests/unit/content/textbook-print.test.js | — | — |
 | DR-11 | ✅ | 테스트 | DOC-DSN-53 | src/views/reader/reader-render.js | tests/dom/reader/reader-concept-link.dom.test.js | — | — |
@@ -606,17 +606,17 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| PS-01 | ✅ | 테스트 | — | src/study/personalization.js<br>src/views/analysis-view.js<br>src/views/dashboard-queue.js<br>src/views/personalization-view.js | tests/unit/engine/today-queue.test.js<br>tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
-| PS-02 | ✅ | 테스트 | — | src/study/personalization.js<br>src/views/exam-sim/exam-sim-weak.js | tests/unit/personalization.test.js | — | — |
-| PS-03 | ✅ | 테스트 | — | src/study/personalization.js<br>src/views/dashboard-queue.js<br>src/views/personalization-view.js | tests/unit/engine/today-queue.test.js<br>tests/unit/personalization.test.js | — | — |
-| PS-04 | ✅ | 테스트 | — | src/study/personalization.js<br>src/views/analysis-view.js | tests/unit/personalization.test.js | — | — |
-| PS-05 | ✅ | 테스트 | DOC-DSN-52 | src/study/personalization.js<br>src/views/analysis-view.js<br>src/views/personalization-view.js<br>src/views/trainer-drills.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
-| PS-06 | ✅ | 테스트 | — | src/study/fsrs.js<br>src/study/personalization.js<br>src/study/spaced-repetition.js<br>src/views/personalization-view.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
-| PS-07 | ✅ | 테스트 | — | src/study/analysis-engine.js<br>src/study/personalization.js<br>src/views/personalization-view.js<br>src/views/quiz/quiz.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
-| PS-08 | ✅ | 테스트 | — | src/study/personalization.js<br>src/views/personalization-view.js<br>src/views/quiz/quiz.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
-| PS-09 | ✅ | 테스트 | — | src/study/personalization.js<br>src/views/analysis-view.js | tests/unit/personalization.test.js | — | — |
-| PS-10 | ✅ v1 | 테스트 | — | src/study/personalization.js<br>src/views/analysis-view.js<br>src/views/dashboard-queue.js | tests/unit/engine/today-queue.test.js<br>tests/unit/personalization.test.js | — | — |
-| PS-11 | ✅ | 테스트 | — | src/study/analysis-engine.js<br>src/study/personalization.js<br>src/views/personalization-view.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-01 | ✅ | 테스트 | — | src/passloop/core/personalization.js<br>src/views/analysis-view.js<br>src/views/dashboard-queue.js<br>src/views/personalization-view.js | tests/unit/engine/today-queue.test.js<br>tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-02 | ✅ | 테스트 | — | src/passloop/core/personalization.js<br>src/views/exam-sim/exam-sim-weak.js | tests/unit/personalization.test.js | — | — |
+| PS-03 | ✅ | 테스트 | — | src/passloop/core/personalization.js<br>src/views/dashboard-queue.js<br>src/views/personalization-view.js | tests/unit/engine/today-queue.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-04 | ✅ | 테스트 | — | src/passloop/core/personalization.js<br>src/views/analysis-view.js | tests/unit/personalization.test.js | — | — |
+| PS-05 | ✅ | 테스트 | DOC-DSN-52 | src/passloop/core/personalization.js<br>src/views/analysis-view.js<br>src/views/personalization-view.js<br>src/views/trainer-drills.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-06 | ✅ | 테스트 | — | src/passloop/core/fsrs.js<br>src/passloop/core/personalization.js<br>src/study/spaced-repetition.js<br>src/views/personalization-view.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-07 | ✅ | 테스트 | — | src/passloop/core/personalization.js<br>src/study/analysis-engine.js<br>src/views/personalization-view.js<br>src/views/quiz/quiz.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-08 | ✅ | 테스트 | — | src/passloop/core/personalization.js<br>src/views/personalization-view.js<br>src/views/quiz/quiz.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-09 | ✅ | 테스트 | — | src/passloop/core/personalization.js<br>src/views/analysis-view.js | tests/unit/personalization.test.js | — | — |
+| PS-10 | ✅ v1 | 테스트 | — | src/passloop/core/personalization.js<br>src/views/analysis-view.js<br>src/views/dashboard-queue.js | tests/unit/engine/today-queue.test.js<br>tests/unit/personalization.test.js | — | — |
+| PS-11 | ✅ | 테스트 | — | src/passloop/core/personalization.js<br>src/study/analysis-engine.js<br>src/views/personalization-view.js | tests/unit/personalization-view.test.js<br>tests/unit/personalization.test.js | — | — |
 
 ## 3.31 Care OS — 요양보호사 실무도구 고도화
 

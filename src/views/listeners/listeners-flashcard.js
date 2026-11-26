@@ -5,7 +5,7 @@ import { state, saveProgress } from '../../core/state.js';
 import { DataLoader } from '../../content/data-loader.js';
 import { updateCardSchedule, snapshotCardSchedule, restoreCardSchedule } from '../../study/spaced-repetition.js';
 import { showActionToast } from '../../ui-utils.js';
-import { Rating } from '../../study/fsrs.js';
+import { Rating } from '../../passloop/core/fsrs.js';
 import { TIMING } from '../../config/timing.js';
 import { loadFlashcards, renderFlashcard } from '../flashcard.js';
 

@@ -27,7 +27,7 @@ import {
     computeTrapWeakness
 } from '../study/analysis-engine.js';
 import { SemanticIndex } from '../search/semantic-index.js';
-import { generateClinic, estimatePassProb, weeklyReport, weakRefLink } from '../study/personalization.js';
+import { generateClinic, estimatePassProb, weeklyReport, weakRefLink } from '../passloop/core/personalization.js';
 import {
     personalKtParams, weakClusters, resolveCidChapter, refitPersonalModels, getPersonalFit
 } from './personalization-view.js';

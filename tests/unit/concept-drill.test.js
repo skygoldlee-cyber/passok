@@ -4,7 +4,7 @@
 
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { normalizeConceptCid, pickConceptQuestions } from '../../src/study/concept-drill.js';
+import { normalizeConceptCid, pickConceptQuestions } from '../../src/passloop/core/concept-drill.js';
 
 const CID_SECTION = {
     subjA: { 'L100': '2.3', 'L200': '2.4' },

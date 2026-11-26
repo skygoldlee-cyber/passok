@@ -15,7 +15,7 @@ import { requestWeakQuizGen } from '../../ai/ai-client.js';
 import { getWeakConcepts } from '../../study/learner-profile-store.js';
 import { filterGeneratedItems } from '../../ai/gen-gate.js';
 import { computeWrongCauseSummary, getWrongCauseLabels } from '../../study/recommendations.js';
-import { normalizeConceptCid, pickConceptQuestions } from '../../study/concept-drill.js';
+import { normalizeConceptCid, pickConceptQuestions } from '../../passloop/core/concept-drill.js';
 import { DataLoader } from '../../content/data-loader.js';
 import { shuffle } from '../../core/utils.js';
 import { updateGlobalStats } from '../dashboard.js';

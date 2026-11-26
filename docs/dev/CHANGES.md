@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **refactor(passloop): 순수 모듈 엔진 코어 이전** — `study/{fsrs,knowledge-tracing,personalization,concept-drill}.js` → `passloop/core/` (무import 모듈 — 경계 게이트로 물리 이전 가능해짐). 임포터 전수 갱신(src 9·테스트 6·audit 1), domain-map은 `src/passloop/**` glob 커버로 stale 엔트리 제거, 복잡도 베이스라인 키 갱신, SPEC·설계·경쟁분석 문서 경로 정합. `weak-items.js`는 exam-context 결합으로 어댑터 잔류
+
 - **feat(gates): PassLoop 엔진 경계 게이트화** — `check_imports.js`에 `src/passloop/**` 외부 의존 0 규칙 추가(정적·동적 import·외부 패키지 전면 차단, 어댑터→엔진 단방향). 판정 함수 분리 export + 유닛 6건, 위반 프로브 스모크 확인. ARCHITECTURE 모듈 방향 규칙 표 등록
 
 - **chore(ai): AI-42 선행 — 사용률 계측 + 방침 개정** — `ai_textbook_qa` 로컬 사용 카운터 계측(AI-36 사용률 실측 경로 확보 — 기존엔 서버 ai_usage 외 측정 수단 없음) + `PRIVACY_POLICY.md` §1.2 AI 행에 교재 질의(질문 문장·근거·이전 문답 컨텍스트 최대 4턴)·취약 개념 라벨 수집 명시, §2 "검색어" 표현 정합

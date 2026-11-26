@@ -12,7 +12,7 @@ import {
 import {
     Rating, initDifficulty, setPersonalDecay, currentDecayW20,
     retrievability, fsrsReview, migrateSm2Record,
-} from '../../../src/study/fsrs.js';
+} from '../../../src/passloop/core/fsrs.js';
 import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 import { scopedKey } from '../../../src/core/exam-context.js';
 import { todayKey } from '../../../src/core/utils.js';

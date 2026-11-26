@@ -396,21 +396,6 @@
       "max": 17,
       "sum": 129
     },
-    "src/study/concept-drill.js": {
-      "count": 2,
-      "max": 18,
-      "sum": 33
-    },
-    "src/study/fsrs.js": {
-      "count": 1,
-      "max": 13,
-      "sum": 13
-    },
-    "src/study/personalization.js": {
-      "count": 5,
-      "max": 19,
-      "sum": 72
-    },
     "src/study/reader-notes.js": {
       "count": 1,
       "max": 12,
@@ -645,6 +630,21 @@
       "count": 3,
       "max": 18,
       "sum": 44
+    },
+    "src/passloop/core/concept-drill.js": {
+      "count": 2,
+      "max": 18,
+      "sum": 33
+    },
+    "src/passloop/core/fsrs.js": {
+      "count": 1,
+      "max": 13,
+      "sum": 13
+    },
+    "src/passloop/core/personalization.js": {
+      "count": 5,
+      "max": 19,
+      "sum": 72
     }
   }
 }

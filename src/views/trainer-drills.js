@@ -19,7 +19,7 @@ import { gradeAnswer } from '../content/questions.js';
 import { recordStatementJudgments, getWeakStatements, getDueStatementSids, getAllStatementStats, getAnomalousStatements, WEAK_GRADUATE_STREAK } from '../study/statement-tracker.js';
 import { normalizeCidAnchor, subjectFromSid } from '../study/analysis-engine.js';
 import { SemanticIndex } from '../search/semantic-index.js';
-import { weakRefLink } from '../study/personalization.js';
+import { weakRefLink } from '../passloop/core/personalization.js';
 import { resolveCidChapter } from './personalization-view.js';
 import { recordStudyActivity } from '../study/study-tracker.js';
 import { switchView, resetMainScroll } from './navigation.js';

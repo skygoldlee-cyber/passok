@@ -202,7 +202,7 @@
 | 3.27 | **AI 제작 지원** | author-time AI 초안 생성·검토 파이프라인 — `tmp/ai_drafts/` → 사람 리뷰 → content/ 편입 + PassLoop 런타임 계열 | AI-01~AI-44 (43) |
 | 3.28 | **주관식 연습** | 서술형 답안 작성·자기채점 루브릭·자동저장 | WP-01~WP-08 (8) |
 | 3.29 | **서비스 소개 (랜딩)** | `/landing.html` 정적 소개 페이지 — 시험 카드·체험 데모(퀴즈·학습계획)·설치 CTA·SEO/OG·프로모션 진입점 | LP-01~LP-14 (14) |
-| 3.30 | **개인 맞춤 고도화** | 개념 단위 약점 진단·개인화 스케줄·합격 예측 — 기존 자산(FSRS·BKT·진술 추적·임베딩)의 조합 계층 `src/study/personalization.js` | PS-01~PS-11 (11) |
+| 3.30 | **개인 맞춤 고도화** | 개념 단위 약점 진단·개인화 스케줄·합격 예측 — 기존 자산(FSRS·BKT·진술 추적·임베딩)의 조합 계층 `src/passloop/core/personalization.js` | PS-01~PS-11 (11) |
 | 3.31 | **Care OS** | 요양보호사 실무도구 — 요양일지·인수인계·근무표·수급자 명부·사고보고·방문 기록·기관 평가 체크리스트·비용 계산·기관 워크스페이스·자체 양식·대처카드·4단계 학습 흐름 | CO-01~CO-22 (22) |
 
 ### 3.1 대시보드 (Dashboard)
@@ -800,7 +800,7 @@
 
 ### 3.30 개인 맞춤 고도화 (Personalization)
 
-> 기존 자산의 조합 계층 — FSRS 리뷰 로그·statement_stats·EMB_NEIGHBORS·BKT·study alloc를 묶어 교재/CBT/인강이 구조적으로 제공 불가한 개인화를 구현. 순수 로직은 `src/study/personalization.js` (DOM·저장 비의존, 데이터 주입형).
+> 기존 자산의 조합 계층 — FSRS 리뷰 로그·statement_stats·EMB_NEIGHBORS·BKT·study alloc를 묶어 교재/CBT/인강이 구조적으로 제공 불가한 개인화를 구현. 순수 로직은 `src/passloop/core/personalization.js` (DOM·저장 비의존, 데이터 주입형).
 
 | ID | 요구사양 | 구현 상태 |
 |----|---------|-----------|
@@ -1479,7 +1479,7 @@ UI/UX 요구사양은 기능 요구사양과 달리 단위 테스트만으로는
 | ROAD-L3 | **오답 체인 잔여**: `핵심 문장(ref_md 조문 원문 인라인)` → 관련 카드 → 유사문제 → 재시험 추적 | A3 출처 근거의 후속 체인 | 미구현 |
 | ROAD-L4 | **Phase 2 차별화**: 출제 패턴 분석·코칭 리포트·지식 맵·요약 노트 | FEATURE_PROPOSALS Phase 2 (`docs/exams/cosmetic/report_archive/`) | 미구현 |
 | ROAD-L5 | **기능 검증 측정**: 개발 완료 기능(오답 루프·합격 전략·진단 평가)의 사용률·만족도 로컬 측정 → 유료가치 판정 데이터 확보 | `usage-stats.js` 뷰·액션 카운터 + 설정 '내 사용 통계' (로컬 전용, 백업·동기화 제외). **유저 단위 = 기기별 익명 `owner`(device_id) — 로그인 없는 프로모션 기간 대응, GLOBAL 키라 시험 전환해도 누적 유지**. **판정 기준: Pro 후보 액션(`VALUE_ACTIONS` — 오답 루프·진단 평가·이야기형·맞춤 리포트·실제 결과 보고) 합계 20회** (`PRO_VALUE_THRESHOLD`) — 편의/UI 액션(검색·플랜 비교)은 제외. 도달 시 유료가치 인정, ROAD-P1 착수 근거 | ✅ 카운터 구현 (판정 데이터 수집 중) |
-| ROAD-L6 | **ML 기술 로드맵 — 스마트·학습 진단 고도화 기법 검토**: ① FSRS 간격 반복 ✅ 적용 완료(F-07~F-11, `src/study/fsrs.js` — FSRS-6 승계·T3 시뮬 복습량 −17% 계측, LEARNING_ALGORITHM_DESIGN·LEARNING_ALGORITHM_DESIGN.md) ② 빌드타임 콘텐츠 임베딩(중복·개념 클러스터링) — transformers.js 빌드 의존성, 중기 후보 ③ 컨텍스추얼 밴딧(LinUCB — 추천 순위 학습, `REC_SNAPSHOT`·`evaluateRecommendationEffect` 보상 신호 기존) — Supabase 집단 데이터 수집 선행 조건 ④ 지식 추적 ✅ 단원 BKT 적용(D-22, `knowledge-tracing.js` — DKT 계열·LoReKT급 저자원은 집단 데이터+추론 최적화 전제로 장기 유지) ⑤ **강화학습(복습 시점·추천 순서 정책) — 검토 완료·보류 판정**: 사용자당 데이터 규모·희소 지연 보상(합격 = 사용자당 1회)·결정론 감사(SQ)와의 충돌로 비현실적 — 재검토 조건: Supabase 집단 수집 + 밴딧 수익 검증 후. FSRS가 스케줄링 문제를 수식으로 해결해 RL 이점 소멸 | LEARNING_ALGORITHM_DESIGN.md · 검토 산출 본 행 | ①④완료 ⑤보류, 나머지 미구현 |
+| ROAD-L6 | **ML 기술 로드맵 — 스마트·학습 진단 고도화 기법 검토**: ① FSRS 간격 반복 ✅ 적용 완료(F-07~F-11, `src/passloop/core/fsrs.js` — FSRS-6 승계·T3 시뮬 복습량 −17% 계측, LEARNING_ALGORITHM_DESIGN·LEARNING_ALGORITHM_DESIGN.md) ② 빌드타임 콘텐츠 임베딩(중복·개념 클러스터링) — transformers.js 빌드 의존성, 중기 후보 ③ 컨텍스추얼 밴딧(LinUCB — 추천 순위 학습, `REC_SNAPSHOT`·`evaluateRecommendationEffect` 보상 신호 기존) — Supabase 집단 데이터 수집 선행 조건 ④ 지식 추적 ✅ 단원 BKT 적용(D-22, `knowledge-tracing.js` — DKT 계열·LoReKT급 저자원은 집단 데이터+추론 최적화 전제로 장기 유지) ⑤ **강화학습(복습 시점·추천 순서 정책) — 검토 완료·보류 판정**: 사용자당 데이터 규모·희소 지연 보상(합격 = 사용자당 1회)·결정론 감사(SQ)와의 충돌로 비현실적 — 재검토 조건: Supabase 집단 수집 + 밴딧 수익 검증 후. FSRS가 스케줄링 문제를 수식으로 해결해 RL 이점 소멸 | LEARNING_ALGORITHM_DESIGN.md · 검토 산출 본 행 | ①④완료 ⑤보류, 나머지 미구현 |
 | ROAD-L7 | **4버튼 레이팅 UI**: `fc-easy/hard` 2버튼 → 다시/어려움/좋음/쉬움(Again/Hard/Good/Easy) 4버튼 + 버튼별 예상 복습 간격 표시(previewCardReview) — `updateCardSchedule`가 Rating 1~4 직접 수용(boolean은 하위호환 GOOD/AGAIN), 레코드 `r`에 마지막 등급 보존, 키보드 1~4·A H G E, Again/Hard→약점·Good/Easy→외움 매핑 | **게이트**: D-18 리뷰 로그로 이진 입력의 실측 손실(Again 과다/Good 남발 분포) 정량화 후 도입 판정 (LEARNING_ALGORITHM_DESIGN §8 · EXAM_R_SCHEDULING §4) | ✅ |
 | ROAD-L8 | **개인 FSRS 파라미터 피팅**: 사용자별 `w` 추정 — FSRS-6의 학습 가능 망각 곡선 지수 `w20`이 첫 대상, `fc_review_log` `{c,r,e,t}`가 optimizer 입력과 동형 | **게이트**: 로그 ~1,000 리뷰 축적(Anki 최적화기 실질 하한 — 일 60~80장 기준 4~6주, LEARNING_ALGORITHM_DESIGN §9.3) | 미구현 |
 | ROAD-L9 | **실측 기억률 분석**: 로그의 경과일 `e`·레이팅 `r`로 "예측 R vs 실제 응답" 버킷 대조 — FSRS 효능 검증 + `EXAM_TARGET_R 0.95`·D-19 창(14일) 튜닝 근거 | **게이트**: 로그 축적(경과일 버킷별 표본 확보) — 로그가 차면 다음 자연 단계 (EXAM_R_SCHEDULING §4) | 미구현 |

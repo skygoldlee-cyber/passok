@@ -10,7 +10,7 @@ import { showToast } from '../../ui-utils.js';
 import { startSimSession, comboToSimQuestion, comboSubjOrder } from './exam-simulator.js';
 import { getAllStatementStats } from '../../study/statement-tracker.js';
 import { subjectFromSid } from '../../study/analysis-engine.js';
-import { buildWeakMock } from '../../study/personalization.js';
+import { buildWeakMock } from '../../passloop/core/personalization.js';
 
 /* =======================================================
    📋 "틀린 문제만 모아 풀기" 오답 모의고사 (Weakness Exam)

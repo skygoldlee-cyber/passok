@@ -7,7 +7,7 @@ import assert from 'node:assert/strict';
 import {
     Rating, initDifficulty, initStability, retrievability, nextInterval,
     nextDifficulty, recallStability, forgetStability, sameDayStability, fsrsReview, migrateSm2Record
-} from '../../../src/study/fsrs.js';
+} from '../../../src/passloop/core/fsrs.js';
 import { updateCardSchedule, getDueCards, getDueCount, getReviewLog, getExamRiskCards, previewCardReview } from '../../../src/study/spaced-repetition.js';
 import { STORAGE_KEYS } from '../../../src/core/storage-keys.js';
 import { todayKey } from '../../../src/core/utils.js';

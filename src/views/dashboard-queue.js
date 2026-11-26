@@ -19,7 +19,7 @@ import {
     getDDay, getStudyGoals, examWeightBySubject, selectExamRiskSession
 } from '../study/study-tracker.js';
 import { computeRecommendations, snapshotRecommendations, evaluateRecommendationEffect } from '../study/recommendations.js';
-import { buildTodayQueue as buildPersonalQueue } from '../study/personalization.js';
+import { buildTodayQueue as buildPersonalQueue } from '../passloop/core/personalization.js';
 import { weakClusters } from './personalization-view.js';
 import { getSubjCounts, displayCounts } from './subject-stats.js';
 import { subjectKeyFromItemId } from '../study/weak-items.js';

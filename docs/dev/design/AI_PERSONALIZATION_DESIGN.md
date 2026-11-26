@@ -146,17 +146,17 @@ src/passloop/                    — 엔진 (외부 import 금지 — 어댑터�
   core/
     mastery.js            ← AI-40 신규
     learner-profile.js    ← AI-41 순수부 (LRU 맵 연산)
-    (선택 이전) fsrs.js·knowledge-tracing.js·personalization.js·concept-drill.js
+    fsrs.js·knowledge-tracing.js·personalization.js·concept-drill.js  ← 기존 순수 자산 (이전 완료 2026-11-26)
 ```
 
 | 구분 | 위치 | 해당 |
 |---|---|---|
-| 엔진 코어 (순수) | `src/passloop/core/` | AI-40·AI-41 순수부 — 기존 순수 자산(fsrs·BKT·personalization·concept-drill·weak-items)의 논리 편입 대상 |
-| 어댑터 (플랫폼 결합) | `src/study/` 잔류 | 프로필 영속화(storage.js+scopedKey로 KvStore 구현)·statement-tracker·spaced-repetition |
+| 엔진 코어 (순수) | `src/passloop/core/` | AI-40·AI-41 순수부 + 기존 순수 자산(fsrs·BKT·personalization·concept-drill) — 물리 이전 완료. weak-items는 exam-context 결합으로 어댑터 잔류 |
+| 어댑터 (플랫폼 결합) | `src/study/` 잔류 | 프로필 영속화(storage.js+scopedKey로 KvStore 구현)·statement-tracker·spaced-repetition·passloop-adapter |
 | 엔진 외부 | `src/ai/`·`src/views/`·`tools/ai/` | AI-42(ai-client·세션·텔레메트리 밀착)·AI-43(저작 런타임)·AI-44(entity-store)·모든 UI |
 
 - **의존 규칙** — `src/passloop/**`는 `src/passloop/` 밖을 import하지 않는다 (fsrs.js의 무import 선례). `check:imports`가 정적·동적 import·외부 패키지를 강제(게이트화 완료, 2026-11-26), `domain-map.json`에 `src/passloop/**` → `feature:passloop` layer 등록
-- **단계적 적용** — 단계 1에서 신규 모듈(mastery·learner-profile)만 `src/passloop/core/`에 배치해 파일 이동 0으로 경계 확보. 기존 순수 모듈의 물리 이전은 정리 가치뿐이라 후속 선택 사항 (import 전수 갱신 + domainmap 패턴 비용)
+- **단계적 적용** — 단계 1에서 신규 모듈(mastery·learner-profile)만 `src/passloop/core/`에 배치해 경계 확보 → 후속 정리로 기존 순수 모듈(fsrs·knowledge-tracing·personalization·concept-drill) 물리 이전 완료 (import 전수 갱신 + domainmap·복잡도 베이스라인 정합)
 - **시험 중립** — 코어는 시험 무관 layer(`feature:passloop` 또는 platform) — 시험 특화 데이터는 전부 포트로 주입 (DA-13 정합)
 
 ## 4. 프라이버시·정합

@@ -45,7 +45,7 @@
                 "html/views/textbook.html",
                 "html/views/trainer.html",
                 "src/study/analysis-engine.js",
-                "src/study/concept-drill.js",
+                
                 "src/shell/app-dashboard.js",
                 "src/shell/app-fallback.js",
                 "src/shell/app-shell.js",
@@ -85,9 +85,9 @@
                 "src/core/exam-context.js",
                 "src/shell/exam-data-boot.js",
                 "src/shell/feedback.js",
-                "src/study/fsrs.js",
+                
                 "src/globals.d.ts",
-                "src/study/knowledge-tracing.js",
+                
                 "src/shell/landing-redirect.js",
                 "src/shell/landing.js",
                 "src/shell/modal-back.js",
@@ -95,7 +95,7 @@
                 "src/shell/onboarding.js",
                 "src/package.json",
                 "src/core/paths.js",
-                "src/study/personalization.js",
+                
                 "src/practice-registry.js",
                 "src/pro/pro-expiry.js",
                 "src/pro/pro-redeem.js",

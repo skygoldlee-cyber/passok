@@ -16,8 +16,8 @@
 
 import { parseWeakSimId, subjectKeyFromItemId, WEAK_QUIZ_PREFIX } from './weak-items.js';
 import { resolveLegacySubjectKey, examIdToSubjectId } from '../core/exam-context.js';
-import { Rating } from './fsrs.js';
-import { computeUnitMastery, KT_DEFAULTS } from './knowledge-tracing.js';
+import { Rating } from '../passloop/core/fsrs.js';
+import { computeUnitMastery, KT_DEFAULTS } from '../passloop/core/knowledge-tracing.js';
 import { localDateKey } from '../core/utils.js';
 import { WEAK_GRADUATE_STREAK } from './statement-tracker.js';
 import { getWrongCauseLabels, getWrongCauseTaxonomy } from './recommendations.js';
