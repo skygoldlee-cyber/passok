@@ -132,7 +132,7 @@ node tmp/_draft_kocw.js src_md/<src> <exam> <subject> <suffix> "<라벨>"  # KOC
 
 ### 그 외 잔여
 
-- **draft 팩 6종 — 교재 21과목 골격 스텁(0.2~1.8k), 소스는 확보됨 (2026-11-25)** — eleceng 5(em·power·mach·circuit·regs)·elecindeng 5(동)·distmgr2 4·iteng 3·itindeng 2·distmgr3 2: 문항 0 + 교재 스텁. **소스 수집은 완료** — 이전 세션 수집분(ref_md NCS 모듈 대량 + `tmp/materials` KOCW 소재)을 이번 세션에서 src_md 변환·갭 보강해 21과목 전부 초안 생성 가능 상태. 잔여는 `_draft_kocw.js`/`_tb_appendix.js` 초안 생성 + 병합(추정 AI 호출 300회+)·문항 은행·승격 리뷰. 과목별 소스 맵은 `tmp/_jobs_README.md` 참조. 소스 불가 확인분: iteng 네트워크 23건(이미지 스캔본)·eleceng/dist 뷰어 HTML 다수 — 제외 처리됨
+- **draft 팩 6종 — 교재 21과목 전량 해소 ✅ (2026-11-26, `54a30a28`)** — eleceng 5·elecindeng 5·distmgr2 4·iteng 3·itindeng 2·distmgr3 2 골격 스텁(0.2~1.8k)에 KOCW 큐레이션 초안(`_draft_kocw.js`)+ref_md ai_textbook 초안(`_tb_appendix.js`) 📚 부록 병합 — 20.2~26.3k 전량 해소. elecindeng·itindeng proglang은 eleceng·iteng 초안 재사용(0호출). 잔여: ①부록 AI 요약본 사실관계 리뷰 ②문항 은행(과목당 ≥20문 — 승격 필수) ③draft→pilot 승격 리뷰. 소스 맵·도구는 `tmp/_jobs_README.md`
 - **문항 필요선 부근**: lossadj(필요 -56)·hairdresser(-20)·indsafe(-9) — 권장 6회분 대비 여유가 얇음
 - **appraisal 인용 94% → 재시도 가능** — 교재 보강 완료로 econ·accounting 문항의 교재 인용 백필 재시도 가능 (`cite_backfill`)
 - **insadj written 게이트** — 주관식 과목 ≥20문 요건 설계 결정 미해결 (상기 시험별 항목 참조)
