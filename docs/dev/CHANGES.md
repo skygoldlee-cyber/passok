@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **fix(notice): 법령 개정 배너·개정 내역 전 시험 공용화 — cosmetic 전용 CSS 글로벌 이관 + ruleName 누출 정정** — 배너(`#formula-notice-banner`)는 index.template 전역 마운트·status/diff URL·watchDocs·저장 키 전부 시험 스코프로 이미 다중 시험 대응이었으나, `.notice-banner`·`.notice-status-view`·`.notice-diff-*` 스타일이 `css/exams/cosmetic/formula.css`(시험별 지연 로딩)에만 있어 다른 팩에선 무스타일로 렌더됐음. notice 블록 153줄을 `css/ui-overlay.css`(전역 로드)로 이관 — cosmetic 동작 동일, 나머지 팩에서 배너·폴백 패널·diff 정상 표시. 함께 `check_mfds_notice.py` `_DEFAULT_CORE` 폴백 제거 — noticeCore 미설정 팩의 `latest.ruleName`에 화장품 규정명이 쓰이던 누출 정정(status 13개 파일 null로 정정, cosmetic·conssafe·insadj·lossadj는 자체 noticeCore 유지). 참고: referenceLaw 빈 6팩(compapp1·2·iteng·itindeng·distmgr2·3)은 ref_md에 법령 문서 없어 감시 대상 자체 없음 — 정상 제외
+
 - **fix(notice): 개정 배너 '변경 내역 보기' 무반응 — `#notice-status-view` 패널 전역 부재 폴백 추가** — 배너(`#formula-notice-banner`)는 index.template 전역 마운트인데 상태 패널은 cosmetic formula 뷰 파셜에만 존재해, 다른 뷰에서 클릭 시 getElementById null 조용 return이 원인. `viewMfdsNoticeStatus`가 패널 부재 시 배너 직하에 `#notice-status-float` 폴백 생성(formula 뷰 인컨텍스트 동작 유지). DOM 테스트 1건
 
 - **fix(analysis): innerHTML 보간 `esc-ok` 면제 누락 — 이스케이프 싱크 규약 위반 해소** — CI 'HTML escape sink check' 실패 수정. `snap.evidenced`(정수)·`gradeRow`(고정 라벨 조립)·`rows`(esc() 처리 내부 마크업) 3곳에 검토 면제 주석 명시

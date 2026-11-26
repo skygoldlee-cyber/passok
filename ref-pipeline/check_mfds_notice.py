@@ -53,13 +53,10 @@ EXAM_DIR = exam_root(exam_arg())
 STATUS_FILE = EXAM_DIR / 'notice_status.json'
 REFS_FILE = EXAM_DIR / 'references.json'
 
-# 레거시 top-level baseline/latest의 기준 문서 — references.json noticeCore 우선,
-# 없으면 아래 기본값. 원료 DB 대조의 기준 문서다.
-_DEFAULT_CORE = '화장품 안전기준 등에 관한 규정'
-
-
+# 레거시 top-level baseline/latest의 기준 문서 — references.json noticeCore 사용.
+# 미설정 시험은 None — 다른 시험의 규정명을 쓰면 배너 라벨이 오표기된다.
 def rule_name():
-    return load_refs_cfg(EXAM_DIR).get('noticeCore') or _DEFAULT_CORE
+    return load_refs_cfg(EXAM_DIR).get('noticeCore')
 
 
 def load_oc_key():

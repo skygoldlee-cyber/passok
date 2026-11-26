@@ -118,3 +118,14 @@ class TestHstSerialsParse:
         assert [(r['serial'], r['efYd'], r['name']) for r in rows] == [
             ('291365', '20261112', '공중위생관리법 시행령'),
             ('266301', '20260101', '공중위생관리법 시행령')]
+
+
+class TestRuleName:
+    def test_noticecore_used_when_set(self, monkeypatch):
+        monkeypatch.setattr(M, 'load_refs_cfg', lambda _p: {'noticeCore': '산업안전보건기준에 관한 규칙'})
+        assert M.rule_name() == '산업안전보건기준에 관한 규칙'
+
+    def test_no_noticecore_returns_none(self, monkeypatch):
+        """noticeCore 미설정 시험은 None — 다른 시험 규정명이 latest.ruleName에 새면 배너 라벨 오표기."""
+        monkeypatch.setattr(M, 'load_refs_cfg', lambda _p: {})
+        assert M.rule_name() is None
