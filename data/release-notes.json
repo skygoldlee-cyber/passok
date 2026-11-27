@@ -1,5 +1,21 @@
 [
   {
+    "version": "v20261128-67fcd1d",
+    "date": "2026-11-28",
+    "notes": [
+      "[수정·e2e] CI 실패 3스펙 스테일 수정 — 배포 차단 해소",
+      "[정리·assets] 고아 예외 han-jeongsu.svg 삭제 — 예외 명단 3→2건",
+      "[수정·ai] ai_apply 제수 스탬프 실측 카운트 기준으로 수정",
+      "[기능·exams] comingSoon 8팩 정식 전환 + itindeng pilot 승격",
+      "[문서·content] 콘텐츠 정비 잔여 작업 목록 명기",
+      "[기능·content] 6회분 미달 3과목 보충 — 삭제 영향분 복구",
+      "[수정·content] 근거부재 잔여 문항 232건 삭제 + 제수 정정",
+      "[정리·content] 드릴·임베딩 재생성 — 인용 재지정 반영",
+      "[수정·content] 레거시 인용 기계적 재지정 — 플래그 516건 근거 라인 정정",
+      "[수정·content] admagent 판본 문서 스탬프 + skincare webmanifest 재생성"
+    ]
+  },
+  {
     "version": "v20261127-4255d50",
     "date": "2026-11-27",
     "notes": [
@@ -230,22 +246,6 @@
       "[문서·design] hazmat 실무도구 설계안 신설 (DOC-DSN-55)",
       "[기능·reader] 진도 바 호버 시 읽기 진도 % 툴팁 + ARIA 진행률 표시",
       "[수정·test] ST-07 시리즈 설정 문서 경로를 CS-13 정본 위치로 갱신"
-    ]
-  },
-  {
-    "version": "v20261118-aba403e",
-    "date": "2026-11-18",
-    "notes": [
-      "[수정] analysis-view 추출 헬퍼 보간에 esc-ok 면제 주석 — CI 이스케이프 싱크 게이트 해소",
-      "[CI] dependency audit를 프로덕션 의존성 한정으로 조정 (--omit=dev)",
-      "[수정] combo 판정 모드 오답이 correctCount에 잘못 집계되던 버그",
-      "[리팩터링] 28~33 고복잡도 8개 함수 분해 — 래칫 기준선 303→299건 정착",
-      "[리팩터링] care-share 내보내기 골격 → content/doc-export 승격 + 분석 계열 고복잡도 분해",
-      "[리팩터링] 시험 공통 부품 platform 승격 — name-fmt·checklist-import·voice·store-fields",
-      "[리팩터링] 30+ 고복잡도 함수 11개 분해 — 래칫 기준선 315→309건·sum -293 정착",
-      "[문서] 판본 문서 갱신일 동기화 — Series Bible 인용 표기 정정 무영향 확인",
-      "[수정·content] LL-05 링크 린트 위반 해소 — 원시 경로를 DOC ID 참조로 대체",
-      "[문서·design] hazmat 실무도구 수요·경쟁 판단 반영 — 목표 재정의"
     ]
   }
 ]
