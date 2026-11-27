@@ -4,8 +4,9 @@
 > **문서 ID**: DOC-DSN-58
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: `AL-01~20` (신규 — §3.32) · `AI-25~30` (ai-proxy·쿼터·템플릿 계약) · `AI-36`·`AI-42` (교재 질의응답·다턴) · `AI-40~44` (PassLoop 숙련도·프로필·퀵체크 계열) · `SEM-02`·`SEM-05` (임베딩 검색·이웃 인덱스) · `CQ-07`·`CQ-08`·`AI-45`·`AI-46` (콘텐츠 신뢰성 장치 — 설계: CONTENT_SAFETY_DESIGN)
-> **상태**: **보류** (2026-11-27 결정 — 기존 PassLoop·ai-proxy·textbook_qa 계열 유지. 향후 기능 심화 확장 필요 시 재검토. 재검토 전제: §15 미결 사항의 기존 인프라 흡수/병행 확정 + G1~G3 관문 기준 확보 + §10 RAG 소스를 기존 교재 md·ref_md 재사용으로 전제)
-> **원본**: `PassOK DeepTutor Hybrid AI Learning 설계서 v1.1.md` (2026-11-27, @coteleaf) — 파일명·헤더·SPEC 연동만 규약에 맞춰 정리, 본문은 원본 그대로
+> **상태**: **보류** (2026-11-27 결정 — 기존 PassLoop·ai-proxy·textbook_qa 계열 유지. **§14 Devin 지시서는 보류 중 실행 금지**)
+> **재검토 트리거**: ①`textbook_qa`로 처리 불가한 요구가 반복될 때(다단계 풀이 유도·소크라테스식 대화 등 세션형 튜터링) ②시험팩 증가로 교재 md·ref_md 변환 비용이 RAG 직접 수집 비용을 넘어설 때 ③승인 문항 풀·정답 비노출이 사업상 필수가 될 때. 재검토 전제: §15 미결 사항의 기존 인프라 흡수/병행 확정 + §10 RAG 소스를 기존 교재 md·ref_md 재사용으로 전제
+> **원본**: `PassOK DeepTutor Hybrid AI Learning 설계서 v1.1.md` (2026-11-27, @coteleaf) — 파일명·헤더·SPEC 연동을 규약에 맞춰 정리. **이식 시 추가·수정된 본문**: §2.2 "주기적 신규 태그 감지·승격 후보 파이프라인" 절, §14.3-6 감지 스크립트 문구, §12.1 G0 비교군 확장, §15 미결 사항 추가분 — 나머지는 원본 그대로
 
 Nov 27, 2026 · @coteleaf
 
@@ -145,7 +146,7 @@ docker build -t passok/deeptutor:1.6.16-p0 .
 
 | 단계 | 자동/사람 | 내용 |
 | --- | --- | --- |
-| 1. 감지 | 자동 | worker가 주 1회 `deeptutor-check-update.sh`를 실행 — 신규 태그 목록·현재 버전과의 diff 통계·사용 중인 엔드포인트 관련 파일 변경 여부를 수집. 신규 태그 발견 시 관리자 알림(이벤트 로그 + 관리자 대시보드 표시) |
+| 1. 감지 | 자동 | **개발 환경 또는 CI(주기 실행 GitHub Actions 등)**에서 주 1회 `deeptutor-check-update.sh`를 실행 — 신규 태그 목록·현재 버전과의 diff 통계·사용 중인 엔드포인트 관련 파일 변경 여부를 수집. 신규 태그 발견 시 결과만 관리자 알림(이벤트 로그 + 관리자 대시보드 표시)으로 전달. 운영 호스트에서 fetch는 실행하지 않음(아래 원칙) |
 | 2. 긴급도 분류 | 자동 | 릴리스 노트에서 보안 키워드(security·CVE·vuln·패치) 감지 시 알림 등급 상승 — §2.2 "확인일만 기록" 절차에 긴급 플래그를 부가 |
 | 3. 승격 후보 준비 | 자동(개발 환경 한정) | 신규 태그에 대해 자동으로: fetch → `passok/*` 패치 rebase → 이미지 빌드 → 어댑터 계약 테스트 → 평가 세트 30문 실행 → 결과 리포트. 통과분을 "승격 후보"로 제시. 어느 단계든 실패하면 후보 폐기·사유 기록 |
 | 4. 승격 | 사람 | 관리자가 후보 리포트 검토 후 승인 → compose 이미지 태그·버전 기록 갱신 → 개발→스테이징→운영 순서 배포(§2.2 5단계와 동일). 실패 시 이전 이미지 태그로 되돌림 |
@@ -269,11 +270,13 @@ DeepTutor는 검색과 자연어 생성만 맡는다. 사용자 상태, 채점, 
 - wᵤ = 문항-개념 매핑 가중치(합 1.0).
 - s = 출처 가중치: 모의고사·진단·맞춤 문제 1.0, 힌트 사용 또는 튜터 설명 직후 재시도 0.5, 로컬 기록 이관(`legacy_import`) 0.5, 연습 모드(실시간 생성 문항) 0.
 
-오래된 증거는 새 증거를 더하기 전에 반감기 60일로 사전분포 쪽으로 줄인다(Δ = 마지막 평가 후 경과일).
+오래된 증거는 반감기 60일로 사전분포 쪽으로 줄인다(Δ = 마지막 평가 후 경과일). 저장되는 α·β는 **마지막 평가 시점 값**이고, 표시값은 조회 시점에 감쇠를 적용해 계산한다 — `now() - last_assessed_at`으로 Δ를 구하는 SQL 함수·뷰로 제공한다. 야간 배치 없이도 묵은 "숙달" 표시가 생기지 않는다(Δ가 커지면 표시 숙달은 50점·n_eff는 0으로 수렴해 "미평가"로 돌아간다).
 
 ```latex
-\alpha_u \leftarrow \alpha_0 + (\alpha_u - \alpha_0)\cdot 0.5^{\Delta/60} \qquad \beta_u \leftarrow \beta_0 + (\beta_u - \beta_0)\cdot 0.5^{\Delta/60}
+\alpha_u^{표시} = \alpha_0 + (\alpha_u^{저장} - \alpha_0)\cdot 0.5^{\Delta/60} \qquad \beta_u^{표시} = \beta_0 + (\beta_u^{저장} - \beta_0)\cdot 0.5^{\Delta/60}
 ```
+
+신규 응답 반영 시에도 같은 수식으로 저장분을 먼저 감쇠시킨 뒤 증거를 더한다. `ai_learner_mastery`의 `n_eff`·`mastery_score` generated column은 "마지막 평가 시점" 값이며, UI·API는 감쇠 적용 뷰의 표시값을 쓴다.
 
 표시값:
 
@@ -319,6 +322,18 @@ DeepTutor는 검색과 자연어 생성만 맡는다. 사용자 상태, 채점, 
 | 4 | 응답시간 < 문항 중앙값의 30% 이고 해당 개념 숙달도 ≥ 75 | 단순 실수 |
 | 5 | 같은 개념 최근 3회 중 2회 이상 오답 | 개념 미이해 |
 | 6 | 그 외 | LLM 분류(문제 해석 오류 포함), 신뢰도 낮으면 `unknown` |
+
+`error_type` enum ↔ 유형 매핑(저장은 enum, 표시는 한글 유형):
+
+| enum | 유형 |
+| --- | --- |
+| `misconception` | 개념 미이해 |
+| `confusion` | 개념 혼동 |
+| `memorization` | 암기 부족 |
+| `misreading` | 문제 해석 오류 |
+| `calculation` | 계산 오류 |
+| `slip` | 단순 실수 |
+| `unknown` | 분류 불가 |
 
 ### 5.5 초기 진단과 학습 경로
 
@@ -435,10 +450,12 @@ create table public.ai_question_items (
   approved_by uuid references auth.users(id),
   approved_at timestamptz,
   median_response_ms integer,
+  content_hash text not null,                             -- stem+options 정규화 해시 — NULL source_question_id 행의 중복 방지
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   unique (exam_pack_id, source, source_question_id)
 );
+create unique index uq_ai_qitems_hash on public.ai_question_items(exam_pack_id, content_hash);
 create index idx_ai_qitems_pack_status on public.ai_question_items(exam_pack_id, status);
 
 create table public.ai_question_keys (
@@ -514,8 +531,9 @@ create table public.ai_attempts (
   error_type text check (error_type in ('misconception','confusion','memorization',
     'misreading','calculation','slip','unknown')),
   error_type_by text check (error_type_by in ('rule','llm')),
-  idempotency_key text unique,
-  answered_at timestamptz not null default now()
+  idempotency_key text,
+  answered_at timestamptz not null default now(),
+  unique (user_id, idempotency_key)                     -- 클라이언트 생성 키는 사용자 범위에서만 유일
 );
 create index idx_ai_attempts_user_time on public.ai_attempts(user_id, answered_at desc);
 create index idx_ai_attempts_question on public.ai_attempts(question_id);
@@ -627,6 +645,7 @@ create table public.ai_document_sources (
   index_status text not null default 'pending' check (index_status in ('pending','indexing','ready','failed')),
   indexed_at timestamptz,
   created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
   unique (exam_pack_id, title, document_version)
 );
 
@@ -642,11 +661,13 @@ create table public.ai_jobs (
   attempts integer not null default 0,
   max_attempts integer not null default 3,
   run_after timestamptz not null default now(),
-  idempotency_key text unique,
+  idempotency_key text,
   created_at timestamptz not null default now(),
   started_at timestamptz,
   completed_at timestamptz
 );
+create unique index uq_ai_jobs_idem on public.ai_jobs(coalesce(user_id, '00000000-0000-0000-0000-000000000000'::uuid), idempotency_key)
+  where idempotency_key is not null;                        -- 클라이언트 키(legacy-import 등)는 사용자 범위 유일 — 시스템 작업은 고정 uuid로 분리
 create index idx_ai_jobs_queue on public.ai_jobs(status, run_after) where status = 'queued';
 
 create table public.ai_usage_logs (
@@ -675,6 +696,8 @@ create trigger trg_ai_qitems_upd before update on public.ai_question_items
 create trigger trg_ai_mastery_upd before update on public.ai_learner_mastery
   for each row execute function public.ai_set_updated_at();
 create trigger trg_ai_review_upd before update on public.ai_review_schedules
+  for each row execute function public.ai_set_updated_at();
+create trigger trg_ai_docsrc_upd before update on public.ai_document_sources
   for each row execute function public.ai_set_updated_at();
 ```
 
@@ -966,15 +989,23 @@ DeepTutor는 지식베이스마다 RAG 엔진을 선택할 수 있다(기본 Lla
 
 예상 총기간은 8\~12주다. v1.0보다 최대 1주 늘었는데, 기존 문항의 개념 태깅을 Phase 2에 넣었기 때문이다. 각 관문을 통과하지 못하면 다음 단계를 Devin에게 맡기지 않는다.
 
-> ⚠️ **원본 임베디드 콘텐츠 미포함** — "개발 단계 · 5단계, 5개 관문" 도식에 G1~G3 관문 기준이 정의돼 있으나 본문에는 G0(§12.1)·G4(§14.8)만 텍스트로 존재. G1~G3 판정 기준은 원본 확보 또는 텍스트 재정의가 선행 필요 — §15 미결 사항에 등록됨.
+> ⚠️ **원본 임베디드 콘텐츠 미포함** — "개발 단계 · 5단계, 5개 관문" 도식. 관문 기준은 원본 작성자 제공분을 아래 표로 이식함.
+
+| 관문 | 기준 |
+| --- | --- |
+| G0 | Go/No-Go: 검색 재현율 85%, 인용 정확도 90%, 첫 토큰 3초 이내 (§12.1) |
+| G1 | 타 사용자 세션·대화 접근 0건, 답변에 인용 표시 |
+| G2 | 기존 문항 매핑 승인 완료, 응답 재생으로 숙달도 재현 |
+| G3 | 개념당 승인 문항 8개 이상, 숙달도에 따라 경로가 달라짐 |
+| G4 | 최종 시나리오 13단계 통과 (§14.8) |
 
 ### 12.1 G0 판정 절차
 
-교재 질문 100개와 법령 질문 30개로 두 엔진(DeepTutor HTTP, pgvector 자체 RAG)을 비교한다. 측정 항목은 검색 재현율(상위 5개), 인용 정확도, 답변 정확도(전문가 기준 답안 대비), 첫 토큰 지연, 질문당 비용, 운영 부담(서비스 수·메모리 사용량)이다.
+교재 질문 100개와 법령 질문 30개로 **세 후보(현행 `textbook_qa` 경로, DeepTutor HTTP, pgvector 자체 RAG)**를 비교한다. 측정 항목은 검색 재현율(상위 5개), 인용 정확도, 답변 정확도(전문가 기준 답안 대비), 첫 토큰 지연, 질문당 비용, 운영 부담(서비스 수·메모리 사용량)이다.
 
-- 두 엔진 모두 기준 통과: 품질 차이가 5%p 이내면 운영이 단순한 쪽을 택한다.
-- DeepTutor만 통과: DeepTutor 채택.
-- 둘 다 미달: 파싱·청크 전략을 고친 뒤 1회 재측정하고, 그래도 미달이면 튜터 기능을 파일럿에서 빼고 학습 엔진(Phase 2\~3)부터 진행한다.
+- 통과 기준은 절대값이 아니라 **현행 `textbook_qa` 대비 개선폭**이다 — "지금 운영 중인 것보다 나은가"가 실제 질문이다. 운영 중인 `textbook_qa`(SemanticIndex 임베딩 검색 + 인용 강제 응답, SPEC AI-36)는 배포돼 비용·지연 실측이 있으므로 베이스라인이 된다.
+- DeepTutor가 `textbook_qa` 대비 유의미 개선을 보이면 채택 후보, 아니면 현행 유지 + pgvector 결과를 참고 자료로 보존한다.
+- 셋 모두 미달이면 파싱·청크 전략을 고친 뒤 1회 재측정하고, 그래도 미달이면 튜터 기능을 파일럿에서 빼고 학습 엔진(Phase 2\~3)부터 진행한다.
 
 어느 쪽을 택해도 어댑터 인터페이스가 같아 이후 단계는 바뀌지 않는다.
 
@@ -1039,6 +1070,8 @@ DeepTutor는 지식베이스마다 RAG 엔진을 선택할 수 있다(기본 Lla
 
 ## 14. Devin 개발 지시서 v1.1
 
+> ⛔ **보류 중 — 실행 금지** (2026-11-27). 본 설계는 도입 보류 판정 상태다. 아래 지시서는 승격 후보로 보존된 것이며, 헤더 "재검토 트리거" 충족 + §15 미결 사항 해소 후 재승인 전까지 Devin에게 붙여 넣거나 Phase를 착수하지 않는다.
+
 이 장은 Devin에게 그대로 붙여 넣는 용도다. 한 번에 한 Phase만 지시하고, 아래 "공통 원칙"은 매번 함께 붙인다.
 
 ### 14.1 프로젝트명과 목표
@@ -1088,7 +1121,7 @@ PoC 결과물 `docs/ai-learning/02-engine-poc.md`:
 3. 로컬 빌드 이미지 `passok/deeptutor:<버전>-p0`로 PoC를 수행한다. 원격 이미지(`latest`)는 쓰지 않는다.
 4. 메모리 끄기, 도구 실행 끄기, auth 비활성, 내부망 전용을 소스 패치가 아닌 설정으로 처리할 수 있는지 확인한다. 패치가 필요하면 패치마다 사유를 기록한다.
 5. 로컬 소스는 실제 HTTP/SSE 엔드포인트를 확인하는 데만 쓴다. PassOK 코드에서 DeepTutor 모듈을 import하지 않는다.
-6. `scripts/deeptutor-check-update.sh`를 만든다. 새 태그 목록, 현재 버전과의 diff 통계, 사용 중인 엔드포인트 관련 파일의 변경 여부를 출력하는 점검 전용 스크립트다. 반영은 하지 않는다. §2.2 "주기적 신규 태그 감지·승격 후보 파이프라인"의 1단계(주기 감지)는 후속 Phase에서 이 스크립트를 worker 작업으로 호출해 구현한다.
+6. `scripts/deeptutor-check-update.sh`를 만든다. 새 태그 목록, 현재 버전과의 diff 통계, 사용 중인 엔드포인트 관련 파일의 변경 여부를 출력하는 점검 전용 스크립트다. 반영은 하지 않는다. §2.2 "주기적 신규 태그 감지·승격 후보 파이프라인"의 1단계(주기 감지)는 후속 Phase에서 이 스크립트를 개발 환경 또는 CI 주기 작업(예: GitHub Actions schedule)으로 호출해 구현한다 — 운영 호스트에서 fetch는 실행하지 않는다.
 7. `docs/ai-learning/deeptutor-version.md`를 처음 작성한다.
 
 완료 조건: 네트워크를 끊은 상태에서 `docker compose up`으로 DeepTutor가 기동된다(LLM 호출 제외). 점검 스크립트가 다음 태그와의 차이를 출력한다.
@@ -1183,17 +1216,30 @@ Phase 0 종료 전에 사용자가 결정할 항목이다.
 - [ ] 문항·매핑 검수 시간 확보 방안(1인 검수의 품질 점검 방식)
 - [ ] 튜터 대화 보관 기간(초안 12개월)과 개인정보 처리방침 개정
 
-### repo 규약 이식 시 추가된 검토 항목 (2026-11-27 저장소 리뷰)
+### repo 규약 이식 시 추가된 검토 항목 (2026-11-27 저장소 리뷰 → 같은 날 재검토로 대부분 해소)
 
-- [ ] **G1~G3 관문 기준 텍스트 확보** — 원본 임베디드 콘텐츠(§12 도식)에만 정의. 14.4~14.6의 "완료 조건은 G1/G2/G3" 참조가 판정 불가 — 원본 확보 또는 본문에 관문별 측정 기준 재정의 필요
-- [ ] **기존 인프라와의 관계 확정(흡수/병행/대체)** — ①숙달도: PassLoop `computeMastery`(AI-40, 사전 보정 정답률×반감) vs §5.2 Beta-Binomial ②복습: 클라이언트 FSRS-4.5/6(DOC-DSN-32) vs 서버 `ai_review_schedules` ③개념: 기존 conceptId(`subj:§N.M`, AI-09·AI-40) vs 신규 Knowledge Unit taxonomy ④튜터: 운영 중 `textbook_qa`(AI-36, SemanticIndex+인용 강제) — **G0 비교군에 현행 textbook_qa를 포함해야 진짜 질문에 답함** ⑤쿼터: `ai_usage`(AI-26) vs `ai_usage_logs` ⑥검증: gen-gate(AI-37)·dupcheck(AI-07)·check:answers(CQ-06)·CQ-07/08·AI-45/46(DOC-DSN-57) vs §9.2 자동 검증 ⑦법령 감시: LAW_OC_KEY 크론·`check:reffresh`·`ai:stale`(AI-12) vs §10.4 워처 ⑧RAG 소스: 기존 교재 md·`ref_md`(PDF 변환·검증 완료) 재사용 시 §10.2의 PDF 파싱 리스크 상당 부분 해소
-- [ ] **`ai_attempts.idempotency_key` 전역 unique** — 클라이언트 생성 키라 사용자 간 충돌 시 타인 제출 차단·누설 가능 → `unique(user_id, idempotency_key)` 변경 검토
-- [ ] **`ai_question_items` 중복 방지** — `source_question_id`가 NULL인 `ai`/`manual` 행은 unique 무력화(NULL distinct) → AI 문항 중복 방지 장치 별도 필요
-- [ ] **숙달도 반감 감쇠 적용 시점** — §5.2는 신규 응답 시에만 감쇠(lazy)인데 `mastery_score`는 generated column — 응답 없는 동안 표시값이 감쇠하지 않음(묵은 "숙달" 유지). 야간 재계산 배치 적용 여부 확정
-- [ ] **로컬 FSRS 카드 상태 이관 여부** — legacy_import는 "풀이 기록"만 정의. 로컬 복습 스케줄(stability·difficulty·due)은 버리고 재구축할지 이관할지 미정
-- [ ] **AI 학습 온라인 전용 명시** — 채점이 서버로 이동하면 AI 학습 경로는 네트워크 필수. PWA 오프라인 기본값(기존 학습 유지)과의 기능 경계를 UX에 명시
-- [ ] **`ai_document_sources.updated_at` 부재** — `index_status`가 pending→ready로 갱신되는데 갱신 시각 추적 컬럼·트리거 없음
-- [ ] **`error_type` enum ↔ §5.4 한글 유형 매핑표 부재** — `misconception`/`confusion` 두 값이 "개념 미이해"/"개념 혼동"에 대응하는 매핑을 문서에 고정 필요
+**해소됨 — 본문 반영 완료**:
+
+- ~~G1~G3 관문 기준~~ → 원본 작성자 제공분을 §12 관문 표로 이식
+- ~~G0 비교군~~ → §12.1을 3자 비교(현행 `textbook_qa`/DeepTutor/pgvector)로 수정, 판정 기준은 "현행 대비 개선폭"
+- ~~`idempotency_key` 전역 unique~~ → `ai_attempts`·`ai_jobs` 모두 사용자 범위 unique로 수정
+- ~~NULL `source_question_id` unique 무력화~~ → `content_hash` 컬럼 + `(exam_pack_id, content_hash)` unique index 추가
+- ~~감쇠 lazy 표시~~ → §5.2를 조회 시점 감쇠(SQL 함수·뷰)로 변경, 저장분은 마지막 평가 시점 값
+- ~~`ai_document_sources.updated_at`~~ → 컬럼·트리거 추가
+- ~~`error_type` 매핑표~~ → §5.4에 enum↔한글 유형 표 추가
+
+**잔여 — 재검토 시 확정**:
+
+- [ ] **기존 인프라와의 관계 확정(흡수/병행/대체)** — ①숙달도: PassLoop `computeMastery`(AI-40) vs §5.2 Beta-Binomial ②복습: 클라이언트 FSRS-4.5/6(DOC-DSN-32) vs 서버 `ai_review_schedules` ③개념: conceptId(`subj:§N.M`, AI-09·AI-40) vs Knowledge Unit ④쿼터: `ai_usage`(AI-26) vs `ai_usage_logs` ⑤검증: gen-gate(AI-37)·dupcheck(AI-07)·check:answers(CQ-06)·CQ-07/08·AI-45/46 vs §9.2 ⑥법령 감시: LAW_OC_KEY 크론·`check:reffresh`·`ai:stale`(AI-12) vs §10.4 ⑦RAG 소스: 기존 교재 md·`ref_md` 재사용 전제 시 §10.2 리스크 상당 부분 해소
+- [ ] **로컬 FSRS 카드 상태 이관 여부** — 흡수/병행 결정에 종속(흡수 시 클라이언트 FSRS 유지가 자연스러움)
+- [ ] **AI 학습 온라인 전용 명시** — 채점 서버 이동으로 네트워크 필수, 동일하게 흡수/병행 결정에 종속
+
+**PassLoop 이식 후보** (본 설계와 무관하게 기존 스택에 소규모 SPEC으로 채택 가능):
+
+- 숙달도의 미평가/판정 보류 구분 + confidence 표시 (§5.2 상태표)
+- 문항-개념 매핑 가중치(문항이 복수 개념에 걸칠 때, §4.2)
+- 규칙 기반 오답 유형 판정 (§5.4 규칙 순서)
+- 선수 개념을 반영한 경로 규칙 (§5.5)
 
 ## 참고 자료
 
