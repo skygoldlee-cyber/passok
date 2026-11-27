@@ -482,5 +482,45 @@
     "file": "docs/dev/design/AI_LEARNING_ENGINE_DESIGN.md",
     "ref": "docs/ai-learning/02-engine-poc.md",
     "reason": "설계안 제안 경로 — Phase 0 엔진 PoC 산출물 (미작성)"
+  },
+  {
+    "file": "docs/dev/design/AVATAR_LECTURE_DESIGN.md",
+    "ref": "src/views/reader/reader-avatar.js",
+    "reason": "설계안 제안 경로 — 아바타 오버레이 모듈 (AV-02~05, Phase 0 미구현)"
+  },
+  {
+    "file": "docs/dev/design/AVATAR_LECTURE_DESIGN.md",
+    "ref": "tests/dom/reader/reader-avatar.dom.test.js",
+    "reason": "설계안 제안 경로 — 아바타 DOM 테스트 (Phase 0 미구현)"
+  },
+  {
+    "file": "docs/dev/design/AVATAR_LECTURE_DESIGN.md",
+    "ref": "tools/build/build_video_manifest.js",
+    "reason": "설계안 제안 경로 — 강의 영상 매니페스트 빌더 (AV-08, Phase 1 예약)"
+  },
+  {
+    "file": "docs/dev/design/AVATAR_LECTURE_DESIGN.md",
+    "ref": "data/video_manifest.js",
+    "reason": "설계안 제안 경로 — 강의 영상 매니페스트 생성물 (AV-08, Phase 1 예약)"
+  },
+  {
+    "file": "docs/dev/design/AVATAR_LECTURE_DESIGN.md",
+    "ref": "content/exams/<id>/lectures/scripts/",
+    "reason": "설계안 제안 경로 — 강의 대본 편입 디렉터리 (AV-08, Phase 1 예약)"
+  },
+  {
+    "file": "docs/dev/SPEC.md",
+    "ref": "content/exams/<id>/lectures/scripts/",
+    "reason": "AV-08 로드맵 행의 설계안 제안 경로 — 강의 대본 편입 디렉터리 (Phase 1 예약)"
+  },
+  {
+    "file": "docs/dev/SPEC.md",
+    "ref": "tools/build/build_video_manifest.js",
+    "reason": "AV-08 로드맵 행의 설계안 제안 경로 — 영상 매니페스트 빌더 (Phase 1 예약)"
+  },
+  {
+    "file": "docs/dev/SPEC.md",
+    "ref": "data/video_manifest.js",
+    "reason": "AV-08 로드맵 행의 설계안 제안 경로 — 영상 매니페스트 생성물 (Phase 1 예약)"
   }
 ]

@@ -881,6 +881,25 @@
 | AL-19 | **비동기 작업 큐** — `ai_jobs` 테이블 + `FOR UPDATE SKIP LOCKED` 폴링(파일럿은 별도 브로커 없음), 시스템 작업은 `user_id` null, `idempotency_key`·`max_attempts`·`run_after` 스케줄, 본인 작업 상태만 조회 가능 | 보류 (예약 — DOC-DSN-58 §2.2·§6, Phase 1) |
 | AL-20 | **Phase 관문·평가 세트** — G0: DeepTutor vs `PgVectorEngine` 동일 질문셋(교재 100+법령 30) 비교(검색 재현율·인용 정확도·답변 정확도·지연·비용·운영 부담), 5%p 이내면 운영 단순한 쪽 채택. 평가 세트(교재100·법령50·설명50·생성100·오답50)는 Phase 0에 작성·고정 관리 — 엔진·모델·프롬프트 변경 시 재측정. KPI: 근거 제공률 ≥95%·답변 정확도 ≥90%·승인율 ≥70%·숙달도 AUC ≥0.70·격리 위반 0건 등 11종 | 보류 (예약 — DOC-DSN-58 §12~13, Phase 0~4) |
 
+### 3.33 AI 아바타 강의 (Avatar Lecture)
+
+> 상세 설계: [`design/AVATAR_LECTURE_DESIGN.md`](design/AVATAR_LECTURE_DESIGN.md) (DOC-DSN-59). 기존 오디오북(AO-01~06) 재생 위에 브라우저 렌더 캐릭터를 얹는 런타임 아바타 오버레이를 Phase 0으로, Phase 0 사용량 확인 후 단원 요약 토킹헤드 영상(외부 호스팅·매니페스트)을 Phase 1 조건부로 한다 — 전량 영상 제작·실시간 스트리밍 아바타는 범위 밖(실시간 튜터 표현층은 AL-15 계획에 통합). **유료 기능 — `feature-plan.json avatar_lecture: "pro"` 게이트**(AV-10, ROAD-P0 soft gate: 배지·1회 안내).
+>
+> **⚠ 보류 (2026-11-27)**: 설계안 — 아래 행은 승격 후보 로드맵이며 착수 지시가 아니다.
+
+| ID | 요구사양 | 구현 상태 |
+|----|---------|-----------|
+| AV-01 | **아바타 강의 피처 게이트·무표시 계약** — `exams.json features.avatarLecture`(`features.audiobook` 의존)로 시험별 온보딩. 오디오 없음·기능 비활성·오디오 로드 실패 시 토글·패널을 렌더하지 않는다(AI-29 무표시 계약 준용) | 보류 (예약 — DOC-DSN-59 §5.4, Phase 0) |
+| AV-02 | **아바타 오버레이 패널** — 오디오 재생 중 인라인 SVG 캐릭터를 플레이어 인접(모바일 플로팅)에 표시. JS 동적 생성(뷰 파셀 무추가), 토글 상태는 시험 스코프 키에 저장·재진입 유지 | 보류 (예약 — DOC-DSN-59 §5.3, Phase 0) |
+| AV-03 | **의사 립싱크 2단계 폴백** — 기본 `AnalyserNode` RMS 진폭→입 개도(closed/half/open). 오디오 엘리먼트 `crossorigin="anonymous"` 선설정 필수(외부 CDN 분석 전제), CORS·AudioContext 불가 시 `currentTime` 기반 절차적 입모양으로 폴백 | 보류 (예약 — DOC-DSN-59 §5.2, Phase 0) |
+| AV-04 | **캐릭터 생동감·표정 상태머신** — 눈깜빡임·고개 미동, 재생/일시정지/정지에 따른 말함·뉴트럴 표정 전이 | 보류 (예약 — DOC-DSN-59 §5.2, Phase 0) |
+| AV-05 | **접근성** — `aria-hidden` 장식 요소·포커스 제외, `prefers-reduced-motion` 시 동작 정지(정지 캐릭터만 표시). 학습 대체 수단은 원문·오디오(A-09 논리 연장 — 아바타는 정보 채널이 아니므로 별도 대체재 불요) | 보류 (예약 — DOC-DSN-59 §5.3, Phase 0) |
+| AV-06 | **캐릭터 브랜딩 확장점** — 기본 캐릭터 1종 + 시험별 캐릭터 키 지정 인터페이스(Phase 0는 기본만). 자체 SVG — 외부 캐릭터 IP 미사용 | 보류 (예약 — DOC-DSN-59 §5.4·§8, Phase 0) |
+| AV-07 | **계측** — `avatar_lecture` 표시·토글·폴백(blocked_cors) 이벤트만 집계, 학습 내용 미수집(AI-28 방침 준용) | 보류 (예약 — DOC-DSN-59 §5.5, Phase 0) |
+| AV-08 | **요약 강의 영상 파이프라인** — 단원 3~5분 대본(`tmp/ai_drafts/lectures/` 초안→사람 검수→`content/exams/<id>/lectures/scripts/` 편입, CQ-07 게이트·AI-30식 구조화 입력) → 토킹헤드 API 생성 → MP4 외부 호스팅 → `tools/build/build_video_manifest.js`→`data/video_manifest.js`·`features.lectureVideo` 게이트. Phase 0 사용량 지표 충족 시 착수 | 보류 (예약 — DOC-DSN-59 §7, Phase 1) |
+| AV-09 | **강의 영상 재생 UI** — 매니페스트에 단원 영상이 있으면 "강의" 진입·`<video>` 재생, 없는 단원은 아바타 오버레이 폴백(영상 우선 공존) | 보류 (예약 — DOC-DSN-59 §7, Phase 1) |
+| AV-10 | **Pro 게이팅** — 유료 기능 확정: `feature-plan.json avatar_lecture: "pro"` 등록, 토글·영상 진입 요소에 `data-pro-feature="avatar_lecture"` PRO 배지 + `proFeatureNotice` 1회 안내(ROAD-P0 soft gate — 접근 차단 없이 유료 경계 인지, hard gate 전환은 별도 정책). `_proBenefitItems`에 "AI 아바타 강의" 행 추가. 아바타·영상 두 모드는 같은 키로 게이트 — 영상 상위 티어 분리는 Phase 1 착수 시 재검토 | 보류 (예약 — DOC-DSN-59 §5.3~5.4·§7, Phase 0) |
+
 ---
 
 ## 4. 비기능 요구사양
