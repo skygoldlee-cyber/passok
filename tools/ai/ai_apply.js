@@ -165,13 +165,14 @@ function applyDrafts(flags, opts) {
 
             if (aBlocks.length) {
                 const newSrc = insertQuestions(src, qLines, aBlocks);
-                const newTitle = (exam.title || '').replace(/\d[\d,]*제/, `${n}제`);
+                const newCount = (newSrc.match(/^###\s*Q\d+\./gm) || []).length;
+                const newTitle = (exam.title || '').replace(/\d[\d,]*제/, `${newCount}제`);
                 console.log(`${target.id}/${exam.file}: ${write ? '편입' : '편입 예정'} ${aBlocks.length}건`
-                    + ` (Q${maxQ + 1}~Q${n}${bad ? ` · 스킵 ${bad}건(인용 부재)` : ''})`);
+                    + ` (Q${maxQ + 1}~Q${n} · 누계 ${newCount}제${bad ? ` · 스킵 ${bad}건(인용 부재)` : ''})`);
                 if (write) {
                     const meta = batchMeta(f); // 메타 확보가 기록보다 먼저 — 실패 시 부분 편입 방지
                     fs.writeFileSync(bankAbs, newSrc, 'utf-8');
-                    syncQuestionCounts(target, exam, newTitle, n);
+                    syncQuestionCounts(target, exam, newTitle);
                     logAdoption({ ts: new Date().toISOString(), draft: f, kind: 'draft',
                         target: target.id, bank: exam.file, generated: qs.length,
                         applied: aBlocks.length, skipped: bad + (qs.length - aBlocks.length - bad),
@@ -198,7 +199,7 @@ function insertQuestions(src, qLines, aBlocks) {
 }
 
 /** 문항 수 표기 정합 — manifest.exams[].title N제 + exams.json desc "문제은행 N,N00문" */
-function syncQuestionCounts(target, exam, newTitle, perBankCount) {
+function syncQuestionCounts(target, exam, newTitle) {
     if (newTitle !== exam.title) {
         const mf = path.join(ROOT, target.contentRoot, 'manifest.json');
         const src = fs.readFileSync(mf, 'utf-8');
@@ -209,7 +210,7 @@ function syncQuestionCounts(target, exam, newTitle, perBankCount) {
     const total = (target.manifest.exams || []).reduce((s, e) => {
         const p = path.join(ROOT, target.contentRoot, '문제은행', e.file);
         const c = fs.existsSync(p) ? (fs.readFileSync(p, 'utf-8').match(/^###\s*Q\d+\./gm) || []).length : 0;
-        return s + (e === exam ? perBankCount : c);
+        return s + c;
     }, 0);
     // 엔트리 경계를 넘지 않도록 다음 "id" 직전까지만 탐색 — desc에 문항수 패턴이 없으면 무치환
     const blockRe = new RegExp(`("id":\\s*"${target.id}"(?:(?!"id":)[\\s\\S])*?문제은행\\s*)[\\d,]+(문)`, '');

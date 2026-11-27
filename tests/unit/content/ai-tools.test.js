@@ -393,6 +393,46 @@ test('AI-05: ai:apply --drafts --write가 초안에 applied 마커를 부여해 
     }
 });
 
+test('AI-05: ai:apply --drafts --write가 번호 갭 있는 은행의 제수를 실제 문항 수로 스탬프한다', () => {
+    // 회귀: 제수 스탬프가 최대 Q번호 기준이라 삭제 갭 은행에서 실측 초과 스탬프 (Q139번호=139문 아닌데 139제로 표기)
+    const dir = join(ROOT, 'tmp', 'ai_drafts', 'carework');
+    mkdirSync(dir, { recursive: true });
+    const fp = join(dir, 'draft_caretheory.md');
+    writeFileSync(fp, [
+        '<!-- ai-draft: model=test date=2026-01-01T00:00:00Z reviewed=no sha=test -->', '',
+        '# 문제 초안 — 테스트', '',
+        '## 섹션 (L14~L14)', '',
+        '### Q1. 테스트 발문으로 옳은 것은?',
+        '① 정답', '② 오답', '',
+        '**Q1답**',
+        '> **정답: ①**',
+        '> **근거 라인: L14**',
+        '> **해설**: 테스트 해설.',
+    ].join('\n'));
+    const bank = join(ROOT, 'content/exams/carework/문제은행/과목1_요양보호론_문제은행.md');
+    const snapPaths = [
+        'content/exams/carework/문제은행/과목1_요양보호론_문제은행.md',
+        'content/exams/carework/manifest.json',
+        'content/exams.json',
+        'tools/ai/adoption_log.jsonl',
+    ].map(p => join(ROOT, p));
+    const snap = snapPaths.map(p => [p, existsSync(p) ? readFileSync(p, 'utf-8') : null]);
+    try {
+        // 발문 번호 갭 주입 — max Q번호 ≠ 문항 수 상태 재현
+        const src = readFileSync(bank, 'utf-8');
+        const count = (src.match(/^###\s*Q\d+\./gm) || []).length;
+        writeFileSync(bank, src.replace(/^###\s*Q1\./m, '### Q9999.'), 'utf-8');
+        const out = runTool('ai_apply.js', ['--drafts', '--exam', 'carework', '--file', 'caretheory', '--write']);
+        assert.match(out, /편입 1건/, '편입 성공');
+        const mf = readFileSync(join(ROOT, 'content/exams/carework/manifest.json'), 'utf-8');
+        assert.match(mf, new RegExp(`${count + 1}제`), `제수는 실측 ${count + 1}이어야 함`);
+        assert.doesNotMatch(mf, /10000제/, '최대 Q번호 스탬프 금지');
+    } finally {
+        for (const [p, s] of snap) { if (s !== null) writeFileSync(p, s, 'utf-8'); }
+        rmSync(fp, { force: true });
+    }
+});
+
 test('AI-16: loadStats가 백업 JSON의 statement_stats를 해석하고 순수 맵도 허용한다', () => {
     const { loadStats, isAnomalous } = require('../../../tools/ai/ai_stmt_feedback.js');
     const dir = mkdtempSync(join(tmpdir(), 'stmtstats-'));
