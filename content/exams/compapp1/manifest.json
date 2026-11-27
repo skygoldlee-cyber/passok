@@ -52,21 +52,21 @@
    "key": "subject1",
    "subject": "computer",
    "part": 1,
-   "title": "컴퓨터 일반 (70제)",
+   "title": "컴퓨터 일반 (167제)",
    "file": "과목1_문제은행.md"
   },
   {
    "key": "subject2",
    "subject": "spreadsheet",
    "part": 2,
-   "title": "스프레드시트 일반 (86제)",
+   "title": "스프레드시트 일반 (207제)",
    "file": "과목2_문제은행.md"
   },
   {
    "key": "subject3",
    "subject": "database",
    "part": 3,
-   "title": "데이터베이스 일반 (68제)",
+   "title": "데이터베이스 일반 (168제)",
    "file": "과목3_문제은행.md"
   }
  ],
