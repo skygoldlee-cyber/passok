@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **docs(safety): AI 콘텐츠 신뢰성 안전장치 설계 + SPEC 신규 ID 부여 — CQ-07~08·AI-45~46** — 학습 콘텐츠의 신뢰성 갭을 결함 이력(거절 문단 유입·KOCW 오배치·프로비넌스 소실·기준선 흡수)에서 실패 모드 5종으로 분류하고, 기존 게이트가 못 잡는 층에 4개 장치 설계. `docs/dev/design/CONTENT_SAFETY_DESIGN.md` (DOC-DSN-57) 신규: ①CQ-07 `check:aifacts` AI 잔재 패턴 게이트(비LLM, 기준선 래칫) ②AI-45 `ai:verify` LLM 팩트체크 도구 정규화(폐기된 `tmp/_qreview` 1,531문 검수 실적의 반복 가능화) ③AI-46 `provenance_log.jsonl` 항목 단위 AI 기원 추적 ④CQ-08 신규 AI분 zero-tolerance(배치 스코프 0건 — AI-46 의존). 도입 순서: CQ-07 → AI-46 → CQ-08 → AI-45. SPEC.md §3.17·§3.27에 미구현 로드맵 행으로 등록 — 승인 전까지 구현 없음
+
 - **fix(notice): 개정 내역 패널 스크롤 부재 — `.notice-status-view`에 최대 높이·내부 스크롤 부여** — 배너 직하 폴백 패널(`#notice-status-float`)은 body 최상단에 삽입되는데 `.app-container`가 height:100dvh라 페이지 스크롤이 없고, 패널 자체도 높이 제한이 없어 개정 내역이 길면 뷰포트 밖으로 잘려 도달 불가. `max-height: calc(var(--app-height,100dvh)*0.6)` + `overflow-y:auto` + `overflow-wrap:break-word` 추가 — `#usage-stats-overlay` 기존 스크롤 규약과 동일 패턴. 인컨텍스트 패널(`#notice-status-view`)도 동일 규칙 적용
 
 - **fix(notice): 개정 배너 '변경 내역 보기' 무반응 재발 — 비활성 뷰·숨은 서브패널 안 패널도 폴백 처리** — `#notice-status-view`는 formula 뷰 파셜(`#formula-menu-panel` 내부) 소속이라 마크업 주입(진입·warmPracticeFeatures 예열) 후 DOM에 상주. 이 상태에서 다른 뷰의 개정 배너나 서브패널 표시 중 클릭하면 `getElementById`가 요소를 찾아 is-hidden을 토글하지만 조상이 display:none이라 무반응으로 보임 — 이전 폴백은 요소 부재만 처리해 미커버. `_statusPanel()` 추출 — 인컨텍스트 패널이 부재이거나 조상에 `.is-hidden`/`.view-section:not(.active)`가 있으면 배너 직하 `#notice-status-float` 폴백 사용. DOM 테스트 1건 추가(비활성 뷰 시나리오)

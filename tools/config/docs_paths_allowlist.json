@@ -427,5 +427,35 @@
     "file": "docs/dev/design/AI_PERSONALIZATION_DESIGN.md",
     "ref": "content/exams/<id>/피드백/quickcheck.json",
     "reason": "설계안 제안 경로 — 퀵체크 오버레이 정본 스키마 (AI-43, 정본 미편입)"
+  },
+  {
+    "file": "docs/dev/design/CONTENT_SAFETY_DESIGN.md",
+    "ref": "tools/check/check_ai_facts.js",
+    "reason": "설계안 제안 경로 — AI 잔재 패턴 게이트 체커 (CQ-07, Phase 1 미구현)"
+  },
+  {
+    "file": "docs/dev/design/CONTENT_SAFETY_DESIGN.md",
+    "ref": "tools/ai/ai_verify.js",
+    "reason": "설계안 제안 경로 — LLM 팩트체크 도구 (AI-45, Phase 4 미구현)"
+  },
+  {
+    "file": "docs/dev/design/CONTENT_SAFETY_DESIGN.md",
+    "ref": "tools/ai/verify_log.jsonl",
+    "reason": "설계안 제안 경로 — ai:verify 배치 판정 로그 (AI-45, Phase 4 미구현)"
+  },
+  {
+    "file": "docs/dev/design/CONTENT_SAFETY_DESIGN.md",
+    "ref": "tools/ai/provenance_log.jsonl",
+    "reason": "설계안 제안 경로 — AI 프로비넌스 추적 로그 (AI-46, Phase 2 미구현)"
+  },
+  {
+    "file": "docs/dev/design/CONTENT_SAFETY_DESIGN.md",
+    "ref": "tools/check/check_ai_zero.js",
+    "reason": "설계안 제안 경로 — 신규 AI분 zero-tolerance 체커 (CQ-08, Phase 3 미구현)"
+  },
+  {
+    "file": "docs/dev/SPEC.md",
+    "ref": "tools/ai/provenance_log.jsonl",
+    "reason": "로드맵 행의 계획 파일 — AI-46 프로비넌스 로그 (DOC-DSN-57 설계안, 미구현)"
   }
 ]
