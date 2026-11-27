@@ -1093,6 +1093,10 @@
     border-radius: var(--radius-md, 8px);
     background: var(--color-surface-alt, rgba(128, 128, 128, 0.06));
     font-size: 0.82rem;
+    /* 개정 내역이 길 때 — body 스크롤이 없어 폴백 패널이 뷰포트 밖으로 잘리는 것 방지 */
+    max-height: calc(var(--app-height, 100dvh) * 0.6);
+    overflow-y: auto;
+    overflow-wrap: break-word;
 }
 .notice-status-row {
     display: flex;

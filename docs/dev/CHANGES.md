@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **fix(notice): 개정 내역 패널 스크롤 부재 — `.notice-status-view`에 최대 높이·내부 스크롤 부여** — 배너 직하 폴백 패널(`#notice-status-float`)은 body 최상단에 삽입되는데 `.app-container`가 height:100dvh라 페이지 스크롤이 없고, 패널 자체도 높이 제한이 없어 개정 내역이 길면 뷰포트 밖으로 잘려 도달 불가. `max-height: calc(var(--app-height,100dvh)*0.6)` + `overflow-y:auto` + `overflow-wrap:break-word` 추가 — `#usage-stats-overlay` 기존 스크롤 규약과 동일 패턴. 인컨텍스트 패널(`#notice-status-view`)도 동일 규칙 적용
+
 - **fix(notice): 개정 배너 '변경 내역 보기' 무반응 재발 — 비활성 뷰·숨은 서브패널 안 패널도 폴백 처리** — `#notice-status-view`는 formula 뷰 파셜(`#formula-menu-panel` 내부) 소속이라 마크업 주입(진입·warmPracticeFeatures 예열) 후 DOM에 상주. 이 상태에서 다른 뷰의 개정 배너나 서브패널 표시 중 클릭하면 `getElementById`가 요소를 찾아 is-hidden을 토글하지만 조상이 display:none이라 무반응으로 보임 — 이전 폴백은 요소 부재만 처리해 미커버. `_statusPanel()` 추출 — 인컨텍스트 패널이 부재이거나 조상에 `.is-hidden`/`.view-section:not(.active)`가 있으면 배너 직하 `#notice-status-float` 폴백 사용. DOM 테스트 1건 추가(비활성 뷰 시나리오)
 
 - **fix(content): 생성 문서 표본 팩트체크 — compapp1 교재 과목 간 콘텐츠 오배치 정정** — 두음법·학습안내서 생성 문서 표본 검증(labor 법령 수치 20여 건 교재 대조 전량 일치, eleceng 안내서 시험시간·5과목·실기과목명 출제기준 일치) 중 발견: compapp1 교재에서 스프레드시트 KOCW 부록 블록이 `컴퓨터 일반`·`데이터베이스 일반` 교재 꼬리에 잘못된 라벨(정보시스템·IT 개론 / 데이터베이스 핵심 정리)로 중복 이식돼 있고, 정작 스프레드시트 교재에는 함수 꼬리 섹션(COUNTA 적용 절차·IF 함수 및 다중 IF)이 누락. 두 잘못된 파일에서 중복 블록 절단(computer 228~451행·database 304~527행, 문제은행 인용은 각각 L125·L198까지만 존재해 무영향), 고유 섹션 2개는 스프레드시트 교재 말미로 이식. 두음법 문서의 IF 암기도 컴퓨터 일반·데이터베이스 일반 중복 배치를 스프레드시트 일반 단일 배치로 정정
