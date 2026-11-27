@@ -9,6 +9,13 @@
 
 등록된 4개 파일럿 팩(`comingSoon: true`)을 정식 시험으로 승격하기까지의 **시험별 잔여 작업과 공통 절차**를 한 문서에 모은다. 준비도 수치는 `npm run check:onboard`로 기계 갱신한다 — 본 문서의 수치는 작성 시점(2026-10-22) 스냅샷이며, 진행 시 체커 출력을 정본으로 삼는다.
 
+## ✅ 승격 완료 이력 (2026-11-27)
+
+- **comingSoon 해제 8팩**: skincare(318문)·hairdresser(340)·lossadj(159)·admagent(248)·appraisal(521)·labor(1,236)·itindeng(254)·compapp1(512) — 전 과목 승격 기준(과목당 ≥3회분) 충족 확인 후 `comingSoon` 일괄 제거
+- **itindeng tier: draft → pilot** — 3회분·교재 요건 충족
+- **appraisal realestate 보충**: 승격 기준 미달(36/60) → `ai_draft`+`ai_apply` +33문(69문) 충족 후 해제
+- 미해결 잔여: appraisal 주관식 은행 답란 부재(구 구조)·weak 인용 390건 — 별도 과제로 분리
+
 ## 현황 스냅샷 (2026-10-22, `check:onboard` 실측)
 
 | 시험 | id | 과목 | 객관식 문항 (실측) | features | 과목당 승격 기준(≥20문) 충족 | 선택 자산 |

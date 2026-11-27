@@ -88,7 +88,6 @@
         "semantic": true,
         "appendixDocs": true
       },
-      "comingSoon": true,
       "appNameEn": "Passkin",
       "practiceName": "Skin OS",
       "group": "미용·화장품",
@@ -125,7 +124,6 @@
       },
       "appNameEn": "Passhair",
       "practiceName": "Hair OS",
-      "comingSoon": true,
       "group": "미용·화장품",
       "tier": "pilot",
       "syllabus": {
@@ -185,7 +183,6 @@
         "--color-primary": "#16a34a",
         "--color-secondary": "#ca8a04"
       },
-      "comingSoon": true,
       "contentRoot": "content/exams/lossadj",
       "dataRoot": "data/exams/lossadj",
       "manifestPath": "content/exams/lossadj/manifest.json",
@@ -232,7 +229,6 @@
         "semantic": true,
         "appendixDocs": true
       },
-      "comingSoon": true,
       "appNameEn": "Passmin",
       "practiceName": "Docs OS",
       "group": "법무·노무",
@@ -259,7 +255,6 @@
       "manifestPath": "content/exams/appraisal/manifest.json",
       "registryBundle": "data/exams/appraisal/registry.js",
       "registryGlobal": "DATA_REGISTRY_APPRAISAL",
-      "comingSoon": true,
       "appNameEn": "Passpraisal",
       "practiceName": "Appraisal OS",
       "group": "보험·평가·부동산",
@@ -328,7 +323,6 @@
         "semantic": true,
         "appendixDocs": true
       },
-      "comingSoon": true,
       "group": "법무·노무",
       "tier": "pilot",
       "syllabus": {
@@ -453,8 +447,7 @@
         "appendixDocs": true
       },
       "group": "정보처리",
-      "comingSoon": true,
-      "tier": "draft",
+      "tier": "pilot",
       "syllabus": {
         "primary": "정보시스템 기반 기술, 프로그래밍 언어 활용, 데이터베이스 활용",
         "secondary": "정보처리 실무 (필답형)"
@@ -546,7 +539,6 @@
         "semantic": true,
         "appendixDocs": true
       },
-      "comingSoon": true,
       "appNameEn": "Passcomp",
       "practiceName": "Sheet OS",
       "group": "정보처리",
