@@ -73,25 +73,25 @@
   },
   "exams": {
     "q_estate_intro": {
-      "questions": 72
+      "questions": 58
     },
     "q_civil_broker": {
-      "questions": 108
+      "questions": 106
     },
     "q_broker_law": {
       "questions": 100
     },
     "q_estate_publaw": {
-      "questions": 78
+      "questions": 68
     },
     "q_estate_registry": {
-      "questions": 66
+      "questions": 62
     },
     "q_estate_tax": {
-      "questions": 66
+      "questions": 63
     },
     "q_broker_practice": {
-      "questions": 80
+      "questions": 65
     }
   }
 }

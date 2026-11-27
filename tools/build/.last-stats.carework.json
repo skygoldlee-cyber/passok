@@ -23,10 +23,10 @@
   },
   "exams": {
     "subject1": {
-      "questions": 211
+      "questions": 203
     },
     "subject2": {
-      "questions": 270
+      "questions": 267
     }
   }
 }
