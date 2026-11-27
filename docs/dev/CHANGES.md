@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **fix(css): 라이트모드 미정의 `--color-text` 토큰 정리 — 시험선택 그룹명 등 6곳** — `--color-text`는 미정의 변수라 폴백(흰색 계열)이 항상 적용돼 라이트모드에서 텍스트가 배경에 묻히는 결함: exam-select 그룹명·카드 배경/보더(dashboard.css) + 같은 패턴 잠복분 일괄 정정 — quiz-cite strong(study.css)·#ref-preview-tooltip(reader-extras.css)·.pro-moment-card(ui-overlay.css)·#html-ref-overlay 타이틀/검색입력(html-viewer.css) → `--color-text-main`/`--bg-subtle`/`--border-color` 테마 토큰으로 교체. 상시 다크 버튼(.hr-ov-btn.secondary)은 밝은 텍스트 유지
+
 - **fix(e2e): CI E2E 3스펙 스테일 수정 — 배포 차단 해소** — ①analysis-view 2건: 시드 cid `L348`의 CID_SECTION 매핑이 문항 삭제로 유실 → CHAPTER_RANGES 폴백이 "3. 화장품의 영업"을 반환해 기대 단원명과 불일치 → 시드를 라인 인용에서 `§1.3` 앵커로 교체(CHAPTER_TITLES 직행 — 교재 라인 이동 무관) ②exam-switch 1건: comingSoon 전 팩 해제로 `coming-soon` 카드가 live 데이터에 부재 → `window.EXAMS_LIST` 엔트리 일시 플래그로 가드 계약을 데이터 무관하게 검증. chromium 로컬 13/13 통과
 
 - **chore(assets): 고아 예외 han-jeongsu.svg 삭제 — 예외 명단 3→2건** — carework 웹툰 캐릭터 매핑(webtoon.json·care-webtoon.js·care-flow.js)에 등록되지 않은 채 예외 승계되던 `assets/characters/han-jeongsu.svg` 제거. 한정수 캐릭터 자체는 서사·인물 설정표(DOC-USR-23)에 유지 — 아바타 아트만 미사용 정리. `orphan_assets_baseline.json` 명단 제거 + 제작의뢰서 캐릭터 원본 파일 목록 실물 동기화. 잔여 예외 2건은 PWA 아이콘 원본 마스터(파생 생성용 소스 — 보존 정당)

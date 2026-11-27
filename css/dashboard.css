@@ -806,7 +806,7 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
 .exam-select-group-name {
     font-size: var(--font-size-lg, 1.05rem);
     font-weight: 600;
-    color: var(--color-text, #e8eaf0);
+    color: var(--color-text-main, #e8eaf0);
 }
 .exam-select-group-count {
     font-size: var(--font-size-sm, 0.8rem);
@@ -816,8 +816,8 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
     margin-top: var(--space-2, 0.5rem);
 }
 .exam-select-card {
-    background: var(--color-surface, rgba(255,255,255,0.03));
-    border: 1px solid var(--color-border, rgba(255,255,255,0.08));
+    background: var(--bg-subtle, rgba(255,255,255,0.03));
+    border: 1px solid var(--border-color, rgba(255,255,255,0.08));
     border-radius: var(--radius-lg, 12px);
     padding: var(--space-5, 1.25rem);
     cursor: pointer;
@@ -907,7 +907,7 @@ ol.today-queue { list-style: none; margin: 0; padding: 0; counter-reset: none; }
 }
 .exam-select-dday.past {
     color: var(--color-text-muted);
-    border-color: var(--color-border);
+    border-color: var(--border-color);
 }
 /* 콘텐츠 갱신·신규 배지 (ES-07) */
 .exam-select-change {

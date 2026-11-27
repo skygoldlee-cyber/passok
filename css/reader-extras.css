@@ -901,7 +901,7 @@ a.glossary-ref-link i {
     padding: 12px 14px;
     font-size: 0.85rem;
     line-height: 1.5;
-    color: var(--color-text, #e6edf3);
+    color: var(--color-text-main, #e6edf3);
     /* A-16 (SC 1.4.13) — hoverable: 포인터가 툴팁 위로 이동해도 유지되려면 포인터 이벤트 필요 */
     pointer-events: auto;
 }

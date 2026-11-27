@@ -847,7 +847,7 @@
     border-left: 3px solid var(--color-primary, #6366f1);
     border-radius: 0 6px 6px 0;
 }
-.quiz-cite strong { color: var(--color-text, #e2e8f0); font-weight: 600; }
+.quiz-cite strong { color: var(--color-text-main, #e2e8f0); font-weight: 600; }
 .quiz-cite-sec { opacity: 0.7; }
 
 /* 뷰 목적·경계 한 줄 문구 (UX-NAV-13) — 퀴즈=연습 / 모의고사=평가 / 훈련소=훈련 / 복습=재확인 */
