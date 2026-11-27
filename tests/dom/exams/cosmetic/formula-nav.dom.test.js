@@ -104,6 +104,17 @@ describe('Formula OS — 패널 전환·서브내비', () => {
         expect(document.getElementById('formula-notice-banner').nextElementSibling).toBe(float);
     });
 
+    it('FO-24: viewMfdsNoticeStatus — 패널이 비활성 뷰 안에 있으면 폴백 패널 사용', async () => {
+        initFormulaView();
+        // 패널은 DOM에 존재하지만 #formula-view는 비활성 — 클릭해도 보이지 않는 결함 시나리오
+        expect(el('notice-status-view')).toBeTruthy();
+        expect(el('formula-view').classList.contains('active')).toBe(false);
+        await viewMfdsNoticeStatus();
+        const float = document.getElementById('notice-status-float');
+        expect(float).toBeTruthy();
+        expect(float.classList.contains('is-hidden')).toBe(false);
+    });
+
     it('FO-24: 고시 감시 UI — 배너·확인 버튼·상태 패널이 허브에 존재', () => {
         initFormulaView();
         expect(el('formula-notice-banner')).toBeTruthy();

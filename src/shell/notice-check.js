@@ -459,20 +459,25 @@ export function statusRows(status) {
   return rows;
 }
 
+/** 상태 패널 해석 — 인컨텍스트 패널이 부재이거나 비활성 뷰·숨은 서브패널 안이면 배너 직하 폴백 생성/반환 */
+function _statusPanel() {
+  const inView = document.getElementById('notice-status-view');
+  if (inView && !inView.parentElement?.closest('.is-hidden, .view-section:not(.active)')) return inView;
+  const panel = document.getElementById('notice-status-float');
+  if (panel) return panel;
+  const banner = document.getElementById('formula-notice-banner');
+  if (!banner) return null;
+  banner.insertAdjacentHTML('afterend',
+    '<div id="notice-status-float" class="notice-status-view is-hidden"></div>');
+  return document.getElementById('notice-status-float');
+}
+
 /** '고시 정보 보기' 버튼 (data-click 위임) — notice_status.json 내용을 패널로 표시/숨김.
- *  개정 배너는 전역 마운트라 formula 뷰 밖에서는 #notice-status-view가 없음 — 배너 직하 폴백 패널로 대응 */
+ *  개정 배너는 전역 마운트라 formula 뷰 밖에서는 #notice-status-view가 없음 — 배너 직하 폴백 패널로 대응.
+ *  마크업 주입 후에는 요소가 DOM에 남으므로 부재만으로는 부족 — 비활성 뷰·숨은 서브패널
+ *  안이면 토글해도 보이지 않으므로 이 경우에도 폴백 패널을 쓴다 */
 export async function viewMfdsNoticeStatus() {
-  let panel = document.getElementById('notice-status-view');
-  if (!panel) {
-    panel = document.getElementById('notice-status-float');
-    if (!panel) {
-      const banner = document.getElementById('formula-notice-banner');
-      if (!banner) return;
-      banner.insertAdjacentHTML('afterend',
-        '<div id="notice-status-float" class="notice-status-view is-hidden"></div>');
-      panel = document.getElementById('notice-status-float');
-    }
-  }
+  const panel = _statusPanel();
   if (!panel) return;
   if (!panel.classList.contains('is-hidden')) { panel.classList.add('is-hidden'); return; }
   panel.innerHTML = '<div class="notice-status-loading">상태 파일 불러오는 중…</div>';
