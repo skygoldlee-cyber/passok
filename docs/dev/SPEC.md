@@ -69,6 +69,7 @@
    - [3.29 서비스 소개 랜딩 페이지 (Landing)](#329-서비스-소개-랜딩-페이지-landing)
    - [3.30 개인 맞춤 고도화 (Personalization)](#330-개인-맞춤-고도화-personalization)
    - [3.31 Care OS — 요양보호사 실무도구 고도화 (`carework` 시험)](#331-care-os--요양보호사-실무도구-고도화-carework-시험)
+   - [3.32 AI 학습 엔진 (AI Learning Engine)](#332-ai-학습-엔진-ai-learning-engine)
 4. [비기능 요구사양](#4-비기능-요구사양)
    - [4.1 PWA & 오프라인](#41-pwa--오프라인)
    - [4.2 오프라인 감지](#42-오프라인-감지)
@@ -204,6 +205,7 @@
 | 3.29 | **서비스 소개 (랜딩)** | `/landing.html` 정적 소개 페이지 — 시험 카드·체험 데모(퀴즈·학습계획)·설치 CTA·SEO/OG·프로모션 진입점 | LP-01~LP-14 (14) |
 | 3.30 | **개인 맞춤 고도화** | 개념 단위 약점 진단·개인화 스케줄·합격 예측 — 기존 자산(FSRS·BKT·진술 추적·임베딩)의 조합 계층 `src/passloop/core/personalization.js` | PS-01~PS-11 (11) |
 | 3.31 | **Care OS** | 요양보호사 실무도구 — 요양일지·인수인계·근무표·수급자 명부·사고보고·방문 기록·기관 평가 체크리스트·비용 계산·기관 워크스페이스·자체 양식·대처카드·4단계 학습 흐름 | CO-01~CO-22 (22) |
+| 3.32 | **AI 학습 엔진** | 서버측 개인화 학습 계층 — Python Learning API + DeepTutor RAG 튜터 + 숙달도·FSRS·문항 풀·개념 매핑 (cosmetic 파일럿, 외부 원안 이식) | AL-01~AL-20 (20) |
 
 ### 3.1 대시보드 (Dashboard)
 
@@ -849,6 +851,35 @@
 | CO-20 | **문서 인쇄·PDF 출력 품질** — 오버레이 뷰어(매뉴얼·문제집 문서)의 인쇄/PDF 버튼은 생성 PDF가 기본 경로 — `pdfFileFromElStyled`(흰 배경·여백 래퍼 + 오버레이 선택자 컨텍스트 재현 + 밝은 글자만 보정(컬러 유지) + 요소 경계 페이지네이션(CO-21) + JPEG(q0.92) 용량 제어) → 새 탭 미리보기(PDF 뷰어의 자체 인쇄 가능) 우선, 팝업 차단·인앱은 다운로드 폴백, 생성 실패 시에만 `window.print()` (기기 print 스택 백지 대응). 두 뷰어의 본문 타이포그래피는 manual-article 기준 스케일로 통일. 주입된 @media print CSS(오버레이 정적 전환·흰 배경·여백·h1 채우기색·형제 숨김)도 폴백 경로 출력 품질을 보장 | ✅ |
 | CO-21 | **페이지 절단 보호** — 인쇄·PDF 출력에서 표·그림·다이어그램·인용 블록 등 블록 요소가 페이지 경계에서 잘리지 않는다. 생성 PDF는 `_blockCuts`(pdf-utils.js 공용, `pdfFileFromEl`·`pdfFileFromElStyled` 공통 적용)로 절단 위치를 요소 경계로만 선택한다: 절단 후보는 직계 자식뿐 아니라 하위 블록(표 행 `tr`·그림 `img`·`pre.mermaid`·단락·목록 항목)까지 수집하고, 표는 행 경계까지만 분할한다(셀 내부 요소는 후보 제외 — 행 중간 절단 금지). 페이지 용량을 넘는 단일 요소만 예외적으로 고정 절단한다. `window.print()` 폴백 경로는 @media print `break-inside:avoid`(tr·img·pre·blockquote·figure)로 동일 보호를 적용한다 | ✅ |
 | CO-22 | **문서 추적성 공용 파이프라인** — 앱이 발행하는 모든 문서(carework 내보내기·cosmetic 증적 인쇄물·향후 시험 팩 출력물)에 동일 추적 장치를 적용한다. ① 문서번호: `docStamp(prefix, seed)`(`src/content/doc-stamp.js`)가 `유형-YYYYMMDD-내용해시6` 번호를 발급 — 내용 해시라 동일 내용 재발행은 동일 번호(중복 탐지)·내용 변경은 번호 변경(변조 대조). cosmetic FO-70의 fpDocStamp를 이 공용 함수로 수렴. ② 발행 대장: `createDocIssueStore`(`src/content/doc-issues.js`) 팩토리로 시험별 로컬 대장(`<exam>_doc_issues`)을 만들어 발행 시 docNo·tool·kind·파일명·rev·기관을 누적 — 같은 docNo 재발행은 rev+1·파일명/형식 병합, 실패 발행은 미기록, 로컬 우선(DA-13 격리는 키 선택으로). ③ 파일 내장: docx는 `opts.doc`으로 `docProps/core.xml`(dc:title·dc:identifier·dc:creator·cp:revision·dcterms:created) + 푸터·메타줄 문서번호를 부여 — 파일명 변경에도 번호가 파일 안에 남는다. ④ QR: `src/content/qr.js`(의존성 0, V1~V7·EC-M·바이트 모드, 결정적 1비트 PNG)로 문서번호 QR을 산출물(docx 말미 블록·PDF·fp-doc 인쇄물)에 부여 — 스캔 시 번호 평문(오프라인 대조용). ⑤ 표기: 파일명은 `제목_문서번호.ext`, carework는 발행 이력·번호 검증 UI(care-forms)를 제공. 인쇄 경로는 fp-doc 루트의 `data-doc-no`/`data-doc-tool` 속성으로 발행 대장 기록을 트리거한다. 뷰어 콘텐츠 재출력(문제집·매뉴얼 인쇄)과 데이터 내보내기(백업 JSON·CSV)는 발행 문서가 아니므로 대상 아님 — cosmetic 비증적 산출물(라벨·기록지·안내문·작업지시서)도 FO-70 규약대로 미적용 | ✅ |
+
+### 3.32 AI 학습 엔진 (AI Learning Engine)
+
+> 상세 설계: [`design/AI_LEARNING_ENGINE_DESIGN.md`](design/AI_LEARNING_ENGINE_DESIGN.md) (DOC-DSN-58 — 외부 원안 "PassOK DeepTutor Hybrid AI Learning 설계서 v1.1" 이식). cosmetic 파일럿 한정 — Python Learning API(FastAPI) + DeepTutor 무상태 서비스 + Supabase `ai_*` 테이블의 서버측 학습 계층. 기존 PassLoop(§3.27 AI-40~44)·ai-proxy(AI-25~30)·textbook_qa(AI-36)·ref_md·ai:stale(AI-12)와의 관계(흡수/병행/대체)는 Phase 0 전제로 확정한다 — 중복 기능의 채택 근거는 각 행에 명기.
+>
+> **⚠ 보류 (2026-11-27)**: 현재는 기존 PassLoop·ai-proxy 계열로 진행. 기능 심화 확장 필요 시 본 절을 재검토 — 아래 행은 승격 후보 로드맵이며 착수 지시가 아니다.
+
+| ID | 요구사양 | 구현 상태 |
+|----|---------|-----------|
+| AL-01 | **Learning API 호스트** — FastAPI `ai-learning/` 앱이 `/api/v1/learning/*` 제공. Supabase JWKS로 JWT 서명·만료·`aud` 검증, 요청 본문 `user_id` 무시·토큰 `sub`만 사용, 모든 쿼리에 `user_id = :sub` 조건 명시(service role RLS 우회 대책). CORS는 PassOK 도메인 한정, 본문 64KB·IP당 분당 60회 제한 | 미구현 (로드맵 — DOC-DSN-58, Phase 1) |
+| AL-02 | **TutorEngine 어댑터 계층** — PassOK 소유 Protocol(`retrieve`/`answer_stream`/`generate`/`index_document`/`health`), 구현체는 `DeepTutorHttpEngine`·`MockTutorEngine`·`PgVectorEngine` 3종(CLI 구현체 제외 — 다중 사용자 부적합). DeepTutor 내부 모듈 import 금지, 사용 엔드포인트는 계약 테스트로 고정(공개 API 레퍼런스 부재 대책) | 미구현 (로드맵 — DOC-DSN-58 §2.3, Phase 0~1) |
+| AL-03 | **DeepTutor 벤더링·배치** — `vendor/deeptutor` submodule + 안정 태그 고정(`passok/v<버전>` 로컬 브랜치 패치), 로컬 빌드 이미지 `passok/deeptutor:<버전>-p<N>`(원격 latest 금지), docker-compose `deeptutor`는 내부망 전용(포트 미바인딩)·계층형 메모리·도구 실행·자체 auth 비활성. 업데이트는 태그 단위만 — 계약 테스트+평가 세트 통과 후 개발→스테이징→운영 승격. **신선도는 감지 자동화+승격 사람 승인으로 분리**: 주 1회 `deeptutor-check-update.sh` 신규 태그 감지·보안 키워드 긴급도 분류 → 개발 환경 한정 승격 후보 자동 준비(rebase·빌드·계약 테스트·평가 30문) → 관리자 승인으로만 운영 반영. 엔진 실행 시점의 원격 diff 자동 갱신은 기각(계약 테스트 우회·패치 소실·오프라인 기동 위반·재현성 상실) | 미구현 (로드맵 — DOC-DSN-58 §2.2, Phase 0) |
+| AL-04 | **개념 체계(Knowledge Unit)** — `ai_knowledge_units`(시험팩→단원→개념, `taxonomy_version`·`exam_weight`·`active`)·`ai_unit_prerequisites`(자기참조 금지, 순환은 적재 시 검사). 개념 병합·분할 시 숙달도 이관 규칙을 버전과 함께 기록. 기존 conceptId(`subj:§N.M` 앵커 — AI-09·AI-40)와의 매핑·재사용 규칙은 Phase 0 확정 | 미구현 (로드맵 — DOC-DSN-58 §4.1, Phase 2) |
+| AL-05 | **문항-개념 매핑** — `ai_question_unit_map`(문항당 개념 ≤3개·weight 합 1.0·`is_primary` 1개, status suggested→approved·`reviewed_by` 기록), 승인 매핑만 숙달도 입력. 태깅은 Worker 후보 제안→관리자 검수 화면 승인, 표본 재태깅 불일치율 ≤10% 품질 점검 | 미구현 (로드맵 — DOC-DSN-58 §4.2~4.3, Phase 2) |
+| AL-06 | **숙달도 엔진** — 난이도 가중 Beta-Binomial(α₀=β₀=1, 정답 `+w·s·(0.6+0.2d)`·오답 `+w·s·(1.8−0.2d)`), 반감기 60일 사전분포 회귀, `n_eff<4`는 "데이터 부족"·≥4부터 판정, 숙달 등급은 90% 신뢰구간 하한 ≥80 요구. 출처 가중치 s: 정규 1.0·힌트/즉시재시도·레거시 이관 0.5·연습 0. 상수는 설정 파일, 순수 함수·LLM 무관 — `ai_attempts` 재생으로 재계산 가능 | 미구현 (로드맵 — DOC-DSN-58 §5.2, Phase 2) |
+| AL-07 | **FSRS 복습** — 복습 단위는 Knowledge Unit(승인 문항 2~3문=복습 1회), 등급 Again/Hard/Good/Easy, 목표 기억률 0.9·누적 1,000건 후 파라미터 최적화, 시험일 초과 시 `남은 일수/2` 클램프, 복습 진입 조건(개념 완료 또는 숙달 ≥60·confidence ≥medium). 다음 복습일 원본은 `ai_review_schedules` 단일 — 기존 클라이언트 FSRS(DOC-DSN-32)와의 원본 분기·이관 규칙은 Phase 0 확정 | 미구현 (로드맵 — DOC-DSN-58 §5.3, Phase 2) |
+| AL-08 | **오답 유형 판정** — 규칙 우선 순차 적용(`distractor_unit`→개념 혼동, `numeric_fact`→암기 부족, `calculation`→계산 오류, 즉답+고숙달→단순 실수, 반복 오답→개념 미이해), 미해당만 LLM 배치 분류·저신뢰는 `unknown` | 미구현 (로드맵 — DOC-DSN-58 §5.4, Phase 3) |
+| AL-09 | **초기 진단·학습 경로** — 과목별 5문 적응 진단(난이도 3 시작·정오 ±1, n_eff≥4 과목 생략). 경로는 규칙 엔진이 확정: 만기 복습 우선(≤일일 시간 40%) → 우선순위 `(100−숙달)×배점 비중×시험 임박도` → 선수 개념 <60 선배치 → 수준별 조치 변환·`daily_minutes` 내 절단. LLM은 "왜 이 순서인가" 설명 문구만 생성 | 미구현 (로드맵 — DOC-DSN-58 §5.5, Phase 3) |
+| AL-10 | **문항 풀·정답 분리** — `ai_question_items`(정답 제외 본문·선지, status draft→auto_checked→approved·rejected·retired)·`ai_question_keys`(정답·해설·오답 선지 개념 — 서버 전용, 클라이언트 접근 불가). 기존 문제은행은 `source='legacy'`+`source_question_id`로 원본 ID 보존 등록, 채점은 서버 정답 키 비교(결정적), 승인 문항만 출제 가능 | 미구현 (로드맵 — DOC-DSN-58 §6·§9, Phase 2~3) |
+| AL-11 | **문항 생성·자동 검증 배치** — 개념×난이도 칸 부족분 산출(개념당 ≥8문 목표) → 근거 청크 첨부 배치 생성 → 자동 검증 7종(스키마·선지 규칙·독립 풀이(타 모델)·근거 일치·해설 모순·유사도 >0.92·법령 기준일), 1회 재생성 후 실패 시 rejected. 사람 검수 없이 승인 불가, 운영 중 정답률 >95%·<15%·신고 ≥2건 시 재검수 대기열 | 미구현 (로드맵 — DOC-DSN-58 §9, Phase 3) |
+| AL-12 | **연습 모드** — `/practice/generate` 즉석 문항은 스키마·선지 규칙만 검증 + "AI 연습 문제 · 검수 전" 표시, `context=practice`·`source_weight=0`으로 숙달도 미반영. 오류 신고 문항은 검수 후보 승격 가능 | 미구현 (로드맵 — DOC-DSN-58 §9.3, Phase 3) |
+| AL-13 | **RAG 지식베이스** — `ai_document_sources`(판본·`copyright_status`·`superseded_by` 체인·`kb_id`·`index_status`), 저작권 pending은 인덱싱 거부, 시험팩당 KB 1개 공유. 청크는 절/조문 경계+`page_number`·`section`·`knowledge_unit_code` 메타, 검색 점수 미달 시 `grounded=false`, 검색 문서는 구분 태그로 데이터 취급(프롬프트 인젝션 방어). RAG 소스는 기존 교재 md·`ref_md` 재사용 검토(PDF 재파싱 회피 — Phase 0 평가 항목) | 미구현 (로드맵 — DOC-DSN-58 §10, Phase 0~1) |
+| AL-14 | **법령 갱신 워처** — 국가법령정보센터 Open API로 주 1회 개정 확인 → 신판 등록+구판 `superseded` → 인용 문항 자동 재검수 대기열(AL-11 퇴역 규칙). 미래 시행일은 두 버전 병존·시험일 기준 적용. 기존 LAW_OC_KEY 크론·`check:reffresh`·`ai:stale`(AI-12)와의 통합 여부는 Phase 0 확정 | 미구현 (로드맵 — DOC-DSN-58 §10.4, Phase 3) |
+| AL-15 | **튜터 스트리밍** — `POST /tutor/sessions/{id}/messages` SSE(meta→delta→citations→actions→done). `learner_context`(수준·개념 숙달·취약·최근 오류)를 PassOK가 매 요청 주입 — DeepTutor 메모리·세션은 원본 미사용, PII(이름·메일·user_id) 맥락 제외. 인용은 검색 청크 메타데이터만(LLM 생성 페이지 번호 불사용), 근거 미달 시 답변 첫 문장에 고지. 대화는 `ai_tutor_messages`에 저장 | 미구현 (로드맵 — DOC-DSN-58 §8.2, Phase 1) |
+| AL-16 | **로컬 기록 이관** — `POST /legacy-import`가 localStorage 풀이 기록을 사용자 동의 후 1회 업로드(`context='legacy_import'`·중복 방지 키). 클라이언트 제출값이라 `source_weight=0.5`·숙달도 사전분포에만 반영 — 공식 성적 불인정. 로컬 FSRS 카드 상태의 이관 여부는 별도 확정 | 미구현 (로드맵 — DOC-DSN-58 §1.3·§8, Phase 2) |
+| AL-17 | **RLS·정답 비노출** — `ai_*` 전 테이블 RLS+`force row level security`, insert/update/delete 정책 미생성(쓰기는 service role API만). 정답·매핑·자료·사용량·이벤트 테이블은 select 정책도 부재(클라이언트 조회 불가), 본인 데이터는 select 전용, 승인 문항만 authenticated select | 미구현 (로드맵 — DOC-DSN-58 §7, Phase 1~2) |
+| AL-18 | **사용량 상한·원가 계측** — Free/Pro 일·월 호출 상한(튜터·연습 생성·질문 길이, 설정값 관리), 초과 시 429+`reset_at`. 모든 LLM 호출은 `ai_usage_logs`(provider·model·토큰·추정 원가·지연) 기록, 학습자 월 원가·배치 원가 대시보드. 기존 `ai_usage`(AI-26) 쿼터 테이블과의 통합·병행은 Phase 0 확정 | 미구현 (로드맵 — DOC-DSN-58 §8.4·§11.4, Phase 1) |
+| AL-19 | **비동기 작업 큐** — `ai_jobs` 테이블 + `FOR UPDATE SKIP LOCKED` 폴링(파일럿은 별도 브로커 없음), 시스템 작업은 `user_id` null, `idempotency_key`·`max_attempts`·`run_after` 스케줄, 본인 작업 상태만 조회 가능 | 미구현 (로드맵 — DOC-DSN-58 §2.2·§6, Phase 1) |
+| AL-20 | **Phase 관문·평가 세트** — G0: DeepTutor vs `PgVectorEngine` 동일 질문셋(교재 100+법령 30) 비교(검색 재현율·인용 정확도·답변 정확도·지연·비용·운영 부담), 5%p 이내면 운영 단순한 쪽 채택. 평가 세트(교재100·법령50·설명50·생성100·오답50)는 Phase 0에 작성·고정 관리 — 엔진·모델·프롬프트 변경 시 재측정. KPI: 근거 제공률 ≥95%·답변 정확도 ≥90%·승인율 ≥70%·숙달도 AUC ≥0.70·격리 위반 0건 등 11종 | 미구현 (로드맵 — DOC-DSN-58 §12~13, Phase 0~4) |
 
 ---
 

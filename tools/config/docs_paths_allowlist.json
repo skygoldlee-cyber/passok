@@ -457,5 +457,30 @@
     "file": "docs/dev/SPEC.md",
     "ref": "tools/ai/provenance_log.jsonl",
     "reason": "로드맵 행의 계획 파일 — AI-46 프로비넌스 로그 (DOC-DSN-57 설계안, 미구현)"
+  },
+  {
+    "file": "docs/dev/SPEC.md",
+    "ref": "vendor/deeptutor",
+    "reason": "로드맵 행의 계획 경로 — DeepTutor submodule 벤더링 위치 (AL-03, Phase 0 미구현)"
+  },
+  {
+    "file": "docs/dev/design/AI_LEARNING_ENGINE_DESIGN.md",
+    "ref": "vendor/deeptutor",
+    "reason": "설계안 제안 경로 — DeepTutor git submodule 벤더링 위치 (AL-03, Phase 0 미구현)"
+  },
+  {
+    "file": "docs/dev/design/AI_LEARNING_ENGINE_DESIGN.md",
+    "ref": "docs/ai-learning/deeptutor-version.md",
+    "reason": "설계안 제안 경로 — DeepTutor 버전·패치 기록 문서 (AL-03, Phase 0 산출물)"
+  },
+  {
+    "file": "docs/dev/design/AI_LEARNING_ENGINE_DESIGN.md",
+    "ref": "docs/ai-learning/01-existing-system-audit.md",
+    "reason": "설계안 제안 경로 — Phase 0 기존 시스템 조사 산출물 (미작성)"
+  },
+  {
+    "file": "docs/dev/design/AI_LEARNING_ENGINE_DESIGN.md",
+    "ref": "docs/ai-learning/02-engine-poc.md",
+    "reason": "설계안 제안 경로 — Phase 0 엔진 PoC 산출물 (미작성)"
   }
 ]

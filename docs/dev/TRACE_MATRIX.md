@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 47c6362e28f42444
-> 생성: 2026-11-27 · 원천: SPEC.md(737개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: a6a5342ae3b85108
+> 생성: 2026-11-27 · 원천: SPEC.md(757개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 737개 — 문서 연결 503 · 소스 연결 646 · 테스트 연결 689 · 보고서 연결 109
+**커버리지 요약**: 요구사항 757개 — 문서 연결 523 · 소스 연결 646 · 테스트 연결 689 · 보고서 연결 109
 
 ---
 
@@ -314,8 +314,8 @@
 | CQ-04 | ✅ | 테스트 | DOC-DSN-33 | tools/audit/audit_card_quality.js | tests/unit/gates/audit-quality.test.js | — | — |
 | CQ-05 | ✅ | 테스트 | DOC-DSN-33 | tools/audit/audit_combo.js<br>tools/check/check_combo_pilot.js | tests/unit/gates/audit-quality.test.js | — | — |
 | CQ-06 | ✅ | 테스트 | DOC-DSN-33<br>DOC-DSN-57 | tools/check/check_answer_overlap.js<br>tools/sync/fix_answer_quotes.js<br>tools/sync/fix_citation_targets.js | tests/unit/gates/answer-overlap.test.js | — | — |
-| CQ-07 | 미구현 (로드맵 — DOC-DSN-57 설계안) | 문서 검토 | DOC-DSN-57 | — | — | — | — |
-| CQ-08 | 미구현 (로드맵 — DOC-DSN-57 설계안, AI-46 의존) | 문서 검토 | DOC-DSN-57 | — | — | — | — |
+| CQ-07 | 미구현 (로드맵 — DOC-DSN-57 설계안) | 문서 검토 | DOC-DSN-57<br>DOC-DSN-58 | — | — | — | — |
+| CQ-08 | 미구현 (로드맵 — DOC-DSN-57 설계안, AI-46 의존) | 문서 검토 | DOC-DSN-57<br>DOC-DSN-58 | — | — | — | — |
 
 ## 3.18 Formula OS — 실전 배합 작업실
 
@@ -498,10 +498,10 @@
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
 | SEM-01 | ✅ | 테스트 | — | tools/build/build_embeddings.js | tests/unit/gates/emb-builder.test.js<br>tests/unit/gates/emb-manifest.test.js | — | — |
-| SEM-02 | ✅ | 테스트 | DOC-DSN-56 | src/search/semantic-index.js | tests/unit/gates/semantic-index.test.js | — | — |
+| SEM-02 | ✅ | 테스트 | DOC-DSN-56<br>DOC-DSN-58 | src/search/semantic-index.js | tests/unit/gates/semantic-index.test.js | — | — |
 | SEM-03 | ✅ | 테스트 | — | — | tests/unit/gates/semantic-index.test.js | — | — |
 | SEM-04 | ✅ | 테스트 | — | src/search/semantic-index.js | tests/unit/gates/semantic-index.test.js | — | — |
-| SEM-05 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-33<br>DOC-DSN-57 | tools/check/check_emb_freshness.js | tests/unit/gates/emb-builder.test.js<br>tests/unit/gates/emb-manifest.test.js | — | — |
+| SEM-05 | ✅ | 테스트 | DOC-DSN-18<br>DOC-DSN-33<br>DOC-DSN-57<br>DOC-DSN-58 | tools/check/check_emb_freshness.js | tests/unit/gates/emb-builder.test.js<br>tests/unit/gates/emb-manifest.test.js | — | — |
 | SEM-06 | 미구현 (로드맵) | — | — | — | — | — | — |
 | SEM-07 | 미구현 (로드맵) | — | — | — | — | — | — |
 | SEM-08 | ✅ v1 (앵커 프록시) | 테스트 | DOC-DSN-56 | src/search/semantic-index.js | tests/unit/gates/semantic-index.test.js | — | — |
@@ -552,27 +552,27 @@
 | AI-22 | ✅ | 테스트 | DOC-RBK-16 | src/content/data-loader.js<br>tools/ai/ai_cards.js | tests/unit/content/ai-tools.test.js | — | — |
 | AI-23 | ✅ | 테스트 | DOC-DSN-57<br>DOC-RBK-16 | tools/ai/ai_adoption.js | tests/unit/content/ai-tools.test.js | — | — |
 | AI-24 | ✅ | 테스트 | DOC-DSN-53 | tools/ai/ai_textbook.js | tests/unit/content/ai-textbook.test.js | — | — |
-| AI-25 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-USR-18 | tools/supabase/functions/ai-proxy/index.ts<br>tools/supabase/sync_ai_proxy_secrets.js | tests/unit/engine/ai-client.test.js | — | — |
-| AI-26 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-USR-18 | tools/supabase/functions/ai-proxy/index.ts<br>tools/supabase/sync_ai_proxy_secrets.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
-| AI-27 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-USR-18 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
-| AI-28 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-USR-18 | src/ai/ai-client.js<br>src/telemetry/usage-telemetry.js | tests/unit/engine/ai-client.test.js | — | — |
-| AI-29 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
-| AI-30 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56 | src/ai/ai-client.js<br>src/ai/gen-gate.js<br>tools/supabase/functions/ai-proxy/index.ts | tests/unit/engine/ai-client.test.js<br>tests/unit/engine/gen-gate.test.js | — | — |
+| AI-25 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-USR-18 | tools/supabase/functions/ai-proxy/index.ts<br>tools/supabase/sync_ai_proxy_secrets.js | tests/unit/engine/ai-client.test.js | — | — |
+| AI-26 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-USR-18 | tools/supabase/functions/ai-proxy/index.ts<br>tools/supabase/sync_ai_proxy_secrets.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
+| AI-27 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-USR-18 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
+| AI-28 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-USR-18 | src/ai/ai-client.js<br>src/telemetry/usage-telemetry.js | tests/unit/engine/ai-client.test.js | — | — |
+| AI-29 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
+| AI-30 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58 | src/ai/ai-client.js<br>src/ai/gen-gate.js<br>tools/supabase/functions/ai-proxy/index.ts | tests/unit/engine/ai-client.test.js<br>tests/unit/engine/gen-gate.test.js | — | — |
 | AI-32 | ✅ | 테스트 | — | src/study/spaced-repetition.js<br>tools/ai/ai_seed_eval.js<br>tools/ai/lib/difficulty.js | tests/dom/study/study-spacedrep.dom.test.js<br>tests/unit/engine/seed-eval.test.js | — | — |
 | AI-33 | ✅ | 테스트 | — | — | tests/dom/study/study-aicoach.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
 | AI-34 | ✅ | 테스트 | — | src/study/weak-items.js | tests/unit/engine/weak-items.test.js | — | — |
 | AI-35 | ✅ | 테스트 | — | — | tests/dom/study/study-aicoach.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
-| AI-36 | ✅ | 테스트 | DOC-DSN-56 | — | tests/dom/study/study-aicoach.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
+| AI-36 | ✅ | 테스트 | DOC-DSN-56<br>DOC-DSN-58 | — | tests/dom/study/study-aicoach.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
 | AI-37 | ✅ | 테스트 | — | src/ai/gen-gate.js | tests/unit/engine/gen-gate.test.js | — | — |
 | AI-38 | ✅ | 테스트 | — | — | tests/unit/engine/ai-client.test.js | — | — |
 | AI-39 | ✅ | 테스트 | — | tools/ai/ai_trap.js<br>tools/ai/lib/traps.js<br>tools/build/plugins/exams.plugin.js | tests/unit/ai/traps.test.js | — | — |
-| AI-40 | 🟡 부분 (단계 2 — 실제 백업 데이터 valid 판정 후 계수 확정) | 테스트 | DOC-DSN-56 | src/passloop/core/mastery.js<br>src/passloop/index.js<br>src/passloop/ports.js<br>src/study/passloop-adapter.js<br>…외 2개 | tests/dom/study/study-mastery.dom.test.js<br>tests/unit/passloop/mastery.test.js | — | — |
-| AI-41 | 🟡 부분 (수집·주입 완료 — 라벨 품질 실측 후 조정) | 테스트 | DOC-DSN-56 | src/passloop/core/learner-profile.js<br>src/passloop/index.js<br>src/study/learner-profile-store.js | tests/unit/passloop/learner-profile.test.js | — | — |
-| AI-42 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-56 | — | — | — | — |
-| AI-43 | 🟡 부분 (도구·런타임 완료 — 정본 편입 후 노출 검증) | 테스트 | DOC-DSN-56 | src/reader/quickcheck.js<br>tools/ai/ai_quickcheck.js | tests/dom/reader/quickcheck.dom.test.js | — | — |
-| AI-44 | 🟡 부분 (목록 뷰 완료 — 노트→드릴 진입 훅은 후속) | 테스트 | DOC-DSN-56 | — | tests/dom/study/study-notes.dom.test.js | — | — |
-| AI-45 | 미구현 (로드맵 — DOC-DSN-57 설계안) | 문서 검토 | DOC-DSN-57 | — | — | — | — |
-| AI-46 | 미구현 (로드맵 — DOC-DSN-57 설계안) | 문서 검토 | DOC-DSN-57 | — | — | — | — |
+| AI-40 | 🟡 부분 (단계 2 — 실제 백업 데이터 valid 판정 후 계수 확정) | 테스트 | DOC-DSN-56<br>DOC-DSN-58 | src/passloop/core/mastery.js<br>src/passloop/index.js<br>src/passloop/ports.js<br>src/study/passloop-adapter.js<br>…외 2개 | tests/dom/study/study-mastery.dom.test.js<br>tests/unit/passloop/mastery.test.js | — | — |
+| AI-41 | 🟡 부분 (수집·주입 완료 — 라벨 품질 실측 후 조정) | 테스트 | DOC-DSN-56<br>DOC-DSN-58 | src/passloop/core/learner-profile.js<br>src/passloop/index.js<br>src/study/learner-profile-store.js | tests/unit/passloop/learner-profile.test.js | — | — |
+| AI-42 | 미구현 (로드맵) | 문서 검토 | DOC-DSN-56<br>DOC-DSN-58 | — | — | — | — |
+| AI-43 | 🟡 부분 (도구·런타임 완료 — 정본 편입 후 노출 검증) | 테스트 | DOC-DSN-56<br>DOC-DSN-58 | src/reader/quickcheck.js<br>tools/ai/ai_quickcheck.js | tests/dom/reader/quickcheck.dom.test.js | — | — |
+| AI-44 | 🟡 부분 (목록 뷰 완료 — 노트→드릴 진입 훅은 후속) | 테스트 | DOC-DSN-56<br>DOC-DSN-58 | — | tests/dom/study/study-notes.dom.test.js | — | — |
+| AI-45 | 미구현 (로드맵 — DOC-DSN-57 설계안) | 문서 검토 | DOC-DSN-57<br>DOC-DSN-58 | — | — | — | — |
+| AI-46 | 미구현 (로드맵 — DOC-DSN-57 설계안) | 문서 검토 | DOC-DSN-57<br>DOC-DSN-58 | — | — | — | — |
 
 ## 3.28 주관식 연습 자기채점
 
@@ -648,6 +648,31 @@
 | CO-20 | ✅ | E2E 테스트 | — | src/content/doc-export.js<br>src/content/pdf-utils.js<br>src/reader/exam-viewer.js<br>src/reader/html-viewer.js<br>…외 1개 | tests/dom/reader/print-pdf.test.js<br>tests/e2e/journeys/j-302-docs-print.spec.js<br>tests/unit/content/pdf-utils.test.js | — | — |
 | CO-21 | ✅ | E2E 테스트 | — | src/content/pdf-utils.js<br>src/reader/exam-viewer.js<br>src/reader/manual-viewer.js | tests/dom/reader/print-pdf.test.js<br>tests/dom/reader/print-prep.test.js<br>tests/e2e/pdf-pagination.spec.js<br>tests/unit/content/pdf-utils.test.js | — | — |
 | CO-22 | ✅ | 테스트 | DOC-DSN-52<br>DOC-REF-20 | src/content/doc-export.js<br>src/content/doc-issues.js<br>src/content/doc-stamp.js<br>src/content/docx-utils.js<br>…외 5개 | tests/dom/exams/cosmetic/formula-print.dom.test.js<br>tests/unit/content/doc-issues.test.js | — | — |
+
+## 3.32 AI 학습 엔진
+
+| ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
+|----|------|-----------|------|------|--------|--------|------|
+| AL-01 | 미구현 (로드맵 — DOC-DSN-58, Phase 1) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-02 | 미구현 (로드맵 — DOC-DSN-58 §2.3, Phase 0~1) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-03 | 미구현 (로드맵 — DOC-DSN-58 §2.2, Phase 0) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-04 | 미구현 (로드맵 — DOC-DSN-58 §4.1, Phase 2) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-05 | 미구현 (로드맵 — DOC-DSN-58 §4.2~4.3, Phase 2) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-06 | 미구현 (로드맵 — DOC-DSN-58 §5.2, Phase 2) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-07 | 미구현 (로드맵 — DOC-DSN-58 §5.3, Phase 2) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-08 | 미구현 (로드맵 — DOC-DSN-58 §5.4, Phase 3) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-09 | 미구현 (로드맵 — DOC-DSN-58 §5.5, Phase 3) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-10 | 미구현 (로드맵 — DOC-DSN-58 §6·§9, Phase 2~3) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-11 | 미구현 (로드맵 — DOC-DSN-58 §9, Phase 3) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-12 | 미구현 (로드맵 — DOC-DSN-58 §9.3, Phase 3) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-13 | 미구현 (로드맵 — DOC-DSN-58 §10, Phase 0~1) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-14 | 미구현 (로드맵 — DOC-DSN-58 §10.4, Phase 3) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-15 | 미구현 (로드맵 — DOC-DSN-58 §8.2, Phase 1) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-16 | 미구현 (로드맵 — DOC-DSN-58 §1.3·§8, Phase 2) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-17 | 미구현 (로드맵 — DOC-DSN-58 §7, Phase 1~2) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-18 | 미구현 (로드맵 — DOC-DSN-58 §8.4·§11.4, Phase 1) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-19 | 미구현 (로드맵 — DOC-DSN-58 §2.2·§6, Phase 1) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
+| AL-20 | 미구현 (로드맵 — DOC-DSN-58 §12~13, Phase 0~4) | 문서 검토 | DOC-DSN-58 | — | — | — | — |
 
 ## 4.1 PWA & 오프라인
 
@@ -1117,6 +1142,7 @@
 | DOC-DSN-55 | docs/exams/hazmat/design/HAZMAT_PRACTICE_TOOL_DESIGN.md | CO-13, CS-13, DA-13, DA-15, PAY-01, PAY-02, PAY-03, PAY-04, PAY-05, PAY-06, PAY-07, PAY-08, UM-01, UM-02, UM-03, UM-04 |
 | DOC-DSN-56 | docs/dev/design/AI_PERSONALIZATION_DESIGN.md | AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AI-36, AI-40, AI-41, AI-42, AI-43, AI-44, DR-08, SEM-02, SEM-08, TR-30 |
 | DOC-DSN-57 | docs/dev/design/CONTENT_SAFETY_DESIGN.md | AI-03, AI-23, AI-45, AI-46, CQ-06, CQ-07, CQ-08, SEM-05 |
+| DOC-DSN-58 | docs/dev/design/AI_LEARNING_ENGINE_DESIGN.md | AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AI-36, AI-40, AI-41, AI-42, AI-43, AI-44, AI-45, AI-46, AL-01, AL-02, AL-03, AL-04, AL-05, AL-06, AL-07, AL-08, AL-09, AL-10, AL-11, AL-12, AL-13, AL-14, AL-15, AL-16, AL-17, AL-18, AL-19, AL-20, CQ-07, CQ-08, SEM-02, SEM-05 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |
