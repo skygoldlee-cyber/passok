@@ -48,6 +48,79 @@ function _bump(out, cid, ok, ts, itemId) {
     if (itemId) cur.items.add(itemId);
 }
 
+/** 문항의 개념 id 집합 — ContentIndex 포트 위임 + 정규화·공백 제거 */
+/** @param {*} q @param {import('../ports.js').ContentIndex} port @param {*} norm @param {string} [ctxId]
+ * @returns {string[]} */
+function _questionCids(q, port, norm, ctxId) {
+    return /** @type {string[]} */ ((q && port.questionCids ? port.questionCids(q) : [])
+        .map((/** @type {*} */ c) => norm(c, ctxId)).filter(Boolean));
+}
+
+/** 1) 진술 통계 누적 — sid별 j/w 누적이 정본 */
+/** @param {Object.<string, *>} stmt @param {*} norm @param {Object.<string, import('../ports.js').ConceptStat>} out */
+function _accStatementStats(stmt, norm, out) {
+    for (const [sid, st] of Object.entries(stmt)) {
+        const cid = norm(st && st.cid, sid);
+        if (!cid) continue;
+        const cur = out[cid] || (out[cid] = { n: 0, ok: 0, lastTs: 0, items: new Set() });
+        const j = (st.j || 0) | 0, w = (st.w || 0) | 0;
+        cur.n += j;
+        cur.ok += Math.max(0, j - w);
+        const t = _ts(st.lw);
+        if (t && t > cur.lastTs) cur.lastTs = t;
+        cur.items.add(sid);
+    }
+}
+
+/** 2) 퀴즈 결과 누적 — 문항의 conceptId 집합에 귀속 (문항 id, 시각 쌍을 quizSeen에 기록해 리뷰 로그와 중복 제거) */
+/** @param {import('../ports.js').MasterySignals} sig @param {import('../ports.js').ContentIndex} port @param {*} norm
+ * @param {Object.<string, import('../ports.js').ConceptStat>} out @param {Set<string>} quizSeen */
+function _accQuizResults(sig, port, norm, out, quizSeen) {
+    for (const [id, r] of Object.entries(sig.quizResults || {})) {
+        if (!r || r.solved === false || typeof r.correct !== 'boolean') continue;
+        const cids = _questionCids(sig.quizById && sig.quizById[id], port, norm, id);
+        const ts = _ts(r.ts);
+        quizSeen.add(`${id}@${ts || 0}`);
+        for (const cid of cids) _bump(out, cid, r.correct, ts, id);
+    }
+}
+
+/** k:'q' 리뷰 이벤트 누적 — quizResults와 (id·시각) 중복 제거 후 귀속 */
+/** @param {*} e @param {import('../ports.js').MasterySignals} sig @param {import('../ports.js').ContentIndex} port @param {*} norm
+ * @param {Object.<string, import('../ports.js').ConceptStat>} out @param {Set<string>} quizSeen @param {number|null} ts */
+function _accReviewQuiz(e, sig, port, norm, out, quizSeen, ts) {
+    if (quizSeen.has(`${e.c}@${ts || 0}`)) return;
+    const cids = _questionCids(sig.quizById && sig.quizById[e.c], port, norm, e.c);
+    for (const cid of cids) _bump(out, cid, !!e.ok, ts, e.c);
+}
+
+/** 비문항 리뷰 이벤트 누적 — 카드 등 (statementStats에 있는 sid는 진술 통계가 정본이라 건너뜀) */
+/** @param {*} e @param {import('../ports.js').MasterySignals} sig @param {Object.<string, *>} stmt @param {import('../ports.js').ContentIndex} port @param {*} norm
+ * @param {Object.<string, import('../ports.js').ConceptStat>} out @param {number|null} ts */
+function _accReviewEntry(e, sig, stmt, port, norm, out, ts) {
+    if (stmt[e.c]) return;
+    const item = sig.itemsById && sig.itemsById[e.c];
+    const cid = item && port.itemCid ? norm(port.itemCid(item), e.c) : null;
+    if (!cid) return;
+    // FSRS 레이팅: 1(Again)=실패, 2~4=기억 성공. r·ok 부재 이벤트는 시도만 집계
+    const ok = typeof e.ok === 'number'
+        ? !!e.ok
+        : (typeof e.r === 'number' ? e.r !== 1 : null);
+    _bump(out, cid, ok, ts, e.c);
+}
+
+/** 3) 리뷰 로그 누적 — k:'q'는 퀴즈 판정, 나머지는 카드 등 비문항 항목 */
+/** @param {import('../ports.js').MasterySignals} sig @param {Object.<string, *>} stmt @param {import('../ports.js').ContentIndex} port @param {*} norm
+ * @param {Object.<string, import('../ports.js').ConceptStat>} out @param {Set<string>} quizSeen */
+function _accReviewLog(sig, stmt, port, norm, out, quizSeen) {
+    for (const e of sig.reviewLog || []) {
+        if (!e || !e.c) continue;
+        const ts = _ts(e.t);
+        if (e.k === 'q') _accReviewQuiz(e, sig, port, norm, out, quizSeen, ts);
+        else _accReviewEntry(e, sig, stmt, port, norm, out, ts);
+    }
+}
+
 /**
  * 신호 → 개념(§앵커)별 집계.
  * @param {import('../ports.js').MasterySignals} signals
@@ -63,56 +136,22 @@ export function collectConceptStats(signals, idx) {
         port.normalizeCid ? port.normalizeCid(c, ctxId) : (c || null);
     const stmt = sig.statementStats || {};
 
-    // 1) 진술 통계 — sid별 j/w 누적이 정본
-    for (const [sid, st] of Object.entries(stmt)) {
-        const cid = norm(st && st.cid, sid);
-        if (!cid) continue;
-        const cur = out[cid] || (out[cid] = { n: 0, ok: 0, lastTs: 0, items: new Set() });
-        const j = (st.j || 0) | 0, w = (st.w || 0) | 0;
-        cur.n += j;
-        cur.ok += Math.max(0, j - w);
-        const t = _ts(st.lw);
-        if (t && t > cur.lastTs) cur.lastTs = t;
-        cur.items.add(sid);
-    }
-
-    // 2) 퀴즈 결과 — 문항의 conceptId 집합에 귀속 (문항 id, 시각 쌍으로 리뷰 로그와 중복 제거)
+    _accStatementStats(stmt, norm, out);
     const quizSeen = new Set();
-    for (const [id, r] of Object.entries(sig.quizResults || {})) {
-        if (!r || r.solved === false || typeof r.correct !== 'boolean') continue;
-        const q = sig.quizById && sig.quizById[id];
-        const cids = /** @type {string[]} */ ((q && port.questionCids ? port.questionCids(q) : [])
-            .map(c => norm(c, id)).filter(Boolean));
-        const ts = _ts(r.ts);
-        quizSeen.add(`${id}@${ts || 0}`);
-        for (const cid of cids) _bump(out, cid, r.correct, ts, id);
-    }
-
-    // 3) 리뷰 로그 — k:'q'는 퀴즈 판정(quizResults와 id·시각 중복 제거),
-    //    나머지는 카드 등 비문항 항목 (statementStats에 있는 sid는 건너뜀)
-    for (const e of sig.reviewLog || []) {
-        if (!e || !e.c) continue;
-        const ts = _ts(e.t);
-        if (e.k === 'q') {
-            if (quizSeen.has(`${e.c}@${ts || 0}`)) continue;
-            const q = sig.quizById && sig.quizById[e.c];
-            const cids = /** @type {string[]} */ ((q && port.questionCids ? port.questionCids(q) : [])
-                .map(c => norm(c, e.c)).filter(Boolean));
-            for (const cid of cids) _bump(out, cid, !!e.ok, ts, e.c);
-            continue;
-        }
-        if (stmt[e.c]) continue;  // 진술 FSRS 이벤트 — 진술 통계가 정본
-        const item = sig.itemsById && sig.itemsById[e.c];
-        const cid = item && port.itemCid ? norm(port.itemCid(item), e.c) : null;
-        if (!cid) continue;
-        // FSRS 레이팅: 1(Again)=실패, 2~4=기억 성공. r·ok 부재 이벤트는 시도만 집계
-        const ok = typeof e.ok === 'number'
-            ? !!e.ok
-            : (typeof e.r === 'number' ? e.r !== 1 : null);
-        _bump(out, cid, ok, ts, e.c);
-    }
+    _accQuizResults(sig, port, norm, out, quizSeen);
+    _accReviewLog(sig, stmt, port, norm, out, quizSeen);
 
     return out;
+}
+
+/** 문항 1건의 conceptId 기여분 — questionCids + 진술 conceptId */
+/** @param {*} q @param {import('../ports.js').ContentIndex} port @param {*} add */
+function _addQuizCids(q, port, add) {
+    const qid = q && q.id;
+    for (const raw of (port.questionCids ? port.questionCids(q) : [])) add(raw, qid);
+    for (const st of (q && q.statements) || []) {
+        if (st && st.conceptId) add(st.conceptId, qid);
+    }
 }
 
 /**
@@ -133,16 +172,41 @@ export function computeConceptTotals(content, idx) {
         if (cid) totals[cid] = (totals[cid] || 0) + 1;
     };
 
-    for (const q of (content && content.quizzes) || []) {
-        for (const raw of (port.questionCids ? port.questionCids(q) : [])) add(raw, q && q.id);
-        for (const st of (q && q.statements) || []) {
-            if (st && st.conceptId) add(st.conceptId, q && q.id);
-        }
-    }
-    for (const c of (content && content.cards) || []) {
+    const body = content || {};
+    for (const q of body.quizzes || []) _addQuizCids(q, port, add);
+    for (const c of body.cards || []) {
         if (port.itemCid) add(port.itemCid(c), c && c.id);
     }
     return totals;
+}
+
+/** 점수 → 숙련도 등급 (§3.2 경계값) */
+/** @param {number} n @param {number} score */
+function _gradeOf(n, score) {
+    return n === 0 ? MASTERY_GRADES.NONE
+        : score < 40 ? MASTERY_GRADES.INTRO
+        : score < 70 ? MASTERY_GRADES.PROGRESS
+        : score < 90 ? MASTERY_GRADES.MASTER
+        : MASTERY_GRADES.KEEP;
+}
+
+/** 개념 1건의 숙련도 엔트리 — 정답률(베타 사전)·최근성(반감)·커버리지·등급 산출 */
+/** @param {string} cid @param {import('../ports.js').ConceptStat|undefined} st @param {import('../ports.js').ConceptTotals} totals
+ * @param {*} cfg @param {*} titleOf @param {number} now
+ * @returns {import('../ports.js').MasteryEntry} */
+function _masteryEntry(cid, st, totals, cfg, titleOf, now) {
+    const n = st ? st.n : 0;
+    const ok = st ? st.ok : 0;
+    const acc = (ok + cfg.prior) / (n + 2 * cfg.prior);
+    const r = (st && st.lastTs) ? Math.pow(0.5, Math.max(0, now - st.lastTs) / (cfg.halfLifeDays * DAY_MS)) : 0;
+    const score = n > 0 ? Math.round(100 * acc * (0.5 + 0.5 * r)) : 0;
+    const attempted = st ? st.items.size : 0;
+    const cov = totals[cid] ? Math.min(1, attempted / totals[cid]) : 0;
+    return {
+        n, ok, acc, r, score, cov, lastTs: st ? st.lastTs : 0,
+        grade: _gradeOf(n, score),
+        ...(titleOf ? { title: titleOf(cid) } : {}),
+    };
 }
 
 /**
@@ -163,24 +227,9 @@ export function computeMastery(stats, opts = {}) {
 
     /** @type {Object<string, import('../ports.js').MasteryEntry>} */
     const out = {};
-    for (const cid of new Set([...Object.keys(stats || {}), ...Object.keys(totals)])) {
-        const st = (stats || {})[cid];
-        const n = st ? st.n : 0;
-        const ok = st ? st.ok : 0;
-        const acc = (ok + cfg.prior) / (n + 2 * cfg.prior);
-        const r = (st && st.lastTs) ? Math.pow(0.5, Math.max(0, now - st.lastTs) / (cfg.halfLifeDays * DAY_MS)) : 0;
-        const score = n > 0 ? Math.round(100 * acc * (0.5 + 0.5 * r)) : 0;
-        const attempted = st ? st.items.size : 0;
-        const cov = totals[cid] ? Math.min(1, attempted / totals[cid]) : 0;
-        out[cid] = {
-            n, ok, acc, r, score, cov, lastTs: st ? st.lastTs : 0,
-            grade: n === 0 ? MASTERY_GRADES.NONE
-                : score < 40 ? MASTERY_GRADES.INTRO
-                : score < 70 ? MASTERY_GRADES.PROGRESS
-                : score < 90 ? MASTERY_GRADES.MASTER
-                : MASTERY_GRADES.KEEP,
-            ...(titleOf ? { title: titleOf(cid) } : {}),
-        };
+    const src = stats || {};
+    for (const cid of new Set([...Object.keys(src), ...Object.keys(totals)])) {
+        out[cid] = _masteryEntry(cid, src[cid], totals, cfg, titleOf, now);
     }
     return out;
 }

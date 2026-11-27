@@ -20,6 +20,28 @@ const VALID_SRC = new Set(['feedback', 'stmt']);
 /** @param {*} s @returns {string} 라벨 정규화 — trim + 상한 절단 */
 const _label = (s) => String(s ?? '').replace(/\s+/g, ' ').trim().slice(0, PROFILE_DEFAULTS.labelMax);
 
+/** 라벨 항목 갱신 — n+1·lastTs 갱신, cid는 신규 우선·기존 보존 */
+/** @param {*} cur @param {*} entry @param {string} src @param {number} nowMs */
+function _mergeEntry(cur, entry, src, nowMs) {
+    return {
+        n: (cur && cur.n || 0) + 1,
+        lastTs: nowMs,
+        ...(entry && entry.cid ? { cid: String(entry.cid).slice(0, 40) } : (cur && cur.cid ? { cid: cur.cid } : {})),
+        src,
+    };
+}
+
+/** LRU 퇴출 — lastTs 오름차순으로 상한 초과분 제거 */
+/** @param {Object.<string, {lastTs:number}>} out @param {number} max */
+function _evictLru(out, max) {
+    const keys = Object.keys(out);
+    if (keys.length <= max) return;
+    const evict = keys.map(k => /** @type {[string, number]} */ ([k, (out[k] && out[k].lastTs) || 0]))
+        .sort((a, b) => a[1] - b[1])
+        .slice(0, keys.length - max);
+    for (const [k] of evict) delete out[k];
+}
+
 /**
  * 프로필에 개념 라벨 1건 누적 — 동일 라벨은 n+1·lastTs 갱신, 상한 초과 시 최장기 미갱신 항목 퇴출.
  * @param {Object.<string, {n:number, lastTs:number, cid?:string, src:string}>|null|undefined} profile
@@ -33,22 +55,8 @@ export function recordConcept(profile, entry, nowMs = Date.now(), opts = {}) {
     const label = _label(entry && entry.label);
     if (!label) return out;
     const src = typeof entry.src === 'string' && VALID_SRC.has(entry.src) ? entry.src : 'stmt';
-    const cur = out[label];
-    out[label] = {
-        n: (cur && cur.n || 0) + 1,
-        lastTs: nowMs,
-        ...(entry && entry.cid ? { cid: String(entry.cid).slice(0, 40) } : (cur && cur.cid ? { cid: cur.cid } : {})),
-        src,
-    };
-    const max = opts.maxEntries || PROFILE_DEFAULTS.maxEntries;
-    const keys = Object.keys(out);
-    if (keys.length > max) {
-        // LRU — lastTs 오름차순으로 초과분 제거
-        const evict = keys.map(k => /** @type {[string, number]} */ ([k, (out[k] && out[k].lastTs) || 0]))
-            .sort((a, b) => a[1] - b[1])
-            .slice(0, keys.length - max);
-        for (const [k] of evict) delete out[k];
-    }
+    out[label] = _mergeEntry(out[label], entry, src, nowMs);
+    _evictLru(out, opts.maxEntries || PROFILE_DEFAULTS.maxEntries);
     return out;
 }
 

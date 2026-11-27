@@ -20,6 +20,26 @@ const STATS_KEY = STORAGE_KEYS.STATEMENT_STATS;
 export const WEAK_GRADUATE_STREAK = 3;
 
 /**
+ * 진술 1건의 판정을 누적 통계에 반영 — 정답 연속(streak)·오판(w/lw)·약점 프로필 누적.
+ * @param {*} cur 누적 통계 엔트리 (in-place 갱신)
+ * @param {{judgedCorrect?: boolean|null, text?: string, truth?: boolean, conceptId?: string|undefined}} s
+ * @param {string} today
+ */
+function _applyStatementJudgment(cur, s, today) {
+    cur.j += 1;
+    cur.last = s.judgedCorrect;
+    cur.streak = s.judgedCorrect ? (cur.streak || 0) + 1 : 0;
+    if (s.text) cur.t = s.text;
+    if (typeof s.truth === 'boolean') cur.truth = s.truth;
+    if (s.conceptId) cur.cid = s.conceptId;
+    if (s.judgedCorrect) return;
+    cur.w += 1;
+    cur.lw = today;
+    // AI-41 — 오판 진술 라벨을 취약 개념 프로필에 누적
+    recordWeakConcept({ label: s.text || s.conceptId || '', cid: s.conceptId || null, src: 'stmt' });
+}
+
+/**
  * gradeAnswer()의 perStatement 결과를 기록한다.
  * @param {Array<{sid?: string|undefined, id?: string, judgedCorrect?: boolean|null, userJudged?: boolean|null, text?: string, truth?: boolean, conceptId?: string|undefined, explain?: string|undefined}>|undefined} perStatement
  * @returns {number} 기록된 진술 수
@@ -33,18 +53,7 @@ export function recordStatementJudgments(perStatement) {
         if (!s || !s.sid || typeof s.judgedCorrect !== 'boolean') continue;
         updateCardSchedule(s.sid, s.judgedCorrect);
         const cur = stats[s.sid] || { j: 0, w: 0, lw: null, t: '', truth: null, cid: null, last: null, streak: 0 };
-        cur.j += 1;
-        cur.last = s.judgedCorrect;
-        cur.streak = s.judgedCorrect ? (cur.streak || 0) + 1 : 0;
-        if (s.text) cur.t = s.text;
-        if (typeof s.truth === 'boolean') cur.truth = s.truth;
-        if (s.conceptId) cur.cid = s.conceptId;
-        if (!s.judgedCorrect) {
-            cur.w += 1;
-            cur.lw = today;
-            // AI-41 — 오판 진술 라벨을 취약 개념 프로필에 누적
-            recordWeakConcept({ label: s.text || s.conceptId || '', cid: s.conceptId || null, src: 'stmt' });
-        }
+        _applyStatementJudgment(cur, s, today);
         stats[s.sid] = cur;
         recorded++;
     }

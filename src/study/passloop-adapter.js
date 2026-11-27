@@ -57,6 +57,14 @@ function _buildAnchorMaps(ranges) {
     return { byTitle, byAnchor };
 }
 
+/** id 접두(첫 어절) → 과목 키 — STUDY_DATA 등재 과목만 인정 */
+/** @param {string|null|undefined} ctxId @returns {string|null} */
+function _subjectByPrefix(ctxId) {
+    const prefix = String(ctxId || '').split('_')[0] || '';
+    const data = (typeof window !== 'undefined' && window.STUDY_DATA) || {};
+    return data[prefix] ? prefix : null;
+}
+
 /** 신호 항목 id → 과목 키 — 퀴즈·카드 인덱스, sid 패턴, id 접두 순으로 해석
  * @param {string|null|undefined} ctxId @returns {string|null} */
 function _subjectOf(ctxId) {
@@ -66,9 +74,7 @@ function _subjectOf(ctxId) {
     if (c) return c.subjectId;
     const sid = ctxId ? subjectFromSid(ctxId) : null;
     if (sid) return sid;
-    const prefix = String(ctxId || '').split('_')[0] || '';
-    const data = (typeof window !== 'undefined' && window.STUDY_DATA) || {};
-    return data[prefix] ? prefix : null;
+    return _subjectByPrefix(ctxId);
 }
 
 /** ContentIndex 구현 — normalizeCidAnchor(기존 순수) + 과목 스코프 확장
@@ -94,22 +100,33 @@ function _subjectName(subj) {
     return (s && s.name) || subj;
 }
 
+/** 문항 → 과목한정 §앵커 cid — 문제은행 챕터 매핑(byTitle) 해석 */
+/** @param {*} q @param {*} qc @param {Object.<string, Object.<string, string>>} byTitle @returns {string|null} */
+function _questionAnchorCid(q, qc, byTitle) {
+    const subj = _subjectOf(q && q.id);
+    const title = qc.questions[q && q.id];
+    const a = subj && title && byTitle[subj] && byTitle[subj][_normTitle(title)];
+    return a ? `${subj}:§${a}` : null;
+}
+
+/** 문항의 개념 id 집합 — §앵커 매핑 + 명시 conceptId + 진술 conceptId */
+/** @param {*} q @param {*} qc @param {Object.<string, Object.<string, string>>} byTitle @returns {string[]} */
+function _questionCidsOf(q, qc, byTitle) {
+    const out = new Set();
+    const anchored = _questionAnchorCid(q, qc, byTitle);
+    if (anchored) out.add(anchored);
+    if (q && q.conceptId) out.add(q.conceptId);
+    for (const st of (q && q.statements) || []) if (st && st.conceptId) out.add(st.conceptId);
+    return [...out];
+}
+
 /** 엔진 주입용 ContentIndex + 표시 보조 맵 묶음 */
 function _buildIndex() {
     const qc = _qc();
     const { byTitle, byAnchor } = _buildAnchorMaps(qc.ranges);
     const idx = {
         normalizeCid: _normalizeCid(qc.cidSection),
-        questionCids: (/** @type {*} */ q) => {
-            const out = new Set();
-            const subj = _subjectOf(q && q.id);
-            const title = qc.questions[q && q.id];
-            const a = subj && title && byTitle[subj] && byTitle[subj][_normTitle(title)];
-            if (a) out.add(`${subj}:§${a}`);
-            if (q && q.conceptId) out.add(q.conceptId);
-            for (const st of (q && q.statements) || []) if (st && st.conceptId) out.add(st.conceptId);
-            return [...out];
-        },
+        questionCids: (/** @type {*} */ q) => _questionCidsOf(q, qc, byTitle),
         itemCid: (/** @type {*} */ item) => {
             const subj = _subjectOf(item && item.id);
             const title = _normTitle(item && item.category);
@@ -143,14 +160,9 @@ export function describeConcept(cid) {
     };
 }
 
-/**
- * 현재 진행 신호 → 개념 숙련도 스냅샷.
- * @param {*} [config] 엔진 설정 오버라이드
- * @returns {{mastery: Object, actions: Array.<*>, evidenced: number, subjects: string[]}|null}
- *   신호가 하나도 없으면 null (뷰는 온보딩 상태를 그린다)
- */
-export function masterySnapshot(config) {
-    const { idx } = _buildIndex();
+/** STUDY_DATA 전 과목의 문항·카드 인덱스 — weak_quiz_ 오답 id 별칭 포함 */
+/** @returns {{quizById: Object.<string, *>, itemsById: Object.<string, *>}} */
+function _collectSignalIndexes() {
     const /** @type {Object.<string, *>} */ quizById = {},
         /** @type {Object.<string, *>} */ itemsById = {};
     const data = (typeof window !== 'undefined' && window.STUDY_DATA) || {};
@@ -161,6 +173,18 @@ export function masterySnapshot(config) {
         }
         for (const c of (subj && subj.cards) || []) itemsById[c.id] = c;
     }
+    return { quizById, itemsById };
+}
+
+/**
+ * 현재 진행 신호 → 개념 숙련도 스냅샷.
+ * @param {*} [config] 엔진 설정 오버라이드
+ * @returns {{mastery: Object, actions: Array.<*>, evidenced: number, subjects: string[]}|null}
+ *   신호가 하나도 없으면 null (뷰는 온보딩 상태를 그린다)
+ */
+export function masterySnapshot(config) {
+    const { idx } = _buildIndex();
+    const { quizById, itemsById } = _collectSignalIndexes();
     const stats = collectConceptStats({
         statementStats: /** @type {*} */ (getAllStatementStats()),
         quizResults: state.quizResults,

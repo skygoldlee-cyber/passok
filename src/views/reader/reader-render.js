@@ -396,18 +396,7 @@ function _sectionCardHtml(section, idx, chapter, ctx, chapterNum) {
     }
     return `
         <div class="reader-section-card${noteText ? ' has-note' : ''}" id="reader-section-${idx}" data-section-idx="${idx}">
-            <div class="reader-section-header" data-section-idx="${idx}">
-                <i class="fa-solid fa-chevron-down reader-section-toggle"></i>
-                <h4 class="reader-section-title">${esc(displayTitles[idx])}</h4>
-                <button class="reader-note-btn${noteText ? ' has-note' : ''}" data-note-key="${esc(bookmarkKey)}"
-                        data-note-subj="${esc(subjId)}" data-note-title="${esc(section.title || '')}"
-                        title="메모 ${noteText ? '보기·수정' : '추가'}" aria-label="섹션 메모">
-                    <i class="fa-${noteText ? 'solid' : 'regular'} fa-note-sticky"></i>
-                </button>
-                <button class="reader-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" data-bookmark-key="${esc(bookmarkKey)}" title="북마크 ${isBookmarked ? '제거' : '추가'}">
-                    <i class="fa-${isBookmarked ? 'solid' : 'regular'} fa-bookmark"></i>
-                </button>
-            </div>
+            ${_sectionHeaderHtml(section, idx, displayTitles[idx], bookmarkKey, subjId, noteText, isBookmarked)}
             <div class="reader-section-body">
                 ${noteText ? `<div class="reader-note-view"><i class="fa-solid fa-note-sticky" aria-hidden="true"></i> <span class="reader-note-text">${esc(noteText)}</span></div>` : ''}
                 <div class="textbook-reader-section-content">
@@ -418,6 +407,28 @@ function _sectionCardHtml(section, idx, chapter, ctx, chapterNum) {
             </div>
         </div>
     `;
+}
+
+/**
+ * 섹션 카드 헤더 HTML — 토글 아이콘·제목·메모/북마크 버튼.
+ * @param {*} section @param {number} idx @param {string} displayTitle
+ * @param {string} bookmarkKey @param {string} subjId @param {string} noteText @param {boolean} isBookmarked
+ * @returns {string}
+ */
+function _sectionHeaderHtml(section, idx, displayTitle, bookmarkKey, subjId, noteText, isBookmarked) {
+    return `
+            <div class="reader-section-header" data-section-idx="${idx}">
+                <i class="fa-solid fa-chevron-down reader-section-toggle"></i>
+                <h4 class="reader-section-title">${esc(displayTitle)}</h4>
+                <button class="reader-note-btn${noteText ? ' has-note' : ''}" data-note-key="${esc(bookmarkKey)}"
+                        data-note-subj="${esc(subjId)}" data-note-title="${esc(section.title || '')}"
+                        title="메모 ${noteText ? '보기·수정' : '추가'}" aria-label="섹션 메모">
+                    <i class="fa-${noteText ? 'solid' : 'regular'} fa-note-sticky"></i>
+                </button>
+                <button class="reader-bookmark-btn ${isBookmarked ? 'bookmarked' : ''}" data-bookmark-key="${esc(bookmarkKey)}" title="북마크 ${isBookmarked ? '제거' : '추가'}">
+                    <i class="fa-${isBookmarked ? 'solid' : 'regular'} fa-bookmark"></i>
+                </button>
+            </div>`;
 }
 
 /** @param {*} chapter @param {*} ctx */

@@ -557,6 +557,20 @@ export function renderQuizResult() {
 }
 
 /**
+ * AI 해설 요청 입력 조립 — 문항 메타(객관식 보기·교재 근거)는 있을 때만 첨부.
+ * @param {*} solved @param {*} q @param {*} cite
+ */
+function _aiFeedbackInput(solved, q, cite) {
+    return {
+        question: solved.question,
+        selected: solved.selected,
+        correct: solved.correctAnswer,
+        ...(Array.isArray(q?.options) && q.options.length ? { options: q.options } : {}),
+        ...(cite ? { citation: cite.source ? `${cite.source} (${cite.section})` : cite.section } : {}),
+    };
+}
+
+/**
  * 오답 항목 "AI 해설" 요청 (AI-27) — 문항·오답·정답·교재 근거를 구조화 인자로
  * 보내 1~2문장 해설을 인라인 표시한다. 결과는 `AI 생성` 배지를 단다.
  */
@@ -571,14 +585,7 @@ export async function requestAiFeedback(quizId) {
     if (btn) btn.disabled = true;
 
     const q = (state.quiz.data || []).find((/** @type {*} */ x) => x.id === quizId);
-    const cite = _citationForQuiz(quizId);
-    const input = {
-        question: solved.question,
-        selected: solved.selected,
-        correct: solved.correctAnswer,
-        ...(Array.isArray(q?.options) && q.options.length ? { options: q.options } : {}),
-        ...(cite ? { citation: cite.source ? `${cite.source} (${cite.section})` : cite.section } : {}),
-    };
+    const input = _aiFeedbackInput(solved, q, _citationForQuiz(quizId));
 
     slot.innerHTML = '<p class="ai-feedback-loading"><i class="fa-solid fa-spinner fa-spin"></i> AI가 오답을 분석하고 있습니다…</p>';
     const res = await requestWrongFeedback(input);

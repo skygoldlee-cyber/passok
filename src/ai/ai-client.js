@@ -491,6 +491,12 @@ export function buildQuizGenPrompt(input) {
     const concepts = (Array.isArray(inp.weakConcepts) ? inp.weakConcepts : [])
         .slice(0, 5).map(x => _clip(x, 60)).filter(Boolean);  // AI-41
     const n = _diagNum(inp.count, 1, 3) ?? 2;
+    return _quizGenPromptText(cluster, evidence, existing, concepts, n);
+}
+
+/** quiz_gen 프롬프트 본문 — 개념·취약 라벨·근거·기존 문항 섹션 조립 */
+/** @param {string|null} cluster @param {string|null} evidence @param {string[]} existing @param {string[]} concepts @param {number} n */
+function _quizGenPromptText(cluster, evidence, existing, concepts, n) {
     return `## 출제 대상 개념\n${cluster ?? '약점 복습'}
 ${concepts.length ? `- 반복 취약 라벨: ${concepts.join(', ')}\n` : ''}${evidence ? `\n## 교재 근거 (반드시 이 범위에서 출제)\n${evidence}\n` : ''}
 ${existing.length ? `\n## 기존 문항 (중복 금지)\n${existing.map((q, i) => `${i + 1}. ${q}`).join('\n')}\n` : ''}

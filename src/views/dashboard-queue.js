@@ -365,6 +365,12 @@ export function buildTodayQueue(p = {}) {
 /** @type {number|null} */
 let _prevQueueLen = null;
 
+/** 개념 진행 로컬 스토어 JSON 파서 — 손상·부재 시 {} 수렴 */
+/** @param {string} key */
+function _flowStoreJson(key) {
+    try { return JSON.parse(getItem(key) || '{}') || {}; } catch { return {}; }
+}
+
 /**
  * 입력 수집 + 큐 렌더 — 기존 weak-subject-recommendation 컨테이너 재사용 (TQ-03).
  * @param {Array<*>} subjects 과목 메타 목록
@@ -429,9 +435,9 @@ export function renderTodayQueue(subjects) {
     let flowResume = null;
     if (hasFeature('careFlow')) {
         try {
-            const fp = JSON.parse(getItem('flow_progress') || '{}') || {};
+            const fp = _flowStoreJson('flow_progress');
             // 개념 복습 큐(flow_review) 기한 도래분 — 취약·진행 중보다 먼저 (DOC-USR-22 §4)
-            const fr = JSON.parse(getItem('flow_review') || '{}') || {};
+            const fr = _flowStoreJson('flow_review');
             const t = todayKey();
             const dueRecs = Object.entries(fp)
                 .filter(([id, r]) => r && fr[id] && fr[id].due <= t);

@@ -354,22 +354,26 @@ function watchDocs() {
   return laws.filter(f => f.file).map(f => parseRefDoc(f.file));
 }
 
+/** 법령(부령) 최신본 조회 — lawSearch 'law' 타겟 → {notice, effectiveDate, serial} */
+/** @param {*} doc */
+async function _fetchLatestLaw(doc) {
+  const res = await lawApi('lawSearch.do', { query: doc.name, display: 50, sort: 'efdes' }, 'law');
+  let items = res?.LawSearch?.law ?? [];
+  if (!Array.isArray(items)) items = [items];
+  const exact = items.filter((/** @type {*} */ i) => String(i['법령명한글'] || '').trim() === doc.name);
+  if (!exact.length) throw new Error('법령 검색 결과 없음');
+  exact.sort((/** @type {*} */ a, /** @type {*} */ b) => String(b['시행일자'] || '').localeCompare(String(a['시행일자'] || '')));
+  return {
+    notice: exact[0]['공포번호'] ? `제${exact[0]['공포번호']}호` : null,
+    effectiveDate: fmtDate(exact[0]['시행일자']),
+    serial: String(exact[0]['법령일련번호'] || ''),
+  };
+}
+
 /** 문서 1종의 law.go.kr 최신본 조회 → {notice, effectiveDate, serial} */
 /** @param {*} doc */
 async function fetchLatestFor(doc) {
-  if (doc.target === 'law') {
-    const res = await lawApi('lawSearch.do', { query: doc.name, display: 50, sort: 'efdes' }, 'law');
-    let items = res?.LawSearch?.law ?? [];
-    if (!Array.isArray(items)) items = [items];
-    const exact = items.filter((/** @type {*} */ i) => String(i['법령명한글'] || '').trim() === doc.name);
-    if (!exact.length) throw new Error('법령 검색 결과 없음');
-    exact.sort((/** @type {*} */ a, /** @type {*} */ b) => String(b['시행일자'] || '').localeCompare(String(a['시행일자'] || '')));
-    return {
-      notice: exact[0]['공포번호'] ? `제${exact[0]['공포번호']}호` : null,
-      effectiveDate: fmtDate(exact[0]['시행일자']),
-      serial: String(exact[0]['법령일련번호'] || ''),
-    };
-  }
+  if (doc.target === 'law') return _fetchLatestLaw(doc);
   const res = await lawApi('lawSearch.do', { query: doc.name, display: 50, sort: 'efdes' });
   let items = res?.AdmRulSearch?.admrul ?? [];
   if (!Array.isArray(items)) items = [items];

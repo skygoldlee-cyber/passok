@@ -348,21 +348,7 @@ export const DataLoader = {
         if (quickchecks) /** @type {*} */ (data).quickcheck = quickchecks;
 
         // 문제은행 보충 카드/퀴즈 병합 (레지스트리가 제공하는 경우 — 출제 비중 보정용)
-        const regSubj = (this.registry && Array.isArray(this.registry.subjects))
-            ? this.registry.subjects.find(s => s.key === key)
-            : null;
-        if (regSubj && regSubj.supplement) {
-            try {
-                await this._loadScript(regSubj.supplement);
-                const supp = /** @type {any} */ (window)[regSubj.supplementGlobal || `STUDY_SUPPLEMENT_${key}`];
-                if (supp) {
-                    if (Array.isArray(supp.cards)) data.cards.push(...supp.cards);
-                    if (Array.isArray(supp.quizzes)) data.quizzes.push(...supp.quizzes);
-                }
-            } catch (e) {
-                console.warn(`[DataLoader] 보충 데이터 로드 실패 (${key}):`, e);
-            }
-        }
+        await this._mergeSupplement(key, data);
 
         this._loaded[key] = data;
         /** @type {Object.<string, any>} */ (window.STUDY_DATA)[key] = data;
@@ -372,6 +358,28 @@ export const DataLoader = {
             cleanOrphansForSubject(key, data);
         }
         return data;
+    },
+
+    /**
+     * 문제은행 보충 카드/퀴즈 병합 — 레지스트리가 supplement를 제공하는 경우 (출제 비중 보정용)
+     * @param {string} key
+     * @param {{cards: *[], quizzes: *[]}} data
+     */
+    async _mergeSupplement(key, data) {
+        const regSubj = (this.registry && Array.isArray(this.registry.subjects))
+            ? this.registry.subjects.find(s => s.key === key)
+            : null;
+        if (!regSubj || !regSubj.supplement) return;
+        try {
+            await this._loadScript(regSubj.supplement);
+            const supp = /** @type {any} */ (window)[regSubj.supplementGlobal || `STUDY_SUPPLEMENT_${key}`];
+            if (supp) {
+                if (Array.isArray(supp.cards)) data.cards.push(...supp.cards);
+                if (Array.isArray(supp.quizzes)) data.quizzes.push(...supp.quizzes);
+            }
+        } catch (e) {
+            console.warn(`[DataLoader] 보충 데이터 로드 실패 (${key}):`, e);
+        }
     },
 
     /**

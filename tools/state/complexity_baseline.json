@@ -33,8 +33,8 @@
     },
     "src/content/data-loader.js": {
       "count": 5,
-      "max": 20,
-      "sum": 68
+      "max": 13,
+      "sum": 60
     },
     "src/content/docx-utils.js": {
       "count": 1,
@@ -251,6 +251,21 @@
       "max": 15,
       "sum": 15
     },
+    "src/passloop/core/concept-drill.js": {
+      "count": 2,
+      "max": 18,
+      "sum": 33
+    },
+    "src/passloop/core/fsrs.js": {
+      "count": 1,
+      "max": 13,
+      "sum": 13
+    },
+    "src/passloop/core/personalization.js": {
+      "count": 5,
+      "max": 19,
+      "sum": 72
+    },
     "src/pdf-registry.js": {
       "count": 1,
       "max": 15,
@@ -367,9 +382,9 @@
       "sum": 27
     },
     "src/shell/notice-check.js": {
-      "count": 8,
+      "count": 7,
       "max": 15,
-      "sum": 99
+      "sum": 87
     },
     "src/shell/onboarding.js": {
       "count": 1,
@@ -410,11 +425,6 @@
       "count": 1,
       "max": 13,
       "sum": 13
-    },
-    "src/study/statement-tracker.js": {
-      "count": 1,
-      "max": 14,
-      "sum": 14
     },
     "src/study/study-tracker-activity.js": {
       "count": 1,
@@ -483,8 +493,8 @@
     },
     "src/views/dashboard-queue.js": {
       "count": 1,
-      "max": 26,
-      "sum": 26
+      "max": 25,
+      "sum": 25
     },
     "src/views/dashboard.js": {
       "count": 1,
@@ -559,7 +569,7 @@
     "src/views/quiz/quiz.js": {
       "count": 6,
       "max": 24,
-      "sum": 96
+      "sum": 94
     },
     "src/views/reader/reader-audio.js": {
       "count": 2,
@@ -573,8 +583,8 @@
     },
     "src/views/reader/reader-render.js": {
       "count": 4,
-      "max": 28,
-      "sum": 73
+      "max": 25,
+      "sum": 71
     },
     "src/views/reader/reader-toolbar.js": {
       "count": 4,
@@ -630,21 +640,6 @@
       "count": 3,
       "max": 18,
       "sum": 44
-    },
-    "src/passloop/core/concept-drill.js": {
-      "count": 2,
-      "max": 18,
-      "sum": 33
-    },
-    "src/passloop/core/fsrs.js": {
-      "count": 1,
-      "max": 13,
-      "sum": 13
-    },
-    "src/passloop/core/personalization.js": {
-      "count": 5,
-      "max": 19,
-      "sum": 72
     }
   }
 }
