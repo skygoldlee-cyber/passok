@@ -81,7 +81,10 @@ test.describe('시험 전환 실경로 — selectExam → 리로드 → 부팅',
         await page.goto('/index.html');
         await page.waitForFunction(() => window.__APP_INITIALIZED === true, null, { timeout: 15_000 });
         // 피커를 직접 렌더링해 comingSoon 가드를 검증 (UI 도달 경로와 무관하게 계약 확인)
+        // live 데이터에 comingSoon 팩이 없어도 가드 계약을 검증할 수 있게 목록 엔트리를 일시 플래그
         await page.evaluate(async () => {
+            const e = ((window.EXAMS_LIST && window.EXAMS_LIST.exams) || []).find(x => x.id === 'lossadj');
+            if (e) e.comingSoon = true;
             const m = await import('./src/views/exam-select.js');
             m.renderExamSelect();
         });

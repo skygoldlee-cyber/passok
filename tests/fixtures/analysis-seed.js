@@ -97,13 +97,14 @@ export function buildAnalysisSeed(examId = 'cosmetic') {
         'weak_quiz_law_quiz_e2e008':           { cause: 'lawConfusion', ts: ts - 3 * DAY_MS, subjectId: 'law' }
     });
 
-    // 진술 오판 — law의 같은 cid(L348) 2건은 "개념 구간 반복 오판" 클러스터를 만든다.
-    // cid는 CID_SECTION 환산 우선·CHAPTER_RANGES 폴백 순 해석 (교재 개편 시
-    // 단원명이 바뀌므로 현재 매핑 기준): L348 → §1.3 → law 'Chapter 01. 화장품법의 이해',
+    // 진술 오판 — law의 같은 cid 2건은 "개념 구간 반복 오판" 클러스터를 만든다.
+    // §앵커는 CHAPTER_TITLES 직행 — 레거시 L####는 CID_SECTION 유실 시
+    // CHAPTER_RANGES 폴백으로 다른 단원명이 나오므로 시드는 §앵커로 고정:
+    // §1.3 → law 'Chapter 01. 화장품법의 이해',
     // L2209: manufacturing '1. 사용제한 원료의 종류', L422: safety '2. 위생 유지관리'.
     seed[P('statement_stats')] = JSON.stringify({
-        'law_st_e2e01':            { j: 5, w: 4, lw: _day(1), t: '맞춤형화장품 조제관리사는 교육을 이수해야 한다', truth: true,  cid: 'L348',  last: false, streak: 0 },
-        'law_st_e2e02':            { j: 3, w: 2, lw: _day(0), t: '화장품은 피부·모발을 청결·미화하기 위한 물품이다', truth: true,  cid: 'L348',  last: true,  streak: 0 },
+        'law_st_e2e01':            { j: 5, w: 4, lw: _day(1), t: '맞춤형화장품 조제관리사는 교육을 이수해야 한다', truth: true,  cid: '§1.3',  last: false, streak: 0 },
+        'law_st_e2e02':            { j: 3, w: 2, lw: _day(0), t: '화장품은 피부·모발을 청결·미화하기 위한 물품이다', truth: true,  cid: '§1.3',  last: true,  streak: 0 },
         'law_st_e2e03':            { j: 6, w: 1, lw: null,    t: '졸업된 진술 — 취약 목록에 나타나면 안 된다',     truth: false, cid: 'L1200', last: true,  streak: 3 },
         'manufacturing_st_e2e01':  { j: 4, w: 3, lw: _day(0), t: '사용제한 원료는 함량 기준을 초과할 수 없다',      truth: true,  cid: 'L2209', last: false, streak: 0 },
         'safety_st_e2e01':         { j: 2, w: 1, lw: _day(2), t: '작업장은 청결한 위생 상태를 유지해야 한다',      truth: false, cid: 'L422',  last: false, streak: 0 }
