@@ -4,7 +4,7 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 2823508848d31717
+> 입력 해시: c1d74e0309d5f838
 > 생성: 2026-11-28 · 원천: SPEC.md(787개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
@@ -765,7 +765,7 @@
 | S-02 | ✅ | 테스트 | DOC-ADR-07 | src/shell/app.js<br>src/views/event-listeners.js<br>src/views/listeners/listeners-delegation.js | tests/dom/common/common-eventlisteners.dom.test.js | — | — |
 | S-03 | ✅ | 테스트 | — | src/shell/app.js<br>src/views/event-listeners.js<br>src/views/listeners/listeners-delegation.js | tests/dom/common/common-eventlisteners.dom.test.js | — | — |
 | S-04 | ✅ | 테스트 | — | — | tests/unit/app/delegation-guard.test.js | — | — |
-| S-05 | ✅ | 테스트 | DOC-DEV-09 | src/core/sanitize.js<br>tools/check/check_html_escape.js | tests/unit/app/sanitize.test.js | — | — |
+| S-05 | ✅ | 테스트 | DOC-DEV-09<br>DOC-DSN-62 | src/core/sanitize.js<br>tools/check/check_html_escape.js | tests/unit/app/sanitize.test.js | — | — |
 | S-06 | ✅ | 테스트 | — | src/core/storage-keys.js<br>src/views/backup.js | tests/dom/common/backup.dom.test.js | — | — |
 | S-07 | ✅ | 테스트 | — | index.html | tests/unit/app/security.test.js | — | — |
 | S-08 | ✅ | 테스트 | — | src/shell/app.js | tests/unit/app/security.test.js | — | — |
@@ -933,9 +933,9 @@
 | DA-10 | ✅ | 테스트 | — | src/auth-sync/sync.js<br>src/exams/cosmetic/customer-store.js | tests/unit/exams/cosmetic/customer-store.test.js | — | 개인정보보호법 — 상동 (조제관리사가 고객 개인정보를 클라우드에 올리지 않는 설계) |
 | DA-11 | ✅ | 테스트 | DOC-RBK-10 | tools/check/check_domain_map.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
 | DA-12 | ✅ | 테스트 | DOC-DEV-09<br>DOC-RBK-10 | src/core/uitext-defaults.js<br>tools/check/check_uitext.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
-| DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-BIZ-06<br>DOC-DEV-08<br>DOC-DEV-09<br>…외 4개 | — | tests/e2e/exam-switch.spec.js | — | — |
+| DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-BIZ-06<br>DOC-DEV-08<br>DOC-DEV-09<br>…외 5개 | — | tests/e2e/exam-switch.spec.js | — | — |
 | DA-14 | ✅ | 테스트 | — | src/pwa/pwa-manifest.js<br>src/shell/app-shell.js | tests/unit/app/exam-context.test.js | — | — |
-| DA-15 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-38<br>DOC-DSN-42<br>…외 5개 | src/core/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
+| DA-15 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-38<br>DOC-DSN-42<br>…외 6개 | src/core/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
 | DA-16 | ✅ | E2E 테스트 | — | src/content/data-loader.js<br>src/content/unpack.js<br>tools/build/build_study_md_bundle.js<br>tools/lib/content_pack.js | tests/dom/common/unpack.dom.test.js<br>tests/e2e/content-pack.spec.js<br>tests/unit/content-pack.test.js<br>tests/unit/content/data-loader-fallback.test.js | — | — |
 | DA-17 | ✅ | 테스트 | — | tools/lib/watermark.js | tests/unit/content-pack.test.js | — | — |
 | DA-18 | ✅ | 테스트 | DOC-BIZ-06<br>DOC-BIZ-07<br>DOC-DSN-44 | html/exams/carework/facility-admin.html<br>html/exams/carework/facility-join.html<br>src/exams/carework/views/facility-admin.js<br>src/exams/carework/views/facility-join.js | tests/dom/exams/carework/care-views.test.js | — | — |
@@ -1191,6 +1191,7 @@
 | DOC-DSN-59 | docs/dev/design/AVATAR_LECTURE_DESIGN.md | A-09, AI-29, AI-30, AO-01, AO-02, AO-03, AO-04, AO-05, AO-06, AV-01, AV-02, AV-03, AV-04, AV-05, AV-06, AV-07, AV-08, AV-09, AV-10, CQ-07, ROAD-P0 |
 | DOC-DSN-60 | docs/dev/design/STORY_AUDIO_DESIGN.md | AI-29, AI-30, AO-01, AO-02, AO-03, AO-04, AO-05, AO-06, AV-08, AV-09, CQ-07, ROAD-P0, SO-01, SO-02, SO-03, SO-04, SO-05, SO-06, SO-07, SO-08, SO-09, SO-10 |
 | DOC-DSN-61 | docs/dev/design/WEBTOON_TEXTBOOK_DESIGN.md | AI-29, CQ-07, CS-13, DA-15, ID-05, SO-01, SO-06, ST-01, ST-02, ST-03, ST-04, ST-05, ST-06, ST-07, TR-27, WT-01, WT-02, WT-03, WT-04, WT-05, WT-06, WT-07, WT-08, WT-09, WT-10 |
+| DOC-DSN-62 | docs/dev/design/FRONTEND_SCALING_REVIEW.md | DA-13, DA-15, S-05 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |
