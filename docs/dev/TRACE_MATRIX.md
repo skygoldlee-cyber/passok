@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: f52282b0a281c1ad
-> 생성: 2026-11-28 · 원천: SPEC.md(777개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: f52530edf4090812
+> 생성: 2026-11-28 · 원천: SPEC.md(787개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 777개 — 문서 연결 545 · 소스 연결 646 · 테스트 연결 689 · 보고서 연결 109
+**커버리지 요약**: 요구사항 787개 — 문서 연결 555 · 소스 연결 646 · 테스트 연결 689 · 보고서 연결 109
 
 ---
 
@@ -148,7 +148,7 @@
 | TR-24 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-05 | — | tests/dom/reader/reader-keyboard.dom.test.js | — | — |
 | TR-25 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-05 | — | tests/dom/reader/reader-keyboard.dom.test.js | — | — |
 | TR-26 | ✅ | E2E 테스트 | DOC-RBK-07<br>DOC-REF-05 | src/reader/zoom-gestures.js | tests/dom/reader/zoom-gestures.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
-| TR-27 | ✅ | E2E 테스트 | DOC-ADR-08<br>DOC-RBK-07<br>DOC-REF-05 | src/views/reader/reader-render.js<br>src/views/reader/reader-toolbar.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
+| TR-27 | ✅ | E2E 테스트 | DOC-ADR-08<br>DOC-DSN-61<br>DOC-RBK-07<br>DOC-REF-05 | src/views/reader/reader-render.js<br>src/views/reader/reader-toolbar.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-advanced.spec.js | — | — |
 | TR-28 | ✅ | E2E 테스트 | DOC-RBK-07<br>DOC-REF-05 | src/views/reader/reader-progress.js | tests/dom/study/study-reader.dom.test.js<br>tests/e2e/reader-flow.spec.js | — | — |
 | TR-30 | ID-05 준수 — 위치 좌표 미사용. 본문 구간 드래그 하이라이트는 판본 갱신 시 드리프트 불가피로 범위 제외(섹션 단위로 수렴) | E2E 테스트 | DOC-DSN-56<br>DOC-RBK-07<br>DOC-REF-05 | src/study/reader-notes.js | tests/dom/reader/reader-notes.dom.test.js<br>tests/e2e/ux-surfaces.spec.js<br>tests/unit/app/reader-notes.test.js | — | — |
 | TR-31 | ✅ | E2E 테스트 | DOC-RBK-07<br>DOC-REF-05 | src/reader/reader-toc.js<br>src/views/reader/reader-render.js | tests/e2e/reader-advanced.spec.js<br>tests/unit/content/reader-toc.test.js | — | — |
@@ -314,7 +314,7 @@
 | CQ-04 | ✅ | 테스트 | DOC-DSN-33 | tools/audit/audit_card_quality.js | tests/unit/gates/audit-quality.test.js | — | — |
 | CQ-05 | ✅ | 테스트 | DOC-DSN-33 | tools/audit/audit_combo.js<br>tools/check/check_combo_pilot.js | tests/unit/gates/audit-quality.test.js | — | — |
 | CQ-06 | ✅ | 테스트 | DOC-DSN-33<br>DOC-DSN-57 | tools/check/check_answer_overlap.js<br>tools/sync/fix_answer_quotes.js<br>tools/sync/fix_citation_targets.js | tests/unit/gates/answer-overlap.test.js | — | — |
-| CQ-07 | 미구현 (로드맵 — DOC-DSN-57 설계안) | 문서 검토 | DOC-DSN-57<br>DOC-DSN-58<br>DOC-DSN-59<br>DOC-DSN-60 | — | — | — | — |
+| CQ-07 | 미구현 (로드맵 — DOC-DSN-57 설계안) | 문서 검토 | DOC-DSN-57<br>DOC-DSN-58<br>DOC-DSN-59<br>DOC-DSN-60<br>…외 1개 | — | — | — | — |
 | CQ-08 | 미구현 (로드맵 — DOC-DSN-57 설계안, AI-46 의존) | 문서 검토 | DOC-DSN-57<br>DOC-DSN-58 | — | — | — | — |
 
 ## 3.18 Formula OS — 실전 배합 작업실
@@ -556,7 +556,7 @@
 | AI-26 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-USR-18 | tools/supabase/functions/ai-proxy/index.ts<br>tools/supabase/sync_ai_proxy_secrets.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
 | AI-27 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-USR-18 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
 | AI-28 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-USR-18 | src/ai/ai-client.js<br>src/telemetry/usage-telemetry.js | tests/unit/engine/ai-client.test.js | — | — |
-| AI-29 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-DSN-59<br>…외 1개 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
+| AI-29 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-DSN-59<br>…외 2개 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
 | AI-30 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-DSN-59<br>…외 1개 | src/ai/ai-client.js<br>src/ai/gen-gate.js<br>tools/supabase/functions/ai-proxy/index.ts | tests/unit/engine/ai-client.test.js<br>tests/unit/engine/gen-gate.test.js | — | — |
 | AI-32 | ✅ | 테스트 | — | src/study/spaced-repetition.js<br>tools/ai/ai_seed_eval.js<br>tools/ai/lib/difficulty.js | tests/dom/study/study-spacedrep.dom.test.js<br>tests/unit/engine/seed-eval.test.js | — | — |
 | AI-33 | ✅ | 테스트 | — | — | tests/dom/study/study-aicoach.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
@@ -693,16 +693,31 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| SO-01 | 보류 (예약 — DOC-DSN-60 §5.2·§6, Phase A/B) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
+| SO-01 | 보류 (예약 — DOC-DSN-60 §5.2·§6, Phase A/B) | 문서 검토 | DOC-DSN-60<br>DOC-DSN-61 | — | — | — | — |
 | SO-02 | 보류 (예약 — DOC-DSN-60 §5.1, Phase A) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
 | SO-03 | 보류 (예약 — DOC-DSN-60 §4·§5.1, Phase A) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
 | SO-04 | 보류 (예약 — DOC-DSN-60 §5.1~5.2, Phase A) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
 | SO-05 | 보류 (예약 — DOC-DSN-60 §5.2, Phase A) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
-| SO-06 | 보류 (예약 — DOC-DSN-60 §6, Phase B) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
+| SO-06 | 보류 (예약 — DOC-DSN-60 §6, Phase B) | 문서 검토 | DOC-DSN-60<br>DOC-DSN-61 | — | — | — | — |
 | SO-07 | 보류 (예약 — DOC-DSN-60 §5.1·§6, Phase A) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
 | SO-08 | 보류 (예약 — DOC-DSN-60 §8, Phase A/B) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
 | SO-09 | 보류 (예약 — DOC-DSN-60 §8, Phase A/B) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
 | SO-10 | 보류 (예약 — DOC-DSN-60 §4·§8, Phase A) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
+
+## 3.35 웹툰형·이야기형 교재 개선
+
+| ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
+|----|------|-----------|------|------|--------|--------|------|
+| WT-01 | 보류 (예약 — DOC-DSN-61 §4, Phase 1) | 문서 검토 | DOC-DSN-61 | — | — | — | — |
+| WT-02 | 보류 (예약 — DOC-DSN-61 §5, Phase 1) | 문서 검토 | DOC-DSN-61 | — | — | — | — |
+| WT-03 | 보류 (예약 — DOC-DSN-61 §6, Phase 1) | 문서 검토 | DOC-DSN-61 | — | — | — | — |
+| WT-04 | 보류 (예약 — DOC-DSN-61 §7, Phase 1) | 문서 검토 | DOC-DSN-61 | — | — | — | — |
+| WT-05 | 보류 (예약 — DOC-DSN-61 §8, Phase 3) | 문서 검토 | DOC-DSN-61 | — | — | — | — |
+| WT-06 | 보류 (예약 — DOC-DSN-61 §7·§11, Phase 2) | 문서 검토 | DOC-DSN-61 | — | — | — | — |
+| WT-07 | 보류 (예약 — DOC-DSN-61 §7, Phase 2) | 문서 검토 | DOC-DSN-61 | — | — | — | — |
+| WT-08 | 보류 (예약 — DOC-DSN-61 §4.1·§11, Phase 3) | 문서 검토 | DOC-DSN-61 | — | — | — | — |
+| WT-09 | 보류 (예약 — DOC-DSN-61 §9·§11, Phase 2) | 문서 검토 | DOC-DSN-61 | — | — | — | — |
+| WT-10 | 보류 (예약 — DOC-DSN-61 §9·§11, Phase 4) | 문서 검토 | DOC-DSN-61 | — | — | — | — |
 
 ## 4.1 PWA & 오프라인
 
@@ -920,7 +935,7 @@
 | DA-12 | ✅ | 테스트 | DOC-DEV-09<br>DOC-RBK-10 | src/core/uitext-defaults.js<br>tools/check/check_uitext.js | tests/unit/gates/multi-exam-gates.test.js | — | — |
 | DA-13 | ✅ | E2E 테스트 | DOC-ADR-16<br>DOC-BIZ-06<br>DOC-DEV-08<br>DOC-DEV-09<br>…외 4개 | — | tests/e2e/exam-switch.spec.js | — | — |
 | DA-14 | ✅ | 테스트 | — | src/pwa/pwa-manifest.js<br>src/shell/app-shell.js | tests/unit/app/exam-context.test.js | — | — |
-| DA-15 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-38<br>DOC-DSN-42<br>…외 4개 | src/core/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
+| DA-15 | ✅ | 테스트 | DOC-DSN-36<br>DOC-DSN-37<br>DOC-DSN-38<br>DOC-DSN-42<br>…외 5개 | src/core/exam-context.js<br>tools/check/check_content_independence.js | tests/unit/app/exam-context.test.js<br>tests/unit/gates/da15-content-independence.test.js | — | — |
 | DA-16 | ✅ | E2E 테스트 | — | src/content/data-loader.js<br>src/content/unpack.js<br>tools/build/build_study_md_bundle.js<br>tools/lib/content_pack.js | tests/dom/common/unpack.dom.test.js<br>tests/e2e/content-pack.spec.js<br>tests/unit/content-pack.test.js<br>tests/unit/content/data-loader-fallback.test.js | — | — |
 | DA-17 | ✅ | 테스트 | — | tools/lib/watermark.js | tests/unit/content-pack.test.js | — | — |
 | DA-18 | ✅ | 테스트 | DOC-BIZ-06<br>DOC-BIZ-07<br>DOC-DSN-44 | html/exams/carework/facility-admin.html<br>html/exams/carework/facility-join.html<br>src/exams/carework/views/facility-admin.js<br>src/exams/carework/views/facility-join.js | tests/dom/exams/carework/care-views.test.js | — | — |
@@ -941,7 +956,7 @@
 | ID-02 | ✅ | 테스트 | DOC-DSN-04<br>DOC-RBK-08<br>DOC-REF-03<br>DOC-REF-05 | src/core/sha256.js<br>tools/build/id_factory.js | tests/unit/app/id-factory.test.js<br>tests/unit/app/sha256.test.js | — | — |
 | ID-03 | ✅ | 테스트 | DOC-DSN-04<br>DOC-RBK-08<br>DOC-REF-03<br>DOC-REF-05 | tools/build/id_factory.js | tests/unit/app/id-factory.test.js | — | — |
 | ID-04 | ✅ | 테스트 | DOC-DSN-04<br>DOC-RBK-08<br>DOC-REF-03<br>DOC-REF-05 | tools/build/build_id_migration.js<br>tools/build/id_factory.js | tests/unit/app/id-factory.test.js | — | — |
-| ID-05 | ✅ | 테스트 | DOC-ADR-08<br>DOC-DEV-09<br>DOC-RBK-20<br>DOC-REF-18 | tools/check/check_position_independence.js | tests/unit/gates/posindep.test.js | — | — |
+| ID-05 | ✅ | 테스트 | DOC-ADR-08<br>DOC-DEV-09<br>DOC-DSN-61<br>DOC-RBK-20<br>…외 1개 | tools/check/check_position_independence.js | tests/unit/gates/posindep.test.js | — | — |
 
 ## 5.3 빌드 파이프라인
 
@@ -979,7 +994,7 @@
 | CS-10 | ✅ | 테스트 | DOC-ADR-12<br>DOC-PPL-01<br>DOC-RBK-03<br>DOC-RBK-07<br>…외 4개 | ref-pipeline/convert.py<br>ref-pipeline/pdf2md.py | tests/unit/gates/content-structure.test.js | DOC-ARC-08 | — |
 | CS-11 | ✅ | 테스트 | DOC-RBK-07<br>DOC-REF-07<br>DOC-REF-21 | tools/ai/ai_textbook.js | tests/unit/content/ai-textbook.test.js<br>tests/unit/content/scaffold-chapter.test.js | — | — |
 | CS-12 | ✅ | 도구 검증 | DOC-DSN-53<br>DOC-DSN-54<br>DOC-REF-07<br>DOC-REF-21 | tools/check/check_numbering.js | — | — | — |
-| CS-13 | ✅ | 테스트 | DOC-DSN-54<br>DOC-DSN-55<br>DOC-REF-07<br>DOC-REF-21 | — | tests/unit/gates/content-structure.test.js | — | — |
+| CS-13 | ✅ | 테스트 | DOC-DSN-54<br>DOC-DSN-55<br>DOC-DSN-61<br>DOC-REF-07<br>…외 1개 | — | tests/unit/gates/content-structure.test.js | — | — |
 | CS-14 | ✅ | 문서 검토 | DOC-RBK-07<br>DOC-REF-07<br>DOC-REF-21 | — | — | — | — |
 | CS-15 | ✅ | 테스트 | DOC-REF-07<br>DOC-REF-21 | tools/check/check_reflayout.js | tests/unit/gates/content-structure.test.js | — | — |
 
@@ -998,13 +1013,13 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| ST-01 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-RBK-07<br>DOC-RBK-13<br>…외 1개 | src/views/reader/reader-loader.js<br>src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-02 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-RBK-07<br>DOC-RBK-13<br>…외 1개 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-03 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-RBK-07<br>DOC-RBK-13<br>…외 1개 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-04 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-RBK-07<br>DOC-RBK-13<br>…외 1개 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-05 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-RBK-07<br>DOC-RBK-13<br>…외 1개 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-06 | ✅ | 테스트 | DOC-DSN-54<br>DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
-| ST-07 | ✅ | 테스트 | DOC-DSN-54<br>DOC-RBK-07<br>DOC-RBK-13<br>DOC-RBK-22 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-01 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-DSN-61<br>DOC-RBK-07<br>…외 2개 | src/views/reader/reader-loader.js<br>src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-02 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-DSN-61<br>DOC-RBK-07<br>…외 2개 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-03 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-DSN-61<br>DOC-RBK-07<br>…외 2개 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-04 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-DSN-61<br>DOC-RBK-07<br>…외 2개 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-05 | ✅ | 테스트 | DOC-ADR-03<br>DOC-DSN-54<br>DOC-DSN-61<br>DOC-RBK-07<br>…외 2개 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-06 | ✅ | 테스트 | DOC-DSN-54<br>DOC-DSN-61<br>DOC-RBK-07<br>DOC-RBK-13<br>…외 1개 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
+| ST-07 | ✅ | 테스트 | DOC-DSN-54<br>DOC-DSN-61<br>DOC-RBK-07<br>DOC-RBK-13<br>…외 1개 | src/views/textbook-reader.js | tests/unit/content/story-textbook.test.js | — | — |
 
 ## 7.2 유료화 인프라
 
@@ -1175,6 +1190,7 @@
 | DOC-DSN-58 | docs/dev/design/AI_LEARNING_ENGINE_DESIGN.md | AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AI-36, AI-40, AI-41, AI-42, AI-43, AI-44, AI-45, AI-46, AL-01, AL-02, AL-03, AL-04, AL-05, AL-06, AL-07, AL-08, AL-09, AL-10, AL-11, AL-12, AL-13, AL-14, AL-15, AL-16, AL-17, AL-18, AL-19, AL-20, CQ-07, CQ-08, SEM-02, SEM-05 |
 | DOC-DSN-59 | docs/dev/design/AVATAR_LECTURE_DESIGN.md | A-09, AI-29, AI-30, AO-01, AO-02, AO-03, AO-04, AO-05, AO-06, AV-01, AV-02, AV-03, AV-04, AV-05, AV-06, AV-07, AV-08, AV-09, AV-10, CQ-07, ROAD-P0 |
 | DOC-DSN-60 | docs/dev/design/STORY_AUDIO_DESIGN.md | AI-29, AI-30, AO-01, AO-02, AO-03, AO-04, AO-05, AO-06, AV-08, AV-09, CQ-07, ROAD-P0, SO-01, SO-02, SO-03, SO-04, SO-05, SO-06, SO-07, SO-08, SO-09, SO-10 |
+| DOC-DSN-61 | docs/dev/design/WEBTOON_TEXTBOOK_DESIGN.md | AI-29, CQ-07, CS-13, DA-15, ID-05, SO-01, SO-06, ST-01, ST-02, ST-03, ST-04, ST-05, ST-06, ST-07, TR-27, WT-01, WT-02, WT-03, WT-04, WT-05, WT-06, WT-07, WT-08, WT-09, WT-10 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |

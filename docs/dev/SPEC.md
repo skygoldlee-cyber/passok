@@ -72,6 +72,7 @@
    - [3.32 AI 학습 엔진 (AI Learning Engine)](#332-ai-학습-엔진-ai-learning-engine)
    - [3.33 AI 아바타 강의 (Avatar Lecture)](#333-ai-아바타-강의-avatar-lecture)
    - [3.34 서사 오디오·보이스 웹툰 (Story Audio)](#334-서사-오디오보이스-웹툰-story-audio)
+   - [3.35 웹툰형·이야기형 교재 개선 (Webtoon Textbook)](#335-웹툰형이야기형-교재-개선-webtoon-textbook)
 4. [비기능 요구사양](#4-비기능-요구사양)
    - [4.1 PWA & 오프라인](#41-pwa--오프라인)
    - [4.2 오프라인 감지](#42-오프라인-감지)
@@ -210,6 +211,7 @@
 | 3.32 | **AI 학습 엔진** | 서버측 개인화 학습 계층 — Python Learning API + DeepTutor RAG 튜터 + 숙달도·FSRS·문항 풀·개념 매핑 (cosmetic 파일럿, 외부 원안 이식) | AL-01~AL-20 (20) |
 | 3.33 | **AI 아바타 강의** | 런타임 아바타 오버레이 + 조건부 요약 강의 영상 (설계안 보류) | AV-01~AV-10 (10) |
 | 3.34 | **서사 오디오·보이스 웹툰** | 서사 멀티보이스 오디오·웹툰 말풍선 음성 동기 (설계안 보류) | SO-01~SO-10 (10) |
+| 3.35 | **웹툰형·이야기형 교재 개선** | 화자 모델 주입·슬롯 주소·표면 정리·오답→컷 연동·생성형 컷 삽화 (설계안 보류) | WT-01~WT-10 (10) |
 
 ### 3.1 대시보드 (Dashboard)
 
@@ -922,6 +924,25 @@
 | SO-08 | **계측** — `story_audio` 재생·트랙 전환·완료율과 `voice_webtoon` 클립 재생·음소거 토글 이벤트만 집계, 학습 내용 미수집(AI-28 방침 준용) | 보류 (예약 — DOC-DSN-60 §8, Phase A/B) |
 | SO-09 | **Pro 게이팅** — `feature-plan.json story_audio`·`voice_webtoon: "pro"` 등록, 트랙 선택·음성 버튼에 `data-pro-feature` 배지 + `proFeatureNotice` 1회 안내(ROAD-P0 soft gate). 서사 콘텐츠 자체의 경계는 `story_textbook: "pro"`와 정합 유지 | 보류 (예약 — DOC-DSN-60 §8, Phase A/B) |
 | SO-10 | **엔진 리스크 대응** — 비공식 무료 API(Edge-TTS) 엔드포인트 변경·차단 시 이미 생성된 자산은 외부 호스팅에 보존돼 런타임 무영향, 신규 생성은 대체 엔진(Piper·gTTS 폴백·유료 전환)으로 스왑 — 자산 1회 생성 원칙 | 보류 (예약 — DOC-DSN-60 §4·§8, Phase A) |
+
+### 3.35 웹툰형·이야기형 교재 개선 (Webtoon Textbook)
+
+> 상세 설계: [`design/WEBTOON_TEXTBOOK_DESIGN.md`](design/WEBTOON_TEXTBOOK_DESIGN.md) (DOC-DSN-61). `story:start` 서사 블록을 말풍선 컷으로 렌더하는 웹툰 표면의 구조 개선 — 화자 추정의 carework 하드코딩 제거(`webtoon.json` v2 시험 주입), 서사 없는 시험의 형식 옵션 무표시 계약, `story:slot` id 기반 씬 주소, 리더 스트립·씬 플레이어 표면 역할 분리, `concepts.cuts`/`cutOnWrong` 오답→컷 연동, 생성형 컷 삽화(`webtoon_art.json` 매니페스트 + 배경 생성·SVG 캐릭터 합성). **전제 — 교재 파생 사슬**: 표준형 → 이야기형 → 웹툰형 순 파생(웹툰형은 이야기형의 렌더 모드로 독립 파일 없음)이며 시험별로 사슬의 어느 단계까지 왔는지가 다르다 — 이야기형 부재 시험은 웹툰형도 불가하고, 캐스팅 미등록 시험은 화자 표현이 제네릭 폴백으로 저하. 보이스 웹툰 음성 동기는 SO-01~10(§3.34) 범위로 분리 — 본 설계는 그 재생 호스트만 제공.
+>
+> **⚠ 보류 (2026-11-28)**: 설계안 — 아래 행은 승격 후보 로드맵이며 착수 지시가 아니다.
+
+| ID | 요구사양 | 구현 상태 |
+|----|---------|-----------|
+| WT-01 | **화자 모델 주입 계약** — `webtoon.json` v2(`chars` + `speakers.names/hints/defaultPair`)를 시험 콘텐츠가 제공, 공용 파서는 `makeSpeakerResolver`로 규칙 생성. 평탄 v1은 chars로 해석, 부재 시 제네릭 `learner`/`guide` 폴백 — `DEFAULT_CHARS`·`SPEAKER_NAMES`·`whoSays`의 시험 특정 리터럴 제거 (DA-15) | 보류 (예약 — DOC-DSN-61 §4, Phase 1) |
+| WT-02 | **서사 형식 무표시 계약** — `features.story_textbook` 거짓 시험은 형식 셀렉트의 이야기형·웹툰형 옵션 미렌더, 검색 이동의 story 강제 무시 (AI-29·SO-01 준용, 기존 기능 소급) | 보류 (예약 — DOC-DSN-61 §5, Phase 1) |
+| WT-03 | **슬롯 ID 주소 체계** — `story:slot:sNN` 마커 파싱 → `slot.id`, 씬 선택·진행 저장·`data-slot-id` 딥링크는 id 기반 (인덱스는 폴백 — ID-05·TR-27 계약), 씬 라벨 `sNN · 제목` 정규화 | 보류 (예약 — DOC-DSN-61 §6, Phase 1) |
+| WT-04 | **웹툰 표면 역할 분리** — 리더 웹툰 모드=연속 읽기 정본, `care-webtoon` 뷰=씬 플레이어(집중 보기·자동진행·보이스 웹툰 호스트)로 경계 명문화 | 보류 (예약 — DOC-DSN-61 §7, Phase 1) |
+| WT-05 | **오답→컷 연동** — `concepts.json` `storySlot`/`cuts[]` 런타임 조회로 오답 피드백에 컷 버블 삽입, `cutOnWrong` 비트 세분은 콘텐츠 규약 확정 후 후속 | 보류 (예약 — DOC-DSN-61 §8, Phase 3) |
+| WT-06 | **웹툰 스트립 기능 균등** — 씬 카드 북마크·검색어 착지·`openSubjectSection` 웹툰 모드 지원, 씬→플레이어 진입 버튼 | 보류 (예약 — DOC-DSN-61 §7·§11, Phase 2) |
+| WT-07 | **씬 플레이어 개선** — id 기반 진행 이어보기, 챕터 optgroup 그룹핑, 문자량 비례 자동진행 토글, 다화자 등록(elder 하위 화자) | 보류 (예약 — DOC-DSN-61 §7, Phase 2) |
+| WT-08 | **시험별 웹툰 온보딩** — `webtoon.json` v2 + 캐스팅 규칙 신규 등록 절차(cosmetic: minsu·jiyeon), 인물 정본은 `인물 설정표.md`(CS-13) 참조, 검수표는 DOC-USR-26 연장 | 보류 (예약 — DOC-DSN-61 §4.1·§11, Phase 3) |
+| WT-09 | **웹툰 접근성** — 버블 행에 화자-대사 의미(role/aria-label), 장면 지문 구분 표기, `prefers-reduced-motion`에서 자동진행 비활성 기본값 | 보류 (예약 — DOC-DSN-61 §9·§11, Phase 2) |
+| WT-10 | **생성형 컷 삽화** — 슬롯 id 주소에 `webtoon_art.json` 매니페스트로 배경 webp·캐릭터 합성(`compose`) 정보 매달기. 캐릭터는 **시험 팩 고유 캐스트**(팩 `webtoon.json` chars의 SVG 고정 아트 — 팩마다 등장인물 상이)의 런타임 합성으로 생성 대상 제외(일관성 확보), `compose[].char`는 팩 chars 키 참조, 배경만 빌드타임 생성. 프롬프트 초안→사람 검수→생성→편입(ai:*·CQ-07 경로), **외부 LLM 교환 파일 계약**(job 내보내기 → JSON 응답 직접 인제스트 — GPT·Claude 수동 워크플로), 무텍스트·무수치 검수표, 엔트리 부재 슬롯 텍스트 폴백(무표시), webp·크기 예산 정책 | 보류 (예약 — DOC-DSN-61 §9·§11, Phase 4) |
 
 ---
 
