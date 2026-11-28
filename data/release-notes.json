@@ -1,5 +1,13 @@
 [
   {
+    "version": "v20261128-ea7b26e",
+    "date": "2026-11-28",
+    "notes": [
+      "[수정·css] 라이트모드 미정의 --color-text 토큰 정리 — 그룹명·툴팁 등 6곳",
+      "[정리·release] v20261128-67fcd1d 스탬프 확정 [no-docs]"
+    ]
+  },
+  {
     "version": "v20261128-67fcd1d",
     "date": "2026-11-28",
     "notes": [
@@ -230,22 +238,6 @@
       "[수정·content] cosmetic·hazmat 평문 화학식 5곳을 팩 관례(유니코드 첨자)로 통일",
       "[수정·fireelec] 과목2 은행 제어문자 LaTeX 손상 4행 복구 · μᵣ 표기 정정",
       "[content·fireelec] KOCW 노트 ref 3종 전량 제거(ND계열 라이선스) · 과목4 출처 NFTC로 교체"
-    ]
-  },
-  {
-    "version": "v20261118-03939b7",
-    "date": "2026-11-18",
-    "notes": [
-      "[문서] 판본 문서 갱신일 동기화 — Series Bible 인용 표기 정정 무영향 확인",
-      "[수정·content] LL-05 링크 린트 위반 해소 — 원시 경로를 DOC ID 참조로 대체",
-      "[문서·design] hazmat 실무도구 수요·경쟁 판단 반영 — 목표 재정의",
-      "[문서·design] hazmat 실무도구 설계 법령 2차 검토 반영",
-      "[수정·content] 과목3 문제은행 Series Bible 인용 경로를 교재/docs/로 갱신",
-      "[문서·design] hazmat 실무도구 설계 법령 검토 반영 — 판정·근거 전면 교정",
-      "[문서·review] cosmetic·carework 실무도구 설계 현행성 점검 반영",
-      "[문서·design] hazmat 실무도구 설계안 신설 (DOC-DSN-55)",
-      "[기능·reader] 진도 바 호버 시 읽기 진도 % 툴팁 + ARIA 진행률 표시",
-      "[수정·test] ST-07 시리즈 설정 문서 경로를 CS-13 정본 위치로 갱신"
     ]
   }
 ]
