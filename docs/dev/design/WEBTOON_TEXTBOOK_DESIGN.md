@@ -243,6 +243,19 @@ tmp/ai_drafts/webtoon/<exam>_<subj>_job.md
 
 **Phase 4 (생성형 컷 삽화, WT-10)**: ⑩ carework **장소 설정표** 작성 + 장소 마스터 컷(~10장) 선행 검수 → ⑪ 스파이크 — 서로 다른 장소·캐스트 조합 5슬롯 파일럿으로 품질·검수표·비용 검증 → ⑫ 매니페스트·런타임 패널 + carework 전 슬롯(58) 배경 컷(마스터 참조 변형) → ⑬ cosmetic 슬롯(263) 확장 → ⑭ (조건부) 참조 이미지 지원 모델로 인물 포함 완전 생성 컷 평가. 선행 의존: WT-03(슬롯 id) — 컷 주소 체계의 전제. 부수 전제: 한정수 어르신 캐스트 등록(WT-07 다화자 세분 또는 char 키 추가 — 그의 집 장면의 `compose` 정확도).
 
+**Phase 4 잔여 구현 분해** (WT-10 착수 시 작업 단위):
+
+| # | 항목 | 규모 | 비고 |
+|---|------|------|------|
+| i | WT-03 슬롯 id 파싱 — `story:slot:sNN` → `slot.id` 캡처 + `data-slot-id` 부여 | 소 | 전체 컷 주소의 전제 — 마커는 파일에 이미 있음(58개) |
+| ii | `ai:webtoon-art` 도구 신설 — `--export`(job 파일) / `--ingest`(JSON 검증·병합) / `--inbox`(이미지→webp·리네임) | 중 | ⚠ 슬롯 파서 공유 — webtoon-render.js는 ESM·tools는 CJS라 복제 관례(ai_story.js 선례). ⚠ webp 변환은 Node 의존성 없음 — Pillow 선례(`webp_refmd_images.py`, q82) 재사용 |
+| iii | carework 장소 설정표 작성 + 장소 마스터 컷(~10장) 검수 | 중 | 문서 + 최초 생성 배치 |
+| iv | 한정수 캐스트 — `webtoon.json` 4번째 char + SVG 재제작(구 파일 고아 삭제됨) | 소 | 그의 집 장면 compose 전제 |
+| v | `webtoon_art.json` 로더 + `.wb-panel` 런타임 합성(figure + compose 스탠디 + sNN 캡션) + CSS | 중 | 엔트리 부재 슬롯 패널 미렌더(무표시) |
+| vi | 게이트·정책 — 고아 자산 체커의 매니페스트 참조 인지 / 크기 예산 갱신(~9MB) / DOC-USR-26 검수표 6행 / sw.js 프리캐시 대상 확인 | 소 | 미등록 시 58컷이 고아로 차단됨 |
+
+**최소 스파이크 경로 (코드 없이 검증)**: iii 장소 설정표 → 5슬롯 job 파일 수작 작성 → GPT·Claude 제공 → 응답 검증. 품질·비용·검수표 판정 후 ii·v·vi 착수.
+
 **검증**:
 - 유닛: `makeSpeakerResolver` 규칙 테이블(이름 라벨·힌트·교대 폴백·제네릭 2인), 슬롯 id 파싱(마커 유·무 혼재), v1/v2 스키마 양방향 해석 — `care-webtoon.test.js`·`reader-webtoon.test.js` 케이스 확장
 - DOM: 형식 셀렉트 게이트(플래그 on/off), 씬 셀렉트 id 저장·복원, 자동진행 토글·reduced-motion 비활성, 오답 컷 블록 표시/비표시
