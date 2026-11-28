@@ -70,6 +70,8 @@
    - [3.30 개인 맞춤 고도화 (Personalization)](#330-개인-맞춤-고도화-personalization)
    - [3.31 Care OS — 요양보호사 실무도구 고도화 (`carework` 시험)](#331-care-os--요양보호사-실무도구-고도화-carework-시험)
    - [3.32 AI 학습 엔진 (AI Learning Engine)](#332-ai-학습-엔진-ai-learning-engine)
+   - [3.33 AI 아바타 강의 (Avatar Lecture)](#333-ai-아바타-강의-avatar-lecture)
+   - [3.34 서사 오디오·보이스 웹툰 (Story Audio)](#334-서사-오디오보이스-웹툰-story-audio)
 4. [비기능 요구사양](#4-비기능-요구사양)
    - [4.1 PWA & 오프라인](#41-pwa--오프라인)
    - [4.2 오프라인 감지](#42-오프라인-감지)
@@ -206,6 +208,8 @@
 | 3.30 | **개인 맞춤 고도화** | 개념 단위 약점 진단·개인화 스케줄·합격 예측 — 기존 자산(FSRS·BKT·진술 추적·임베딩)의 조합 계층 `src/passloop/core/personalization.js` | PS-01~PS-11 (11) |
 | 3.31 | **Care OS** | 요양보호사 실무도구 — 요양일지·인수인계·근무표·수급자 명부·사고보고·방문 기록·기관 평가 체크리스트·비용 계산·기관 워크스페이스·자체 양식·대처카드·4단계 학습 흐름 | CO-01~CO-22 (22) |
 | 3.32 | **AI 학습 엔진** | 서버측 개인화 학습 계층 — Python Learning API + DeepTutor RAG 튜터 + 숙달도·FSRS·문항 풀·개념 매핑 (cosmetic 파일럿, 외부 원안 이식) | AL-01~AL-20 (20) |
+| 3.33 | **AI 아바타 강의** | 런타임 아바타 오버레이 + 조건부 요약 강의 영상 (설계안 보류) | AV-01~AV-10 (10) |
+| 3.34 | **서사 오디오·보이스 웹툰** | 서사 멀티보이스 오디오·웹툰 말풍선 음성 동기 (설계안 보류) | SO-01~SO-10 (10) |
 
 ### 3.1 대시보드 (Dashboard)
 
@@ -899,6 +903,25 @@
 | AV-08 | **요약 강의 영상 파이프라인** — 단원 3~5분 대본(`tmp/ai_drafts/lectures/` 초안→사람 검수→`content/exams/<id>/lectures/scripts/` 편입, CQ-07 게이트·AI-30식 구조화 입력) → 토킹헤드 API 생성 → MP4 외부 호스팅 → `tools/build/build_video_manifest.js`→`data/video_manifest.js`·`features.lectureVideo` 게이트. Phase 0 사용량 지표 충족 시 착수 | 보류 (예약 — DOC-DSN-59 §7, Phase 1) |
 | AV-09 | **강의 영상 재생 UI** — 매니페스트에 단원 영상이 있으면 "강의" 진입·`<video>` 재생, 없는 단원은 아바타 오버레이 폴백(영상 우선 공존) | 보류 (예약 — DOC-DSN-59 §7, Phase 1) |
 | AV-10 | **Pro 게이팅** — 유료 기능 확정: `feature-plan.json avatar_lecture: "pro"` 등록, 토글·영상 진입 요소에 `data-pro-feature="avatar_lecture"` PRO 배지 + `proFeatureNotice` 1회 안내(ROAD-P0 soft gate — 접근 차단 없이 유료 경계 인지, hard gate 전환은 별도 정책). `_proBenefitItems`에 "AI 아바타 강의" 행 추가. 아바타·영상 두 모드는 같은 키로 게이트 — 영상 상위 티어 분리는 Phase 1 착수 시 재검토 | 보류 (예약 — DOC-DSN-59 §5.3~5.4·§7, Phase 0) |
+
+### 3.34 서사 오디오·보이스 웹툰 (Story Audio)
+
+> 상세 설계: [`design/STORY_AUDIO_DESIGN.md`](design/STORY_AUDIO_DESIGN.md) (DOC-DSN-60). 교재 원문 전문 낭독 대신 **서사 패치(`story:start` 블록)를 다중 음성 TTS로 음성화**하는 방향 전환 — Phase A 서사 멀티보이스 오디오(리더 트랙), Phase B 보이스 웹툰(말풍선 동기 재생). TTS 엔진은 무료 신경망 경로(Edge-TTS) 채택 — 유료 ElevenLabs 기각, 기존 11시간 표준형 낭독은 "전문 낭독" 트랙으로 격하 유지. **유료 기능 — `feature-plan.json story_audio`/`voice_webtoon: "pro"` 게이트**(SO-09, ROAD-P0 soft gate).
+>
+> **⚠ 보류 (2026-11-28)**: 설계안 — 아래 행은 승격 후보 로드맵이며 착수 지시가 아니다.
+
+| ID | 요구사양 | 구현 상태 |
+|----|---------|-----------|
+| SO-01 | **서사 오디오 피처 게이트·무표시 계약** — `exams.json features.storyAudio`·`features.voiceWebtoon`으로 시험별 온보딩. 서사 오디오 자산·웹툰 씬 없음·기능 비활성·로드 실패 시 트랙 선택·음성 버튼을 렌더하지 않는다(AI-29 무표시 계약 준용) | 보류 (예약 — DOC-DSN-60 §5.2·§6, Phase A/B) |
+| SO-02 | **화자 태깅 파이프라인** — 이야기형 MD의 `story:start~end` 블록을 비트 단위로 파싱해 화자 키를 부여 — `webtoon-render.js`의 `SPEAKER_NAMES`(화자명 라벨)·`whoSays`(호칭·교대 규칙) 규칙을 빌드타임으로 이식, 규칙 불확실 비트는 검수 목록 산출·오버라이드 테이블(speaker_map)로 정정 | 보류 (예약 — DOC-DSN-60 §5.1, Phase A) |
+| SO-03 | **멀티보이스 TTS 엔진 계층** — 캐스팅 맵의 화자 키→`voiceId`·속도·피치 매핑으로 비트별 음성 합성. 엔진은 플러그인 계층(`tts_google_direct`·`tts_elevenlabs`와 동형 `tts_edgetts.py`) — Edge-TTS 기본, 엔드포인트 변경 시 대체 엔진 스왑 | 보류 (예약 — DOC-DSN-60 §4·§5.1, Phase A) |
+| SO-04 | **서사 오디오 자산·매니페스트** — 씬 단위 MP3 병합(`mp3_merger` 재사용)·`audiobook/story/<subj>/` 경로, `build_audio_manifest.js`가 `AUDIO_MANIFEST[exam][subj]`에 `story` 트랙 배열을 방출 — 표준형 낭독과 병존, 외부 호스팅·SW 캐시 제외·커버리지 검증(AO-06 연장) 상속 | 보류 (예약 — DOC-DSN-60 §5.1~5.2, Phase A) |
+| SO-05 | **리더 트랙 선택** — 오디오 플레이어에 "전문 낭독/이야기 듣기" 트랙 전환, `reader-audio.js` 재생·속도·이어듣기 재사용 — 이어듣기 키에 트랙을 포함해 위치 격리 | 보류 (예약 — DOC-DSN-60 §5.2, Phase A) |
+| SO-06 | **보이스 웹툰 음성 동기** — `webtoon.json` 화자별 `voiceId`로 비트 클립을 말풍선 표시 시점에 재생, 자동진행 모드는 클립 종료→다음 컷 연동. 음소거 토글(시험 스코프 저장), 클립 없는 비트는 무음 진행 | 보류 (예약 — DOC-DSN-60 §6, Phase B) |
+| SO-07 | **시험별 캐스팅 맵** — `content/exams/<id>/assets/voice_cast.json`: 화자 키→표시명·`voiceId`·rate·pitch. 웹툰 캐릭터 맵(webtoon.json)과 화자 키 네임스페이스 공용 — cosmetic(민수·지연)과 carework(미영·선임·어르신)는 독립 캐스팅 | 보류 (예약 — DOC-DSN-60 §5.1·§6, Phase A) |
+| SO-08 | **계측** — `story_audio` 재생·트랙 전환·완료율과 `voice_webtoon` 클립 재생·음소거 토글 이벤트만 집계, 학습 내용 미수집(AI-28 방침 준용) | 보류 (예약 — DOC-DSN-60 §8, Phase A/B) |
+| SO-09 | **Pro 게이팅** — `feature-plan.json story_audio`·`voice_webtoon: "pro"` 등록, 트랙 선택·음성 버튼에 `data-pro-feature` 배지 + `proFeatureNotice` 1회 안내(ROAD-P0 soft gate). 서사 콘텐츠 자체의 경계는 `story_textbook: "pro"`와 정합 유지 | 보류 (예약 — DOC-DSN-60 §8, Phase A/B) |
+| SO-10 | **엔진 리스크 대응** — 비공식 무료 API(Edge-TTS) 엔드포인트 변경·차단 시 이미 생성된 자산은 외부 호스팅에 보존돼 런타임 무영향, 신규 생성은 대체 엔진(Piper·gTTS 폴백·유료 전환)으로 스왑 — 자산 1회 생성 원칙 | 보류 (예약 — DOC-DSN-60 §4·§8, Phase A) |
 
 ---
 

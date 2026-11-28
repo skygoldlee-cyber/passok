@@ -93,11 +93,11 @@ docs/
 ├── README.md                    ← 본 파일 (문서 인덱스 + 읽기 순서)
 ├── DOC_CONVENTIONS.md           ← 문서 규약 정본 — 분류·명칭·배치·헤더·ID·생명주기 (DOC-DEV-08)
 ├── CODE_CONVENTIONS.md          ← 코드 규약 정본 — 파일 계층·명칭·금지 패턴·추적성 (DOC-DEV-09)
-├── dev/                         ← 플랫폼 공통 개발 문서 (112개)
+├── dev/                         ← 플랫폼 공통 개발 문서 (113개)
 │   ├── 수위 문서 (6개)         ← ARCHITECTURE·SPEC·CHANGES·TRACE_MATRIX·COMPLEXITY_BACKLOG·UIUX_외주전달_패키지
 │   ├── adr/                   ← 아키텍처 결정 기록 (20개 — README + ADR 19건)
 │   ├── runbooks/              ← 실행 절차·운영 런북 (25개)
-│   ├── design/                ← 설계·계획·평가 문서 (37개)
+│   ├── design/                ← 설계·계획·평가 문서 (38개)
 │   ├── reference/             ← 명세·로직·참조 문서 (19개 + images/)
 │   └── evals/                 ← 프로젝트 평가 보고서 아카이브 (4개 — §9 스냅샷 이력)
 ├── user/                      ← 앱 공용 사용자 문서 (2개 — 사용자 매뉴얼·개인정보처리방침 + images/ — 런타임 fetch·배포 대상)
@@ -244,6 +244,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | [AI_PERSONALIZATION_DESIGN.md](dev/design/AI_PERSONALIZATION_DESIGN.md) | PassLoop 학습엔진 설계 — 개념 숙련도 맵·취약 개념 프로필·다턴 교재 튜터·챕터 퀵체크·통합 노트 (DOC-DSN-56, DeepTutor 벤치마크 이식 제안) |
 | [AI_LEARNING_ENGINE_DESIGN.md](dev/design/AI_LEARNING_ENGINE_DESIGN.md) | AI 학습 엔진 설계 — Python Learning API + DeepTutor 무상태 RAG 튜터 + 서버측 숙달도·FSRS·문항 풀 (DOC-DSN-58, 외부 원안 v1.1 이식 설계안 — cosmetic 파일럿, AL-01~20) |
 | [AVATAR_LECTURE_DESIGN.md](dev/design/AVATAR_LECTURE_DESIGN.md) | AI 아바타 강의 설계 — 런타임 아바타 오버레이(기존 오디오북 재사용·의사 립싱크) Phase 0 + 선별 요약 강의 영상 Phase 1 조건부 (DOC-DSN-59, 설계안, AV-01~09) |
+| [STORY_AUDIO_DESIGN.md](dev/design/STORY_AUDIO_DESIGN.md) | 서사 오디오·보이스 웹툰 설계 — 교재 낭독 → 서사 멀티보이스(Edge-TTS) 전환, 리더 story 트랙 + 웹툰 말풍선 음성 동기 (DOC-DSN-60, 설계안, SO-01~10) |
 | [CHANGES.md](dev/CHANGES.md) | 코드 변경 이력 (Changelog) — 변경의 이유와 맥락 |
 
 ### 제품 전략·기획
@@ -467,6 +468,7 @@ UI/UX 작업의 문서 계열 — 역할 분담과 읽기 순서는 "무엇을(S
 | DOC-DSN-57 | `docs/dev/design/CONTENT_SAFETY_DESIGN.md` |
 | DOC-DSN-58 | `docs/dev/design/AI_LEARNING_ENGINE_DESIGN.md` (외부 원안 "PassOK DeepTutor Hybrid AI Learning 설계서 v1.1" 이식) |
 | DOC-DSN-59 | `docs/dev/design/AVATAR_LECTURE_DESIGN.md` |
+| DOC-DSN-60 | `docs/dev/design/STORY_AUDIO_DESIGN.md` |
 | DOC-REF-01 | `docs/dev/reference/COMBO_STUDY_STRATEGY.md` |
 | DOC-REF-02 | `docs/dev/reference/DEV_ENVIRONMENT.md` |
 | DOC-REF-03 | `docs/dev/reference/FLASHCARD_LOGIC.md` |

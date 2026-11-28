@@ -1,6 +1,8 @@
 > **문서 ID**: DOC-DEV-03
 > **범위**: platform · 판본: none
 
+- **docs(design): 서사 오디오·보이스 웹툰 설계안 — 교재 낭독 방향 전환 + SPEC SO-01~10 등록** — 오디오 전략을 교재 원문 전문 낭독(기존 11h 자산은 "전문 낭독"으로 격하 보존)에서 서사 멀티보이스 음성화로 전환하는 설계. `docs/dev/design/STORY_AUDIO_DESIGN.md` (DOC-DSN-60) 신규: Phase A 서사 `story:start` 비트 → 화자 태깅(`webtoon-render.js` SPEAKER_NAMES/whoSays 규칙의 빌드타임 이식 + `speaker_map` 검수 오버라이드) → Edge-TTS 다중 음성(무료 — ElevenLabs 유료 기각, Piper 보조·SpeechSynthesis 런타임 전용) → 씬 MP3 → `AUDIO_MANIFEST` story 트랙 → `reader-audio.js` 트랙 선택. Phase B 보이스 웹툰 — `webtoon.json` 화자 `voiceId` + 비트 클립 말풍선 동기 재생(carework 우선). 아바타(DOC-DSN-59) 콘텐츠 소스는 전문 낭독 → AV-08 요약 대본으로 교체 지시. SPEC.md §3.34 + SO-01~10 보류(예약) 등록, 색인 표·목차 3.33 누락분도 함께 보충
+
 - **fix(css): 라이트모드 미정의 `--color-text` 토큰 정리 — 시험선택 그룹명 등 6곳** — `--color-text`는 미정의 변수라 폴백(흰색 계열)이 항상 적용돼 라이트모드에서 텍스트가 배경에 묻히는 결함: exam-select 그룹명·카드 배경/보더(dashboard.css) + 같은 패턴 잠복분 일괄 정정 — quiz-cite strong(study.css)·#ref-preview-tooltip(reader-extras.css)·.pro-moment-card(ui-overlay.css)·#html-ref-overlay 타이틀/검색입력(html-viewer.css) → `--color-text-main`/`--bg-subtle`/`--border-color` 테마 토큰으로 교체. 상시 다크 버튼(.hr-ov-btn.secondary)은 밝은 텍스트 유지
 
 - **fix(e2e): CI E2E 3스펙 스테일 수정 — 배포 차단 해소** — ①analysis-view 2건: 시드 cid `L348`의 CID_SECTION 매핑이 문항 삭제로 유실 → CHAPTER_RANGES 폴백이 "3. 화장품의 영업"을 반환해 기대 단원명과 불일치 → 시드를 라인 인용에서 `§1.3` 앵커로 교체(CHAPTER_TITLES 직행 — 교재 라인 이동 무관) ②exam-switch 1건: comingSoon 전 팩 해제로 `coming-soon` 카드가 live 데이터에 부재 → `window.EXAMS_LIST` 엔트리 일시 플래그로 가드 계약을 데이터 무관하게 검증. chromium 로컬 13/13 통과

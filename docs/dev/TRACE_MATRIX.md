@@ -4,8 +4,8 @@
 > **범위**: platform · 판본: none
 > **관련 SPEC ID**: 해당 없음 (본 문서가 추적 산출물)
 > ⚠️ 자동 생성 파일 — `npm run build:trace`로 재생성. 직접 편집 금지.
-> 입력 해시: 6047a72a9ea43655
-> 생성: 2026-11-27 · 원천: SPEC.md(767개 ID) + @spec 태그 + 문서 헤더
+> 입력 해시: f52282b0a281c1ad
+> 생성: 2026-11-28 · 원천: SPEC.md(777개 ID) + @spec 태그 + 문서 헤더
 
 | 열 | 의미 | 원천 |
 |----|------|------|
@@ -17,7 +17,7 @@
 | 보고서 | 분석·결과 보고서 | report_archive 헤더 |
 | 출처 | 요구사항의 기원 (법령·시험 규정·사업 문서) | SPEC 부록 "요구사항 출처" 표 |
 
-**커버리지 요약**: 요구사항 767개 — 문서 연결 535 · 소스 연결 646 · 테스트 연결 689 · 보고서 연결 109
+**커버리지 요약**: 요구사항 777개 — 문서 연결 545 · 소스 연결 646 · 테스트 연결 689 · 보고서 연결 109
 
 ---
 
@@ -256,12 +256,12 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| AO-01 | ✅ | 테스트 | DOC-DSN-59<br>DOC-PPL-01<br>DOC-PPL-02<br>DOC-PPL-03<br>…외 1개 | ref-pipeline/audiobook/generate_all_mp3.py<br>ref-pipeline/audiobook/run_pipeline.py<br>ref-pipeline/audiobook/tts_elevenlabs.py<br>ref-pipeline/audiobook/tts_google_direct.py<br>…외 1개 | tests/dom/reader/reader-audio.dom.test.js | — | — |
-| AO-02 | ✅ | 테스트 | DOC-DSN-59<br>DOC-PPL-01<br>DOC-PPL-02<br>DOC-PPL-03<br>…외 1개 | src/views/reader/reader-audio.js | tests/dom/reader/reader-audio.dom.test.js | — | — |
-| AO-03 | ✅ | 테스트 | DOC-DSN-59<br>DOC-PPL-01<br>DOC-PPL-02<br>DOC-PPL-03<br>…외 1개 | src/views/reader/reader-audio.js | tests/dom/reader/reader-audio.dom.test.js | — | — |
-| AO-04 | ✅ | 테스트 | DOC-DSN-59<br>DOC-PPL-01<br>DOC-PPL-02<br>DOC-PPL-03<br>…외 1개 | src/views/reader/reader-audio.js | tests/dom/reader/reader-audio.dom.test.js | — | — |
-| AO-05 | ✅ | 테스트 | DOC-DSN-59<br>DOC-PPL-01<br>DOC-PPL-02<br>DOC-PPL-03<br>…외 1개 | src/views/reader/reader-audio.js | tests/dom/reader/reader-audio.dom.test.js | — | — |
-| AO-06 | ✅ | 테스트 | DOC-DSN-59 | tools/build/build_audio_manifest.js | tests/unit/content/audio-manifest.test.js | — | — |
+| AO-01 | ✅ | 테스트 | DOC-DSN-59<br>DOC-DSN-60<br>DOC-PPL-01<br>DOC-PPL-02<br>…외 2개 | ref-pipeline/audiobook/generate_all_mp3.py<br>ref-pipeline/audiobook/run_pipeline.py<br>ref-pipeline/audiobook/tts_elevenlabs.py<br>ref-pipeline/audiobook/tts_google_direct.py<br>…외 1개 | tests/dom/reader/reader-audio.dom.test.js | — | — |
+| AO-02 | ✅ | 테스트 | DOC-DSN-59<br>DOC-DSN-60<br>DOC-PPL-01<br>DOC-PPL-02<br>…외 2개 | src/views/reader/reader-audio.js | tests/dom/reader/reader-audio.dom.test.js | — | — |
+| AO-03 | ✅ | 테스트 | DOC-DSN-59<br>DOC-DSN-60<br>DOC-PPL-01<br>DOC-PPL-02<br>…외 2개 | src/views/reader/reader-audio.js | tests/dom/reader/reader-audio.dom.test.js | — | — |
+| AO-04 | ✅ | 테스트 | DOC-DSN-59<br>DOC-DSN-60<br>DOC-PPL-01<br>DOC-PPL-02<br>…외 2개 | src/views/reader/reader-audio.js | tests/dom/reader/reader-audio.dom.test.js | — | — |
+| AO-05 | ✅ | 테스트 | DOC-DSN-59<br>DOC-DSN-60<br>DOC-PPL-01<br>DOC-PPL-02<br>…외 2개 | src/views/reader/reader-audio.js | tests/dom/reader/reader-audio.dom.test.js | — | — |
+| AO-06 | ✅ | 테스트 | DOC-DSN-59<br>DOC-DSN-60 | tools/build/build_audio_manifest.js | tests/unit/content/audio-manifest.test.js | — | — |
 
 ## 3.13 데이터 백업/복원
 
@@ -314,7 +314,7 @@
 | CQ-04 | ✅ | 테스트 | DOC-DSN-33 | tools/audit/audit_card_quality.js | tests/unit/gates/audit-quality.test.js | — | — |
 | CQ-05 | ✅ | 테스트 | DOC-DSN-33 | tools/audit/audit_combo.js<br>tools/check/check_combo_pilot.js | tests/unit/gates/audit-quality.test.js | — | — |
 | CQ-06 | ✅ | 테스트 | DOC-DSN-33<br>DOC-DSN-57 | tools/check/check_answer_overlap.js<br>tools/sync/fix_answer_quotes.js<br>tools/sync/fix_citation_targets.js | tests/unit/gates/answer-overlap.test.js | — | — |
-| CQ-07 | 미구현 (로드맵 — DOC-DSN-57 설계안) | 문서 검토 | DOC-DSN-57<br>DOC-DSN-58<br>DOC-DSN-59 | — | — | — | — |
+| CQ-07 | 미구현 (로드맵 — DOC-DSN-57 설계안) | 문서 검토 | DOC-DSN-57<br>DOC-DSN-58<br>DOC-DSN-59<br>DOC-DSN-60 | — | — | — | — |
 | CQ-08 | 미구현 (로드맵 — DOC-DSN-57 설계안, AI-46 의존) | 문서 검토 | DOC-DSN-57<br>DOC-DSN-58 | — | — | — | — |
 
 ## 3.18 Formula OS — 실전 배합 작업실
@@ -556,8 +556,8 @@
 | AI-26 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-USR-18 | tools/supabase/functions/ai-proxy/index.ts<br>tools/supabase/sync_ai_proxy_secrets.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
 | AI-27 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-USR-18 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
 | AI-28 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-USR-18 | src/ai/ai-client.js<br>src/telemetry/usage-telemetry.js | tests/unit/engine/ai-client.test.js | — | — |
-| AI-29 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-DSN-59 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
-| AI-30 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-DSN-59 | src/ai/ai-client.js<br>src/ai/gen-gate.js<br>tools/supabase/functions/ai-proxy/index.ts | tests/unit/engine/ai-client.test.js<br>tests/unit/engine/gen-gate.test.js | — | — |
+| AI-29 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-DSN-59<br>…외 1개 | src/ai/ai-client.js | tests/dom/study/ai-feedback.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
+| AI-30 | ✅ | 테스트 | DOC-DSN-40<br>DOC-DSN-56<br>DOC-DSN-58<br>DOC-DSN-59<br>…외 1개 | src/ai/ai-client.js<br>src/ai/gen-gate.js<br>tools/supabase/functions/ai-proxy/index.ts | tests/unit/engine/ai-client.test.js<br>tests/unit/engine/gen-gate.test.js | — | — |
 | AI-32 | ✅ | 테스트 | — | src/study/spaced-repetition.js<br>tools/ai/ai_seed_eval.js<br>tools/ai/lib/difficulty.js | tests/dom/study/study-spacedrep.dom.test.js<br>tests/unit/engine/seed-eval.test.js | — | — |
 | AI-33 | ✅ | 테스트 | — | — | tests/dom/study/study-aicoach.dom.test.js<br>tests/unit/engine/ai-client.test.js | — | — |
 | AI-34 | ✅ | 테스트 | — | src/study/weak-items.js | tests/unit/engine/weak-items.test.js | — | — |
@@ -685,9 +685,24 @@
 | AV-05 | 보류 (예약 — DOC-DSN-59 §5.3, Phase 0) | 문서 검토 | DOC-DSN-59 | — | — | — | — |
 | AV-06 | 보류 (예약 — DOC-DSN-59 §5.4·§8, Phase 0) | 문서 검토 | DOC-DSN-59 | — | — | — | — |
 | AV-07 | 보류 (예약 — DOC-DSN-59 §5.5, Phase 0) | 문서 검토 | DOC-DSN-59 | — | — | — | — |
-| AV-08 | 보류 (예약 — DOC-DSN-59 §7, Phase 1) | 문서 검토 | DOC-DSN-59 | — | — | — | — |
-| AV-09 | 보류 (예약 — DOC-DSN-59 §7, Phase 1) | 문서 검토 | DOC-DSN-59 | — | — | — | — |
+| AV-08 | 보류 (예약 — DOC-DSN-59 §7, Phase 1) | 문서 검토 | DOC-DSN-59<br>DOC-DSN-60 | — | — | — | — |
+| AV-09 | 보류 (예약 — DOC-DSN-59 §7, Phase 1) | 문서 검토 | DOC-DSN-59<br>DOC-DSN-60 | — | — | — | — |
 | AV-10 | 보류 (예약 — DOC-DSN-59 §5.3~5.4·§7, Phase 0) | 문서 검토 | DOC-DSN-59 | — | — | — | — |
+
+## 3.34 서사 오디오·보이스 웹툰
+
+| ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
+|----|------|-----------|------|------|--------|--------|------|
+| SO-01 | 보류 (예약 — DOC-DSN-60 §5.2·§6, Phase A/B) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
+| SO-02 | 보류 (예약 — DOC-DSN-60 §5.1, Phase A) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
+| SO-03 | 보류 (예약 — DOC-DSN-60 §4·§5.1, Phase A) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
+| SO-04 | 보류 (예약 — DOC-DSN-60 §5.1~5.2, Phase A) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
+| SO-05 | 보류 (예약 — DOC-DSN-60 §5.2, Phase A) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
+| SO-06 | 보류 (예약 — DOC-DSN-60 §6, Phase B) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
+| SO-07 | 보류 (예약 — DOC-DSN-60 §5.1·§6, Phase A) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
+| SO-08 | 보류 (예약 — DOC-DSN-60 §8, Phase A/B) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
+| SO-09 | 보류 (예약 — DOC-DSN-60 §8, Phase A/B) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
+| SO-10 | 보류 (예약 — DOC-DSN-60 §4·§8, Phase A) | 문서 검토 | DOC-DSN-60 | — | — | — | — |
 
 ## 4.1 PWA & 오프라인
 
@@ -995,7 +1010,7 @@
 
 | ID | 상태 | 검증 수단 | 문서 | 소스 | 테스트 | 보고서 | 출처 |
 |----|------|-----------|------|------|--------|--------|------|
-| ROAD-P0 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 7개 | src/pro/pro-upgrade.js<br>tools/check/check_plan_features.js | tests/dom/pro/pro-plan.dom.test.js<br>tests/unit/app/learning-pro.test.js | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06 | — |
+| ROAD-P0 | ✅ | 테스트 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 8개 | src/pro/pro-upgrade.js<br>tools/check/check_plan_features.js | tests/dom/pro/pro-plan.dom.test.js<br>tests/unit/app/learning-pro.test.js | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06 | — |
 | ROAD-P1 | 미구현 (유일한 Phase 1~2 잔여) | 문서 검토 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 4개 | — | — | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-P2 | 미구현 | 문서 검토 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 3개 | — | — | DOC-ARC-01<br>DOC-ARC-03<br>DOC-ARC-06 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
 | ROAD-P3 | 미구현 | 문서 검토 | DOC-BIZ-01<br>DOC-BIZ-02<br>DOC-BIZ-03<br>DOC-BIZ-04<br>…외 3개 | — | — | DOC-ARC-01<br>DOC-ARC-02<br>DOC-ARC-03<br>DOC-ARC-06 | 사업 문서 — docs/exams/cosmetic/report_archive/FEATURE_PROPOSALS.md · SUBSCRIPTION_ROADMAP.md |
@@ -1159,6 +1174,7 @@
 | DOC-DSN-57 | docs/dev/design/CONTENT_SAFETY_DESIGN.md | AI-03, AI-23, AI-45, AI-46, CQ-06, CQ-07, CQ-08, SEM-05 |
 | DOC-DSN-58 | docs/dev/design/AI_LEARNING_ENGINE_DESIGN.md | AI-25, AI-26, AI-27, AI-28, AI-29, AI-30, AI-36, AI-40, AI-41, AI-42, AI-43, AI-44, AI-45, AI-46, AL-01, AL-02, AL-03, AL-04, AL-05, AL-06, AL-07, AL-08, AL-09, AL-10, AL-11, AL-12, AL-13, AL-14, AL-15, AL-16, AL-17, AL-18, AL-19, AL-20, CQ-07, CQ-08, SEM-02, SEM-05 |
 | DOC-DSN-59 | docs/dev/design/AVATAR_LECTURE_DESIGN.md | A-09, AI-29, AI-30, AO-01, AO-02, AO-03, AO-04, AO-05, AO-06, AV-01, AV-02, AV-03, AV-04, AV-05, AV-06, AV-07, AV-08, AV-09, AV-10, CQ-07, ROAD-P0 |
+| DOC-DSN-60 | docs/dev/design/STORY_AUDIO_DESIGN.md | AI-29, AI-30, AO-01, AO-02, AO-03, AO-04, AO-05, AO-06, AV-08, AV-09, CQ-07, ROAD-P0, SO-01, SO-02, SO-03, SO-04, SO-05, SO-06, SO-07, SO-08, SO-09, SO-10 |
 | DOC-IDX-01 | docs/README.md | — |
 | DOC-IDX-02 | docs/exams/cosmetic/README.md | — |
 | DOC-IDX-03 | docs/assets/README.md | — |

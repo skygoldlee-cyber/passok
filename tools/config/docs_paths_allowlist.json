@@ -522,5 +522,20 @@
     "file": "docs/dev/SPEC.md",
     "ref": "data/video_manifest.js",
     "reason": "AV-08 로드맵 행의 설계안 제안 경로 — 영상 매니페스트 생성물 (Phase 1 예약)"
+  },
+  {
+    "file": "docs/dev/design/STORY_AUDIO_DESIGN.md",
+    "ref": "content/exams/<id>/assets/voice_cast.json",
+    "reason": "설계안 제안 경로 — 시험별 음성 캐스팅 맵 (Phase A 미구현)"
+  },
+  {
+    "file": "docs/dev/design/STORY_AUDIO_DESIGN.md",
+    "ref": "ref-pipeline/audiobook/tts_edgetts.py",
+    "reason": "설계안 제안 경로 — Edge-TTS 엔진 플러그인 (Phase A 미구현)"
+  },
+  {
+    "file": "docs/dev/SPEC.md",
+    "ref": "content/exams/<id>/assets/voice_cast.json",
+    "reason": "SO-07 예약 요구사항의 계획 경로 — 캐스팅 맵 (Phase A 미구현)"
   }
 ]
